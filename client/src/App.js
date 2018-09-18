@@ -7,13 +7,30 @@ import SetString from "./SetString";
 
 import Header from "./header/Header";
 import DocList from "./list/List";
+import DocDetail from "./detail/Detail";
 import SignIn from "./signin/SignIn";
 import Footer from "./footer/Footer";
 import Upload from "./upload/Upload";
 
+import * as restapi from './apis/DocApi';
 
 class App extends Component {
-  state = { loading: true, drizzleState: null, view:"list", authenticated:true};
+  state = { loading: true, drizzleState: null, currentView:"list", authenticated:true, resultList:[], fetching:false };
+
+  handleChangeView = (viewName) => {
+    console.log("on event handleChangeView", viewName);
+    this.setState({currentView:viewName})
+
+  }
+
+  fetchDocuments = async (nextKey) => {
+      if(this.state.fetching==false){
+        this.setState({fetching:true})
+        const docs = await restapi.getDocuments(nextKey);
+        //console.log(docs);
+        this.setState({resultList:docs.data.body});
+      }
+  }
 
   componentDidMount() {
     const { drizzle } = this.props;
@@ -25,8 +42,12 @@ class App extends Component {
 
       // check to see if it's ready, if so, update local component state
       if (drizzleState.drizzleStatus.initialized) {
-        console.log(drizzleState);
         this.setState({ loading: false, drizzleState });
+      }
+
+      if(this.state.resultList.length == 0){
+        console.log(this.state.resultList.length);
+        this.fetchDocuments();
       }
     });
   }
@@ -35,8 +56,11 @@ class App extends Component {
     this.unsubscribe();
   }
 
+
+
   render() {
-    console.log("state.loading : " + this.state.loading);
+    //console.log("state.loading : " + this.state.loading);
+    console.log("currentView", this.state.currentView);
     if (this.state.loading) return "Loading Drizzle...";
     return (
 
@@ -44,8 +68,9 @@ class App extends Component {
 
         <Header />
         {this.state.authenticated==false && <SignIn />}
-        {(this.state.authenticated && this.state.view == "list") && <DocList />}
-        {(this.state.authenticated && this.state.view == "upload") && <Upload />}
+        {(this.state.authenticated && this.state.currentView == "list") && <DocList resultList={this.state.resultList} handler={this.handleChangeView} currentView={this.state.currentView}/>}
+        {(this.state.authenticated && this.state.currentView == "upload") && <Upload />}
+        {(this.state.authenticated && this.state.currentView == "detail") && <DocDetail />}
 
         <ReadString
           drizzle={this.props.drizzle}
@@ -55,8 +80,6 @@ class App extends Component {
           drizzle={this.props.drizzle}
           drizzleState={this.state.drizzleState}
         />
-
-
         <Footer />
       </div>
 

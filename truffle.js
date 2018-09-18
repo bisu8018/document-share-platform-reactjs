@@ -11,6 +11,7 @@
  *     gasPrice: 10000000000,
  *   },
  */
+var HDWalletProvider = require("truffle-hdwallet-provider");
 
  module.exports = {
    networks: {
@@ -18,6 +19,22 @@
        host: "localhost",
        port: 8545,
        network_id: "*" // Match any network id
-     }
+     },
+     ropsten: {
+       provider: function() {
+         return new HDWalletProvider("광경 유치원 해군 안개 작품 인체 농촌 생산 훈련 함께 약점 소설 그토록 기운 가죽",
+         "https://ropsten.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c")
+       },
+       network_id: 3
+     },
+     rinkeby: {
+       provider: function() {
+         return new HDWalletProvider("pride mystery round monitor put young blush comfort rack live tenant razor",
+          "https://rinkeby.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c")
+       },
+       //from: "0xa4dA09DF8E5D0E05775c2C26ABCdFB97f3e84e15", // default address to use for any transaction Truffle makes during migrations
+       network_id: 1,
+       //gas: 4612388 // Gas limit used for deploys
+    }
    }
  };

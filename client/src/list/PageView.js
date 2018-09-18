@@ -43,7 +43,6 @@ class FullScreenDialog extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log(this.state);
     return (
       <div>
         <Button onClick={this.handleClickOpen}>Open full-screen dialog</Button>
@@ -66,7 +65,7 @@ class FullScreenDialog extends React.Component {
               </Button>
             </Toolbar>
           </AppBar>
-          <img src="https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod/document/get/bbbbbb/1" style="{max-width:100%; height:auto}"/>
+          <img src="https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod/document/get/bbbbbb/1" />
         </Dialog>
       </div>
     );
