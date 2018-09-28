@@ -20,13 +20,6 @@ var HDWalletProvider = require("truffle-hdwallet-provider");
        port: 8545,
        network_id: "*" // Match any network id
      },
-     ropsten: {
-       provider: function() {
-         return new HDWalletProvider("광경 유치원 해군 안개 작품 인체 농촌 생산 훈련 함께 약점 소설 그토록 기운 가죽",
-         "https://ropsten.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c")
-       },
-       network_id: 3
-     },
      rinkeby: {
        provider: function() {
          return new HDWalletProvider("pride mystery round monitor put young blush comfort rack live tenant razor",

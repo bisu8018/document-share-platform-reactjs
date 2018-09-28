@@ -1,42 +1,62 @@
 import React from 'react'
-import axios, { post } from 'axios';
+import axios, { get, post, put } from 'axios';
+import * as restapi from '../apis/DocApi';
 
 class SimpleReactFileUpload extends React.Component {
+  state = {
+    file: {
+      data: null,
+      size:-1,
+      ext:null,
+      owner:null
+    }
+  }
 
   constructor(props) {
     super(props);
-    this.state ={
-      file:null
-    }
-    this.onFormSubmit = this.onFormSubmit.bind(this)
-    this.onChange = this.onChange.bind(this)
-    this.fileUpload = this.fileUpload.bind(this)
+
+    //this.onFormSubmit = this.onFormSubmit.bind(this)
+    //this.onChange = this.onChange.bind(this)
+    //this.fileUpload = this.fileUpload.bind(this)
   }
-  onFormSubmit(e){
+  onFormSubmit = (e) => {
     e.preventDefault() // Stop form submit
-    this.fileUpload(this.state.file).then((response)=>{
-      console.log(response.data);
-    })
+    console.log("onFormSubmit", this.state.file);
+    const res = restapi.registDocument(this.state.file, (result) => {
+      this.clearForm();
+      this.clearFileInfo();
+    });
   }
-  onChange(e) {
-    this.setState({file:e.target.files[0]})
+
+  onChange = (e) => {
+
+    const file = e.target.files[0];
+    console.log("onChange", file);
+
+    let filename = file.name;
+    let filesize = file.size;
+    let ext  = filename.substring(filename.lastIndexOf(".") + 1, filename.length).toLowerCase();
+
+    console.log(filename, filesize, ext);
+    this.setState({file: {
+      data: file,
+      size: filesize,
+      ext: ext
+    }});
   }
-  fileUpload(file){
-    const url = 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod/document/upload';
-    const formData = new FormData();
-    formData.append('file',file)
-    const config = {
-        headers: {
-            'content-type': 'multipart/form-data',
-            'x-api-key': 'M84xHJ4cPEa1CAcmxHgTzyfSzIQSIZEaLR1mzRod'
-        }
-    }
-    return  post(url, formData,config)
+
+  clearForm = () => {
+    document.getElementById("frmUploadFile").reset();
+  }
+
+  clearFileInfo = () => {
+    this.setState({file:null});
   }
 
   render() {
+    console.log(JSON.stringify(this.state));
     return (
-      <form onSubmit={this.onFormSubmit}>
+      <form id="frmUploadFile" onSubmit={this.onFormSubmit}>
         <h1>File Upload</h1>
         <input type="file" onChange={this.onChange} />
         <button type="submit">Upload</button>

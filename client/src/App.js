@@ -24,11 +24,13 @@ class App extends Component {
   }
 
   fetchDocuments = async (nextKey) => {
-      if(this.state.fetching==false){
+      if(this.state.fetching==false) {
         this.setState({fetching:true})
         const docs = await restapi.getDocuments(nextKey);
-        //console.log(docs);
-        this.setState({resultList:docs.data.body});
+        if(docs.data.body) {
+            this.setState({resultList:docs.data.body});
+        }
+
       }
   }
 
@@ -46,7 +48,6 @@ class App extends Component {
       }
 
       if(this.state.resultList.length == 0){
-        console.log(this.state.resultList.length);
         this.fetchDocuments();
       }
     });
@@ -76,10 +77,12 @@ class App extends Component {
           drizzle={this.props.drizzle}
           drizzleState={this.state.drizzleState}
         />
+
         <SetString
           drizzle={this.props.drizzle}
           drizzleState={this.state.drizzleState}
         />
+
         <Footer />
       </div>
 
