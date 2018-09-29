@@ -87,27 +87,30 @@ class Album extends React.Component {
   render(){
 
     const { classes, resultList, handle, currentView } = this.props;
-    console.log("resultList", resultList);
+
     return (
       <React.Fragment>
         <main>
           <div className={classNames(classes.layout, classes.cardGrid)}>
             {/* End hero unit */}
             <Grid container spacing={40}>
-              {cards.map(result => (
-                <Grid item key={result.fileid} sm={6} md={4} lg={3}>
+              {resultList.map(result => (
+                <Grid item key={result.documentId} sm={6} md={4} lg={3}>
                   <Card className={classes.card}>
                     <CardMedia
                       className={classes.cardMedia}
-                      image={this.imageUrl(result.fileid, result.fileindex)}
+                      image={this.imageUrl(result.documentId, 1)}
                       title={result.fileid}
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="headline" component="h2">
-                        {result.fileid}
+                        {result.documentName?result.documentName:result.documentId}
                       </Typography>
                       <Typography>
-                        {domain}/{result.fileid}/{result.fileindex}
+                        {result.accountId}
+                      </Typography>
+                      <Typography>
+                        {result.created}
                       </Typography>
                     </CardContent>
                     <CardActions>

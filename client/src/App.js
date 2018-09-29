@@ -23,14 +23,16 @@ class App extends Component {
 
   }
 
-  fetchDocuments = async (nextKey) => {
+  fetchDocuments = async (params) => {
       if(this.state.fetching==false) {
+        console.log("fetchDocument start");
         this.setState({fetching:true})
-        const docs = await restapi.getDocuments(nextKey);
-        if(docs.data.body) {
-            this.setState({resultList:docs.data.body});
-        }
-
+        restapi.getDocuments(params).then((res)=>{
+          console.log("Fetch Document", res.data.resultList);
+          if(res.data.resultList) {
+              this.setState({resultList:res.data.resultList});
+          }
+        });
       }
   }
 
@@ -47,9 +49,9 @@ class App extends Component {
         this.setState({ loading: false, drizzleState });
       }
 
-      if(this.state.resultList.length == 0){
-        this.fetchDocuments();
-      }
+
+      this.fetchDocuments();
+
     });
   }
 
@@ -61,7 +63,7 @@ class App extends Component {
 
   render() {
     //console.log("state.loading : " + this.state.loading);
-    console.log("currentView", this.state.currentView);
+    //console.log("currentView", this.state.currentView);
     if (this.state.loading) return "Loading Drizzle...";
     return (
 
@@ -83,7 +85,7 @@ class App extends Component {
           drizzleState={this.state.drizzleState}
         />
 
-        <Footer />
+        <Footer handler={this.handleChangeView} />
       </div>
 
 

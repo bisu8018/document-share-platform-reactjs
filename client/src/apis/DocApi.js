@@ -1,20 +1,22 @@
 import axios from 'axios';
 const uploadDomain = "https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod/upload";
-const apiDomain = "http://localhost:4000";
+//const apiDomain = "http://localhost:4000";
+const apiDomain = "https://iwzx8ah5xf.execute-api.us-west-1.amazonaws.com/dev";
 
 const registDocumentInfoUrl = "/document/regist";
-
 const getDocumentsUrl = "/document/list";
 
-export function getDocuments(nextKey){
- return axios.get(apiDomain + getDocumentsUrl);
+export function getDocuments(params){
+
+  const config = {
+    header: {
+       'Access-Control-Allow-Origin': '*',
+       'Content-Type':'application/json'
+    }
+  }
+
+ return axios.get(apiDomain + getDocumentsUrl, config);
 }
-/*
-export function registDocument(file){
-  const header = null;
-  return post(apiDomain + regsitDocumentInfoUrl, params);
-}
-*/
 
 export function registDocument(file, callback) {
 
@@ -26,7 +28,11 @@ export function registDocument(file, callback) {
   // 1. Regist Document Meta Info
   const url = apiDomain + registDocumentInfoUrl;//localhost:4000/document/regist"
   console.log("Regist Document Meta Info", url, file);
-  const res = post(url, null).then((res)=>{
+  const registParam = {
+    filename:file.data.name,
+    size:file.data.size,
+  }
+  const res = post(url, registParam).then((res)=>{
 
     console.log("Regist Document Meta Info Complete", res.data);
 
@@ -84,7 +90,8 @@ export function post(url, params){
     url : url,
     data:params,
     header: {
-      "Content-Type":"application/json"
+      "Content-Type":"application/json",
+       'Access-Control-Allow-Origin': '*'
     }
   }
   return axios.post(url, config);
@@ -96,7 +103,8 @@ export function syncPost(url, params) {
     url : url,
     data: params,
     header: {
-      "Content-Type":"application/json"
+      "Content-Type":"application/json",
+       'Access-Control-Allow-Origin': '*'
     }
   }
 

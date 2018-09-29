@@ -37,7 +37,7 @@ class SimpleReactFileUpload extends React.Component {
     let filesize = file.size;
     let ext  = filename.substring(filename.lastIndexOf(".") + 1, filename.length).toLowerCase();
 
-    console.log(filename, filesize, ext);
+    //console.log(filename, filesize, ext);
     this.setState({file: {
       data: file,
       size: filesize,
@@ -54,7 +54,7 @@ class SimpleReactFileUpload extends React.Component {
   }
 
   render() {
-    console.log(JSON.stringify(this.state));
+    //console.log(JSON.stringify(this.state));
     return (
       <form id="frmUploadFile" onSubmit={this.onFormSubmit}>
         <h1>File Upload</h1>

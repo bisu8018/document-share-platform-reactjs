@@ -23,11 +23,13 @@ const styles = theme => ({
 });
 
 const actions = [
-  { icon: <FileCopyIcon />, name: 'Copy' },
-  { icon: <SaveIcon />, name: 'Save' },
+  { icon: <FileCopyIcon />, name: '목록', value: "list" },
+  { icon: <SaveIcon />, name: '등록', value: "upload" },
+  /*
   { icon: <PrintIcon />, name: 'Print' },
   { icon: <ShareIcon />, name: 'Share' },
   { icon: <DeleteIcon />, name: 'Delete' },
+  */
 ];
 
 class SpeedDials extends React.Component {
@@ -37,24 +39,35 @@ class SpeedDials extends React.Component {
   };
 
   handleVisibility = () => {
+
     this.setState(state => ({
       open: false,
       hidden: !state.hidden,
     }));
+
   };
 
-  handleClick = () => {
+  handleClick = (e, value) => {
+    console.log("handleClick", e, value)
+    if(value){
+      this.props.handler(e);
+    }
+
+
     this.setState(state => ({
       open: !state.open,
     }));
+
   };
 
   handleOpen = () => {
+
     if (!this.state.hidden) {
       this.setState({
         open: true,
       });
     }
+
   };
 
   handleClose = () => {
@@ -64,7 +77,7 @@ class SpeedDials extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, handler } = this.props;
     const { hidden, open } = this.state;
 
     let isTouch;
@@ -93,7 +106,7 @@ class SpeedDials extends React.Component {
               key={action.name}
               icon={action.icon}
               tooltipTitle={action.name}
-              onClick={this.handleClick}
+              onClick={this.handleClick.bind(this, action.value)}
             />
           ))}
         </SpeedDial>
