@@ -47,9 +47,9 @@ class SpeedDials extends React.Component {
 
   };
 
-  handleClick = (e, value) => {
-    console.log("handleClick", e, value)
-    if(value){
+  handleClick = (e) => {
+    console.log("handleClick", e)
+    if(e){
       this.props.handler(e);
     }
 

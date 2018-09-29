@@ -14,12 +14,17 @@ import Upload from "./upload/Upload";
 
 import * as restapi from './apis/DocApi';
 
+const VIEW_LIST = ["list", "upload", "detail"];
+
 class App extends Component {
-  state = { loading: true, drizzleState: null, currentView:"list", authenticated:true, resultList:[], fetching:false };
+  state = { loading: true, drizzleState: null, currentView:"list", authenticated:true, resultList:[], selected: null, fetching:false };
 
   handleChangeView = (viewName) => {
     console.log("on event handleChangeView", viewName);
-    this.setState({currentView:viewName})
+    if(VIEW_LIST.includes(viewName)){
+      this.setState({currentView:viewName});
+    }
+
 
   }
 
@@ -73,7 +78,7 @@ class App extends Component {
         {this.state.authenticated==false && <SignIn />}
         {(this.state.authenticated && this.state.currentView == "list") && <DocList resultList={this.state.resultList} handler={this.handleChangeView} currentView={this.state.currentView}/>}
         {(this.state.authenticated && this.state.currentView == "upload") && <Upload />}
-        {(this.state.authenticated && this.state.currentView == "detail") && <DocDetail />}
+        {(this.state.authenticated && this.state.currentView == "detail") && <DocDetail selected={this.state.selected}/>}
 
         <ReadString
           drizzle={this.props.drizzle}
