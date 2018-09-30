@@ -74,14 +74,12 @@ function handlePageView(fileid) {
 }
 class Album extends React.Component {
 
-  imageUrl = (fileid, fileindex) => domain+ "/prod/document/get/" + fileid + "/" + fileindex;
-  pageUrl = (fileid) => domain+ "/prod/document/get/" + fileid;
+  imageUrl = (documentId, pageNo) => domain+ "/prod/document/get/" + documentId + "/" + pageNo;
 
-  goDetail = (viewName, e) => {
+  goDetail = (e) => {
     //e.preventDefault();
-    console.log("goDetail", e, viewName);
-    console.log(this.props.currentView);
-    this.props.handler("detail");
+    //console.log("goDetail", e);
+    this.props.handleSelectDocument(e);
 
   }
   render(){
@@ -100,7 +98,7 @@ class Album extends React.Component {
                     <CardMedia
                       className={classes.cardMedia}
                       image={this.imageUrl(result.documentId, 1)}
-                      title={result.fileid}
+                      title={result.documentName}
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="headline" component="h2">
@@ -114,7 +112,7 @@ class Album extends React.Component {
                       </Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small" color="primary" onClick={this.goDetail.bind(this, "detail")}>
+                      <Button size="small" color="primary" onClick={this.goDetail.bind(this, result)}>
                         View
                       </Button>
                       <Button size="small" color="primary">

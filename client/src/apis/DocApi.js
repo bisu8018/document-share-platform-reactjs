@@ -1,10 +1,15 @@
 import axios from 'axios';
 const uploadDomain = "https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod/upload";
+const imgDomain = "https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod/document/get";
 //const apiDomain = "http://localhost:4000";
 const apiDomain = "https://iwzx8ah5xf.execute-api.us-west-1.amazonaws.com/dev";
 
 const registDocumentInfoUrl = "/document/regist";
 const getDocumentsUrl = "/document/list";
+
+export function getPageView(documentId, pageNo) {
+  return imgDomain+ "/" + documentId + "/" + pageNo;
+}
 
 export function getDocuments(params){
 

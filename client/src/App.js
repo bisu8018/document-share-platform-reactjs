@@ -28,6 +28,12 @@ class App extends Component {
 
   }
 
+  handleSelectDocument = (doc) => {
+
+    this.setState({currentView:"detail", selected:doc});
+
+  }
+
   fetchDocuments = async (params) => {
       if(this.state.fetching==false) {
         console.log("fetchDocument start");
@@ -76,7 +82,7 @@ class App extends Component {
 
         <Header />
         {this.state.authenticated==false && <SignIn />}
-        {(this.state.authenticated && this.state.currentView == "list") && <DocList resultList={this.state.resultList} handler={this.handleChangeView} currentView={this.state.currentView}/>}
+        {(this.state.authenticated && this.state.currentView == "list") && <DocList resultList={this.state.resultList} handler={this.handleChangeView} handleSelectDocument={this.handleSelectDocument} currentView={this.state.currentView}/>}
         {(this.state.authenticated && this.state.currentView == "upload") && <Upload />}
         {(this.state.authenticated && this.state.currentView == "detail") && <DocDetail selected={this.state.selected}/>}
 
