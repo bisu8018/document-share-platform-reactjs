@@ -25,8 +25,8 @@ const styles = theme => ({
 const actions = [
   { icon: <FileCopyIcon />, name: '목록', value: "list" },
   { icon: <SaveIcon />, name: '등록', value: "upload" },
+  { icon: <PrintIcon />, name: 'Sign-in', value: "signin" },
   /*
-  { icon: <PrintIcon />, name: 'Print' },
   { icon: <ShareIcon />, name: 'Share' },
   { icon: <DeleteIcon />, name: 'Delete' },
   */
