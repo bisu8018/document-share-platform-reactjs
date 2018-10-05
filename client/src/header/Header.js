@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
@@ -71,7 +72,10 @@ const styles = theme => ({
 });
 
 function SearchAppBar(props) {
-  const { classes } = props;
+  const { classes, auth } = props;
+
+  const userInfo = auth.getUserInfo();
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -80,9 +84,12 @@ function SearchAppBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="title" color="inherit" noWrap>
-            BLUE BOTTLE
+            BLUE BOTTLE{(userInfo && userInfo.nickname) ? (' - ' + userInfo.nickname)
+              : ' - Anonymous User'} :::::: {userInfo && userInfo.email_verified? 'Verify' : 'No Verify'}
           </Typography>
+
           <div className={classes.grow} />
+
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -96,6 +103,20 @@ function SearchAppBar(props) {
               }}
             />
           </div>
+
+          {auth.isAuthenticated() &&
+            <Button variant="contained" className={classes.button} onClick={auth.logout} disabled={!auth.isAuthenticated()}>
+              Log out
+            </Button>
+          }
+          {!auth.isAuthenticated() &&
+            <Button variant="contained" className={classes.button} onClick={auth.login} disabled={auth.isAuthenticated()}>
+              Sign-In
+            </Button>
+          }
+
+
+
         </Toolbar>
       </AppBar>
     </div>
