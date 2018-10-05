@@ -2,12 +2,11 @@ const DocumentRegistry = artifacts.require("./DocumentRegistry.sol");
 
 contract("DocumentRegistry", accounts => {
 
-  it("should be initialized", async () => {
+  it("confirm total page view", async () => {
 
     // prepare
-    const documentRegistry = await DocumentRegistry.deployed();
+    const totalPageView = 234000;
 
-    // logic
     var x = new Date();
     var y = x.getFullYear();
     var m = x.getMonth();
@@ -15,11 +14,15 @@ contract("DocumentRegistry", accounts => {
     var u = new Date(Date.UTC(y, m, d, 0, 0, 0, 0, 0));
     const timestamp = u.getTime();
 
+    const documentRegistry = await DocumentRegistry.deployed();
     await documentRegistry.init(timestamp, 300, { from: accounts[0] });
 
+    // logic
+    await documentRegistry.confirmTotalPageView(timestamp, totalPageView, { from: accounts[0] });
+
     // assert
-    const b = await documentRegistry.isInitialized();
-    assert.equal(true, b, "was not initialized");
+    const r_totalPageView = await documentRegistry.getTotalPageView(timestamp);
+    assert.equal(totalPageView, r_totalPageView, "different total page view");
   });
 
 });
