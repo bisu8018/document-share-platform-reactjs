@@ -32,7 +32,7 @@ class SetString extends React.Component {
 
     // if transaction hash does not exist, don't display anything
     if (!txHash) return null;
-
+    console.log("getTxStatus", txHash, transactions, transactions[txHash].status);
     // otherwise, return the transaction status
     return `Transaction status: ${transactions[txHash].status}`;
   };

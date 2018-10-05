@@ -1,18 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
+import MainRoutes from "./MainRoutes"
 import registerServiceWorker from "./registerServiceWorker";
 
+//import { makeMainRoutes } from './routes';
 
-
-import { makeMainRoutes } from './routes';
-
-const routes = makeMainRoutes();
-
-
+//const routes = makeMainRoutes();
 
 
 // pass in the drizzle instance
-ReactDOM.render(routes, document.getElementById("root"));
+ReactDOM.render(<MainRoutes />, document.getElementById("root"));
 registerServiceWorker();
