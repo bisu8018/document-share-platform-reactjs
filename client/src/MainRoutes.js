@@ -5,6 +5,8 @@ import Callback from './callback/callback';
 import Auth from './auth/auth';
 import history from './history';
 
+import Header from "./header/Header";
+import TopMenu from "./header/TopMenu";
 import DocList from "./list/List";
 import DocDetail from "./detail/Detail";
 import Upload from "./upload/Upload";
@@ -31,6 +33,7 @@ const options = { contracts: [DocumentRegistry, MyStringStore] };
 // setup the drizzle store and drizzle
 const drizzleStore = generateStore(options);
 const drizzle = new Drizzle(options, drizzleStore);
+
 
 
 class MainRoutes extends Component {
@@ -62,22 +65,15 @@ class MainRoutes extends Component {
     return (
         <Router history={history}>
           <div>
-            <div>
-              <Link to="/">Home</Link>
-              <Link to="/upload">Upload</Link>
-            </div>
-
+            <Header auth={auth} />
+            <TopMenu auth={auth} {...this.props} />
             <Route exact path="/" render={(props) => <App drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/upload" render={(props) => <Upload drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/callback" render={(props) => {
               handleAuthentication(props);
               return <Callback {...props} />
             }}/>
-            <Route path="/logout" render={(props) => {
-                handleLogout(props);
-                return <Callback {...props} />
-              }}/>
-            </div>
+          </div>
         </Router>
     );
   }

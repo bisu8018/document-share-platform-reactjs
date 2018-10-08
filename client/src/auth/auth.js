@@ -36,10 +36,11 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
 
       console.log("handleAuthentication", authResult, this);
+
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.auth0.client.userInfo(authResult.accessToken, (err, user) => {
           if(err){
-              alert('Error: ${err.error}. Getting UserInfo');
+              alert(`Error: ${err.error}. Getting UserInfo`);
           } else {
               console.log('Getting Userinfo Success!!', {user, authResult});
               this.setSession(authResult, user);
@@ -49,9 +50,11 @@ export default class Auth {
         });
 
       } else if (err) {
+        this.clearSession();
         history.replace('/');
-        console.log(err);
-        alert('Error: ${err.error}. Check the console for further details.');
+        console.error(err);
+        //alert(`Error: ${err.error}. Check the console for further details.`);
+
       }
     });
   }
@@ -101,9 +104,13 @@ export default class Auth {
   isAuthenticated() {
     // Check whether the current time is past the
     // access token's expiry time
-
-    let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    //console.log("expiresAt", new Date(expiresAt), localStorage);
-    return new Date().getTime() < expiresAt;
+    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    //console.log("isAuthenticated", new Date(expiresAt), localStorage);
+    const isUnExpired = new Date().getTime() < expiresAt;
+    if(!isUnExpired){
+      console.error("Session Expired", expiresAt, localStorage);
+      this.clearSession();
+    }
+    return isUnExpired;
   }
 }

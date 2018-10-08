@@ -28,6 +28,9 @@ export function getDocuments(params){
 export function registDocument(args, callback) {
   const fileInfo = args.fileInfo;
   const user = args.userInfo;
+  const account = args.account;
+  const tags = args.tags;
+
   if(!fileInfo.file || !user){
     console.error("The registration value(file or metadata) is invalid.", fileInfo, user);
     return;
@@ -39,11 +42,13 @@ export function registDocument(args, callback) {
   const res = ajax.post(url, {
     filename:fileInfo.file.name,
     size:fileInfo.file.size,
-    username:user.name
+    username:user.name,
+    account: account,
+    tags:tags
   }).then((registResult)=>{
 
-    console.log("Regist Document Meta Info Complete", registResult.data);
-    if(registResult.data && registResult.data.documentId){
+    console.log("Getting Response Regist Document Meta Info", registResult.data);
+    if(registResult && registResult.data && registResult.data.documentId){
 
       //2. Upload File Binary
       const documentId = registResult.data.documentId;
@@ -59,7 +64,11 @@ export function registDocument(args, callback) {
         return callback({documentId:documentId, accountId:owner});
       });
     } else {
-        return callback(null, {err:500,message:"'/regist' response data is invalid!"});
+        let detail = null;
+        if(registResult && registResult.data){
+            detail = JSON.stringify(registResult.data);
+        }
+        return callback(null, {err:"error", message:"regist document response data is invalid!", "detail":detail});
     }
   });
 

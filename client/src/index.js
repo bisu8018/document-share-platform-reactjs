@@ -8,7 +8,6 @@ import registerServiceWorker from "./registerServiceWorker";
 
 //const routes = makeMainRoutes();
 
-
 // pass in the drizzle instance
 ReactDOM.render(<MainRoutes />, document.getElementById("root"));
 registerServiceWorker();
