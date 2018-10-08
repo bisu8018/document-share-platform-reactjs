@@ -4,8 +4,6 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import logo from './logo.svg';
 import './App.css';
-import ReadString from "./ReadString";
-import SetString from "./SetString";
 import DocList from "./list/List";
 import DocDetail from "./detail/Detail";
 import SignIn from "./signin/SignIn";
@@ -71,16 +69,6 @@ class App extends Component {
 
         {(this.state.authenticated && this.state.currentView == "list") && <DocList resultList={this.state.resultList} handler={this.handleChangeView} handleSelectDocument={this.handleSelectDocument} currentView={this.state.currentView}/>}
         {(this.state.authenticated && this.state.currentView == "detail") && <DocDetail selected={this.state.selected}/>}
-
-        <ReadString
-          drizzle={drizzle}
-          drizzleState={drizzleState}
-        />
-
-        <SetString
-          drizzle={drizzle}
-          drizzleState={drizzleState}
-        />
 
         <Footer handler={this.handleChangeView} />
       </div>

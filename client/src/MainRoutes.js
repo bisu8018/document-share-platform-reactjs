@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Router, Link } from 'react-router-dom';
+import logobar from './logo_bar.svg';
 import App from './App';
 import Callback from './callback/callback';
 import Auth from './auth/auth';
@@ -60,7 +61,7 @@ class MainRoutes extends Component {
 
   render() {
 
-    if (this.state.loading) return (<Callback {...this.props} message="Loading Drizzle...." />);
+    //if (this.state.loading) return (<Callback {...this.props} message="Loading Drizzle...." />);
 
     return (
         <Router history={history}>
