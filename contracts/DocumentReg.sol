@@ -2,6 +2,7 @@ pragma solidity ^0.4.24;
 
 import "./Deck.sol";
 import "./Utility.sol";
+import "./AuthorPool.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 contract DocumentReg is Ownable{
@@ -30,7 +31,7 @@ contract DocumentReg is Ownable{
   // private variables
   Utility private util;
   Deck private token;
-  //AuthorPool private authorPool;
+  AuthorPool private authorPool;
   //CuratorPool private curatorPool;
 
   // public variables
@@ -39,12 +40,13 @@ contract DocumentReg is Ownable{
   function init(address _token, address _author, address _curator, address _utility) public {
 
     require(_token != 0 && address(token) == 0);
-    //require(_author != 0 && address(authorPool) == 0);
+    require(_author != 0 && address(authorPool) == 0);
     //require(_curator != 0 && address(curatorPool) == 0);
     require(_utility != 0 && address(util) == 0);
 
     token = Deck(_token);
     util = Utility(_utility);
+    authorPool = AuthorPool(_author);
 
     createTime = util.getTimeMillis();
     emit _Initialize(createTime, _token);
@@ -68,7 +70,7 @@ contract DocumentReg is Ownable{
     // creating user document mapping
     // userDocuments[msg.sender].push(_docId);
 
-    emit _RegisterNewDocument(_docId, tMillis, msg.sender, 0);
+    emit _RegisterNewDocument(_docId, tMillis, msg.sender, index);
   }
 
   function contains(bytes32 _docId) public view returns (bool) {
