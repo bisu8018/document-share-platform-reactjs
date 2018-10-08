@@ -1,6 +1,7 @@
 import history from '../history';
 import auth0 from 'auth0-js';
 import { AUTH_CONFIG } from '../resources/auth.properties';
+import { APP_PROPERTIES } from '../resources/APP.properties';
 
 export default class Auth {
   auth0 = new auth0.WebAuth({
@@ -26,7 +27,7 @@ export default class Auth {
   logout = () => {
     this.clearSession();
     this.auth0.logout({
-      returnTo: 'http://localhost:3000',
+      returnTo: APP_PROPERTIES.mainHost,
       clientID: AUTH_CONFIG.clientId
     });
 
