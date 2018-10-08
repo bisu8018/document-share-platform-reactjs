@@ -4,10 +4,6 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import logo from './logo.svg';
 import './App.css';
-import ReadString from "./ReadString";
-import SetString from "./SetString";
-
-import Header from "./header/Header";
 import DocList from "./list/List";
 import DocDetail from "./detail/Detail";
 import SignIn from "./signin/SignIn";
@@ -50,17 +46,10 @@ class App extends Component {
 
   }
 
-  validateSessionInfo = (sessionInfo) => {
-    console.log("validateSessionInfo", "sessionInfo", sessionInfo);
-    authApi.getUserInfo(sessionInfo.idToken);
-  }
-
   componentDidMount() {
     const { drizzle, auth } = this.props;
     console.log("componentDidMount");
     this.fetchDocuments();
-    this.validateSessionInfo(auth.getSession());
-
   }
 
   compomentWillUnmount() {
@@ -72,25 +61,14 @@ class App extends Component {
     //console.log("state.loading : " + this.state.loading);
     //console.log("currentView", this.state.currentView);
     //console.log("auth info", auth.getSession(), "isAuthenticated", auth.isAuthenticated(), APP_PROPERTIES);
+    //console.log("process.env", process.env);
 
     return (
 
       <div className="App">
 
-        <Header auth={auth} />
-
         {(this.state.authenticated && this.state.currentView == "list") && <DocList resultList={this.state.resultList} handler={this.handleChangeView} handleSelectDocument={this.handleSelectDocument} currentView={this.state.currentView}/>}
         {(this.state.authenticated && this.state.currentView == "detail") && <DocDetail selected={this.state.selected}/>}
-
-        <ReadString
-          drizzle={drizzle}
-          drizzleState={drizzleState}
-        />
-
-        <SetString
-          drizzle={drizzle}
-          drizzleState={drizzleState}
-        />
 
         <Footer handler={this.handleChangeView} />
       </div>

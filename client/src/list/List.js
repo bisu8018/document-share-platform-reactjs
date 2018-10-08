@@ -74,7 +74,7 @@ function handlePageView(fileid) {
 }
 class Album extends React.Component {
 
-  imageUrl = (documentId, pageNo) => domain+ "/prod/document/get/" + documentId + "/" + pageNo;
+  imageUrl = (documentId, pageNo) => domain+ "/prod/document/thumb/" + documentId + "/" + pageNo;
 
   goDetail = (e) => {
     //e.preventDefault();

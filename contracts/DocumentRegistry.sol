@@ -40,7 +40,7 @@ contract DocumentRegistry {
     return true;
   }
 
-  function registerDocument(bytes32 _docId) external {
+  function registerDocument(bytes32 _docId) public {
 
     require(documentRegistry[_docId].timestamp == 0); // register once
 

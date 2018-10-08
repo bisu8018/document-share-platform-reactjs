@@ -1,8 +1,6 @@
 import React from 'react'
 import axios, { get, post, put } from 'axios';
 import * as restapi from '../apis/DocApi';
-import ReadString from "../ReadString";
-import SetString from "../SetString";
 class SimpleReactFileUpload extends React.Component {
   state = {
     fileInfo: {
@@ -14,22 +12,31 @@ class SimpleReactFileUpload extends React.Component {
     stackId: null
   }
 
+  onClick = (e) => {
+    console.log("click");
+    //this.setValue("t" + new Date()); return;
+
+    this.registDocumentToSmartContract({documentId:"a32539cb30eb40f2b50d995636b79c8a"});
+  }
+
   onFormSubmit = (e) => {
     e.preventDefault() // Stop form submit
-
-    this.registDocumentToSmartContract({documentId:"00e89f6da7d84344baede6899fa110b7"}); return;
-
 
     if(!this.state.fileInfo || !this.state.fileInfo.file){
       alert("Please select a document file");
     } else {
-      console.log("Selected a document file", this.state.fileInfo);
+      const { drizzle, drizzleState, auth } = this.props;
+      const account = drizzleState.accounts[0];
+
+      console.log("Selected a document file", this.state.fileInfo, "eth account", account);
       const res = restapi.registDocument({
           fileInfo: this.state.fileInfo,
-          userInfo: this.props.auth.getUserInfo()
+          userInfo: this.props.auth.getUserInfo(),
+          account: account,
+          //tags:['BlockChain', 'ConsenSys']
         }, (result, err) => {
           if(err){
-            alert(err.message);
+            alert("Regist Document Fail : " + JSON.stringify(err.detail));
           } else {
             this.registDocumentToSmartContract(result);
           }
@@ -67,20 +74,31 @@ class SimpleReactFileUpload extends React.Component {
   }
 
   registDocumentToSmartContract = (result) => {
-
+    const { drizzle, drizzleState, auth } = this.props;
     if(!result || !result.documentId){
       alert("documentId is nothing");
       return;
     }
-    const { drizzle, drizzleState, auth } = this.props;
+
     const documentId = result.documentId;
-    const contract = drizzle.contracts.DocumentRegistry;
     const account = drizzleState.accounts[0];
 
-    console.log("registSmartContractAddress", drizzle, drizzleState, contract, account, result);
-
+    const contract = drizzle.contracts.DocumentRegistry;
     const stackId = contract.methods["registerDocument"].cacheSend(drizzle.web3.utils.fromAscii(documentId), {
       from: account
+    });
+    console.log("registSmartContractAddress", drizzle, drizzleState, contract, account, result);
+    // save the `stackId` for later reference
+    this.setState({ stackId });
+  };
+
+  setValue = value => {
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.MyStringStore;
+
+    // let drizzle know we want to call the `set` method with `value`
+    const stackId = contract.methods["set"].cacheSend(value, {
+      from: drizzleState.accounts[0]
     });
 
     // save the `stackId` for later reference
@@ -88,6 +106,7 @@ class SimpleReactFileUpload extends React.Component {
   };
 
   getTxStatus = () => {
+    const { drizzle, drizzleState, auth } = this.props;
     // get the transaction states from the drizzle state
     const { transactions, transactionStack } = this.props.drizzleState;
 
@@ -96,8 +115,15 @@ class SimpleReactFileUpload extends React.Component {
 
     // if transaction hash does not exist, don't display anything
     if (!txHash) return null;
-    console.log("getTxStatus", txHash, transactions, transactions[txHash].status);
+    console.log("getTxStatus", txHash, transactions, transactions[txHash].status, drizzleState, drizzle);
     // otherwise, return the transaction status
+    const txStatus = transactions[txHash].status;
+    const txReceipt = transactions[txHash].receipt;
+    if(txReceipt){
+      console.log("Transcation Complete", txReceipt);
+      this.setState({stackId:null});
+    }
+
     return `Transaction status: ${transactions[txHash].status}`;
   };
 
@@ -112,6 +138,8 @@ class SimpleReactFileUpload extends React.Component {
 
   render() {
     const { drizzle, drizzleState, auth } = this.props;
+    if(!auth.isAuthenticated()) return "Loading";
+
     return (
       <div className="App">
         <form id="frmUploadFile" onSubmit={this.onFormSubmit}>
@@ -120,16 +148,6 @@ class SimpleReactFileUpload extends React.Component {
           <button type="submit">Upload</button>
         </form>
         <div>{this.getTxStatus()}</div>
-
-          <ReadString
-            drizzle={drizzle}
-            drizzleState={drizzleState}
-          />
-
-          <SetString
-            drizzle={drizzle}
-            drizzleState={drizzleState}
-          />
       </div>
     )
   }

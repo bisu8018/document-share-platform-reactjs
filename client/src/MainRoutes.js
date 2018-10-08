@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Route, Router, Link } from 'react-router-dom';
+import logobar from './logo_bar.svg';
 import App from './App';
 import Callback from './callback/callback';
 import Auth from './auth/auth';
 import history from './history';
 
+import Header from "./header/Header";
+import TopMenu from "./header/TopMenu";
 import DocList from "./list/List";
 import DocDetail from "./detail/Detail";
 import Upload from "./upload/Upload";
@@ -33,6 +36,7 @@ const drizzleStore = generateStore(options);
 const drizzle = new Drizzle(options, drizzleStore);
 
 
+
 class MainRoutes extends Component {
   state = { loading: true, drizzleState: null};
   componentDidMount() {
@@ -57,27 +61,20 @@ class MainRoutes extends Component {
 
   render() {
 
-    if (this.state.loading) return (<Callback {...this.props} message="Loading Drizzle...." />);
+    //if (this.state.loading) return (<Callback {...this.props} message="Loading Drizzle...." />);
 
     return (
         <Router history={history}>
           <div>
-            <div>
-              <Link to="/">Home</Link>
-              <Link to="/upload">Upload</Link>
-            </div>
-
+            <Header auth={auth} />
+            <TopMenu auth={auth} {...this.props} />
             <Route exact path="/" render={(props) => <App drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/upload" render={(props) => <Upload drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/callback" render={(props) => {
               handleAuthentication(props);
               return <Callback {...props} />
             }}/>
-            <Route path="/logout" render={(props) => {
-                handleLogout(props);
-                return <Callback {...props} />
-              }}/>
-            </div>
+          </div>
         </Router>
     );
   }
