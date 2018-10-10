@@ -19,10 +19,16 @@ contract("DocumentReg", accounts => {
     init(documentReg, deck, authorPool, "", utility);
 
     // logic
-    await documentReg.register(docId, { from: accounts[0] });
+    // await documentReg.register(docId, { from: accounts[0] });
 
     // assert
-    const isExist = await documentReg.contains(docId, { from: accounts[0] });
+    var isExist = await documentReg.contains(docId, { from: accounts[0] });
+
+    if (!isExist) {
+      await documentReg.register(docId, { from: accounts[0] });
+      isExist = await documentReg.contains(docId, { from: accounts[0] });
+    }
+
     assert.equal(true, isExist, "can't find document");
   });
 
@@ -36,5 +42,5 @@ contract("DocumentReg", accounts => {
     // logic
     documentReg.init(_token, _author, _curator, _utility, { from: accounts[0] });
   }
-  
+
 });

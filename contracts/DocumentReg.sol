@@ -10,7 +10,8 @@ contract DocumentReg is Ownable{
   event _Initialize(uint timestamp, address token);
   event _RegisterNewDocument(bytes32 indexed docId, uint timestamp, address indexed applicant, uint count);
   event _ConfirmPageView(bytes32 indexed docId, uint timestamp, uint pageView);
-  event _ConfirmTotalPageView(uint timestamp, uint pageView);
+  event _ConfirmTotalPageViewSquare(uint timestamp, uint pageView);
+  //event _DetermineReward(bytes32 indexed docId, uint timestamp, uint pageView, uint totalPageView, uint dailyReward);
 
   struct Document {
     address author;
@@ -24,9 +25,9 @@ contract DocumentReg is Ownable{
   // key list for iteration
   bytes32[] private docList;
 
-  // store total page views for reward calculation
-  //  : timestamp(yyyy-mm-dd) => daily total page view
-  mapping (uint => uint) private totalPageViews;
+  // store total page view square for reward calculation
+  //  : timestamp(yyyy-mm-dd) => daily total page view square
+  mapping (uint => uint) private totalPageViewSquare;
 
   // private variables
   Utility private util;
@@ -46,7 +47,10 @@ contract DocumentReg is Ownable{
 
     token = Deck(_token);
     util = Utility(_utility);
+
+    // init author pool
     authorPool = AuthorPool(_author);
+    authorPool.init(token, util);
 
     createTime = util.getTimeMillis();
     emit _Initialize(createTime, _token);
@@ -68,7 +72,8 @@ contract DocumentReg is Ownable{
     uint index = docList.push(_docId);
 
     // creating user document mapping
-    // userDocuments[msg.sender].push(_docId);
+    authorPool.register(_docId);
+    assert(authorPool.contains(_docId));
 
     emit _RegisterNewDocument(_docId, tMillis, msg.sender, index);
   }
@@ -87,12 +92,6 @@ contract DocumentReg is Ownable{
     return map[_docId].createTime;
   }
 
-  function getDailyPageViewByKey(bytes32 _docId, uint date) public view returns (uint) {
-    require(map[_docId].createTime != 0);
-    require(map[_docId].pageViews[date] != 0);
-    return map[_docId].pageViews[date];
-  }
-
   function count() public view returns (uint) {
     return uint(docList.length);
   }
@@ -103,21 +102,21 @@ contract DocumentReg is Ownable{
   }
 
   // -------------------------------
-  // Total Page View Functions
+  // Total Page View Square Functions
   // -------------------------------
 
-  function confirmTotalPageView(uint _date, uint _totalPageView) public
+  function confirmTotalPageViewSquare(uint _date, uint _totalPageViewSquare) public
     onlyOwner()
   {
     require(_date != 0);
-    require(_totalPageView != 0);
-    totalPageViews[_date] = _totalPageView;
-    emit _ConfirmTotalPageView(_date, _totalPageView);
+    require(_totalPageViewSquare != 0);
+    totalPageViewSquare[_date] = _totalPageViewSquare;
+    emit _ConfirmTotalPageViewSquare(_date, _totalPageViewSquare);
   }
 
-  function getTotalPageView(uint _date) public view returns (uint) {
+  function getTotalPageViewSquare(uint _date) public view returns (uint) {
     require(_date != 0);
-    return totalPageViews[_date];
+    return totalPageViewSquare[_date];
   }
 
   // -------------------------------
@@ -133,9 +132,42 @@ contract DocumentReg is Ownable{
     emit _ConfirmPageView(_docId, _date, _pageView);
   }
 
-  function getPageView(bytes32 _docId, uint _date) external view returns (uint) {
+  function getPageView(bytes32 _docId, uint _date) public view returns (uint) {
     require(map[_docId].createTime != 0);
     return map[_docId].pageViews[_date];
+  }
+
+  // --------------------------------
+  //
+  function determineDeco(bytes32 _docId) public view returns (uint) {
+
+    //require(authorPool.createTime != 0);
+    int idx = authorPool.getAssetIndex(_docId);
+    if (idx < 0) {
+      return uint(0);
+    }
+
+    uint claimDate = authorPool.getLastClaimedDate(idx);
+    uint dateMillis = util.getDateMillis();
+
+    uint sumDeco = 0;
+    while (claimDate < dateMillis) {
+      if (claimDate == 0) {
+        claimDate = authorPool.getListedDate(idx);
+      }
+      assert(claimDate <= dateMillis);
+
+      uint tpvs = getTotalPageViewSquare(claimDate);
+      uint pv = getPageView(_docId, claimDate);
+      sumDeco += authorPool.determineDeco(idx, claimDate, pv, tpvs);
+
+      uint nextDate = claimDate + util.getOneDayMillis();
+      assert(claimDate < nextDate);
+      claimDate = nextDate;
+
+      //emit _DetermineReward(_docId, lastClaimedDate, pv, tpv, dailyRewardPool);
+    }
+    return sumDeco;
   }
 
 }

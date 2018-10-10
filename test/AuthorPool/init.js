@@ -22,4 +22,18 @@ contract("AuthorPool", accounts => {
     assert.notEqual(b, 0, "was not initialized");
   });
 
+  it("registered document should exist", async () => {
+
+    // prepare
+    const docId = "1234567890abcdefghijklmnopqrstuv";
+    const authorPool = await AuthorPool.deployed();
+
+    // logic
+    await authorPool.register(docId, { from: accounts[0] });
+
+    // assert
+    const isExist = await authorPool.contains(docId, { from: accounts[0] });
+    assert.equal(true, isExist, "can't find document");
+  });
+
 });

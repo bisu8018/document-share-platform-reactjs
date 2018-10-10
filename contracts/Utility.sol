@@ -22,4 +22,15 @@ contract Utility {
     return tMillis;
   }
 
+  function getOffsetYears(uint _from) public view returns (uint) {
+    uint curTimeSec = block.timestamp;
+    uint createTimeSec = _from / 1000;
+    uint offsetSec = curTimeSec - createTimeSec;
+    uint offsetDays = offsetSec / (ONE_DAY_MILLIS / 1000);
+    return offsetDays / 365;
+  }
+
+  function getOneDayMillis() public view returns (uint) {
+    return ONE_DAY_MILLIS;
+  }
 }

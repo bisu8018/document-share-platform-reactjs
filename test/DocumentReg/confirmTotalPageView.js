@@ -5,10 +5,10 @@ const AuthorPool = artifacts.require("./AuthorPool.sol");
 
 contract("DocumentReg", accounts => {
 
-  it("confirm total page view", async () => {
+  it("confirm total page view square", async () => {
 
     // prepare
-    const totalPageView = 234000;
+    const totalPageViewSquare = 234000;
 
     const deck = await Deck.deployed();
     const utility = await Utility.deployed();
@@ -19,11 +19,11 @@ contract("DocumentReg", accounts => {
 
     // logic
     const timestamp = await utility.getDateMillis();
-    await documentReg.confirmTotalPageView(timestamp, totalPageView);
+    await documentReg.confirmTotalPageViewSquare(timestamp, totalPageViewSquare);
 
     // assert
-    const r_totalPageView = await documentReg.getTotalPageView(timestamp);
-    assert.equal(totalPageView, r_totalPageView, "different total page view");
+    const r_totalPageViewSquare = await documentReg.getTotalPageViewSquare(timestamp);
+    assert.equal(totalPageViewSquare, r_totalPageViewSquare, "different total page view square");
   });
 
   function init (documentReg, deck, authorPool, curatorPool, utility) {

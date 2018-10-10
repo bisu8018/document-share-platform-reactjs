@@ -60,10 +60,16 @@ contract AuthorPool {
     return getIndex(_docId, msg.sender) >= 0;
   }
 
-  function getLastClaimedDate(bytes32 _docId) public view returns (uint) {
-    int index = getIndex(_docId, msg.sender);
-    require(index >= 0);
-    return map[msg.sender][uint(index)].lastClaimedDate;
+  function getAssetIndex(bytes32 _docId) public view returns (int) {
+    return getIndex(_docId, msg.sender);
+  }
+
+  function getListedDate(int _idx) public view returns (uint) {
+    return map[msg.sender][uint(_idx)].listedDate;
+  }
+
+  function getLastClaimedDate(int _idx) public view returns (uint) {
+    return map[msg.sender][uint(_idx)].lastClaimedDate;
   }
 
   function count() public view returns (uint) {
@@ -71,8 +77,22 @@ contract AuthorPool {
   }
 
   // document list for iteration
-  function getDocuments() public view returns (address[]) {
+  function getAuthors() public view returns (address[]) {
     return keys;
+  }
+
+  function determineDeco(int _idx, uint _dateMillis, uint _pv, uint _tpvs) public view returns (uint) {
+
+    require(_dateMillis > 0);
+    require(_idx >= 0);
+    require(_tpvs > 0);
+    require(_pv > 0);
+
+    uint drp = getDailyRewardPool();
+    uint deco_with_ratio = 1000 * 1000 * 0.7;
+    require(drp > 0);
+
+    return uint(((_pv ** 2) * drp * deco_with_ratio) / _tpvs);
   }
 
   function getIndex(bytes32 _docId, address author) private view returns (int) {
@@ -85,6 +105,12 @@ contract AuthorPool {
       }
     }
     return -1;
+  }
+
+  function getDailyRewardPool() private view returns (uint) {
+    require(createTime > 0);
+    uint offsetYears = util.getOffsetYears(createTime);
+    return 300 * (1 / (2 ** offsetYears));
   }
 
 }
