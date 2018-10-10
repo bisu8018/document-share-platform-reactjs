@@ -137,8 +137,10 @@ contract DocumentReg is Ownable{
     return map[_docId].pageViews[_date];
   }
 
-  // --------------------------------
-  //
+  // -------------------------------
+  // Determine Reward Deco
+  // -------------------------------
+
   function determineDeco(bytes32 _docId) public view returns (uint) {
 
     //require(authorPool.createTime != 0);
