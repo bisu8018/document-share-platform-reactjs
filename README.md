@@ -21,6 +21,10 @@
 ## Choose Network
 > truffle migrate --network rinkeby
 
+## install openzeppelin
+> cd client
+> npm install -E openzeppelin-solidity
+
 ## nodejs start
 >> cd client
 npm start
