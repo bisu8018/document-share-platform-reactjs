@@ -151,10 +151,10 @@ contract DocumentReg is Ownable{
   }
 
   // -------------------------------
-  // Determine reward after last claim
+  // Determine author reward after last claim
   // -------------------------------
 
-  function determineDeco(address _addr, bytes32 _docId) public view returns (uint) {
+  function determineAuthorDeco(address _addr, bytes32 _docId) public view returns (uint) {
     require(_addr != 0);
     require(authorPool.createTime() != 0);
     int idx = authorPool.getUserDocumentIndex(_addr, _docId);
@@ -185,4 +185,38 @@ contract DocumentReg is Ownable{
     return sumDeco;
   }
 
+  // -------------------------------
+  // Determine curator reward after last claim
+  // -------------------------------
+
+  function determineCuratorDeco(address _addr, bytes32 _docId) public view returns (uint) {
+    require(_addr != 0);
+    require(curatorPool.createTime() != 0);
+
+    uint dateMillis = util.getDateMillis();
+    uint numVotes = curatorPool.getVoteCount(_addr);
+    if (numVotes == 0) {
+      return uint(0);
+    }
+
+    uint deco = 0;
+    for (uint i=0; i<numVotes; i++) {
+      uint startDate = curatorPool.getStartDate(_addr, i);
+      for (uint dt=startDate; dt<=dateMillis; dt+=util.getOneDayMillis()) {
+        uint pv = getPageView(_docId, dt);
+        uint tpvs = getTotalPageViewSquare(dt);
+        deco += curatorPool.determineDeco(_addr, i, dt, pv, tpvs);
+      }
+    }
+
+    return deco;
+  }
+
+  function voteOnDocument(address _addr, bytes32 _docId, uint _deposit) public {
+    require(_addr != 0);
+    require(_deposit > 0);
+    require(curatorPool.createTime() != 0);
+    require(map[_docId].createTime != 0);
+    curatorPool.addVote(_addr, _docId, 10);
+  }
 }

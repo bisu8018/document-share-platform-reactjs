@@ -31,7 +31,7 @@ contract("CuratorPool", accounts => {
 
     // assert
     var sample = (pv ** 2) * (300 * 300 * 1000 / pvts);
-    assert.equal(sample, deco, "wrong reward deco");
+    assert.equal(sample, deco * 1, "wrong reward deco");
 
     var curators = await curatorPool.getCurators();
     assert.equal(1, curators.length, "curator not exist");
