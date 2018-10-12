@@ -3,14 +3,15 @@ pragma solidity ^0.4.24;
 import "./Deck.sol";
 import "./Utility.sol";
 import "./AuthorPool.sol";
+import "./CuratorPool.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 contract DocumentReg is Ownable{
 
-  event _Initialize(uint timestamp, address token);
-  event _RegisterNewDocument(bytes32 indexed docId, uint timestamp, address indexed applicant, uint count);
-  event _ConfirmPageView(bytes32 indexed docId, uint timestamp, uint pageView);
-  event _ConfirmTotalPageViewSquare(uint timestamp, uint pageView);
+  event _InitializeDocumentReg(uint timestamp, address token);
+  event _RegisterNewDocument(bytes32 docId, uint timestamp, address applicant, uint count);
+  event _ConfirmPageView(bytes32 docId, uint timestamp, uint pageView);
+  event _ConfirmTotalPageView(uint timestamp, uint pageView, uint pageViewSquare);
   //event _DetermineReward(bytes32 indexed docId, uint timestamp, uint pageView, uint totalPageView, uint dailyReward);
 
   struct Document {
@@ -27,13 +28,14 @@ contract DocumentReg is Ownable{
 
   // store total page view square for reward calculation
   //  : timestamp(yyyy-mm-dd) => daily total page view square
+  mapping (uint => uint) private totalPageView;
   mapping (uint => uint) private totalPageViewSquare;
 
   // private variables
-  Utility private util;
   Deck private token;
+  Utility private util;
   AuthorPool private authorPool;
-  //CuratorPool private curatorPool;
+  CuratorPool private curatorPool;
 
   // public variables
   uint public createTime;
@@ -42,7 +44,7 @@ contract DocumentReg is Ownable{
 
     require(_token != 0 && address(token) == 0);
     require(_author != 0 && address(authorPool) == 0);
-    //require(_curator != 0 && address(curatorPool) == 0);
+    require(_curator != 0 && address(curatorPool) == 0);
     require(_utility != 0 && address(util) == 0);
 
     token = Deck(_token);
@@ -52,8 +54,12 @@ contract DocumentReg is Ownable{
     authorPool = AuthorPool(_author);
     authorPool.init(token, util);
 
+    // init curator pool
+    curatorPool = CuratorPool(_curator);
+    curatorPool.init(token, util);
+
     createTime = util.getTimeMillis();
-    emit _Initialize(createTime, _token);
+    emit _InitializeDocumentReg(createTime, _token);
   }
 
   // -------------------------------
@@ -72,8 +78,8 @@ contract DocumentReg is Ownable{
     uint index = docList.push(_docId);
 
     // creating user document mapping
-    authorPool.register(_docId);
-    assert(authorPool.contains(_docId));
+    authorPool.registerUserDocument(_docId, msg.sender);
+    assert(authorPool.containsUserDocument(msg.sender, _docId));
 
     emit _RegisterNewDocument(_docId, tMillis, msg.sender, index);
   }
@@ -105,13 +111,20 @@ contract DocumentReg is Ownable{
   // Total Page View Square Functions
   // -------------------------------
 
-  function confirmTotalPageViewSquare(uint _date, uint _totalPageViewSquare) public
+  function confirmTotalPageView(uint _date, uint _totalPageView, uint _totalPageViewSquare) public
     onlyOwner()
   {
     require(_date != 0);
+    require(_totalPageView != 0);
     require(_totalPageViewSquare != 0);
+    totalPageView[_date] = _totalPageView;
     totalPageViewSquare[_date] = _totalPageViewSquare;
-    emit _ConfirmTotalPageViewSquare(_date, _totalPageViewSquare);
+    emit _ConfirmTotalPageView(_date, _totalPageView, _totalPageViewSquare);
+  }
+
+  function getTotalPageView(uint _date) public view returns (uint) {
+    require(_date != 0);
+    return totalPageView[_date];
   }
 
   function getTotalPageViewSquare(uint _date) public view returns (uint) {
@@ -138,30 +151,30 @@ contract DocumentReg is Ownable{
   }
 
   // -------------------------------
-  // Determine Reward Deco
+  // Determine reward after last claim
   // -------------------------------
 
-  function determineDeco(bytes32 _docId) public view returns (uint) {
-
-    //require(authorPool.createTime != 0);
-    int idx = authorPool.getAssetIndex(_docId);
+  function determineDeco(address _addr, bytes32 _docId) public view returns (uint) {
+    require(_addr != 0);
+    require(authorPool.createTime() != 0);
+    int idx = authorPool.getUserDocumentIndex(_addr, _docId);
     if (idx < 0) {
       return uint(0);
     }
 
-    uint claimDate = authorPool.getLastClaimedDate(idx);
+    uint claimDate = authorPool.getUserDocumentLastClaimedDate(_addr, idx);
     uint dateMillis = util.getDateMillis();
 
     uint sumDeco = 0;
     while (claimDate < dateMillis) {
       if (claimDate == 0) {
-        claimDate = authorPool.getListedDate(idx);
+        claimDate = authorPool.getUserDocumentListedDate(_addr, idx);
       }
       assert(claimDate <= dateMillis);
 
-      uint tpvs = getTotalPageViewSquare(claimDate);
+      uint tpv = getTotalPageView(claimDate);
       uint pv = getPageView(_docId, claimDate);
-      sumDeco += authorPool.determineDeco(idx, claimDate, pv, tpvs);
+      sumDeco += authorPool.determineUserDocumentDeco(pv, tpv);
 
       uint nextDate = claimDate + util.getOneDayMillis();
       assert(claimDate < nextDate);
