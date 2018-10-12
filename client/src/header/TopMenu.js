@@ -1,44 +1,52 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+/*eslint-disable*/
+import React from "react";
+// react components for routing our app without refresh
+import { Link } from "react-router-dom";
 
-const styles = theme => ({
-  top_menu: {
-    textAlign: 'center',
-  },
-  button: {
-    margin: theme.spacing.unit,
+// @material-ui/core components
+import withStyles from "@material-ui/core/styles/withStyles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import CustomInput from "components/CustomInput/CustomInput.jsx";
 
-  },
-});
+// @material-ui/icons
+import { Apps, CloudUpload ,Face ,Person, Search} from "@material-ui/icons";
 
-function TopMenu(props) {
-  const { classes, auth } = props;
+import Button from "components/CustomButtons/Button.jsx";
 
+import headerLinksStyle from "assets/jss/material-kit-react/components/headerLinksStyle.jsx";
 
-
+function SubHeaderLinks({ ...props }) {
+  const { classes } = props;
   return (
-    <div className={classes.top_menu}>
-      <Button size="small" className={classes.button} component={Link} to="/">
-        Home
-      </Button>
-      <Button size="small" className={classes.button} component={Link} to="/">
-        Latest
-      </Button>
-      <Button size="small" className={classes.button} component={Link} to="/">
-        MyPage
-      </Button>
-      <Button size="small" className={classes.button} component={Link} to="/upload">
-        Upload
-      </Button>
-    </div>
+    <ul className="subHeader">
+      <li>
+        <Button href="/" color="transparent">Home</Button>
+        <Button href="/contents/expolre" color="transparent">Explore</Button>
+        <Button href="/contents/topauthor" color="transparent">Top Author</Button>
+        <Button href="/contents/topcurator" color="transparent">Top Curator</Button>
+        <Button href="#" color="transparent">Help</Button>
+        <div className="sortSearch">
+          <CustomInput
+            formControlProps={{
+              className: classes.formControl
+            }}
+            inputProps={{
+              placeholder: "Search",
+              inputProps: {
+                "aria-label": "Search"
+              }
+            }}
+          />
+          <Button justIcon color="white">
+            <Search className={classes.searchIcon} />
+          </Button>
+        </div>
+      </li>
+    </ul>
+
+
   );
 }
 
-TopMenu.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(TopMenu);
+export default withStyles(headerLinksStyle)(SubHeaderLinks);

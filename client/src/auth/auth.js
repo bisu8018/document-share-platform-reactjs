@@ -41,6 +41,7 @@ export default class Auth {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.auth0.client.userInfo(authResult.accessToken, (err, user) => {
           if(err){
+            console.error("Getting userInfo", err);
               alert(`Error: ${err.error}. Getting UserInfo`);
           } else {
               console.log('Getting Userinfo Success!!', {user, authResult});

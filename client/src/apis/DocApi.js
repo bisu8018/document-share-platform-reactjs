@@ -3,14 +3,15 @@ import * as ajax from './CommonAjaxApis';
 import { APP_PROPERTIES } from '../resources/app.properties';
 
 const uploadDomain = APP_PROPERTIES.domain.upload + '/prod/upload' //"https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod/upload";
-const imgDomain = APP_PROPERTIES.domain.image + '/prod/document/get'//"https://24gvmjxwme.execute-api.us-west-1.amazonaws.com";
+const imgDomain = APP_PROPERTIES.domain.image;// + '/prod/document/get'//"https://24gvmjxwme.execute-api.us-west-1.amazonaws.com";
 const apiDomain = APP_PROPERTIES.domain.api;//"https://iwzx8ah5xf.execute-api.us-west-1.amazonaws.com/dev";
 
 const registDocumentInfoUrl = "/document/regist";
 const getDocumentsUrl = "/document/list";
+const getDocumentUrl = "/document/info/";
 
 export function getPageView(documentId, pageNo) {
-  return imgDomain+ "/" + documentId + "/" + pageNo;
+  return imgDomain + "/document/get/" + documentId + "/" + pageNo;
 }
 
 export function getDocuments(params){
@@ -25,11 +26,28 @@ export function getDocuments(params){
  return axios.get(apiDomain + getDocumentsUrl, config);
 }
 
+export function getDocument(documentId){
+
+  const config = {
+    header: {
+       'Access-Control-Allow-Origin': '*',
+       'Content-Type':'application/json'
+    }
+  }
+  const url = apiDomain + getDocumentUrl + documentId;
+ return axios.get(url, config);
+}
+
 export function registDocument(args, callback) {
+
+  console.log("registDocument", args);
+
   const fileInfo = args.fileInfo;
   const user = args.userInfo;
-  const account = args.account;
+  const ethAccount = args.ethAccount;
   const tags = args.tags;
+  const title = args.title;
+  const desc = args.desc;
 
   if(!fileInfo.file || !user){
     console.error("The registration value(file or metadata) is invalid.", fileInfo, user);
@@ -43,7 +61,9 @@ export function registDocument(args, callback) {
     filename:fileInfo.file.name,
     size:fileInfo.file.size,
     username:user.name,
-    account: account,
+    ethAccount: ethAccount,
+    title: title,
+    desc: desc,
     tags:tags
   }).then((registResult)=>{
 
