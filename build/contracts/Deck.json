@@ -409,7 +409,7 @@
         "id": 998,
         "nodeType": "ImportDirective",
         "scope": 1109,
-        "sourceUnit": 3107,
+        "sourceUnit": 3196,
         "src": "26:71:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -420,7 +420,7 @@
         "id": 999,
         "nodeType": "ImportDirective",
         "scope": 1109,
-        "sourceUnit": 2689,
+        "sourceUnit": 2778,
         "src": "98:63:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -434,10 +434,10 @@
               "id": 1000,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2688,
+              "referencedDeclaration": 2777,
               "src": "180:7:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$2688",
+                "typeIdentifier": "t_contract$_Ownable_$2777",
                 "typeString": "contract Ownable"
               }
             },
@@ -452,10 +452,10 @@
               "id": 1002,
               "name": "StandardToken",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3106,
+              "referencedDeclaration": 3195,
               "src": "189:13:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StandardToken_$3106",
+                "typeIdentifier": "t_contract$_StandardToken_$3195",
                 "typeString": "contract StandardToken"
               }
             },
@@ -465,11 +465,11 @@
           }
         ],
         "contractDependencies": [
-          2688,
-          2784,
-          2827,
-          2859,
-          3106
+          2777,
+          2873,
+          2916,
+          2948,
+          3195
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -477,11 +477,11 @@
         "id": 1108,
         "linearizedBaseContracts": [
           1108,
-          3106,
-          2784,
-          2827,
-          2859,
-          2688
+          3195,
+          2873,
+          2916,
+          2948,
+          2777
         ],
         "name": "Deck",
         "nodeType": "ContractDefinition",
@@ -839,10 +839,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "528:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -915,7 +915,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3147,
+                        "referencedDeclaration": 3236,
                         "src": "571:5:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_Deck_$1108",
@@ -929,7 +929,7 @@
                       "lValueRequested": false,
                       "memberName": "transfer",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2771,
+                      "referencedDeclaration": 2860,
                       "src": "571:14:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$_t_bool_$",
@@ -1061,7 +1061,7 @@
             "scope": 1108,
             "src": "451:152:2",
             "stateMutability": "nonpayable",
-            "superFunction": 2771,
+            "superFunction": 2860,
             "visibility": "public"
           },
           {
@@ -1099,10 +1099,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "703:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -1192,7 +1192,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3147,
+                        "referencedDeclaration": 3236,
                         "src": "746:5:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_Deck_$1108",
@@ -1206,7 +1206,7 @@
                       "lValueRequested": false,
                       "memberName": "transferFrom",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2959,
+                      "referencedDeclaration": 3048,
                       "src": "746:18:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_address_$_t_uint256_$returns$_t_bool_$",
@@ -1364,7 +1364,7 @@
             "scope": 1108,
             "src": "607:182:2",
             "stateMutability": "nonpayable",
-            "superFunction": 2959,
+            "superFunction": 3048,
             "visibility": "public"
           },
           {
@@ -1441,7 +1441,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2636,
+                  "referencedDeclaration": 2725,
                   "src": "825:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1524,10 +1524,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "969:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -1568,7 +1568,7 @@
                         "name": "balances",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2701,
+                        "referencedDeclaration": 2790,
                         "src": "1007:8:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
@@ -1690,7 +1690,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2636,
+                  "referencedDeclaration": 2725,
                   "src": "947:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1809,7 +1809,7 @@
         "id": 998,
         "nodeType": "ImportDirective",
         "scope": 1109,
-        "sourceUnit": 3107,
+        "sourceUnit": 3196,
         "src": "26:71:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1820,7 +1820,7 @@
         "id": 999,
         "nodeType": "ImportDirective",
         "scope": 1109,
-        "sourceUnit": 2689,
+        "sourceUnit": 2778,
         "src": "98:63:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1834,10 +1834,10 @@
               "id": 1000,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2688,
+              "referencedDeclaration": 2777,
               "src": "180:7:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$2688",
+                "typeIdentifier": "t_contract$_Ownable_$2777",
                 "typeString": "contract Ownable"
               }
             },
@@ -1852,10 +1852,10 @@
               "id": 1002,
               "name": "StandardToken",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3106,
+              "referencedDeclaration": 3195,
               "src": "189:13:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StandardToken_$3106",
+                "typeIdentifier": "t_contract$_StandardToken_$3195",
                 "typeString": "contract StandardToken"
               }
             },
@@ -1865,11 +1865,11 @@
           }
         ],
         "contractDependencies": [
-          2688,
-          2784,
-          2827,
-          2859,
-          3106
+          2777,
+          2873,
+          2916,
+          2948,
+          3195
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -1877,11 +1877,11 @@
         "id": 1108,
         "linearizedBaseContracts": [
           1108,
-          3106,
-          2784,
-          2827,
-          2859,
-          2688
+          3195,
+          2873,
+          2916,
+          2948,
+          2777
         ],
         "name": "Deck",
         "nodeType": "ContractDefinition",
@@ -2239,10 +2239,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "528:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -2315,7 +2315,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3147,
+                        "referencedDeclaration": 3236,
                         "src": "571:5:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_Deck_$1108",
@@ -2329,7 +2329,7 @@
                       "lValueRequested": false,
                       "memberName": "transfer",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2771,
+                      "referencedDeclaration": 2860,
                       "src": "571:14:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$_t_bool_$",
@@ -2461,7 +2461,7 @@
             "scope": 1108,
             "src": "451:152:2",
             "stateMutability": "nonpayable",
-            "superFunction": 2771,
+            "superFunction": 2860,
             "visibility": "public"
           },
           {
@@ -2499,10 +2499,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "703:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -2592,7 +2592,7 @@
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3147,
+                        "referencedDeclaration": 3236,
                         "src": "746:5:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_super$_Deck_$1108",
@@ -2606,7 +2606,7 @@
                       "lValueRequested": false,
                       "memberName": "transferFrom",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2959,
+                      "referencedDeclaration": 3048,
                       "src": "746:18:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_address_$_t_uint256_$returns$_t_bool_$",
@@ -2764,7 +2764,7 @@
             "scope": 1108,
             "src": "607:182:2",
             "stateMutability": "nonpayable",
-            "superFunction": 2959,
+            "superFunction": 3048,
             "visibility": "public"
           },
           {
@@ -2841,7 +2841,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2636,
+                  "referencedDeclaration": 2725,
                   "src": "825:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2924,10 +2924,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "969:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -2968,7 +2968,7 @@
                         "name": "balances",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2701,
+                        "referencedDeclaration": 2790,
                         "src": "1007:8:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
@@ -3090,7 +3090,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2636,
+                  "referencedDeclaration": 2725,
                   "src": "947:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3187,6 +3187,12 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {},
+      "links": {},
+      "address": "0xfe7bf3a42d3a65cfbbdddfb1b8d5f9695fe4e0eb",
+      "transactionHash": "0x1afa7dc8b57b0c69d8a21b4945fe7f40f7f21dd9b5830f13d71d0794a5767996"
+    },
     "1539154838957": {
       "events": {},
       "links": {},
@@ -3243,5 +3249,5 @@
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-10-16T05:33:39.625Z"
+  "updatedAt": "2018-10-16T08:55:33.653Z"
 }

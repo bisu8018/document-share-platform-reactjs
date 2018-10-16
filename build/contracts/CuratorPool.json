@@ -446,7 +446,7 @@
         "id": 379,
         "nodeType": "ImportDirective",
         "scope": 996,
-        "sourceUnit": 2509,
+        "sourceUnit": 2598,
         "src": "47:23:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -460,10 +460,10 @@
               "id": 380,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2688,
+              "referencedDeclaration": 2777,
               "src": "96:7:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$2688",
+                "typeIdentifier": "t_contract$_Ownable_$2777",
                 "typeString": "contract Ownable"
               }
             },
@@ -473,7 +473,7 @@
           }
         ],
         "contractDependencies": [
-          2688
+          2777
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -481,7 +481,7 @@
         "id": 995,
         "linearizedBaseContracts": [
           995,
-          2688
+          2777
         ],
         "name": "CuratorPool",
         "nodeType": "ContractDefinition",
@@ -1076,7 +1076,7 @@
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_Utility_$2508",
+              "typeIdentifier": "t_contract$_Utility_$2597",
               "typeString": "contract Utility"
             },
             "typeName": {
@@ -1084,10 +1084,10 @@
               "id": 430,
               "name": "Utility",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2508,
+              "referencedDeclaration": 2597,
               "src": "815:7:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Utility_$2508",
+                "typeIdentifier": "t_contract$_Utility_$2597",
                 "typeString": "contract Utility"
               }
             },
@@ -1327,10 +1327,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "990:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -1445,7 +1445,7 @@
                                 "referencedDeclaration": 431,
                                 "src": "1072:4:1",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_contract$_Utility_$2508",
+                                  "typeIdentifier": "t_contract$_Utility_$2597",
                                   "typeString": "contract Utility"
                                 }
                               }
@@ -1453,7 +1453,7 @@
                             "expression": {
                               "argumentTypes": [
                                 {
-                                  "typeIdentifier": "t_contract$_Utility_$2508",
+                                  "typeIdentifier": "t_contract$_Utility_$2597",
                                   "typeString": "contract Utility"
                                 }
                               ],
@@ -1528,10 +1528,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "1039:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -1655,7 +1655,7 @@
                       "referencedDeclaration": 431,
                       "src": "1116:4:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_Utility_$2508",
+                        "typeIdentifier": "t_contract$_Utility_$2597",
                         "typeString": "contract Utility"
                       }
                     },
@@ -1689,10 +1689,10 @@
                         "name": "Utility",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2508,
+                        "referencedDeclaration": 2597,
                         "src": "1123:7:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_Utility_$2508_$",
+                          "typeIdentifier": "t_type$_t_contract$_Utility_$2597_$",
                           "typeString": "type(contract Utility)"
                         }
                       },
@@ -1706,13 +1706,13 @@
                       "nodeType": "FunctionCall",
                       "src": "1123:17:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_Utility_$2508",
+                        "typeIdentifier": "t_contract$_Utility_$2597",
                         "typeString": "contract Utility"
                       }
                     },
                     "src": "1116:24:1",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_Utility_$2508",
+                      "typeIdentifier": "t_contract$_Utility_$2597",
                       "typeString": "contract Utility"
                     }
                   },
@@ -1757,7 +1757,7 @@
                           "referencedDeclaration": 431,
                           "src": "1160:4:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_contract$_Utility_$2508",
+                            "typeIdentifier": "t_contract$_Utility_$2597",
                             "typeString": "contract Utility"
                           }
                         },
@@ -1768,7 +1768,7 @@
                         "lValueRequested": false,
                         "memberName": "getTimeMillis",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 2437,
+                        "referencedDeclaration": 2526,
                         "src": "1160:18:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_external_view$__$returns$_t_uint256_$",
@@ -1887,7 +1887,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2636,
+                  "referencedDeclaration": 2725,
                   "src": "970:9:1",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2116,7 +2116,7 @@
                         "referencedDeclaration": 431,
                         "src": "1693:4:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_Utility_$2508",
+                          "typeIdentifier": "t_contract$_Utility_$2597",
                           "typeString": "contract Utility"
                         }
                       },
@@ -2127,7 +2127,7 @@
                       "lValueRequested": false,
                       "memberName": "getDateMillis",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2461,
+                      "referencedDeclaration": 2550,
                       "src": "1693:18:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$__$returns$_t_uint256_$",
@@ -2791,7 +2791,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2636,
+                  "referencedDeclaration": 2725,
                   "src": "1658:9:1",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3129,7 +3129,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2636,
+                  "referencedDeclaration": 2725,
                   "src": "2052:9:1",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -4818,7 +4818,7 @@
                         "referencedDeclaration": 431,
                         "src": "3538:4:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_Utility_$2508",
+                          "typeIdentifier": "t_contract$_Utility_$2597",
                           "typeString": "contract Utility"
                         }
                       },
@@ -4829,7 +4829,7 @@
                       "lValueRequested": false,
                       "memberName": "getDateMillis",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2461,
+                      "referencedDeclaration": 2550,
                       "src": "3538:18:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$__$returns$_t_uint256_$",
@@ -5488,7 +5488,7 @@
                                         "referencedDeclaration": 431,
                                         "src": "3832:4:1",
                                         "typeDescriptions": {
-                                          "typeIdentifier": "t_contract$_Utility_$2508",
+                                          "typeIdentifier": "t_contract$_Utility_$2597",
                                           "typeString": "contract Utility"
                                         }
                                       },
@@ -5499,7 +5499,7 @@
                                       "lValueRequested": false,
                                       "memberName": "getOneDayMillis",
                                       "nodeType": "MemberAccess",
-                                      "referencedDeclaration": 2507,
+                                      "referencedDeclaration": 2596,
                                       "src": "3832:20:1",
                                       "typeDescriptions": {
                                         "typeIdentifier": "t_function_external_view$__$returns$_t_uint256_$",
@@ -6099,10 +6099,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "4042:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -6193,10 +6193,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "4067:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -6287,10 +6287,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "4097:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -6381,10 +6381,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "4121:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -8303,10 +8303,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "4930:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -8397,7 +8397,7 @@
                         "referencedDeclaration": 431,
                         "src": "4978:4:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_Utility_$2508",
+                          "typeIdentifier": "t_contract$_Utility_$2597",
                           "typeString": "contract Utility"
                         }
                       },
@@ -8408,7 +8408,7 @@
                       "lValueRequested": false,
                       "memberName": "getOffsetYears",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2499,
+                      "referencedDeclaration": 2588,
                       "src": "4978:19:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$_t_uint256_$returns$_t_uint256_$",
@@ -8869,7 +8869,7 @@
         "id": 379,
         "nodeType": "ImportDirective",
         "scope": 996,
-        "sourceUnit": 2509,
+        "sourceUnit": 2598,
         "src": "47:23:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -8883,10 +8883,10 @@
               "id": 380,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2688,
+              "referencedDeclaration": 2777,
               "src": "96:7:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$2688",
+                "typeIdentifier": "t_contract$_Ownable_$2777",
                 "typeString": "contract Ownable"
               }
             },
@@ -8896,7 +8896,7 @@
           }
         ],
         "contractDependencies": [
-          2688
+          2777
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -8904,7 +8904,7 @@
         "id": 995,
         "linearizedBaseContracts": [
           995,
-          2688
+          2777
         ],
         "name": "CuratorPool",
         "nodeType": "ContractDefinition",
@@ -9499,7 +9499,7 @@
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_Utility_$2508",
+              "typeIdentifier": "t_contract$_Utility_$2597",
               "typeString": "contract Utility"
             },
             "typeName": {
@@ -9507,10 +9507,10 @@
               "id": 430,
               "name": "Utility",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2508,
+              "referencedDeclaration": 2597,
               "src": "815:7:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Utility_$2508",
+                "typeIdentifier": "t_contract$_Utility_$2597",
                 "typeString": "contract Utility"
               }
             },
@@ -9750,10 +9750,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "990:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -9868,7 +9868,7 @@
                                 "referencedDeclaration": 431,
                                 "src": "1072:4:1",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_contract$_Utility_$2508",
+                                  "typeIdentifier": "t_contract$_Utility_$2597",
                                   "typeString": "contract Utility"
                                 }
                               }
@@ -9876,7 +9876,7 @@
                             "expression": {
                               "argumentTypes": [
                                 {
-                                  "typeIdentifier": "t_contract$_Utility_$2508",
+                                  "typeIdentifier": "t_contract$_Utility_$2597",
                                   "typeString": "contract Utility"
                                 }
                               ],
@@ -9951,10 +9951,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "1039:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -10078,7 +10078,7 @@
                       "referencedDeclaration": 431,
                       "src": "1116:4:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_Utility_$2508",
+                        "typeIdentifier": "t_contract$_Utility_$2597",
                         "typeString": "contract Utility"
                       }
                     },
@@ -10112,10 +10112,10 @@
                         "name": "Utility",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2508,
+                        "referencedDeclaration": 2597,
                         "src": "1123:7:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_Utility_$2508_$",
+                          "typeIdentifier": "t_type$_t_contract$_Utility_$2597_$",
                           "typeString": "type(contract Utility)"
                         }
                       },
@@ -10129,13 +10129,13 @@
                       "nodeType": "FunctionCall",
                       "src": "1123:17:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_Utility_$2508",
+                        "typeIdentifier": "t_contract$_Utility_$2597",
                         "typeString": "contract Utility"
                       }
                     },
                     "src": "1116:24:1",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_Utility_$2508",
+                      "typeIdentifier": "t_contract$_Utility_$2597",
                       "typeString": "contract Utility"
                     }
                   },
@@ -10180,7 +10180,7 @@
                           "referencedDeclaration": 431,
                           "src": "1160:4:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_contract$_Utility_$2508",
+                            "typeIdentifier": "t_contract$_Utility_$2597",
                             "typeString": "contract Utility"
                           }
                         },
@@ -10191,7 +10191,7 @@
                         "lValueRequested": false,
                         "memberName": "getTimeMillis",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 2437,
+                        "referencedDeclaration": 2526,
                         "src": "1160:18:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_external_view$__$returns$_t_uint256_$",
@@ -10310,7 +10310,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2636,
+                  "referencedDeclaration": 2725,
                   "src": "970:9:1",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -10539,7 +10539,7 @@
                         "referencedDeclaration": 431,
                         "src": "1693:4:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_Utility_$2508",
+                          "typeIdentifier": "t_contract$_Utility_$2597",
                           "typeString": "contract Utility"
                         }
                       },
@@ -10550,7 +10550,7 @@
                       "lValueRequested": false,
                       "memberName": "getDateMillis",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2461,
+                      "referencedDeclaration": 2550,
                       "src": "1693:18:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$__$returns$_t_uint256_$",
@@ -11214,7 +11214,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2636,
+                  "referencedDeclaration": 2725,
                   "src": "1658:9:1",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -11552,7 +11552,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2636,
+                  "referencedDeclaration": 2725,
                   "src": "2052:9:1",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -13241,7 +13241,7 @@
                         "referencedDeclaration": 431,
                         "src": "3538:4:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_Utility_$2508",
+                          "typeIdentifier": "t_contract$_Utility_$2597",
                           "typeString": "contract Utility"
                         }
                       },
@@ -13252,7 +13252,7 @@
                       "lValueRequested": false,
                       "memberName": "getDateMillis",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2461,
+                      "referencedDeclaration": 2550,
                       "src": "3538:18:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$__$returns$_t_uint256_$",
@@ -13911,7 +13911,7 @@
                                         "referencedDeclaration": 431,
                                         "src": "3832:4:1",
                                         "typeDescriptions": {
-                                          "typeIdentifier": "t_contract$_Utility_$2508",
+                                          "typeIdentifier": "t_contract$_Utility_$2597",
                                           "typeString": "contract Utility"
                                         }
                                       },
@@ -13922,7 +13922,7 @@
                                       "lValueRequested": false,
                                       "memberName": "getOneDayMillis",
                                       "nodeType": "MemberAccess",
-                                      "referencedDeclaration": 2507,
+                                      "referencedDeclaration": 2596,
                                       "src": "3832:20:1",
                                       "typeDescriptions": {
                                         "typeIdentifier": "t_function_external_view$__$returns$_t_uint256_$",
@@ -14522,10 +14522,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "4042:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -14616,10 +14616,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "4067:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -14710,10 +14710,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "4097:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -14804,10 +14804,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "4121:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -16726,10 +16726,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3124,
-                        3125
+                        3213,
+                        3214
                       ],
-                      "referencedDeclaration": 3124,
+                      "referencedDeclaration": 3213,
                       "src": "4930:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -16820,7 +16820,7 @@
                         "referencedDeclaration": 431,
                         "src": "4978:4:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_Utility_$2508",
+                          "typeIdentifier": "t_contract$_Utility_$2597",
                           "typeString": "contract Utility"
                         }
                       },
@@ -16831,7 +16831,7 @@
                       "lValueRequested": false,
                       "memberName": "getOffsetYears",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2499,
+                      "referencedDeclaration": 2588,
                       "src": "4978:19:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$_t_uint256_$returns$_t_uint256_$",
@@ -17259,6 +17259,12 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {},
+      "links": {},
+      "address": "0xf06332ccd3e50fed9221a62b669ec60bd5eed778",
+      "transactionHash": "0x075a7f53875dd3bdae931eb1c0d223fc72a7c685c8cdb66902626f87b4b3b654"
+    },
     "1539319535305": {
       "events": {},
       "links": {},
@@ -17309,5 +17315,5 @@
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-10-16T05:33:39.648Z"
+  "updatedAt": "2018-10-16T08:55:33.675Z"
 }
