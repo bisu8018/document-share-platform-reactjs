@@ -6,7 +6,7 @@ const CuratorPool = artifacts.require("./CuratorPool.sol");
 
 contract("DocumentReg", accounts => {
 
-  it("determine curator deco", async () => {
+  it("claim curator deco", async () => {
 
     // prepare
     const docId = "1234567890abcdefghijklmnopqrstuv";
@@ -26,16 +26,17 @@ contract("DocumentReg", accounts => {
     init(documentReg, deck, authorPool, curatorPool, utility);
 
     const BigNumber = web3.BigNumber;
-    const totalSupply = new web3.BigNumber(100000000);
-    const deposit = new web3.BigNumber(10000);
+    const totalSupply = new web3.BigNumber(1000000000);
+    const deposit = new web3.BigNumber(100000000);
 
     await deck.issue(accounts[0], totalSupply, { from: accounts[0] });
     await deck.release({ from: accounts[0] });
-    await deck.transfer(accounts[3], deposit, { from: accounts[0] });
+    await deck.transfer(documentReg.address, deposit, { from: accounts[0] });
+    await deck.transfer(accounts[3], 20, { from: accounts[0] });
 
-    const balance = await deck.balanceOf(accounts[3]);
+    const balance = await deck.balanceOf(documentReg.address);
     //console.log('balance : ' + balance.toString());
-    assert.equal("10000", balance.valueOf());
+    assert.equal("100000000", balance.valueOf());
 
     const timestamp = await utility.getDateMillis();
     await documentReg.register(docId, { from: accounts[0] });
@@ -45,14 +46,21 @@ contract("DocumentReg", accounts => {
     // logic
     await deck.approve(documentReg.address, 10, { from: accounts[3] });
     await documentReg.voteOnDocument(docId, 10, { from: accounts[3] });
-    const r_tokens = await documentReg.determineCuratorDeco(docId, { from: accounts[3] });
 
     // assert
     const balance2 = await deck.balanceOf(accounts[3]);
     //console.log('balance : ' + balance.toString());
-    assert.equal("9990", balance2.valueOf(), "wrong amount of token deposit");
-    //console.log('r_tokens : ' + r_tokens * 1);
-    assert.equal(0, r_tokens.valueOf(), "wrong determined curator deco");
+    assert.equal("10", balance2.valueOf(), "wrong amount of token deposit");
+
+    await documentReg.claimCuratorDeco(docId, { from: accounts[3] });
+
+    // assert
+    const balance3 = await deck.balanceOf(accounts[3]);
+    //console.log('balance : ' + balance.toString());
+    assert.equal("10", balance3.valueOf(), "wrong amount of token reward received");
+    // assert
+    const balance4 = await deck.balanceOf(documentReg.address);
+    assert.equal("100000010", balance4.valueOf(), "wrong amount of token reward withdraw");
   });
 
   function init (documentReg, deck, authorPool, curatorPool, utility) {

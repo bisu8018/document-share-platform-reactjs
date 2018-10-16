@@ -18,6 +18,9 @@ contract("DocumentReg", accounts => {
     const authorPool = await AuthorPool.deployed();
     const curatorPool = await CuratorPool.deployed();
 
+    await authorPool.transferOwnership(documentReg.address, { from: accounts[0] });
+    await curatorPool.transferOwnership(documentReg.address, { from: accounts[0] });
+
     init(documentReg, deck, authorPool, curatorPool, utility);
 
     // logic

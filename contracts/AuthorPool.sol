@@ -2,8 +2,9 @@ pragma solidity ^0.4.24;
 
 import "./Deck.sol";
 import "./Utility.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract AuthorPool {
+contract AuthorPool is Ownable {
 
   event _InitializeAuthorPool(uint timestamp, address token);
   event _RegisterNewUserDocument(bytes32 indexed docId, uint timestamp, address indexed applicant, uint count);
@@ -27,7 +28,9 @@ contract AuthorPool {
   // public variables
   uint public createTime;
 
-  function init(address _token, address _utility) public {
+  function init(address _token, address _utility) public
+    onlyOwner()
+  {
 
     require(_token != 0 && address(token) == 0);
     require(_utility != 0 && address(util) == 0);
@@ -53,8 +56,9 @@ contract AuthorPool {
   // -------------------------------
 
   // register a new document
-  function registerUserDocument(bytes32 _docId, address _author) public {
-
+  function registerUserDocument(bytes32 _docId, address _author) public
+    onlyOwner()
+  {
     require(getIndex(_docId, _author) < 0);
 
     // adding to document registry

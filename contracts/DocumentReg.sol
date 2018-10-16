@@ -6,12 +6,15 @@ import "./AuthorPool.sol";
 import "./CuratorPool.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract DocumentReg is Ownable{
+contract DocumentReg is Ownable {
 
   event _InitializeDocumentReg(uint timestamp, address token);
-  event _RegisterNewDocument(bytes32 docId, uint timestamp, address applicant, uint count);
-  event _ConfirmPageView(bytes32 docId, uint timestamp, uint pageView);
+  event _RegisterNewDocument(bytes32 indexed docId, uint timestamp, address indexed applicant, uint count);
+  event _ConfirmPageView(bytes32 indexed docId, uint timestamp, uint pageView);
   event _ConfirmTotalPageView(uint timestamp, uint pageView, uint pageViewSquare);
+  event _VoteOnDocument(bytes32 indexed docId, uint deposit, address indexed applicant);
+  event _ClaimAuthorDeco(bytes32 indexed docId, uint deco, address indexed applicant);
+  event _ClaimCuratorDeco(bytes32 indexed docId, uint deco, address indexed applicant);
   //event _DetermineReward(bytes32 indexed docId, uint timestamp, uint pageView, uint totalPageView, uint dailyReward);
 
   struct Document {
@@ -40,7 +43,9 @@ contract DocumentReg is Ownable{
   // public variables
   uint public createTime;
 
-  function init(address _token, address _author, address _curator, address _utility) public {
+  function init(address _token, address _author, address _curator, address _utility) public
+    onlyOwner()
+  {
 
     require(_token != 0 && address(token) == 0);
     require(_author != 0 && address(authorPool) == 0);
@@ -154,6 +159,10 @@ contract DocumentReg is Ownable{
   // Determine author reward after last claim
   // -------------------------------
 
+  function determineAuthorDeco(bytes32 _docId) public view returns (uint) {
+    return determineAuthorDeco(msg.sender, _docId);
+  }
+
   function determineAuthorDeco(address _addr, bytes32 _docId) public view returns (uint) {
     require(_addr != 0);
     require(authorPool.createTime() != 0);
@@ -166,6 +175,7 @@ contract DocumentReg is Ownable{
     uint dateMillis = util.getDateMillis();
 
     uint sumDeco = 0;
+
     while (claimDate < dateMillis) {
       if (claimDate == 0) {
         claimDate = authorPool.getUserDocumentListedDate(_addr, idx);
@@ -182,14 +192,50 @@ contract DocumentReg is Ownable{
 
       //emit _DetermineReward(_docId, lastClaimedDate, pv, tpv, dailyRewardPool);
     }
+
     return sumDeco;
   }
 
+  function claimAuthorDeco(bytes32 _docId) public {
+    require(msg.sender != 0);
+    require(authorPool.createTime() != 0);
+    int idx = authorPool.getUserDocumentIndex(msg.sender, _docId);
+    if (idx < 0) {
+      return;
+    }
+
+    uint claimDate = authorPool.getUserDocumentLastClaimedDate(msg.sender, idx);
+    uint dateMillis = util.getDateMillis();
+
+    uint sumDeco = 0;
+    while (claimDate < dateMillis) {
+      if (claimDate == 0) {
+        claimDate = authorPool.getUserDocumentListedDate(msg.sender, idx);
+      }
+      assert(claimDate <= dateMillis);
+
+      uint tpv = getTotalPageView(claimDate);
+      uint pv = getPageView(_docId, claimDate);
+      sumDeco += authorPool.determineUserDocumentDeco(pv, tpv);
+
+      uint nextDate = claimDate + util.getOneDayMillis();
+      assert(claimDate < nextDate);
+      claimDate = nextDate;
+    }
+
+    token.transfer(msg.sender, sumDeco);
+    emit _ClaimAuthorDeco(_docId, sumDeco, msg.sender);
+  }
+
   // -------------------------------
-  // Determine curator reward after last claim
+  // Estimate curator reward after last claim
   // -------------------------------
 
-  function determineCuratorDeco(address _addr, bytes32 _docId) public view returns (uint) {
+  function estimateCuratorDeco(bytes32 _docId) public view returns (uint) {
+    return estimateCuratorDeco(msg.sender, _docId);
+  }
+
+  function estimateCuratorDeco(address _addr, bytes32 _docId) public view returns (uint) {
     require(_addr != 0);
     require(curatorPool.createTime() != 0);
 
@@ -202,21 +248,117 @@ contract DocumentReg is Ownable{
     uint deco = 0;
     for (uint i=0; i<numVotes; i++) {
       uint startDate = curatorPool.getStartDate(_addr, i);
-      for (uint dt=startDate; dt<=dateMillis; dt+=util.getOneDayMillis()) {
+      if (curatorPool.getDocId(_addr, i) == _docId
+       && curatorPool.getWithdraw(_addr, i) == 0) {
+        for (uint dt=startDate; dt<=dateMillis; dt+=util.getOneDayMillis()) {
+          uint pv = getPageView(_docId, dt);
+          uint tpvs = getTotalPageViewSquare(dt);
+          deco += curatorPool.determineDeco(_addr, i, dt, pv, tpvs);
+        }
+      }
+    }
+    return deco;
+  }
+
+  // -------------------------------
+  // Determine curator reward after last claim
+  // -------------------------------
+  function determineCuratorDeco(bytes32 _docId) public view returns (uint) {
+
+    // validation check
+    require(curatorPool.createTime() != 0);
+
+    uint numVotes = 0;
+    int idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(0));
+    while(idx >= 0)
+    {
+      numVotes++;
+      idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
+    }
+
+    uint deco = 0;
+    idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(0));
+    for(uint i=0; i<numVotes; i++)
+    {
+      uint dt = curatorPool.getStartDate(msg.sender, uint(idx));
+      for (uint j=0; j<30; j++) {
         uint pv = getPageView(_docId, dt);
         uint tpvs = getTotalPageViewSquare(dt);
-        deco += curatorPool.determineDeco(_addr, i, dt, pv, tpvs);
+        deco += curatorPool.determineDeco(msg.sender, i, dt, pv, tpvs);
+        dt += util.getOneDayMillis();
       }
+      idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
     }
 
     return deco;
   }
 
-  function voteOnDocument(address _addr, bytes32 _docId, uint _deposit) public {
-    require(_addr != 0);
+  function claimCuratorDeco(bytes32 _docId) public {
+
+    // validation check
+    require(curatorPool.createTime() != 0);
+
+    // 인출을 요청한 큐레이터의 명시된 문서에 투표된 vote 객체를 찾아서 목록 구성
+    // 1. 해당 큐레이터의 전체 vote 목록을 돌면서
+    //  a. 명시된 docuemnt에 대한 vote만 필터링
+    //  b. 이미 인출한 Vote 인지 검사
+    //  c. 시작한지 30일이 지났는지 검사 (인출 가능한지)
+    uint numVotes = 0;
+    int idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(0));
+    while(idx >= 0)
+    {
+      numVotes++;
+      idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
+    }
+    if (numVotes == 0) {
+      return;
+    }
+
+    // 2. 1번에서 추출한 목록을 기반으로 총 보상을 계산
+    //  a. 토큰 양은 기본으로 18 decimals 기준
+    //  b. 시작일부터 30일간의 page view 값을 읽어서 일별 보상을 계산
+    //  c. 일별 보상을 합산한 최종 보상을 결정
+    uint deco = 0;
+    uint[] memory voteList = new uint[](numVotes);
+    uint[] memory deltaList = new uint[](numVotes);
+    idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(0));
+    for(uint i=0; i<numVotes; i++)
+    {
+      uint delta = 0;
+      uint dt = curatorPool.getStartDate(msg.sender, uint(idx));
+      for (uint j=0; j<30; j++) {
+        uint pv = getPageView(_docId, dt);
+        uint tpvs = getTotalPageViewSquare(dt);
+        delta += curatorPool.determineDeco(msg.sender, i, dt, pv, tpvs);
+        dt += util.getOneDayMillis();
+      }
+      deco += delta;
+      voteList[i] = uint(idx);
+      deltaList[i] = delta;
+      idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
+    }
+
+    // 3. 결정된 보상액을 document registry contract에서 사용자 계정으로 전송
+    token.transfer(msg.sender, deco);
+
+    // 4. 보상이 완료된 vote들에 withdraw 값을 기록
+    for (i=0; i<voteList.length; i++) {
+      curatorPool.withdraw(msg.sender, voteList[i], deltaList[i]);
+    }
+
+    emit _ClaimCuratorDeco(_docId, deco, msg.sender);
+  }
+
+  function voteOnDocument(bytes32 _docId, uint _deposit) public {
+
+    require(msg.sender != 0);
     require(_deposit > 0);
     require(curatorPool.createTime() != 0);
     require(map[_docId].createTime != 0);
-    curatorPool.addVote(_addr, _docId, 10);
+
+    token.transferFrom(msg.sender, address(this), _deposit);
+    curatorPool.addVote(msg.sender, _docId, _deposit);
+
+    emit _VoteOnDocument(_docId, _deposit, msg.sender);
   }
 }
