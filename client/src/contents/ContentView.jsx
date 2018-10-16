@@ -1,25 +1,39 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { NavigateBefore, NavigateNext, Face } from "@material-ui/icons";
+import { Link } from 'react-router-dom';
 import CustomLinearProgress from "components/CustomLinearProgress/CustomLinearProgress.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import Badge from "components/Badge/Badge.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import * as restapi from 'apis/DocApi';
+import DrizzleApis from 'apis/DrizzleApis';
 
 const style = {
 
 };
 
+
+
 class ContentView extends React.Component {
+
+
+  drizzleApis = new DrizzleApis(this.props.drizzle);
+
   state = {
     document:null,
-    currentPageNo:1
+    currentPageNo:1,
+    dataKey:null,
+    determineAuthorToken:-1,
+    isExistInBlockChain: true
   }
 
   getContentInfo = (documentId) => {
     restapi.getDocument(documentId).then((res) => {
         this.setState({document:res.data.document});
+
+        //this.handleDetermineAuthorToken();
+        this.handleCheckDocumentInBlockChain();
     });
   }
 
@@ -32,6 +46,97 @@ class ContentView extends React.Component {
     this.setState({currentPageNo: newPageNo})
   }
 
+  handleCheckDocumentInBlockChain = () => {
+
+    if(!this.state.document) return;
+
+    let self = this;
+    this.drizzleApis.isExistDocument(this.state.document.documentId).then(function (data) {
+      console.log("isExist", data);
+      self.setState({isExistInBlockChain: data});
+    });
+
+  }
+
+  handleVoteOnDocument = () => {
+    if(!this.state.document) return;
+
+    const doc = this.state.document;
+    const deposit = document.getElementById("deposit").value;
+
+    if(!doc || !doc.documentId){
+      alert("documentId is nothing");
+      return;
+    }
+
+    if(deposit<=0){
+      alert("Deposit must be greater than zero.");
+      return;
+    }
+
+    this.drizzleApis.voteOnDocument(doc.documentId, deposit);
+  }
+
+  handleDetermineAuthorToken = () => {
+    if(!this.state.document) return;
+
+    const doc = this.state.document;
+
+    if(!doc || !doc.documentId){
+      console.error("handleDetermineAuthorToken documentId is nothing");
+      return;
+    }
+
+    this.drizzleApis.determineAuthorToken(doc.documentId).then(function(data){
+      if(data){
+        this.setState({determineAuthorToken: data});
+      }
+    });
+
+
+  }
+
+  handleRegistDocumentInBlockChain = () => {
+
+    if(!this.state.document) return;
+
+    const { drizzle,} = this.props;
+    const drizzleState = drizzle.store.getState();
+
+    const ethAccount = drizzleState.accounts[0];
+    this.drizzleApis.registDocumentToSmartContract(ethAccount, this.state.document.documentId);
+  }
+
+  printTxStatus = () => {
+    const { drizzle } = this.props;
+    const drizzleState = drizzle.store.getState();
+    // get the transaction states from the drizzle state
+    const { transactions, transactionStack } = drizzleState;
+
+    if(transactions && transactionStack){
+      // get the transaction hash using our saved `stackId`
+      const txHash = transactionStack[this.state.stackId];
+
+      // if transaction hash does not exist, don't display anything
+      if (!txHash) return null;
+      console.log("getTxStatus", txHash, transactions, transactions[txHash].status, drizzleState, drizzle);
+      // otherwise, return the transaction status
+      const txStatus = transactions[txHash].status;
+      const txReceipt = transactions[txHash].receipt;
+      if(txReceipt){
+        console.log("Transcation Complete", txReceipt);
+        this.setState({stackId:null});
+      }
+
+      return `Transaction status: ${transactions[txHash].status}`;
+    } else {
+      console.log("transction is null");
+    }
+
+    return null;
+
+  };
+
   goPrevPage = () => {
     let newPageNo = this.state.currentPageNo - 1;
     if(newPageNo<1){
@@ -40,19 +145,22 @@ class ContentView extends React.Component {
     this.setState({currentPageNo: newPageNo})
   }
 
-  componentDidMount() {
-    const { match} = this.props;
-    const documentId = match.params.documentId;
-    this.getContentInfo(documentId);
+  componentWillMount() {
+    if(!this.state.document) {
+      const { match} = this.props;
+      const documentId = match.params.documentId;
+      this.getContentInfo(documentId);
+
+    }
   }
 
   render() {
-    const { classes, match} = this.props;
+    const { classes } = this.props;
     const document = this.state.document;
 
-    console.log(document);
-
-    if(!document) return "Loading";
+    if(!document) {
+      return "Loading";
+    }
 
     return (
         <div className="contentGridView">
@@ -78,21 +186,22 @@ class ContentView extends React.Component {
                    <Button color="rose" size="sm">Like</Button>
                    <Button color="rose" size="sm">Share</Button>
                    <Button color="rose" size="sm">Download</Button>
+                   {/*<Button color="rose" size="sm" onClick={this.handleCheckDocumentInBlockChain} >Checking BlockChain</Button>*/}
+                   {!this.state.isExistInBlockChain?<Button color="rose" size="sm" onClick={this.handleRegistDocumentInBlockChain} >Regist to BlockChain</Button>:""}
                </div>
-
-                <a href="#">
+               <Link to={"/author/" + document.accountId} >
                     <div className="profileImg">
                        <span className="userImg">
                            <Face className={classes.icons} />
-                           <img src="http://i.imgur.com/UGzF2lv.jpg" alt=""/>
+                           <img src="http://i.imgur.com/UGzF2lv.jpg" alt="{document.accountId}"/>
                        </span>
                        <strong className="userName">{document.accountId}
-                           <span className="txt">Author profile (provide a link to author page)</span>
+                           <span className="txt"></span>
                         </strong>
                    </div>
                    <div className="proFileDescript">{document.desc?document.desc:""}</div>
-                </a>
-
+                </Link>
+              {/*
               <h3 className="tit02">Document Information</h3>
               <ul className="detailList">
                 <li>daily page views : 123</li>
@@ -103,6 +212,7 @@ class ContentView extends React.Component {
                 <li>....</li>
                 <li>....</li>
               </ul>
+              */}
            </div>
 
 
@@ -138,7 +248,7 @@ class ContentView extends React.Component {
                    <CustomInput
                      labelText="DECK"
                      error
-                     id="DECK"
+                     id="deposit"
                      formControlProps={{
                        fullWidth: true
                      }}
@@ -153,7 +263,7 @@ class ContentView extends React.Component {
                <p className="notiTxt">Note: The token used for voting can be withdrawn after 40 days.</p>
 
                <div>
-                   <Button sz="large" color="rose" fullWidth>Commit</Button>
+                   <Button sz="large" color="rose" fullWidth onClick={this.handleVoteOnDocument}>Commit</Button>
                </div>
 
 
@@ -169,7 +279,7 @@ class ContentView extends React.Component {
                                >25 Uses for Duct Tape on Your Next Camping Trip</div>
                            <div className="descript"
                                style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                            >설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.</div>
+                            >Recommand Document</div>
                            <div className="badge">
                                <Badge color="rose">1,222 Deck</Badge>
                                <Badge color="rose">1,222 view</Badge>
@@ -189,7 +299,7 @@ class ContentView extends React.Component {
                                >25 Uses for Duct Tape on Your Next Camping Trip</div>
                            <div className="descript"
                                style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                            >설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.설명 자리 입니다.</div>
+                            >Recommand Document</div>
                            <div className="badge">
                                <Badge color="rose">1,222 Deck</Badge>
                                <Badge color="rose">1,222 view</Badge>

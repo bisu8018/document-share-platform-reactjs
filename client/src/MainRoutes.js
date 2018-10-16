@@ -14,7 +14,7 @@ import Author from "profile/Author";
 
 // import drizzle functions and contract artifact
 import { Drizzle, generateStore } from "drizzle";
-import DocumentRegistry from "./contracts/DocumentRegistry.json";
+import DocumentReg from "contracts/DocumentReg.json";
 
 const auth = new Auth();
 
@@ -29,7 +29,7 @@ const handleLogout = ({location}) => {
 }
 
 // let drizzle know what contracts we want
-const options = { contracts: [DocumentRegistry] };
+const options = { contracts: [DocumentReg] };
 // setup the drizzle store and drizzle
 const drizzleStore = generateStore(options);
 const drizzle = new Drizzle(options, drizzleStore);
@@ -87,7 +87,8 @@ class MainRoutes extends Component {
           <Switch>
             <Route exact path="/" render={(props) => <App drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/content/view/:documentId" render={(props) => <ContentView drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
-            <Route path="/profile/author" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
+            <Route path="/author/:email" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
+            <Route path="/curator/:email" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/callback" render={(props) => {
               handleAuthentication(props);
               return <Callback {...props} />

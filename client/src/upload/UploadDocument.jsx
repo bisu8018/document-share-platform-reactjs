@@ -16,18 +16,26 @@ import javascriptStyles from "assets/jss/material-kit-react/views/componentsSect
 import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
 import * as restapi from 'apis/DocApi';
+import DrizzleApis from 'apis/DrizzleApis';
+
+
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
 }
 
 class UploadDocument extends React.Component {
+
   anchorElLeft = null;
   anchorElTop = null;
   anchorElBottom = null;
   anchorElRight = null;
+
   constructor(props) {
     super(props);
+
+    this.dizzleApis = new DrizzleApis(props.dirzzle);
+
     this.state = {
       classicModal: false,
       openLeft: false,
@@ -44,6 +52,7 @@ class UploadDocument extends React.Component {
       tags: []
     };
   }
+
   handleClickOpen = (modal) => {
 
     const { auth } = this.props;
@@ -122,7 +131,14 @@ class UploadDocument extends React.Component {
         if(err){
           alert("Regist Document Fail : " + JSON.stringify(err.detail));
         } else {
-          this.registDocumentToSmartContract(result);
+          //this.registDocumentToSmartContract(result);
+          const stackId = this.drizzleApis.registDocumentToSmartContract(ethAccount, result.documentId);
+          if(stackId){
+            this.setState({ stackId });
+          } else {
+            alert('Document registration Smart contract failed.');
+          }
+
         }
         console.log("Regist Document End", result);
         this.clearForm();
@@ -172,7 +188,7 @@ class UploadDocument extends React.Component {
     const account = drizzleState.accounts[0];
 
     const contract = drizzle.contracts.DocumentRegistry;
-    const stackId = contract.methods["registerDocument"].cacheSend(drizzle.web3.utils.fromAscii(documentId), {
+    const stackId = contract.methods["register"].cacheSend(drizzle.web3.utils.fromAscii(documentId), {
       from: account
     });
     console.log("registSmartContractAddress", drizzle, drizzleState, contract, account, result);

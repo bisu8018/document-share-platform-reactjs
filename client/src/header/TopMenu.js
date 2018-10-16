@@ -10,7 +10,7 @@ import ListItem from "@material-ui/core/ListItem";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 
 // @material-ui/icons
-import { Apps, CloudUpload ,Face ,Person, Search} from "@material-ui/icons";
+import { Search} from "@material-ui/icons";
 
 import Button from "components/CustomButtons/Button.jsx";
 

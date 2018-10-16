@@ -49,8 +49,11 @@
     "prettier": "1.14.3"
   },
   "scripts": {
+    "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
+    "start-js": "react-scripts start",
     "start": "PORT=8000 react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run build-css && react-scripts build",
     "deploy": "aws s3 sync build/ s3://share.decompany.io",
     "build:stage": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

@@ -94,7 +94,7 @@ export default class Auth {
   }
 
   clearSession() {
-    console.log("clear session", localStorage);
+    //console.log("clear session", localStorage);
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');

@@ -69,7 +69,7 @@ class ContentList extends React.Component {
                                <div className="img"><span><img src={this.imageUrl(result.documentId, 1)} alt={result.documentName?result.documentName:result.documentId} alt={result.documentName?result.documentName:result.documentId} /></span></div>
                              </Link>
                              <div className="inner">
-                                 <a href="#">
+                                 <Link to={"/author/" + document.accountId} >
                                      <div className="profileImg">
                                          <span className="userImg">
                                              <Face className={classes.icons} />
@@ -77,8 +77,8 @@ class ContentList extends React.Component {
                                          </span>
                                          <strong className="userName">{result.accountId}</strong>
                                      </div>
-                                 </a>
-                                 <a href="#">
+                                 </Link>
+                                 <Link to={"/content/view/" + result.documentId} >
                                      <div className="tit"
                                           style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
                                       >{result.title?result.title:result.documentName}</div>
@@ -98,7 +98,7 @@ class ContentList extends React.Component {
                                          <Badge color="rose">rose</Badge>
                                          */}
                                      </div>
-                                 </a>
+                                 </Link>
                              </div>
                          </div>
                        ))}
