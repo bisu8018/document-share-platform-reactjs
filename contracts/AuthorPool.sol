@@ -87,14 +87,13 @@ contract AuthorPool is Ownable {
     return map[_addr][uint(_idx)].lastClaimedDate;
   }
 
-  function determineUserDocumentDeco(uint _pv, uint _tpv) public view returns (uint) {
-    require(_tpv > 0);
-    require(_pv > 0);
+  function determineReward(uint _pv, uint _tpv) public view returns (uint) {
+    if (_tpv == 0 || _pv == 0) {
+      return uint(0);
+    }
 
-    uint drp = getDailyRewardDeco();
-    require(drp > 0);
-
-    return uint(_pv * drp / _tpv);
+    uint drp = util.getDailyRewardPool(uint(70), createTime);
+    return uint(_pv * uint(drp / _tpv));
   }
 
   function getIndex(bytes32 _docId, address _author) private view returns (int) {
@@ -107,14 +106,6 @@ contract AuthorPool is Ownable {
       }
     }
     return -1;
-  }
-
-  function getDailyRewardDeco() private view returns (uint) {
-    require(createTime > 0);
-    uint offsetYears = util.getOffsetYears(createTime);
-    uint initialTokens = 300;
-    uint ratioDeco = 700 * 1000; // 70%
-    return initialTokens * ratioDeco * (1 / (2 ** offsetYears));
   }
 
 }

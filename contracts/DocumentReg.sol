@@ -13,8 +13,8 @@ contract DocumentReg is Ownable {
   event _ConfirmPageView(bytes32 indexed docId, uint timestamp, uint pageView);
   event _ConfirmTotalPageView(uint timestamp, uint pageView, uint pageViewSquare);
   event _VoteOnDocument(bytes32 indexed docId, uint deposit, address indexed applicant);
-  event _ClaimAuthorDeco(bytes32 indexed docId, uint deco, address indexed applicant);
-  event _ClaimCuratorDeco(bytes32 indexed docId, uint deco, address indexed applicant);
+  event _ClaimAuthorReward(bytes32 indexed docId, uint reward, address indexed applicant);
+  event _ClaimCuratorReward(bytes32 indexed docId, uint reward, address indexed applicant);
   //event _DetermineReward(bytes32 indexed docId, uint timestamp, uint pageView, uint totalPageView, uint dailyReward);
 
   struct Document {
@@ -159,11 +159,8 @@ contract DocumentReg is Ownable {
   // Determine author reward after last claim
   // -------------------------------
 
-  function determineAuthorDeco(bytes32 _docId) public view returns (uint) {
-    return determineAuthorDeco(msg.sender, _docId);
-  }
+  function determineAuthorReward(address _addr, bytes32 _docId) public view returns (uint) {
 
-  function determineAuthorDeco(address _addr, bytes32 _docId) public view returns (uint) {
     require(_addr != 0);
     require(authorPool.createTime() != 0);
     int idx = authorPool.getUserDocumentIndex(_addr, _docId);
@@ -171,32 +168,26 @@ contract DocumentReg is Ownable {
       return uint(0);
     }
 
+    uint sumReward = 0;
     uint claimDate = authorPool.getUserDocumentLastClaimedDate(_addr, idx);
-    uint dateMillis = util.getDateMillis();
-
-    uint sumDeco = 0;
-
-    while (claimDate < dateMillis) {
+    while (claimDate < util.getDateMillis()) {
       if (claimDate == 0) {
         claimDate = authorPool.getUserDocumentListedDate(_addr, idx);
       }
-      assert(claimDate <= dateMillis);
-
+      //assert(claimDate <= util.getDateMillis());
       uint tpv = getTotalPageView(claimDate);
       uint pv = getPageView(_docId, claimDate);
-      sumDeco += authorPool.determineUserDocumentDeco(pv, tpv);
+      sumReward += authorPool.determineReward(pv, tpv);
 
       uint nextDate = claimDate + util.getOneDayMillis();
       assert(claimDate < nextDate);
       claimDate = nextDate;
-
       //emit _DetermineReward(_docId, lastClaimedDate, pv, tpv, dailyRewardPool);
     }
-
-    return sumDeco;
+    return sumReward;
   }
 
-  function claimAuthorDeco(bytes32 _docId) public {
+  function claimAuthorReward(bytes32 _docId) public {
     require(msg.sender != 0);
     require(authorPool.createTime() != 0);
     int idx = authorPool.getUserDocumentIndex(msg.sender, _docId);
@@ -207,7 +198,7 @@ contract DocumentReg is Ownable {
     uint claimDate = authorPool.getUserDocumentLastClaimedDate(msg.sender, idx);
     uint dateMillis = util.getDateMillis();
 
-    uint sumDeco = 0;
+    uint sumReward = 0;
     while (claimDate < dateMillis) {
       if (claimDate == 0) {
         claimDate = authorPool.getUserDocumentListedDate(msg.sender, idx);
@@ -216,26 +207,22 @@ contract DocumentReg is Ownable {
 
       uint tpv = getTotalPageView(claimDate);
       uint pv = getPageView(_docId, claimDate);
-      sumDeco += authorPool.determineUserDocumentDeco(pv, tpv);
+      sumReward += authorPool.determineReward(pv, tpv);
 
       uint nextDate = claimDate + util.getOneDayMillis();
       assert(claimDate < nextDate);
       claimDate = nextDate;
     }
 
-    token.transfer(msg.sender, sumDeco);
-    emit _ClaimAuthorDeco(_docId, sumDeco, msg.sender);
+    token.transfer(msg.sender, sumReward);
+    emit _ClaimAuthorReward(_docId, sumReward, msg.sender);
   }
 
   // -------------------------------
   // Estimate curator reward after last claim
   // -------------------------------
 
-  function estimateCuratorDeco(bytes32 _docId) public view returns (uint) {
-    return estimateCuratorDeco(msg.sender, _docId);
-  }
-
-  function estimateCuratorDeco(address _addr, bytes32 _docId) public view returns (uint) {
+  function estimateCuratorReward(address _addr, bytes32 _docId) public view returns (uint) {
     require(_addr != 0);
     require(curatorPool.createTime() != 0);
 
@@ -245,7 +232,7 @@ contract DocumentReg is Ownable {
       return uint(0);
     }
 
-    uint deco = 0;
+    uint reward = 0;
     for (uint i=0; i<numVotes; i++) {
       uint startDate = curatorPool.getStartDate(_addr, i);
       if (curatorPool.getDocId(_addr, i) == _docId
@@ -253,17 +240,17 @@ contract DocumentReg is Ownable {
         for (uint dt=startDate; dt<=dateMillis; dt+=util.getOneDayMillis()) {
           uint pv = getPageView(_docId, dt);
           uint tpvs = getTotalPageViewSquare(dt);
-          deco += curatorPool.determineDeco(_addr, i, dt, pv, tpvs);
+          reward += curatorPool.determineReward(_addr, i, dt, pv, tpvs);
         }
       }
     }
-    return deco;
+    return reward;
   }
 
   // -------------------------------
   // Determine curator reward after last claim
   // -------------------------------
-  function determineCuratorDeco(bytes32 _docId) public view returns (uint) {
+  function determineCuratorReward(bytes32 _docId) public view returns (uint) {
 
     // validation check
     require(curatorPool.createTime() != 0);
@@ -276,7 +263,7 @@ contract DocumentReg is Ownable {
       idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
     }
 
-    uint deco = 0;
+    uint reward = 0;
     idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(0));
     for(uint i=0; i<numVotes; i++)
     {
@@ -284,16 +271,16 @@ contract DocumentReg is Ownable {
       for (uint j=0; j<30; j++) {
         uint pv = getPageView(_docId, dt);
         uint tpvs = getTotalPageViewSquare(dt);
-        deco += curatorPool.determineDeco(msg.sender, i, dt, pv, tpvs);
+        reward += curatorPool.determineReward(msg.sender, i, dt, pv, tpvs);
         dt += util.getOneDayMillis();
       }
       idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
     }
 
-    return deco;
+    return reward;
   }
 
-  function claimCuratorDeco(bytes32 _docId) public {
+  function claimCuratorReward(bytes32 _docId) public {
 
     // validation check
     require(curatorPool.createTime() != 0);
@@ -318,7 +305,7 @@ contract DocumentReg is Ownable {
     //  a. 토큰 양은 기본으로 18 decimals 기준
     //  b. 시작일부터 30일간의 page view 값을 읽어서 일별 보상을 계산
     //  c. 일별 보상을 합산한 최종 보상을 결정
-    uint deco = 0;
+    uint reward = 0;
     uint[] memory voteList = new uint[](numVotes);
     uint[] memory deltaList = new uint[](numVotes);
     idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(0));
@@ -329,24 +316,24 @@ contract DocumentReg is Ownable {
       for (uint j=0; j<30; j++) {
         uint pv = getPageView(_docId, dt);
         uint tpvs = getTotalPageViewSquare(dt);
-        delta += curatorPool.determineDeco(msg.sender, i, dt, pv, tpvs);
+        delta += curatorPool.determineReward(msg.sender, i, dt, pv, tpvs);
         dt += util.getOneDayMillis();
       }
-      deco += delta;
+      reward += delta;
       voteList[i] = uint(idx);
       deltaList[i] = delta;
       idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
     }
 
     // 3. 결정된 보상액을 document registry contract에서 사용자 계정으로 전송
-    token.transfer(msg.sender, deco);
+    token.transfer(msg.sender, reward);
 
     // 4. 보상이 완료된 vote들에 withdraw 값을 기록
     for (i=0; i<voteList.length; i++) {
       curatorPool.withdraw(msg.sender, voteList[i], deltaList[i]);
     }
 
-    emit _ClaimCuratorDeco(_docId, deco, msg.sender);
+    emit _ClaimCuratorReward(_docId, reward, msg.sender);
   }
 
   function voteOnDocument(bytes32 _docId, uint _deposit) public {

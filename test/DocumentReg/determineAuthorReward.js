@@ -6,13 +6,13 @@ const CuratorPool = artifacts.require("./CuratorPool.sol");
 
 contract("DocumentReg", accounts => {
 
-  it("determine author deco", async () => {
+  it("determine author reward", async () => {
 
     // prepare
     const docId = "1234567890abcdefghijklmnopqrstuv";
     const pageView = 23400;
     const pageViewSquare = 23400 ** 2;
-    const t_deco = 300 * 1000 * 1000;
+    const t_reward = 300 * 1000 * 1000;
 
     const deck = await Deck.deployed();
     const utility = await Utility.deployed();
@@ -32,11 +32,15 @@ contract("DocumentReg", accounts => {
     await documentReg.confirmTotalPageView(timestamp, pageView, pageViewSquare, { from: accounts[0] });
 
     // assert
-    const r_tokens = await documentReg.determineAuthorDeco(accounts[0], docId);
-    assert.equal(t_deco * 0.7, r_tokens.valueOf(), "different page view");
+    var r_tokens = await documentReg.determineAuthorReward(accounts[0], docId);
+    r_tokens = web3.fromWei(r_tokens.toNumber(), "ether");
+    //console.log('called determineAuthorReward');
+    var sample = web3.fromWei(await utility.getDailyRewardPool(70, timestamp), "ether");
+    assert.equal(sample * 1, r_tokens * 1, "different page view");
+    //console.log('called assert');
   });
 
-  it("determine author deco for multi documents", async () => {
+  it("determine author reward for multi documents", async () => {
 
     // prepare
     const docId1 = "1234567890abcdefghijklmnopqrstuv";
@@ -47,7 +51,6 @@ contract("DocumentReg", accounts => {
 
     const tpv = orgPageView + newPageView;
     const tpvs = (orgPageView * orgPageView) + (newPageView * newPageView);
-    const t_deco = 300 * 1000 * 1000;
 
     const utility = await Utility.deployed();
     const documentReg = await DocumentReg.deployed();
@@ -60,18 +63,22 @@ contract("DocumentReg", accounts => {
     await documentReg.confirmTotalPageView(timestamp, tpv, tpvs, { from: accounts[0] });
 
     // logic
-    const r_deco1 = await documentReg.determineAuthorDeco(accounts[0], docId1);
-    const r_deco2 = await documentReg.determineAuthorDeco(accounts[0], docId2);
-
+    var r_reward1 = await documentReg.determineAuthorReward(accounts[0], docId1);
+    var r_reward2 = await documentReg.determineAuthorReward(accounts[0], docId2);
+    r_reward1 = web3.fromWei(r_reward1, "ether");
+    r_reward2 = web3.fromWei(r_reward2, "ether");
     // assert
-    //console.log('[doc1] pv : ' + orgPageView + ', deco : ' + r_deco1.valueOf());
-    //console.log('[doc2] pv : ' + newPageView + ', deco : ' + r_deco2.valueOf());
+    //console.log('[doc1] pv : ' + orgPageView + ', reward : ' + r_reward1.valueOf());
+    //console.log('[doc2] pv : ' + newPageView + ', reward : ' + r_reward2.valueOf());
 
-    const sample1 = t_deco * 0.7 * (orgPageView / tpv);
-    const sample2 = t_deco * 0.7 * (newPageView / tpv);
+    var sample = await utility.getDailyRewardPool(70, timestamp);
+    sample = web3.fromWei(sample, "ether");
 
-    assert.equal(Math.floor(sample1), r_deco1.valueOf(), "doc1 : different page view");
-    assert.equal(Math.floor(sample2), r_deco2.valueOf(), "doc2 : different page view");
+    const sample1 = (sample * 1) * (orgPageView / tpv);
+    const sample2 = (sample * 1) * (newPageView / tpv);
+
+    assert.equal(sample1, r_reward1 * 1, "doc1 : different page view");
+    assert.equal(sample2, r_reward2 * 1, "doc2 : different page view");
   });
 
   function init (documentReg, deck, authorPool, curatorPool, utility) {

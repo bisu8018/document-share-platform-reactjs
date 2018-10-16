@@ -4,7 +4,7 @@ const CuratorPool = artifacts.require("./CuratorPool.sol");
 
 contract("CuratorPool", accounts => {
 
-  it("determine deco of a document with a vote", async () => {
+  it("determine reward of a document with a vote", async () => {
     // prepare
     const docId = "1234567890abcdefghijklmnopqrstuv";
     const pv = 123;
@@ -27,17 +27,18 @@ contract("CuratorPool", accounts => {
     assert.equal(c1 * 1 + 1, c2 * 1, "failed to add a vote");
 
     const timestamp = await utility.getDateMillis();
-    var deco = await curatorPool.determineDeco(accounts[1], 0, timestamp, pv, pvts);
+    var reward = await curatorPool.determineReward(accounts[1], 0, timestamp, pv, pvts);
+    reward = web3.fromWei(reward.toNumber(), "ether");
 
     // assert
-    var sample = (pv ** 2) * (300 * 300 * 1000 / pvts);
-    assert.equal(sample, deco * 1, "wrong reward deco");
+    var sample = web3.fromWei(await utility.getDailyRewardPool(30, timestamp), "ether");
+    assert.equal(sample * 1, (reward * 1), "wrong reward token");
 
     var curators = await curatorPool.getCurators();
     assert.equal(1, curators.length, "curator not exist");
   });
 
-  it("determine deco of a document with multi vote", async () => {
+  it("determine reward of a document with multi vote", async () => {
 
     // prepare
     const docId = "1234567890abcdefghijklmnopqrst11";
@@ -69,21 +70,23 @@ contract("CuratorPool", accounts => {
     //console.log('vote counts 3 : ' + (c3 * 1));
 
     const timestamp = await utility.getDateMillis();
-    var deco1 = await curatorPool.determineDeco(accounts[1], 0, timestamp, pv1, pvts);
-    //console.log('deco 1 : ' + (deco1 * 1));
-    var deco2 = await curatorPool.determineDeco(accounts[1], 1, timestamp, pv2, pvts);
-    //console.log('deco 2 : ' + (deco2 * 1));
-    var deco3 = await curatorPool.determineDeco(accounts[1], 2, timestamp, pv2, pvts);
-    //console.log('deco 3 : ' + (deco3 * 1));
+    var reward1 = await curatorPool.determineReward(accounts[1], 0, timestamp, pv1, pvts);
+    //console.log('reward 1 : ' + (reward1 * 1));
+    var reward2 = await curatorPool.determineReward(accounts[1], 1, timestamp, pv2, pvts);
+    //console.log('reward 2 : ' + (reward2 * 1));
+    var reward3 = await curatorPool.determineReward(accounts[1], 2, timestamp, pv2, pvts);
+    //console.log('reward 3 : ' + (reward3 * 1));
+
+    reward1 = web3.fromWei(reward1, "ether");
+    reward2 = web3.fromWei(reward2, "ether");
+    reward3 = web3.fromWei(reward3, "ether");
 
     // assert
-    var s1 = Math.floor(300 * 300 * 1000 * ((pv1 ** 2)/pvts) * 10/10);
-    var s2 = Math.floor(300 * 300 * 1000 * ((pv2 ** 2)/pvts) * 20/50);
-    var s3 = Math.floor(300 * 300 * 1000 * ((pv2 ** 2)/pvts) * 30/50);
-    var reference = Math.floor((s1 + s2 + s3) / 1000000);
-    var sample = Math.floor(((deco1 *= 1) + (deco2 *= 1) + (deco3 *= 1)) / 1000000);
+    var s = web3.fromWei(await utility.getDailyRewardPool(30, timestamp), "ether");
+    var reference = s * (((pv1 ** 2)/pvts) * 10/10 + ((pv2 ** 2)/pvts) * 20/50 + ((pv2 ** 2)/pvts) * 30/50);
+    var sample = (reward1 * 1) + (reward2 * 1) + (reward3 * 1);
 
-    assert.equal(reference, sample, "wrong reward deco");
+    assert.equal(reference * 1, sample * 1, "wrong reward token");
   });
 
 });

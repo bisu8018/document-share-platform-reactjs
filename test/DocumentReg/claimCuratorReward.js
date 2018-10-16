@@ -6,13 +6,13 @@ const CuratorPool = artifacts.require("./CuratorPool.sol");
 
 contract("DocumentReg", accounts => {
 
-  it("claim curator deco", async () => {
+  it("claim curator reward", async () => {
 
     // prepare
     const docId = "1234567890abcdefghijklmnopqrstuv";
     const pageView = 23400;
     const pageViewSquare = 23400 ** 2;
-    const t_deco = 300 * 1000 * 1000;
+    const t_reward = 300 * 1000 * 1000;
 
     const deck = await Deck.deployed();
     const utility = await Utility.deployed();
@@ -52,7 +52,7 @@ contract("DocumentReg", accounts => {
     //console.log('balance : ' + balance.toString());
     assert.equal("10", balance2.valueOf(), "wrong amount of token deposit");
 
-    await documentReg.claimCuratorDeco(docId, { from: accounts[3] });
+    await documentReg.claimCuratorReward(docId, { from: accounts[3] });
 
     // assert
     const balance3 = await deck.balanceOf(accounts[3]);

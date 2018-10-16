@@ -6,13 +6,12 @@ const CuratorPool = artifacts.require("./CuratorPool.sol");
 
 contract("DocumentReg", accounts => {
 
-  it("determine curator deco", async () => {
+  it("determine curator reward", async () => {
 
     // prepare
     const docId = "1234567890abcdefghijklmnopqrstuv";
     const pageView = 23400;
     const pageViewSquare = 23400 ** 2;
-    const t_deco = 300 * 1000 * 1000;
 
     const deck = await Deck.deployed();
     const utility = await Utility.deployed();
@@ -45,14 +44,14 @@ contract("DocumentReg", accounts => {
     // logic
     await deck.approve(documentReg.address, 10, { from: accounts[3] });
     await documentReg.voteOnDocument(docId, 10, { from: accounts[3] });
-    const r_tokens = await documentReg.determineCuratorDeco(docId, { from: accounts[3] });
+    const r_tokens = await documentReg.determineCuratorReward(docId, { from: accounts[3] });
 
     // assert
     const balance2 = await deck.balanceOf(accounts[3]);
     //console.log('balance : ' + balance.toString());
     assert.equal("9990", balance2.valueOf(), "wrong amount of token deposit");
     //console.log('r_tokens : ' + r_tokens * 1);
-    assert.equal(0, r_tokens.valueOf(), "wrong determined curator deco");
+    assert.equal(0, r_tokens.valueOf(), "wrong determined curator reward");
   });
 
   function init (documentReg, deck, authorPool, curatorPool, utility) {

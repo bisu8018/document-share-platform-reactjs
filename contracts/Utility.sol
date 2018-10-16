@@ -17,20 +17,27 @@ contract Utility {
   }
 
   function getDateMillis() public view returns (uint) {
-    uint tDay = block.timestamp / (ONE_DAY_MILLIS / 1000);
+    uint tDay = uint(block.timestamp / uint(ONE_DAY_MILLIS / 1000));
     uint tMillis = tDay * ONE_DAY_MILLIS;
     return tMillis;
   }
 
   function getOffsetYears(uint _from) public view returns (uint) {
     uint curTimeSec = block.timestamp;
-    uint createTimeSec = _from / 1000;
+    uint createTimeSec = uint(_from / 1000);
     uint offsetSec = curTimeSec - createTimeSec;
-    uint offsetDays = offsetSec / (ONE_DAY_MILLIS / 1000);
-    return offsetDays / 365;
+    uint offsetDays = uint(offsetSec / uint(ONE_DAY_MILLIS / 1000));
+    return uint(offsetDays / 365);
   }
 
   function getOneDayMillis() public view returns (uint) {
     return ONE_DAY_MILLIS;
+  }
+
+  function getDailyRewardPool(uint _percent, uint _createTime) public view returns (uint) {
+    uint offsetYears = getOffsetYears(_createTime);
+    // initial daily reward pool tokens : (200000000 / 365) * decimals(10 ** 18) / percent(100)
+    uint initialTokens = 54794520548 * (10 ** 11);
+    return uint((initialTokens * _percent) / (2 ** offsetYears));
   }
 }

@@ -8,7 +8,7 @@ contract CuratorPool is Ownable {
   event _InitializeCuratorPool(uint timestamp, address token);
   event _AddVote(bytes32 indexed docId, uint timestamp, uint deposit, address indexed applicant, uint idx);
   event _Withdraw(address indexed applicant, uint idx, uint withdraw);
-  //event _DetermineDeco(bytes32 indexed docId, uint cvd, uint tvd, uint pv, uint tpvs, uint drp);
+  //event _DetermineReward(bytes32 indexed docId, uint cvd, uint tvd, uint pv, uint tpvs, uint drp);
 
   struct Vote {
     bytes32 docId;
@@ -132,7 +132,7 @@ contract CuratorPool is Ownable {
     return -1;
   }
 
-  function determineDeco(address _addr, uint _idx, uint _dateMillis, uint _pv, uint _tpvs) public view returns (uint) {
+  function determineReward(address _addr, uint _idx, uint _dateMillis, uint _pv, uint _tpvs) public view returns (uint) {
 
     require(_addr != 0);
     require(_dateMillis > 0);
@@ -155,22 +155,14 @@ contract CuratorPool is Ownable {
       }
     }
 
-    uint drp = getDailyRewardDeco();
+    uint drp = util.getDailyRewardPool(uint(30), createTime);
     if (drp == 0 || tvd == 0 || vote.deposit == 0) {
       return uint(0);
     }
 
-    //emit _DetermineDeco(vote.docId, vote.deposit, tvd, _pv, _tpvs, drp);
+    //emit _DetermineReward(vote.docId, vote.deposit, tvd, _pv, _tpvs, drp);
 
-    return (((drp * (_pv ** 2)) / _tpvs) / tvd) * vote.deposit;
-  }
-
-  function getDailyRewardDeco() private view returns (uint) {
-    require(createTime > 0);
-    uint offsetYears = util.getOffsetYears(createTime);
-    uint initialTokens = 300;
-    uint ratioDeco = 300 * 1000; // 30%
-    return initialTokens * ratioDeco * (1 / (2 ** offsetYears));
+    return uint(uint((drp * (_pv ** 2)) / _tpvs) / tvd) * vote.deposit;
   }
 
 }

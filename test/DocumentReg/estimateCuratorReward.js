@@ -6,13 +6,12 @@ const CuratorPool = artifacts.require("./CuratorPool.sol");
 
 contract("DocumentReg", accounts => {
 
-  it("estimate curator deco", async () => {
+  it("estimate curator reward", async () => {
 
     // prepare
     const docId = "1234567890abcdefghijklmnopqrstuv";
     const pageView = 23400;
     const pageViewSquare = 23400 ** 2;
-    const t_deco = 300 * 1000 * 1000;
 
     const deck = await Deck.deployed();
     const utility = await Utility.deployed();
@@ -46,14 +45,19 @@ contract("DocumentReg", accounts => {
     await deck.approve(documentReg.address, 10, { from: accounts[3] });
     await documentReg.voteOnDocument(docId, 10, { from: accounts[3] });
 
-    const r_tokens = await documentReg.estimateCuratorDeco(accounts[3], docId);
-    //console.log('success to call estimateCuratorDeco()');
+    var r_tokens = await documentReg.estimateCuratorReward(accounts[3], docId);
+    r_tokens = web3.fromWei(r_tokens, "ether");
+    //console.log('success to call estimateCuratorReward()');
     // assert
     const balance2 = await deck.balanceOf(accounts[3]);
     //console.log('balance : ' + balance.toString());
     assert.equal("9990", balance2.valueOf(), "wrong amount of token deposit");
     //console.log('r_tokens : ' + r_tokens * 1);
-    assert.equal(t_deco * 0.3, r_tokens.valueOf(), "wrong curator deco");
+
+    var sample = await utility.getDailyRewardPool(30, timestamp);
+    sample = web3.fromWei(sample, "ether");
+
+    assert.equal(sample * 1, r_tokens * 1, "wrong curator reward");
   });
 
   function init (documentReg, deck, authorPool, curatorPool, utility) {
