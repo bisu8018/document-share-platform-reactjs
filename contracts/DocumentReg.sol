@@ -10,9 +10,11 @@ contract DocumentReg is Ownable {
 
   event _InitializeDocumentReg(uint timestamp, address token);
   event _RegisterNewDocument(bytes32 indexed docId, uint timestamp, address indexed applicant, uint count);
+  event _UpdateDocument(bytes32 indexed docId, uint timestamp, address indexed applicant);
   event _ConfirmPageView(bytes32 indexed docId, uint timestamp, uint pageView);
   event _ConfirmTotalPageView(uint timestamp, uint pageView, uint pageViewSquare);
   event _VoteOnDocument(bytes32 indexed docId, uint deposit, address indexed applicant);
+  event _UpdateVoteOnDocument(bytes32 indexed docId, uint deposit, address indexed applicant, uint timestamp);
   event _ClaimAuthorReward(bytes32 indexed docId, uint reward, address indexed applicant);
   event _ClaimCuratorReward(bytes32 indexed docId, uint reward, address indexed applicant);
   //event _DetermineReward(bytes32 indexed docId, uint timestamp, uint pageView, uint totalPageView, uint dailyReward);
@@ -87,6 +89,21 @@ contract DocumentReg is Ownable {
     assert(authorPool.containsUserDocument(msg.sender, _docId));
 
     emit _RegisterNewDocument(_docId, tMillis, msg.sender, index);
+  }
+
+  function update(address _addr, bytes32 _docId, uint _timestamp) public
+    onlyOwner()
+  {
+    // updating to document registry
+    if (map[_docId].createTime == 0) {
+      docList.push(_docId);
+    }
+    map[_docId] = Document(_addr, _timestamp);
+
+    // creating user document mapping
+    authorPool.updateUserDocument(_docId, _addr, _timestamp);
+
+    emit _UpdateDocument(_docId, _timestamp, _addr);
   }
 
   function contains(bytes32 _docId) public view returns (bool) {
@@ -195,26 +212,28 @@ contract DocumentReg is Ownable {
       return;
     }
 
+    emit _ClaimAuthorReward(_docId, uint(idx), msg.sender);
     uint claimDate = authorPool.getUserDocumentLastClaimedDate(msg.sender, idx);
+    emit _ClaimAuthorReward(_docId, claimDate, msg.sender);
     uint dateMillis = util.getDateMillis();
 
     uint sumReward = 0;
     while (claimDate < dateMillis) {
-      if (claimDate == 0) {
-        claimDate = authorPool.getUserDocumentListedDate(msg.sender, idx);
-      }
-      assert(claimDate <= dateMillis);
+//      if (claimDate == 0) {
+//        claimDate = authorPool.getUserDocumentListedDate(msg.sender, idx);
+//      }
+//      assert(claimDate <= dateMillis);
 
-      uint tpv = getTotalPageView(claimDate);
-      uint pv = getPageView(_docId, claimDate);
-      sumReward += authorPool.determineReward(pv, tpv);
+//      uint tpv = getTotalPageView(claimDate);
+//      uint pv = getPageView(_docId, claimDate);
+//      sumReward += authorPool.determineReward(pv, tpv);
 
       uint nextDate = claimDate + util.getOneDayMillis();
-      assert(claimDate < nextDate);
+//      assert(claimDate < nextDate);
       claimDate = nextDate;
     }
 
-    token.transfer(msg.sender, sumReward);
+//    token.transfer(msg.sender, sumReward);
     emit _ClaimAuthorReward(_docId, sumReward, msg.sender);
   }
 
@@ -304,7 +323,7 @@ contract DocumentReg is Ownable {
     // 2. 1번에서 추출한 목록을 기반으로 총 보상을 계산
     //  a. 토큰 양은 기본으로 18 decimals 기준
     //  b. 시작일부터 30일간의 page view 값을 읽어서 일별 보상을 계산
-    //  c. 일별 보상을 합산한 최종 보상을 결정
+    //  c. 일별 보상과 deposit을 합산한 최종 지급액을 결정
     uint reward = 0;
     uint[] memory voteList = new uint[](numVotes);
     uint[] memory deltaList = new uint[](numVotes);
@@ -320,6 +339,7 @@ contract DocumentReg is Ownable {
         dt += util.getOneDayMillis();
       }
       reward += delta;
+      reward += curatorPool.getDeposit(msg.sender, uint(idx));
       voteList[i] = uint(idx);
       deltaList[i] = delta;
       idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
@@ -338,14 +358,23 @@ contract DocumentReg is Ownable {
 
   function voteOnDocument(bytes32 _docId, uint _deposit) public {
 
-    require(msg.sender != 0);
     require(_deposit > 0);
     require(curatorPool.createTime() != 0);
-    require(map[_docId].createTime != 0);
 
     token.transferFrom(msg.sender, address(this), _deposit);
     curatorPool.addVote(msg.sender, _docId, _deposit);
 
     emit _VoteOnDocument(_docId, _deposit, msg.sender);
   }
+
+  function updateVoteOnDocument(address _addr, bytes32 _docId, uint _deposit, uint _timestamp) public
+    onlyOwner()
+  {
+    require(_deposit > 0);
+    require(curatorPool.createTime() != 0);
+
+    curatorPool.updateVote(_addr, _docId, _deposit, _timestamp);
+    emit _UpdateVoteOnDocument(_docId, _deposit, _addr, _timestamp);
+  }
+
 }

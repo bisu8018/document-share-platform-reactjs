@@ -71,6 +71,23 @@ contract AuthorPool is Ownable {
     emit _RegisterNewUserDocument(_docId, tMillis, _author, index);
   }
 
+  function updateUserDocument(bytes32 _docId, address _author, uint _timestamp) public
+    onlyOwner()
+  {
+    if (map[_author].length == 0){
+      keys.push(_author);
+    }
+    for (uint i=0; i<map[_author].length; i++) {
+      if (map[_author][i].docId == _docId) {
+        map[_author][i].listedDate = _timestamp;
+        return;
+      }
+    }
+    uint index = map[_author].push(Asset(_docId, _timestamp, 0));
+
+    emit _RegisterNewUserDocument(_docId, _timestamp, _author, index);
+  }
+
   function containsUserDocument(address _addr, bytes32 _docId) public view returns (bool) {
     return getIndex(_docId, _addr) >= 0;
   }
@@ -99,9 +116,9 @@ contract AuthorPool is Ownable {
   function getIndex(bytes32 _docId, address _author) private view returns (int) {
     Asset[] storage assetList = map[_author];
     if (assetList.length > 0) {
-      for (int i=0; uint(i)<assetList.length; i++) {
-        if (assetList[uint(i)].docId == _docId) {
-          return i;
+      for (uint i=0; i<assetList.length; i++) {
+        if (assetList[i].docId == _docId) {
+          return int(i);
         }
       }
     }

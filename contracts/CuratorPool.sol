@@ -6,7 +6,8 @@ import "./Utility.sol";
 contract CuratorPool is Ownable {
 
   event _InitializeCuratorPool(uint timestamp, address token);
-  event _AddVote(bytes32 indexed docId, uint timestamp, uint deposit, address indexed applicant, uint idx);
+  event _AddVote(bytes32 indexed docId, uint timestamp, uint deposit, address indexed applicant);
+  event _UpdateVote(bytes32 indexed docId, uint timestamp, uint deposit, address indexed applicant);
   event _Withdraw(address indexed applicant, uint idx, uint withdraw);
   //event _DetermineReward(bytes32 indexed docId, uint cvd, uint tvd, uint pv, uint tpvs, uint drp);
 
@@ -24,7 +25,7 @@ contract CuratorPool is Ownable {
   mapping (bytes32 => Vote[]) internal mapByDoc;
 
   // key list for iteration
-  address[] private keys;
+  //address[] private keys;
 
   // private variables
   Utility private util;
@@ -51,9 +52,9 @@ contract CuratorPool is Ownable {
   // -------------------------------
 
   // curator list for iteration
-  function getCurators() public view returns (address[]) {
-    return keys;
-  }
+  //function getCurators() public view returns (address[]) {
+  //  return keys;
+  //}
 
   // -------------------------------
   // Voting Information Functions
@@ -63,17 +64,32 @@ contract CuratorPool is Ownable {
   function addVote(address _curator, bytes32 _docId, uint _deposit) public
     onlyOwner()
   {
-    uint tMillis = util.getDateMillis();
-    Vote memory vote = Vote(_docId, tMillis, _deposit, 0);
+    uint dateMillis = util.getDateMillis();
+    Vote memory vote = Vote(_docId, dateMillis, _deposit, 0);
 
-    uint idx = mapByAddr[_curator].push(vote);
+    mapByAddr[_curator].push(vote);
     mapByDoc[_docId].push(vote);
 
-    if (idx == 1) {
-      keys.push(_curator);
-    }
+    //if (mapByAddr[_curator].length == 1) {
+    //  keys.push(_curator);
+    //}
 
-    emit _AddVote(_docId, tMillis, _deposit, _curator, idx);
+    emit _AddVote(_docId, dateMillis, _deposit, _curator);
+  }
+
+  function updateVote(address _curator, bytes32 _docId, uint _deposit, uint _timestamp) public
+    onlyOwner()
+  {
+    Vote memory vote = Vote(_docId, _timestamp, _deposit, 0);
+
+    mapByAddr[_curator].push(vote);
+    mapByDoc[_docId].push(vote);
+
+    //if (idx == 1) {
+    //  keys.push(_curator);
+    //}
+
+    emit _UpdateVote(_docId, _timestamp, _deposit, _curator);
   }
 
   function withdraw(address _curator, uint _idx, uint _withdraw) public
