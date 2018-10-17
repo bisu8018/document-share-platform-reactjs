@@ -15,6 +15,7 @@ import Author from "profile/Author";
 // import drizzle functions and contract artifact
 import { Drizzle, generateStore } from "drizzle";
 import DocumentReg from "contracts/DocumentReg.json";
+import Deck from "contracts/Deck.json";
 
 const auth = new Auth();
 
@@ -29,7 +30,7 @@ const handleLogout = ({location}) => {
 }
 
 // let drizzle know what contracts we want
-const options = { contracts: [DocumentReg] };
+const options = { contracts: [DocumentReg, Deck] };
 // setup the drizzle store and drizzle
 const drizzleStore = generateStore(options);
 const drizzle = new Drizzle(options, drizzleStore);

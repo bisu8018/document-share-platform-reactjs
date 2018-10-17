@@ -118,3 +118,12 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 .customGrid .box h4{margin:-10px -10px 10px -10px;padding:2px 10px;font-size:20px;color:#fff;background:#999}
 
 .customGrid .box .cardSide {box-shadow:none;border-radius:0}
+
+.customGrid.col3 {flex-wrap:wrap;}
+.customGrid.col3 .box {width:32.3%;margin-top:15px;}
+.customGrid.col3 .box:nth-child(1)
+.customGrid.col3 .box:nth-child(2),
+.customGrid.col3 .box:nth-child(3), {margin-top:0}
+.customGrid.col3 .box:nth-child(3n + 1) {margin-left:0;}
+.customGrid.col3 .box:nth-child(2n) {}
+.customGrid.col3 .box:nth-child(3n) {}

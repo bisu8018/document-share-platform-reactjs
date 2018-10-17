@@ -6,24 +6,41 @@ const uploadDomain = APP_PROPERTIES.domain.upload + '/prod/upload' //"https://24
 const imgDomain = APP_PROPERTIES.domain.image;// + '/prod/document/get'//"https://24gvmjxwme.execute-api.us-west-1.amazonaws.com";
 const apiDomain = APP_PROPERTIES.domain.api;//"https://iwzx8ah5xf.execute-api.us-west-1.amazonaws.com/dev";
 
-const registDocumentInfoUrl = "/document/regist";
-const getDocumentsUrl = "/document/list";
-const getDocumentUrl = "/document/info/";
+const registDocumentInfoUrl = "/api/document/regist";
+const getDocumentsUrl = "/api/document/list";
+const getDocumentUrl = "/api/document/info/";
 
 export function getPageView(documentId, pageNo) {
   return imgDomain + "/document/get/" + documentId + "/" + pageNo;
 }
 
+export function getThumbnail(documentId, pageNo) {
+  return imgDomain+ "/document/thumb/" + documentId + "/" + pageNo;
+}
+
 export function getDocuments(params){
+
+
+  let key = null
+  if(params.nextPageKey){
+    key = btoa(JSON.stringify(params.nextPageKey));
+    console.log(params," base64 encoded to ", key);
+  } else {
+    console.log("first page");
+  }
 
   const config = {
     header: {
        'Access-Control-Allow-Origin': '*',
        'Content-Type':'application/json'
+    },
+    params: {
+      nextPageKey:key,
+      email:params.email
     }
   }
 
- return axios.get(apiDomain + getDocumentsUrl, config);
+  return axios.get(apiDomain + getDocumentsUrl, config);
 }
 
 export function getDocument(documentId){
@@ -54,47 +71,54 @@ export function registDocument(args, callback) {
     return;
   }
 
-  // 1. Regist Document Meta Info
-  const url = apiDomain + registDocumentInfoUrl;//localhost:4000/document/regist"
-  console.log("Regist Document Meta Info", url, fileInfo, user);
-  const res = ajax.post(url, {
-    filename:fileInfo.file.name,
-    size:fileInfo.file.size,
-    username:user.name,
-    ethAccount: ethAccount,
-    title: title,
-    desc: desc,
-    tags:tags
-  }).then((registResult)=>{
+  return new Promise(function(resolve, reject) {
 
-    console.log("Getting Response Regist Document Meta Info", registResult.data);
-    if(registResult && registResult.data && registResult.data.documentId){
+    // 1. Regist Document Meta Info
+    const url = apiDomain + registDocumentInfoUrl;//localhost:4000/document/regist"
+    console.log("Regist Document Meta Info", url, fileInfo, user);
+    const promise = ajax.post(url, {
+      filename:fileInfo.file.name,
+      size:fileInfo.file.size,
+      username:user.name,
+      ethAccount: ethAccount,
+      title: title,
+      desc: desc,
+      tags:tags }).then((res) => {
 
-      //2. Upload File Binary
-      const documentId = registResult.data.documentId;
-      const owner = registResult.data.accountId;
-      const result = fileUpload({
-          file: fileInfo.file,
-          fileid : documentId,
-          fileindex : 1,
-          ext: fileInfo.ext,
-          owner: owner
-        }).then((uploadResult)=>{
-        console.log("Upload Document Complete", res);
-        return callback({documentId:documentId, accountId:owner});
-      });
-    } else {
-        let detail = null;
-        if(registResult && registResult.data){
-            detail = JSON.stringify(registResult.data);
+        console.log("Getting Response Regist Document Meta Info", res);
+        //2. Upload File Binary
+        if(res && res.status == 200){
+          const documentId = res.data.documentId;
+          const owner = res.data.accountId;
+          fileUpload({
+              file: fileInfo.file,
+              fileid : documentId,
+              fileindex : 1,
+              ext: fileInfo.ext,
+              owner: owner
+            }).then((res)=>{
+
+            console.log("Upload Document Complete", res);
+            resolve({documentId:documentId, accountId:owner});
+          });
+
+        } else {
+
+            let detail = null;
+            if(res && res.data){
+                detail = JSON.stringify(res.data);
+            }
+            reject(new Error("regist document response data is invalid!"));
         }
-        return callback(null, {err:"error", message:"regist document response data is invalid!", "detail":detail});
-    }
+      });
+
+
   });
 
 }
 
 function fileUpload(params) {
+
   if(params.file==null || params.fileid == null || params.ext == null){
     console.error("file object is null", params);
     return;
@@ -114,8 +138,8 @@ function fileUpload(params) {
           'x-api-key': 'M84xHJ4cPEa1CAcmxHgTzyfSzIQSIZEaLR1mzRod'
       }
   }
-  return axios.put(url, params.file, config).then((res) => {
-    console.log("fileUpload Complete", res);
-    return res;
-  })
+
+  return axios.put(url, params.file, config);
+
+
 }

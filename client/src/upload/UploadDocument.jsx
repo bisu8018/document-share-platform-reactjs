@@ -34,7 +34,7 @@ class UploadDocument extends React.Component {
   constructor(props) {
     super(props);
 
-    this.dizzleApis = new DrizzleApis(props.dirzzle);
+    this.drizzleApis = new DrizzleApis(props.dirzzle);
 
     this.state = {
       classicModal: false,
@@ -93,7 +93,7 @@ class UploadDocument extends React.Component {
 
   onRegistDoc = () => {
     const { drizzle, drizzleState, auth } = this.props;
-
+    const self = this;
     if(!drizzle || !drizzleState || !auth){
       console.error("dirzzle or auth object is invalid",  drizzle, drizzleState, auth);
       alert('dirzzle or auth object is invalid');
@@ -112,14 +112,12 @@ class UploadDocument extends React.Component {
       return;
     }
 
-    const ethAccount = drizzleState.accounts[0];
-
-    if(!ethAccount){
+    if(!drizzleState.drizzleStatus.initialized){
       alert("Please connect to Metamask...(Metamask Account is invalid)");
       return;
     }
-
-    console.log("Selected a document file", this.state.fileInfo, "eth account", ethAccount);
+    const ethAccount = drizzleState.accounts[0];
+    console.log("Selected a document file", this.state.fileInfo);
     restapi.registDocument({
         fileInfo: fileInfo,
         userInfo: userInfo,
@@ -127,25 +125,22 @@ class UploadDocument extends React.Component {
         title: title,
         desc: desc,
         tags:tags
-      }, (result, err) => {
-        if(err){
-          alert("Regist Document Fail : " + JSON.stringify(err.detail));
+      }).then((result) => {
+        console.log("UploadDocument", result);
+        //this.registDocumentToSmartContract(result);
+        const drizzleApis = new DrizzleApis(drizzle);
+        const stackId = drizzleApis.registDocumentToSmartContract(result.documentId);
+        self.setState({ stackId });
+        /*
+        if(stackId){
+          self.setState({ stackId });
         } else {
-          //this.registDocumentToSmartContract(result);
-          const stackId = this.drizzleApis.registDocumentToSmartContract(ethAccount, result.documentId);
-          if(stackId){
-            this.setState({ stackId });
-          } else {
-            alert('Document registration Smart contract failed.');
-          }
-
+          alert('Document registration Smart contract failed.');
         }
-        console.log("Regist Document End", result);
-        this.clearForm();
-        this.clearFileInfo();
-    });
-
-
+        */
+        this.handleClose("classicModal");
+        console.log("Regist Document End SUCCESS", result);
+      });
   }
 
   onChange = (e) => {

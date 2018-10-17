@@ -110,7 +110,7 @@ export default class Auth {
     //console.log("isAuthenticated", new Date(expiresAt), localStorage);
     const isUnExpired = new Date().getTime() < expiresAt;
     if(!isUnExpired){
-      console.error("Session Expired", expiresAt, localStorage);
+      //console.error("Session Expired", expiresAt, localStorage);
       this.clearSession();
     }
     return isUnExpired;

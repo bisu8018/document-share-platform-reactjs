@@ -6,17 +6,15 @@ import CustomLinearProgress from "components/CustomLinearProgress/CustomLinearPr
 import Button from "components/CustomButtons/Button.jsx";
 import Badge from "components/Badge/Badge.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
+import ContentVote from 'contents/ContentVote';
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
-
+import Spinner from 'react-spinkit';
 const style = {
 
 };
 
-
-
 class ContentView extends React.Component {
-
 
   drizzleApis = new DrizzleApis(this.props.drizzle);
 
@@ -49,35 +47,18 @@ class ContentView extends React.Component {
   handleCheckDocumentInBlockChain = () => {
 
     if(!this.state.document) return;
-
-    let self = this;
-    this.drizzleApis.isExistDocument(this.state.document.documentId).then(function (data) {
-      console.log("isExist", data);
-      self.setState({isExistInBlockChain: data});
-    });
-
+    try{
+      let self = this;
+      this.drizzleApis.isExistDocument(this.state.document.documentId).then(function (data) {
+        console.log("isExist", data);
+        self.setState({isExistInBlockChain: data});
+      });
+    }catch(e){
+      console.error("handleCheckDocumentInBlockChain error", e);
+    }
   }
 
-  handleVoteOnDocument = () => {
-    if(!this.state.document) return;
-
-    const doc = this.state.document;
-    const deposit = document.getElementById("deposit").value;
-
-    if(!doc || !doc.documentId){
-      alert("documentId is nothing");
-      return;
-    }
-
-    if(deposit<=0){
-      alert("Deposit must be greater than zero.");
-      return;
-    }
-
-    this.drizzleApis.voteOnDocument(doc.documentId, deposit);
-  }
-
-  handleDetermineAuthorToken = () => {
+    handleDetermineAuthorToken = () => {
     if(!this.state.document) return;
 
     const doc = this.state.document;
@@ -104,7 +85,9 @@ class ContentView extends React.Component {
     const drizzleState = drizzle.store.getState();
 
     const ethAccount = drizzleState.accounts[0];
-    this.drizzleApis.registDocumentToSmartContract(ethAccount, this.state.document.documentId);
+    this.drizzleApis.registDocumentToSmartContract(this.state.document.documentId);
+
+    this.handleCheckDocumentInBlockChain();
   }
 
   printTxStatus = () => {
@@ -159,8 +142,10 @@ class ContentView extends React.Component {
     const document = this.state.document;
 
     if(!document) {
-      return "Loading";
+      return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     }
+
+    console.log("Loading Document", document.documentId, this.drizzleApis.fromAscii(document.documentId));
 
     return (
         <div className="contentGridView">
@@ -217,54 +202,7 @@ class ContentView extends React.Component {
 
 
            <div className="rightWrap">
-               <h3>Voting</h3>
-
-               <h4>1. Total amount of tokens voted</h4>
-               <ul className="voteList">
-                   <li><strong>You : </strong> <span>0.00 DECK</span></li>
-                   <li><strong>Total : </strong> <span>0.00 DECK</span></li>
-               </ul>
-
-               <h4>2. Total amount of tokens earned</h4>
-               <ul className="voteList">
-                   <li><strong>You : </strong> <span>0.00 DECK</span></li>
-                   <li><strong>Total : </strong> <span>0.00 DECK</span></li>
-               </ul>
-
-               <h4>3. Amount of available tokens</h4>
-               <ul className="voteList">
-                   <li><strong></strong><span>13.00 DECK</span></li>
-               </ul>
-
-
-               <h4>4. Estimated daily earning</h4>
-               <ul className="voteList">
-                   <li>0.00 ~ 0.00 DECK / 1day</li>
-                   <li>0.00 ~ 0.00 dollor($) / 1day</li>
-               </ul>
-
-               <h4>5. Enter the number of votes to commit</h4>
-               <div className="deckInput">
-                   <CustomInput
-                     labelText="DECK"
-                     error
-                     id="deposit"
-                     formControlProps={{
-                       fullWidth: true
-                     }}
-                     inputProps={{
-                       type: "text"
-                     }}
-
-
-                   />
-               </div>
-
-               <p className="notiTxt">Note: The token used for voting can be withdrawn after 40 days.</p>
-
-               <div>
-                   <Button sz="large" color="rose" fullWidth onClick={this.handleVoteOnDocument}>Commit</Button>
-               </div>
+               <ContentVote {...this.props} document={this.state.document}/>
 
 
                <h3>See also</h3>

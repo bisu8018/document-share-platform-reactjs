@@ -5,26 +5,13 @@ import logo from './logo.svg';
 import './App.css';
 import ContentList from "contents/ContentList"
 
-import * as restapi from 'apis/DocApi';
+
 
 class App extends Component {
   state = { loading: true, resultList:[], selected: null, fetching:false };
 
-  fetchDocuments = (params) => {
-
-      console.log("fetchDocument start");
-      this.setState({fetching:true})
-      restapi.getDocuments(params).then((res)=>{
-        console.log("Fetch Document", res.data.resultList);
-        if(res.data.resultList) {
-            this.setState({resultList: res.data.resultList});
-        }
-      });
-
-  }
-
   componentDidMount() {
-    this.fetchDocuments();
+    //this.fetchDocuments();
   }
 
   compomentWillUnmount() {
@@ -35,13 +22,7 @@ class App extends Component {
   render() {
     const { classes, ...rest } = this.props;
     return (
-
-        <ContentList {...this.props} resultList={this.state.resultList}/>
-          /*
-          <CardList />
-          <CardView />
-          <AuthorPage />
-          */
+        <ContentList {...this.props}/>
     );
   }
   /*
