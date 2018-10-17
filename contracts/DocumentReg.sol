@@ -304,7 +304,7 @@ contract DocumentReg is Ownable {
     // 2. 1번에서 추출한 목록을 기반으로 총 보상을 계산
     //  a. 토큰 양은 기본으로 18 decimals 기준
     //  b. 시작일부터 30일간의 page view 값을 읽어서 일별 보상을 계산
-    //  c. 일별 보상과 deposit을 합산한 최종 지급액을 결정
+    //  c. 일별 보상을 합산한 최종 보상을 결정
     uint reward = 0;
     uint[] memory voteList = new uint[](numVotes);
     uint[] memory deltaList = new uint[](numVotes);
@@ -320,7 +320,6 @@ contract DocumentReg is Ownable {
         dt += util.getOneDayMillis();
       }
       reward += delta;
-      reward += curatorPool.getDeposit(msg.sender, uint(idx));
       voteList[i] = uint(idx);
       deltaList[i] = delta;
       idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
