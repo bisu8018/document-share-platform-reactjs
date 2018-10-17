@@ -14,8 +14,8 @@ import Author from "profile/Author";
 
 // import drizzle functions and contract artifact
 import { Drizzle, generateStore } from "drizzle";
-import DocumentReg from "contracts/DocumentReg.json";
-import Deck from "contracts/Deck.json";
+import DocumentReg from "contracts-rinkeby/DocumentReg.json";
+import Deck from "contracts-rinkeby/Deck.json";
 
 const auth = new Auth();
 

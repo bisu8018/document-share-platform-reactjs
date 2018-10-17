@@ -81,7 +81,7 @@ export default class DrizzleApis {
 
     const contract = this.drizzle.contracts.DocumentReg;
     const bigNumberDeposit = this.toBigNumber(deposit);
-    console.log("vote on document id", documentId, "deposit", deposit, bigNumberDeposit);
+    console.log("vote on document id", documentId, "deposit", deposit, bigNumberDeposit, "contract address", contract.address);
     const stackId = contract.methods["voteOnDocument"].cacheSend(this.fromAscii(documentId), bigNumberDeposit, {
       from: ethAccount
     });
