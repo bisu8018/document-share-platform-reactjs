@@ -251,11 +251,10 @@ class ContentVote extends React.Component {
             />
         </div>
 
-        <p className="notiTxt">Note: The token used for voting can be withdrawn after 40 days.</p>
+        <p className="notiTxt">Note: The token used for voting can be withdrawn after 3 days.</p>
 
         <div>
             <Button sz="large" color="rose" fullWidth onClick={this.onClickVote} >{this.state.buttonText}</Button>
-            <Button sz="large" color="rose" fullWidth onClick={this.onClickVoteStep2} >Vote</Button>
         </div>
       </div>
     );
