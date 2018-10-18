@@ -219,21 +219,21 @@ contract DocumentReg is Ownable {
 
     uint sumReward = 0;
     while (claimDate < dateMillis) {
-//      if (claimDate == 0) {
-//        claimDate = authorPool.getUserDocumentListedDate(msg.sender, idx);
-//      }
-//      assert(claimDate <= dateMillis);
+      if (claimDate == 0) {
+        claimDate = authorPool.getUserDocumentListedDate(msg.sender, idx);
+      }
+      assert(claimDate <= dateMillis);
 
-//      uint tpv = getTotalPageView(claimDate);
-//      uint pv = getPageView(_docId, claimDate);
-//      sumReward += authorPool.determineReward(pv, tpv);
+      uint tpv = getTotalPageView(claimDate);
+      uint pv = getPageView(_docId, claimDate);
+      sumReward += authorPool.determineReward(pv, tpv);
 
       uint nextDate = claimDate + util.getOneDayMillis();
-//      assert(claimDate < nextDate);
+      assert(nextDate > claimDate);
       claimDate = nextDate;
     }
 
-//    token.transfer(msg.sender, sumReward);
+    token.transfer(msg.sender, sumReward);
     emit _ClaimAuthorReward(_docId, sumReward, msg.sender);
   }
 
@@ -242,10 +242,10 @@ contract DocumentReg is Ownable {
   // -------------------------------
 
   function estimateCuratorReward(address _addr, bytes32 _docId) public view returns (uint) {
+
     require(_addr != 0);
     require(curatorPool.createTime() != 0);
 
-    uint dateMillis = util.getDateMillis();
     uint numVotes = curatorPool.getVoteCount(_addr);
     if (numVotes == 0) {
       return uint(0);
@@ -253,13 +253,14 @@ contract DocumentReg is Ownable {
 
     uint reward = 0;
     for (uint i=0; i<numVotes; i++) {
-      uint startDate = curatorPool.getStartDate(_addr, i);
       if (curatorPool.getDocId(_addr, i) == _docId
        && curatorPool.getWithdraw(_addr, i) == 0) {
-        for (uint dt=startDate; dt<=dateMillis; dt+=util.getOneDayMillis()) {
+        uint dt = curatorPool.getStartDate(_addr, i);
+        for (uint j=0; j<30; j++) {
           uint pv = getPageView(_docId, dt);
           uint tpvs = getTotalPageViewSquare(dt);
           reward += curatorPool.determineReward(_addr, i, dt, pv, tpvs);
+          dt += util.getOneDayMillis();
         }
       }
     }
@@ -375,6 +376,10 @@ contract DocumentReg is Ownable {
 
     curatorPool.updateVote(_addr, _docId, _deposit, _timestamp);
     emit _UpdateVoteOnDocument(_docId, _deposit, _addr, _timestamp);
+  }
+
+  function getDepositOnDocument(address _addr, bytes32 _docId, uint _timestamp) public view returns (uint) {
+    return curatorPool.getDepositByAddr(_addr, _docId, _timestamp);
   }
 
 }

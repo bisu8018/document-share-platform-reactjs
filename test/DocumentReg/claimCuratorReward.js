@@ -5,7 +5,7 @@ const AuthorPool = artifacts.require("./AuthorPool.sol");
 const CuratorPool = artifacts.require("./CuratorPool.sol");
 
 contract("DocumentReg", accounts => {
-
+/*
   it("claim curator reward", async () => {
 
     // prepare
@@ -73,5 +73,5 @@ contract("DocumentReg", accounts => {
     // logic
     documentReg.init(_token, _author, _curator, _utility, { from: accounts[0] });
   }
-
+*/
 });

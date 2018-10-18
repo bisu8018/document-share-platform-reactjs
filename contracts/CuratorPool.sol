@@ -65,10 +65,12 @@ contract CuratorPool is Ownable {
     onlyOwner()
   {
     uint dateMillis = util.getDateMillis();
-    Vote memory vote = Vote(_docId, dateMillis, _deposit, 0);
 
-    mapByAddr[_curator].push(vote);
-    mapByDoc[_docId].push(vote);
+    Vote memory vote1 = Vote(_docId, dateMillis, _deposit, 0);
+    Vote memory vote2 = Vote(_docId, dateMillis, _deposit, 0);
+
+    mapByAddr[_curator].push(vote1);
+    mapByDoc[_docId].push(vote2);
 
     //if (mapByAddr[_curator].length == 1) {
     //  keys.push(_curator);
@@ -80,10 +82,11 @@ contract CuratorPool is Ownable {
   function updateVote(address _curator, bytes32 _docId, uint _deposit, uint _timestamp) public
     onlyOwner()
   {
-    Vote memory vote = Vote(_docId, _timestamp, _deposit, 0);
+    Vote memory vote1 = Vote(_docId, _timestamp, _deposit, 0);
+    Vote memory vote2 = Vote(_docId, _timestamp, _deposit, 0);
 
-    mapByAddr[_curator].push(vote);
-    mapByDoc[_docId].push(vote);
+    mapByAddr[_curator].push(vote1);
+    mapByDoc[_docId].push(vote2);
 
     //if (idx == 1) {
     //  keys.push(_curator);
@@ -100,7 +103,7 @@ contract CuratorPool is Ownable {
   }
 
   function getVoteCount(address _addr) public view returns (uint) {
-    return uint(mapByAddr[_addr].length);
+    return mapByAddr[_addr].length;
   }
 
   function getDocId(address _addr, uint _idx) public view returns (bytes32) {
@@ -152,33 +155,43 @@ contract CuratorPool is Ownable {
 
     require(_addr != 0);
     require(_dateMillis > 0);
-    require(_tpvs > 0);
-    require(_pv > 0);
+
+    if (_tpvs == 0 || _pv == 0) {
+      return uint(0);
+    }
 
     Vote memory vote = mapByAddr[_addr][_idx];
 
-    if (vote.startDate > _dateMillis || vote.withdraw > 0) {
+    if (vote.startDate > _dateMillis || vote.withdraw > 0 || vote.deposit == 0) {
       return uint(0);
     }
 
     uint tvd = 0;
     Vote[] memory voteTotalList = mapByDoc[vote.docId];
     for (uint i=0; i<voteTotalList.length; i++) {
-      uint tmpStartDate = voteTotalList[i].startDate;
-      if (tmpStartDate - _dateMillis >= 0
-        && tmpStartDate - _dateMillis < 30) {
+      if ((_dateMillis - voteTotalList[i].startDate) >= 0
+       && (_dateMillis - voteTotalList[i].startDate) < (30 * util.getOneDayMillis())) {
         tvd += voteTotalList[i].deposit;
       }
     }
 
-    uint drp = util.getDailyRewardPool(uint(30), createTime);
-    if (drp == 0 || tvd == 0 || vote.deposit == 0) {
+    if (tvd == 0) {
       return uint(0);
     }
+    return uint(uint((util.getDailyRewardPool(30, _dateMillis) * (_pv ** 2)) / _tpvs) * vote.deposit / tvd);
+  }
 
-    //emit _DetermineReward(vote.docId, vote.deposit, tvd, _pv, _tpvs, drp);
-
-    return uint(uint((drp * (_pv ** 2)) / _tpvs) / tvd) * vote.deposit;
+  function getDepositByAddr(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint) {
+    uint sumDeposit = 0;
+    Vote[] memory voteList = mapByAddr[_addr];
+    for (uint i=0; i<voteList.length; i++) {
+      if (voteList[i].docId == _docId
+        && (_dateMillis - voteList[i].startDate) >= 0
+        && (_dateMillis - voteList[i].startDate) < (30 * util.getOneDayMillis())) {
+        sumDeposit += voteList[i].deposit;
+      }
+    }
+    return sumDeposit;
   }
 
 }
