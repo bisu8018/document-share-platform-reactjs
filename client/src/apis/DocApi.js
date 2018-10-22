@@ -9,6 +9,7 @@ const apiDomain = APP_PROPERTIES.domain.api;//"https://iwzx8ah5xf.execute-api.us
 const registDocumentInfoUrl = "/api/document/regist";
 const getDocumentsUrl = "/api/document/list";
 const getDocumentUrl = "/api/document/info/";
+const getDocumentTextUrl = "/api/document/text/";
 
 export function getPageView(documentId, pageNo) {
   return imgDomain + "/document/get/" + documentId + "/" + pageNo;
@@ -52,7 +53,19 @@ export function getDocument(documentId){
     }
   }
   const url = apiDomain + getDocumentUrl + documentId;
- return axios.get(url, config);
+  return axios.get(url, config);
+}
+
+export function getDocumentText(documentId){
+
+  const config = {
+    header: {
+       'Access-Control-Allow-Origin': '*',
+       'Content-Type':'application/json'
+    }
+  }
+  const url = apiDomain + getDocumentTextUrl + documentId;
+  return axios.get(url, config);
 }
 
 export function registDocument(args, callback) {
