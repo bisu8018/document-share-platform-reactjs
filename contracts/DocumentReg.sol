@@ -305,11 +305,10 @@ contract DocumentReg is Ownable {
     // validation check
     require(curatorPool.createTime() != 0);
 
-    // 인출을 요청한 큐레이터의 명시된 문서에 투표된 vote 객체를 찾아서 목록 구성
-    // 1. 해당 큐레이터의 전체 vote 목록을 돌면서
-    //  a. 명시된 docuemnt에 대한 vote만 필터링
-    //  b. 이미 인출한 Vote 인지 검사
-    //  c. 시작한지 util.getVoteDepositDays()일이 지났는지 검사 (인출 가능한지)
+    // 1. Going around the full vote list of the curator
+    //  a. Select only the votes for the specified docuemnt
+    //  b. Exclude votes that have already been withdrawn
+    //  c. Check whether voting period expired since start date (can be claimed)
     uint numVotes = 0;
     int idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(0));
     while(idx >= 0)
@@ -321,10 +320,10 @@ contract DocumentReg is Ownable {
       return;
     }
 
-    // 2. 1번에서 추출한 목록을 기반으로 총 보상을 계산
-    //  a. 토큰 양은 기본으로 18 decimals 기준
-    //  b. 시작일부터 util.getVoteDepositDays()일간의 page view 값을 읽어서 일별 보상을 계산
-    //  c. 일별 보상과 deposit을 합산한 최종 지급액을 결정
+    // 2. Calculate total reward based on the list from step #1
+    //  a. The token amount is based on 18 decimals by default
+    //  b. Calculate daily reward by page views ​​from start date for deposit days
+    //  c. Determine the final amount of the sum of the daily compensation and deposit
     uint reward = 0;
     uint[] memory voteList = new uint[](numVotes);
     uint[] memory deltaList = new uint[](numVotes);
@@ -346,10 +345,11 @@ contract DocumentReg is Ownable {
       idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
     }
 
-    // 3. 결정된 보상액을 document registry contract에서 사용자 계정으로 전송
+    // 3. Transfer the determined reward from the this contract to the user account
     token.transfer(msg.sender, reward);
 
-    // 4. 보상이 완료된 vote들에 withdraw 값을 기록
+
+    // 4. Record the amount of reward in the withdrawn votes
     for (i=0; i<voteList.length; i++) {
       curatorPool.withdraw(msg.sender, voteList[i], deltaList[i]);
     }

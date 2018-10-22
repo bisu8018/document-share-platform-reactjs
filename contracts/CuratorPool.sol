@@ -131,7 +131,7 @@ contract CuratorPool is Ownable {
   }
 
   // --------------------------------
-  // 특정 큐레이터가 명시된 문서에 투표한 vote 중에서 인출 가능한 항목을 찾아서 목록을 리턴하기
+  // Find the next index of votes that can be claimed
   // --------------------------------
   function indexOfNextVoteForClaim(address _addr, bytes32 _docId, uint _index) public view returns (int) {
 
@@ -143,10 +143,10 @@ contract CuratorPool is Ownable {
       return int(-1);
     }
 
-    // 1. 해당 큐레이터의 전체 vote 목록을 돌면서
-    //  a. 명시된 docuemnt에 대한 vote만 필터링
-    //  b. 이미 인출한 Vote 인지 검사
-    //  c. 시작한지 util.getVoteDepositDays()일이 지났는지 검사 (인출 가능한지)
+    // Going around the full vote list of the curator
+    //  a. Select only the votes for the specified docuemnt
+    //  b. Exclude votes that have already been withdrawn
+    //  c. Check whether voting period expired since start date (can be claimed)
     uint dateMillis = util.getDateMillis();
     for (uint i=(_index+1); i<mapByAddr[_addr].length; i++) {
       if ((mapByAddr[_addr][i].docId == _docId)
