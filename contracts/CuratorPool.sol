@@ -146,13 +146,13 @@ contract CuratorPool is Ownable {
     // 1. 해당 큐레이터의 전체 vote 목록을 돌면서
     //  a. 명시된 docuemnt에 대한 vote만 필터링
     //  b. 이미 인출한 Vote 인지 검사
-    //  c. 시작한지 30일이 지났는지 검사 (인출 가능한지)
+    //  c. 시작한지 util.getVoteDepositDays()일이 지났는지 검사 (인출 가능한지)
     uint dateMillis = util.getDateMillis();
     for (uint i=(_index+1); i<mapByAddr[_addr].length; i++) {
       if ((mapByAddr[_addr][i].docId == _docId)
        && (mapByAddr[_addr][i].withdraw == 0)
        && (dateMillis > mapByAddr[_addr][i].startDate)
-       && (dateMillis - mapByAddr[_addr][i].startDate > 30 * util.getOneDayMillis())) {
+       && (dateMillis - mapByAddr[_addr][i].startDate > util.getVoteDepositMillis())) {
          return int(i);
       }
     }
@@ -178,7 +178,7 @@ contract CuratorPool is Ownable {
     Vote[] memory voteTotalList = mapByDoc[vote.docId];
     for (uint i=0; i<voteTotalList.length; i++) {
       if ((_dateMillis - voteTotalList[i].startDate) >= 0
-       && (_dateMillis - voteTotalList[i].startDate) < (30 * util.getOneDayMillis())) {
+       && (_dateMillis - voteTotalList[i].startDate) < util.getVoteDepositMillis()) {
         tvd += voteTotalList[i].deposit;
       }
     }
@@ -195,7 +195,7 @@ contract CuratorPool is Ownable {
     for (uint i=0; i<voteList.length; i++) {
       if (voteList[i].docId == _docId
         && (_dateMillis - voteList[i].startDate) >= 0
-        && (_dateMillis - voteList[i].startDate) < (30 * util.getOneDayMillis())) {
+        && (_dateMillis - voteList[i].startDate) < util.getVoteDepositMillis()) {
         sumDeposit += voteList[i].deposit;
       }
     }
@@ -207,7 +207,7 @@ contract CuratorPool is Ownable {
     Vote[] memory voteList = mapByDoc[_docId];
     for (uint i=0; i<voteList.length; i++) {
       if ((_dateMillis - voteList[i].startDate) >= 0
-       && (_dateMillis - voteList[i].startDate) < (30 * util.getOneDayMillis())) {
+       && (_dateMillis - voteList[i].startDate) < util.getVoteDepositMillis()) {
         sumDeposit += voteList[i].deposit;
       }
     }
@@ -219,7 +219,7 @@ contract CuratorPool is Ownable {
     Vote[] memory voteList = mapByAddr[_addr];
     for (uint i=0; i<voteList.length; i++) {
       if (voteList[i].docId == _docId
-        && (_dateMillis - voteList[i].startDate) > (30 * util.getOneDayMillis())) {
+        && (_dateMillis - voteList[i].startDate) > util.getVoteDepositMillis()) {
         sumWithdraw += voteList[i].withdraw;
       }
     }
@@ -230,7 +230,7 @@ contract CuratorPool is Ownable {
     uint sumWithdraw = 0;
     Vote[] memory voteList = mapByDoc[_docId];
     for (uint i=0; i<voteList.length; i++) {
-      if ((_dateMillis - voteList[i].startDate) > (30 * util.getOneDayMillis())) {
+      if ((_dateMillis - voteList[i].startDate) > util.getVoteDepositMillis()) {
         sumWithdraw += voteList[i].withdraw;
       }
     }

@@ -3,6 +3,7 @@ pragma solidity ^0.4.24;
 contract Utility {
 
   uint private ONE_DAY_MILLIS = 86400000;
+  uint private DEPOSIT_DAYS = 3;
 
   function bytes32ToStr(bytes32 _bytes32) private pure returns (string) {
     bytes memory bytesArray = new bytes(32);
@@ -32,6 +33,14 @@ contract Utility {
 
   function getOneDayMillis() public view returns (uint) {
     return ONE_DAY_MILLIS;
+  }
+
+  function getVoteDepositMillis() public view returns (uint) {
+    return DEPOSIT_DAYS * ONE_DAY_MILLIS;
+  }
+
+  function getVoteDepositDays() public view returns (uint) {
+    return DEPOSIT_DAYS;
   }
 
   function getDailyRewardPool(uint _percent, uint _createTime) public view returns (uint) {

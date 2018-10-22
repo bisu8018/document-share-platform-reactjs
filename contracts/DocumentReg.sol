@@ -256,7 +256,7 @@ contract DocumentReg is Ownable {
       if (curatorPool.getDocId(_addr, i) == _docId
        && curatorPool.getWithdraw(_addr, i) == 0) {
         uint dt = curatorPool.getStartDate(_addr, i);
-        for (uint j=0; j<30; j++) {
+        for (uint j=0; j<util.getVoteDepositDays(); j++) {
           uint pv = getPageView(_docId, dt);
           uint tpvs = getTotalPageViewSquare(dt);
           reward += curatorPool.determineReward(_addr, i, dt, pv, tpvs);
@@ -288,10 +288,10 @@ contract DocumentReg is Ownable {
     for(uint i=0; i<numVotes; i++)
     {
       uint dt = curatorPool.getStartDate(msg.sender, uint(idx));
-      for (uint j=0; j<30; j++) {
+      for (uint j=0; j<util.getVoteDepositDays(); j++) {
         uint pv = getPageView(_docId, dt);
         uint tpvs = getTotalPageViewSquare(dt);
-        reward += curatorPool.determineReward(msg.sender, i, dt, pv, tpvs);
+        reward += curatorPool.determineReward(msg.sender, uint(idx), dt, pv, tpvs);
         dt += util.getOneDayMillis();
       }
       idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
@@ -309,7 +309,7 @@ contract DocumentReg is Ownable {
     // 1. 해당 큐레이터의 전체 vote 목록을 돌면서
     //  a. 명시된 docuemnt에 대한 vote만 필터링
     //  b. 이미 인출한 Vote 인지 검사
-    //  c. 시작한지 30일이 지났는지 검사 (인출 가능한지)
+    //  c. 시작한지 util.getVoteDepositDays()일이 지났는지 검사 (인출 가능한지)
     uint numVotes = 0;
     int idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(0));
     while(idx >= 0)
@@ -323,7 +323,7 @@ contract DocumentReg is Ownable {
 
     // 2. 1번에서 추출한 목록을 기반으로 총 보상을 계산
     //  a. 토큰 양은 기본으로 18 decimals 기준
-    //  b. 시작일부터 30일간의 page view 값을 읽어서 일별 보상을 계산
+    //  b. 시작일부터 util.getVoteDepositDays()일간의 page view 값을 읽어서 일별 보상을 계산
     //  c. 일별 보상과 deposit을 합산한 최종 지급액을 결정
     uint reward = 0;
     uint[] memory voteList = new uint[](numVotes);
@@ -333,10 +333,10 @@ contract DocumentReg is Ownable {
     {
       uint delta = 0;
       uint dt = curatorPool.getStartDate(msg.sender, uint(idx));
-      for (uint j=0; j<30; j++) {
+      for (uint j=0; j<util.getVoteDepositDays(); j++) {
         uint pv = getPageView(_docId, dt);
         uint tpvs = getTotalPageViewSquare(dt);
-        delta += curatorPool.determineReward(msg.sender, i, dt, pv, tpvs);
+        delta += curatorPool.determineReward(msg.sender, uint(idx), dt, pv, tpvs);
         dt += util.getOneDayMillis();
       }
       reward += delta;
