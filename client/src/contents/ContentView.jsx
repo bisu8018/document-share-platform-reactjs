@@ -20,6 +20,7 @@ class ContentView extends React.Component {
 
   state = {
     document:null,
+    documentText:null,
     currentPageNo:1,
     dataKey:null,
     determineAuthorToken:-1,
@@ -28,11 +29,17 @@ class ContentView extends React.Component {
 
   getContentInfo = (documentId) => {
     restapi.getDocument(documentId).then((res) => {
-        this.setState({document:res.data.document});
+      this.setState({document:res.data.document});
 
-        //this.handleDetermineAuthorToken();
-        this.handleCheckDocumentInBlockChain();
+      //this.handleDetermineAuthorToken();
+      this.handleCheckDocumentInBlockChain();
     });
+
+    restapi.getDocumentText(documentId).then((res) => {
+      console.log(res);
+      this.setState({documentText:res.data.text});
+    });
+
   }
 
   goNextPage = () => {
@@ -186,6 +193,10 @@ class ContentView extends React.Component {
                    </div>
                    <div className="proFileDescript">{document.desc?document.desc:""}</div>
                 </Link>
+                <h3 className="tit02">Document Information</h3>
+                <div>
+                {this.state.documentText?this.state.documentText:"No Text"}
+                </div>
               {/*
               <h3 className="tit02">Document Information</h3>
               <ul className="detailList">
