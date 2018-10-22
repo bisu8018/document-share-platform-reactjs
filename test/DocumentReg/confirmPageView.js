@@ -59,11 +59,11 @@ contract("DocumentReg - confirm page view & total page view", accounts => {
     // ---------------------------
     // DOCUMENT REGISTRY
     // ---------------------------
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     // ---------------------------
     // AUTHOR POOL
@@ -110,11 +110,11 @@ contract("DocumentReg - confirm page view & total page view", accounts => {
 
     // ------------------
     // ACCOUNT[1]
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     const pv_D3_D0 = (await _documentReg.getPageView(DOC3, DAYS_0)) * 1;
     assert.equal(0, pv_D3_D0, "different page view doc3, day0");
@@ -125,11 +125,11 @@ contract("DocumentReg - confirm page view & total page view", accounts => {
   it("confirm page view for 5 day", async () => {
 
     // ------------------
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     const pv_D1_D0 = (await _documentReg.getPageView(DOC1, DAYS_0)) * 1;
     assert.equal(0, pv_D1_D0, "different page view doc1, day0");
@@ -150,11 +150,11 @@ contract("DocumentReg - confirm page view & total page view", accounts => {
   it("confirm total page view for 8 day", async () => {
 
     // ------------------
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     const pv_D4_D0 = (await _documentReg.getTotalPageView(DAYS_0)) * 1;
     assert.equal(0, pv_D4_D0, "different total page view day0");

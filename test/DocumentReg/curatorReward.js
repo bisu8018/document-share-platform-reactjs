@@ -4,7 +4,7 @@ const DocumentReg = artifacts.require("./DocumentReg.sol");
 const AuthorPool = artifacts.require("./AuthorPool.sol");
 const CuratorPool = artifacts.require("./CuratorPool.sol");
 
-contract("DocumentReg - estimate curator rewards", accounts => {
+contract("DocumentReg - estimate, determine & claim curator rewards", accounts => {
 
   const DOC1 = "10000000000000000000000000000001";
   const DOC2 = "10000000000000000000000000000002";
@@ -84,11 +84,11 @@ contract("DocumentReg - estimate curator rewards", accounts => {
     // ---------------------------
     // DOCUMENT REGISTRY
     // ---------------------------
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     // ---------------------------
     // AUTHOR POOL
@@ -154,23 +154,23 @@ contract("DocumentReg - estimate curator rewards", accounts => {
     await _documentReg.updateVoteOnDocument(accounts[4], DOC4, VOTE_A4_D4, DAYS_4, { from: accounts[0] });
     await _documentReg.updateVoteOnDocument(accounts[4], DOC3, VOTE_A4_D3, DAYS_0, { from: accounts[0] });
 
-    const deposit_A3_D1 = (await _documentReg.getDepositOnDocument(accounts[3], DOC1, DAYS_5)) * 1;
+    const deposit_A3_D1 = (await _documentReg.getDepositOnUserDocument(accounts[3], DOC1, DAYS_5)) * 1;
     //console.log('deposit_A3_D1 : ' + deposit_A3_D1);
     assert.equal(VOTE_A3_D1, deposit_A3_D1);
 
-    const deposit_A3_D2 = (await _documentReg.getDepositOnDocument(accounts[3], DOC2, DAYS_1)) * 1;
+    const deposit_A3_D2 = (await _documentReg.getDepositOnUserDocument(accounts[3], DOC2, DAYS_1)) * 1;
     //console.log('deposit_A3_D2 : ' + deposit_A3_D2);
     assert.equal(VOTE_A3_D2, deposit_A3_D2);
 
-    const deposit_A4_D1 = (await _documentReg.getDepositOnDocument(accounts[4], DOC1, DAYS_3)) * 1;
+    const deposit_A4_D1 = (await _documentReg.getDepositOnUserDocument(accounts[4], DOC1, DAYS_3)) * 1;
     //console.log('deposit_A4_D1 : ' + deposit_A4_D1);
     assert.equal(VOTE_A4_D1, deposit_A4_D1);
 
-    const deposit_A4_D4 = (await _documentReg.getDepositOnDocument(accounts[4], DOC4, DAYS_4)) * 1;
+    const deposit_A4_D4 = (await _documentReg.getDepositOnUserDocument(accounts[4], DOC4, DAYS_4)) * 1;
     //console.log('deposit_A4_D4 : ' + deposit_A4_D4);
     assert.equal(VOTE_A4_D4, deposit_A4_D4);
 
-    const deposit_A4_D3 = (await _documentReg.getDepositOnDocument(accounts[4], DOC3, DAYS_0)) * 1;
+    const deposit_A4_D3 = (await _documentReg.getDepositOnUserDocument(accounts[4], DOC3, DAYS_0)) * 1;
     //console.log('deposit_A4_D3 : ' + deposit_A4_D3);
     assert.equal(VOTE_A4_D3, deposit_A4_D3);
   });
@@ -180,17 +180,17 @@ contract("DocumentReg - estimate curator rewards", accounts => {
     // ---------------------------
     // CURATOR POOL
     // ---------------------------
-    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100)
-    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200)
-    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100)
-    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400)
-    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE()
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100, 100)
+    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100, 100)
+    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400, 400)
+    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
 
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     const todayMillis = (await _utility.getTimeMillis()) * 1;
     const dayMillis = (await _utility.getOneDayMillis()) * 1;
@@ -202,7 +202,7 @@ contract("DocumentReg - estimate curator rewards", accounts => {
     const reward_A3_D2 = web3.fromWei(await _documentReg.estimateCuratorReward(accounts[3], DOC2, { from: accounts[0] }));
     const sample = Math.round((reward_A3_D2 * 1) / 100);
     const reference = Math.round((ref_A3_D2_D1) / 100);
-    assert.equal(reference, sample, "wrong amount of estimated token curator #3, doc #2");
+    assert.equal(reference, sample, "wrong amount of estimated token : curator #3, doc #2");
   });
 
   it("estimate curator reward for 5days", async () => {
@@ -210,17 +210,17 @@ contract("DocumentReg - estimate curator rewards", accounts => {
     // ---------------------------
     // CURATOR POOL
     // ---------------------------
-    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100)
-    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200)
-    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100)
-    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400)
-    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE()
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100, 100)
+    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100, 100)
+    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400, 400)
+    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
 
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     const todayMillis = (await _utility.getTimeMillis()) * 1;
     const dayMillis = (await _utility.getOneDayMillis()) * 1;
@@ -246,7 +246,7 @@ contract("DocumentReg - estimate curator rewards", accounts => {
     const reward_A3_D1 = web3.fromWei(await _documentReg.estimateCuratorReward(accounts[3], DOC1, { from: accounts[0] }));
     const sample = Math.floor((reward_A3_D1 * 1) / 10);
     const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5) / 10);
-    assert.equal(reference, sample, "wrong amount of estimated token curator #3, doc #1");
+    assert.equal(reference, sample, "wrong amount of estimated token : curator #3, doc #1");
   });
 
   it("determine curator reward for 29, 30, 31 days", async () => {
@@ -254,17 +254,21 @@ contract("DocumentReg - estimate curator rewards", accounts => {
     // ---------------------------
     // CURATOR POOL
     // ---------------------------
-    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100)
-    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200)
-    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100)
-    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400)
-    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE()
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100, 100)
+    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100, 100)
+    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400, 400)
+    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
 
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // ACOUNT[3] : DOC #1(100), +29 DAYS, VOTE(100, 100, 100, 100, 100, 100, ...., 100)
+    // ACOUNT[3] : DOC #1(100), +30 DAYS, VOTE(  0, 100, 100, 100, 100, 100, ...., 100, 100)
+    // ACOUNT[3] : DOC #1(100), +31 DAYS, VOTE(  0,   0, 100, 100, 100, 100, ...., 100, 100, 100)
+
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     const DAYS_29 = ((await _utility.getDateMillis()) * 1) - 29 * (await _utility.getOneDayMillis());
     const DAYS_30 = ((await _utility.getDateMillis()) * 1) - 30 * (await _utility.getOneDayMillis());
@@ -294,48 +298,314 @@ contract("DocumentReg - estimate curator rewards", accounts => {
     const VOTE_A3_D1 = new web3.BigNumber('100000000000000000000');
     const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5));
 
-    const reward_A3_D2_E = web3.fromWei(await _documentReg.estimateCuratorReward(accounts[3], DOC1, { from: accounts[0] }));
-
     await _documentReg.update(accounts[1], DOC1, DAYS_31, { from: accounts[0] });
     await _documentReg.updateVoteOnDocument(accounts[3], DOC1, VOTE_A3_D1, DAYS_29, { from: accounts[0] });
     const reward_A3_D1_29 = web3.fromWei(await _documentReg.determineCuratorReward(DOC1, { from: accounts[3] }));
     const sample_29 = Math.floor((reward_A3_D1_29 * 1));
-    assert.equal(0, sample_29, "wrong amount of determined token curator #3, doc #1, day 29");
+    assert.equal(0, sample_29, "wrong amount of determined token : curator #3, doc #1, day 29");
 
     await _documentReg.updateVoteOnDocument(accounts[3], DOC1, VOTE_A3_D1, DAYS_30, { from: accounts[0] });
     const reward_A3_D1_30 = web3.fromWei(await _documentReg.determineCuratorReward(DOC1, { from: accounts[3] }));
     const sample_30 = Math.floor((reward_A3_D1_30 * 1));
-    assert.equal(0, sample_30, "wrong amount of determined token curator #3, doc #1, day 30");
+    assert.equal(0, sample_30, "wrong amount of determined token : curator #3, doc #1, day 30");
 
     await _documentReg.updateVoteOnDocument(accounts[3], DOC1, VOTE_A3_D1, DAYS_31, { from: accounts[0] });
     const reward_A3_D1_31 = web3.fromWei(await _documentReg.determineCuratorReward(DOC1, { from: accounts[3] }));
     const sample_31 = Math.floor((reward_A3_D1_31 * 1));
-    //assert.equal(reward_A3_D2_E, sample_31, "wrong amount of determined token curator #3, doc #1, day 31");
-    assert.equal(reference, sample_31, "wrong amount of determined token curator #3, doc #1, day 31");
+    assert.equal(reference, sample_31, "wrong amount of determined token : curator #3, doc #1, day 31");
   });
 
   it("claim curator reward for 29, 30, 31 days", async () => {
-    // TODO : coding test
+
+    // ---------------------------
+    // CURATOR POOL
+    // ---------------------------
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100, 100)
+    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100, 100)
+    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400, 400)
+    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
+
+    // ACOUNT[3] : DOC #1(100), +29 DAYS, VOTE(100, 100, 100, 100, 100, 100, ...., 100)
+    // ACOUNT[3] : DOC #1(100), +30 DAYS, VOTE(  0, 100, 100, 100, 100, 100, ...., 100, 100)
+    // ACOUNT[3] : DOC #1(100), +31 DAYS, VOTE(  0,   0, 100, 100, 100, 100, ...., 100, 100, 100) => CLAIMED
+
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
+
+    const DAYS_29 = ((await _utility.getDateMillis()) * 1) - 29 * (await _utility.getOneDayMillis());
+    const DAYS_30 = ((await _utility.getDateMillis()) * 1) - 30 * (await _utility.getOneDayMillis());
+    const DAYS_31 = ((await _utility.getDateMillis()) * 1) - 31 * (await _utility.getOneDayMillis());
+
+    const todayMillis = (await _utility.getTimeMillis()) * 1;
+    const dayMillis = (await _utility.getOneDayMillis()) * 1;
+    const drp_1 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 1 * dayMillis));
+    const drp_2 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 2 * dayMillis));
+    const drp_3 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 3 * dayMillis));
+    const drp_4 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 4 * dayMillis));
+    const drp_5 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 5 * dayMillis));
+
+    const ref_A3_D1_D1 = 0; //((drp_1 * 1) * (100 / (100 + 100))) / (10000 + 40000 + 10000 + 90000) * 10000;
+    const ref_A3_D1_D2 = ((drp_2 * 1) * (100 / (100 + 100 + 100 + 100 + 100))) / (40000 + 40000) * 40000;
+    const ref_A3_D1_D3 = ((drp_3 * 1) * (100 / (100 + 100 + 100 + 100 + 100))) / (90000 + 90000) * 90000;
+    const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100 + 100 + 100 + 100))) / (160000 + 160000) * 160000;
+    const ref_A3_D1_D5 = ((drp_5 * 1) * (100 / (100 + 100 + 100 + 100))) / (250000 + 250000) * 250000;
+
+    const VOTE_A3_D1 = new web3.BigNumber('100000000000000000000');
+    const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5));
+
+    const balance_A3_S1 = web3.fromWei(await _deck.balanceOf(accounts[3]), "ether");
+    //console.log('balance_A3_S1 : ' + balance_A3_S1);
+
+    const reward_A3_D1_31 = web3.fromWei(await _documentReg.determineCuratorReward(DOC1, { from: accounts[3] }));
+    const sample_31 = Math.floor((reward_A3_D1_31 * 1));
+    assert.equal(reference, sample_31, "wrong amount of determined token : curator #3, doc #1, day 31");
+
+    await _documentReg.claimCuratorReward(DOC1, { from: accounts[3] })
+    const balance_A3_S2 = web3.fromWei(await _deck.balanceOf(accounts[3]), "ether");
+    //console.log('balance_A3_S2 : ' + balance_A3_S2);
+    const reward_claimed = Math.floor(balance_A3_S2 * 1 - balance_A3_S1 * 1) - (web3.fromWei(VOTE_A3_D1, "ether") * 1);
+    assert.equal(sample_31, reward_claimed, "wrong amount of claimed token : curator #3, doc #1, day 31");
   });
 
   it("vote on a document", async () => {
-    // TODO : coding test
+
+    // ---------------------------
+    // CURATOR POOL
+    // ---------------------------
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100, 100)
+    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100, 100)
+    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400, 400)
+    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
+
+    // ACOUNT[3] : DOC #1(100), +29 DAYS, VOTE(100, 100, 100, 100, 100, 100, ...., 100)
+    // ACOUNT[3] : DOC #1(100), +30 DAYS, VOTE(  0, 100, 100, 100, 100, 100, ...., 100, 100)
+    // ACOUNT[3] : DOC #1(100), +31 DAYS, VOTE(  0,   0, 100, 100, 100, 100, ...., 100, 100, 100) => CLAIMED
+
+    // ACOUNT[4] : DOC #2(300),  +0 DAYS, VOTE(300)
+
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
+
+    // S1. check initial balance of account #4
+    const balance_A4_S1 = web3.fromWei(await _deck.balanceOf(accounts[4]), "ether") * 1;
+    //console.log('balance_A4_S1 : ' + balance_A4_S1);
+
+    // S2. approve 300 tokens which will be used for voting on document #2
+    const VOTE_A4_D2 = new web3.BigNumber('300000000000000000000');
+    await _deck.approve(_documentReg.address, VOTE_A4_D2, { from: accounts[4] });
+
+    // S3. vote 300 tokens on document #2
+    await _documentReg.voteOnDocument(DOC2, VOTE_A4_D2, { from: accounts[4] });
+
+    // S4. check amount of tokens account #4 has deposited on document #2
+    const deposit_A4_D2 = web3.fromWei(await _documentReg.getDepositOnUserDocument(accounts[4], DOC2, DAYS_0), "ether") * 1;
+    //console.log('deposit_A4_D2 : ' + deposit_A4_D2);
+    assert.equal(300, deposit_A4_D2, "wrong amount of tokens deposited on doc #2");
+
+    // S5. check the balance of account #4
+    const balance_A4_S5 = web3.fromWei(await _deck.balanceOf(accounts[4]), "ether") * 1;
+    //console.log('balance_A4_S5 : ' + balance_A4_S5);
+    assert.equal(balance_A4_S1 - balance_A4_S5, 300, "wrong amount of tokens deposited from DECK wallet");
   });
 
   it("get tokens a user voted on a document", async () => {
-    // TODO : coding test
+
+    // ---------------------------
+    // CURATOR POOL
+    // ---------------------------
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100, 100)
+    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100, 100)
+    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400, 400)
+    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
+
+    // ACOUNT[3] : DOC #1(100), +29 DAYS, VOTE(100, 100, 100, 100, 100, 100, ...., 100)
+    // ACOUNT[3] : DOC #1(100), +30 DAYS, VOTE(  0, 100, 100, 100, 100, 100, ...., 100, 100)
+    // ACOUNT[3] : DOC #1(100), +31 DAYS, VOTE(  0,   0, 100, 100, 100, 100, ...., 100, 100, 100) => CLAIMED
+
+    // ACOUNT[4] : DOC #2(300),  +0 DAYS, VOTE(300)
+
+    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(200)
+    // DOC #3 : ACOUNT[1], PV()
+    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(300)
+
+    const deposit_A1_D1 = web3.fromWei(await _documentReg.getDepositOnUserDocument(accounts[1], DOC1, DAYS_0), "ether") * 1;
+    //console.log('deposit_A1_D1 : ' + deposit_A1_D1);
+    assert.equal(0, deposit_A1_D1, "wrong amount of tokens deposited on doc #1, account #1");
+
+    const deposit_A3_D1 = web3.fromWei(await _documentReg.getDepositOnUserDocument(accounts[3], DOC1, DAYS_0), "ether") * 1;
+    //console.log('deposit_A3_D1 : ' + deposit_A3_D1);
+    assert.equal(200, deposit_A3_D1, "wrong amount of tokens deposited on doc #1, account #3");
+
+    const deposit_A3_D1_DAY1 = web3.fromWei(await _documentReg.getDepositOnUserDocument(accounts[3], DOC1, DAYS_1), "ether") * 1;
+    //console.log('deposit_A3_D1_DAY1 : ' + deposit_A3_D1_DAY1);
+    assert.equal(300, deposit_A3_D1_DAY1, "wrong amount of tokens deposited on doc #1, account #3, yesterday");
+
+    const deposit_A3_D1_DAY2 = web3.fromWei(await _documentReg.getDepositOnUserDocument(accounts[3], DOC1, DAYS_2), "ether") * 1;
+    //console.log('deposit_A3_D1_DAY2 : ' + deposit_A3_D1_DAY2);
+    assert.equal(400, deposit_A3_D1_DAY2, "wrong amount of tokens deposited on doc #1, account #3, a day before yesterday");
+
+    const deposit_A3_D2 = web3.fromWei(await _documentReg.getDepositOnUserDocument(accounts[3], DOC2, DAYS_0), "ether") * 1;
+    //console.log('deposit_A3_D2 : ' + deposit_A3_D2);
+    assert.equal(200, deposit_A3_D2, "wrong amount of tokens deposited on doc #2, account #3");
+
+    const deposit_A4_D1 = web3.fromWei(await _documentReg.getDepositOnUserDocument(accounts[4], DOC1, DAYS_0), "ether") * 1;
+    //console.log('deposit_A4_D1 : ' + deposit_A4_D1);
+    assert.equal(100, deposit_A4_D1, "wrong amount of tokens deposited on doc #1, account #4");
+
+    const deposit_A4_D2 = web3.fromWei(await _documentReg.getDepositOnUserDocument(accounts[4], DOC2, DAYS_0), "ether") * 1;
+    //console.log('deposit_A4_D2 : ' + deposit_A4_D2);
+    assert.equal(300, deposit_A4_D2, "wrong amount of tokens deposited on doc #2, account #4");
+
+    const deposit_A4_D5 = web3.fromWei(await _documentReg.getDepositOnUserDocument(accounts[4], DOC5, DAYS_0), "ether") * 1;
+    //console.log('deposit_A4_D5 : ' + deposit_A4_D5);
+    assert.equal(0, deposit_A4_D5, "wrong amount of tokens deposited on doc #5, account #4");
+
+    const deposit_A4_D4 = web3.fromWei(await _documentReg.getDepositOnUserDocument(accounts[4], DOC4, DAYS_0), "ether") * 1;
+    //console.log('deposit_A4_D4 : ' + deposit_A4_D4);
+    assert.equal(400, deposit_A4_D4, "wrong amount of tokens deposited on doc #4, account #4");
+
   });
 
   it("get tokens voted on a document", async () => {
-    // TODO : coding test
+
+    // ---------------------------
+    // CURATOR POOL
+    // ---------------------------
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100, 100)
+    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100, 100)
+    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400, 400)
+    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
+
+    // ACOUNT[3] : DOC #1(100), +29 DAYS, VOTE(100, 100, 100, 100, 100, 100, ...., 100)
+    // ACOUNT[3] : DOC #1(100), +30 DAYS, VOTE(  0, 100, 100, 100, 100, 100, ...., 100, 100)
+    // ACOUNT[3] : DOC #1(100), +31 DAYS, VOTE(  0,   0, 100, 100, 100, 100, ...., 100, 100, 100) => CLAIMED
+
+    // ACOUNT[4] : DOC #2(300),  +0 DAYS, VOTE(300)
+
+    const deposit_D1_DAY0 = web3.fromWei(await _documentReg.getDepositOnDocument(DOC1, DAYS_0), "ether") * 1;
+    //console.log('deposit_D1_DAY0 : ' + deposit_D1_DAY0);
+    assert.equal(300, deposit_D1_DAY0, "wrong amount of tokens deposited on doc #1, day 0");
+
+    const deposit_D1_DAY1 = web3.fromWei(await _documentReg.getDepositOnDocument(DOC1, DAYS_1), "ether") * 1;
+    //console.log('deposit_D1_DAY1 : ' + deposit_D1_DAY1);
+    assert.equal(400, deposit_D1_DAY1, "wrong amount of tokens deposited on doc #1, day 1");
+
+    const deposit_D1_DAY2 = web3.fromWei(await _documentReg.getDepositOnDocument(DOC1, DAYS_2), "ether") * 1;
+    //console.log('deposit_D1_DAY2 : ' + deposit_D1_DAY2);
+    assert.equal(500, deposit_D1_DAY2, "wrong amount of tokens deposited on doc #1, day 2");
+
+    const deposit_D1_DAY3 = web3.fromWei(await _documentReg.getDepositOnDocument(DOC1, DAYS_3), "ether") * 1;
+    //console.log('deposit_D1_DAY3 : ' + deposit_D1_DAY3);
+    assert.equal(500, deposit_D1_DAY3, "wrong amount of tokens deposited on doc #1, day 3");
+
+    const DAYS_31 = ((await _utility.getDateMillis()) * 1) - 31 * (await _utility.getOneDayMillis());
+    const deposit_D1_DAY31 = web3.fromWei(await _documentReg.getDepositOnDocument(DOC1, DAYS_31), "ether") * 1;
+    //console.log('deposit_D1_DAY31 : ' + deposit_D1_DAY31);
+    assert.equal(100, deposit_D1_DAY31, "wrong amount of tokens deposited on doc #1, day 31");
+
+    const DAYS_32 = ((await _utility.getDateMillis()) * 1) - 32 * (await _utility.getOneDayMillis());
+    const deposit_D1_DAY32 = web3.fromWei(await _documentReg.getDepositOnDocument(DOC1, DAYS_32), "ether") * 1;
+    //console.log('deposit_D1_DAY32 : ' + deposit_D1_DAY32);
+    assert.equal(0, deposit_D1_DAY32, "wrong amount of tokens deposited on doc #1, day 32");
+
+    const deposit_D2_DAY0 = web3.fromWei(await _documentReg.getDepositOnDocument(DOC2, DAYS_0), "ether") * 1;
+    //console.log('deposit_D2_DAY0 : ' + deposit_D2_DAY0);
+    assert.equal(500, deposit_D2_DAY0, "wrong amount of tokens deposited on doc #2, day 0");
+
+    const deposit_D2_DAY1 = web3.fromWei(await _documentReg.getDepositOnDocument(DOC2, DAYS_1), "ether") * 1;
+    //console.log('deposit_D2_DAY1 : ' + deposit_D2_DAY1);
+    assert.equal(200, deposit_D2_DAY1, "wrong amount of tokens deposited on doc #2, day 1");
+
+    const deposit_D2_DAY2 = web3.fromWei(await _documentReg.getDepositOnDocument(DOC2, DAYS_2), "ether") * 1;
+    //console.log('deposit_D2_DAY2 : ' + deposit_D2_DAY2);
+    assert.equal(0, deposit_D2_DAY2, "wrong amount of tokens deposited on doc #2, day 2");
+
   });
 
   it("get tokens a user earned on a document", async () => {
-    // TODO : coding test
+
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100, 100)
+    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100, 100)
+    // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400, 400)
+    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
+
+    // ACOUNT[3] : DOC #1(100), +29 DAYS, VOTE(100, 100, 100, 100, 100, 100, ...., 100)
+    // ACOUNT[3] : DOC #1(100), +30 DAYS, VOTE(  0, 100, 100, 100, 100, 100, ...., 100, 100)
+    // ACOUNT[3] : DOC #1(100), +31 DAYS, VOTE(  0,   0, 100, 100, 100, 100, ...., 100, 100, 100) => CLAIMED
+
+    const todayMillis = (await _utility.getTimeMillis()) * 1;
+    const dayMillis = (await _utility.getOneDayMillis()) * 1;
+    const drp_1 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 1 * dayMillis));
+    const drp_2 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 2 * dayMillis));
+    const drp_3 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 3 * dayMillis));
+    const drp_4 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 4 * dayMillis));
+    const drp_5 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 5 * dayMillis));
+
+    const ref_A3_D1_D1 = 0; //((drp_1 * 1) * (100 / (100 + 100))) / (10000 + 40000 + 10000 + 90000) * 10000;
+    const ref_A3_D1_D2 = ((drp_2 * 1) * (100 / (100 + 100 + 100 + 100 + 100))) / (40000 + 40000) * 40000;
+    const ref_A3_D1_D3 = ((drp_3 * 1) * (100 / (100 + 100 + 100 + 100 + 100))) / (90000 + 90000) * 90000;
+    const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100 + 100 + 100 + 100))) / (160000 + 160000) * 160000;
+    const ref_A3_D1_D5 = ((drp_5 * 1) * (100 / (100 + 100 + 100 + 100))) / (250000 + 250000) * 250000;
+
+    const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5));
+
+    const withdraw_A1_D1_DAY0 = web3.fromWei(await _documentReg.getWithdrawOnUserDocument(accounts[1], DOC1, DAYS_0), "ether") * 1;
+    //console.log('withdraw_A1_D1_DAY0 : ' + withdraw_A1_D1_DAY0);
+    assert.equal(0, Math.floor(withdraw_A1_D1_DAY0), "wrong amount of tokens withdraw on doc #1, account #1, day 0");
+
+    const withdraw_A3_D1_DAY0 = web3.fromWei(await _documentReg.getWithdrawOnUserDocument(accounts[3], DOC1, DAYS_0), "ether") * 1;
+    //console.log('withdraw_A3_D1_DAY0 : ' + withdraw_A3_D1_DAY0);
+    assert.equal(reference, Math.floor(withdraw_A3_D1_DAY0), "wrong amount of tokens withdraw on doc #1, account #3, day 0");
   });
 
   it("get tokens earned on a document", async () => {
-    // TODO : coding test
+
+        // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(100, 100, 100, 100, 100, 100)
+        // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+        // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(100, 100, 100, 100)
+        // ACOUNT[4] : DOC #4(400), +4 DAYS, VOTE(400, 400, 400, 400, 400)
+        // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
+
+        // ACOUNT[3] : DOC #1(100), +29 DAYS, VOTE(100, 100, 100, 100, 100, 100, ...., 100)
+        // ACOUNT[3] : DOC #1(100), +30 DAYS, VOTE(  0, 100, 100, 100, 100, 100, ...., 100, 100)
+        // ACOUNT[3] : DOC #1(100), +31 DAYS, VOTE(  0,   0, 100, 100, 100, 100, ...., 100, 100, 100) => CLAIMED
+
+        const todayMillis = (await _utility.getTimeMillis()) * 1;
+        const dayMillis = (await _utility.getOneDayMillis()) * 1;
+        const drp_1 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 1 * dayMillis));
+        const drp_2 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 2 * dayMillis));
+        const drp_3 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 3 * dayMillis));
+        const drp_4 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 4 * dayMillis));
+        const drp_5 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 5 * dayMillis));
+
+        const ref_A3_D1_D1 = 0; //((drp_1 * 1) * (100 / (100 + 100))) / (10000 + 40000 + 10000 + 90000) * 10000;
+        const ref_A3_D1_D2 = ((drp_2 * 1) * (100 / (100 + 100 + 100 + 100 + 100))) / (40000 + 40000) * 40000;
+        const ref_A3_D1_D3 = ((drp_3 * 1) * (100 / (100 + 100 + 100 + 100 + 100))) / (90000 + 90000) * 90000;
+        const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100 + 100 + 100 + 100))) / (160000 + 160000) * 160000;
+        const ref_A3_D1_D5 = ((drp_5 * 1) * (100 / (100 + 100 + 100 + 100))) / (250000 + 250000) * 250000;
+
+        const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5));
+
+        const withdraw_D1_DAY0 = web3.fromWei(await _documentReg.getWithdrawOnDocument(DOC1, DAYS_0), "ether") * 1;
+        //console.log('withdraw_D1_DAY0 : ' + Math.floor(withdraw_D1_DAY0));
+        assert.equal(reference, Math.floor(withdraw_D1_DAY0), "wrong amount of tokens withdraw on doc #1, day 0");
+
+        const withdraw_D1_DAY1 = web3.fromWei(await _documentReg.getWithdrawOnDocument(DOC1, DAYS_1), "ether") * 1;
+        //console.log('withdraw_D1_DAY1 : ' + Math.floor(withdraw_D1_DAY1));
+        assert.equal(0, Math.floor(withdraw_D1_DAY1), "wrong amount of tokens withdraw on doc #1, day 1");
   });
 
 });

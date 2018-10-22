@@ -82,11 +82,11 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     // ---------------------------
     // DOCUMENT REGISTRY
     // ---------------------------
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     // ---------------------------
     // AUTHOR POOL
@@ -137,11 +137,11 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     // ---------------------------
     // DOCUMENT REGISTRY
     // ---------------------------
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     const doc1 = await _documentReg.contains(DOC1);
     //console.log('doc1 exists : ' + doc1);
@@ -169,9 +169,9 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     // ------------------
     // ACCOUNT[1]
     //  : 300,000 DECK
-    //  : DOC #1, +5 DAYS, PV(100, 200, 300, 400, 500)
-    //  : DOC #2, +1 DAYS, PV(200)
-    //  : DOC #3, +0 DAYS, PV()
+    //  : DOC #1, +5 DAYS, PV(0, 100, 200, 300, 400, 500)
+    //  : DOC #2, +1 DAYS, PV(0, 200)
+    //  : DOC #3, +0 DAYS, PV(0, )
 
     const doc3 = web3.fromWei(await _documentReg.determineAuthorReward(accounts[1], DOC3));
     //console.log('reward of doc2 : ' + doc3);
@@ -187,11 +187,11 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     //  : DOC #2, +1 DAYS
     //  : DOC #3, +0 DAYS
 
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     const todayMillis = (await _utility.getTimeMillis()) * 1;
     const yesterdayMillis = todayMillis - (await _utility.getOneDayMillis()) * 1;
@@ -214,11 +214,11 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     //  : DOC #2, +1 DAYS
     //  : DOC #3, +0 DAYS
 
-    // DOC #1 : ACOUNT[1], PV(100, 200, 300, 400, 500)
-    // DOC #2 : ACOUNT[1], PV(200)
-    // DOC #3 : ACOUNT[1], PV()
-    // DOC #4 : ACOUNT[2], PV(100, 200, 300, 400, 500, 600, 700, 800)
-    // DOC #5 : ACOUNT[2], PV(300)
+    // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
+    // DOC #2 : ACOUNT[1], PV(0, 200)
+    // DOC #3 : ACOUNT[1], PV(0, )
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+    // DOC #5 : ACOUNT[2], PV(0, 300)
 
     const todayMillis = (await _utility.getTimeMillis()) * 1;
     const dayMillis = (await _utility.getOneDayMillis()) * 1;
@@ -247,9 +247,9 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     // ------------------
     // ACCOUNT[1]
     //  : 300,000 DECK
-    //  : DOC #1, +5 DAYS, PV(100, 200, 300, 400, 500)
-    //  : DOC #2, +1 DAYS, PV(200)
-    //  : DOC #3, +0 DAYS, PV()
+    //  : DOC #1, +5 DAYS, PV(0, 100, 200, 300, 400, 500)
+    //  : DOC #2, +1 DAYS, PV(0, 200)
+    //  : DOC #3, +0 DAYS, PV(0, )
 
     // #1. check initial token balance
     const balance_A1_S1 = web3.fromWei(await _deck.balanceOf(accounts[1]), "ether");
@@ -274,9 +274,9 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     // ------------------
     // ACCOUNT[1]
     //  : 300,000 DECK
-    //  : DOC #1, +5 DAYS, PV(100, 200, 300, 400, 500)
-    //  : DOC #2, +1 DAYS, PV(200)
-    //  : DOC #3, +0 DAYS, PV()
+    //  : DOC #1, +5 DAYS, PV(0, 100, 200, 300, 400, 500)
+    //  : DOC #2, +1 DAYS, PV(0, 200)
+    //  : DOC #3, +0 DAYS, PV(0, )
 
     // #1. check initial token balance
     const balance_A1_S1 = web3.fromWei(await _deck.balanceOf(accounts[1]), "ether");
@@ -297,9 +297,9 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     // ------------------
     // ACCOUNT[1]
     //  : 300,000 DECK
-    //  : DOC #1, +5 DAYS, PV(100, 200, 300, 400, 500)
-    //  : DOC #2, +1 DAYS, PV(200)
-    //  : DOC #3, +0 DAYS, PV()
+    //  : DOC #1, +5 DAYS, PV(0, 100, 200, 300, 400, 500)
+    //  : DOC #2, +1 DAYS, PV(0, 200)
+    //  : DOC #3, +0 DAYS, PV(0, )
 
     // #1. check initial token balance
     const balance_A1_S1 = web3.fromWei(await _deck.balanceOf(accounts[1]), "ether");

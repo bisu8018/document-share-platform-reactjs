@@ -357,6 +357,9 @@ contract DocumentReg is Ownable {
     emit _ClaimCuratorReward(_docId, reward, msg.sender);
   }
 
+  // -------------------------------
+  // Voting for curators
+  // -------------------------------
   function voteOnDocument(bytes32 _docId, uint _deposit) public {
 
     require(_deposit > 0);
@@ -378,8 +381,24 @@ contract DocumentReg is Ownable {
     emit _UpdateVoteOnDocument(_docId, _deposit, _addr, _timestamp);
   }
 
-  function getDepositOnDocument(address _addr, bytes32 _docId, uint _timestamp) public view returns (uint) {
+  // -------------------------------
+  // Query functions
+  // -------------------------------
+
+  function getDepositOnUserDocument(address _addr, bytes32 _docId, uint _timestamp) public view returns (uint) {
     return curatorPool.getDepositByAddr(_addr, _docId, _timestamp);
+  }
+
+  function getDepositOnDocument(bytes32 _docId, uint _timestamp) public view returns (uint) {
+    return curatorPool.getDepositByDoc(_docId, _timestamp);
+  }
+
+  function getWithdrawOnUserDocument(address _addr, bytes32 _docId, uint _timestamp) public view returns (uint) {
+    return curatorPool.getWithdrawByAddr(_addr, _docId, _timestamp);
+  }
+
+  function getWithdrawOnDocument(bytes32 _docId, uint _timestamp) public view returns (uint) {
+    return curatorPool.getWithdrawByDoc(_docId, _timestamp);
   }
 
 }

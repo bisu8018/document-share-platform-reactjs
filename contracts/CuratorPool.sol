@@ -67,10 +67,10 @@ contract CuratorPool is Ownable {
     uint dateMillis = util.getDateMillis();
 
     Vote memory vote1 = Vote(_docId, dateMillis, _deposit, 0);
-    Vote memory vote2 = Vote(_docId, dateMillis, _deposit, 0);
+    //Vote memory vote2 = Vote(_docId, dateMillis, _deposit, 0);
 
     mapByAddr[_curator].push(vote1);
-    mapByDoc[_docId].push(vote2);
+    mapByDoc[_docId].push(vote1);
 
     //if (mapByAddr[_curator].length == 1) {
     //  keys.push(_curator);
@@ -83,10 +83,10 @@ contract CuratorPool is Ownable {
     onlyOwner()
   {
     Vote memory vote1 = Vote(_docId, _timestamp, _deposit, 0);
-    Vote memory vote2 = Vote(_docId, _timestamp, _deposit, 0);
+    //Vote memory vote2 = Vote(_docId, _timestamp, _deposit, 0);
 
     mapByAddr[_curator].push(vote1);
-    mapByDoc[_docId].push(vote2);
+    mapByDoc[_docId].push(vote1);
 
     //if (idx == 1) {
     //  keys.push(_curator);
@@ -99,6 +99,14 @@ contract CuratorPool is Ownable {
     onlyOwner()
   {
     mapByAddr[_curator][_idx].withdraw = _withdraw;
+    Vote[] storage voteList = mapByDoc[mapByAddr[_curator][_idx].docId];
+    for (uint i=0; i<voteList.length; i++) {
+      if (voteList[i].startDate == mapByAddr[_curator][_idx].startDate
+       && voteList[i].deposit == mapByAddr[_curator][_idx].deposit
+       && voteList[i].withdraw == 0) {
+         voteList[i].withdraw = _withdraw;
+      }
+    }
     emit _Withdraw(_curator, _idx, _withdraw);
   }
 
@@ -192,6 +200,41 @@ contract CuratorPool is Ownable {
       }
     }
     return sumDeposit;
+  }
+
+  function getDepositByDoc(bytes32 _docId, uint _dateMillis) public view returns (uint) {
+    uint sumDeposit = 0;
+    Vote[] memory voteList = mapByDoc[_docId];
+    for (uint i=0; i<voteList.length; i++) {
+      if ((_dateMillis - voteList[i].startDate) >= 0
+       && (_dateMillis - voteList[i].startDate) < (30 * util.getOneDayMillis())) {
+        sumDeposit += voteList[i].deposit;
+      }
+    }
+    return sumDeposit;
+  }
+
+  function getWithdrawByAddr(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint) {
+    uint sumWithdraw = 0;
+    Vote[] memory voteList = mapByAddr[_addr];
+    for (uint i=0; i<voteList.length; i++) {
+      if (voteList[i].docId == _docId
+        && (_dateMillis - voteList[i].startDate) > (30 * util.getOneDayMillis())) {
+        sumWithdraw += voteList[i].withdraw;
+      }
+    }
+    return sumWithdraw;
+  }
+
+  function getWithdrawByDoc(bytes32 _docId, uint _dateMillis) public view returns (uint) {
+    uint sumWithdraw = 0;
+    Vote[] memory voteList = mapByDoc[_docId];
+    for (uint i=0; i<voteList.length; i++) {
+      if ((_dateMillis - voteList[i].startDate) > (30 * util.getOneDayMillis())) {
+        sumWithdraw += voteList[i].withdraw;
+      }
+    }
+    return sumWithdraw;
   }
 
 }
