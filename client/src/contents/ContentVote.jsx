@@ -25,20 +25,6 @@ class ContentVote extends React.Component {
     deposit: 0
   }
 
-  componentWillMount() {
-
-  }
-
-  compomentWillUnmount() {
-
-  }
-
-  componentDidMount() {
-
-  }
-
-
-
   onChangeDeposit = (e) => {
     this.setState({deposit:e.target.value});
   }
@@ -268,7 +254,6 @@ class ContentVote extends React.Component {
 
         <div>
             <Button sz="large" color="rose" fullWidth onClick={this.onClickVote} >{this.state.buttonText}</Button>
-            <Button sz="large" color="rose" fullWidth onClick={this.onClickSendVoteInfo} >Vote Dynamo</Button>
         </div>
       </div>
     );
