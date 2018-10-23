@@ -20,8 +20,9 @@ class ContentVote extends React.Component {
   state = {
     loading: true,
     buttonText: "Commit",
-    approve: {stackId: -1, done: false, voteOpening: false},
-    vote: {stackId:-1, done: false, complete: false}
+    approve: {stackId: -1, done: false, voteOpening: false, receipt: null},
+    vote: {stackId:-1, done: false, complete: false, receipt: null},
+    deposit: 0
   }
 
   componentWillMount() {
@@ -38,25 +39,34 @@ class ContentVote extends React.Component {
 
 
 
-  getDeposit = () => {
-    const deposit = document.getElementById("deposit").value;
-    return deposit;
+  onChangeDeposit = (e) => {
+    this.setState({deposit:e.target.value});
   }
 
   clearVoteInfo = () => {
 
     this.setState({
-      approve: {stackId: -1, done: false, voteOpening: false},
-      vote: {stackId:-1, done: false, complete: false}
-    })
+      approve: {stackId: -1, done: false, voteOpening: false, receipt: null},
+      vote: {stackId:-1, done: false, complete: false, receipt: null},
+      deposit: 0
 
+    });
     document.getElementById("deposit").value = null;
+  }
+
+  sendVoteInfo = () => {
+    const { document, drizzle, auth } = this.props;
+    const curatorId = auth.getUserInfo().name;
+    const voteAmount = drizzle.web3.utils.toWei(this.state.deposit, 'ether');
+
+    restapi.sendVoteInfo(curatorId, voteAmount, document);
 
   }
-  onClickVoteStep2=()=> {
-    this.handleVoteOnDocument();
-    console.log("onclickvotestep2");
+
+  onClickSendVoteInfo=()=> {
+    this.sendVoteInfo();
   }
+
   onClickVote = () => {
     //this.subscribeDrizzle();
     //console.log("subscribeDrizzle start");
@@ -72,7 +82,7 @@ class ContentVote extends React.Component {
 
     if(!document) return;
 
-    const deposit = this.getDeposit();
+    const deposit = this.state.deposit;
 
     if(deposit<=0){
       alert("Deposit must be greater than zero.");
@@ -84,7 +94,7 @@ class ContentVote extends React.Component {
       const drizzleState = drizzle.store.getState();
       // check to see if it's ready, if so, update local component state
       if (drizzleState.drizzleStatus.initialized) {
-        this.getTxApproveStatus();
+        this.checkTxApproveStatus();
 
         if(this.state.approve.done){
           this.unsubscribeApprove();
@@ -102,7 +112,7 @@ class ContentVote extends React.Component {
     this.setState({approve:{stackId:stackId}});
   }
 
-  getTxApproveStatus = () => {
+  checkTxApproveStatus = () => {
 
     if(this.state.approve.done) return;
 
@@ -122,7 +132,7 @@ class ContentVote extends React.Component {
 
     if(txState=="success") {
       this.setState({
-        approve: {done: true}
+        approve: {done: true, receipt: txReceipt}
       });
     } else if(txState=="error") {
       this.setState({
@@ -141,7 +151,7 @@ class ContentVote extends React.Component {
 
     if(!document) return;
 
-    const deposit = this.getDeposit();
+    const deposit = this.state.deposit;
 
     if(deposit<=0){
       alert("Deposit must be greater than zero.");
@@ -157,10 +167,11 @@ class ContentVote extends React.Component {
       const drizzleState = drizzle.store.getState();
       // check to see if it's ready, if so, update local component state
       if (drizzleState.drizzleStatus.initialized) {
-        this.getTxVoteStatus();
+        this.checkTxVoteStatus();
 
         if(this.state.vote.done){
           this.unsubscribeVote();
+          this.sendVoteInfo();
           this.clearVoteInfo();
         }
       } else {
@@ -175,7 +186,7 @@ class ContentVote extends React.Component {
 
 
 
-  getTxVoteStatus = () => {
+  checkTxVoteStatus = () => {
 
     if(this.state.vote.done) return;
 
@@ -194,7 +205,7 @@ class ContentVote extends React.Component {
 
     if(txState=="success"){
       this.setState({
-        vote: {done: true, complete: true}
+        vote: {done: true, complete: true, receipt: txReceipt}
       });
     } else if(txState=="error"){
       this.setState({
@@ -246,8 +257,10 @@ class ContentVote extends React.Component {
                 fullWidth: true
               }}
               inputProps={{
-                type: "text"
+                type: "text",
+                onChange: this.onChangeDeposit
               }}
+
             />
         </div>
 
@@ -255,6 +268,7 @@ class ContentVote extends React.Component {
 
         <div>
             <Button sz="large" color="rose" fullWidth onClick={this.onClickVote} >{this.state.buttonText}</Button>
+            <Button sz="large" color="rose" fullWidth onClick={this.onClickSendVoteInfo} >Vote Dynamo</Button>
         </div>
       </div>
     );

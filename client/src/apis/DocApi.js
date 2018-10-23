@@ -11,6 +11,8 @@ const getDocumentsUrl = "/api/document/list";
 const getDocumentUrl = "/api/document/info/";
 const getDocumentTextUrl = "/api/document/text/";
 
+const voteDocumentUrl = "/api/document/vote/";
+
 export function getPageView(documentId, pageNo) {
   return imgDomain + "/document/get/" + documentId + "/" + pageNo;
 }
@@ -153,6 +155,22 @@ function fileUpload(params) {
   }
 
   return axios.put(url, params.file, config);
+}
+
+export function sendVoteInfo(curatorId, voteAmount, document) {
+  console.log("sendVoteInfo", curatorId, voteAmount, document);
+  if(!curatorId || !document || isNaN(voteAmount) || voteAmount<=0) {
+    console.error("sendVoteInfo Parameter Invaild", params);
+    return;
+  }
 
 
+  const url = apiDomain + voteDocumentUrl + document.documentId;
+  const params = {
+    curatorId: curatorId,
+    voteAmount: voteAmount,
+    documentInfo: document,
+  }
+
+  return axios.post(url, params);
 }

@@ -37,20 +37,7 @@ export default class DrizzleApis {
       from: ethAccount
     });
 
-    return new Promise(function (resolve, reject) {
-      // subscribe to changes in the store
-      const unsubscribe = drizzle.store.subscribe(() => {
-        // every time the store updates, grab the state from drizzle
-        const drizzleState = drizzle.store.getState();
-        // check to see if it's ready, if so, update local component state
-        if(drizzleState.contracts.DocumentReg.contains[dataKey]){
-          unsubscribe();
-          console.log("subscribe isExist", drizzleState.contracts.DocumentReg.contains[dataKey].value);
-          return resolve(drizzleState.contracts.DocumentReg.contains[dataKey].value);
-        }
-
-      });
-    });
+    return dataKey;
 
   }
 

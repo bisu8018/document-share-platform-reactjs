@@ -7,6 +7,7 @@ import Button from "components/CustomButtons/Button.jsx";
 import Badge from "components/Badge/Badge.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import ContentVote from 'contents/ContentVote';
+import ContentViewRegistBlockchainButton from 'contents/ContentViewRegistBlockchainButton';
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
 import Spinner from 'react-spinkit';
@@ -30,9 +31,7 @@ class ContentView extends React.Component {
   getContentInfo = (documentId) => {
     restapi.getDocument(documentId).then((res) => {
       this.setState({document:res.data.document});
-
       //this.handleDetermineAuthorToken();
-      this.handleCheckDocumentInBlockChain();
     });
 
     restapi.getDocumentText(documentId).then((res) => {
@@ -51,21 +50,7 @@ class ContentView extends React.Component {
     this.setState({currentPageNo: newPageNo})
   }
 
-  handleCheckDocumentInBlockChain = () => {
-
-    if(!this.state.document) return;
-    try{
-      let self = this;
-      this.drizzleApis.isExistDocument(this.state.document.documentId).then(function (data) {
-        console.log("isExist", data);
-        self.setState({isExistInBlockChain: data});
-      });
-    }catch(e){
-      console.error("handleCheckDocumentInBlockChain error", e);
-    }
-  }
-
-    handleDetermineAuthorToken = () => {
+  handleDetermineAuthorToken = () => {
     if(!this.state.document) return;
 
     const doc = this.state.document;
@@ -83,49 +68,6 @@ class ContentView extends React.Component {
 
 
   }
-
-  handleRegistDocumentInBlockChain = () => {
-
-    if(!this.state.document) return;
-
-    const { drizzle,} = this.props;
-    const drizzleState = drizzle.store.getState();
-
-    const ethAccount = drizzleState.accounts[0];
-    this.drizzleApis.registDocumentToSmartContract(this.state.document.documentId);
-
-    this.handleCheckDocumentInBlockChain();
-  }
-
-  printTxStatus = () => {
-    const { drizzle } = this.props;
-    const drizzleState = drizzle.store.getState();
-    // get the transaction states from the drizzle state
-    const { transactions, transactionStack } = drizzleState;
-
-    if(transactions && transactionStack){
-      // get the transaction hash using our saved `stackId`
-      const txHash = transactionStack[this.state.stackId];
-
-      // if transaction hash does not exist, don't display anything
-      if (!txHash) return null;
-      console.log("getTxStatus", txHash, transactions, transactions[txHash].status, drizzleState, drizzle);
-      // otherwise, return the transaction status
-      const txStatus = transactions[txHash].status;
-      const txReceipt = transactions[txHash].receipt;
-      if(txReceipt){
-        console.log("Transcation Complete", txReceipt);
-        this.setState({stackId:null});
-      }
-
-      return `Transaction status: ${transactions[txHash].status}`;
-    } else {
-      console.log("transction is null");
-    }
-
-    return null;
-
-  };
 
   goPrevPage = () => {
     let newPageNo = this.state.currentPageNo - 1;
@@ -145,7 +87,7 @@ class ContentView extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, drizzle } = this.props;
     const document = this.state.document;
 
     if(!document) {
@@ -178,8 +120,7 @@ class ContentView extends React.Component {
                    <Button color="rose" size="sm">Like</Button>
                    <Button color="rose" size="sm">Share</Button>
                    <Button color="rose" size="sm">Download</Button>
-                   {/*<Button color="rose" size="sm" onClick={this.handleCheckDocumentInBlockChain} >Checking BlockChain</Button>*/}
-                   {!this.state.isExistInBlockChain?<Button color="rose" size="sm" onClick={this.handleRegistDocumentInBlockChain} >Regist to BlockChain</Button>:""}
+                   <ContentViewRegistBlockchainButton document={document} drizzle={drizzle} />
                </div>
                <Link to={"/author/" + document.accountId} >
                     <div className="profileImg">
