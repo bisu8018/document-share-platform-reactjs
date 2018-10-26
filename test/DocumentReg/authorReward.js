@@ -119,14 +119,14 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     await _documentReg.confirmPageView(DOC4, DAYS_8, 800, { from: accounts[0] });
     await _documentReg.confirmPageView(DOC5, DAYS_1, 300, { from: accounts[0] });
 
-    await _documentReg.confirmTotalPageView(DAYS_1, 700, 150000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_2, 400, 80000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_3, 600, 180000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_4, 800, 320000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_5, 1000, 500000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_6, 600, 360000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_7, 700, 490000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_8, 800, 640000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_1, 700, 150000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_2, 400, 80000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_3, 600, 180000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_4, 800, 320000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_5, 1000, 500000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_6, 600, 360000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_7, 700, 490000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_8, 800, 640000, { from: accounts[0] });
 
     const balance_A1_S1 = web3.fromWei(await _deck.balanceOf(accounts[1]), "ether");
     assert.equal(300000, balance_A1_S1 * 1);
@@ -315,9 +315,47 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     await _documentReg.claimAuthorReward(DOC1, { from: accounts[1] });
     const balance_A1_S2 = web3.fromWei(await _deck.balanceOf(accounts[1]), "ether");
     //console.log('balance_A1_S2 : ' + balance_A1_S2.toString());
+    //console.log('rwdDoc1 : ' + rwdDoc1.toString());
+    rwdDoc1
     var ref = Math.round(((balance_A1_S1 * 1) + (rwdDoc1 * 1)) / 100);
     var smp = Math.round((balance_A1_S2 * 1) / 100);
     assert.equal(ref, smp);
+  });
+
+  it("get withdrawn author reward on a user document", async () => {
+    // ------------------
+    // ACCOUNT[1]
+    //  : 300,000 DECK
+    //  : DOC #1, +5 DAYS, PV(0, 100, 200, 300, 400, 500)
+    //  : DOC #2, +1 DAYS, PV(0, 200)
+    //  : DOC #3, +0 DAYS, PV(0, )
+
+    // #1. check withdrawn amount
+    const withdrawDoc1 = await _documentReg.getAuthorWithdrawOnUserDocument(accounts[1], DOC1);
+    //console.log('withdrawDoc1 : ' + withdrawDoc1.toString());
+    assert.isBelow(821917, Math.floor(withdrawDoc1 * 1), "withdrawn author reward is 0");
+  });
+
+  it("should be able to claim reward only once", async () => {
+    // ------------------
+    // ACCOUNT[1]
+    //  : 300,000 DECK
+    //  : DOC #1, +5 DAYS, PV(0, 100, 200, 300, 400, 500)
+    //  : DOC #2, +1 DAYS, PV(0, 200)
+    //  : DOC #3, +0 DAYS, PV(0, )
+
+    // #1. check initial token balance
+    const balance_A1_S1 = web3.fromWei(await _deck.balanceOf(accounts[1]), "ether");
+    //console.log('balance_A1_S1 : ' + balance_A1_S1.toString());
+
+    // #2. check the amount of claimed reward (DOC #1, ACCOUNT #1)
+    const rwdDoc1 = web3.fromWei(await _documentReg.determineAuthorReward(accounts[1], DOC1));
+    await _documentReg.claimAuthorReward(DOC1, { from: accounts[1] });
+    const balance_A1_S2 = web3.fromWei(await _deck.balanceOf(accounts[1]), "ether");
+    //console.log('balance_A1_S2 : ' + balance_A1_S2.toString());
+
+    assert.equal(0, rwdDoc1 * 1, "determined author reward is not 0");
+    assert.equal(balance_A1_S1 * 1, balance_A1_S2 * 1, "claimed author reward > 0");
   });
 
 });

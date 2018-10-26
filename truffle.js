@@ -22,12 +22,12 @@ var HDWalletProvider = require("truffle-hdwallet-provider");
      },
      rinkeby: {
        provider: function() {
-         return new HDWalletProvider("pride mystery round monitor put young blush comfort rack live tenant razor",
+         return new HDWalletProvider("YOUR SEED",
           "https://rinkeby.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c")
        },
        //from: "0xa4dA09DF8E5D0E05775c2C26ABCdFB97f3e84e15", // default address to use for any transaction Truffle makes during migrations
-       network_id: 1,
-       gas: 4612388 // Gas limit used for deploys
+       network_id: 3,
+       //gas: 4612388 // Gas limit used for deploys
     }
    }
  };

@@ -132,7 +132,7 @@ contract DocumentReg is Ownable {
   // -------------------------------
   // Total Page View Square Functions
   // -------------------------------
-
+/*
   function confirmTotalPageView(uint _date, uint _totalPageView, uint _totalPageViewSquare) public
     onlyOwner()
   {
@@ -143,7 +143,7 @@ contract DocumentReg is Ownable {
     totalPageViewSquare[_date] = _totalPageViewSquare;
     emit _ConfirmTotalPageView(_date, _totalPageView, _totalPageViewSquare);
   }
-
+*/
   function getTotalPageView(uint _date) public view returns (uint) {
     require(_date != 0);
     return totalPageView[_date];
@@ -162,9 +162,22 @@ contract DocumentReg is Ownable {
     onlyOwner()
   {
     require(map[_docId].createTime != 0);
+
     Document storage doc = map[_docId];
+
+    if (doc.pageViews[_date] > 0) {
+      totalPageView[_date] -= doc.pageViews[_date];
+      totalPageViewSquare[_date] -= (doc.pageViews[_date] ** 2);
+
+      emit _ConfirmTotalPageView(_date, totalPageView[_date], totalPageViewSquare[_date]);
+    }
+
     doc.pageViews[_date] = _pageView;
+    totalPageView[_date] += _pageView;
+    totalPageViewSquare[_date] += (_pageView ** 2);
+
     emit _ConfirmPageView(_docId, _date, _pageView);
+    emit _ConfirmTotalPageView(_date, totalPageView[_date], totalPageViewSquare[_date]);
   }
 
   function getPageView(bytes32 _docId, uint _date) public view returns (uint) {
@@ -186,10 +199,10 @@ contract DocumentReg is Ownable {
     }
 
     uint sumReward = 0;
-    uint claimDate = authorPool.getUserDocumentLastClaimedDate(_addr, idx);
+    uint claimDate = authorPool.getUserDocumentLastClaimedDate(_addr, uint(idx));
     while (claimDate < util.getDateMillis()) {
       if (claimDate == 0) {
-        claimDate = authorPool.getUserDocumentListedDate(_addr, idx);
+        claimDate = authorPool.getUserDocumentListedDate(_addr, uint(idx));
       }
       //assert(claimDate <= util.getDateMillis());
       uint tpv = getTotalPageView(claimDate);
@@ -213,14 +226,14 @@ contract DocumentReg is Ownable {
     }
 
     emit _ClaimAuthorReward(_docId, uint(idx), msg.sender);
-    uint claimDate = authorPool.getUserDocumentLastClaimedDate(msg.sender, idx);
+    uint claimDate = authorPool.getUserDocumentLastClaimedDate(msg.sender, uint(idx));
     emit _ClaimAuthorReward(_docId, claimDate, msg.sender);
     uint dateMillis = util.getDateMillis();
 
     uint sumReward = 0;
     while (claimDate < dateMillis) {
       if (claimDate == 0) {
-        claimDate = authorPool.getUserDocumentListedDate(msg.sender, idx);
+        claimDate = authorPool.getUserDocumentListedDate(msg.sender, uint(idx));
       }
       assert(claimDate <= dateMillis);
 
@@ -234,6 +247,8 @@ contract DocumentReg is Ownable {
     }
 
     token.transfer(msg.sender, sumReward);
+    authorPool.withdraw(msg.sender, uint(idx), sumReward, claimDate);
+
     emit _ClaimAuthorReward(_docId, sumReward, msg.sender);
   }
 
@@ -385,20 +400,24 @@ contract DocumentReg is Ownable {
   // Query functions
   // -------------------------------
 
-  function getDepositOnUserDocument(address _addr, bytes32 _docId, uint _timestamp) public view returns (uint) {
+  function getCuratorDepositOnUserDocument(address _addr, bytes32 _docId, uint _timestamp) public view returns (uint) {
     return curatorPool.getDepositByAddr(_addr, _docId, _timestamp);
   }
 
-  function getDepositOnDocument(bytes32 _docId, uint _timestamp) public view returns (uint) {
+  function getCuratorDepositOnDocument(bytes32 _docId, uint _timestamp) public view returns (uint) {
     return curatorPool.getDepositByDoc(_docId, _timestamp);
   }
 
-  function getWithdrawOnUserDocument(address _addr, bytes32 _docId, uint _timestamp) public view returns (uint) {
+  function getCuratorWithdrawOnUserDocument(address _addr, bytes32 _docId, uint _timestamp) public view returns (uint) {
     return curatorPool.getWithdrawByAddr(_addr, _docId, _timestamp);
   }
 
-  function getWithdrawOnDocument(bytes32 _docId, uint _timestamp) public view returns (uint) {
+  function getCuratorWithdrawOnDocument(bytes32 _docId, uint _timestamp) public view returns (uint) {
     return curatorPool.getWithdrawByDoc(_docId, _timestamp);
+  }
+
+  function getAuthorWithdrawOnUserDocument(address _addr, bytes32 _docId) public view returns (uint) {
+    return authorPool.getUserDocumentWithdraw(_addr, _docId);
   }
 
 }

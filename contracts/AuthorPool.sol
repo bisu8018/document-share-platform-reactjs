@@ -8,11 +8,13 @@ contract AuthorPool is Ownable {
 
   event _InitializeAuthorPool(uint timestamp, address token);
   event _RegisterNewUserDocument(bytes32 indexed docId, uint timestamp, address indexed applicant, uint count);
+  event _Withdraw(address indexed applicant, uint idx, uint withdraw, uint timestamp);
 
   struct Asset {
     bytes32 docId;
     uint listedDate;
     uint lastClaimedDate;
+    uint withdraw;
   }
 
   // maps address to the user's asset data
@@ -66,7 +68,7 @@ contract AuthorPool is Ownable {
     if (map[_author].length == 0){
       keys.push(_author);
     }
-    uint index = map[_author].push(Asset(_docId, tMillis, 0));
+    uint index = map[_author].push(Asset(_docId, tMillis, 0, 0));
 
     emit _RegisterNewUserDocument(_docId, tMillis, _author, index);
   }
@@ -83,7 +85,7 @@ contract AuthorPool is Ownable {
         return;
       }
     }
-    uint index = map[_author].push(Asset(_docId, _timestamp, 0));
+    uint index = map[_author].push(Asset(_docId, _timestamp, 0, 0));
 
     emit _RegisterNewUserDocument(_docId, _timestamp, _author, index);
   }
@@ -96,12 +98,28 @@ contract AuthorPool is Ownable {
     return getIndex(_docId, _addr);
   }
 
-  function getUserDocumentListedDate(address _addr, int _idx) public view returns (uint) {
-    return map[_addr][uint(_idx)].listedDate;
+  function getUserDocumentListedDate(address _addr, uint _idx) public view returns (uint) {
+    return map[_addr][_idx].listedDate;
   }
 
-  function getUserDocumentLastClaimedDate(address _addr, int _idx) public view returns (uint) {
-    return map[_addr][uint(_idx)].lastClaimedDate;
+  function getUserDocumentLastClaimedDate(address _addr, uint _idx) public view returns (uint) {
+    return map[_addr][_idx].lastClaimedDate;
+  }
+
+  function getUserDocumentWithdraw(address _addr, bytes32 _docId) public view returns (uint) {
+    int idx = getIndex(_docId, _addr);
+    if (idx < 0) {
+      return 0;
+    }
+    return map[_addr][uint(idx)].withdraw;
+  }
+
+  function withdraw(address _author, uint _idx, uint _withdraw, uint _dateMillis) public
+    onlyOwner()
+  {
+    map[_author][_idx].withdraw += _withdraw;
+    map[_author][_idx].lastClaimedDate = _dateMillis;
+    emit _Withdraw(_author, _idx, _withdraw, _dateMillis);
   }
 
   function determineReward(uint _pv, uint _tpv) public view returns (uint) {

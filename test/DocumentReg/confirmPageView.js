@@ -96,14 +96,14 @@ contract("DocumentReg - confirm page view & total page view", accounts => {
     await _documentReg.confirmPageView(DOC4, DAYS_8, 800, { from: accounts[0] });
     await _documentReg.confirmPageView(DOC5, DAYS_1, 300, { from: accounts[0] });
 
-    await _documentReg.confirmTotalPageView(DAYS_1, 700, 150000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_2, 400, 80000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_3, 600, 180000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_4, 800, 320000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_5, 1000, 500000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_6, 600, 360000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_7, 700, 490000, { from: accounts[0] });
-    await _documentReg.confirmTotalPageView(DAYS_8, 800, 640000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_1, 700, 150000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_2, 400, 80000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_3, 600, 180000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_4, 800, 320000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_5, 1000, 500000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_6, 600, 360000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_7, 700, 490000, { from: accounts[0] });
+    //await _documentReg.confirmTotalPageView(DAYS_8, 800, 640000, { from: accounts[0] });
   });
 
   it("confirm page view for 0 day", async () => {
