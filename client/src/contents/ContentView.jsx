@@ -30,6 +30,7 @@ class ContentView extends React.Component {
 
   getContentInfo = (documentId) => {
     restapi.getDocument(documentId).then((res) => {
+      console.log(res.data.document);
       this.setState({document:res.data.document});
       //this.handleDetermineAuthorToken();
     });
@@ -87,11 +88,16 @@ class ContentView extends React.Component {
   }
 
   render() {
-    const { classes, drizzle } = this.props;
+    const { classes, drizzle, drizzleState } = this.props;
+
     const document = this.state.document;
 
-    if(!document) {
+    if(!document || !drizzle || !drizzleState) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
+    }
+    let voteTag = null;
+    if(drizzleState.accounts && drizzleState.accounts[0]){
+      voteTag = (<ContentVote {...this.props} document={this.state.document}/>);
     }
 
     console.log("Loading Document", document.documentId, this.drizzleApis.fromAscii(document.documentId));
@@ -120,15 +126,15 @@ class ContentView extends React.Component {
                    <Button color="rose" size="sm">Like</Button>
                    <Button color="rose" size="sm">Share</Button>
                    <Button color="rose" size="sm">Download</Button>
-                   <ContentViewRegistBlockchainButton document={document} drizzle={drizzle} />
+                   <ContentViewRegistBlockchainButton document={document} {...this.props} />
                </div>
                <Link to={"/author/" + document.accountId} >
                     <div className="profileImg">
                        <span className="userImg">
                            <Face className={classes.icons} />
-                           <img src="http://i.imgur.com/UGzF2lv.jpg" alt="{document.accountId}"/>
+                           <img src="http://i.imgur.com/UGzF2lv.jpg" alt={document.accountId}/>
                        </span>
-                       <strong className="userName">{document.accountId}
+                       <strong className="userName">{document.nickname?document.nickname:document.accountId}
                            <span className="txt"></span>
                         </strong>
                    </div>
@@ -138,23 +144,12 @@ class ContentView extends React.Component {
                 <div>
                 {this.state.documentText?this.state.documentText:"No Text"}
                 </div>
-              {/*
-              <h3 className="tit02">Document Information</h3>
-              <ul className="detailList">
-                <li>daily page views : 123</li>
-                <li>total voting : 12</li>
-                <li>total earning : 1</li>
-                <li>....</li>
-                <li>....</li>
-                <li>....</li>
-                <li>....</li>
-              </ul>
-              */}
            </div>
 
 
            <div className="rightWrap">
-               <ContentVote {...this.props} document={this.state.document}/>
+             {voteTag}
+             {/*<ContentVote {...this.props} document={this.state.document}/>*/}
 
 
                <h3>See also</h3>

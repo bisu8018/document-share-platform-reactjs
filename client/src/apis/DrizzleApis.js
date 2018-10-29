@@ -20,17 +20,11 @@ export default class DrizzleApis {
     return v;
   }
 
-  isExistDocument = (documentId) => {
+  isExistDocument = (documentId, ethAccount) => {
 
     const drizzle = this.drizzle;
     //console.log("isExistDocument account", account, "documentId", documentId, drizzle);
 
-    const drizzleState = drizzle.store.getState();
-    if (!drizzleState.drizzleStatus.initialized) {
-      console.error("drizzle state is not initialized!!!");
-      return false;
-    }
-    const ethAccount = drizzleState.accounts[0];
     const contract = drizzle.contracts.DocumentReg;
 
     const dataKey = contract.methods["contains"].cacheCall(this.fromAscii(documentId), {

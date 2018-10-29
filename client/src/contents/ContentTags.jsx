@@ -15,6 +15,15 @@ const style = {
 
 };
 
+const categories = [
+  "Art & Photos", "Automotive", "Business", "Career", "Data & Analytics", "Design", "Devices & Hardware", "Design",
+  "Devices & Hardware", "Economy & Finance", "Education", "Engineering", "Entertainment & Humor", "Environment", "Food",
+  "Government & Nonprofit", "Health & Medicine", "Healthcare", "Engineering", "Internet", "Investor Relations", "Law",
+  "Leadership & Management", "Lifestyle", "Marketing", "Mobile", "News & Politics", "Presentations & Public Speaking", "Real Estate",
+  "Recruiting & HR", "Retail", "Sales", "Science", "Self Improvement", "Services", "Small Business & Entrepreneurship", "Social Media",
+  "Software", "Spiritual", "Sports", "Technology", "Travel"
+]
+
 class ContentTags extends React.Component {
 
 
@@ -24,12 +33,14 @@ class ContentTags extends React.Component {
       return (
 
          <div className="leftWrap">
-              <List>
-                <ListItem><Button color="transparent">TECH</Button></ListItem>
-                <ListItem><Button color="transparent">BLOCKCAHIN</Button></ListItem>
-                <ListItem><Button color="transparent">MUSIC</Button></ListItem>
-                <ListItem><Button color="transparent">PDF</Button></ListItem>
-              </List>
+           <List>
+             {
+               categories.map((category, idx) => {
+                 return (<ListItem key={idx}><Button key={category} color="transparent">{category}</Button></ListItem>);
+               })
+             }
+
+           </List>
          </div>
 
       );

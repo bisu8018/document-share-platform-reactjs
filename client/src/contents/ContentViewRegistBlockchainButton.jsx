@@ -17,87 +17,96 @@ class ContentViewBlockchainButton extends React.Component {
 
   drizzleApis = new DrizzleApis(this.props.drizzle);
   state = {
-    isExistInBlockChain: false,
-    isExistDataKey: null
+    isExistDataKey: null,
+    stackId: null
   }
 
   handleCheckDocumentInBlockChain = () => {
-    const { document, classes } = this.props;
+    const { document, classes, drizzle, drizzleState } = this.props;
+
     if(!document) return;
+
+    if(this.state.isExistDataKey) return;
+
     try{
-      const dataKey = this.drizzleApis.isExistDocument(document.documentId);
+      const ethAccount = drizzleState.accounts[0];
+      const dataKey = this.drizzleApis.isExistDocument(document.documentId, ethAccount);
       this.setState({isExistDataKey: dataKey});
+      console.log("handleCheckDocumentInBlockChain dataKey", dataKey);
     }catch(e){
       console.error("handleCheckDocumentInBlockChain error", e);
     }
   }
 
+  isExistDocument = () => {
+    const { drizzle, drizzleState } = this.props;
+    if(drizzleState.contracts.DocumentReg.contains[this.state.isExistDataKey]){
+      console.log("isExistDocument", drizzleState.contracts.DocumentReg.contains[this.state.isExistDataKey].value);
+      return drizzleState.contracts.DocumentReg.contains[this.state.isExistDataKey].value;
+//      this.setState({isExistInBlockChain: isExistDocument});
+    }
+
+  }
+
   handleRegistDocumentInBlockChain = () => {
 
-    const { document, classes, drizzle } = this.props;
+    const { document, classes, drizzle, drizzleState } = this.props;
 
     if(!document) return;
 
-    const drizzleState = drizzle.store.getState();
-
     const ethAccount = drizzleState.accounts[0];
-    this.drizzleApis.registDocumentToSmartContract(document.documentId);
+    const stackId = this.drizzleApis.registDocumentToSmartContract(document.documentId);
+    this.setState({stackId: stackId});
 
-    this.handleCheckDocumentInBlockChain();
+  }
+
+  isDrizzleInitialized = () => {
+    const { drizzle, drizzleState } = this.props;
+
+    console.log("isDrizzleInitialized", drizzle && drizzleState.drizzleStatus.initialized);
+    return drizzle && drizzleState.drizzleStatus.initialized;
+
   }
 
   printTxStatus = () => {
-    const { drizzle } = this.props;
-    const drizzleState = drizzle.store.getState();
     // get the transaction states from the drizzle state
-    const { transactions, transactionStack } = drizzleState;
+    const { transactions, transactionStack } = this.props.drizzleState;
+    // get the transaction hash using our saved `stackId`
+    const txHash = transactionStack[this.state.stackId];
+    console.log(this.state);
+    // if transaction hash does not exist, don't display anything
+    if(!txHash) return;
 
-    if(transactions && transactionStack) {
-      // get the transaction hash using our saved `stackId`
-      const txHash = transactionStack[this.state.stackId];
+    const txState = transactions[txHash].status;
+    const txReceipt = transactions[txHash].receipt;
+    const confirmations = transactions[txHash].confirmations;
 
-      // if transaction hash does not exist, don't display anything
-      if (!txHash) return null;
-      console.log("getTxStatus", txHash, transactions, transactions[txHash].status, drizzleState, drizzle);
-      // otherwise, return the transaction status
-      const txStatus = transactions[txHash].status;
-      const txReceipt = transactions[txHash].receipt;
-      if(txReceipt){
-        console.log("Transcation Complete", txReceipt);
-        this.setState({stackId:null});
-      }
-
-      return `Transaction status: ${transactions[txHash].status}`;
-    } else {
-      console.log("transction is null");
+    if(txReceipt){
+      this.handleCheckDocumentInBlockChain();
     }
 
-    return null;
-
+    console.log("printTxStatus", txState, txReceipt, transactions[txHash]);
   };
 
 
-  componentWillMount() {
-    const { document, classes, drizzle } = this.props;
+  componentDidMount() {
+    const { document, classes, drizzle, drizzleState } = this.props;
     this.handleCheckDocumentInBlockChain();
-
     // subscribe to changes in the store
     this.unsubscribe = drizzle.store.subscribe(() => {
+
       // every time the store updates, grab the state from drizzle
-      if(!this.state.isExistDataKey) return;
       const drizzleState = drizzle.store.getState();
       // check to see if it's ready, if so, update local component state
-      if(drizzleState.contracts.DocumentReg.contains[this.state.isExistDataKey]){
-        this.unsubscribe();
-        console.log("Document", document.documentId, "isExist in blockchain", drizzleState.contracts.DocumentReg.contains[this.state.isExistDataKey].value);
-        this.setState({isExistInBlockChain: drizzleState.contracts.DocumentReg.contains[this.state.isExistDataKey].value});
+      if (drizzleState.drizzleStatus.initialized) {
+        this.printTxStatus();
+
       }
 
     });
-
   }
 
-  compomentWillUnmount() {
+  compomentDidUnmount() {
     this.unsubscribe();
   }
 
@@ -105,10 +114,12 @@ class ContentViewBlockchainButton extends React.Component {
   render() {
     const { document, classes } = this.props;
 
+    if(this.isExistDocument()) return null;
+
     return (
       <div>
         {/*<Button color="rose" size="sm" onClick={this.handleCheckDocumentInBlockChain} >Checking BlockChain</Button>*/}
-        {!this.state.isExistInBlockChain?<Button color="rose" size="sm" onClick={this.handleRegistDocumentInBlockChain} >Regist to BlockChain</Button>:""}
+        <Button color="rose" size="sm" onClick={this.handleRegistDocumentInBlockChain} >Regist to BlockChain</Button>
       </div>
     );
   }

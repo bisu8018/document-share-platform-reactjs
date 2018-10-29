@@ -81,8 +81,8 @@ export function registDocument(args, callback) {
   const title = args.title;
   const desc = args.desc;
 
-  if(!fileInfo.file || !user){
-    console.error("The registration value(file or metadata) is invalid.", fileInfo, user);
+  if(!fileInfo.file){
+    console.error("The registration value(file or metadata) is invalid.", fileInfo);
     return;
   }
 
@@ -90,11 +90,12 @@ export function registDocument(args, callback) {
 
     // 1. Regist Document Meta Info
     const url = apiDomain + registDocumentInfoUrl;//localhost:4000/document/regist"
-    console.log("Regist Document Meta Info", url, fileInfo, user);
+    console.log("Regist Document Meta Info", url, fileInfo);
     const promise = ajax.post(url, {
-      filename:fileInfo.file.name,
-      size:fileInfo.file.size,
-      username:user.name,
+      filename: fileInfo.file.name,
+      size: fileInfo.file.size,
+      nickname: user.nickname,
+      username: ethAccount,
       ethAccount: ethAccount,
       title: title,
       desc: desc,

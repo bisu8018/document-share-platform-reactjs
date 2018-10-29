@@ -13,6 +13,7 @@ import Button from "components/CustomButtons/Button.jsx";
 import { Close, CloudUpload } from "@material-ui/icons";
 import javascriptStyles from "assets/jss/material-kit-react/views/componentsSections/javascriptStyles.jsx";
 
+import Autosuggest from 'react-autosuggest'
 import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
 import * as restapi from 'apis/DocApi';
@@ -23,6 +24,15 @@ import DrizzleApis from 'apis/DrizzleApis';
 function Transition(props) {
   return <Slide direction="down" {...props} />;
 }
+
+const categories = [
+  "Art & Photos", "Automotive", "Business", "Career", "Data & Analytics", "Design", "Devices & Hardware", "Design",
+  "Devices & Hardware", "Economy & Finance", "Education", "Engineering", "Entertainment & Humor", "Environment", "Food",
+  "Government & Nonprofit", "Health & Medicine", "Healthcare", "Engineering", "Internet", "Investor Relations", "Law",
+  "Leadership & Management", "Lifestyle", "Marketing", "Mobile", "News & Politics", "Presentations & Public Speaking", "Real Estate",
+  "Recruiting & HR", "Retail", "Sales", "Science", "Self Improvement", "Services", "Small Business & Entrepreneurship", "Social Media",
+  "Software", "Spiritual", "Sports", "Technology", "Travel"
+]
 
 class UploadDocument extends React.Component {
 
@@ -37,6 +47,7 @@ class UploadDocument extends React.Component {
     this.drizzleApis = new DrizzleApis(props.dirzzle);
 
     this.state = {
+      nickname: "",
       classicModal: false,
       openLeft: false,
       openTop: false,
@@ -55,8 +66,12 @@ class UploadDocument extends React.Component {
 
   handleClickOpen = (modal) => {
 
-    const { auth } = this.props;
-    console.log(this.props)
+    const { drizzle, drizzleState} = this.props;
+
+    const account = drizzleState.accounts[0];
+    this.setState({nickname: drizzleState.accounts[0]});
+
+    /*
     if(!auth.isAuthenticated()){
       auth.login();
       return "Loading";
@@ -65,7 +80,10 @@ class UploadDocument extends React.Component {
       x[modal] = true;
       this.setState(x);
     }
-
+    */
+    var x = [];
+    x[modal] = true;
+    this.setState(x);
 
   }
   handleClose = (modal) => {
@@ -86,7 +104,8 @@ class UploadDocument extends React.Component {
     });
   }
 
-  handleTagChange = (tags) => {
+  onChangeTag = (tags) => {
+
     this.setState({tags})
   }
 
@@ -94,18 +113,18 @@ class UploadDocument extends React.Component {
   onRegistDoc = () => {
     const { drizzle, drizzleState, auth } = this.props;
     const self = this;
-    if(!drizzle || !drizzleState || !auth){
+    if(!drizzle || !drizzleState){
       console.error("dirzzle or auth object is invalid",  drizzle, drizzleState, auth);
       alert('dirzzle or auth object is invalid');
       return;
     }
 
-
     const fileInfo = this.state.fileInfo;
     const tags = this.state.tags?this.state.tags:[];
     const title = document.getElementById("title").value;
     const desc = document.getElementById("desc").value;
-    const userInfo = this.props.auth.getUserInfo();
+    const nickname = document.getElementById("nickname").value;
+    const userInfo = {nickname: nickname};//this.props.auth.getUserInfo();
 
     if(!this.state.fileInfo || !this.state.fileInfo.file){
       alert("Please select a document file", drizzle, auth);
@@ -143,6 +162,12 @@ class UploadDocument extends React.Component {
       });
   }
 
+  onChangeNickname = (e) => {
+    console.log(e.target);
+    const nickname = e.target.value;
+    this.setState({nickname: nickname});
+  }
+
   onChange = (e) => {
 
     const file = e.target.files[0];
@@ -165,6 +190,7 @@ class UploadDocument extends React.Component {
     document.getElementById("title").value=null;
     document.getElementById("desc").value=null;
     document.getElementById("file").value=null;
+    document.getElementById("nickname").value=null;
     this.setState({tags:[]});
   }
 
@@ -226,7 +252,45 @@ class UploadDocument extends React.Component {
     return `Transaction status: ${transactions[txHash].status}`;
   };
 
+  validateTag = (tag) => {
+    //console.log(tag);
+    return false;
 
+  }
+
+
+  autocompleteRenderInput =({addTag, ...props}) => {
+        const handleOnChange = (e, {newValue, method}) => {
+          if (method === 'enter') {
+            e.preventDefault()
+          } else {
+            props.onChange(e)
+          }
+        }
+
+        const inputValue = (props.value && props.value.trim().toLowerCase()) || ''
+        const inputLength = inputValue.length
+
+        let suggestions = categories.filter((categories) => {
+          return categories.toLowerCase().slice(0, inputLength) === inputValue
+        })
+
+        return (
+          <Autosuggest
+            ref={props.ref}
+            suggestions={suggestions}
+            shouldRenderSuggestions={(value) => value && value.trim().length > 0}
+            getSuggestionValue={(suggestion) => suggestion}
+            renderSuggestion={(suggestion) => <span>{suggestion}</span>}
+            inputProps={{...props, onChange: handleOnChange}}
+            onSuggestionSelected={(e, {suggestion}) => {
+              addTag(suggestion)
+            }}
+            onSuggestionsClearRequested={() => {}}
+            onSuggestionsFetchRequested={() => {}}
+          />
+        )
+      }
 
 
   render() {
@@ -265,6 +329,18 @@ class UploadDocument extends React.Component {
                 className={classes.modalBody}>
 
                 <CustomInput
+                  labelText="Nickname"
+                  id="nickname"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    type: "labelText",
+                    value: this.state.nickname,
+                    onChange: this.onChangeNickname
+                  }} />
+
+                <CustomInput
                   labelText="Title"
                   id="title"
                   formControlProps={{
@@ -297,7 +373,8 @@ class UploadDocument extends React.Component {
                   }} />
 
 
-                <TagsInput id="tags" value={this.state.tags} onChange={this.handleTagChange} />
+                <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
+                  value={this.state.tags} onChange={this.onChangeTag} validate={this.validateTag} onlyUnique />
 
               </DialogContent>
               <DialogActions className={classes.modalFooter}>

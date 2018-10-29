@@ -28,7 +28,7 @@ class ContentListItem extends React.Component {
                              <Face className={classes.icons} />
                              <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.accountId} />
                          </span>
-                         <strong className="userName">{result.accountId}</strong>
+                         <strong className="userName">{result.nickname?result.nickname:result.accountId}</strong>
                      </div>
                  </Link>
                  <Link to={"/content/view/" + result.documentId} >
