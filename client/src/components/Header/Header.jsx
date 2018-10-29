@@ -53,7 +53,7 @@ class Header extends React.Component {
       [classes.absolute]: absolute,
       [classes.fixed]: fixed
     });
-    const brandComponent = <Button className={classes.title}><img src="http://share.decompany.io/logo.png" alt={brand} /></Button>;
+    const brandComponent = <Button className={classes.title}><img src="/logo.png" alt={brand} /></Button>;
     return (
       <AppBar className={appBarClasses}>
         <Toolbar className={classes.container}>
