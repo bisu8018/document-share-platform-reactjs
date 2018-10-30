@@ -39,11 +39,12 @@ export function getDocuments(params){
     },
     params: {
       nextPageKey:key,
-      email:params.email
+      email:params.email,
+      tag: params.tag
     }
   }
 
-  return axios.get(apiDomain + getDocumentsUrl, config);
+  return axios.post(apiDomain + getDocumentsUrl, config);
 }
 
 export function getDocument(documentId){

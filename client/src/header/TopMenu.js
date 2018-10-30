@@ -18,19 +18,15 @@ import headerLinksStyle from "assets/jss/material-kit-react/components/headerLin
 
 function SubHeaderLinks({ ...props }) {
   const { classes } = props;
+  //console.log(classes);
   return (
     <ul className="subHeader">
       <li>
-        <Button href="/" color="transparent">Home</Button>
-        <Button href="/contents/expolre" color="transparent">Explore</Button>
-        <Button href="/contents/topauthor" color="transparent">Top Author</Button>
-        <Button href="/contents/topcurator" color="transparent">Top Curator</Button>
-        <Button href="#" color="transparent">Help</Button>
+
+        <Button href="/" color="transparent">Explore</Button>
+        <Button href="https://github.com/decompanyio/decompanyio-front-end" color="transparent">Help</Button>
         <div className="sortSearch">
           <CustomInput
-            formControlProps={{
-              className: classes.formControl
-            }}
             inputProps={{
               placeholder: "Search",
               inputProps: {

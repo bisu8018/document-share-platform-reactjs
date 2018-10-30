@@ -26,6 +26,14 @@ const categories = [
 
 class ContentTags extends React.Component {
 
+  handleOnClick = (e) => {
+    const { classes, tagSearch } = this.props;
+    const tag = e.target.text
+    console.log(tag);
+
+    tagSearch(tag);
+
+  }
 
     render() {
       const { classes, noTags } = this.props;
@@ -36,7 +44,7 @@ class ContentTags extends React.Component {
            <List>
              {
                categories.map((category, idx) => {
-                 return (<ListItem key={idx}><Button key={category} color="transparent">{category}</Button></ListItem>);
+                 return (<ListItem key={idx}><Button key={category} color="transparent" ><Link to={"/tag/" + category} onClick={this.handleOnClick}>{category}</Link></Button></ListItem>);
                })
              }
 

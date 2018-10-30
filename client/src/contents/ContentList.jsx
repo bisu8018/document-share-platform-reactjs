@@ -21,33 +21,59 @@ class ContentList extends React.Component {
     state = {
       resultList: [],
       nextPageKey: null,
-      isEndPage:false
+      isEndPage:false,
+      tag: null,
     };
+
+    tagSearch = (tag) => {
+
+      console.log("tagSearch", tag);
+
+      this.setState({
+        resultList: [],
+        nextPageKey: null,
+        isEndPage:false,
+        tag: tag
+      });
+
+      this.fetchDocuments({
+        tag: tag,
+        nextPageKey: null
+      });
+    }
 
     fetchMoreData = () => {
 
         this.fetchDocuments({
-          nextPageKey: this.state.nextPageKey
+          nextPageKey: this.state.nextPageKey,
+          tag: this.state.tag
         })
 
     };
 
-    fetchDocuments = (params) => {
+    fetchDocuments = (args) => {
 
-        console.log("fetchDocument start", this.state);
-        restapi.getDocuments({nextPageKey: this.state.nextPageKey}).then((res)=>{
+        const params = {
+          nextPageKey: args.nextPageKey,
+          tag: args.tag
+        }
+
+        console.log("fetchDocument start", params);
+        restapi.getDocuments(params).then((res)=>{
           console.log("Fetch Document", res.data);
           if(res.data && res.data.resultList) {
             if(this.state.resultList){
-              console.log("concat");
               this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey});
             } else {
-              console.log("init list");
               this.setState({resultList: res.data.resultList, nextPageKey:res.data.nextPageKey});
             }
             console.log("list", this.state.resultList);
             if(!res.data.nextPageKey){
               this.setState({isEndPage:true});
+            }
+
+            if(res.data.nextPageKey && res.data.resultList.length<20){
+              this.fetchDocuments({nextPageKey: res.data.nextPageKey, tag: args.tag});
             }
           }
         });
@@ -62,12 +88,24 @@ class ContentList extends React.Component {
     }
 
     componentWillMount() {
-      this.fetchDocuments();
+      const { match } = this.props;
+      console.log("componentWillMount");
+      this.setState({
+        resultList: [],
+        nextPageKey: null,
+        isEndPage:false,
+        tag: match.params.tag
+      });
+
+      this.fetchDocuments({
+        tag: match.params.tag
+      });
     }
 
     render() {
-      const { classes } = this.props;
+      const { classes, match } = this.props;
       const resultList = this.state.resultList;
+
       return (
           <div>
              <InfiniteScroll
@@ -77,9 +115,9 @@ class ContentList extends React.Component {
                loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
 
                  <div className="contentGrid" >
-                    <ContentTags />
+                    <ContentTags tagSearch={this.tagSearch}/>
                     <div className="rightWrap">
-                        <h3>@LATEST</h3>
+                        <h3>{this.state.tag?"#" + this.state.tag:"@LATEST"}</h3>
                         {resultList.map((result, index) => (
                           <ContentListItem key={result.documentId} result={result} />
                         ))}

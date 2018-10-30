@@ -28,9 +28,9 @@ ul.subHeader li .sortSearch div.jss0229 > div:hover {border:0 !important;}
 ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:28px;padding:0 !important;margin-right:-30px !important;box-shadow:none;}
 
 
-.contentGrid {padding:20px 15px;padding-left:240px;}
+.contentGrid {padding:20px 15px;padding-left:310px;}
 .contentGrid * {font-weight:400}
-.contentGrid .leftWrap {position:absolute;top:123px;left:20px;width:210px;bottom:20px;width:200px;overflow:auto;border:1px solid #eee;background:#fff;}
+.contentGrid .leftWrap {position:absolute;top:123px;left:20px;width:280px;bottom:20px;overflow:auto;border:1px solid #eee;background:#fff;}
 .contentGrid .leftWrap ul {padding:25px;}
 .contentGrid .leftWrap ul li {padding:0;text-align:left;}
 .contentGrid .leftWrap ul li button {padding:0;transition:all .2s linear}

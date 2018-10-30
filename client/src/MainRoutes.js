@@ -87,6 +87,7 @@ class MainRoutes extends Component {
         <Router history={history}>
           <Switch>
             <Route exact path="/" render={(props) => <App drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
+            <Route path="/tag/:tag" render={(props) => <App drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/content/view/:documentId" render={(props) => <ContentView drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/author/:email" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/curator/:email" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
