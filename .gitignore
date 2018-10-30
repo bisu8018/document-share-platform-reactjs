@@ -1,0 +1,4 @@
+.DS_Store
+client/.DS_Store
+package-lock.json
+node_modules/*
