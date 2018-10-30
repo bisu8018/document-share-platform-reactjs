@@ -716,16 +716,16 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
 
     const earn_D1_DAY0 = web3.fromWei(await _documentReg.getCuratorRewardOnDocument(DOC1), "ether") * 1;
     //console.log('earn_D1_DAY0 : ' + Math.floor(earn_D1_DAY0));
-    assert.equal(reference, Math.floor(earn_D1_DAY0), "wrong amount of tokens earn on doc #1, day 0");
+    assert.equal(reference, Math.floor(earn_D1_DAY0), "wrong amount of tokens earn on doc #1");
 
     const earn_D1_DAY1 = web3.fromWei(await _documentReg.getCurator3DayRewardOnDocument(DOC1, DAYS_2), "ether") * 1;
     //console.log('earn_D1_DAY1 : ' + Math.floor(earn_D1_DAY1));
-    assert.equal(Math.floor((reference - ref_A1_D1_D1 * 4)/10), Math.floor(earn_D1_DAY1/10), "wrong amount of tokens earn on doc #1, day 1");
+    assert.equal(Math.round((reference - ref_A1_D1_D1 * 4)/10), Math.round(earn_D1_DAY1/10), "wrong amount of tokens earn on doc #1, day 1");
 
     const reference3 = Math.floor((ref_A1_D1_D1 * 4 + ref_A3_D1_D2 * 5 + ref_A3_D1_D3 * 4));
     const earn_D1_DAY3 = web3.fromWei(await _documentReg.getCurator3DayRewardOnDocument(DOC1, DAYS_0), "ether") * 1;
     //console.log('earn_D1_DAY3 : ' + Math.floor(earn_D1_DAY3));
-    assert.equal(Math.floor((reference3)/10), Math.floor(earn_D1_DAY3/10), "wrong amount of tokens earn on doc #1, day 1");
+    assert.equal(Math.round((reference3)/10), Math.round(earn_D1_DAY3/10), "wrong amount of tokens earn on doc #1, day 0");
 
   });
 /*

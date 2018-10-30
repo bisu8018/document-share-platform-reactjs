@@ -45,8 +45,8 @@ contract Utility {
 
   function getDailyRewardPool(uint _percent, uint _createTime) public view returns (uint) {
     uint offsetYears = getOffsetYears(_createTime);
-    // initial daily reward pool tokens : (200000000 / 365) * decimals(10 ** 18) / percent(100)
-    uint initialTokens = 54794520548 * (10 ** 11);
+    // initial daily reward pool tokens : (60000000 / 365) * decimals(10 ** 18) / percent(100)
+    uint initialTokens = 16438356164 * (10 ** 11);
     return uint((initialTokens * _percent) / (2 ** offsetYears));
   }
 }

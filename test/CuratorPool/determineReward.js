@@ -86,7 +86,7 @@ contract("CuratorPool", accounts => {
     var reference = s * (((pv1 ** 2)/pvts) * 10/10 + ((pv2 ** 2)/pvts) * 20/50 + ((pv2 ** 2)/pvts) * 30/50);
     var sample = (reward1 * 1) + (reward2 * 1) + (reward3 * 1);
 
-    assert.equal(reference * 1, sample * 1, "wrong reward token");
+    assert.equal(Math.floor(reference * 1), Math.floor(sample * 1), "wrong reward token");
   });
 
 });
