@@ -66,11 +66,10 @@ contract CuratorPool is Ownable {
   {
     uint dateMillis = util.getDateMillis();
 
-    Vote memory vote1 = Vote(_docId, dateMillis, _deposit, 0);
-    //Vote memory vote2 = Vote(_docId, dateMillis, _deposit, 0);
+    Vote memory vote = Vote(_docId, dateMillis, _deposit, 0);
 
-    mapByAddr[_curator].push(vote1);
-    mapByDoc[_docId].push(vote1);
+    mapByAddr[_curator].push(vote);
+    mapByDoc[_docId].push(vote);
 
     //if (mapByAddr[_curator].length == 1) {
     //  keys.push(_curator);
@@ -79,20 +78,19 @@ contract CuratorPool is Ownable {
     emit _AddVote(_docId, dateMillis, _deposit, _curator);
   }
 
-  function updateVote(address _curator, bytes32 _docId, uint _deposit, uint _timestamp) public
+  function updateVote(address _curator, bytes32 _docId, uint _deposit, uint _dateMillis) public
     onlyOwner()
   {
-    Vote memory vote1 = Vote(_docId, _timestamp, _deposit, 0);
-    //Vote memory vote2 = Vote(_docId, _timestamp, _deposit, 0);
+    Vote memory vote = Vote(_docId, _dateMillis, _deposit, 0);
 
-    mapByAddr[_curator].push(vote1);
-    mapByDoc[_docId].push(vote1);
+    mapByAddr[_curator].push(vote);
+    mapByDoc[_docId].push(vote);
 
     //if (idx == 1) {
     //  keys.push(_curator);
     //}
 
-    emit _UpdateVote(_docId, _timestamp, _deposit, _curator);
+    emit _UpdateVote(_docId, _dateMillis, _deposit, _curator);
   }
 
   function withdraw(address _curator, uint _idx, uint _withdraw) public
@@ -110,24 +108,44 @@ contract CuratorPool is Ownable {
     emit _Withdraw(_curator, _idx, _withdraw);
   }
 
-  function getVoteCount(address _addr) public view returns (uint) {
+  function getVoteCountByAddr(address _addr) public view returns (uint) {
     return mapByAddr[_addr].length;
   }
 
-  function getDocId(address _addr, uint _idx) public view returns (bytes32) {
+  function getDocIdByAddr(address _addr, uint _idx) public view returns (bytes32) {
     return mapByAddr[_addr][uint(_idx)].docId;
   }
 
-  function getStartDate(address _addr, uint _idx) public view returns (uint) {
+  function getStartDateByAddr(address _addr, uint _idx) public view returns (uint) {
     return mapByAddr[_addr][uint(_idx)].startDate;
   }
 
-  function getDeposit(address _addr, uint _idx) public view returns (uint) {
+  function getDepositByAddr(address _addr, uint _idx) public view returns (uint) {
     return mapByAddr[_addr][uint(_idx)].deposit;
   }
 
-  function getWithdraw(address _addr, uint _idx) public view returns (uint) {
+  function getWithdrawByAddr(address _addr, uint _idx) public view returns (uint) {
     return mapByAddr[_addr][uint(_idx)].withdraw;
+  }
+
+  function getVoteCountByDoc(bytes32 _docId) public view returns (uint) {
+    return mapByDoc[_docId].length;
+  }
+
+  function getAddressByDoc(bytes32 _docId, uint _idx) public view returns (bytes32) {
+    return mapByDoc[_docId][uint(_idx)].docId;
+  }
+
+  function getStartDateByDoc(bytes32 _docId, uint _idx) public view returns (uint) {
+    return mapByDoc[_docId][uint(_idx)].startDate;
+  }
+
+  function getDepositByDoc(bytes32 _docId, uint _idx) public view returns (uint) {
+    return mapByDoc[_docId][uint(_idx)].deposit;
+  }
+
+  function getWithdrawByDoc(bytes32 _docId, uint _idx) public view returns (uint) {
+    return mapByDoc[_docId][uint(_idx)].withdraw;
   }
 
   // --------------------------------
@@ -164,21 +182,37 @@ contract CuratorPool is Ownable {
     require(_addr != 0);
     require(_dateMillis > 0);
 
+    Vote memory vote = mapByAddr[_addr][_idx];
+    if (vote.startDate > _dateMillis || vote.deposit == 0 || (_dateMillis - vote.startDate) > util.getVoteDepositMillis()) {
+      return uint(0);
+    }
+
+    return calculateReward(vote.docId, _dateMillis, _pv, _tpvs, vote.deposit);
+  }
+
+  function getRewardByDoc(bytes32 _docId, uint _idx, uint _dateMillis, uint _pv, uint _tpvs) public view returns (uint) {
+
+    require(_dateMillis > 0);
+
+    Vote memory vote = mapByDoc[_docId][_idx];
+    if (vote.startDate > _dateMillis || vote.deposit == 0) {
+      return uint(0);
+    }
+
+    return calculateReward(_docId, _dateMillis, _pv, _tpvs, vote.deposit);
+  }
+
+  function calculateReward(bytes32 _docId, uint _dateMillis, uint _pv, uint _tpvs, uint _deposit) private view returns (uint) {
+
     if (_tpvs == 0 || _pv == 0) {
       return uint(0);
     }
 
-    Vote memory vote = mapByAddr[_addr][_idx];
-
-    if (vote.startDate > _dateMillis || vote.withdraw > 0 || vote.deposit == 0) {
-      return uint(0);
-    }
-
     uint tvd = 0;
-    Vote[] memory voteTotalList = mapByDoc[vote.docId];
+    Vote[] memory voteTotalList = mapByDoc[_docId];
     for (uint i=0; i<voteTotalList.length; i++) {
-      if ((_dateMillis - voteTotalList[i].startDate) >= 0
-       && (_dateMillis - voteTotalList[i].startDate) < util.getVoteDepositMillis()) {
+      uint offset = _dateMillis - voteTotalList[i].startDate;
+      if (offset >= 0 && offset < util.getVoteDepositMillis()) {
         tvd += voteTotalList[i].deposit;
       }
     }
@@ -186,10 +220,19 @@ contract CuratorPool is Ownable {
     if (tvd == 0) {
       return uint(0);
     }
-    return uint(uint((util.getDailyRewardPool(30, _dateMillis) * (_pv ** 2)) / _tpvs) * vote.deposit / tvd);
+
+    assert(tvd >= _deposit);
+    assert(_tpvs >= (_pv ** 2));
+
+    uint drp = util.getDailyRewardPool(30, _dateMillis);
+    uint reward = uint(uint((drp * (_pv ** 2)) / _tpvs) * _deposit / tvd);
+
+    assert(drp >= reward);
+
+    return reward;
   }
 
-  function getDepositByAddr(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint) {
+  function getSumDepositByAddr(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint) {
     uint sumDeposit = 0;
     Vote[] memory voteList = mapByAddr[_addr];
     for (uint i=0; i<voteList.length; i++) {
@@ -202,7 +245,7 @@ contract CuratorPool is Ownable {
     return sumDeposit;
   }
 
-  function getDepositByDoc(bytes32 _docId, uint _dateMillis) public view returns (uint) {
+  function getSumDepositByDoc(bytes32 _docId, uint _dateMillis) public view returns (uint) {
     uint sumDeposit = 0;
     Vote[] memory voteList = mapByDoc[_docId];
     for (uint i=0; i<voteList.length; i++) {
@@ -214,7 +257,7 @@ contract CuratorPool is Ownable {
     return sumDeposit;
   }
 
-  function getWithdrawByAddr(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint) {
+  function getSumWithdrawByAddr(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint) {
     uint sumWithdraw = 0;
     Vote[] memory voteList = mapByAddr[_addr];
     for (uint i=0; i<voteList.length; i++) {
@@ -226,7 +269,7 @@ contract CuratorPool is Ownable {
     return sumWithdraw;
   }
 
-  function getWithdrawByDoc(bytes32 _docId, uint _dateMillis) public view returns (uint) {
+  function getSumWithdrawByDoc(bytes32 _docId, uint _dateMillis) public view returns (uint) {
     uint sumWithdraw = 0;
     Vote[] memory voteList = mapByDoc[_docId];
     for (uint i=0; i<voteList.length; i++) {

@@ -20,10 +20,10 @@ contract("CuratorPool", accounts => {
     await curatorPool.init(_token, _utility, { from: accounts[0] });
 
     // logic
-    const c1 = await curatorPool.getVoteCount(accounts[1]);
+    const c1 = await curatorPool.getVoteCountByAddr(accounts[1]);
     assert.equal(0, c1 * 1, "not empty");
     await curatorPool.addVote(accounts[1], docId, 10);
-    const c2 = await curatorPool.getVoteCount(accounts[1]);
+    const c2 = await curatorPool.getVoteCountByAddr(accounts[1]);
     assert.equal(c1 * 1 + 1, c2 * 1, "failed to add a vote");
 
     const timestamp = await utility.getDateMillis();
@@ -55,17 +55,17 @@ contract("CuratorPool", accounts => {
     //console.log('curators : ' + curators.length);
 
     // logic
-    var c1 = await curatorPool.getVoteCount(accounts[1]);
+    var c1 = await curatorPool.getVoteCountByAddr(accounts[1]);
     assert.equal(1, c1 *= 1, "vote not exist");
     //console.log('vote counts 1 : ' + (c1 * 1));
 
     await curatorPool.addVote(accounts[1], docId, 20);
-    var c2 = await curatorPool.getVoteCount(accounts[1]);
+    var c2 = await curatorPool.getVoteCountByAddr(accounts[1]);
     assert.equal(2, c2 *= 1, "failed to add a vote 2");
     //console.log('vote counts 2 : ' + (c2 * 1));
 
     await curatorPool.addVote(accounts[1], docId, 30);
-    var c3 = await curatorPool.getVoteCount(accounts[1]);
+    var c3 = await curatorPool.getVoteCountByAddr(accounts[1]);
     assert.equal(3, c3 *= 1, "failed to add a vote 3");
     //console.log('vote counts 3 : ' + (c3 * 1));
 

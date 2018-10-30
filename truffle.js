@@ -13,21 +13,29 @@
  */
 var HDWalletProvider = require("truffle-hdwallet-provider");
 
- module.exports = {
-   networks: {
-     development: {
-       host: "localhost",
-       port: 8545,
-       network_id: "*" // Match any network id
-     },
-     rinkeby: {
-       provider: function() {
-         return new HDWalletProvider("YOUR SEED",
-          "https://rinkeby.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c")
-       },
-       //from: "0xa4dA09DF8E5D0E05775c2C26ABCdFB97f3e84e15", // default address to use for any transaction Truffle makes during migrations
-       network_id: 3,
-       //gas: 4612388 // Gas limit used for deploys
+module.exports = {
+  networks: {
+    development: {
+        host: "localhost",
+        port: 8545, // Using ganache as development network
+        network_id: "*",
+        gas: 4698712,
+        gasPrice: 25000000000
+    },
+    rinkeby: {
+      provider: function() {
+        return new HDWalletProvider("YOUR SEED HERE",
+        "https://rinkeby.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c")
+      },
+      //from: "0xa4dA09DF8E5D0E05775c2C26ABCdFB97f3e84e15", // default address to use for any transaction Truffle makes during migrations
+      network_id: 3,
+      //gas: 4612388 // Gas limit used for deploys
     }
-   }
- };
+  },
+  solc: {
+      optimizer: {
+          enabled: true,
+          runs: 200
+      }
+  }
+};

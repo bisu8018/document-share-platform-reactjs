@@ -208,7 +208,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     // ---------------
     const ref_A3_D2_D1 = (drp_1 * 1) * (200 / (200)) * (40000 / (10000 + 40000 + 10000 + 90000));
 
-    const reward_A3_D2 = web3.fromWei(await _documentReg.estimateCuratorReward(accounts[3], DOC2, { from: accounts[0] }));
+    const reward_A3_D2 = web3.fromWei(await _documentReg.getCuratorRewardOnUserDocument(accounts[3], DOC2));
     const sample = Math.round((reward_A3_D2 * 1) / 100);
     const reference = Math.round((ref_A3_D2_D1) / 100);
     assert.equal(reference, sample, "wrong amount of estimated token : curator #3, doc #2");
@@ -252,7 +252,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     //console.log('ref_A3_D1_D4 : ' + ref_A3_D1_D4);
     //console.log('ref_A3_D1_D5 : ' + ref_A3_D1_D5);
 
-    const reward_A3_D1 = web3.fromWei(await _documentReg.estimateCuratorReward(accounts[3], DOC1, { from: accounts[0] }));
+    const reward_A3_D1 = web3.fromWei(await _documentReg.getCuratorRewardOnUserDocument(accounts[3], DOC1, { from: accounts[0] }));
     const sample = Math.floor((reward_A3_D1 * 1) / 10);
     const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5) / 10);
     assert.equal(reference, sample, "wrong amount of estimated token : curator #3, doc #1");
@@ -272,6 +272,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +4 DAYS, VOTE(  0,   0, 100, 100, 100)
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(  0,   0,   0, 100, 100, 100)
 
     // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
     // DOC #2 : ACOUNT[1], PV(0, 200)
@@ -294,6 +295,10 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100))) / (160000 + 160000) * 160000;
     const ref_A3_D1_D5 = 0; //((drp_5 * 1) * (100 / (100 + 100 + 100 + 100))) / (250000 + 250000) * 250000;
 
+    const ref_A3_D1_D3_1 = ((drp_3 * 1) * (100 / (100 + 100 + 100 + 100))) / (90000 + 90000) * 90000;
+    const ref_A3_D1_D4_1 = ((drp_4 * 1) * (100 / (100 + 100))) / (160000 + 160000) * 160000;
+    const ref_A3_D1_D5_1 = ((drp_5 * 1) * (100 / (100))) / (250000 + 250000) * 250000;
+
     //console.log('ref_A3_D1_D1 : ' + ref_A3_D1_D1);
     //console.log('ref_A3_D1_D2 : ' + ref_A3_D1_D2);
     //console.log('ref_A3_D1_D3 : ' + ref_A3_D1_D3);
@@ -302,6 +307,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
 
     const VOTE_A3_D1 = new web3.BigNumber('100000000000000000000');
     const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5));
+    const reference2 = Math.floor((ref_A3_D1_D2 + ref_A3_D1_D3_1 * 2 + ref_A3_D1_D4_1 * 2 + ref_A3_D1_D5_1));
 
     await _documentReg.updateVoteOnDocument(accounts[3], DOC1, VOTE_A3_D1, DAYS_2, { from: accounts[0] });
     const reward_A3_D1_2 = web3.fromWei(await _documentReg.determineCuratorReward(DOC1, { from: accounts[3] }));
@@ -317,6 +323,12 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     const reward_A3_D1_4 = web3.fromWei(await _documentReg.determineCuratorReward(DOC1, { from: accounts[3] }));
     const sample_4 = Math.floor((reward_A3_D1_4 * 1));
     assert.equal(reference, sample_4, "wrong amount of determined token : curator #3, doc #1, day 4");
+
+    await _documentReg.updateVoteOnDocument(accounts[3], DOC1, VOTE_A3_D1, DAYS_5, { from: accounts[0] });
+    const reward_A3_D1_5 = web3.fromWei(await _documentReg.determineCuratorReward(DOC1, { from: accounts[3] }));
+    const sample_5 = Math.floor((reward_A3_D1_5 * 1));
+    assert.equal(reference2, sample_5, "wrong amount of determined token : curator #3, doc #1, day 5");
+
   });
 
   it("claim curator reward for 2, 3, 4 days", async () => {
@@ -333,6 +345,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +4 DAYS, VOTE(  0,   0, 100, 100, 100) => CLAIMED
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(  0,   0,   0, 100, 100, 100) => CLAIMED
 
     // DOC #1 : ACOUNT[1], PV(0, 100, 200, 300, 400, 500)
     // DOC #2 : ACOUNT[1], PV(0, 200)
@@ -350,12 +363,12 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
 
     const ref_A3_D1_D1 = 0; //((drp_1 * 1) * (100 / (100 + 100))) / (10000 + 40000 + 10000 + 90000) * 10000;
     const ref_A3_D1_D2 = ((drp_2 * 1) * (100 / (100 + 100 + 100 + 100 + 100))) / (40000 + 40000) * 40000;
-    const ref_A3_D1_D3 = ((drp_3 * 1) * (100 / (100 + 100 + 100))) / (90000 + 90000) * 90000;
-    const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100))) / (160000 + 160000) * 160000;
-    const ref_A3_D1_D5 = 0; //((drp_5 * 1) * (100 / (100 + 100 + 100 + 100))) / (250000 + 250000) * 250000;
+    const ref_A3_D1_D3 = ((drp_3 * 1) * (100 / (100 + 100 + 100 + 100))) / (90000 + 90000) * 90000;
+    const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100 + 100))) / (160000 + 160000) * 160000;
+    const ref_A3_D1_D5 = ((drp_5 * 1) * (100 / (100))) / (250000 + 250000) * 250000;
 
     const VOTE_A3_D1 = new web3.BigNumber('100000000000000000000');
-    const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5));
+    const reference = Math.floor((ref_A3_D1_D2 + ref_A3_D1_D3 * 2 + ref_A3_D1_D4 * 2 + ref_A3_D1_D5));
 
     const balance_A3_S1 = web3.fromWei(await _deck.balanceOf(accounts[3]), "ether");
     //console.log('balance_A3_S1 : ' + balance_A3_S1);
@@ -367,8 +380,44 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     await _documentReg.claimCuratorReward(DOC1, { from: accounts[3] })
     const balance_A3_S2 = web3.fromWei(await _deck.balanceOf(accounts[3]), "ether");
     //console.log('balance_A3_S2 : ' + balance_A3_S2);
-    const reward_claimed = Math.floor(balance_A3_S2 * 1 - balance_A3_S1 * 1) - (web3.fromWei(VOTE_A3_D1, "ether") * 1);
+    const reward_claimed = Math.floor(balance_A3_S2 * 1 - balance_A3_S1 * 1) - (web3.fromWei(VOTE_A3_D1, "ether") * 2);
     assert.equal(sample_4, reward_claimed, "wrong amount of claimed token : curator #3, doc #1, day 4");
+  });
+
+  it("calculate estimated curator reward for today", async () => {
+
+    // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
+    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
+    // ACOUNT[4] : DOC #4(400), +2 DAYS, VOTE(400, 400, 400)
+    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
+
+    // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
+    // ACOUNT[3] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
+    // ACOUNT[3] : DOC #1(100), +4 DAYS, VOTE(  0,   0, 100, 100, 100) => CLAIMED
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(  0,   0,   0, 100, 100, 100) => CLAIMED
+
+    // ACOUNT[4] : DOC #4(200), +5 DAYS, VOTE(  0,   0,   0, 200, 200, 200) => CLAIMED
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+
+    const todayMillis = (await _utility.getTimeMillis()) * 1;
+    const dayMillis = (await _utility.getOneDayMillis()) * 1;
+    const drp_3 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 3 * dayMillis));
+
+    //console.log('drp_3 : ' + drp_3 * 1);
+    const ref_A3_D1_D0 = (((drp_3 * 90000) / (180000)) * 10000 / (20000)) ;
+
+    // addr : curator address
+    // doc id
+    // pv : page view
+    // tpvs : sum((page view)^2)
+    const sample = web3.fromWei(await _documentReg.calculateCuratorReward(accounts[3], DOC1, 100, 20000), "ether");
+    //console.log('sample : ' + sample * 1);
+
+    var ref = Math.round((ref_A3_D1_D0 * 2));
+    var smp = Math.round((sample * 1));
+
+    assert.equal(ref, smp);
   });
 
   it("vote on a document", async () => {
@@ -385,6 +434,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +4 DAYS, VOTE(  0,   0, 100, 100, 100) => CLAIMED
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(  0,   0,   0, 100, 100, 100) => CLAIMED
 
     // ACOUNT[4] : DOC #2(300),  +0 DAYS, VOTE(300)
 
@@ -430,6 +480,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +4 DAYS, VOTE(  0,   0, 100, 100, 100) => CLAIMED
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(  0,   0,   0, 100, 100, 100) => CLAIMED
 
     // ACOUNT[4] : DOC #2(300),  +0 DAYS, VOTE(300)
 
@@ -491,6 +542,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +4 DAYS, VOTE(  0,   0, 100, 100, 100) => CLAIMED
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(  0,   0,   0, 100, 100, 100) => CLAIMED
 
     // ACOUNT[4] : DOC #2(300),  +0 DAYS, VOTE(300)
 
@@ -508,15 +560,15 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
 
     const deposit_D1_DAY3 = web3.fromWei(await _documentReg.getCuratorDepositOnDocument(DOC1, DAYS_3), "ether") * 1;
     //console.log('deposit_D1_DAY3 : ' + deposit_D1_DAY3);
-    assert.equal(300, deposit_D1_DAY3, "wrong amount of tokens deposited on doc #1, day 3");
+    assert.equal(400, deposit_D1_DAY3, "wrong amount of tokens deposited on doc #1, day 3");
 
     const deposit_D1_DAY4 = web3.fromWei(await _documentReg.getCuratorDepositOnDocument(DOC1, DAYS_4), "ether") * 1;
     //console.log('deposit_D1_DAY4 : ' + deposit_D1_DAY4);
-    assert.equal(100, deposit_D1_DAY4, "wrong amount of tokens deposited on doc #1, day 4");
+    assert.equal(200, deposit_D1_DAY4, "wrong amount of tokens deposited on doc #1, day 4");
 
     const deposit_D1_DAY5 = web3.fromWei(await _documentReg.getCuratorDepositOnDocument(DOC1, DAYS_5), "ether") * 1;
     //console.log('deposit_D1_DAY5 : ' + deposit_D1_DAY5);
-    assert.equal(0, deposit_D1_DAY5, "wrong amount of tokens deposited on doc #1, day 5");
+    assert.equal(100, deposit_D1_DAY5, "wrong amount of tokens deposited on doc #1, day 5");
 
     const deposit_D2_DAY0 = web3.fromWei(await _documentReg.getCuratorDepositOnDocument(DOC2, DAYS_0), "ether") * 1;
     //console.log('deposit_D2_DAY0 : ' + deposit_D2_DAY0);
@@ -532,7 +584,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
 
   });
 
-  it("get tokens a user earned on a document", async () => {
+  it("get tokens a user withdrawn on a document", async () => {
 
     // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
     // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
@@ -543,6 +595,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +4 DAYS, VOTE(  0,   0, 100, 100, 100) => CLAIMED
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(  0,   0,   0, 100, 100, 100) => CLAIMED
 
     const todayMillis = (await _utility.getTimeMillis()) * 1;
     const dayMillis = (await _utility.getOneDayMillis()) * 1;
@@ -554,11 +607,11 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
 
     const ref_A3_D1_D1 = 0; //((drp_1 * 1) * (100 / (100 + 100))) / (10000 + 40000 + 10000 + 90000) * 10000;
     const ref_A3_D1_D2 = ((drp_2 * 1) * (100 / (100 + 100 + 100 + 100 + 100))) / (40000 + 40000) * 40000;
-    const ref_A3_D1_D3 = ((drp_3 * 1) * (100 / (100 + 100 + 100))) / (90000 + 90000) * 90000;
-    const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100))) / (160000 + 160000) * 160000;
-    const ref_A3_D1_D5 = 0; //((drp_5 * 1) * (100 / (100 + 100 + 100 + 100))) / (250000 + 250000) * 250000;
+    const ref_A3_D1_D3 = ((drp_3 * 1) * (100 / (100 + 100 + 100 + 100))) / (90000 + 90000) * 90000;
+    const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100 + 100))) / (160000 + 160000) * 160000;
+    const ref_A3_D1_D5 = ((drp_5 * 1) * (100 / (100))) / (250000 + 250000) * 250000;
 
-    const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5));
+    const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 * 2 + ref_A3_D1_D4 * 2 + ref_A3_D1_D5));
 
     const withdraw_A1_D1_DAY0 = web3.fromWei(await _documentReg.getCuratorWithdrawOnUserDocument(accounts[1], DOC1, DAYS_0), "ether") * 1;
     //console.log('withdraw_A1_D1_DAY0 : ' + withdraw_A1_D1_DAY0);
@@ -569,7 +622,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     assert.equal(reference, Math.floor(withdraw_A3_D1_DAY0), "wrong amount of tokens withdraw on doc #1, account #3, day 0");
   });
 
-  it("get tokens earned on a document", async () => {
+  it("get tokens withdrawn on a document", async () => {
 
     // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
     // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
@@ -580,6 +633,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
     // ACOUNT[3] : DOC #1(100), +4 DAYS, VOTE(  0,   0, 100, 100, 100) => CLAIMED
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(  0,   0,   0, 100, 100, 100) => CLAIMED
 
     // ACOUNT[4] : DOC #4(200), +5 DAYS, VOTE(  0,   0,   0, 200, 200, 200) => CLAIMED
     // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
@@ -594,15 +648,16 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
 
     const ref_A3_D1_D1 = 0; //((drp_1 * 1) * (100 / (100 + 100))) / (10000 + 40000 + 10000 + 90000) * 10000;
     const ref_A3_D1_D2 = ((drp_2 * 1) * (100 / (100 + 100 + 100 + 100 + 100))) / (40000 + 40000) * 40000;
-    const ref_A3_D1_D3 = ((drp_3 * 1) * (100 / (100 + 100 + 100))) / (90000 + 90000) * 90000;
-    const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100))) / (160000 + 160000) * 160000;
-    const ref_A3_D1_D5 = 0; //((drp_5 * 1) * (100 / (100 + 100 + 100 + 100))) / (250000 + 250000) * 250000;
+    const ref_A3_D1_D3 = ((drp_3 * 1) * (100 / (100 + 100 + 100 + 100))) / (90000 + 90000) * 90000;
+    const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100 + 100))) / (160000 + 160000) * 160000;
+    const ref_A3_D1_D5 = ((drp_5 * 1) * (100 / (100))) / (250000 + 250000) * 250000;
 
-    const ref_A4_D1_D3 = ((drp_3 * 1) * (200 / (200 + 100 + 100 + 100))) / (90000 + 90000) * 90000;
-    const ref_A4_D1_D4 = ((drp_4 * 1) * (200 / (200 + 100))) / (160000 + 160000) * 160000;
-    const ref_A4_D1_D5 = ((drp_5 * 1) * (200 / (200))) / (250000 + 250000) * 250000;
+    //const ref_A4_D1_D3 = ((drp_3 * 1) * (200 / (200 + 100 + 100 + 100))) / (90000 + 90000) * 90000;
+    //const ref_A4_D1_D4 = ((drp_4 * 1) * (200 / (200 + 100))) / (160000 + 160000) * 160000;
+    //const ref_A4_D1_D5 = ((drp_5 * 1) * (200 / (200))) / (250000 + 250000) * 250000;
 
-    const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5));
+    const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 * 2 + ref_A3_D1_D4 * 2 + ref_A3_D1_D5));
+    const reference2 = Math.floor((ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5));
 
     const withdraw_D1_DAY0 = web3.fromWei(await _documentReg.getCuratorWithdrawOnDocument(DOC1, DAYS_0), "ether") * 1;
     //console.log('withdraw_D1_DAY0 : ' + Math.floor(withdraw_D1_DAY0));
@@ -610,7 +665,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
 
     const withdraw_D1_DAY1 = web3.fromWei(await _documentReg.getCuratorWithdrawOnDocument(DOC1, DAYS_1), "ether") * 1;
     //console.log('withdraw_D1_DAY1 : ' + Math.floor(withdraw_D1_DAY1));
-    assert.equal(0, Math.floor(withdraw_D1_DAY1), "wrong amount of tokens withdraw on doc #1, day 1");
+    assert.equal(reference2, Math.floor(withdraw_D1_DAY1), "wrong amount of tokens withdraw on doc #1, day 1");
 
     // additional claim - same document & different account
     const VOTE_A4_D1_S2 = new web3.BigNumber('200000000000000000000');
@@ -624,9 +679,55 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
 
     const reward_claimed = Math.floor(balance_A4_S2 * 1 - balance_A4_S1 * 1) - (web3.fromWei(VOTE_A4_D1_S2, "ether") * 1);
     const withdraw_D1_S2 = web3.fromWei(await _documentReg.getCuratorWithdrawOnDocument(DOC1, DAYS_0), "ether") * 1;
-    assert.equal(reference + reward_claimed, Math.floor(withdraw_D1_S2), "wrong amount of claimed token : doc #1, stage 2");
+    assert.equal(Math.floor((reference + reward_claimed) / 10), Math.floor(withdraw_D1_S2/10), "wrong amount of claimed token : doc #1, stage 2");
   });
 
+  it("get tokens earned on a document", async () => {
+
+    // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
+    // ACOUNT[3] : DOC #2(200), +1 DAYS, VOTE(200, 200)
+    // ACOUNT[4] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
+    // ACOUNT[4] : DOC #4(400), +2 DAYS, VOTE(400, 400, 400)
+    // ACOUNT[4] : DOC #3(100), +0 DAYS, VOTE(100)
+
+    // ACOUNT[3] : DOC #1(100), +2 DAYS, VOTE(100, 100, 100)
+    // ACOUNT[3] : DOC #1(100), +3 DAYS, VOTE(  0, 100, 100, 100)
+    // ACOUNT[3] : DOC #1(100), +4 DAYS, VOTE(  0,   0, 100, 100, 100) => CLAIMED
+    // ACOUNT[3] : DOC #1(100), +5 DAYS, VOTE(  0,   0,   0, 100, 100, 100) => CLAIMED
+
+    // ACOUNT[4] : DOC #4(200), +5 DAYS, VOTE(  0,   0,   0, 200, 200, 200) => CLAIMED
+    // DOC #4 : ACOUNT[2], PV(0, 100, 200, 300, 400, 500, 600, 700, 800)
+
+    const todayMillis = (await _utility.getTimeMillis()) * 1;
+    const dayMillis = (await _utility.getOneDayMillis()) * 1;
+    const drp_1 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 1 * dayMillis));
+    const drp_2 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 2 * dayMillis));
+    const drp_3 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 3 * dayMillis));
+    const drp_4 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 4 * dayMillis));
+    const drp_5 = web3.fromWei(await _utility.getDailyRewardPool(30, todayMillis - 5 * dayMillis));
+
+    const ref_A1_D1_D1 = ((drp_1 * 1) * (100 / (100 + 100 + 100 + 100))) / (10000 + 40000 + 10000 + 90000) * 10000;
+    const ref_A3_D1_D2 = ((drp_2 * 1) * (100 / (100 + 100 + 100 + 100 + 100))) / (40000 + 40000) * 40000;
+    const ref_A3_D1_D3 = ((drp_3 * 1) * (100 / (100 + 100 + 100 + 100))) / (90000 + 90000) * 90000;
+    const ref_A3_D1_D4 = ((drp_4 * 1) * (100 / (100 + 100))) / (160000 + 160000) * 160000;
+    const ref_A3_D1_D5 = ((drp_5 * 1) * (100 / (100))) / (250000 + 250000) * 250000;
+
+    const reference = Math.floor((ref_A1_D1_D1 * 4 + ref_A3_D1_D2 * 5 + ref_A3_D1_D3 * 4 + ref_A3_D1_D4 * 2 + ref_A3_D1_D5 * 1));
+
+    const earn_D1_DAY0 = web3.fromWei(await _documentReg.getCuratorRewardOnDocument(DOC1), "ether") * 1;
+    //console.log('earn_D1_DAY0 : ' + Math.floor(earn_D1_DAY0));
+    assert.equal(reference, Math.floor(earn_D1_DAY0), "wrong amount of tokens earn on doc #1, day 0");
+
+    const earn_D1_DAY1 = web3.fromWei(await _documentReg.getCurator3DayRewardOnDocument(DOC1, DAYS_2), "ether") * 1;
+    //console.log('earn_D1_DAY1 : ' + Math.floor(earn_D1_DAY1));
+    assert.equal(Math.floor((reference - ref_A1_D1_D1 * 4)/10), Math.floor(earn_D1_DAY1/10), "wrong amount of tokens earn on doc #1, day 1");
+
+    const reference3 = Math.floor((ref_A1_D1_D1 * 4 + ref_A3_D1_D2 * 5 + ref_A3_D1_D3 * 4));
+    const earn_D1_DAY3 = web3.fromWei(await _documentReg.getCurator3DayRewardOnDocument(DOC1, DAYS_0), "ether") * 1;
+    //console.log('earn_D1_DAY3 : ' + Math.floor(earn_D1_DAY3));
+    assert.equal(Math.floor((reference3)/10), Math.floor(earn_D1_DAY3/10), "wrong amount of tokens earn on doc #1, day 1");
+
+  });
 /*
  // =================================
  // Vote Deposit for 30 days
@@ -670,7 +771,7 @@ contract("DocumentReg - estimate, determine & claim curator rewards", accounts =
     //console.log('ref_A3_D1_D4 : ' + ref_A3_D1_D4);
     //console.log('ref_A3_D1_D5 : ' + ref_A3_D1_D5);
 
-    const reward_A3_D1 = web3.fromWei(await _documentReg.estimateCuratorReward(accounts[3], DOC1, { from: accounts[0] }));
+    const reward_A3_D1 = web3.fromWei(await _documentReg.getCuratorRewardOnDocumentByAddr(accounts[3], DOC1, { from: accounts[0] }));
     const sample = Math.floor((reward_A3_D1 * 1) / 10);
     const reference = Math.floor((ref_A3_D1_D1 + ref_A3_D1_D2 + ref_A3_D1_D3 + ref_A3_D1_D4 + ref_A3_D1_D5) / 10);
     assert.equal(reference, sample, "wrong amount of estimated token : curator #3, doc #1");

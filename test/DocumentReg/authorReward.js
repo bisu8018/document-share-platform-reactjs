@@ -316,9 +316,25 @@ contract("DocumentReg - determine & claim author reward", accounts => {
     const balance_A1_S2 = web3.fromWei(await _deck.balanceOf(accounts[1]), "ether");
     //console.log('balance_A1_S2 : ' + balance_A1_S2.toString());
     //console.log('rwdDoc1 : ' + rwdDoc1.toString());
-    rwdDoc1
     var ref = Math.round(((balance_A1_S1 * 1) + (rwdDoc1 * 1)) / 100);
     var smp = Math.round((balance_A1_S2 * 1) / 100);
+    assert.equal(ref, smp);
+  });
+
+  it("calculate estimated author reward for today", async () => {
+    // ------------------
+    // ACCOUNT[1]
+    //  : 300,000 DECK
+    //  : DOC #1, +5 DAYS, PV(0, 100, 200, 300, 400, 500)
+    //  : DOC #2, +1 DAYS, PV(0, 200)
+    //  : DOC #3, +0 DAYS, PV(0, )
+
+    const sample = await _documentReg.calculateAuthorReward(100, 300);
+    //console.log('sample : ' + sample * 1);
+
+    var rp = await _utility.getDailyRewardPool(70, DAYS_0);
+    var ref = Math.round(((100 / 300) * (rp * 1)) / 100);
+    var smp = Math.round((sample * 1) / 100);
     assert.equal(ref, smp);
   });
 

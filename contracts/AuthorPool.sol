@@ -122,12 +122,12 @@ contract AuthorPool is Ownable {
     emit _Withdraw(_author, _idx, _withdraw, _dateMillis);
   }
 
-  function determineReward(uint _pv, uint _tpv) public view returns (uint) {
+  function determineReward(uint _pv, uint _tpv, uint _dateMillis) public view returns (uint) {
     if (_tpv == 0 || _pv == 0) {
       return uint(0);
     }
 
-    uint drp = util.getDailyRewardPool(uint(70), createTime);
+    uint drp = util.getDailyRewardPool(uint(70), _dateMillis);
     return uint(_pv * uint(drp / _tpv));
   }
 

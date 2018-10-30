@@ -18,11 +18,11 @@ contract("CuratorPool", accounts => {
     await curatorPool.init(_token, _utility, { from: accounts[0] });
 
     // logic
-    var reference = await curatorPool.getVoteCount(accounts[5]);
+    var reference = await curatorPool.getVoteCountByAddr(accounts[5]);
     await curatorPool.addVote(accounts[5], docId, 10);
 
     // assert
-    var sample = await curatorPool.getVoteCount(accounts[5]);
+    var sample = await curatorPool.getVoteCountByAddr(accounts[5]);
     assert.equal((reference *= 1) + 1, (sample *= 1), "failed to add a vote");
   });
 

@@ -17,7 +17,6 @@ contract DocumentReg is Ownable {
   event _UpdateVoteOnDocument(bytes32 indexed docId, uint deposit, address indexed applicant, uint timestamp);
   event _ClaimAuthorReward(bytes32 indexed docId, uint reward, address indexed applicant);
   event _ClaimCuratorReward(bytes32 indexed docId, uint reward, address indexed applicant);
-  //event _DetermineReward(bytes32 indexed docId, uint timestamp, uint pageView, uint totalPageView, uint dailyReward);
 
   struct Document {
     address author;
@@ -44,6 +43,11 @@ contract DocumentReg is Ownable {
 
   // public variables
   uint public createTime;
+  address private foundation;
+
+  // --------------------------------------------
+  // Initialize the Document Registry Contract
+  // --------------------------------------------
 
   function init(address _token, address _author, address _curator, address _utility) public
     onlyOwner()
@@ -57,6 +61,9 @@ contract DocumentReg is Ownable {
     token = Deck(_token);
     util = Utility(_utility);
 
+    // first set foundation as contract owner
+    foundation = msg.sender;
+
     // init author pool
     authorPool = AuthorPool(_author);
     authorPool.init(token, util);
@@ -67,6 +74,13 @@ contract DocumentReg is Ownable {
 
     createTime = util.getTimeMillis();
     emit _InitializeDocumentReg(createTime, _token);
+  }
+
+  function setFoundation(address _foundation) public
+    onlyOwner()
+  {
+    require(_foundation != 0);
+    foundation = _foundation;
   }
 
   // -------------------------------
@@ -129,21 +143,6 @@ contract DocumentReg is Ownable {
     return docList;
   }
 
-  // -------------------------------
-  // Total Page View Square Functions
-  // -------------------------------
-/*
-  function confirmTotalPageView(uint _date, uint _totalPageView, uint _totalPageViewSquare) public
-    onlyOwner()
-  {
-    require(_date != 0);
-    require(_totalPageView != 0);
-    require(_totalPageViewSquare != 0);
-    totalPageView[_date] = _totalPageView;
-    totalPageViewSquare[_date] = _totalPageViewSquare;
-    emit _ConfirmTotalPageView(_date, _totalPageView, _totalPageViewSquare);
-  }
-*/
   function getTotalPageView(uint _date) public view returns (uint) {
     require(_date != 0);
     return totalPageView[_date];
@@ -157,10 +156,9 @@ contract DocumentReg is Ownable {
   // -------------------------------
   // Daily Page View Functions
   // -------------------------------
-
   function confirmPageView(bytes32 _docId, uint _date, uint _pageView) public
-    onlyOwner()
   {
+    require(msg.sender == foundation);
     require(map[_docId].createTime != 0);
 
     Document storage doc = map[_docId];
@@ -188,7 +186,6 @@ contract DocumentReg is Ownable {
   // -------------------------------
   // Determine author reward after last claim
   // -------------------------------
-
   function determineAuthorReward(address _addr, bytes32 _docId) public view returns (uint) {
 
     require(_addr != 0);
@@ -207,16 +204,23 @@ contract DocumentReg is Ownable {
       //assert(claimDate <= util.getDateMillis());
       uint tpv = getTotalPageView(claimDate);
       uint pv = getPageView(_docId, claimDate);
-      sumReward += authorPool.determineReward(pv, tpv);
+      sumReward += authorPool.determineReward(pv, tpv, claimDate);
 
       uint nextDate = claimDate + util.getOneDayMillis();
       assert(claimDate < nextDate);
       claimDate = nextDate;
-      //emit _DetermineReward(_docId, lastClaimedDate, pv, tpv, dailyRewardPool);
     }
+
     return sumReward;
   }
 
+  function calculateAuthorReward(uint _pv, uint _tpv) public view returns (uint) {
+    return authorPool.determineReward(_pv, _tpv, util.getDateMillis());
+  }
+
+  // -------------------------------
+  // Claim author reward
+  // -------------------------------
   function claimAuthorReward(bytes32 _docId) public {
     require(msg.sender != 0);
     require(authorPool.createTime() != 0);
@@ -239,7 +243,7 @@ contract DocumentReg is Ownable {
 
       uint tpv = getTotalPageView(claimDate);
       uint pv = getPageView(_docId, claimDate);
-      sumReward += authorPool.determineReward(pv, tpv);
+      sumReward += authorPool.determineReward(pv, tpv, claimDate);
 
       uint nextDate = claimDate + util.getOneDayMillis();
       assert(nextDate > claimDate);
@@ -250,36 +254,6 @@ contract DocumentReg is Ownable {
     authorPool.withdraw(msg.sender, uint(idx), sumReward, claimDate);
 
     emit _ClaimAuthorReward(_docId, sumReward, msg.sender);
-  }
-
-  // -------------------------------
-  // Estimate curator reward after last claim
-  // -------------------------------
-
-  function estimateCuratorReward(address _addr, bytes32 _docId) public view returns (uint) {
-
-    require(_addr != 0);
-    require(curatorPool.createTime() != 0);
-
-    uint numVotes = curatorPool.getVoteCount(_addr);
-    if (numVotes == 0) {
-      return uint(0);
-    }
-
-    uint reward = 0;
-    for (uint i=0; i<numVotes; i++) {
-      if (curatorPool.getDocId(_addr, i) == _docId
-       && curatorPool.getWithdraw(_addr, i) == 0) {
-        uint dt = curatorPool.getStartDate(_addr, i);
-        for (uint j=0; j<util.getVoteDepositDays(); j++) {
-          uint pv = getPageView(_docId, dt);
-          uint tpvs = getTotalPageViewSquare(dt);
-          reward += curatorPool.determineReward(_addr, i, dt, pv, tpvs);
-          dt += util.getOneDayMillis();
-        }
-      }
-    }
-    return reward;
   }
 
   // -------------------------------
@@ -302,7 +276,7 @@ contract DocumentReg is Ownable {
     idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(0));
     for(uint i=0; i<numVotes; i++)
     {
-      uint dt = curatorPool.getStartDate(msg.sender, uint(idx));
+      uint dt = curatorPool.getStartDateByAddr(msg.sender, uint(idx));
       for (uint j=0; j<util.getVoteDepositDays(); j++) {
         uint pv = getPageView(_docId, dt);
         uint tpvs = getTotalPageViewSquare(dt);
@@ -315,6 +289,27 @@ contract DocumentReg is Ownable {
     return reward;
   }
 
+  function calculateCuratorReward(address _addr, bytes32 _docId, uint _pv, uint _tpvs) public view returns (uint) {
+
+    uint numVotes = curatorPool.getVoteCountByAddr(_addr);
+    if (numVotes == 0) {
+      return uint(0);
+    }
+
+    uint reward = 0;
+    uint dateMillis = util.getDateMillis();
+    for (uint i=0; i<numVotes; i++) {
+      if ((curatorPool.getDocIdByAddr(_addr, i) == _docId)
+       && (dateMillis - curatorPool.getStartDateByAddr(_addr, i) < util.getVoteDepositMillis())) {
+        reward += curatorPool.determineReward(_addr, i, dateMillis, _pv, _tpvs);
+      }
+    }
+    return reward;
+  }
+
+  // -------------------------------
+  // Claim curator reward
+  // -------------------------------
   function claimCuratorReward(bytes32 _docId) public {
 
     // validation check
@@ -346,7 +341,7 @@ contract DocumentReg is Ownable {
     for(uint i=0; i<numVotes; i++)
     {
       uint delta = 0;
-      uint dt = curatorPool.getStartDate(msg.sender, uint(idx));
+      uint dt = curatorPool.getStartDateByAddr(msg.sender, uint(idx));
       for (uint j=0; j<util.getVoteDepositDays(); j++) {
         uint pv = getPageView(_docId, dt);
         uint tpvs = getTotalPageViewSquare(dt);
@@ -354,7 +349,7 @@ contract DocumentReg is Ownable {
         dt += util.getOneDayMillis();
       }
       reward += delta;
-      reward += curatorPool.getDeposit(msg.sender, uint(idx));
+      reward += curatorPool.getDepositByAddr(msg.sender, uint(idx));
       voteList[i] = uint(idx);
       deltaList[i] = delta;
       idx = curatorPool.indexOfNextVoteForClaim(msg.sender, _docId, uint(idx));
@@ -386,38 +381,181 @@ contract DocumentReg is Ownable {
     emit _VoteOnDocument(_docId, _deposit, msg.sender);
   }
 
-  function updateVoteOnDocument(address _addr, bytes32 _docId, uint _deposit, uint _timestamp) public
+  function updateVoteOnDocument(address _addr, bytes32 _docId, uint _deposit, uint _dateMillis) public
     onlyOwner()
   {
     require(_deposit > 0);
     require(curatorPool.createTime() != 0);
 
-    curatorPool.updateVote(_addr, _docId, _deposit, _timestamp);
-    emit _UpdateVoteOnDocument(_docId, _deposit, _addr, _timestamp);
+    curatorPool.updateVote(_addr, _docId, _deposit, _dateMillis);
+    emit _UpdateVoteOnDocument(_docId, _deposit, _addr, _dateMillis);
   }
 
   // -------------------------------
-  // Query functions
+  // KPI Query functions
   // -------------------------------
 
-  function getCuratorDepositOnUserDocument(address _addr, bytes32 _docId, uint _timestamp) public view returns (uint) {
-    return curatorPool.getDepositByAddr(_addr, _docId, _timestamp);
+  // Get total amount of deposited tokens on the document
+  // _docId : target document id
+  // _dateMillis : find the amount of deposited tokens based on this date in milliseconds (eg. YYYY-MM-dd 00:00:00.000)
+  function getCuratorDepositOnDocument(bytes32 _docId, uint _dateMillis) public view returns (uint) {
+    return curatorPool.getSumDepositByDoc(_docId, _dateMillis);
   }
 
-  function getCuratorDepositOnDocument(bytes32 _docId, uint _timestamp) public view returns (uint) {
-    return curatorPool.getDepositByDoc(_docId, _timestamp);
+  // Get a curator's amount of deposited tokens on the document
+  // _addr : the EOA of the curator
+  // _docId : target document id
+  // _dateMillis : find the amount of deposited tokens based on this date in milliseconds (eg. YYYY-MM-dd 00:00:00.000)
+  function getCuratorDepositOnUserDocument(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint) {
+    return curatorPool.getSumDepositByAddr(_addr, _docId, _dateMillis);
   }
 
-  function getCuratorWithdrawOnUserDocument(address _addr, bytes32 _docId, uint _timestamp) public view returns (uint) {
-    return curatorPool.getWithdrawByAddr(_addr, _docId, _timestamp);
+  // Get total amount of withdrawn curator reward tokens on the document
+  // _docId : target document id
+  // _dateMillis : find the amount of withdrawn tokens based on this date in milliseconds (eg. YYYY-MM-dd 00:00:00.000)
+  function getCuratorWithdrawOnDocument(bytes32 _docId, uint _dateMillis) public view returns (uint) {
+    return curatorPool.getSumWithdrawByDoc(_docId, _dateMillis);
   }
 
-  function getCuratorWithdrawOnDocument(bytes32 _docId, uint _timestamp) public view returns (uint) {
-    return curatorPool.getWithdrawByDoc(_docId, _timestamp);
+  // Get a curator's amount of withdrawn tokens on the document
+  // _addr : the EOA of the curator
+  // _docId : target document id
+  // _dateMillis : find the amount of withdrawn tokens based on this date in milliseconds (eg. YYYY-MM-dd 00:00:00.000)
+  function getCuratorWithdrawOnUserDocument(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint) {
+    return curatorPool.getSumWithdrawByAddr(_addr, _docId, _dateMillis);
   }
 
+  // Get a curator's amount of estimated reward on the document for last 3 days from a date
+  // _addr : the EOA of the curator
+  // _docId : target document id
+  // _dateMillis : find the amount of estimated reward based on this date in milliseconds (eg. YYYY-MM-dd 00:00:00.000)
+  function getCurator3DayRewardOnUserDocument(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint) {
+
+    uint numVotes = curatorPool.getVoteCountByAddr(_addr);
+    if (numVotes == 0) {
+      return uint(0);
+    }
+
+    uint reward = 0;
+    for (uint i=0; i<numVotes; i++) {
+      if (curatorPool.getDocIdByAddr(_addr, i) == _docId) {
+        uint dt = curatorPool.getStartDateByAddr(_addr, i);
+        for (uint j=0; j<util.getVoteDepositDays(); j++) {
+          if (_dateMillis == 0 || (_dateMillis >= dt && _dateMillis - dt <= util.getOneDayMillis() * 3)) {
+            uint pv = getPageView(_docId, dt);
+            uint tpvs = getTotalPageViewSquare(dt);
+            reward += curatorPool.determineReward(_addr, i, dt, pv, tpvs);
+          }
+          dt += util.getOneDayMillis();
+        }
+      }
+    }
+    return reward;
+  }
+
+  // Get a curator's amount of estimated reward on the document for last 3 days
+  // _addr : the EOA of the curator
+  // _docId : target document id
+  function getCurator3DayRewardOnUserDocument(address _addr, bytes32 _docId) public view returns (uint) {
+    return getCurator3DayRewardOnUserDocument(_addr, _docId, util.getDateMillis());
+  }
+
+  // Get a curator's total amount of reward on the document
+  // _addr : the EOA of the curator
+  // _docId : target document id
+  function getCuratorRewardOnUserDocument(address _addr, bytes32 _docId) public view returns (uint) {
+    return getCurator3DayRewardOnUserDocument(_addr, _docId, 0);
+  }
+
+  // Get total amount of estimated curator reward on the document
+  // _docId : target document id
+  function getCuratorRewardOnDocument(bytes32 _docId) public view returns (uint) {
+    return getCurator3DayRewardOnDocument(_docId, 0);
+  }
+
+  // Get total amount of estimated curator reward on the document for last 3 days
+  // _docId : target document id
+  function getCurator3DayRewardOnDocument(bytes32 _docId) public view returns (uint) {
+    return getCurator3DayRewardOnDocument(_docId, util.getDateMillis());
+  }
+
+  // Get total amount of estimated curator reward on the document from a date
+  // _docId : target document id
+  // _dateMillis : find the amount of estimated reward based on this date in milliseconds (eg. YYYY-MM-dd 00:00:00.000)
+  function getCurator3DayRewardOnDocument(bytes32 _docId, uint _dateMillis) public view returns (uint) {
+
+    uint numVotes = curatorPool.getVoteCountByDoc(_docId);
+    if (numVotes == 0) {
+      return uint(0);
+    }
+
+    uint reward = 0;
+    for (uint i=0; i<numVotes; i++) {
+      uint dt = curatorPool.getStartDateByDoc(_docId, i);
+      for (uint j=0; j<util.getVoteDepositDays(); j++) {
+        if (_dateMillis == 0 || (_dateMillis >= dt && _dateMillis - dt <= util.getOneDayMillis() * 3)) {
+          uint pv = getPageView(_docId, dt);
+          uint tpvs = getTotalPageViewSquare(dt);
+          reward += curatorPool.getRewardByDoc(_docId, i, dt, pv, tpvs);
+        }
+        dt += util.getOneDayMillis();
+      }
+    }
+    return reward;
+  }
+
+  // Get a author's total amount of reward withdrawn from the document
+  // _addr : the EOA of the curator
+  // _docId : target document id
   function getAuthorWithdrawOnUserDocument(address _addr, bytes32 _docId) public view returns (uint) {
     return authorPool.getUserDocumentWithdraw(_addr, _docId);
   }
+
+  // Get a author's amount of estimated reward on the document
+  // _addr : the EOA of the curator
+  // _docId : target document id
+  function getAuthorRewardOnDocument(address _addr, bytes32 _docId) public view returns (uint) {
+    return getAuthor3DayRewardOnDocument(_addr, _docId, 0);
+  }
+
+  // Get a author's amount of estimated reward on the document for last 3 days
+  // _addr : the EOA of the curator
+  // _docId : target document id
+  function getAuthor3DayRewardOnDocument(address _addr, bytes32 _docId) public view returns (uint) {
+    return getAuthor3DayRewardOnDocument(_addr, _docId, util.getDateMillis());
+  }
+
+  // Get a author's amount of estimated reward on the document for last 3 days from a date
+  // _addr : the EOA of the curator
+  // _docId : target document id
+  // _dateMillis : find the amount of estimated reward based on this date in milliseconds (eg. YYYY-MM-dd 00:00:00.000)
+  function getAuthor3DayRewardOnDocument(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint) {
+
+    int idx = authorPool.getUserDocumentIndex(_addr, _docId);
+    if (idx < 0) {
+      return uint(0);
+    }
+
+    uint sumReward = 0;
+    uint nextDate = authorPool.getUserDocumentListedDate(_addr, uint(idx));
+    uint endDate = util.getDateMillis();
+
+    // when _dateMillis == 0, from listed date to today
+    if (_dateMillis != 0) {
+      endDate = _dateMillis;
+    }
+
+    while (nextDate <= endDate) {
+      if (endDate - nextDate <= util.getOneDayMillis() * 3) {
+        uint tpv = getTotalPageView(nextDate);
+        uint pv = getPageView(_docId, nextDate);
+        sumReward += authorPool.determineReward(pv, tpv, nextDate);
+      }
+      assert(nextDate < nextDate + util.getOneDayMillis());
+      nextDate += util.getOneDayMillis();
+    }
+    return sumReward;
+  }
+
 
 }

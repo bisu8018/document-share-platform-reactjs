@@ -198,4 +198,29 @@ contract("DocumentReg - confirm page view & total page view", accounts => {
     assert.equal(0, tpvs_D4_D9, "different total page view square day9");
   });
 
+  it("set foundation address", async () => {
+
+    // set foundation as acount #4
+    await _documentReg.setFoundation(accounts[4]);
+
+    try {
+      // calling from account #0 should throw exception
+      await _documentReg.confirmPageView(DOC1, DAYS_0, 200, { from: accounts[0] });
+    } catch (error) {
+      const revertFound = error.message.search('revert') >= 0;
+      assert.strictEqual(revertFound, true);
+    }
+
+    // check if the value was changed
+    const pv_D1_D0 = (await _documentReg.getPageView(DOC1, DAYS_0)) * 1;
+    assert.equal(0, pv_D1_D0, "different page view doc1, day0");
+
+    // calling from account #4 should succeed
+    await _documentReg.confirmPageView(DOC1, DAYS_0, 200, { from: accounts[4] });
+
+    // check if the value was changed #2
+    const pv_D1_D0_2 = (await _documentReg.getPageView(DOC1, DAYS_0)) * 1;
+    assert.equal(200, pv_D1_D0_2, "different page view doc1, day0, stage 2");
+  });
+
 });
