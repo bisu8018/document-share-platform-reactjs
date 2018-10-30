@@ -26,6 +26,8 @@ class ContentViewBlockchainButton extends React.Component {
 
     if(!document) return;
 
+    if(!drizzleState) return;
+
     if(this.state.isExistDataKey) return;
 
     try{
@@ -40,6 +42,9 @@ class ContentViewBlockchainButton extends React.Component {
 
   isExistDocument = () => {
     const { drizzle, drizzleState } = this.props;
+
+    if(!drizzleState) return;
+
     if(drizzleState.contracts.DocumentReg.contains[this.state.isExistDataKey]){
       console.log("isExistDocument", drizzleState.contracts.DocumentReg.contains[this.state.isExistDataKey].value);
       return drizzleState.contracts.DocumentReg.contains[this.state.isExistDataKey].value;
@@ -91,12 +96,16 @@ class ContentViewBlockchainButton extends React.Component {
 
   componentDidMount() {
     const { document, classes, drizzle, drizzleState } = this.props;
+
+    if(!drizzleState) return;
+
     this.handleCheckDocumentInBlockChain();
+
     // subscribe to changes in the store
     this.unsubscribe = drizzle.store.subscribe(() => {
 
       // every time the store updates, grab the state from drizzle
-      const drizzleState = drizzle.store.getState();
+      //const drizzleState = drizzle.store.getState();
       // check to see if it's ready, if so, update local component state
       if (drizzleState.drizzleStatus.initialized) {
         this.printTxStatus();
@@ -107,7 +116,10 @@ class ContentViewBlockchainButton extends React.Component {
   }
 
   compomentDidUnmount() {
-    this.unsubscribe();
+    if(this.unsubscribe){
+        this.unsubscribe();
+    }
+
   }
 
 

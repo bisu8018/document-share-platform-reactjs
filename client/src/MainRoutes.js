@@ -40,7 +40,6 @@ const drizzle = new Drizzle(options, drizzleStore);
 class MainRoutes extends Component {
   state = { loading: true, drizzleState: null};
   componentDidMount() {
-
     // subscribe to changes in the store
     this.unsubscribe = drizzle.store.subscribe(() => {
 
@@ -55,7 +54,9 @@ class MainRoutes extends Component {
   }
 
   compomentWillUnmount() {
+
     this.unsubscribe();
+
   }
 
   render() {

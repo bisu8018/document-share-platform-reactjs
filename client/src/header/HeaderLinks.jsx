@@ -26,14 +26,16 @@ class HeaderLinks extends React.Component {
 
   componentDidMount() {
     const { classes, auth, drizzle, drizzleState } = this.props;
+    if(drizzleState && drizzleState.accounts){
+      const intervalId = setInterval(this.getAccount, 1000);
+      this.setState({intervalId});
+    }
 
-    const intervalId = setInterval(this.getAccount, 1000);
-    this.setState({intervalId});
   }
 
   getAccount = () =>{
     const { drizzleState } = this.props;
-    console.log(drizzleState);
+
     if(drizzleState && drizzleState.accounts){
       this.setState({displayname: drizzleState.accounts[0]});
       clearInterval(this.state.intervalId);
@@ -50,7 +52,7 @@ class HeaderLinks extends React.Component {
       <List className={classes.list}>
         <ListItem className={classes.listItem}>
           <UploadDocument auth={auth} drizzle={drizzle} drizzleState={drizzleState} />
-          <Button color="transparent" className={classes.button} onClick={auth.logout} >
+          <Button color="transparent" className={classes.button} >
             <Person className={classes.icons} />  {this.state.displayname}
           </Button>
           {/*

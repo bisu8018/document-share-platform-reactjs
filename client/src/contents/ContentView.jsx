@@ -36,7 +36,7 @@ class ContentView extends React.Component {
     });
 
     restapi.getDocumentText(documentId).then((res) => {
-      console.log(res);
+      //console.log(res);
       this.setState({documentText:res.data.text});
     });
 
@@ -92,11 +92,11 @@ class ContentView extends React.Component {
 
     const document = this.state.document;
 
-    if(!document || !drizzle || !drizzleState) {
+    if(!document) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     }
     let voteTag = null;
-    if(drizzleState.accounts && drizzleState.accounts[0]){
+    if(drizzleState && drizzleState.accounts && drizzleState.accounts[0]){
       voteTag = (<ContentVote {...this.props} document={this.state.document}/>);
     }
 
