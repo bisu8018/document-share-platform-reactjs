@@ -13,6 +13,11 @@
 > ganache-cli -b 3
 
 ## SmartContract Compile
+> npm init
+> npm install
+> npm install truffle
+> npm install truffle-hdwallet-provider
+> npm install -E openzeppelin-solidity@1.12.0
 > truffle compile
 
 ## SmartContract Migrate
@@ -23,7 +28,7 @@
 
 ## install openzeppelin
 > cd client
-> npm install -E openzeppelin-solidity
+> npm install -E openzeppelin-solidity@1.12.0
 
 ## nodejs start
 >> cd client
