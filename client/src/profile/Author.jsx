@@ -7,6 +7,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
+import AuthorSummary from 'profile/AuthorSummary';
 const style = {
 
 };
@@ -34,10 +35,8 @@ class Author extends React.Component {
         console.log("Fetch Document", res.data);
         if(res.data && res.data.resultList) {
           if(this.state.resultList){
-            console.log("concat");
             this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey});
           } else {
-            console.log("init list");
             this.setState({resultList: res.data.resultList, nextPageKey:res.data.nextPageKey});
           }
           console.log("list", this.state.resultList);
@@ -54,35 +53,13 @@ class Author extends React.Component {
   }
 
   render() {
-    const {classes, match} = this.props;
+    const {classes, drizzle, drizzleState, match} = this.props;
 
     return (
 
         <div className="contentGridView">
 
-            <h3 style={{margin:'0',fontSize:'26px'}} >KPI Summary</h3>
-            <div className="customGrid">
-                <div className="box">
-                    <h4>{match.params.email}</h4>
-                    <ul className="detailList">
-                        <li>daily total page views : </li>
-                        <li>aily total earning : </li>
-                        <li>otal number of documents :</li>
-                        <li>otal number of votes :</li>
-                        <li>otal number of curators :</li>
-                    </ul>
-                </div>
-                <div className="box">
-                    <h4>Global</h4>
-                    <ul className="detailList">
-                        <li>daily total page views : </li>
-                        <li>aily total earning : </li>
-                        <li>otal number of documents :</li>
-                        <li>otal number of votes :</li>
-                        <li>otal number of curators :</li>
-                    </ul>
-                </div>
-            </div>
+            <AuthorSummary drizzle={drizzle} drizzleState={drizzleState} nickname={match.params.email} />
 
             <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{match.params.email} documents</h3>
               <InfiniteScroll
@@ -97,7 +74,7 @@ class Author extends React.Component {
                         <div className="cardSide">
                             <Link to={"/content/view/" + result.documentId} >
                                 <span className="img">
-                                    <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.accountId} />
+                                    <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.title?result.title:result.documentName} />
                                 </span>
                                <div className="inner">
                                     <div className="tit"
@@ -108,7 +85,7 @@ class Author extends React.Component {
                                      >{result.desc}</div>
                                     <div className="badge">
                                         <Badge color="rose">1,222 Deck</Badge>
-                                        <Badge color="rose">1,222 view</Badge>
+                                        <Badge color="rose">{result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} view</Badge>
                                     </div>
                                 </div>
                             </Link>

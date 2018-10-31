@@ -119,7 +119,7 @@ class ContentList extends React.Component {
                     <div className="rightWrap">
                         <h3>{this.state.tag?"#" + this.state.tag:"@LATEST"}</h3>
                         {resultList.map((result, index) => (
-                          <ContentListItem key={result.documentId} result={result} />
+                          <ContentListItem key={result.documentId + result.accountId} result={result} />
                         ))}
                      </div>
                 </div>

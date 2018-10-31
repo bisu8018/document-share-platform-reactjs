@@ -26,34 +26,38 @@ class HeaderLinks extends React.Component {
 
   componentDidMount() {
     const { classes, auth, drizzle, drizzleState } = this.props;
-    if(drizzleState && drizzleState.accounts){
-      const intervalId = setInterval(this.getAccount, 1000);
-      this.setState({intervalId});
-    }
+    /*
+    this.unsubscribe = drizzle.store.subscribe(() => {
 
+      // every time the store updates, grab the state from drizzle
+      const drizzleState = drizzle.store.getState();
+      // check to see if it's ready, if so, update local component state
+      if (drizzleState.drizzleStatus.initialized) {
+        console.log(drizzleState);
+        this.setState({drizzleState: drizzleState});
+        this.setState({displayname: this.state.drizzleState.accounts[0]});
+
+      }
+
+    });
+    */
   }
 
-  getAccount = () =>{
-    const { drizzleState } = this.props;
-
-    if(drizzleState && drizzleState.accounts){
-      this.setState({displayname: drizzleState.accounts[0]});
-      clearInterval(this.state.intervalId);
-    }
-
-
+  compomentWillUnmount() {
+    this.unsubscribe();
   }
 
   render() {
-    const { classes, auth, drizzle, drizzleState } = this.props;
-    if(!this.state.displayname) return null;
+    const { classes, drizzle, drizzleState} = this.props;
+
+    if(!drizzleState) return null;
 
     return (
       <List className={classes.list}>
         <ListItem className={classes.listItem}>
-          <UploadDocument auth={auth} drizzle={drizzle} drizzleState={drizzleState} />
+          <UploadDocument drizzle={drizzle} drizzleState={drizzleState} />
           <Button color="transparent" className={classes.button} >
-            <Person className={classes.icons} />  {this.state.displayname}
+            <Person className={classes.icons} />  {drizzleState.accounts[0]}
           </Button>
           {/*
           {auth.isAuthenticated() &&

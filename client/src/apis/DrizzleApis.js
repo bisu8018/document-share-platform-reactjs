@@ -9,12 +9,15 @@ export default class DrizzleApis {
     return this.drizzle.web3.utils.fromAscii(str);
   }
 
+  toWei = (str) => {
+    return this.drizzle.web3.utils.fromWei(str, "ether");
+  }
+
   toNumber = (str) => {
     return str*1;
   }
 
   toBigNumber = (str) => {
-
     const v = this.drizzle.web3.utils.toWei(str, 'ether');
     //console.log(str, "to bignumber ", v);
     return v;
@@ -160,4 +163,110 @@ export default class DrizzleApis {
 
     return stackId;
   };
+
+  requestTotalBalance = () => {
+    const drizzleState = this.drizzle.store.getState();
+    const ethAccount = drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.Deck;
+
+    if(!ethAccount){
+      console.error("The Metamask login is required.")
+      return null;
+    }
+
+    console.log("account", ethAccount);
+    const dataKey = contract.methods.balanceOf.cacheCall(ethAccount, {
+      from: ethAccount
+    });
+
+    return dataKey;
+  };
+
+  getTotalBalance = (dataKey) => {
+    if(!dataKey) return 0;
+    const drizzleState = this.drizzle.store.getState();
+    const ethAccount = drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.Deck;
+
+    if(!ethAccount){
+      console.error("The Metamask login is required.")
+      return null;
+    }
+    
+    console.log("getTotalBalance", drizzleState.contracts.Deck.balanceOf[dataKey]);
+
+    if(!drizzleState.contracts.Deck.balanceOf[dataKey]) return 0;
+
+    //const isExistInBlockChain = drizzleState.contracts.DocumentReg.contains[this.state.isExistDataKey].value
+    //console.log("getTotalBalance", ethAccount, v);
+    return this.toWei(drizzleState.contracts.Deck.balanceOf[dataKey].value);
+  };
+
+  requestPageView = (documentId) => {
+    const drizzleState = this.drizzle.store.getState();
+    const ethAccount = drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.DocumentReg;
+    const curDate = this.getBlockchainTimestamp(new Date());
+    const dataKey = contract.methods.getPageView.cacheCall(this.fromAscii(documentId), curDate, {
+      from: ethAccount
+    });
+
+    return dataKey;
+  };
+
+  getPageView = (dateKey) => {
+    const drizzleState = this.drizzle.store.getState();
+    const ethAccount = drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.DocumentReg;
+
+    const curDate = this.getBlockchainTimestamp(new Date());
+    const v = contract.methods.getPageView[dateKey].value
+
+    return v;
+  };
+
+  requestTotalPageView = (dataKey) => {
+    const drizzleState = this.drizzle.store.getState();
+    const ethAccount = drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.DocumentReg;
+
+    const v = contract.methods.calculateAuthorReward[dataKey].value;
+
+    return v;
+  };
+
+  requestAuthorReward = (pageView, totalPageView) => {
+    const drizzleState = this.drizzle.store.getState();
+    const ethAccount = drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.DocumentReg;
+
+    const dataKey = contract.methods.calculateAuthorReward.cacheCall(pageView, totalPageView, {
+      from: ethAccount
+    });
+
+    return dataKey;
+  };
+
+  getAuthorReward = (dataKey) => {
+    const drizzleState = this.drizzle.store.getState();
+    const ethAccount = drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.DocumentReg;
+    const v = contract.methods.balanceOf[dataKey];
+
+    console.log("getTotalBalance", ethAccount, v);
+    return v;
+  };
+
+  getBlockchainTimestamp = (date) => {
+    // daily YYYY-MM-DD 00:00:00(실행기준에서 전날 일자)
+    //let yesterday = new Date(); /* 현재 */
+    //yesterday.setDate(yesterday.getDate() - 1);
+
+    /* 날짜 - 1일 */
+
+    const d = Math.floor(date / (60 * 60 *24 * 1000)) * (60 * 60 *24 * 1000);
+    //console.log("getBlockchainTimestamp", d, new Date(d));
+    return d;
+  }
+
 }

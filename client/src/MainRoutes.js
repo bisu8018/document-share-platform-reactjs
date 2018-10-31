@@ -47,6 +47,7 @@ class MainRoutes extends Component {
       const drizzleState = drizzle.store.getState();
       // check to see if it's ready, if so, update local component state
       if (drizzleState.drizzleStatus.initialized) {
+        console.log("MainRoutes", "drizzleStatus initialized", drizzleState);
         this.setState({ loading: false, drizzleState });
       }
 
@@ -69,9 +70,9 @@ class MainRoutes extends Component {
       <div>
         <Header
           brand="DECOMPANY.io"
-          rightLinks={<HeaderLinks auth={auth}
-              drizzleState={this.state.drizzleState}
-              drizzle={drizzle} />}
+          rightLinks={<HeaderLinks
+            drizzleState={this.state.drizzleState}
+            drizzle={drizzle} />}
           fixed
           color="white"
           {...rest}
@@ -90,8 +91,8 @@ class MainRoutes extends Component {
             <Route exact path="/" render={(props) => <App drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/tag/:tag" render={(props) => <App drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/content/view/:documentId" render={(props) => <ContentView drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
-            <Route path="/author/:email" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
-            <Route path="/curator/:email" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
+            <Route path="/author/:email" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} {...props} />} />
+            <Route path="/curator/:email" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} {...props} />} />
             <Route path="/callback" render={(props) => {
               handleAuthentication(props);
               return <Callback {...props} />

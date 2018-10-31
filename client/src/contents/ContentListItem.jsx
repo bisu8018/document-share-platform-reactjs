@@ -40,7 +40,7 @@ class ContentListItem extends React.Component {
                       >{result.desc}</div>
                      <div className="badge">
                          <Badge color="rose">DECK 1,222</Badge>
-                         <Badge color="info">Vote 123,000</Badge>
+                         <Badge color="info">View {result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} </Badge>
                          {result.tags?result.tags.map((tag, index) => (
                                <Badge color="success" key={index}>{tag}</Badge>
                          )):""}
