@@ -8,17 +8,44 @@ import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import AuthorSummary from 'profile/AuthorSummary';
+import AuthorRevenueOnDocument from 'profile/AuthorRevenueOnDocument';
+
 const style = {
 
 };
+
 
 class Author extends React.Component {
 
   state = {
     resultList: [],
     nextPageKey: null,
-    isEndPage:false
+    isEndPage:false,
+    totalRevenue: 0
   };
+
+  revenueOnDocuments = [];
+  revenues = [];
+
+  handleRevenueOnDocuments = (documentId, revenue) =>{
+
+    if(this.revenueOnDocuments.includes(documentId)) return;
+
+    console.log("handleRevenueOnDocuments", documentId, revenue);
+    this.revenueOnDocuments.push(documentId);
+    this.revenues.push(revenue);
+    let totalRevenue = 0;
+    if(this.revenues.length == this.state.resultList.length){
+      console.log(this.revenues);
+      for(const idx in this.revenues){
+
+        totalRevenue += this.revenues[idx];
+        console.log("handleRevenueOnDocuments", totalRevenue, revenue);
+      }
+      this.setState({totalRevenue: Math.round(totalRevenue*100)/100});
+    }
+
+  }
 
   fetchMoreData = () => {
 
@@ -32,7 +59,7 @@ class Author extends React.Component {
       const {classes, match} = this.props;
       const email = match.params.email;
       restapi.getDocuments({email:email, nextPageKey: this.state.nextPageKey}).then((res)=>{
-        console.log("Fetch Document", res.data);
+        console.log("Fetch Author Document", res.data);
         if(res.data && res.data.resultList) {
           if(this.state.resultList){
             this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey});
@@ -53,13 +80,15 @@ class Author extends React.Component {
   }
 
   render() {
-    const {classes, drizzle, drizzleState, match} = this.props;
+    const {classes, drizzleApis, match} = this.props;
+
+    if(!drizzleApis.isAuthenticated()) "DrizzleState Loading!!";
 
     return (
 
         <div className="contentGridView">
 
-            <AuthorSummary drizzle={drizzle} drizzleState={drizzleState} nickname={match.params.email} />
+            <AuthorSummary totalRevenue={this.state.totalRevenue} drizzleApis={drizzleApis} documentList={this.state.resultList} nickname={match.params.email} />
 
             <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{match.params.email} documents</h3>
               <InfiniteScroll
@@ -84,7 +113,7 @@ class Author extends React.Component {
                                         style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
                                      >{result.desc}</div>
                                     <div className="badge">
-                                        <Badge color="rose">1,222 Deck</Badge>
+                                        <Badge color="rose"><AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} /></Badge>
                                         <Badge color="rose">{result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} view</Badge>
                                     </div>
                                 </div>

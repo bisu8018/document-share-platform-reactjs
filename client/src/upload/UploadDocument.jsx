@@ -9,6 +9,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
+import CustomDropdown from 'components/CustomDropdown/CustomDropdown.jsx';
+import Badge from 'components/Badge/Badge.jsx';
 
 import { Close, CloudUpload } from "@material-ui/icons";
 import javascriptStyles from "assets/jss/material-kit-react/views/componentsSections/javascriptStyles.jsx";
@@ -44,8 +46,6 @@ class UploadDocument extends React.Component {
   constructor(props) {
     super(props);
 
-    this.drizzleApis = new DrizzleApis(props.dirzzle);
-
     this.state = {
       nickname: "",
       classicModal: false,
@@ -60,7 +60,8 @@ class UploadDocument extends React.Component {
         owner:null
       },
       stackId: null,
-      tags: []
+      tags: [],
+      category: null
     };
   }
 
@@ -76,10 +77,10 @@ class UploadDocument extends React.Component {
 
   handleClickOpen = (modal) => {
 
-    const { drizzle, drizzleState} = this.props;
+    const { drizzleApis} = this.props;
 
-    const account = drizzleState.accounts[0];
-    this.setState({nickname: drizzleState.accounts[0]});
+    const account = drizzleApis.getLoggedInAccount();
+    this.setState({nickname: account});
 
     /*
     if(!auth.isAuthenticated()){
@@ -121,11 +122,10 @@ class UploadDocument extends React.Component {
 
 
   onRegistDoc = () => {
-    const { drizzle, drizzleState, auth } = this.props;
+    const { drizzleApis } = this.props;
     const self = this;
-    if(!drizzle || !drizzleState){
-      console.error("dirzzle or auth object is invalid",  drizzle, drizzleState, auth);
-      alert('dirzzle or auth object is invalid');
+    if(!drizzleApis.isAuthenticated()){
+      alert('dirzzle is not Authenticated');
       return;
     }
 
@@ -137,16 +137,12 @@ class UploadDocument extends React.Component {
     const userInfo = {nickname: nickname};//this.props.auth.getUserInfo();
 
     if(!this.state.fileInfo || !this.state.fileInfo.file){
-      alert("Please select a document file", drizzle, auth);
+      alert("Please select a document file");
       return;
     }
 
-    if(!drizzleState.drizzleStatus.initialized){
-      alert("Please connect to Metamask...(Metamask Account is invalid)");
-      return;
-    }
-    const ethAccount = drizzleState.accounts[0];
-    console.log("Selected a document file", this.state.fileInfo);
+    const ethAccount = drizzleApis.getLoggedInAccount();
+    console.log("Selected a Document File", this.state.fileInfo);
     restapi.registDocument({
         fileInfo: fileInfo,
         userInfo: userInfo,
@@ -157,7 +153,6 @@ class UploadDocument extends React.Component {
       }).then((result) => {
         console.log("UploadDocument", result);
         //this.registDocumentToSmartContract(result);
-        const drizzleApis = new DrizzleApis(drizzle);
         const stackId = drizzleApis.registDocumentToSmartContract(result.documentId);
         self.setState({ stackId });
         /*
@@ -173,6 +168,12 @@ class UploadDocument extends React.Component {
   }
 
   onChangeNickname = (e) => {
+    console.log(e.target);
+    const nickname = e.target.value;
+    this.setState({nickname: nickname});
+  }
+
+  onChangeCategory = (e) => {
     console.log(e.target);
     const nickname = e.target.value;
     this.setState({nickname: nickname});
@@ -227,40 +228,6 @@ class UploadDocument extends React.Component {
     this.setState({ stackId });
   };
 
-  setValue = value => {
-    const { drizzle, drizzleState } = this.props;
-    const contract = drizzle.contracts.MyStringStore;
-
-    // let drizzle know we want to call the `set` method with `value`
-    const stackId = contract.methods["set"].cacheSend(value, {
-      from: drizzleState.accounts[0]
-    });
-
-    // save the `stackId` for later reference
-    this.setState({ stackId });
-  };
-
-  getTxStatus = () => {
-    const { drizzle, drizzleState } = this.props;
-    // get the transaction states from the drizzle state
-    const { transactions, transactionStack } = this.props.drizzleState;
-
-    // get the transaction hash using our saved `stackId`
-    const txHash = transactionStack[this.state.stackId];
-
-    // if transaction hash does not exist, don't display anything
-    if (!txHash) return null;
-    console.log("getTxStatus", txHash, transactions, transactions[txHash].status, drizzleState, drizzle);
-    // otherwise, return the transaction status
-    const txStatus = transactions[txHash].status;
-    const txReceipt = transactions[txHash].receipt;
-    if(txReceipt){
-      console.log("Transcation Complete", txReceipt);
-      this.setState({stackId:null});
-    }
-
-    return `Transaction status: ${transactions[txHash].status}`;
-  };
 
   validateTag = (tag) => {
     //console.log(tag);
@@ -349,6 +316,14 @@ class UploadDocument extends React.Component {
                     value: this.state.nickname,
                     onChange: this.onChangeNickname
                   }} />
+
+                  <CustomDropdown
+                    buttonText="Category"
+                    dropdownList={categories}
+                    buttonProps={{
+                      onChange: this.onChangeCategory
+                    }}
+                  />
 
                 <CustomInput
                   labelText="Title"

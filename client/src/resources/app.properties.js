@@ -6,8 +6,8 @@ export const APP_PROPERTIES = {
   domain:{
     upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
     image: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod',
-    api: "http://localhost:4000",
-    //api: 'https://iwzx8ah5xf.execute-api.us-west-1.amazonaws.com/dev'
+    //api: "http://localhost:4000",
+    api: 'https://iwzx8ah5xf.execute-api.us-west-1.amazonaws.com/dev'
   },
   local:{
     domain:{

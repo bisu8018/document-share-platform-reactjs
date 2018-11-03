@@ -11,11 +11,8 @@ import HeaderLinks from "./header/HeaderLinks";
 import TopMenu from "./header/TopMenu";
 import ContentView from "contents/ContentView";
 import Author from "profile/Author";
+import DrizzleApis from 'apis/DrizzleApis';
 
-// import drizzle functions and contract artifact
-import { Drizzle, generateStore } from "drizzle";
-import DocumentReg from "contracts-rinkeby/DocumentReg.json";
-import Deck from "contracts-rinkeby/Deck.json";
 
 const auth = new Auth();
 
@@ -29,29 +26,20 @@ const handleLogout = ({location}) => {
   auth.logout();
 }
 
-// let drizzle know what contracts we want
-const options = { contracts: [DocumentReg, Deck] };
-// setup the drizzle store and drizzle
-const drizzleStore = generateStore(options);
-const drizzle = new Drizzle(options, drizzleStore);
+
 
 
 
 class MainRoutes extends Component {
-  state = { loading: true, drizzleState: null};
-  componentDidMount() {
+  state = { loading: true, drizzleState: null, drizzleApis: null};
+
+  componentWillMount() {
     // subscribe to changes in the store
-    this.unsubscribe = drizzle.store.subscribe(() => {
-
-      // every time the store updates, grab the state from drizzle
-      const drizzleState = drizzle.store.getState();
-      // check to see if it's ready, if so, update local component state
-      if (drizzleState.drizzleStatus.initialized) {
-        console.log("MainRoutes", "drizzleStatus initialized", drizzleState);
-        this.setState({ loading: false, drizzleState });
-      }
-
+    const drizzleApis = new DrizzleApis((drizzleApis, drizzle, drizzleState) => {
+      //console.log("MainRoutes", drizzleApis, drizzle, drizzleState);
+      this.setState({drizzleApis: drizzleApis});
     });
+    this.setState({drizzleApis: drizzleApis});
   }
 
   compomentWillUnmount() {
@@ -72,7 +60,7 @@ class MainRoutes extends Component {
           brand="DECOMPANY.io"
           rightLinks={<HeaderLinks
             drizzleState={this.state.drizzleState}
-            drizzle={drizzle} />}
+            drizzleApis={this.state.drizzleApis} />}
           fixed
           color="white"
           {...rest}
@@ -84,15 +72,15 @@ class MainRoutes extends Component {
           {...this.props}
           auth={auth}
           dirzzleState={this.state.drizzleState}
-          drizzle={drizzle} />
+          drizzleApis={this.state.drizzleApis} />
 
         <Router history={history}>
           <Switch>
-            <Route exact path="/" render={(props) => <App drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
-            <Route path="/tag/:tag" render={(props) => <App drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
-            <Route path="/content/view/:documentId" render={(props) => <ContentView drizzle={drizzle} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
-            <Route path="/author/:email" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} {...props} />} />
-            <Route path="/curator/:email" render={(props) => <Author drizzle={drizzle} drizzleState={this.state.drizzleState} {...props} />} />
+            <Route exact path="/" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
+            <Route path="/tag/:tag" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
+            <Route path="/content/view/:documentId" render={(props) => <ContentView drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
+            <Route path="/author/:email" render={(props) => <Author drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} {...props} />} />
+            <Route path="/curator/:email" render={(props) => <Author drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} {...props} />} />
             <Route path="/callback" render={(props) => {
               handleAuthentication(props);
               return <Callback {...props} />

@@ -12,14 +12,13 @@ import DrizzleApis from 'apis/DrizzleApis';
 const style = {
 
 };
-
+const VOTE_STATE = {"START":1, "APPROVE": 2, "VOTE": 3, "DONE": 4, "COMPLETE": 5, "ERROR": 6};
 class ContentVote extends React.Component {
-
-  drizzleApis = new DrizzleApis(this.props.drizzle);
 
   state = {
     loading: true,
     buttonText: "Commit",
+    voteState: VOTE_STATE.START,
     approve: {stackId: -1, done: false, voteOpening: false, receipt: null},
     vote: {stackId:-1, done: false, complete: false, receipt: null},
     deposit: 0
@@ -41,9 +40,10 @@ class ContentVote extends React.Component {
   }
 
   sendVoteInfo = () => {
-    const { document, drizzle, auth } = this.props;
-    const curatorId = auth.getUserInfo().name;
-    const voteAmount = drizzle.web3.utils.toWei(this.state.deposit, 'ether');
+    const { document, drizzleApis } = this.props;
+
+    const curatorId = drizzleApis.getLoggedInAccount();//drizzleState.accounts[0];
+    const voteAmount = drizzleApis.fromWei(this.state.deposit);
 
     restapi.sendVoteInfo(curatorId, voteAmount, document);
 
@@ -64,9 +64,11 @@ class ContentVote extends React.Component {
 
   handleApprove = () => {
 
-    const { document, drizzle } = this.props;
+    const { document, drizzleApis } = this.props;
 
     if(!document) return;
+
+    if (!drizzleApis.isAuthenticated()) return;
 
     const deposit = this.state.deposit;
 
@@ -75,37 +77,60 @@ class ContentVote extends React.Component {
       return;
     }
 
-      this.unsubscribeApprove = drizzle.store.subscribe(() => {
-      // every time the store updates, grab the state from drizzle
-      const drizzleState = drizzle.store.getState();
-      // check to see if it's ready, if so, update local component state
-      if (drizzleState.drizzleStatus.initialized) {
-        this.checkTxApproveStatus();
-
-        if(this.state.approve.done){
-          this.unsubscribeApprove();
-          if(!this.state.approve.error) {
-            this.handleVoteOnDocument();
-          }
-        }
+    drizzleApis.subscribe((drizzle, drizzleState) => {
+      if(this.state.approve.stackId){
+        this.getTransactionStatus(this.state.approve.stackId, drizzleState);
       } else {
-        console.error("drizzleState does not initialized");
+
+      }
+
+
+      if(this.state.voteState == VOTE_STATE.APPROVE);
+
+      if(!this.state.approve.done && this.checkApproveTransaction(this.state.approve.stackId, drizzleState)) {
+        console.log("start vote");
+        const stackId = drizzleApis.voteOnDocument(document.documentId, deposit);
+        this.setState({vote:{stackId:stackId}});
+      }
+
+      if(this.state.approve.done && this.checkVoteTransaction(this.state.vote.stackId, drizzleState)){
+        this.setState({buttonText: "COMMIT"});
+        this.sendVoteInfo();
+        this.clearVoteInfo();
       }
 
     });
 
-    const stackId = this.drizzleApis.approve(deposit);
+    const stackId = drizzleApis.approve(deposit);
     this.setState({approve:{stackId:stackId}});
+
   }
 
-  checkTxApproveStatus = () => {
+  getTransactionStatus = (stackId, drizzleState) => {
+    const { transactions, transactionStack } = drizzleState;
 
+    const txHash = transactionStack[stackId];
+
+    // if transaction hash does not exist, don't display anything
+    if(!txHash) return;
+
+    const txState = transactions[txHash].status;
+    const txReceipt = transactions[txHash].receipt;
+    const confirmations = transactions[txHash].confirmations;
+
+    console.log(txState, txReceipt, confirmations);
+
+  }
+
+  checkApproveTransaction = (stackId, drizzleState) => {
+    let resultBoolean = false;
+    console.log("checkApproveTransaction", stackId, drizzleState, this.state.approve);
     if(this.state.approve.done) return;
 
     // get the transaction states from the drizzle state
-    const { transactions, transactionStack } = this.props.drizzleState;
+    const { transactions, transactionStack } = drizzleState;
     // get the transaction hash using our saved `stackId`
-    const txHash = transactionStack[this.state.approve.stackId];
+    const txHash = transactionStack[stackId];
 
     // if transaction hash does not exist, don't display anything
     if(!txHash) return;
@@ -120,6 +145,7 @@ class ContentVote extends React.Component {
       this.setState({
         approve: {done: true, receipt: txReceipt}
       });
+      resultBoolean = true;
     } else if(txState=="error") {
       this.setState({
         approve: {done: true, error:"error"}
@@ -129,6 +155,8 @@ class ContentVote extends React.Component {
     console.log("getTxApproveStatus", txState, txReceipt, transactions[txHash]);
     // otherwise, return the transaction status
     //return `Transaction status: ${transactions[txHash].status}`;
+
+    return resultBoolean;
   };
 
   handleVoteOnDocument = () => {
@@ -166,18 +194,17 @@ class ContentVote extends React.Component {
 
     });
 
-    const stackId = this.drizzleApis.voteOnDocument(document.documentId, deposit);
-    this.setState({vote:{stackId:stackId}});
+
   }
 
 
 
-  checkTxVoteStatus = () => {
-
+  checkVoteTransaction = (stackId, drizzleState) => {
+    let returnBoolean = false;
     if(this.state.vote.done) return;
 
     // get the transaction states from the drizzle state
-    const { transactions, transactionStack } = this.props.drizzleState;
+    const { transactions, transactionStack } = drizzleState;
     // get the transaction hash using our saved `stackId`
     const txHash = transactionStack[this.state.vote.stackId];
 
@@ -193,6 +220,8 @@ class ContentVote extends React.Component {
       this.setState({
         vote: {done: true, complete: true, receipt: txReceipt}
       });
+
+      returnBoolean = true;
     } else if(txState=="error"){
       this.setState({
         vote: {done: true, error:"error", complete:false}
@@ -200,6 +229,7 @@ class ContentVote extends React.Component {
     }
 
     console.log("getTxVoteStatus", txState, txReceipt);
+    return returnBoolean;
   }
 
   render() {

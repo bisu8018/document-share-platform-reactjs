@@ -17,15 +17,13 @@ const style = {
 
 class ContentView extends React.Component {
 
-  drizzleApis = new DrizzleApis(this.props.drizzle);
-
   state = {
     document:null,
     documentText:null,
     currentPageNo:1,
     dataKey:null,
     determineAuthorToken:-1,
-    isExistInBlockChain: true
+    isExistInBlockChain: false
   }
 
   getContentInfo = (documentId) => {
@@ -52,6 +50,8 @@ class ContentView extends React.Component {
   }
 
   handleDetermineAuthorToken = () => {
+
+    const {drizzleApis} = this.props
     if(!this.state.document) return;
 
     const doc = this.state.document;
@@ -61,7 +61,7 @@ class ContentView extends React.Component {
       return;
     }
 
-    this.drizzleApis.determineAuthorToken(doc.documentId).then(function(data){
+    drizzleApis.determineAuthorToken(doc.documentId).then(function(data){
       if(data){
         this.setState({determineAuthorToken: data});
       }
@@ -88,7 +88,7 @@ class ContentView extends React.Component {
   }
 
   render() {
-    const { classes, drizzle, drizzleState } = this.props;
+    const { classes, drizzleApis } = this.props;
 
     const document = this.state.document;
 
@@ -96,11 +96,10 @@ class ContentView extends React.Component {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     }
     let voteTag = null;
-    if(drizzleState && drizzleState.accounts && drizzleState.accounts[0]){
+    if(drizzleApis.isAuthenticated()){
       voteTag = (<ContentVote {...this.props} document={this.state.document}/>);
     }
 
-    console.log("Loading Document", document.documentId, this.drizzleApis.fromAscii(document.documentId));
 
     return (
         <div className="contentGridView">

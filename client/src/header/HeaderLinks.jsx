@@ -48,16 +48,17 @@ class HeaderLinks extends React.Component {
   }
 
   render() {
-    const { classes, drizzle, drizzleState} = this.props;
+    const { classes, drizzle, drizzleState, drizzleApis} = this.props;
+    //console.log("HeaderLinks render()", drizzleApis);
 
-    if(!drizzleState) return null;
+    if(!drizzleApis.isAuthenticated()) return null;
 
     return (
       <List className={classes.list}>
         <ListItem className={classes.listItem}>
-          <UploadDocument drizzle={drizzle} drizzleState={drizzleState} />
+          <UploadDocument drizzleApis={drizzleApis} />
           <Button color="transparent" className={classes.button} >
-            <Person className={classes.icons} />  {drizzleState.accounts[0]}
+            <Person className={classes.icons} />  {drizzleApis.getLoggedInAccount()}
           </Button>
           {/*
           {auth.isAuthenticated() &&
