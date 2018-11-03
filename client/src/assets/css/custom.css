@@ -93,10 +93,11 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 
 .slideShow {}
 .slideShow .img {}
-.slideShow .img img {display:block;width:100%;}
+.slideShow .img img {display:block;width:100%;min-height:400px;}
 .slideShow .prev {}
 .slideShow .next {}
 .slideShow .slideBtn {text-align:center;background:#333}
+.slideShow .slideBtn span {padding:0;margin:0;font-size:12px;color: #fff}
 .slideShow .slideBtn button {margin:0;font-size:14px;color:#fff;}
 .slideShow .slideBtn button span {padding-top:2px;}
 .slideShow .slideBtn button svg {font-size:24px;width:24px;height:24px;color:#fff;}

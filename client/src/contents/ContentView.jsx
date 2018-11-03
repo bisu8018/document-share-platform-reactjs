@@ -115,6 +115,7 @@ class ContentView extends React.Component {
                   />
                     <div className="slideBtn">
                        <Button color="transparent" className="prev" onClick={this.goPrevPage}><NavigateBefore className={classes.icons} /> <span>Prev</span></Button>
+                       <span>{this.state.currentPageNo} / {document.totalPages}</span>
                        <Button color="transparent" className="next" onClick={this.goNextPage}><span>Next</span> <NavigateNext className={classes.icons} /></Button>
                    </div>
                </div>
