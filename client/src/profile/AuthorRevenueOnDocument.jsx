@@ -45,7 +45,10 @@ class AuthorRevenueOnDocument extends React.Component {
       if(!isNaN(v)){
         //console.log("printAuthor3DayRewardOnDocument", document.documentId, v)
         const returnValue = Math.round(drizzleApis.fromWei(v)* 100) /100;
-        handleRevenueOnDocuments(document.documentId, returnValue);
+        if(handleRevenueOnDocuments){
+          handleRevenueOnDocuments(document.documentId, returnValue);
+        }
+
         return returnValue;
 
       }
@@ -58,8 +61,11 @@ class AuthorRevenueOnDocument extends React.Component {
 
 
   shouldComponentUpdate(nextProps, nextState) {
+    const {classes, drizzleApis} = this.props;
+    if(drizzleApis.isAuthenticated()){
+      this.handleRequestAuthor3DayRewardOnDocument();
+    }
 
-    this.handleRequestAuthor3DayRewardOnDocument();
 
     return true;
   }
