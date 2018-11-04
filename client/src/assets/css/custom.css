@@ -130,6 +130,11 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 .customGrid.col3 .box:nth-child(2n) {}
 .customGrid.col3 .box:nth-child(3n) {}
 
-#.sortSearch .jss0188 {padding-top:8px}
-#.sortSearch .jss0188:after {display:none;}
-#.sortSearch .jss0188:before {display:none;}
+.uploadStatus {margin:0px 0px 0px 3px;font-size:12px;line-height:1.2;height: 50px;}
+.uploadProgress {width:100%}
+
+/*
+.sortSearch .jss0188 {padding-top:8px}
+.sortSearch .jss0188:after {display:none;}
+.sortSearch .jss0188:before {display:none;}
+*/

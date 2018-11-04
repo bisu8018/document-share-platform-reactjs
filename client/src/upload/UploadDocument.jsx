@@ -194,17 +194,16 @@ class UploadDocument extends React.Component {
       size: filesize,
       ext: ext
     }});
-
   }
 
   progressHandler = (e) => {
     var percent = Math.round((e.loaded / e.total) * 100);
     if (percent !== null) {
       if (percent < 100) {
-        document.getElementById("progressBar").value = percent;
-        document.getElementById("status").innerHTML = percent + "% uploaded... please wait";
+        document.getElementById("uploadProgress").value = percent;
+        document.getElementById("uploadStatus").innerHTML = percent + "% uploaded... please wait";
       } else {
-        document.getElementById("status").innerHTML = "100% uploaded!";
+        document.getElementById("uploadStatus").innerHTML = "100% uploaded!";
       }
     }
   }
@@ -214,7 +213,7 @@ class UploadDocument extends React.Component {
     document.getElementById("desc").value=null;
     document.getElementById("file").value=null;
     document.getElementById("nickname").value=null;
-    document.getElementById("status").innerHTML = null;
+    document.getElementById("uploadStatus").innerHTML = null;
     this.setState({tags:[]});
   }
 
@@ -370,8 +369,8 @@ class UploadDocument extends React.Component {
                     onChange: this.onChange
                   }} />
 
-                <progress id="progressBar" value="0" max="100"></progress>
-                <span id="status"></span>
+                <progress class="uploadProgress" id="uploadProgress" value="0" max="100" width={300}></progress>
+                <div class="uploadStatus" id="uploadStatus"></div>
 
                 <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
                   value={this.state.tags} onChange={this.onChangeTag} validate={this.validateTag} onlyUnique />
