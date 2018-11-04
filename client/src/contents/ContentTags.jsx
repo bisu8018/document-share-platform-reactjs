@@ -21,7 +21,7 @@ const categories = [
   "Government & Nonprofit", "Health & Medicine", "Healthcare", "Engineering", "Internet", "Investor Relations", "Law",
   "Leadership & Management", "Lifestyle", "Marketing", "Mobile", "News & Politics", "Presentations & Public Speaking", "Real Estate",
   "Recruiting & HR", "Retail", "Sales", "Science", "Self Improvement", "Services", "Small Business & Entrepreneurship", "Social Media",
-  "Software", "Spiritual", "Sports", "Technology", "Travel"
+  "Software", "Spiritual", "Sports", "Technology", "Templates", "Travel"
 ]
 
 class ContentTags extends React.Component {

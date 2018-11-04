@@ -27,15 +27,16 @@ ul.subHeader li .sortSearch div.jss0180 > div:hover {border:0 !important;}
 ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:28px;padding:0 !important;margin-right:-30px !important;-webkit-box-shadow:none;box-shadow:none;}
 
 
-.contentGrid {padding:20px 15px;padding-left:330px;}
+.contentGrid {padding:20px 15px;padding-left:310px;}
 .contentGrid * {font-weight:400}
-.contentGrid .leftWrap {position:absolute;top:123px;left:20px;width:300px;overflow:auto;border:1px solid #eee;background:#fff;}
+.contentGrid .leftWrap {position:absolute;top:123px;left:20px;width:280px;overflow:auto;border:1px solid #eee;background:#fff;}
 .contentGrid .leftWrap ul {padding:25px;}
 .contentGrid .leftWrap ul li {padding:0;text-align:left;}
 .contentGrid .leftWrap ul li button {font-size:14px;}
 .contentGrid .leftWrap ul li button {padding:0;-webkit-transition:all .2s linear;-o-transition:all .2s linear;transition:all .2s linear}
 .contentGrid .leftWrap ul li button:hover {color:#e91e63;}
 .contentGrid .leftWrap ul li button a {color:inherit;}
+.contentGrid .leftWrap ul li button a {text-transform: capitalize;}
 .contentGrid .rightWrap {padding:25px;border:1px solid #eee;background:#fff;}
 .contentGrid .rightWrap h3 {margin-top:-10px;font-weight:bold}
 
@@ -129,7 +130,6 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 .customGrid.col3 .box:nth-child(2n) {}
 .customGrid.col3 .box:nth-child(3n) {}
 
-
-.sortSearch .jss0188 {padding-top:8px}
-.sortSearch .jss0188:after {display:none;}
-.sortSearch .jss0188:before {display:none;}
+#.sortSearch .jss0188 {padding-top:8px}
+#.sortSearch .jss0188:after {display:none;}
+#.sortSearch .jss0188:before {display:none;}
