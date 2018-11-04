@@ -2,6 +2,7 @@ body {background:#fcfcfc;}
 #root {padding-top:103px;}
 ul {margin:0;padding:0;}
 ul li {list-style:none;}
+#address {text-transform: none;}
 
 .spinner {padding:20px 0;text-align:center;}
 
