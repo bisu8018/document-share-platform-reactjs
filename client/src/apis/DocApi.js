@@ -112,7 +112,8 @@ export function registDocument(args, callback) {
               fileid : documentId,
               fileindex : 1,
               ext: fileInfo.ext,
-              owner: owner
+              owner: owner,
+              callback: callback
             }).then((res)=>{
 
             console.log("Upload Document Complete", res);
@@ -153,7 +154,14 @@ function fileUpload(params) {
       headers: {
           'content-type': 'application/octet-stream',
           'x-api-key': 'M84xHJ4cPEa1CAcmxHgTzyfSzIQSIZEaLR1mzRod'
-      }
+      },
+      onUploadProgress: (e) => {
+        console.log("onUploadProgress : " + e.loaded + "/" + e.total);
+        if (e.laod !== null && params.callback !== null) {
+            params.callback(e);
+        }
+      },
+
   }
 
   return axios.put(url, params.file, config);

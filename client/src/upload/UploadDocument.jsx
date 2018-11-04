@@ -150,7 +150,7 @@ class UploadDocument extends React.Component {
         title: title,
         desc: desc,
         tags:tags
-      }).then((result) => {
+      }, this.progressHandler).then((result) => {
         console.log("UploadDocument", result);
         //this.registDocumentToSmartContract(result);
         const stackId = drizzleApis.registDocumentToSmartContract(result.documentId);
@@ -197,11 +197,24 @@ class UploadDocument extends React.Component {
 
   }
 
+  progressHandler = (e) => {
+    var percent = Math.round((e.loaded / e.total) * 100);
+    if (percent !== null) {
+      if (percent < 100) {
+        document.getElementById("progressBar").value = percent;
+        document.getElementById("status").innerHTML = percent + "% uploaded... please wait";
+      } else {
+        document.getElementById("status").innerHTML = "100% uploaded!";
+      }
+    }
+  }
+
   clearForm = () => {
     document.getElementById("title").value=null;
     document.getElementById("desc").value=null;
     document.getElementById("file").value=null;
     document.getElementById("nickname").value=null;
+    document.getElementById("status").innerHTML = null;
     this.setState({tags:[]});
   }
 
@@ -357,6 +370,8 @@ class UploadDocument extends React.Component {
                     onChange: this.onChange
                   }} />
 
+                <progress id="progressBar" value="0" max="100"></progress>
+                <span id="status"></span>
 
                 <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
                   value={this.state.tags} onChange={this.onChangeTag} validate={this.validateTag} onlyUnique />
