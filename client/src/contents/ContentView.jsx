@@ -11,6 +11,10 @@ import ContentViewRegistBlockchainButton from 'contents/ContentViewRegistBlockch
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
 import Spinner from 'react-spinkit';
+
+import AuthorEstimatedToday from "profile/AuthorEstimatedToday"
+import AuthorRevenueOnDocument from "profile/AuthorRevenueOnDocument"
+
 const style = {
 
 };
@@ -122,13 +126,18 @@ class ContentView extends React.Component {
 
 
                <h2 className="tit">{document.title?document.title:""}</h2>
+
                <div>
                    <Button color="rose" size="sm">Like</Button>
                    <Button color="rose" size="sm">Share</Button>
                    <Button color="rose" size="sm">Download</Button>
                    <ContentViewRegistBlockchainButton document={document} {...this.props} />
                </div>
+               <span>
+                  <Badge color="success"><AuthorRevenueOnDocument document={document} {...this.props} /></Badge>
+               </span>
                <Link to={"/author/" + document.accountId} >
+
                     <div className="profileImg">
                        <span className="userImg">
                            <Face className={classes.icons} />
@@ -137,11 +146,12 @@ class ContentView extends React.Component {
                        <strong className="userName">{document.nickname?document.nickname:document.accountId}
                            <span className="txt"></span>
                         </strong>
+
                    </div>
                    <div className="proFileDescript">{document.desc?document.desc:""}</div>
                 </Link>
                 <h3 className="tit02">Document Information</h3>
-                <div>
+                <div className="documentText">
                 {this.state.documentText?this.state.documentText:"No Text"}
                 </div>
            </div>

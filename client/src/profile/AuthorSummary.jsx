@@ -8,6 +8,7 @@ import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
+import AuthorEstimatedToday from 'profile/AuthorEstimatedToday'
 const style = {
 
 };
@@ -20,10 +21,10 @@ class AuthorSummary extends React.Component {
   };
 
   handleRequestBalance = () => {
-    const {drizzleApis, drizzleState} = this.props;
+    const {drizzleApis, drizzleState, accountId} = this.props;
     if(this.state.totalBalanceDataKey) return;
 
-    const dataKey = drizzleApis.requestTotalBalance();
+    const dataKey = drizzleApis.requestTotalBalance(accountId);
     if(dataKey){
       //console.log("handleRequestBalance", dataKey);
       this.setState({totalBalanceDataKey: dataKey});
@@ -57,21 +58,20 @@ class AuthorSummary extends React.Component {
 
 
   render() {
-    const {classes, nickname, drizzleApis, drizzleState, totalRevenue} = this.props;
+    const {classes, accountId, drizzleApis, drizzleState, totalRevenue} = this.props;
 
     if(!drizzleApis.isAuthenticated()) return "Loading";
-
 
     const totalBalance = this.printBalance();
     return (
         <div>
-            <h3 style={{margin:'0',fontSize:'26px'}} >My Wallet</h3>
+            <h3 style={{margin:'0',fontSize:'26px'}} >"{accountId}" Wallet</h3>
             <div className="customGrid">
                 <div className="box">
-                    <h4>{nickname}</h4>
+                    <h4>Overview</h4>
                     <ul className="detailList">
                         <li>Total balance : {totalBalance} DECK</li>
-                        <li>Estimated earnings for today : </li>
+                        <li>Estimated earnings for today : <AuthorEstimatedToday {...this.props} /> </li>
                         <li>Revenue for the last 3 days : {totalRevenue} DECK</li>
                     </ul>
                 </div>

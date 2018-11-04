@@ -59,7 +59,9 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 .profileImg .userName {font-size:14px;line-height:1.2;font-weight:bold}
 .profileImg .txt {display:block;font-size:14px;font-weight:normal;color:#}
 
-.proFileDescript {font-size:13px;white-space:pre-wrap;}
+.proFileDescript {font-size:15px;white-space:pre-wrap;}
+
+.documentText {font-size:10px;color:#a0a096;white-space:pre-wrap;}
 
 .detailList {}
 .detailList li {font-size:14px;}

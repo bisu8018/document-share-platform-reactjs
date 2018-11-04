@@ -262,7 +262,7 @@ export default class DrizzleApis {
     return stackId;
   };
 
-  requestTotalBalance = () => {
+  requestTotalBalance = (accountId) => {
 
 
     if(!this.isInitialized()){
@@ -276,8 +276,8 @@ export default class DrizzleApis {
     }
     const ethAccount = this.drizzleState.accounts[0];
     const contract = this.drizzle.contracts.Deck;
-    console.log("Metamask logged in account", ethAccount);
-    const dataKey = contract.methods.balanceOf.cacheCall(ethAccount, {
+    console.log("Metamask logged in account", ethAccount, "Profile account", accountId);
+    const dataKey = contract.methods.balanceOf.cacheCall(accountId, {
       from: ethAccount
     });
 
@@ -325,7 +325,7 @@ export default class DrizzleApis {
     const ethAccount = this.drizzleState.accounts[0];
     const contract = this.drizzle.contracts.DocumentReg;
 
-    const dataKey = contract.calculateAuthorReward.cacheCall(pageView, totalPageView, {
+    const dataKey = contract.methods.calculateAuthorReward.cacheCall(pageView, totalPageView, {
       from: ethAccount
     });
 
@@ -344,12 +344,17 @@ export default class DrizzleApis {
       return;
     }
 
+    if(!dataKey) return;
+
     const ethAccount = this.drizzleState.accounts[0];
     const contract = this.drizzle.contracts.DocumentReg;
-    const v = contract.methods.calculateAuthorReward[dataKey];
 
-    //console.log("getTotalBalance", ethAccount, v);
-    return this. v;
+    const v = this.drizzleState.contracts.DocumentReg.calculateAuthorReward[dataKey];
+
+    if(!v) return ;
+    //console.log("getCalculateAuthorReward", v);
+
+    return v.value;
   };
 
   requestAuthor3DayRewardOnDocument = (documentId) => {

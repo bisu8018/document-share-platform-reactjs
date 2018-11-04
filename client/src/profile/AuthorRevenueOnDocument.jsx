@@ -76,9 +76,9 @@ class AuthorRevenueOnDocument extends React.Component {
 
     const author3DayRewardOnDocument = this.printAuthor3DayRewardOnDocument();
     return (
-        <div>
+        <span>
             {author3DayRewardOnDocument} DECK
-        </div>
+        </span>
 
     );
   }

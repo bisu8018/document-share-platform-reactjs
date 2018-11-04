@@ -21,7 +21,8 @@ class Author extends React.Component {
     resultList: [],
     nextPageKey: null,
     isEndPage:false,
-    totalRevenue: 0
+    totalRevenue: 0,
+    totalViewCountInfo: null
   };
 
   revenueOnDocuments = [];
@@ -31,16 +32,16 @@ class Author extends React.Component {
 
     if(this.revenueOnDocuments.includes(documentId)) return;
 
-    console.log("handleRevenueOnDocuments", documentId, revenue);
+    //console.log("handleRevenueOnDocuments", documentId, revenue);
     this.revenueOnDocuments.push(documentId);
     this.revenues.push(revenue);
     let totalRevenue = 0;
     if(this.revenues.length == this.state.resultList.length){
-      console.log(this.revenues);
+      //console.log(this.revenues);
       for(const idx in this.revenues){
 
         totalRevenue += this.revenues[idx];
-        console.log("handleRevenueOnDocuments", totalRevenue, revenue);
+        //console.log("handleRevenueOnDocuments", totalRevenue, revenue);
       }
       this.setState({totalRevenue: Math.round(totalRevenue*100)/100});
     }
@@ -64,12 +65,16 @@ class Author extends React.Component {
           if(this.state.resultList){
             this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey});
           } else {
-            this.setState({resultList: res.data.resultList, nextPageKey:res.data.nextPageKey});
+            this.setState({resultList: res.data.resultList, nextPageKey:res.data.nextPageKey, totalViewCountInfo: res.data.totalViewCountInfo});
           }
           console.log("list", this.state.resultList);
           if(!res.data.nextPageKey){
             this.setState({isEndPage:true});
           }
+        }
+
+        if(res.data && res.data.totalViewCountInfo && !this.state.totalViewCountInfo){
+          this.setState({totalViewCountInfo: res.data.totalViewCountInfo});
         }
       });
 
@@ -81,16 +86,16 @@ class Author extends React.Component {
 
   render() {
     const {classes, drizzleApis, match} = this.props;
-
+    const accountId = match.params.email;
     if(!drizzleApis.isAuthenticated()) "DrizzleState Loading!!";
 
     return (
 
         <div className="contentGridView">
 
-            <AuthorSummary totalRevenue={this.state.totalRevenue} drizzleApis={drizzleApis} documentList={this.state.resultList} nickname={match.params.email} />
+            <AuthorSummary totalRevenue={this.state.totalRevenue} drizzleApis={drizzleApis} documentList={this.state.resultList} totalViewCountInfo={this.state.totalViewCountInfo} accountId={accountId} />
 
-            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{match.params.email} documents</h3>
+            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >Author Documents {this.state.resultList.length}</h3>
               <InfiniteScroll
                 dataLength={this.state.resultList.length}
                 next={this.fetchMoreData}
@@ -113,8 +118,8 @@ class Author extends React.Component {
                                         style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
                                      >{result.desc}</div>
                                     <div className="badge">
-                                        <Badge color="rose"><AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} /></Badge>
-                                        <Badge color="rose">{result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} view</Badge>
+                                        <Badge color="success"><AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} /></Badge>
+                                        <Badge color="success">{result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} view</Badge>
                                     </div>
                                 </div>
                             </Link>

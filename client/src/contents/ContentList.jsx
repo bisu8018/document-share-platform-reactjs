@@ -23,6 +23,7 @@ class ContentList extends React.Component {
       nextPageKey: null,
       isEndPage:false,
       tag: null,
+      totalViewCountInfo: null
     };
 
     tagSearch = (tag) => {
@@ -76,6 +77,10 @@ class ContentList extends React.Component {
               this.fetchDocuments({nextPageKey: res.data.nextPageKey, tag: args.tag});
             }
           }
+
+          if(res.data && res.data.totalViewCountInfo && !this.state.totalViewCountInfo){
+            this.setState({totalViewCountInfo: res.data.totalViewCountInfo});
+          }
         });
 
     }
@@ -119,7 +124,7 @@ class ContentList extends React.Component {
                     <div className="rightWrap">
                         <h3>{this.state.tag?"#" + this.state.tag:"@LATEST"}</h3>
                         {resultList.map((result, index) => (
-                          <ContentListItem key={result.documentId + result.accountId} result={result} {...this.props} />
+                          <ContentListItem key={result.documentId + result.accountId} result={result} totalViewCountInfo={this.state.totalViewCountInfo} {...this.props} />
                         ))}
                      </div>
                 </div>

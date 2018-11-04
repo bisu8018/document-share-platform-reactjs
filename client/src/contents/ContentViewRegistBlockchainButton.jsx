@@ -118,10 +118,12 @@ class ContentViewBlockchainButton extends React.Component {
 
     if(this.isExistDocument()) return null;
 
+    const disabled = document.accountId == drizzleApis.getLoggedInAccount()?false:true;
+
     return (
       <div>
         {/*<Button color="rose" size="sm" onClick={this.handleCheckDocumentInBlockChain} >Checking BlockChain</Button>*/}
-        <Button color="rose" size="sm" onClick={this.handleRegistDocumentInBlockChain} >Regist to BlockChain</Button>
+        <Button color="rose" size="sm" onClick={this.handleRegistDocumentInBlockChain} disabled={disabled} >Regist to BlockChain</Button>
       </div>
     );
   }

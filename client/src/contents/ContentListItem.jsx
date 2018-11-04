@@ -6,6 +6,7 @@ import { Face } from "@material-ui/icons";
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import AuthorRevenueOnDocument from 'profile/AuthorRevenueOnDocument';
+import AuthorEstimatedToday from 'profile/AuthorEstimatedToday';
 
 const style = {
 
@@ -28,7 +29,7 @@ class ContentListItem extends React.Component {
                      <div className="profileImg">
                          <span className="userImg">
                              <Face className={classes.icons} />
-                             <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.accountId} />
+
                          </span>
                          <strong className="userName">{result.nickname?result.nickname:result.accountId}</strong>
                      </div>
@@ -41,11 +42,11 @@ class ContentListItem extends React.Component {
                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
                       >{result.desc}</div>
                      <div className="badge">
-                         <Badge color="rose"><AuthorRevenueOnDocument document={result} {...this.props} /></Badge>
                          <Badge color="info">View {result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} </Badge>
+                         <Badge color="success"><AuthorRevenueOnDocument document={result} {...this.props} /></Badge>
                          {result.tags?result.tags.map((tag, index) => (
-                               <Badge color="success" key={index}>{tag}</Badge>
-                         )):""}
+                         <Badge color="success" key={index}>{tag}</Badge>
+                           )):""}
                          {/*
                          <Badge color="success">success</Badge>
                          <Badge color="warning">warning</Badge>
