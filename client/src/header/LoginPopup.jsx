@@ -43,11 +43,7 @@ class LoginPopup extends React.Component {
 
     return (
       <div>
-<<<<<<< HEAD
-        <Button id="address" color="inherit" className={classes.button} onClick={this.handleOpen} >
-=======
         <Button id="address" color="default" className={classes.button} onClick={this.handleOpen} >
->>>>>>> 4225154554f1405c6c59002bbc94bd8dd155459f
           <Person className={classes.icons} /> Log-in
         </Button>
         <Modal
