@@ -41,21 +41,21 @@ class ContentListItem extends React.Component {
                      <div className="descript"
                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
                       >{result.desc}</div>
-                     <div className="badge">
-                         <Badge color="info">View {result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} </Badge>
-                         <AuthorRevenueOnDocument document={result} {...this.props} />
-                         <Badge color="success">Vote $ {drizzleApis.toDollar(result.totalVoteAmount?result.totalVoteAmount:"0")}</Badge>
-                         {result.tags?result.tags.map((tag, index) => (
-                         <Badge color="warning" key={index}>{tag}</Badge>
-                           )):""}
-                         {/*
-                         <Badge color="success">success</Badge>
-                         <Badge color="warning">warning</Badge>
-                         <Badge color="danger">danger</Badge>
-                         <Badge color="rose">rose</Badge>
-                         */}
-                     </div>
                  </Link>
+                 <div className="badge">
+                     <Badge color="info">View {result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} </Badge>
+                     <AuthorRevenueOnDocument document={result} {...this.props} />
+                     <Badge color="success">Vote $ {drizzleApis.toDollar(result.totalVoteAmount?result.totalVoteAmount:"0")}</Badge>
+                     {result.tags?result.tags.map((tag, index) => (
+                     <Badge color="warning" key={index}>{tag}</Badge>
+                       )):""}
+                     {/*
+                     <Badge color="success">success</Badge>
+                     <Badge color="warning">warning</Badge>
+                     <Badge color="danger">danger</Badge>
+                     <Badge color="rose">rose</Badge>
+                     */}
+                 </div>
              </div>
          </div>
 

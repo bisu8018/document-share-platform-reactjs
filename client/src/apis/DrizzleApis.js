@@ -89,7 +89,7 @@ export default class DrizzleApis {
     const d = new BigNumber("1e+18")
     const bn = new BigNumber(str);
     const dollar = bn.dividedBy(d).multipliedBy(c);
-    const result = dollar.toNumber();
+    const result = Math.round(dollar.toNumber() * 100) / 100;
     //120,000,000,000,000,000,000
     //console.log("toDollar", str, bn, dollar, result);
 
