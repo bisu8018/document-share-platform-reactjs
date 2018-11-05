@@ -368,10 +368,10 @@ class UploadDocument extends React.Component {
                     type: "file",
                     onChange: this.onChange
                   }} />
-                  
+
 
                 <progress className="uploadProgress" id="uploadProgress" value="0" max="100" width={300}></progress>
-                <div class="uploadStatus" id="uploadStatus"></div>
+                <div className="uploadStatus" id="uploadStatus"></div>
 
                 <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
                   value={this.state.tags} onChange={this.onChangeTag} validate={this.validateTag} onlyUnique />
