@@ -76,9 +76,13 @@ class AuthorRevenueOnDocument extends React.Component {
 
     const author3DayRewardOnDocument = this.printAuthor3DayRewardOnDocument();
     return (
-        <span>
-            $ {drizzleApis.toDollar(author3DayRewardOnDocument?author3DayRewardOnDocument:0)}
-        </span>
+
+     <Badge color="success">Reward 
+       <span>
+           $ {drizzleApis.toDollar(author3DayRewardOnDocument?author3DayRewardOnDocument:0)}
+       </span>
+     </Badge>
+
 
     );
   }

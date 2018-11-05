@@ -119,7 +119,7 @@ class Author extends React.Component {
                                      >{result.desc}</div>
                                     <div className="badge">
                                         <Badge color="info">View {result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} </Badge>
-                                        <Badge color="success">Reward <AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} /></Badge>
+                                        <AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} />
                                         <Badge color="success">Vote $ {drizzleApis.toDollar(result.totalVoteAmount?result.totalVoteAmount:"0")}</Badge>
 
 
