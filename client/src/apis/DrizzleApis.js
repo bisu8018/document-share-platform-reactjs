@@ -2,6 +2,8 @@
 import { Drizzle, generateStore } from "drizzle";
 import DocumentReg from "contracts-rinkeby/DocumentReg.json";
 import Deck from "contracts-rinkeby/Deck.json";
+
+import {BigNumber} from 'bignumber.js';
 // import drizzle functions and contract artifact
 export default class DrizzleApis {
 
@@ -72,24 +74,27 @@ export default class DrizzleApis {
 
   fromWei = (str) => {
 
-    if(typeof str === 'number'){
-      str += "";
-    }
-
     return this.drizzle.web3.utils.fromWei(str, "ether");
   }
 
   toDollar = (str) => {
-    if(typeof str === 'number'){
-      str += "";
-    }
+
     //console.log("toDollar", this.drizzle.web3.utils);
     //const c = this.drizzle.web3.utils.toWei(0.005);
     const c = 0.005;
     //const t =  this.drizzle.web3.utils.toWei(c, "ether");
 
     //const ether= this.drizzle.web3.utils.fromWei(str, "ether");
-    return str;
+
+    const d = new BigNumber("1e+18")
+    const bn = new BigNumber(str);
+    const dollar = bn.dividedBy(d).multipliedBy(c);
+    const result = dollar.toNumber();
+    //120,000,000,000,000,000,000
+    //console.log("toDollar", str, bn, dollar, result);
+
+    //return this.drizzle.web3.utils.fromWei(bn, "ether");
+    return result;
   }
 
   toNumber = (number) => {
