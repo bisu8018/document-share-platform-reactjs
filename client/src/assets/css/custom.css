@@ -2,7 +2,7 @@ body {background:#fcfcfc;}
 #root {padding-top:103px;}
 ul {margin:0;padding:0;}
 ul li {list-style:none;}
-#address {text-transform: none;}
+#address {text-transform: none; font-size: 12px;}
 
 .spinner {padding:20px 0;text-align:center;}
 
@@ -19,10 +19,10 @@ ul.subHeader li .sortSearch div[class^=MuiFormControl] > div:after,
 ul.subHeader li .sortSearch div[class^=MuiFormControl] > div:before,
 ul.subHeader li .sortSearch div[class^=MuiFormControl] > div:hover {border:0 !important;}
 
-ul.subHeader li .sortSearch div.jss0180 {padding:0;margin:0;-ms-flex-direction:row;flex-direction:row;vertical-align:middle;-ms-flex-align:center;align-items:center}
-ul.subHeader li .sortSearch div.jss0180 > div:after,
-ul.subHeader li .sortSearch div.jss0180 > div:before,
-ul.subHeader li .sortSearch div.jss0180 > div:hover {border:0 !important;}
+ul.subHeader li .sortSearch div.jss0203 {padding:0;margin:0;-ms-flex-direction:row;flex-direction:row;vertical-align:middle;-ms-flex-align:center;align-items:center}
+ul.subHeader li .sortSearch div.jss0203 > div:after,
+ul.subHeader li .sortSearch div.jss0203 > div:before,
+ul.subHeader li .sortSearch div.jss0203 > div:hover {border:0 !important;}
 
 
 ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:28px;padding:0 !important;margin-right:-30px !important;-webkit-box-shadow:none;box-shadow:none;}

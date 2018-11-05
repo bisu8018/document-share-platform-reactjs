@@ -15,7 +15,7 @@ import Button from "components/CustomButtons/Button.jsx";
 import headerLinksStyle from "assets/jss/material-kit-react/components/headerLinksStyle.jsx";
 
 import UploadDocument from "upload/UploadDocument";
-
+import LoginPopupWrapped from "./LoginPopup";
 
 class HeaderLinks extends React.Component {
 
@@ -51,7 +51,15 @@ class HeaderLinks extends React.Component {
     const { classes, drizzle, drizzleState, drizzleApis} = this.props;
     //console.log("HeaderLinks render()", drizzleApis);
 
-    if(!drizzleApis.isAuthenticated()) return null;
+    if(!drizzleApis.isAuthenticated()) {
+      return (
+        <List className={classes.list}>
+          <ListItem className={classes.listItem}>
+            <LoginPopupWrapped />
+          </ListItem>
+        </List>
+      );
+    }
 
     return (
       <List className={classes.list}>
@@ -72,7 +80,6 @@ class HeaderLinks extends React.Component {
           */}
         </ListItem>
       </List>
-
 
     );
   }
