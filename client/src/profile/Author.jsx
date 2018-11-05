@@ -95,7 +95,7 @@ class Author extends React.Component {
 
             <AuthorSummary totalRevenue={this.state.totalRevenue} drizzleApis={drizzleApis} documentList={this.state.resultList} totalViewCountInfo={this.state.totalViewCountInfo} accountId={accountId} />
 
-            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >Author Documents {this.state.resultList.length}</h3>
+            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} shared documents </h3>
               <InfiniteScroll
                 dataLength={this.state.resultList.length}
                 next={this.fetchMoreData}

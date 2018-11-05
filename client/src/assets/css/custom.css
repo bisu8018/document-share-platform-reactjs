@@ -65,7 +65,7 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 
 .documentText {font-size:10px;color:#a0a096;white-space:pre-wrap;}
 
-.detailList {}
+.detailList {margin-top: 10px; margin-left: 10px; margin-bottom: 30px;}
 .detailList li {font-size:14px;}
 
 

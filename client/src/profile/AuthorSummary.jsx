@@ -65,19 +65,13 @@ class AuthorSummary extends React.Component {
     const totalBalance = this.printBalance();
     return (
         <div>
-            <h3 style={{margin:'0',fontSize:'26px'}} >"{accountId}" Wallet</h3>
-            <div className="customGrid">
-                <div className="box">
-                    <h4>Overview</h4>
-                    <ul className="detailList">
-                        <li>Total balance : {totalBalance} DECK</li>
-                        <li>Estimated earnings for today : <AuthorEstimatedToday {...this.props} /> </li>
-                        <li>Revenue for the last 3 days : {totalRevenue} DECK</li>
-                    </ul>
-                </div>
-            </div>
+          <h3 style={{margin:'0',fontSize:'26px'}} >Account: {accountId}</h3>
+          <ul className="detailList">
+              <li> - Total balance : {totalBalance} DECK</li>
+              <li> - Estimated earnings for today : <AuthorEstimatedToday {...this.props} /> </li>
+              <li> - Revenue for the last 3 days : {totalRevenue} DECK</li>
+          </ul>
         </div>
-
     );
   }
 }
