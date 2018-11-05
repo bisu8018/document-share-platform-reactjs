@@ -22,10 +22,16 @@ class AuthorEstimatedToday extends React.Component {
 
 
   requestCalculateAuthorReward = () => {
-    const {drizzleApis, document, totalViewCountInfo} = this.props;
+    const {drizzleApis, documentList, totalViewCountInfo} = this.props;
     if(this.state.estimatedTodayDataKey || !totalViewCountInfo) return;
 
-    const dataKey = drizzleApis.requestCalculateAuthorReward(totalViewCountInfo.totalViewCount, totalViewCountInfo.totalViewCountSquare);
+    let viewCount = 0;
+    for(const idx in documentList) {
+      const document = documentList[idx];
+      viewCount += document.viewCount;
+    }
+    //console.log("requestCalculateAuthorReward", viewCount, totalViewCountInfo);
+    const dataKey = drizzleApis.requestCalculateAuthorReward(viewCount, totalViewCountInfo.totalViewCount);
     if(dataKey){
       console.log("requestCalculateAuthorReward dataKey", dataKey);
       this.setState({estimatedTodayDataKey: dataKey});
