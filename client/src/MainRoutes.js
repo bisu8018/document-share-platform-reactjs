@@ -54,7 +54,7 @@ class MainRoutes extends Component {
     //if (this.state.loading) return (<Callback {...this.props} message="Loading Drizzle...." />);
 
     return (
-
+      <Router history={history}>
       <div>
         <Header
           brand="DECOMPANY.io"
@@ -74,7 +74,7 @@ class MainRoutes extends Component {
           dirzzleState={this.state.drizzleState}
           drizzleApis={this.state.drizzleApis} />
 
-        <Router history={history}>
+
           <Switch>
             <Route exact path="/" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/tag/:tag" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
@@ -86,8 +86,9 @@ class MainRoutes extends Component {
               return <Callback {...props} />
             }} />
           </Switch>
-        </Router>
+
       </div>
+      </Router>
     );
   }
 }
