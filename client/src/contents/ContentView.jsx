@@ -134,7 +134,9 @@ class ContentView extends React.Component {
                    <ContentViewRegistBlockchainButton document={document} {...this.props} />
                </div>
                <span>
-                  <Badge color="success"><AuthorRevenueOnDocument document={document} {...this.props} /></Badge>
+                  <Badge color="info">View {document.viewCount?document.viewCount:0 + document.confirmViewCount?document.confirmViewCount:0} </Badge>
+                  <Badge color="success">Reward <AuthorRevenueOnDocument document={document} {...this.props} /></Badge>
+                  <Badge color="success">Vote $ {drizzleApis.toDollar(document.totalVoteAmount?document.totalVoteAmount:"0")}</Badge>
                </span>
                <Link to={"/author/" + document.accountId} >
 

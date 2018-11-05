@@ -118,8 +118,11 @@ class Author extends React.Component {
                                         style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
                                      >{result.desc}</div>
                                     <div className="badge">
-                                        <Badge color="success"><AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} /></Badge>
-                                        <Badge color="success">{result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} view</Badge>
+                                        <Badge color="info">View {result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} </Badge>
+                                        <Badge color="success">Reward <AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} /></Badge>
+                                        <Badge color="success">Vote $ {drizzleApis.toDollar(result.totalVoteAmount?result.totalVoteAmount:"0")}</Badge>
+
+
                                     </div>
                                 </div>
                             </Link>
