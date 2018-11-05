@@ -77,7 +77,7 @@ class AuthorRevenueOnDocument extends React.Component {
     const author3DayRewardOnDocument = this.printAuthor3DayRewardOnDocument();
     return (
         <span>
-            {author3DayRewardOnDocument} DECK
+            {drizzleApis.toDollar(author3DayRewardOnDocument)} DECK
         </span>
 
     );

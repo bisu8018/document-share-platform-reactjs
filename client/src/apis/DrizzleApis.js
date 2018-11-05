@@ -71,12 +71,31 @@ export default class DrizzleApis {
   }
 
   fromWei = (str) => {
+
+    if(typeof str === 'number'){
+      str += "";
+    }
+
     return this.drizzle.web3.utils.fromWei(str, "ether");
   }
 
-  toNumber = (str) => {
-    return str*1;
+  toDollar = (str) => {
+    if(typeof str === 'number'){
+      str += "";
+    }
+    //console.log("toDollar", this.drizzle.web3.utils);
+    //const c = this.drizzle.web3.utils.toWei(0.005);
+    const c = 0.005;
+    //const t =  this.drizzle.web3.utils.toWei(c, "ether");
+
+    //const ether= this.drizzle.web3.utils.fromWei(str, "ether");
+    return str;
   }
+
+  toNumber = (number) => {
+    return isNaN(parseInt(number, 10)) ? 0 : parseInt(number, 10);
+  }
+
 
   toBigNumber = (str) => {
     const v = this.drizzle.web3.utils.toWei(str, 'ether');

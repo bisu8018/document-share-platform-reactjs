@@ -123,7 +123,7 @@ class ContentViewBlockchainButton extends React.Component {
     return (
       <div>
         {/*<Button color="rose" size="sm" onClick={this.handleCheckDocumentInBlockChain} >Checking BlockChain</Button>*/}
-        <Button color="rose" size="sm" onClick={this.handleRegistDocumentInBlockChain} disabled={disabled} >Regist to BlockChain</Button>
+        <Button color="rose" size="sm" onClick={this.handleRegistDocumentInBlockChain} disabled={disabled} >Register to BlockChain</Button>
       </div>
     );
   }

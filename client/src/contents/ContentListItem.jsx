@@ -16,7 +16,7 @@ class ContentListItem extends React.Component {
 
 
     render() {
-      const { classes, result } = this.props;
+      const { classes, result, drizzleApis } = this.props;
 
       return (
 
@@ -43,9 +43,10 @@ class ContentListItem extends React.Component {
                       >{result.desc}</div>
                      <div className="badge">
                          <Badge color="info">View {result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} </Badge>
-                         <Badge color="success"><AuthorRevenueOnDocument document={result} {...this.props} /></Badge>
+                         <Badge color="success">Reward <AuthorRevenueOnDocument document={result} {...this.props} /></Badge>
+                         <Badge color="success">Vote $ {drizzleApis.toDollar(result.totalVoteAmount?result.totalVoteAmount:"0")}</Badge>
                          {result.tags?result.tags.map((tag, index) => (
-                         <Badge color="success" key={index}>{tag}</Badge>
+                         <Badge color="warning" key={index}>{tag}</Badge>
                            )):""}
                          {/*
                          <Badge color="success">success</Badge>

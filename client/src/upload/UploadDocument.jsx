@@ -328,7 +328,7 @@ class UploadDocument extends React.Component {
                     value: this.state.nickname,
                     onChange: this.onChangeNickname
                   }} />
-
+                {/*
                   <CustomDropdown
                     buttonText="Category"
                     dropdownList={categories}
@@ -336,7 +336,7 @@ class UploadDocument extends React.Component {
                       onChange: this.onChangeCategory
                     }}
                   />
-
+                  */}
                 <CustomInput
                   labelText="Title"
                   id="title"
