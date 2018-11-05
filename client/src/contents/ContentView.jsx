@@ -135,7 +135,7 @@ class ContentView extends React.Component {
                </div>
                <span>
                   <Badge color="info">View {document.viewCount?document.viewCount:0 + document.confirmViewCount?document.confirmViewCount:0} </Badge>
-                  <Badge color="success">Reward <AuthorRevenueOnDocument document={document} {...this.props} /></Badge>
+                  <AuthorRevenueOnDocument document={document} {...this.props} />
                   <Badge color="success">Vote $ {drizzleApis.toDollar(document.totalVoteAmount?document.totalVoteAmount:"0")}</Badge>
                </span>
                <Link to={"/author/" + document.accountId} >
