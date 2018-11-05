@@ -43,7 +43,7 @@ class LoginPopup extends React.Component {
 
     return (
       <div>
-        <Button id="address" color="transparent" className={classes.button} onClick={this.handleOpen} >
+        <Button id="address" color="default" className={classes.button} onClick={this.handleOpen} >
           <Person className={classes.icons} /> Log-in
         </Button>
         <Modal
@@ -59,7 +59,7 @@ class LoginPopup extends React.Component {
              <Typography variant="caption" id="simple-modal-description">
              After logging in, you can get DECK tokens by sharing or voting documents.
              </Typography>
-             <Button color="transparent" className={classes.button} onClick={this.refresh} >
+             <Button color="default" className={classes.button} onClick={this.refresh} >
                <Apps className={classes.icons} /> Refresh
              </Button>
            </div>
