@@ -373,7 +373,9 @@ export default class DrizzleApis {
 
     const ethAccount = this.drizzleState.accounts[0];
     const contract = this.drizzle.contracts.DocumentReg;
-    const yesterday = (new Date()).getDate() - 1;
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
     const blockchainTimestamp = this.getBlockchainTimestamp(yesterday);
 
     const dataKey = contract.methods.getAuthor3DayRewardOnDocument.cacheCall(ethAccount, this.fromAscii(documentId), blockchainTimestamp, {
