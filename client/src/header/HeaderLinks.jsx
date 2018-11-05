@@ -66,7 +66,7 @@ class HeaderLinks extends React.Component {
         <ListItem className={classes.listItem}>
           <UploadDocument drizzleApis={drizzleApis} />
           <Button id="address" color="transparent" className={classes.button} >
-            <Person className={classes.icons} />  {drizzleApis.getLoggedInAccount()}
+            <Person className={classes.icons} /> <Link to={"/author/" + drizzleApis.getLoggedInAccount()} > {drizzleApis.getLoggedInAccount()}</Link>
           </Button>
           {/*
           {auth.isAuthenticated() &&
