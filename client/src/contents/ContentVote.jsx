@@ -17,7 +17,7 @@ class ContentVote extends React.Component {
 
   state = {
     loading: true,
-    buttonText: "Commit",
+    buttonText: "Vote",
     voteState: VOTE_STATE.START,
     approve: {stackId: -1, done: false, voteOpening: false, receipt: null},
     vote: {stackId:-1, done: false, complete: false, receipt: null},
@@ -39,13 +39,14 @@ class ContentVote extends React.Component {
     document.getElementById("deposit").value = null;
   }
 
-  sendVoteInfo = () => {
+  sendVoteInfo = (transactionResult) => {
     const { document, drizzleApis } = this.props;
 
+    const ethAccount = drizzleApis.getLoggedInAccount();
     const curatorId = drizzleApis.getLoggedInAccount();//drizzleState.accounts[0];
     const voteAmount = drizzleApis.fromWei(this.state.deposit);
 
-    restapi.sendVoteInfo(curatorId, voteAmount, document);
+    restapi.sendVoteInfo(ethAccount, curatorId, voteAmount, document, transactionResult);
 
   }
 
@@ -90,11 +91,11 @@ class ContentVote extends React.Component {
       if(!this.state.approve.done && this.checkApproveTransaction(this.state.approve.stackId, drizzleState)) {
         console.log("start vote");
         const stackId = drizzleApis.voteOnDocument(document.documentId, deposit);
-        this.setState({vote:{stackId:stackId}});
+        this.setState({vote:{stackId: stackId}});
       }
 
       if(this.state.approve.done && this.checkVoteTransaction(this.state.vote.stackId, drizzleState)){
-        this.setState({buttonText: "COMMIT"});
+        this.setState({buttonText: "Vote"});
         this.sendVoteInfo();
         this.clearVoteInfo();
       }

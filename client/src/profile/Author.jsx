@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import AuthorSummary from 'profile/AuthorSummary';
 import AuthorRevenueOnDocument from 'profile/AuthorRevenueOnDocument';
+import CuratorDocumentList from 'profile/CuratorDocumentList.jsx';
 
 const style = {
 
@@ -125,8 +126,6 @@ class Author extends React.Component {
                                         <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
                                         <AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} />
                                         <Badge color="success">Vote $ {drizzleApis.toDollar(result.totalVoteAmount?result.totalVoteAmount:"0")}</Badge>
-
-
                                     </div>
                                 </div>
                             </Link>
@@ -136,6 +135,8 @@ class Author extends React.Component {
 
                 </div>
             </InfiniteScroll>
+
+            <CuratorDocumentList {...this.props} />
         </div>
 
     );

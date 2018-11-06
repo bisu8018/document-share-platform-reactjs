@@ -8,6 +8,7 @@ const apiDomain = APP_PROPERTIES.domain.api;//"https://iwzx8ah5xf.execute-api.us
 
 const registDocumentInfoUrl = "/api/document/regist";
 const getDocumentsUrl = "/api/document/list";
+const getCuratorDocumentsUrl = "/api/curator/document/list";
 const getDocumentUrl = "/api/document/info/";
 const getDocumentTextUrl = "/api/document/text/";
 
@@ -22,7 +23,6 @@ export function getThumbnail(documentId, pageNo) {
 }
 
 export function getDocuments(params){
-
 
   let key = null
   if(params.nextPageKey){
@@ -45,6 +45,30 @@ export function getDocuments(params){
   }
 
   return axios.post(apiDomain + getDocumentsUrl, config);
+}
+
+export function getCuratorDocuments(params) {
+  let key = null
+  if(params.nextPageKey){
+    key = btoa(JSON.stringify(params.nextPageKey));
+    console.log(params," base64 encoded to ", key);
+  } else {
+    console.log("first page");
+  }
+
+  const config = {
+    header: {
+       'Access-Control-Allow-Origin': '*',
+       'Content-Type':'application/json'
+    },
+    params: {
+      nextPageKey:key,
+      accountId:params.accountId,
+      tag: params.tag
+    }
+  }
+
+  return axios.post(apiDomain + getCuratorDocumentsUrl, config);
 }
 
 export function getDocument(documentId){
@@ -175,9 +199,9 @@ function fileUpload(params) {
   return axios.put(url, params.file, config);
 }
 
-export function sendVoteInfo(curatorId, voteAmount, document) {
+export function sendVoteInfo(ethAccount, curatorId, voteAmount, document, transactionResult) {
   console.log("sendVoteInfo", curatorId, voteAmount, document);
-  if(!curatorId || !document || isNaN(voteAmount) || voteAmount<=0) {
+  if(!curatorId || !document || isNaN(voteAmount) || voteAmount<=0 || !ethAccount) {
     console.error("sendVoteInfo Parameter Invaild", params);
     return;
   }
@@ -187,7 +211,10 @@ export function sendVoteInfo(curatorId, voteAmount, document) {
   const params = {
     curatorId: curatorId,
     voteAmount: voteAmount,
+    documentId: document.documentId,
     documentInfo: document,
+    ethAccount: ethAccount,
+    transaction: transactionResult
   }
 
   return axios.post(url, params);
