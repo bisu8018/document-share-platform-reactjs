@@ -107,12 +107,14 @@ export function registDocument(args, callback) {
         if(res && res.status == 200){
           const documentId = res.data.documentId;
           const owner = res.data.accountId;
+          const signedUrl = res.data.signedUrl;
           fileUpload({
               file: fileInfo.file,
               fileid : documentId,
               fileindex : 1,
               ext: fileInfo.ext,
               owner: owner,
+              signedUrl: signedUrl,
               callback: callback
             }).then((res)=>{
 
@@ -146,14 +148,20 @@ function fileUpload(params) {
   const fileindex = params.fileindex;
   const ext = params.ext;
   const owner = params.owner;
-  const url = uploadDomain + "/" + fileid + "/" + owner + "/" + ext;
-  console.log(url);
+  //const url = uploadDomain + "/" + fileid + "/" + owner + "/" + ext;
+  const urlSplits = params.signedUrl.split("?");
+
+  const url = urlSplits[0];
+  const search = urlSplits[1];
+  const query = JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}', function(key, value) { return key===""?value:decodeURIComponent(value) })
+  console.log(url, query);
   const formData = new FormData();
   formData.append('file', params.file);
   const config = {
       headers: {
-          'content-type': 'application/octet-stream',
-          'x-api-key': 'M84xHJ4cPEa1CAcmxHgTzyfSzIQSIZEaLR1mzRod'
+          "content-type": 'application/octet-stream',
+          "Signature": query.Signature,
+          "x-amz-acl": "authenticated-read"
       },
       onUploadProgress: (e) => {
         console.log("onUploadProgress : " + e.loaded + "/" + e.total);
@@ -183,4 +191,9 @@ export function sendVoteInfo(curatorId, voteAmount, document) {
   }
 
   return axios.post(url, params);
+}
+
+export function convertTimestampToString(timestamp) {
+  var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: "2-digit", minute: "2-digit" };
+  return (new Date(timestamp)).toLocaleString("en-US", options);
 }

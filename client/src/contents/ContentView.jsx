@@ -8,9 +8,10 @@ import Badge from "components/Badge/Badge.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import ContentVote from 'contents/ContentVote';
 import ContentViewRegistBlockchainButton from 'contents/ContentViewRegistBlockchainButton';
+import ContentViewRight from "contents/ContentViewRight"
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
-import Spinner from 'react-spinkit';
+import Spinner from 'react-spinkit'
 
 import AuthorEstimatedToday from "profile/AuthorEstimatedToday"
 import AuthorRevenueOnDocument from "profile/AuthorRevenueOnDocument"
@@ -27,13 +28,14 @@ class ContentView extends React.Component {
     currentPageNo:1,
     dataKey:null,
     determineAuthorToken:-1,
-    isExistInBlockChain: false
+    isExistInBlockChain: false,
+    list: null
   }
 
   getContentInfo = (documentId) => {
     restapi.getDocument(documentId).then((res) => {
-      console.log(res.data.document);
-      this.setState({document:res.data.document});
+      console.log(res.data);
+      this.setState({document:res.data.document, list:res.data.list});
       //this.handleDetermineAuthorToken();
     });
 
@@ -99,10 +101,6 @@ class ContentView extends React.Component {
     if(!document) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     }
-    let voteTag = null;
-    if(drizzleApis.isAuthenticated()){
-      voteTag = (<ContentVote {...this.props} document={this.state.document}/>);
-    }
 
 
     return (
@@ -126,7 +124,10 @@ class ContentView extends React.Component {
 
 
                <h2 className="tit">{document.title?document.title:""}</h2>
-
+               <div className="descript"
+                     style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
+                {restapi.convertTimestampToString(document.created)}
+                </div>
                <div>
                    <Button color="rose" size="sm">Like</Button>
                    <Button color="rose" size="sm">Share</Button>
@@ -143,7 +144,6 @@ class ContentView extends React.Component {
                     <div className="profileImg">
                        <span className="userImg">
                            <Face className={classes.icons} />
-                           <img src="http://i.imgur.com/UGzF2lv.jpg" alt={document.accountId}/>
                        </span>
                        <strong className="userName">{document.nickname?document.nickname:document.accountId}
                            <span className="txt"></span>
@@ -159,53 +159,7 @@ class ContentView extends React.Component {
            </div>
 
 
-           <div className="rightWrap">
-             {voteTag}
-             {/*<ContentVote {...this.props} document={this.state.document}/>*/}
-
-
-               <h3>See also</h3>
-               <div className="cardSide">
-                   <a href="#">
-                       <span className="img">
-                           <img src="https://cdn.namuwikiusercontent.com/s/c57155e34a23c4f9918e0e6e5f14924223aa3f15c78049539ee0ed4edd00eb00a429933b1228c370105dc861e72b0a79160ba74677b9f6f7a94c303cbdadf04482c375c5defbfa244dcbcb3a42d55e73?e=1546994084&k=W8a-YTwBcvw2CetlHaNR3A" alt=""/>
-                       </span>
-                      <div className="inner">
-                           <div className="tit"
-                               style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                               >25 Uses for Duct Tape on Your Next Camping Trip</div>
-                           <div className="descript"
-                               style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                            >Recommand Document</div>
-                           <div className="badge">
-                               <Badge color="rose">1,222 Deck</Badge>
-                               <Badge color="rose">1,222 view</Badge>
-                           </div>
-                       </div>
-                   </a>
-               </div>
-
-               <div className="cardSide">
-                   <a href="#">
-                       <span className="img">
-                           <img src="https://dispatch.cdnser.be/wp-content/uploads/2017/01/20170105232912_lhj_1778.jpg" alt=""/>
-                       </span>
-                      <div className="inner">
-                           <div className="tit"
-                               style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                               >25 Uses for Duct Tape on Your Next Camping Trip</div>
-                           <div className="descript"
-                               style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                            >Recommand Document</div>
-                           <div className="badge">
-                               <Badge color="rose">1,222 Deck</Badge>
-                               <Badge color="rose">1,222 view</Badge>
-                           </div>
-                       </div>
-                   </a>
-               </div>
-
-           </div>
+           <ContentViewRight document={this.state.document} list={this.state.list} {...this.props}/>
 
 
         </div>
