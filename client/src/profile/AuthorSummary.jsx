@@ -60,12 +60,18 @@ class AuthorSummary extends React.Component {
   render() {
     const {classes, accountId, drizzleApis, drizzleState, totalRevenue} = this.props;
 
-    if(!drizzleApis.isAuthenticated()) return "Loading";
+    if(!drizzleApis.isAuthenticated()) return (
+        <h3 style={{margin:'0',fontSize:'26px'}}>Account
+          <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
+        </h3>
+    );
 
     const totalBalance = this.printBalance();
     return (
         <div>
-          <h3 style={{margin:'0',fontSize:'26px'}} >Account: {accountId}</h3>
+          <h3 style={{margin:'0',fontSize:'26px'}}>Account
+            <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
+          </h3>
           <ul className="detailList">
               <li> - Total balance : {totalBalance} DECK</li>
               <li> - Estimated earnings for today : <AuthorEstimatedToday {...this.props} /> </li>

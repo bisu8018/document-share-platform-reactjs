@@ -29,6 +29,7 @@ class ContentTags extends React.Component {
   handleOnClick = (e) => {
     const { classes, tagSearch } = this.props;
     const tag = e.target.text
+    window.scrollTo(0, 0);
     console.log(tag);
 
     tagSearch(tag);
