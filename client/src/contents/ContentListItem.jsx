@@ -38,11 +38,15 @@ class ContentListItem extends React.Component {
                      <div className="tit"
                           style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
                       >{result.title?result.title:result.documentName}</div>
+                      <div className="descript"
+                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
+                     {restapi.convertTimestampToString(result.created)}
+                     </div>
                      <div className="descript"
                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
                       >{result.desc}</div>
                      <div className="badge">
-                         <Badge color="info">View {result.viewCount?result.viewCount:0 + result.confirmViewCount?result.confirmViewCount:0} </Badge>
+                         <Badge color="info">View {result.totalViewCount?result.totalViewCount:0} </Badge>
                          <AuthorRevenueOnDocument document={result} {...this.props} />
                          <Badge color="success">Vote $ {drizzleApis.toDollar(result.totalVoteAmount?result.totalVoteAmount:"0")}</Badge>
                          {result.tags?result.tags.map((tag, index) => (

@@ -381,7 +381,7 @@ export default class DrizzleApis {
     return v.value;
   };
 
-  requestAuthor3DayRewardOnDocument = (documentId) => {
+  requestAuthor3DayRewardOnDocument = (accountId, documentId) => {
     //contract getAuthor3DayRewardOnDocument
 
     if(!this.isInitialized()){
@@ -402,7 +402,7 @@ export default class DrizzleApis {
 
     const blockchainTimestamp = this.getBlockchainTimestamp(yesterday);
 
-    const dataKey = contract.methods.getAuthor3DayRewardOnDocument.cacheCall(ethAccount, this.fromAscii(documentId), blockchainTimestamp, {
+    const dataKey = contract.methods.getAuthor3DayRewardOnDocument.cacheCall(accountId, this.fromAscii(documentId), blockchainTimestamp, {
       from: ethAccount
     });
 

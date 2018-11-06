@@ -15,7 +15,6 @@ const style = {
 class AuthorRevenueOnDocument extends React.Component {
 
   state = {
-
     author3DayRewardOnDocumentDataKey: null,
     author3DayRewardOnDocument: 0
   };
@@ -27,7 +26,7 @@ class AuthorRevenueOnDocument extends React.Component {
 
     if(this.state.author3DayRewardOnDocumentDataKey) return;
 
-    const dataKey = drizzleApis.requestAuthor3DayRewardOnDocument(document.documentId);
+    const dataKey = drizzleApis.requestAuthor3DayRewardOnDocument(document.ethAccount, document.documentId);
     if(dataKey){
       //console.log("handleRequestBalance", dataKey);
       this.setState({author3DayRewardOnDocumentDataKey: dataKey});
@@ -77,7 +76,7 @@ class AuthorRevenueOnDocument extends React.Component {
     const author3DayRewardOnDocument = this.printAuthor3DayRewardOnDocument();
     return (
 
-     <Badge color="success">Reward 
+     <Badge color="success">Reward
        <span>
            $ {drizzleApis.toDollar(author3DayRewardOnDocument?author3DayRewardOnDocument:0)}
        </span>
