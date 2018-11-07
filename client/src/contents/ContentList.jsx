@@ -23,7 +23,8 @@ class ContentList extends React.Component {
       nextPageKey: null,
       isEndPage:false,
       tag: null,
-      totalViewCountInfo: null
+      totalViewCountInfo: null,
+      path: null
     };
 
     tagSearch = (tag) => {
@@ -34,12 +35,14 @@ class ContentList extends React.Component {
         resultList: [],
         nextPageKey: null,
         isEndPage:false,
-        tag: tag
+        tag: tag,
+        path: null
       });
 
       this.fetchDocuments({
         tag: tag,
-        nextPageKey: null
+        nextPageKey: null,
+        path: this.state.path
       });
     }
 
@@ -47,7 +50,8 @@ class ContentList extends React.Component {
 
         this.fetchDocuments({
           nextPageKey: this.state.nextPageKey,
-          tag: this.state.tag
+          tag: this.state.tag,
+          path: this.state.path
         })
 
     };
@@ -56,10 +60,11 @@ class ContentList extends React.Component {
 
         const params = {
           nextPageKey: args.nextPageKey,
-          tag: args.tag
+          tag: args.tag,
+          path: args.path?args.path:this.state.path
         }
 
-        console.log("fetchDocument start", params);
+        console.log("fetchDocument start", args, this.state, params);
         restapi.getDocuments(params).then((res)=>{
           console.log("Fetch Document", res.data);
           if(res.data && res.data.resultList) {
@@ -94,16 +99,18 @@ class ContentList extends React.Component {
 
     componentWillMount() {
       const { match } = this.props;
-      console.log("componentWillMount");
+      console.log("componentWillMount", match.path);
       this.setState({
         resultList: [],
         nextPageKey: null,
         isEndPage:false,
-        tag: match.params.tag
+        tag: match.params.tag,
+        path: match.path
       });
 
       this.fetchDocuments({
-        tag: match.params.tag
+        tag: match.params.tag,
+        path: match.path
       });
     }
 

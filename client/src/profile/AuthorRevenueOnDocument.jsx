@@ -8,6 +8,7 @@ import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
+import Web3Apis from 'apis/Web3Apis';
 import Tooltip from '@material-ui/core/Tooltip';
 const styles = theme => ({
   dollar: {
@@ -22,6 +23,8 @@ const styles = theme => ({
 
 class AuthorRevenueOnDocument extends React.Component {
 
+  web3Apis = new Web3Apis();
+
   state = {
     author3DayRewardOnDocumentDataKey: null,
     author3DayRewardOnDocument: 0,
@@ -29,55 +32,21 @@ class AuthorRevenueOnDocument extends React.Component {
     open: false
   };
 
+  componentWillMount () {
+    const { document, handleRevenueOnDocuments } = this.props;
 
+    //console.log(document);
+    this.web3Apis.getAuthor3DayRewardOnDocument(document.ethAccount, document.documentId).then((data) => {
 
-  handleRequestAuthor3DayRewardOnDocument = () => {
-    const {drizzleApis, document} = this.props;
-
-    if(this.state.author3DayRewardOnDocumentDataKey) return;
-
-    const dataKey = drizzleApis.requestAuthor3DayRewardOnDocument(document.ethAccount, document.documentId);
-    if(dataKey){
-      //console.log("handleRequestBalance", dataKey);
-      this.setState({author3DayRewardOnDocumentDataKey: dataKey});
-    }
-
-  }
-
-  printAuthor3DayRewardOnDocument = () => {
-    const {drizzleApis, document, handleRevenueOnDocuments} = this.props;
-    //console.log("printBalance", this.state.totalBalanceDataKey);
-    if(this.state.author3DayRewardOnDocumentDataKey) {
-
-      const v = drizzleApis.getAuthor3DayRewardOnDocument(this.state.author3DayRewardOnDocumentDataKey);
-
-      if(!isNaN(v)){
-        //console.log("printAuthor3DayRewardOnDocument", document.documentId, v)
-        const returnValue = Math.round(drizzleApis.fromWei(v)* 100) /100;
-        if(handleRevenueOnDocuments){
-          handleRevenueOnDocuments(document.documentId, returnValue);
-        }
-
-        return v;
-
+      this.setState({author3DayRewardOnDocument:data});
+      if(handleRevenueOnDocuments) {
+        handleRevenueOnDocuments(document.documentId, data);
       }
 
-    }
-
+    });
     return 0;
   }
 
-
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const {classes, drizzleApis} = this.props;
-    if(drizzleApis.isAuthenticated()){
-      this.handleRequestAuthor3DayRewardOnDocument();
-    }
-
-
-    return true;
-  }
 
   handleClick = event => {
     const { currentTarget } = event;
@@ -99,14 +68,14 @@ class AuthorRevenueOnDocument extends React.Component {
     const { classes, drizzleApis } = this.props;
     const { anchorEl, open } = this.state;
 
-    const author3DayRewardOnDocument = this.printAuthor3DayRewardOnDocument();
+    const author3DayRewardOnDocument = this.state.author3DayRewardOnDocument;
     const textDeck = "Reward " + (author3DayRewardOnDocument?author3DayRewardOnDocument:0) + " DECK";
 
     return (
      <Badge color="success">
        <Tooltip title={textDeck} placement="bottom">
         <span className={classes.dollar}>
-          Reward ${drizzleApis.toDollar(author3DayRewardOnDocument?author3DayRewardOnDocument:0)}
+          Reward ${this.web3Apis.toDollar(author3DayRewardOnDocument)}
         </span>
       </Tooltip>
      </Badge>

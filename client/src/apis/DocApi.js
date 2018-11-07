@@ -40,7 +40,8 @@ export function getDocuments(params){
     params: {
       nextPageKey:key,
       email:params.email,
-      tag: params.tag
+      tag: params.tag,
+      path: params.path
     }
   }
 

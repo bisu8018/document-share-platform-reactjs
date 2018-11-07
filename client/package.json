@@ -13,6 +13,7 @@
     "classnames": "2.2.6",
     "drizzle": "^1.2.3",
     "history": "4.7.2",
+    "jsonfile": "^5.0.0",
     "moment": "2.22.2",
     "node-sass-chokidar": "1.3.3",
     "nouislider": "12.0.0",
@@ -31,7 +32,8 @@
     "react-spinkit": "^3.0.0",
     "react-swipeable-views": "0.13.0",
     "react-tagsinput": "^3.19.0",
-    "serverless-http": "^1.6.0"
+    "serverless-http": "^1.6.0",
+    "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
@@ -57,7 +59,7 @@
     "start": "PORT=8000 react-scripts start",
     "build": "npm run build-css && react-scripts build",
     "deploy": "aws s3 sync build/ s3://share.decompany.io",
-    "build:stage": "react-scripts build",
+    "invaildate": "aws cloudfront create-invalidation --distribution-id EDFUPNJU9XKGX --paths /*",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

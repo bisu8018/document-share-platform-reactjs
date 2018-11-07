@@ -5,6 +5,8 @@ import Deck from "contracts-rinkeby/Deck.json";
 
 import {BigNumber} from 'bignumber.js';
 // import drizzle functions and contract artifact
+
+const defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
 export default class DrizzleApis {
 
   callbackFuncs = [];
@@ -66,6 +68,12 @@ export default class DrizzleApis {
     if(!this.isAuthenticated()) return;
 
     return this.drizzleState.accounts[0];
+  }
+
+  getReaderAccount = () => {
+    if(this.isAuthenticated()) return this.getLoggedInAccount();
+
+    return defaultAccountId;
   }
 
   fromAscii = (str) => {
@@ -388,14 +396,14 @@ export default class DrizzleApis {
       console.error("Metamask doesn't initialized");
       return;
     }
-
+/*
     if(!this.isAuthenticated()){
       console.error("The Metamask login is required.")
       return;
     }
+*/
 
-
-    const ethAccount = this.drizzleState.accounts[0];
+    const ethAccount = this.getReaderAccount();//his.drizzleState.accounts[0];
     const contract = this.drizzle.contracts.DocumentReg;
     let yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -415,15 +423,15 @@ export default class DrizzleApis {
       console.error("Metamask doesn't initialized");
       return;
     }
-
+/*
     if(!this.isAuthenticated()){
       console.error("The Metamask login is required.")
       return;
     }
-
+*/
     if(!dataKey) return 0;
     const drizzleState = this.drizzle.store.getState();
-    const ethAccount = this.drizzleState.accounts[0];
+    const ethAccount = this.getReaderAccount();//this.drizzleState.accounts[0];
 
 
     const v = this.drizzleState.contracts.DocumentReg.getAuthor3DayRewardOnDocument[dataKey];

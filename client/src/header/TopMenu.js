@@ -23,7 +23,9 @@ function SubHeaderLinks({ ...props }) {
     <ul className="subHeader">
       <li>
 
-        <Button href="/" color="transparent">Explore</Button>
+        <Button href="/" color="transparent">Latest</Button>
+        <Button href="/featured" color="transparent">Featured</Button>
+        <Button href="/populars" color="transparent">Populars</Button>
         <Button href="https://github.com/decompanyio/decompanyio-front-end" color="transparent">Help</Button>
         <div className="sortSearch">
           <CustomInput
