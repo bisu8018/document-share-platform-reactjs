@@ -15,6 +15,7 @@ import Spinner from 'react-spinkit'
 
 import AuthorEstimatedToday from "profile/AuthorEstimatedToday"
 import AuthorRevenueOnDocument from "profile/AuthorRevenueOnDocument"
+import ContentViewComment from "./ContentViewComment"
 
 const style = {
 
@@ -129,7 +130,7 @@ class ContentView extends React.Component {
                 {restapi.convertTimestampToString(document.created)}
                 </div>
                <div>
-                   <Button color="rose" size="sm">Like</Button>
+                   <Button color="rose" size="sm">Vote</Button>
                    <Button color="rose" size="sm">Share</Button>
                    <Button color="rose" size="sm">Download</Button>
                    <ContentViewRegistBlockchainButton document={document} {...this.props} />
@@ -138,6 +139,11 @@ class ContentView extends React.Component {
                   <Badge color="info">View {document.viewCount?document.viewCount:0 + document.confirmViewCount?document.confirmViewCount:0} </Badge>
                   <AuthorRevenueOnDocument document={document} {...this.props} />
                   <Badge color="success">Vote $ {drizzleApis.toDollar(document.totalVoteAmount?document.totalVoteAmount:"0")}</Badge>
+                  {
+                    document.tags?document.tags.map((tag, index) => (
+                      <Badge color="warning" key={index}>{tag}</Badge>
+                    )):""
+                  }
                </span>
                <Link to={"/author/" + document.accountId} >
 
@@ -152,7 +158,7 @@ class ContentView extends React.Component {
                    </div>
                    <div className="proFileDescript">{document.desc?document.desc:""}</div>
                 </Link>
-                <h3 className="tit02">Document Information</h3>
+                <ContentViewComment/>
                 <div className="documentText">
                 {this.state.documentText?this.state.documentText:"No Text"}
                 </div>

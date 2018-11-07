@@ -116,16 +116,16 @@ class ContentViewBlockchainButton extends React.Component {
 
     if(!drizzleApis.isAuthenticated()) return null;
 
-    if(this.isExistDocument()) return null;
-
     const disabled = document.accountId == drizzleApis.getLoggedInAccount()?false:true;
-
-    return (
-      <div>
-        {/*<Button color="rose" size="sm" onClick={this.handleCheckDocumentInBlockChain} >Checking BlockChain</Button>*/}
-        <Button color="rose" size="sm" onClick={this.handleRegistDocumentInBlockChain} disabled={disabled} >Register to BlockChain</Button>
-      </div>
-    );
+    if(!this.isExistDocument() && !disabled) {
+      return (
+        <div>
+          {/*<Button color="rose" size="sm" onClick={this.handleCheckDocumentInBlockChain} >Checking BlockChain</Button>*/}
+          <Button color="rose" size="sm" onClick={this.handleRegistDocumentInBlockChain} disabled={disabled} >Register to BlockChain</Button>
+        </div>
+      );
+    }
+    return null;
   }
 }
 
