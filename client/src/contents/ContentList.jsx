@@ -134,7 +134,7 @@ class ContentList extends React.Component {
                  <div className="contentGrid" >
                     <ContentTags tagSearch={this.tagSearch}/>
                     <div className="rightWrap">
-                        <h3>{this.state.tag?"#" + this.state.tag:"@" + title}</h3>
+                        <h3>{this.state.tag ? "@" + title + " #" + this.state.tag : "@" + title}</h3>
                         {resultList.map((result, index) => (
                           <ContentListItem key={result.documentId + result.accountId} result={result} totalViewCountInfo={this.state.totalViewCountInfo} {...this.props} />
                         ))}
