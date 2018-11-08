@@ -108,6 +108,16 @@ export default class DrizzleApis {
     return result;
   }
 
+  toEther = (str) => {
+
+    const d = new BigNumber("1e+18")
+    const bn = new BigNumber(str);
+    const ether = bn.dividedBy(d);
+    const result = Math.round(ether.toNumber() * 100) / 100;
+
+    return result;
+  }
+
   toNumber = (number) => {
     return isNaN(parseInt(number, 10)) ? 0 : parseInt(number, 10);
   }

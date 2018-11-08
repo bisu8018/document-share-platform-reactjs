@@ -118,7 +118,7 @@ class ContentList extends React.Component {
       const { classes, match } = this.props;
       const resultList = this.state.resultList;
       const tag = this.state.tag;
-      let title = "LATEST";
+      let title = "latest";
       if(this.state.path
         && (this.state.path.lastIndexOf("featured")>0 || this.state.path.lastIndexOf("popular")>0)){
         title = this.state.path.substring(1);

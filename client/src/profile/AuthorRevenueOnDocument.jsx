@@ -69,7 +69,7 @@ class AuthorRevenueOnDocument extends React.Component {
     const { anchorEl, open } = this.state;
 
     const author3DayRewardOnDocument = this.state.author3DayRewardOnDocument;
-    const textDeck = "Reward " + (author3DayRewardOnDocument?author3DayRewardOnDocument:0) + " DECK";
+    const textDeck = drizzleApis.toEther(author3DayRewardOnDocument?author3DayRewardOnDocument:0) + " DECK";
 
     return (
      <Badge color="success">
