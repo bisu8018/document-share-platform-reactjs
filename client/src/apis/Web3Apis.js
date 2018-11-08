@@ -50,6 +50,10 @@ export default class Web3Apis {
 
   toDollar = (str) => {
 
+    if(isNaN(str)) {
+      return 0;
+    }
+
     const c = 0.005;
 
 
