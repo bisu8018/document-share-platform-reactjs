@@ -3,8 +3,10 @@ import Fullscreen from "react-full-screen";
 import * as restapi from 'apis/DocApi';
 import { NavigateBefore, NavigateNext, Face } from "@material-ui/icons";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Button from "components/CustomButtons/Button.jsx";
+//import Button from "components/CustomButtons/Button.jsx";
 import goFull from './fullscreen.svg';
+import NextButton from './NextButton';
+import PrevButton from './PrevButton';
 import arrowRight from 'assets/img/right-arrow.png';
 import arrowLeft from 'assets/img/left-arrow.png';
 import CustomLinearProgress from "components/CustomLinearProgress/CustomLinearProgress.jsx";
@@ -145,9 +147,9 @@ class ContentViewFullScreen extends Component {
                style={{ width: "100%", height:'3px', display: "block" ,marginBottom: "0"}}
               />
               <div className="slideBtn">
-                <Button color="transparent" className="prev" onClick={this.goPrevPage}><NavigateBefore className={this.classes.icons} /> <span>Prev</span></Button>
+                <PrevButton color="transparent" className="prev" onClick={this.goPrevPage}><NavigateBefore className={this.classes.icons} /> <span>Prev</span></PrevButton>
                 <span>{this.state.currentPageNo} / {this.document.totalPages}</span>
-                <Button color="transparent" className="next" onClick={this.goNextPage}><span>Next</span> <NavigateNext className={this.classes.icons} /></Button>
+                <NextButton color="transparent" className="next" onClick={this.goNextPage}><span>Next</span> <NavigateNext className={this.classes.icons} /></NextButton>
                 <button onClick={this.goFull}>
                   <img width="20px" src={goFull}/>
                 </button>
