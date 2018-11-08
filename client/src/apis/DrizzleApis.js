@@ -87,6 +87,9 @@ export default class DrizzleApis {
 
   toDollar = (str) => {
 
+    if(isNaN(str)){
+      return 0;
+    }
     //console.log("toDollar", this.drizzle.web3.utils);
     //const c = this.drizzle.web3.utils.toWei(0.005);
     const c = 0.005;
