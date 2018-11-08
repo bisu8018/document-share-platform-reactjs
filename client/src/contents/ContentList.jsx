@@ -117,7 +117,12 @@ class ContentList extends React.Component {
     render() {
       const { classes, match } = this.props;
       const resultList = this.state.resultList;
-
+      const tag = this.state.tag;
+      let title = "LATEST";
+      if(this.state.path
+        && (this.state.path.lastIndexOf("featured")>0 || this.state.path.lastIndexOf("popular")>0)){
+        title = this.state.path.substring(1);
+      }
       return (
           <div>
              <InfiniteScroll
@@ -129,7 +134,7 @@ class ContentList extends React.Component {
                  <div className="contentGrid" >
                     <ContentTags tagSearch={this.tagSearch}/>
                     <div className="rightWrap">
-                        <h3>{this.state.tag?"#" + this.state.tag:"@LATEST"}</h3>
+                        <h3>{this.state.tag?"#" + this.state.tag:"@" + title}</h3>
                         {resultList.map((result, index) => (
                           <ContentListItem key={result.documentId + result.accountId} result={result} totalViewCountInfo={this.state.totalViewCountInfo} {...this.props} />
                         ))}
