@@ -8,7 +8,7 @@ import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import AuthorSummary from 'profile/AuthorSummary';
-import AuthorRevenueOnDocument from 'profile/AuthorRevenueOnDocument';
+import CuratorDepositOnDocument from 'profile/CuratorDepositOnDocument';
 
 const style = {
 
@@ -63,7 +63,10 @@ class CuratorDocumentList extends React.Component {
   render() {
     const {classes, drizzleApis, match} = this.props;
     const accountId = match.params.email;
-    if(!drizzleApis.isAuthenticated()) "DrizzleState Loading!!";
+    if(!drizzleApis.isAuthenticated()) return "DrizzleState Loading!!";
+
+    const loggedInAccount = drizzleApis.getLoggedInAccount();
+
 
     if (this.state.resultList.length > 0) {
       return (
@@ -94,11 +97,10 @@ class CuratorDocumentList extends React.Component {
                                   <div className="descript"
                                       style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
                                    >{result.desc}</div>
-                                  <div className="badge">
-                                      <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
-                                      <AuthorRevenueOnDocument document={result.documentInfo} {...this.props} />
-                                      <Badge color="success">Vote $ {drizzleApis.toDollar(result.totalVoteAmount?result.totalVoteAmount:"0")}</Badge>
-                                  </div>
+                                   <div className="badge">
+                                       <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
+                                       <CuratorDepositOnDocument document={result.documentInfo} {...this.props} loggedInAccount={loggedInAccount} />
+                                   </div>
                               </div>
                           </Link>
                       </div>

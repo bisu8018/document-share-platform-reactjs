@@ -11,6 +11,7 @@ import ContentViewRegistBlockchainButton from 'contents/ContentViewRegistBlockch
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
 import Spinner from 'react-spinkit';
+import adimg from 'po_ad.jpg';
 
 import AuthorEstimatedToday from "profile/AuthorEstimatedToday"
 import AuthorRevenueOnDocument from "profile/AuthorRevenueOnDocument"
@@ -40,9 +41,14 @@ class ContentViewRight extends React.Component {
 
       <div className="rightWrap">
            {voteTag}
-           <h3>See also</h3>
+           <h3>AD</h3>
+           <div className="cardSide">
+               <span className="img">
+                   <img src={adimg} alt="AD PolarisOffice" />
+               </span>
+            </div>
+            <h3>See also</h3>
            {list.map((result, idx) => (
-
              <div className="cardSide" key={result.documentId}>
                <Link to={"/content/view/" + result.documentId} >
                    <span className="img">

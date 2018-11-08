@@ -29,6 +29,9 @@ class Author extends React.Component {
   revenueOnDocuments = [];
   revenues = [];
 
+  depositOnDocuments = [];
+  deposits = [];
+
   handleRevenueOnDocuments = (documentId, revenue) =>{
 
     if(this.revenueOnDocuments.includes(documentId)) return;
@@ -45,6 +48,26 @@ class Author extends React.Component {
         //console.log("handleRevenueOnDocuments", totalRevenue, revenue);
       }
       this.setState({totalRevenue: Math.round(totalRevenue*100)/100});
+    }
+
+  }
+
+  handleDepositOnDocuments = (documentId, deposit) =>{
+
+    if(this.revenueOnDocuments.includes(documentId)) return;
+
+    //console.log("handleRevenueOnDocuments", documentId, revenue);
+    this.depositOnDocuments.push(documentId);
+    this.deposits.push(deposit);
+    let totalDeposit = 0;
+    if(this.deposits.length == this.state.resultList.length){
+      //console.log(this.revenues);
+      for(const idx in this.deposits){
+
+        totalDeposit += this.deposits[idx];
+        //console.log("handleRevenueOnDocuments", totalRevenue, revenue);
+      }
+      this.setState({totalDeposit: Math.round(totalDeposit*100)/100});
     }
 
   }

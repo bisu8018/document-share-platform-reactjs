@@ -27,33 +27,40 @@ const categories = [
 class ContentTags extends React.Component {
 
   handleOnClick = (e) => {
-    const { classes, tagSearch } = this.props;
-    const tag = e.target.text
+    const { classes, tagSearch, path, url } = this.props;
+    const tag = e.target.text;
     window.scrollTo(0, 0);
-    console.log(tag);
+    console.log("handleOnClick", path, url, tag);
 
-    tagSearch(tag);
-
+    tagSearch(tag, path);
   }
 
-    render() {
-      const { classes, noTags } = this.props;
+  handleToLink = (category) => {
+    const { url } = this.props;
 
-      return (
+    const link = url.replace(":tag", category);
+    //console.log("handleToLink", category, link);
+    return link;
+  }
 
-         <div className="leftWrap">
-           <List>
-             {
-               categories.map((category, idx) => {
-                 return (<ListItem key={idx}><Button key={category} color="transparent" ><Link to={"/tag/" + category} onClick={this.handleOnClick}>{category}</Link></Button></ListItem>);
-               })
-             }
+  render() {
+    const { classes, noTags , path} = this.props;
 
-           </List>
-         </div>
+    return (
 
-      );
-    }
+       <div className="leftWrap">
+         <List>
+           {
+             categories.map((category, idx) => {
+               return (<ListItem key={idx}><Button key={category} color="transparent" ><Link to="#" onClick={this.handleOnClick}>{category}</Link></Button></ListItem>);
+             })
+           }
+
+         </List>
+       </div>
+
+    );
+  }
 }
 
 export default withStyles(style)(ContentTags);

@@ -27,22 +27,22 @@ class ContentList extends React.Component {
       path: null
     };
 
-    tagSearch = (tag) => {
+    tagSearch = (tag, path) => {
 
-      console.log("tagSearch", tag);
+      console.log("tagSearch", tag, path);
 
       this.setState({
         resultList: [],
         nextPageKey: null,
         isEndPage:false,
         tag: tag,
-        path: null
+        path: path
       });
 
       this.fetchDocuments({
         tag: tag,
         nextPageKey: null,
-        path: this.state.path
+        path: path
       });
     }
 
@@ -99,18 +99,18 @@ class ContentList extends React.Component {
 
     componentWillMount() {
       const { match } = this.props;
-      console.log("componentWillMount", match.path);
+      console.log("componentWillMount", match);
       this.setState({
         resultList: [],
         nextPageKey: null,
         isEndPage:false,
         tag: match.params.tag,
-        path: match.path
+        path: match.url
       });
 
       this.fetchDocuments({
         tag: match.params.tag,
-        path: match.path
+        path: match.url
       });
     }
 
@@ -124,7 +124,9 @@ class ContentList extends React.Component {
         title = this.state.path.substring(1);
       }
       return (
+
           <div>
+
              <InfiniteScroll
                dataLength={resultList.length}
                next={this.fetchMoreData}
@@ -132,7 +134,7 @@ class ContentList extends React.Component {
                loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
 
                  <div className="contentGrid" >
-                    <ContentTags tagSearch={this.tagSearch}/>
+                   <ContentTags path={match.path} url={match.url} tagSearch={this.tagSearch}/>
                     <div className="rightWrap">
                         <h3>{this.state.tag ? "@" + title + " #" + this.state.tag : "@" + title}</h3>
                         {resultList.map((result, index) => (

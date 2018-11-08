@@ -55,7 +55,6 @@ class MainRoutes extends Component {
         <Header
           brand="DECOMPANY.io"
           rightLinks={<HeaderLinks
-            drizzleState={this.state.drizzleState}
             drizzleApis={this.state.drizzleApis} />}
           fixed
           color="white"
@@ -66,16 +65,16 @@ class MainRoutes extends Component {
 
         <TopMenu
           {...this.props}
-          auth={auth}
-          dirzzleState={this.state.drizzleState}
           drizzleApis={this.state.drizzleApis} />
 
 
           <Switch>
             <Route exact path="/" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
+    
             <Route path="/latest" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/popular" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/featured" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
+
             <Route path="/tag/:tag" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/content/view/:documentId" render={(props) => <ContentView drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/author/:email" render={(props) => <Author drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} {...props} />} />

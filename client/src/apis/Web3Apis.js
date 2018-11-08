@@ -48,9 +48,9 @@ export default class Web3Apis {
     return web3.utils.fromWei(str, "ether");
   }
 
-  toDollar = (str) => {
+  toDollar = (deck) => {
 
-    if(isNaN(str)) {
+    if(isNaN(deck)) {
       return 0;
     }
 
@@ -58,7 +58,7 @@ export default class Web3Apis {
 
 
     const d = new BigNumber("1e+18")
-    const bn = new BigNumber(str);
+    const bn = new BigNumber(deck);
     const dollar = bn.dividedBy(d).multipliedBy(c);
     const result = Math.round(dollar.toNumber() * 100) / 100;
     //120,000,000,000,000,000,000
@@ -67,20 +67,16 @@ export default class Web3Apis {
     return result;
   }
 
-  getCuratorDepositOnDocument = (documentId, blockchainTimestamp) => {
-    //function getCuratorDepositOnDocument(bytes32 _docId, uint _dateMillis) public view returns (uint)
-    console.log("getCuratorDepositOnDocument", documentId, blockchainTimestamp);
-    return this.DocumentReg.methods.getCuratorDepositOnDocument(this.asciiToHex(documentId), blockchainTimestamp).call({from: defaultAccountId});
-  };
+
 
   getAuthor3DayRewardOnDocument = (accountId, documentId) => {
     //contract getAuthor3DayRewardOnDocument
 
     //console.log(accountId, documentId);
-    let yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+    const today = new Date();
+    //const yesterday = today.setDate(today.getDate() - 1);
 
-    const blockchainTimestamp = this.getBlockchainTimestamp(yesterday);
+    const blockchainTimestamp = this.getBlockchainTimestamp(today);
     //return DocumentReg.methods.getCuratorDepositOnDocument(this.asciiToHex(documentId), blockchainTimestamp).call({from: myAddress});
     const promise = this.DocumentReg.methods.getAuthor3DayRewardOnDocument(accountId, this.asciiToHex(documentId), blockchainTimestamp).call({
       from: defaultAccountId
@@ -100,4 +96,13 @@ export default class Web3Apis {
 
     return promise;
   }
+
+  getCuratorDepositOnDocument = (curatorId, documentId) => {
+    //function getCuratorDepositOnDocument(bytes32 _docId, uint _dateMillis) public view returns (uint)
+    const today = new Date();
+
+    const blockchainTimestamp = this.getBlockchainTimestamp(today);
+    console.log("getCuratorDepositOnDocument", curatorId, documentId, blockchainTimestamp);
+    return this.DocumentReg.methods.getCuratorDepositOnDocument(this.asciiToHex(documentId), blockchainTimestamp).call({from: curatorId});
+  };
 }

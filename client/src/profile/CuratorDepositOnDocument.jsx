@@ -21,27 +21,28 @@ const styles = theme => ({
   },
 });
 
-class AuthorRevenueOnDocument extends React.Component {
+class CuratorDepositOnDocument extends React.Component {
 
   web3Apis = new Web3Apis();
 
   state = {
-    author3DayRewardOnDocumentDataKey: null,
-    author3DayRewardOnDocument: 0,
+    curatorDepositOnDocument: 0,
     anchorEl: null,
     open: false
   };
 
   componentWillMount () {
-    const { document, handleRevenueOnDocuments } = this.props;
+    const { document, handleRevenueOnDocuments, loggedInAccount } = this.props;
 
     //console.log(document);
-    this.web3Apis.getAuthor3DayRewardOnDocument(document.ethAccount, document.documentId).then((data) => {
+    this.web3Apis.getCuratorDepositOnDocument(loggedInAccount, document.documentId).then((data) => {
 
-      this.setState({author3DayRewardOnDocument:data});
+      this.setState({curatorDepositOnDocument:data});
+      /*
       if(handleRevenueOnDocuments) {
         handleRevenueOnDocuments(document.documentId, data);
       }
+      */
 
     });
 
@@ -68,14 +69,14 @@ class AuthorRevenueOnDocument extends React.Component {
     const { classes, drizzleApis } = this.props;
     const { anchorEl, open } = this.state;
 
-    const author3DayRewardOnDocument = this.state.author3DayRewardOnDocument;
-    const textDeck = drizzleApis.toEther(author3DayRewardOnDocument?author3DayRewardOnDocument:0) + " DECK";
+    const curatorDepositOnDocument = this.state.curatorDepositOnDocument;
+    const textDeck = drizzleApis.toEther(curatorDepositOnDocument?curatorDepositOnDocument:0) + " DECK";
 
     return (
      <Badge color="success">
        <Tooltip title={textDeck} placement="bottom">
         <span className={classes.dollar}>
-          Reward ${this.web3Apis.toDollar(author3DayRewardOnDocument)}
+          Deposit ${this.web3Apis.toDollar(curatorDepositOnDocument)}
         </span>
       </Tooltip>
      </Badge>
@@ -83,4 +84,4 @@ class AuthorRevenueOnDocument extends React.Component {
   }
 }
 
-export default withStyles(styles)(AuthorRevenueOnDocument);
+export default withStyles(styles)(CuratorDepositOnDocument);
