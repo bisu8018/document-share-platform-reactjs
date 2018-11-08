@@ -2,6 +2,7 @@ import React from "react";
 
 import withStyles from "@material-ui/core/styles/withStyles";
 import Badge from "components/Badge/Badge.jsx";
+import Button from '@material-ui/core/Button';
 import { Face } from "@material-ui/icons";
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
@@ -25,15 +26,14 @@ class ContentListItem extends React.Component {
                <div className="img"><span><img src={restapi.getThumbnail(result.documentId, 1)} alt={result.documentName?result.documentName:result.documentId} alt={result.documentName?result.documentName:result.documentId} /></span></div>
              </Link>
              <div className="inner">
-                 <Link to={"/author/" + result.accountId} >
-                     <div className="profileImg">
-                         <span className="userImg">
-                             <Face className={classes.icons} />
-
-                         </span>
-                         <strong className="userName">{result.nickname?result.nickname:result.accountId}</strong>
-                     </div>
-                 </Link>
+                 <div className="profileImg">
+                     <span className="userImg">
+                         <Face className={classes.icons} />
+                     </span>
+                     <span className="userName">
+                       <Button className={classes.button}><Link to={"/author/" + result.accountId} >{result.nickname?result.nickname:result.accountId}</Link></Button>
+                     </span>
+                 </div>
                  <Link to={"/content/view/" + result.documentId} >
                      <div className="tit"
                           style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
