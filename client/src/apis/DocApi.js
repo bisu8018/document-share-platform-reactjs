@@ -91,7 +91,7 @@ export function getTodayVotedDocumentsByCurator(params) {
 export function getDocument(documentId){
 
   const config = {
-    headers: {
+    header: {
        'Access-Control-Allow-Origin': '*',
        'Content-Type':'application/json'
     }
@@ -199,7 +199,7 @@ function fileUpload(params) {
   const formData = new FormData();
   formData.append('file', params.file);
   const config = {
-      headers: {
+      header: {
           "content-type": 'application/octet-stream',
           "Signature": query.Signature,
           "x-amz-acl": "authenticated-read"
@@ -260,7 +260,7 @@ export function getContentDownload(accountId, documentId) {
       console.log(downloadUrl, filename);
 
       const config = {
-        headers: {
+        header: {
            'Access-Control-Allow-Origin': '*',
            'Access-Control-Allow-Credentials': true,
            "Accept":"application/pdf",
@@ -270,7 +270,7 @@ export function getContentDownload(accountId, documentId) {
 
       axios.get(downloadUrl, config).then((response) => {
         resolve(response);
-        
+
       });
 
     }).catch((err) => {
