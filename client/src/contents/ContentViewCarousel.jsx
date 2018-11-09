@@ -40,7 +40,7 @@ class ContentViewCarousel extends React.Component {
       <div className={this.classes.container}>
         <Carousel useKeyboardArrows>
           {arr.length > 0 ? arr.map((addr, index) => (
-            <img className={this.classes.img} idx={index} src={addr} />
+            <img className={this.classes.img} key={index} src={addr} />
           )):""}
         </Carousel>
       </div>

@@ -6,12 +6,12 @@ import CustomLinearProgress from "components/CustomLinearProgress/CustomLinearPr
 import Button from "components/CustomButtons/Button.jsx";
 import Badge from "components/Badge/Badge.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
-import ContentVote from 'contents/ContentVote';
+//import ContentVote from 'contents/ContentVote';
 import ContentViewRegistBlockchainButton from 'contents/ContentViewRegistBlockchainButton';
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
 import Spinner from 'react-spinkit';
-import adimg from 'po_ad.jpg';
+import adimg from 'assets/img/decompany_ad.png';
 
 import AuthorEstimatedToday from "profile/AuthorEstimatedToday"
 import AuthorRevenueOnDocument from "profile/AuthorRevenueOnDocument"
@@ -31,23 +31,23 @@ class ContentViewRight extends React.Component {
     if(!document) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     }
-    let voteTag = null;
-    if(drizzleApis.isAuthenticated()){
-      voteTag = (<ContentVote {...this.props} document={document}/>);
-    }
-
+    //let voteTag = null;
+    //if(drizzleApis.isAuthenticated()){
+    //  voteTag = (<ContentVote {...this.props} document={document}/>);
+    //}
 
     return (
 
       <div className="rightWrap">
-           {voteTag}
-           <h3>AD</h3>
+           <h3>Sponsored link</h3>
            <div className="cardSide">
                <span className="img">
-                   <img src={adimg} alt="AD PolarisOffice" />
+                 <a href="https://www.polarisoffice.com">
+                 <img src={adimg} alt="AD PolarisOffice" />
+                 </a>
                </span>
             </div>
-            <h3>See also</h3>
+           <h3>See also</h3>
            {list.map((result, idx) => (
              <div className="cardSide" key={result.documentId}>
                <Link to={"/content/view/" + result.documentId} >
