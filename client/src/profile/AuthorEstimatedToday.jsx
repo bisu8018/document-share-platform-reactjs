@@ -8,6 +8,7 @@ import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
+import Web3Apis from 'apis/Web3Apis';
 const style = {
 
 };
@@ -15,15 +16,14 @@ const style = {
 class AuthorEstimatedToday extends React.Component {
 
   state = {
-    estimatedTodayDataKey: null,
     estimatedToday: 0
   };
 
+  web3Apis = new Web3Apis();
 
-
-  requestCalculateAuthorReward = () => {
+  getCalculateAuthorReward = () => {
     const {drizzleApis, documentList, totalViewCountInfo} = this.props;
-    if(this.state.estimatedTodayDataKey || !totalViewCountInfo) return;
+    if(this.state.estimatedToday || !totalViewCountInfo) return;
 
     let viewCount = 0;
     for(const idx in documentList) {
@@ -31,40 +31,22 @@ class AuthorEstimatedToday extends React.Component {
       viewCount += document.viewCount;
     }
     //console.log("requestCalculateAuthorReward", viewCount, totalViewCountInfo);
-    const dataKey = drizzleApis.requestCalculateAuthorReward(viewCount, totalViewCountInfo.totalViewCount);
-    if(dataKey){
-      console.log("requestCalculateAuthorReward dataKey", dataKey);
-      this.setState({estimatedTodayDataKey: dataKey});
-    }
+    const address = drizzleApis.getLoggedInAccount();
+    this.web3Apis.getCalculateAuthorReward(address, viewCount, totalViewCountInfo.totalViewCount).then((data) =>{
+      this.setState({estimatedToday: data});
+
+    }).catch((err) => {
+      console.error(err);
+    });
 
   }
-
-  printCalculateAuthorReward = () => {
-    const {drizzleApis, document} = this.props;
-    //console.log("printBalance", this.state.totalBalanceDataKey);
-    if(this.state.estimatedTodayDataKey) {
-
-      const v = drizzleApis.getCalculateAuthorReward(this.state.estimatedTodayDataKey);
-
-      if(!isNaN(v)){
-        const returnValue = Math.round(drizzleApis.fromWei(v)* 100) /100;
-        return returnValue;
-      }
-
-    }
-
-    return 0;
-  }
-
 
 
   shouldComponentUpdate(nextProps, nextState) {
     const {classes, drizzleApis} = this.props;
     if(drizzleApis.isAuthenticated()){
-      this.requestCalculateAuthorReward();
+      this.getCalculateAuthorReward();
     }
-
-
     return true;
   }
 
@@ -72,10 +54,10 @@ class AuthorEstimatedToday extends React.Component {
   render() {
     const {classes, drizzleApis} = this.props;
 
-    const estimatedToday = this.printCalculateAuthorReward();
+    const estimatedToday = this.state.estimatedToday;
     return (
         <span>
-            {estimatedToday} DECK
+            ${this.web3Apis.toDollar(estimatedToday)}
         </span>
 
     );

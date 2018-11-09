@@ -10,7 +10,7 @@ import * as restapi from 'apis/DocApi';
 import AuthorSummary from 'profile/AuthorSummary';
 import AuthorRevenueOnDocument from 'profile/AuthorRevenueOnDocument';
 import CuratorDocumentList from 'profile/CuratorDocumentList.jsx';
-
+import Web3Apis from 'apis/Web3Apis';
 const style = {
 
 };
@@ -23,14 +23,16 @@ class Author extends React.Component {
     nextPageKey: null,
     isEndPage:false,
     totalRevenue: 0,
-    
+    totalReward: 0
   };
 
   revenueOnDocuments = [];
   revenues = [];
 
-  depositOnDocuments = [];
-  deposits = [];
+  rewardOnDocuments = [];
+  rewards = [];
+
+  web3Apis = new Web3Apis();
 
   handleRevenueOnDocuments = (documentId, revenue) =>{
 
@@ -38,37 +40,36 @@ class Author extends React.Component {
 
     //console.log("handleRevenueOnDocuments", documentId, revenue);
     this.revenueOnDocuments.push(documentId);
-    this.revenues.push(revenue);
+    this.revenues.push(Number(revenue));
     let totalRevenue = 0;
     if(this.revenues.length == this.state.resultList.length){
       //console.log(this.revenues);
       for(const idx in this.revenues){
 
         totalRevenue += this.revenues[idx];
-        //console.log("handleRevenueOnDocuments", totalRevenue, revenue);
+        //console.log("handleRevenueOnDocuments", this.revenues[idx], revenue);
       }
-      this.setState({totalRevenue: Math.round(totalRevenue*100)/100});
+      this.setState({totalRevenue: totalRevenue});
     }
 
   }
 
-  handleDepositOnDocuments = (documentId, deposit) =>{
+  handleRewardOnDocuments = (documentId, reward) =>{
 
-    if(this.revenueOnDocuments.includes(documentId)) return;
+    if(this.rewardOnDocuments.includes(documentId)) return;
 
-    //console.log("handleRevenueOnDocuments", documentId, revenue);
-    this.depositOnDocuments.push(documentId);
-    this.deposits.push(deposit);
-    let totalDeposit = 0;
-    if(this.deposits.length == this.state.resultList.length){
+    console.log("handleRewardOnDocuments", documentId, reward);
+    this.rewardOnDocuments.push(documentId);
+    this.rewards.push(Number(reward));
+    let totalReward = 0;
+
       //console.log(this.revenues);
-      for(const idx in this.deposits){
+      for(const idx in this.rewards){
 
-        totalDeposit += this.deposits[idx];
-        //console.log("handleRevenueOnDocuments", totalRevenue, revenue);
+        totalReward += this.rewards[idx];
+        //console.log("handleRevenueOnDocuments", this.revenues[idx], revenue);
       }
-      this.setState({totalDeposit: Math.round(totalDeposit*100)/100});
-    }
+      this.setState({totalReward: totalReward});
 
   }
 
@@ -113,7 +114,7 @@ class Author extends React.Component {
 
         <div className="contentGridView">
 
-            <AuthorSummary totalRevenue={this.state.totalRevenue} drizzleApis={drizzleApis} documentList={this.state.resultList} totalViewCountInfo={this.state.totalViewCountInfo} accountId={accountId} />
+            <AuthorSummary totalReward={this.state.totalReward} totalRevenue={this.state.totalRevenue} drizzleApis={drizzleApis} documentList={this.state.resultList} totalViewCountInfo={this.state.totalViewCountInfo} accountId={accountId} />
 
             <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} shared documents </h3>
               <InfiniteScroll
@@ -155,7 +156,7 @@ class Author extends React.Component {
                 </div>
             </InfiniteScroll>
 
-            <CuratorDocumentList {...this.props} />
+            <CuratorDocumentList {...this.props} handleRewardOnDocuments={this.handleRewardOnDocuments} />
         </div>
 
     );

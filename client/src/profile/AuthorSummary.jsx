@@ -8,7 +8,7 @@ import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
-import * as Web3Apis from 'apis/Web3Apis';
+import Web3Apis from 'apis/Web3Apis';
 import AuthorEstimatedToday from 'profile/AuthorEstimatedToday'
 const style = {
 
@@ -25,6 +25,8 @@ class AuthorSummary extends React.Component {
     totalViewCount:null
 
   };
+
+  web3Apis = new Web3Apis();
 
   fetchDocuments = (params) => {
       const {classes, accountId} = this.props;
@@ -102,7 +104,7 @@ class AuthorSummary extends React.Component {
 
 
   render() {
-    const {classes, accountId, drizzleApis, drizzleState, totalRevenue} = this.props;
+    const {classes, accountId, drizzleApis, drizzleState, totalRevenue, totalReward} = this.props;
 
     if(!drizzleApis.isAuthenticated()) return (
         <h3 style={{margin:'0',fontSize:'26px'}}>Account
@@ -118,8 +120,8 @@ class AuthorSummary extends React.Component {
           </h3>
           <ul className="detailList">
               <li> - Total balance : {totalBalance} DECK</li>
-              <li> - Estimated earnings for today : <AuthorEstimatedToday {...this.props} /> + {this.state.curatorEstimatedToday}</li>
-              <li> - Revenue for the last 3 days : {totalRevenue} DECK</li>
+              <li> - Estimated earnings for today : <AuthorEstimatedToday {...this.props} /> +  ${this.web3Apis.toDollar(this.state.curatorEstimatedToday)}</li>
+              <li> - Revenue for the last 3 days : $ {this.web3Apis.toDollar(totalRevenue)} + $ {this.web3Apis.toDollar(totalReward)}</li>
           </ul>
         </div>
     );

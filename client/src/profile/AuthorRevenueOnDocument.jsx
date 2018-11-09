@@ -40,7 +40,7 @@ class AuthorRevenueOnDocument extends React.Component {
 
       this.setState({author3DayRewardOnDocument:data});
       if(handleRevenueOnDocuments) {
-        handleRevenueOnDocuments(document.documentId, data);
+        handleRevenueOnDocuments(document.documentId, Number(data));
       }
 
     });

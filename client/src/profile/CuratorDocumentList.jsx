@@ -66,7 +66,7 @@ class CuratorDocumentList extends React.Component {
   }
 
   render() {
-    const {classes, drizzleApis, match} = this.props;
+    const {classes, drizzleApis, match, handleRewardOnDocuments} = this.props;
     const accountId = match.params.email;
     if(!drizzleApis.isAuthenticated()) return "DrizzleState Loading!!";
 
@@ -104,7 +104,7 @@ class CuratorDocumentList extends React.Component {
                                    >{result.desc}</div>
                                    <div className="badge">
                                        <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
-                                       <CuratorDepositOnDocument document={result.documentInfo} {...this.props} loggedInAccount={loggedInAccount} />
+                                       <CuratorDepositOnDocument handleRewardOnDocuments={handleRewardOnDocuments} document={result.documentInfo} {...this.props} loggedInAccount={loggedInAccount} />
                                    </div>
                               </div>
                           </Link>

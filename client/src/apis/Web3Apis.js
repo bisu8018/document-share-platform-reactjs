@@ -67,7 +67,13 @@ export default class Web3Apis {
     return result;
   }
 
+  getCalculateAuthorReward = (address, viewCount, totalViewCount) => {
 
+    return this.DocumentReg.methods.calculateAuthorReward(viewCount, totalViewCount).call({
+      from: address
+    });
+
+  };
 
   getAuthor3DayRewardOnDocument = (accountId, documentId) => {
     //contract getAuthor3DayRewardOnDocument
