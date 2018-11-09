@@ -88,13 +88,12 @@ export default class Web3Apis {
   calculateCuratorReward = (curatorId, documentId, viewCount, totalViewCount) => {
     //contract calculateCuratorReward
 
-    console.log(curatorId, documentId, viewCount, totalViewCount);
+    console.log("calculateCuratorReward", curatorId, documentId, viewCount, totalViewCount);
 
-    const promise = this.DocumentReg.methods.calculateCuratorReward(curatorId, this.asciiToHex(documentId), viewCount, totalViewCount).call({
+    return this.DocumentReg.methods.calculateCuratorReward(curatorId, this.asciiToHex(documentId), viewCount, totalViewCount).call({
       from: defaultAccountId
     });
 
-    return promise;
   }
 
   getCuratorDepositOnDocument = (curatorId, documentId) => {
@@ -104,5 +103,14 @@ export default class Web3Apis {
     const blockchainTimestamp = this.getBlockchainTimestamp(today);
     console.log("getCuratorDepositOnDocument", curatorId, documentId, blockchainTimestamp);
     return this.DocumentReg.methods.getCuratorDepositOnDocument(this.asciiToHex(documentId), blockchainTimestamp).call({from: curatorId});
+  };
+
+  getCuratorDepositOnUserDocument = (curatorId, documentId) => {
+    //function getCuratorDepositOnUserDocument(address, bytes32 _docId, uint _dateMillis) public view returns (uint)
+    const today = new Date();
+
+    const blockchainTimestamp = this.getBlockchainTimestamp(today);
+    console.log("getCuratorDepositOnUserDocument", curatorId, documentId, blockchainTimestamp);
+    return this.DocumentReg.methods.getCuratorDepositOnUserDocument(curatorId, this.asciiToHex(documentId), blockchainTimestamp).call({from: curatorId});
   };
 }
