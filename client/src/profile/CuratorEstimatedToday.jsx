@@ -18,24 +18,12 @@ class CuratorEstimatedToday extends React.Component {
     estimatedToday: 0
   };
 
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const {classes, drizzleApis} = this.props;
-    if(drizzleApis.isAuthenticated()){
-      this.requestCalculateAuthorReward();
-    }
-
-
-    return true;
-  }
-
-
   render() {
     const {classes, drizzleApis} = this.props;
 
     if(!drizzleApis.isAuthenticated()) return "DrizzleState Loading!!";
 
-    const estimatedToday = this.printCalculateAuthorReward();
+    const estimatedToday = this.state.estimatedToday();
     return (
         <span>
             {estimatedToday} DECK

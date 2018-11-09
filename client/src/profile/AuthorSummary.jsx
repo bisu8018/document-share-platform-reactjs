@@ -8,6 +8,7 @@ import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
+import * as Web3Apis from 'apis/Web3Apis';
 import AuthorEstimatedToday from 'profile/AuthorEstimatedToday'
 const style = {
 
@@ -17,8 +18,51 @@ class AuthorSummary extends React.Component {
 
   state = {
     totalBalanceDataKey: null,
-    totalBalance: 0
+    totalBalance: 0,
+    totalViewCountInfo: null,
+    curatorEstimatedToday: 0,
+    todayVotedDocuments: null,
+    totalViewCount:null
+
   };
+
+  fetchDocuments = (params) => {
+      const {classes, accountId} = this.props;
+      restapi.getTodayVotedDocumentsByCurator({accountId:accountId}).then((res)=>{
+        //console.log("Fetch getTodayVotedDocumentsByCurator Document", res.data);
+        if(res.data){
+          const todayVotedDocuments = res.data.todayVotedDocuments;
+          const totalViewCount = res.data.totalViewCount[0];
+          this.setState({todayVotedDocuments: todayVotedDocuments, totalViewCount: totalViewCount});
+
+          console.log(todayVotedDocuments, totalViewCount);
+          for(const i in todayVotedDocuments){
+            const document = todayVotedDocuments[i].documentInfo;
+            console.log(document);
+            this.setState({curatorEstimatedToday: this.state.curatorEstimatedToday + Number(isNaN(document.voteAmount)?0:document.voteAmount)});
+          }
+        }
+      });
+
+  }
+/*
+  getCuratorEstimatedToday = (curatorId, documentId, viewCount, totalTodayViewCount) => {
+    const {classes, accountId} = this.props;
+
+
+    Web3Apis.calculateCuratorReward(curatorId, documentId, viewCount, totalTodayViewCount).then((data) => {
+      console.log("get Today Curator' Estimated reward  in blockchain", data);
+      //this.setState({curatorEstimatedToday: this.state.curatorEstimatedToday + Number(data)});
+    }).catch((err) => {
+      console.error(err);
+    })
+  }
+*/
+  componentWillMount() {
+    const {drizzleApis} = this.props;
+
+    this.fetchDocuments();
+  }
 
   handleRequestBalance = () => {
     const {drizzleApis, drizzleState, accountId} = this.props;
@@ -74,7 +118,7 @@ class AuthorSummary extends React.Component {
           </h3>
           <ul className="detailList">
               <li> - Total balance : {totalBalance} DECK</li>
-              <li> - Estimated earnings for today : <AuthorEstimatedToday {...this.props} /> </li>
+              <li> - Estimated earnings for today : <AuthorEstimatedToday {...this.props} /> + {this.state.curatorEstimatedToday}</li>
               <li> - Revenue for the last 3 days : {totalRevenue} DECK</li>
           </ul>
         </div>

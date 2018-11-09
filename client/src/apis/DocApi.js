@@ -9,9 +9,10 @@ const apiDomain = APP_PROPERTIES.domain.api;//"https://iwzx8ah5xf.execute-api.us
 const registDocumentInfoUrl = "/api/document/regist";
 const getDocumentsUrl = "/api/document/list";
 const getCuratorDocumentsUrl = "/api/curator/document/list";
+const getTodayVotedDocumentsByCuratorUrl = "/api/curator/document/today";
 const getDocumentUrl = "/api/document/info/";
 const getDocumentTextUrl = "/api/document/text/";
-
+const getDocumentDownloadUrl = "/api/document/download/";
 const voteDocumentUrl = "/api/document/vote/";
 
 export function getPageView(documentId, pageNo) {
@@ -58,7 +59,7 @@ export function getCuratorDocuments(params) {
   }
 
   const config = {
-    header: {
+    headers: {
        'Access-Control-Allow-Origin': '*',
        'Content-Type':'application/json'
     },
@@ -72,10 +73,25 @@ export function getCuratorDocuments(params) {
   return axios.post(apiDomain + getCuratorDocumentsUrl, config);
 }
 
-export function getDocument(documentId){
+export function getTodayVotedDocumentsByCurator(params) {
 
   const config = {
     header: {
+       'Access-Control-Allow-Origin': '*',
+       'Content-Type':'application/json'
+    },
+    params: {
+      accountId: params.accountId,
+    }
+  }
+
+  return axios.post(apiDomain + getTodayVotedDocumentsByCuratorUrl, config);
+}
+
+export function getDocument(documentId){
+
+  const config = {
+    headers: {
        'Access-Control-Allow-Origin': '*',
        'Content-Type':'application/json'
     }
@@ -224,4 +240,43 @@ export function sendVoteInfo(ethAccount, curatorId, voteAmount, document, transa
 export function convertTimestampToString(timestamp) {
   var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: "2-digit", minute: "2-digit" };
   return (new Date(timestamp)).toLocaleString("en-US", options);
+}
+
+export function getContentDownload(accountId, documentId) {
+
+  return new Promise((resolve, reject) => {
+
+    const config = {
+      header: {
+         'Access-Control-Allow-Origin': '*',
+         'Content-Type':'application/json'
+      }
+    }
+    const url = apiDomain + getDocumentDownloadUrl + accountId + "/" + documentId;
+    axios.get(url, config).then((res) => {
+      console.log(res.data);
+      const downloadUrl = res.data.downloadUrl;
+      const filename = res.data.document.documentName;
+      console.log(downloadUrl, filename);
+
+      const config = {
+        headers: {
+           'Access-Control-Allow-Origin': '*',
+           'Access-Control-Allow-Credentials': true,
+           "Accept":"application/pdf",
+           responseType: 'blob' // important
+        }
+      }
+
+      axios.get(downloadUrl, config).then((response) => {
+        resolve(response);
+        
+      });
+
+    }).catch((err) => {
+      reject(err);
+    });
+
+  })
+
 }

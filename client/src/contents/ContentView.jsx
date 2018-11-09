@@ -18,6 +18,9 @@ import AuthorRevenueOnDocument from "profile/AuthorRevenueOnDocument"
 import ContentViewComment from "./ContentViewComment"
 import ContentViewFullScreen from "./ContentViewFullScreen";
 
+import FileDownload from "js-file-download";
+
+
 const style = {
 
 };
@@ -45,6 +48,43 @@ class ContentView extends React.Component {
       this.setState({documentText:res.data.text});
     });
 
+  }
+
+  getContentDownload = (accountId, documentId, documentName) => {
+
+
+    restapi.getContentDownload(accountId, documentId).then((res) => {
+      console.log(res);
+      /*
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      */
+
+      FileDownload(new Blob([res.data]), documentName);
+
+
+    }).catch((err) => {
+      console.error(err);
+    });
+
+  }
+
+  handleDownloadContent = () => {
+
+    if(!this.state.document){
+      console.log("getting document meta infomation!");
+      return;
+    }
+    console.log(this.state.document);
+    const accountId = this.state.document.accountId;
+    const documentId = this.state.document.documentId;
+    const documentName = this.state.document.documentName;
+
+    this.getContentDownload(accountId, documentId, documentName);
   }
 
   handleDetermineAuthorToken = () => {
@@ -97,7 +137,7 @@ class ContentView extends React.Component {
              <div>
                  <Button color="rose" size="sm">Vote</Button>
                  <Button color="rose" size="sm">Share</Button>
-                 <Button color="rose" size="sm">Download</Button>
+                 <Button color="rose" size="sm" onClick={this.handleDownloadContent}>Download</Button>
                  <ContentViewRegistBlockchainButton document={document} {...this.props} />
              </div>
              <span>

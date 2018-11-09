@@ -23,7 +23,7 @@ class Author extends React.Component {
     nextPageKey: null,
     isEndPage:false,
     totalRevenue: 0,
-    totalViewCountInfo: null
+    
   };
 
   revenueOnDocuments = [];
@@ -95,10 +95,6 @@ class Author extends React.Component {
           if(!res.data.nextPageKey){
             this.setState({isEndPage:true});
           }
-        }
-
-        if(res.data && res.data.totalViewCountInfo && !this.state.totalViewCountInfo){
-          this.setState({totalViewCountInfo: res.data.totalViewCountInfo});
         }
       });
 

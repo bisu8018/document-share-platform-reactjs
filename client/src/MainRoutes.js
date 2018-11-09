@@ -31,6 +31,7 @@ class MainRoutes extends Component {
 
   componentWillMount() {
     // subscribe to changes in the store
+    console.log("env", process.env);
     const drizzleApis = new DrizzleApis((drizzleApis, drizzle, drizzleState) => {
       //console.log("MainRoutes", drizzleApis, drizzle, drizzleState);
       this.setState({drizzleApis: drizzleApis});
@@ -70,7 +71,7 @@ class MainRoutes extends Component {
 
           <Switch>
             <Route exact path="/" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
-    
+
             <Route path="/latest" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/popular" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/featured" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />

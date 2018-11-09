@@ -19,6 +19,7 @@ class CuratorDocumentList extends React.Component {
 
   state = {
     resultList: [],
+    todayVotedDocuments: [],
     nextPageKey: null,
     isEndPage:false,
   };
@@ -39,7 +40,7 @@ class CuratorDocumentList extends React.Component {
         accountId: accountId,
         nextPageKey: this.state.nextPageKey
       }).then((res)=>{
-        console.log("Fetch Curator Document", res.data);
+        console.log("Fetch Voted Document", res.data);
         if(res.data && res.data.resultList) {
           if(this.state.resultList){
             this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey});
@@ -49,6 +50,10 @@ class CuratorDocumentList extends React.Component {
           console.log("list", this.state.resultList);
           if(!res.data.nextPageKey){
             this.setState({isEndPage:true});
+          }
+
+          if(this.state.todayVotedDocuments){
+            this.setState({todayVotedDocuments: res.data.todayVotedDocuments});
           }
         }
 

@@ -42,6 +42,16 @@ class ContentVote extends React.Component {
   sendVoteInfo = (transactionResult) => {
     const { document, drizzleApis } = this.props;
 
+    if(!drizzleApis.isAuthenticated()){
+      console.log("Drizzle is not signed");
+      return;
+    }
+
+    if(isNaN(this.state.deposit)){
+      console.log("Deposit is not number");
+      return;
+    }
+
     const ethAccount = drizzleApis.getLoggedInAccount();
     const curatorId = drizzleApis.getLoggedInAccount();//drizzleState.accounts[0];
     const voteAmount = drizzleApis.fromWei(this.state.deposit);
@@ -55,11 +65,10 @@ class ContentVote extends React.Component {
   }
 
   onClickVote = () => {
-    //this.subscribeDrizzle();
-    //console.log("subscribeDrizzle start");
-    this.handleApprove();
-    //this.handleVoteOnDocument();
 
+    //this.handleApprove();
+
+    this.sendVoteInfo();
     console.log("handleApprove start");
   }
 
@@ -96,7 +105,7 @@ class ContentVote extends React.Component {
 
       if(this.state.approve.done && this.checkVoteTransaction(this.state.vote.stackId, drizzleState)){
         this.setState({buttonText: "Vote"});
-        this.sendVoteInfo();
+        //this.sendVoteInfo();
         this.clearVoteInfo();
       }
 

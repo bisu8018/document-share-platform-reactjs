@@ -68,17 +68,20 @@ class ContentList extends React.Component {
         restapi.getDocuments(params).then((res)=>{
           console.log("Fetch Document", res.data);
           if(res.data && res.data.resultList) {
-            if(this.state.resultList){
+            if(this.state.resultList && this.state.nextPageKey){
               this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey});
             } else {
               this.setState({resultList: res.data.resultList, nextPageKey:res.data.nextPageKey});
+            }
+            if(res.data.nextPageKey){
+              this.setState({nextPageKey: res.data.nextPageKey});
             }
             console.log("list", this.state.resultList);
             if(!res.data.nextPageKey){
               this.setState({isEndPage:true});
             }
 
-            if(res.data.nextPageKey && res.data.resultList.length<20){
+            if(res.data.nextPageKey && res.data.resultList.length<50){
               this.fetchDocuments({nextPageKey: res.data.nextPageKey, tag: args.tag});
             }
           }
