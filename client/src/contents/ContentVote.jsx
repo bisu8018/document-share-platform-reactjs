@@ -65,11 +65,11 @@ class ContentVote extends React.Component {
   }
 
   onClickVote = () => {
-
-    //this.handleApprove();
+    console.log("handleApprove start");
+    this.handleApprove();
 
     this.sendVoteInfo();
-    console.log("handleApprove start");
+
   }
 
   handleApprove = () => {
