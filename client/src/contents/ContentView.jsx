@@ -17,6 +17,7 @@ import AuthorEstimatedToday from "profile/AuthorEstimatedToday"
 import AuthorRevenueOnDocument from "profile/AuthorRevenueOnDocument"
 import ContentViewComment from "./ContentViewComment"
 import ContentViewFullScreen from "./ContentViewFullScreen";
+import VoteOnDocument from "./VoteOnDocument";
 
 import FileDownload from "js-file-download";
 
@@ -135,7 +136,7 @@ class ContentView extends React.Component {
               {restapi.convertTimestampToString(document.created)}
               </div>
              <div>
-                 <Button color="rose" size="sm">Vote</Button>
+                 <VoteOnDocument document={document} {...this.props}/>
                  <Button color="rose" size="sm">Share</Button>
                  <Button color="rose" size="sm" onClick={this.handleDownloadContent}>Download</Button>
                  <ContentViewRegistBlockchainButton document={document} {...this.props} />
