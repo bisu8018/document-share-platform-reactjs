@@ -39,25 +39,19 @@ const style = {
 class ContentViewFullScreen extends Component {
 
   state = {
-    documentText:null,
-    isExistInBlockChain: false,
+    isFull:false
   }
 
   constructor(props) {
     super();
 
-    const { document, classes, drizzleApis } = props;
+    const { document, documentText, drizzleApis } = props;
     this.document = document;
-    //this.goNormal = goNormal;
-    this.classes = classes;
+    this.documentText = documentText;
     this.drizzleApis = drizzleApis;
-    this.state = {
-      isFull:false
-    };
   }
 
   getContentDownload = (accountId, documentId, documentName) => {
-
 
     restapi.getContentDownload(accountId, documentId).then((res) => {
       console.log(res);
@@ -127,10 +121,10 @@ class ContentViewFullScreen extends Component {
           enabled={this.state.isFull}
           onChange={isFull => this.setState({isFull})}
         >
-          <div id="page" className={this.classes.pageViewer}>
-            <ContentViewCarousel target={this.document} state={this.state} />
-            <div className={this.classes.fullscreenBar}>
-              <Button className={this.classes.fullscreenBtn} onClick={this.goFull}>View full screen</Button>
+          <div id="page" className={classes.pageViewer}>
+            <ContentViewCarousel target={this.document} {...other}/>
+            <div className={classes.fullscreenBar}>
+              <Button className={classes.fullscreenBtn} onClick={this.goFull}>View full screen</Button>
             </div>
             <h2 className="tit">{this.document.title?this.document.title:""}</h2>
             <div className="descript"
@@ -166,11 +160,11 @@ class ContentViewFullScreen extends Component {
              </Link>
              <ContentViewComment/>
              <div className="documentText">
-             {this.state.documentText?this.state.documentText:"No Text"}
+             {this.documentText?this.documentText:"No Text"}
              </div>
           </div>
-          <div id="full" className={this.classes.fullViewer}>
-            <ContentViewCarousel target={this.document} state={this.state} {...other}/>
+          <div id="full" className={classes.fullViewer}>
+            <ContentViewCarousel target={this.document} {...other}/>
           </div>
         </Fullscreen>
       </div>

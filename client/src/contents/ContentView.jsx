@@ -23,6 +23,7 @@ class ContentView extends React.Component {
 
   state = {
     document:null,
+    documentText:null,
     dataKey:null,
     determineAuthorToken:-1,
     list: null,
@@ -72,9 +73,10 @@ class ContentView extends React.Component {
   }
 
   render() {
-    const { classes, drizzleApis } = this.props;
+    const { classes, drizzleApis, ...others } = this.props;
 
     const document = this.state.document;
+    const documentText = this.state.documentText;
 
     if(!document) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
@@ -83,9 +85,9 @@ class ContentView extends React.Component {
     return (
       <div className="contentGridView">
          <div className="leftWrap">
-            <ContentViewFullScreen document={document} {...this.props}/>
+            <ContentViewFullScreen document={document} documentText={documentText} {...others}/>
          </div>
-         <ContentViewRight document={this.state.document} list={this.state.list} {...this.props}/>
+         <ContentViewRight document={this.state.document} list={this.state.list} {...others}/>
       </div>
 
     );

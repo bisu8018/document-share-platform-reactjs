@@ -17,17 +17,15 @@ class ContentViewCarousel extends React.Component {
 
   constructor(props) {
     super();
-    const { target, state, classes } = props;
+    const { target, classes } = props;
     this.target = target;
     this.classes = classes;
-    this.state = state;
   }
 
   render() {
     const {
       classes,
-      target,
-      state
+      target
     } = this.props;
 
     let arr = [target.totalPages];
