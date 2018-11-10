@@ -25,7 +25,9 @@ class ContentViewCarousel extends React.Component {
   render() {
     const {
       classes,
-      target
+      target,
+      page,
+      onChange
     } = this.props;
 
     let arr = [target.totalPages];
@@ -35,7 +37,7 @@ class ContentViewCarousel extends React.Component {
 
     return (
       <div className={this.classes.container}>
-        <Carousel useKeyboardArrows>
+        <Carousel useKeyboardArrows onChange={onChange} selectedItem={page}>
           {arr.length > 0 ? arr.map((addr, index) => (
             <img className={this.classes.img} key={index} src={addr} />
           )):""}

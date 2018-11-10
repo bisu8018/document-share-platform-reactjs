@@ -108,6 +108,20 @@ export default class DrizzleApis {
     return result;
   }
 
+  deckToDollar = (str) => {
+
+    if(isNaN(str)){
+      return 0;
+    }
+
+    const c = 0.005;
+    const bn = new BigNumber(str);
+    const dollar = bn.multipliedBy(c);
+    const result = Math.round(dollar.toNumber() * 100) / 100;
+
+    return result;
+  }
+
   toEther = (str) => {
 
     const d = new BigNumber("1e+18")

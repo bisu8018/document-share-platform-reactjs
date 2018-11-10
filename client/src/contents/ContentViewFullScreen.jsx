@@ -42,7 +42,21 @@ const style = {
 class ContentViewFullScreen extends Component {
 
   state = {
-    isFull:false
+    isFull: false,
+    currentPage: 0,
+    totalPages: 0
+  }
+
+  handlePage = (page) => {
+    if (this.state.totalPages > 0 && !this.state.isFull) {
+      this.setState({currentPage:page});
+    }
+  }
+
+  handleFull = (page) => {
+    if (this.state.totalPages > 0 && this.state.isFull) {
+      this.setState({currentPage:page});
+    }
   }
 
   getContentDownload = (accountId, documentId, documentName) => {
@@ -89,9 +103,11 @@ class ContentViewFullScreen extends Component {
 
     const { classes, ...other } = this.props;
 
-    let page = document.getElementById("page");
-    let full = document.getElementById("full");
+    if (this.state.totalPages != this.props.document.totalPages) {
+      this.setState({totalPages: this.props.document.totalPages});
+    }
 
+    let page = document.getElementById("page");
     if (page !== null) {
       if (this.state.isFull) {
         page.style.display = "none";
@@ -100,6 +116,7 @@ class ContentViewFullScreen extends Component {
       }
     }
 
+    let full = document.getElementById("full");
     if (full !== null) {
       if (this.state.isFull) {
         full.style.display = "block";
@@ -116,7 +133,7 @@ class ContentViewFullScreen extends Component {
           onChange={isFull => this.setState({isFull})}
         >
           <div id="page" className={classes.pageViewer}>
-            <ContentViewCarousel target={this.props.document} {...other}/>
+            <ContentViewCarousel id="pageCarousel" target={this.props.document} onChange={this.handlePage} page={this.state.currentPage} {...other}/>
             <div className={classes.fullscreenBar}>
               <Button className={classes.fullscreenBtn} onClick={this.goFull}>View full screen</Button>
             </div>
@@ -156,7 +173,7 @@ class ContentViewFullScreen extends Component {
              </div>
           </div>
           <div id="full" className={classes.fullViewer}>
-            <ContentViewCarousel target={this.props.document} {...other}/>
+            <ContentViewCarousel id="fullCarousel" target={this.props.document} onChange={this.handleFull} page={this.state.currentPage} {...other}/>
           </div>
         </Fullscreen>
       </div>
