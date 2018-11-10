@@ -260,17 +260,21 @@ export function getContentDownload(accountId, documentId) {
       console.log(downloadUrl, filename);
 
       const config = {
-        header: {
+        responseType: 'arraybuffer', // important
+        headers: {
            'Access-Control-Allow-Origin': '*',
            'Access-Control-Allow-Credentials': true,
-           "Accept":"application/pdf",
-           responseType: 'blob' // important
+           'Accept':'application/pdf'
         }
       }
-
       axios.get(downloadUrl, config).then((response) => {
-        resolve(response);
-
+        const blob = new Blob([response.data], {type: response.data.type});
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
       });
 
     }).catch((err) => {

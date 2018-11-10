@@ -9,7 +9,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 const style = {
   container: {
     position: "relative",
-    maxHeight:"100vh",
     maxWidth:"100vw"
   }
 }

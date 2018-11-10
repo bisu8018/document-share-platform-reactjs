@@ -42,7 +42,7 @@ class ContentViewRight extends React.Component {
            <h3>Sponsored link</h3>
            <div className="cardSide">
                <span className="img">
-                 <a href="https://www.polarisoffice.com">
+                 <a href="https://www.polarisoffice.com" target='_blank'>
                  <img src={adimg} alt="AD PolarisOffice" />
                  </a>
                </span>
