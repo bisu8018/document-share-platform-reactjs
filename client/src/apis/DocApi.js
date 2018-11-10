@@ -199,7 +199,7 @@ function fileUpload(params) {
   const formData = new FormData();
   formData.append('file', params.file);
   const config = {
-      header: {
+      headers: {
           "content-type": 'application/octet-stream',
           "Signature": query.Signature,
           "x-amz-acl": "authenticated-read"
