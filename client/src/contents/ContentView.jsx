@@ -37,7 +37,7 @@ class ContentView extends React.Component {
     });
 
     restapi.getDocumentText(documentId).then((res) => {
-      //console.log(res);
+      console.log("text ", res);
       this.setState({documentText:res.data.text});
     });
 
@@ -65,18 +65,15 @@ class ContentView extends React.Component {
 
   componentWillMount() {
     if(!this.state.document) {
-      const { match} = this.props;
+      const { match } = this.props;
       const documentId = match.params.documentId;
       this.getContentInfo(documentId);
-
     }
   }
 
   render() {
-    const { classes, drizzleApis, ...others } = this.props;
-
+    const { classes, ...others } = this.props;
     const document = this.state.document;
-    const documentText = this.state.documentText;
 
     if(!document) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
@@ -85,7 +82,7 @@ class ContentView extends React.Component {
     return (
       <div className="contentGridView">
          <div className="leftWrap">
-            <ContentViewFullScreen document={document} documentText={documentText} {...others}/>
+            <ContentViewFullScreen document={document} documentText={this.state.documentText} {...others}/>
          </div>
          <ContentViewRight document={this.state.document} list={this.state.list} {...others}/>
       </div>

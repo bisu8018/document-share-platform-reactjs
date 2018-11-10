@@ -62,11 +62,18 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 .contentGridView .rightWrap h3 {font-size:16px;font-weight:bold}
 .contentGridView .rightWrap h4 {margin:0;font-size:14px;}
 
+.contentGridView .leftWrap .userName button {color:#000;background:#fff;font-size:14px;border:0px solid #eee;}
+.contentGridView .leftWrap .userName button {padding:1px;-webkit-transition:all .2s linear;-o-transition:all .2s linear;transition:all .2s linear}
+.contentGridView .leftWrap .userName button:hover {color:#e91e63;}
+.contentGridView .leftWrap .userName button a {color:inherit;}
+.contentGridView .leftWrap .userName button a {text-transform: capitalize;text-decoration: none;}
+
 .profileImg {display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}
 .profileImg .userImg {position:relative;display:inline-block;overflow:hidden;width:34px;height:34px;margin-right:10px;border-radius:34px;border:1px solid #ddd}
 .profileImg .userImg img {position:absolute;top:0;left:0;width:100%;height:100%;}
 .profileImg .userImg svg {margin:4px 0 0 4px;}
 .profileImg .userName {font-size:14px;line-height:1.2;font-weight:bold}
+.profileImg .userName a {}
 .profileImg .txt {display:block;font-size:14px;font-weight:normal;color:#}
 
 .proFileDescript {font-size:15px;white-space:pre-wrap;}

@@ -33,6 +33,9 @@ const style = {
     padding:"5px",
     margin:"5px",
     fontSize:"12px"
+  },
+  button: {
+    boxShadow:"none"
   }
 }
 
@@ -40,15 +43,6 @@ class ContentViewFullScreen extends Component {
 
   state = {
     isFull:false
-  }
-
-  constructor(props) {
-    super();
-
-    const { document, documentText, drizzleApis } = props;
-    this.document = document;
-    this.documentText = documentText;
-    this.drizzleApis = drizzleApis;
   }
 
   getContentDownload = (accountId, documentId, documentName) => {
@@ -75,14 +69,14 @@ class ContentViewFullScreen extends Component {
 
   handleDownloadContent = () => {
 
-    if(!this.document){
+    if(!this.props.document){
       console.log("getting document meta infomation!");
       return;
     }
-    console.log(this.document);
-    const accountId = this.document.accountId;
-    const documentId = this.document.documentId;
-    const documentName = this.document.documentName;
+    //console.log(this.props.document);
+    const accountId = this.props.document.accountId;
+    const documentId = this.props.document.documentId;
+    const documentName = this.props.document.documentName;
 
     this.getContentDownload(accountId, documentId, documentName);
   }
@@ -122,49 +116,47 @@ class ContentViewFullScreen extends Component {
           onChange={isFull => this.setState({isFull})}
         >
           <div id="page" className={classes.pageViewer}>
-            <ContentViewCarousel target={this.document} {...other}/>
+            <ContentViewCarousel target={this.props.document} {...other}/>
             <div className={classes.fullscreenBar}>
               <Button className={classes.fullscreenBtn} onClick={this.goFull}>View full screen</Button>
             </div>
-            <h2 className="tit">{this.document.title?this.document.title:""}</h2>
+            <h2 className="tit">{this.props.document.title?this.props.document.title:""}</h2>
             <div className="descript"
                   style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
-             {restapi.convertTimestampToString(this.document.created)}
+             {restapi.convertTimestampToString(this.props.document.created)}
              </div>
             <div>
-                <VoteOnDocument document={this.document} {...other} />
+                <VoteOnDocument document={this.props.document} {...other} />
                 <Button color="rose" size="sm">Share</Button>
                 <Button color="rose" size="sm" onClick={this.handleDownloadContent}>Download</Button>
-                <ContentViewRegistBlockchainButton document={this.document} {...other} />
+                <ContentViewRegistBlockchainButton document={this.props.document} {...other} />
             </div>
             <span>
-               <Badge color="info">View {this.document.viewCount?this.document.viewCount:0 + this.document.confirmViewCount?this.document.confirmViewCount:0} </Badge>
-               <AuthorRevenueOnDocument document={document} {...other} />
-               <Badge color="success">Vote $ {this.drizzleApis.toDollar(this.document.totalVoteAmount?this.document.totalVoteAmount:"0")}</Badge>
+               <Badge color="info">View {this.props.document.viewCount?this.props.document.viewCount:0 + this.props.document.confirmViewCount?this.props.document.confirmViewCount:0} </Badge>
+               <AuthorRevenueOnDocument document={this.props.document} {...other} />
+               <Badge color="success">Vote ${this.props.drizzleApis.toDollar(this.props.document.totalVoteAmount?this.props.document.totalVoteAmount:"0")}</Badge>
                {
-                 this.document.tags?this.document.tags.map((tag, index) => (
+                 this.props.document.tags?this.props.document.tags.map((tag, index) => (
                    <Badge color="warning" key={index}>{tag}</Badge>
                  )):""
                }
             </span>
-            <Link to={"/author/" + this.document.accountId} >
-                 <div className="profileImg">
-                    <span className="userImg">
-                        <Face className={classes.icons} />
-                    </span>
-                    <strong className="userName">{this.document.nickname?this.document.nickname:this.document.accountId}
-                        <span className="txt"></span>
-                     </strong>
-                </div>
-                <div className="proFileDescript">{this.document.desc?this.document.desc:""}</div>
-             </Link>
+            <div className="profileImg">
+                <span className="userImg">
+                    <Face className={classes.icons} />
+                </span>
+                <span className="userName">
+                  <Button className={classes.button}><Link to={"/author/" + this.props.document.accountId} >{this.props.document.nickname?this.props.document.nickname:this.props.document.accountId}</Link></Button>
+                </span>
+            </div>
+            <div className="proFileDescript">{this.props.document.desc?this.props.document.desc:""}</div>
              <ContentViewComment/>
              <div className="documentText">
-             {this.documentText?this.documentText:"No Text"}
+               {this.props.documentText?this.props.documentText:"No Text"}
              </div>
           </div>
           <div id="full" className={classes.fullViewer}>
-            <ContentViewCarousel target={this.document} {...other}/>
+            <ContentViewCarousel target={this.props.document} {...other}/>
           </div>
         </Fullscreen>
       </div>
