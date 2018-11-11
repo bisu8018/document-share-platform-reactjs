@@ -267,41 +267,6 @@ export default class DrizzleApis {
     return stackId;
   };
 
-  determineAuthorToken = (documentId) => {
-
-    const drizzle = this.drizzle;
-    console.log("determineAuthorToken", documentId, drizzle);
-
-    const drizzleState = drizzle.store.getState();
-    if (!drizzleState.drizzleStatus.initialized) {
-      console.error("drizzle state is not initialized!!!");
-      return ;
-    }
-    const ethAccount = drizzleState.accounts[0];
-    const contract = drizzle.contracts.DocumentReg;
-
-    const dataKey = contract.methods["determineAuthorToken"].cacheCall(ethAccount, this.fromAscii(documentId), {
-      from: ethAccount
-    });
-
-    return new Promise(function (resolve, reject) {
-      // subscribe to changes in the store
-      console.log("dataKey", dataKey);
-      const unsubscribe = drizzle.store.subscribe(() => {
-        // every time the store updates, grab the state from drizzle
-        const drizzleState = drizzle.store.getState();
-        // check to see if it's ready, if so, update local component state
-        if(drizzleState.contracts.DocumentReg.determineAuthorToken[dataKey]){
-          unsubscribe();
-          const dataValue = drizzleState.contracts.DocumentReg.determineAuthorToken[dataKey].value
-          console.log("subscribe determineAuthorToken", dataValue);
-          return resolve(dataValue);
-        }
-
-      });
-    });
-  };
-
   registDocumentToSmartContract = (documentId) => {
     console.log(documentId, this.drizzle);
     if(!documentId){
@@ -320,6 +285,45 @@ export default class DrizzleApis {
 
     return stackId;
   };
+
+  claimAuthorReward = (documentId) => {
+    //function claimAuthorReward(bytes32 _docId) public
+
+    if(!this.isAuthenticated()){
+      console.error("The Metamask login is required.")
+      return;
+    }
+
+    const ethAccount = this.drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.DocumentReg;
+    console.log("claimAuthorReward", ethAccount, "Profile account", documentId, this.fromAscii(documentId));
+    const stackId = contract.methods.claimAuthorReward.cacheSend(this.fromAscii(documentId), {
+      from: ethAccount
+    });
+
+    return stackId;
+
+  }
+
+  claimCuratorReward = (documentId) => {
+    //function claimCuratorReward(bytes32 _docId) public
+
+    if(!this.isAuthenticated()){
+      console.error("The Metamask login is required.")
+      return;
+    }
+
+    const ethAccount = this.drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.DocumentReg;
+    console.log("claimCuratorReward", ethAccount, "Profile account", documentId, this.fromAscii(documentId));
+    const stackId = contract.methods.claimCuratorReward.cacheSend(this.fromAscii(documentId), {
+      from: ethAccount
+    });
+
+    return stackId;
+
+  }
+
 
   requestTotalBalance = (accountId) => {
 

@@ -11,6 +11,7 @@ import AuthorSummary from 'profile/AuthorSummary';
 import AuthorRevenueOnDocument from 'profile/AuthorRevenueOnDocument';
 import CuratorDocumentList from 'profile/CuratorDocumentList.jsx';
 import Web3Apis from 'apis/Web3Apis';
+import AuthorClaim from 'profile/AuthorClaim';
 const style = {
 
 };
@@ -58,7 +59,7 @@ class Author extends React.Component {
 
     if(this.rewardOnDocuments.includes(documentId)) return;
 
-    console.log("handleRewardOnDocuments", documentId, reward);
+    //console.log("handleRewardOnDocuments", documentId, reward);
     this.rewardOnDocuments.push(documentId);
     this.rewards.push(Number(reward));
     let totalReward = 0;
@@ -144,11 +145,14 @@ class Author extends React.Component {
                                      >{result.desc}</div>
                                     <div className="badge">
                                         <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
-                                        <AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} />
-                                        <Badge color="success">Vote $ {drizzleApis.toDollar(result.totalVoteAmount?result.totalVoteAmount:"0")}</Badge>
+                                        {/*<AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} />*/}
+                                        <Badge color="success">Reward $ {drizzleApis.toDollar(result.confirmAuthorReward)}</Badge>
+                                        <Badge color="success">Vote $ {drizzleApis.toDollar(result.confirmVoteAmount)}</Badge>
                                     </div>
                                 </div>
                             </Link>
+
+                            <AuthorClaim document={result} {...this.props}/>
                         </div>
                     </div>
                   ))}

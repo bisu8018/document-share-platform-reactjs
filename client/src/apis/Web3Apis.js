@@ -119,4 +119,18 @@ export default class Web3Apis {
     console.log("getCuratorDepositOnUserDocument", curatorId, documentId, blockchainTimestamp);
     return this.DocumentReg.methods.getCuratorDepositOnUserDocument(curatorId, this.asciiToHex(documentId), blockchainTimestamp).call({from: curatorId});
   };
+
+
+  getDetermineAuthorReward = (authorAddress, documentId) => {
+
+    console.log("determineAuthorToken", documentId, authorAddress);
+
+    return this.DocumentReg.methods.determineAuthorReward(authorAddress, this.asciiToHex(documentId)).call({from: authorAddress});
+  };
+
+  getDetermineCuratorReward = (documentId) => {
+    //function determineCuratorReward(bytes32 _docId) public view returns (uint)
+
+    return this.DocumentReg.methods.determineCuratorReward(this.asciiToHex(documentId)).call({from: defaultAccountId});
+  }
 }

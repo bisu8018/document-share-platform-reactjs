@@ -33,32 +33,12 @@ class ContentView extends React.Component {
     restapi.getDocument(documentId).then((res) => {
       console.log(res.data);
       this.setState({document:res.data.document, list:res.data.list});
-      //this.handleDetermineAuthorToken();
+
     });
 
     restapi.getDocumentText(documentId).then((res) => {
       console.log("text ", res);
       this.setState({documentText:res.data.text});
-    });
-
-  }
-
-  handleDetermineAuthorToken = () => {
-
-    const {drizzleApis} = this.props
-    if(!this.state.document) return;
-
-    const doc = this.state.document;
-
-    if(!doc || !doc.documentId){
-      console.error("handleDetermineAuthorToken documentId is nothing");
-      return;
-    }
-
-    drizzleApis.determineAuthorToken(doc.documentId).then(function(data){
-      if(data){
-        this.setState({determineAuthorToken: data});
-      }
     });
 
   }

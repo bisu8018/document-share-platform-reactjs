@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import AuthorSummary from 'profile/AuthorSummary';
 import CuratorDepositOnDocument from 'profile/CuratorDepositOnDocument';
+import CuratorClaim from 'profile/CuratorClaim';
 
 const style = {
 
@@ -92,22 +93,24 @@ class CuratorDocumentList extends React.Component {
                                   <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.title?result.title:result.documentName} />
                               </span>
                              <div className="inner">
-                                  <div className="tit"
-                                      style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                                      >{result.title?result.title:result.documentName}</div>
-                                    <div className="descript"
-                                        style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
-                                   {restapi.convertTimestampToString(result.created)}
-                                   </div>
+                                <div className="tit"
+                                    style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
+                                    >{result.title?result.title:result.documentName}</div>
                                   <div className="descript"
-                                      style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                                   >{result.desc}</div>
-                                   <div className="badge">
-                                       <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
-                                       <CuratorDepositOnDocument handleRewardOnDocuments={handleRewardOnDocuments} document={result.documentInfo} {...this.props} loggedInAccount={loggedInAccount} />
-                                   </div>
+                                      style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
+                                 {restapi.convertTimestampToString(result.created)}
+                                 </div>
+                                <div className="descript"
+                                    style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
+                                 >{result.desc}</div>
+                                 <div className="badge">
+                                     <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
+                                     <CuratorDepositOnDocument handleRewardOnDocuments={handleRewardOnDocuments} document={result.documentInfo} {...this.props} loggedInAccount={loggedInAccount} />
+                                 </div>
+
                               </div>
                           </Link>
+                          <CuratorClaim {...this.props} document={result} />
                       </div>
                   </div>
                 ))}
