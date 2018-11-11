@@ -26,7 +26,7 @@ class ContentViewComment extends React.Component {
           inputProps={{
             type: "commentText"
           }} />
-        <Button onClick={() => this.addComment()} color="rose" size="sm">Post</Button>
+        <Button onClick={() => this.addComment()} color="rose" size="sm">Add</Button>
       </div>
     );
   }
