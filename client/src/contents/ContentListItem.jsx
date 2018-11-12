@@ -16,14 +16,18 @@ const style = {
 class ContentListItem extends React.Component {
 
 
+
     render() {
       const { classes, result, drizzleApis } = this.props;
-
+      let imageUrl = restapi.getThumbnail(result.documentId, 1);
+      if(result.documentName.lastIndexOf(".dotx")>0 || result.documentName.lastIndexOf(".dot")>0 || result.documentName.lastIndexOf(".docx")>0){
+        imageUrl = restapi.getPageView(result.documentId, 1);
+      }
       return (
 
          <div className="cardCont" key={result.documentId}>
              <Link to={"/content/view/" + result.documentId} >
-               <div className="img"><span><img src={restapi.getThumbnail(result.documentId, 1)} alt={result.documentName?result.documentName:result.documentId} alt={result.documentName?result.documentName:result.documentId} /></span></div>
+               <div className="img"><span><img src={imageUrl} alt={result.title} /></span></div>
              </Link>
              <div className="inner">
                  <div className="profileImg">
