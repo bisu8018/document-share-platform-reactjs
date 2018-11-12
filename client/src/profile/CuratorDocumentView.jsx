@@ -8,8 +8,9 @@ import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import AuthorSummary from 'profile/AuthorSummary';
-import CuratorDepositOnDocument from 'profile/CuratorDepositOnDocument';
+import CuratorDepositOnUserDocument from 'profile/CuratorDepositOnUserDocument';
 import CuratorClaim from 'profile/CuratorClaim';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const style = {
 
@@ -63,7 +64,9 @@ class CuratorDocumentView extends React.Component {
                    >{document.desc}</div>
                    <div className="badge">
                        <Badge color="info">View {document.totalViewCount?document.totalViewCount:0}</Badge>
-                       <CuratorDepositOnDocument handleRewardOnDocuments={handleRewardOnDocuments} document={this.state.document} {...this.props} loggedInAccount={drizzleApis.getLoggedInAccount()} />
+                       <Badge color="success">
+                         <CuratorDepositOnUserDocument handleRewardOnDocuments={handleRewardOnDocuments} document={this.state.document} {...this.props} loggedInAccount={drizzleApis.getLoggedInAccount()} />
+                       </Badge>
                    </div>
 
                 </div>

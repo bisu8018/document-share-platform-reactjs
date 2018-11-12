@@ -59,7 +59,7 @@ class Author extends React.Component {
 
     if(this.rewardOnDocuments.includes(documentId)) return;
 
-    //console.log("handleRewardOnDocuments", documentId, reward);
+    //.log("handleRewardOnDocuments", documentId, reward);
     this.rewardOnDocuments.push(documentId);
     this.rewards.push(Number(reward));
     let totalReward = 0;
@@ -67,9 +67,9 @@ class Author extends React.Component {
       //console.log(this.revenues);
       for(const idx in this.rewards){
 
-        totalReward += this.rewards[idx];
-        //console.log("handleRevenueOnDocuments", this.revenues[idx], revenue);
+        totalReward += Number(this.rewards[idx]);
       }
+      console.log("handleRevenueOnDocuments", this.rewards, "totalReward", totalReward);
       this.setState({totalReward: totalReward});
 
   }

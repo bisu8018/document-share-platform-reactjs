@@ -64,7 +64,7 @@ export default class Web3Apis {
   }
 
   toDeck = (smalldeck) => {
-    console.log(smalldeck);
+    //console.log(smalldeck);
 
     const d = new BigNumber("1e+18")
     const bn = new BigNumber(smalldeck);
