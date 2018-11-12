@@ -71,7 +71,7 @@ export default class Web3Apis {
     const deck = bn.dividedBy(d);
     const result = Math.round(deck.toNumber() * 100) / 100;
     //120,000,000,000,000,000,000
-    console.log("toDeck", bn, deck, deck.toNumber(), result);
+    //console.log("toDeck", bn, deck, deck.toNumber(), result);
 
     return result;
   }

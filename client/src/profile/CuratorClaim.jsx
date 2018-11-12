@@ -42,7 +42,7 @@ class CuratorClaim extends React.Component {
       const receipt = transactions[txHash].receipt;
       const confirmations = transactions[txHash].confirmations;
 
-      console.log(state, confirmations, receipt);
+      //console.log(state, confirmations, receipt);
       this.setState({ message: state});
       if(state!="pending"){
         this.setState({stackId:null, determineReward: -1});
@@ -58,7 +58,7 @@ class CuratorClaim extends React.Component {
     const {document, drizzleApis} = this.props;
     if(document && drizzleApis.isAuthenticated() && this.state.determineReward < 0){
       this.web3Apis.getDetermineCuratorReward(document.documentId, drizzleApis.getLoggedInAccount()).then((data) => {
-        console.log("getDetermineCuratorReward", document.documentId, data)
+        //console.log("getDetermineCuratorReward", document.documentId, data)
         this.setState({determineReward: data});
       }).catch((err) => {
         console.error(err);
