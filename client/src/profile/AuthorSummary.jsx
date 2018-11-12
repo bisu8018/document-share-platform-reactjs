@@ -49,44 +49,6 @@ class AuthorSummary extends React.Component {
 
   web3Apis = new Web3Apis();
 
-  fetchDocuments = (params) => {
-      const {classes, accountId} = this.props;
-      restapi.getTodayVotedDocumentsByCurator({accountId:accountId}).then((res)=>{
-        //console.log("Fetch getTodayVotedDocumentsByCurator Document", res.data);
-        if(res.data){
-          const todayVotedDocuments = res.data.todayVotedDocuments;
-          const totalViewCount = res.data.totalViewCount[0];
-          this.setState({todayVotedDocuments: todayVotedDocuments, totalViewCount: totalViewCount});
-
-          console.log(todayVotedDocuments, totalViewCount);
-          for(const i in todayVotedDocuments){
-            const document = todayVotedDocuments[i].documentInfo;
-            console.log(document);
-            this.setState({curatorEstimatedToday: this.state.curatorEstimatedToday + Number(isNaN(document.voteAmount)?0:document.voteAmount)});
-          }
-        }
-      });
-
-  }
-/*
-  getCuratorEstimatedToday = (curatorId, documentId, viewCount, totalTodayViewCount) => {
-    const {classes, accountId} = this.props;
-
-
-    Web3Apis.calculateCuratorReward(curatorId, documentId, viewCount, totalTodayViewCount).then((data) => {
-      console.log("get Today Curator' Estimated reward  in blockchain", data);
-      //this.setState({curatorEstimatedToday: this.state.curatorEstimatedToday + Number(data)});
-    }).catch((err) => {
-      console.error(err);
-    })
-  }
-*/
-  componentWillMount() {
-    const {drizzleApis} = this.props;
-
-    this.fetchDocuments();
-  }
-
   handleRequestBalance = () => {
 
     const {drizzleApis, drizzleState, accountId} = this.props;
@@ -145,7 +107,7 @@ class AuthorSummary extends React.Component {
   }
 
   render() {
-    const {classes, accountId, drizzleApis, totalRevenue, totalReward} = this.props;
+    const {classes, accountId, drizzleApis, totalAuthor3DayReward, totalCurator3DayReward} = this.props;
 
     if(!drizzleApis.isAuthenticated()) return (
       <h3 style={{margin:'0',fontSize:'26px'}}>Account
@@ -158,9 +120,9 @@ class AuthorSummary extends React.Component {
 
     // Values in DECK
     const balance = drizzleApis.toEther(this.printBalance());
-    const author3DayReward = drizzleApis.toEther(totalRevenue);
+    const author3DayReward = drizzleApis.toEther(totalAuthor3DayReward);
     const authorTodayReward = drizzleApis.toEther(this.state.authorEstimatedToday);
-    const curator3DayReward = drizzleApis.toEther(totalReward);
+    const curator3DayReward = drizzleApis.toEther(totalCurator3DayReward);
     const curatorTodayReward = drizzleApis.toEther(this.state.curatorEstimatedToday);
     const sumReward = author3DayReward + authorTodayReward + curator3DayReward + curatorTodayReward;
 

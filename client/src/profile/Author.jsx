@@ -21,56 +21,60 @@ class Author extends React.Component {
 
   state = {
     resultList: [],
+    curatorDocumentList: [],
+    curatorDocumentKeyList: [],
     nextPageKey: null,
     isEndPage:false,
-    totalRevenue: 0,
-    totalReward: 0
+    totalAuthor3DayReward: 0,
+    totalCurator3DayReward: 0,
+    totalCuratorEstimateRewards: 0
   };
 
-  revenueOnDocuments = [];
-  revenues = [];
+  author3DayRewardOnDocuments = [];
+  author3DayRewards = [];
 
-  rewardOnDocuments = [];
-  rewards = [];
+  curator3DayRewardOnDocuments = [];
+  curator3DayRewards = [];
+  curatorEstimateRewards = [];
 
   web3Apis = new Web3Apis();
 
-  handleRevenueOnDocuments = (documentId, revenue) =>{
+  handleTotalAuthor3DayReward = (documentId, revenue) =>{
 
-    if(this.revenueOnDocuments.includes(documentId)) return;
+    if(this.author3DayRewardOnDocuments.includes(documentId)) return;
 
-    //console.log("handleRevenueOnDocuments", documentId, revenue);
-    this.revenueOnDocuments.push(documentId);
-    this.revenues.push(Number(revenue));
-    let totalRevenue = 0;
-    if(this.revenues.length == this.state.resultList.length){
-      //console.log(this.revenues);
-      for(const idx in this.revenues){
+    //console.log("handleTotalAuthor3DayReward", documentId, revenue);
+    this.author3DayRewardOnDocuments.push(documentId);
+    this.author3DayRewards.push(Number(revenue));
+    let totalAuthor3DayRewards = 0;
 
-        totalRevenue += this.revenues[idx];
-        //console.log("handleRevenueOnDocuments", this.revenues[idx], revenue);
-      }
-      this.setState({totalRevenue: totalRevenue});
+    for(const idx in this.author3DayRewardOnDocuments){
+      totalAuthor3DayRewards += Number(this.author3DayRewards[idx]);
     }
+    //console.log("handleTotalAuthor3DayReward", this.author3DayRewards, "totalAuthor3DayRewards", totalAuthor3DayRewards);
+    this.setState({totalAuthor3DayReward: totalAuthor3DayRewards});
+
 
   }
 
-  handleRewardOnDocuments = (documentId, reward) =>{
+  handleCurator3DayRewardOnDocuments = (documentId, reward, estimateReward) =>{
 
-    if(this.rewardOnDocuments.includes(documentId)) return;
+    if(this.curator3DayRewardOnDocuments.includes(documentId)) return;
 
-    //.log("handleRewardOnDocuments", documentId, reward);
-    this.rewardOnDocuments.push(documentId);
-    this.rewards.push(Number(reward));
-    let totalReward = 0;
-
+    console.log("handleCurator3DayRewardOnDocuments", documentId, reward, estimateReward);
+    this.curator3DayRewardOnDocuments.push(documentId);
+    this.curator3DayRewards.push(Number(reward));
+    this.curatorEstimateRewards.push(Number(estimateReward));
+    let totalCurator3DayReward = 0;
+    let totalCuratorEstimateRewards = 0;
       //console.log(this.revenues);
-      for(const idx in this.rewards){
+      for(const idx in this.curator3DayRewards){
 
-        totalReward += Number(this.rewards[idx]);
+        totalCurator3DayReward += Number(this.curator3DayRewards[idx]);
+        totalCuratorEstimateRewards += Number(this.curatorEstimateRewards[idx]);
       }
-      console.log("handleRevenueOnDocuments", this.rewards, "totalReward", totalReward);
-      this.setState({totalReward: totalReward});
+      //console.log("handleCurator3DayRewardOnDocuments", this.curator3DayRewards, "totalCurator3DayReward", totalCurator3DayReward, "totalCuratorEstimateRewards", totalCuratorEstimateRewards);
+      this.setState({totalCurator3DayReward: totalCurator3DayReward, totalCuratorEstimateRewards: totalCuratorEstimateRewards});
 
   }
 
@@ -89,7 +93,7 @@ class Author extends React.Component {
         console.log("Fetch Author Document", res.data);
         if(res.data && res.data.resultList) {
           if(this.state.resultList){
-            this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey});
+            this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey, totalViewCountInfo: res.data.totalViewCountInfo});
           } else {
             this.setState({resultList: res.data.resultList, nextPageKey:res.data.nextPageKey, totalViewCountInfo: res.data.totalViewCountInfo});
           }
@@ -102,8 +106,38 @@ class Author extends React.Component {
 
   }
 
+  getCuratorDocuments = () => {
+
+      const {classes, match} = this.props;
+      const email = match.params.email;
+      restapi.getCuratorDocuments({
+        accountId: email
+      }).then((res)=>{
+        console.log("Fetch My Voted Document", res.data);
+        if(res.data && res.data.resultList) {
+          //console.log("list", res.data.resultList);
+
+          let deduplicationList = this.state.curatorDocumentList;
+          let deduplicationKeys = this.state.curatorDocumentKeyList;
+          res.data.resultList.forEach((curItem) => {
+            if(!deduplicationKeys.includes(curItem.documentId)){
+              deduplicationKeys.push(curItem.documentId);
+              deduplicationList.push(curItem);
+              //console.log(curItem);
+            }
+          });
+
+          this.setState({curatorDocumentList:deduplicationList, curatorDocumentKeyList:deduplicationKeys});
+
+        }
+
+      });
+  }
+
+
   componentWillMount() {
     this.fetchDocuments();
+    this.getCuratorDocuments();
   }
 
   render() {
@@ -115,7 +149,13 @@ class Author extends React.Component {
 
         <div className="contentGridView">
 
-            <AuthorSummary totalReward={this.state.totalReward} totalRevenue={this.state.totalRevenue} drizzleApis={drizzleApis} documentList={this.state.resultList} totalViewCountInfo={this.state.totalViewCountInfo} accountId={accountId} />
+            <AuthorSummary totalReward={this.state.totalReward}
+              totalAuthor3DayReward={this.state.totalAuthor3DayReward}
+              totalCurator3DayReward={this.state.totalCurator3DayReward}
+              drizzleApis={drizzleApis} documentList={this.state.resultList}
+              curatorDocumentList={this.state.curatorDocumentList}
+              totalViewCountInfo={this.state.totalViewCountInfo}
+              accountId={accountId} />
 
             <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} shared documents </h3>
               <InfiniteScroll
@@ -145,8 +185,8 @@ class Author extends React.Component {
                                      >{result.desc}</div>
                                     <div className="badge">
                                         <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
-                                        {/*<AuthorRevenueOnDocument handleRevenueOnDocuments={this.handleRevenueOnDocuments} document={result} {...this.props} />*/}
-                                        <Badge color="success">Reward $ {drizzleApis.toDollar(result.confirmAuthorReward)}</Badge>
+                                        <AuthorRevenueOnDocument handleTotalAuthor3DayReward={this.handleTotalAuthor3DayReward} document={result} {...this.props} />
+                                        {/* <Badge color="success">Reward $ {drizzleApis.toDollar(result.confirmAuthorReward)}</Badge> */}
                                         <Badge color="success">Vote $ {drizzleApis.toDollar(result.confirmVoteAmount)}</Badge>
                                     </div>
                                 </div>
@@ -160,7 +200,11 @@ class Author extends React.Component {
                 </div>
             </InfiniteScroll>
 
-            <CuratorDocumentList {...this.props} handleRewardOnDocuments={this.handleRewardOnDocuments} />
+            <CuratorDocumentList {...this.props}
+              handleCurator3DayRewardOnDocuments={this.handleCurator3DayRewardOnDocuments}
+              curatorDocumentList={this.state.curatorDocumentList}
+              totalViewCountInfo={this.state.totalViewCountInfo}
+                />
         </div>
 
     );

@@ -8,7 +8,7 @@ import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import AuthorSummary from 'profile/AuthorSummary';
-import CuratorDepositOnUserDocument from 'profile/CuratorDepositOnUserDocument';
+import CuratorRewardOnUserDocument from 'profile/CuratorRewardOnUserDocument';
 import CuratorClaim from 'profile/CuratorClaim';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -25,7 +25,7 @@ class CuratorDocumentView extends React.Component {
 
   getContentInfo = (documentId) => {
     restapi.getDocument(documentId).then((res) => {
-      console.log(res.data);
+      //console.log(res.data);
       this.setState({document:res.data.document});
     });
 
@@ -39,7 +39,7 @@ class CuratorDocumentView extends React.Component {
   }
 
   render() {
-      const {classes, drizzleApis, handleRewardOnDocuments} = this.props;
+      const {classes, drizzleApis, handleCurator3DayRewardOnDocuments} = this.props;
 
       if(!this.state.document) return "Loading Document";
 
@@ -65,7 +65,7 @@ class CuratorDocumentView extends React.Component {
                    <div className="badge">
                        <Badge color="info">View {document.totalViewCount?document.totalViewCount:0}</Badge>
                        <Badge color="success">
-                         <CuratorDepositOnUserDocument handleRewardOnDocuments={handleRewardOnDocuments} document={this.state.document} {...this.props} loggedInAccount={drizzleApis.getLoggedInAccount()} />
+                         <CuratorRewardOnUserDocument handleCurator3DayRewardOnDocuments={handleCurator3DayRewardOnDocuments} document={this.state.document} {...this.props} loggedInAccount={drizzleApis.getLoggedInAccount()} />
                        </Badge>
                    </div>
 

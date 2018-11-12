@@ -34,7 +34,7 @@ class CuratorDocumentList extends React.Component {
       })
 
   };
-
+/*
   fetchDocuments = (params) => {
 
       const {classes, match} = this.props;
@@ -74,34 +74,29 @@ class CuratorDocumentList extends React.Component {
   componentWillMount() {
     this.fetchDocuments();
   }
-
+*/
   render() {
-    const {classes, drizzleApis, match, handleRewardOnDocuments} = this.props;
+    const {classes, drizzleApis, match, handleCurator3DayRewardOnDocuments, curatorDocumentList, totalViewCountInfo} = this.props;
     const accountId = match.params.email;
     if(!drizzleApis.isAuthenticated()) return "DrizzleState Loading!!";
 
     const loggedInAccount = drizzleApis.getLoggedInAccount();
 
-
-    if (this.state.resultList.length > 0) {
+    if (curatorDocumentList.length > 0) {
       return (
         <div>
             <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} voted documents </h3>
-            <InfiniteScroll
-              dataLength={this.state.resultList.length}
-              next={this.fetchMoreData}
-              hasMore={!this.state.isEndPage}
-              loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
 
-              <div className="customGrid col3">
-                {this.state.resultList.map((result, index) => (
-                  <div className="box" key={result.documentId}>
-                      <CuratorDocumentView {...this.props} documentId={result.documentId}/>
-                  </div>
-                ))}
 
-              </div>
-          </InfiniteScroll>
+            <div className="customGrid col3">
+              {curatorDocumentList.map((result, index) => (
+                <div className="box" key={result.documentId}>
+                    <CuratorDocumentView {...this.props} documentId={result.documentId} totalViewCountInfo={totalViewCountInfo}/>
+                </div>
+              ))}
+
+            </div>
+
         </div>
 
       );

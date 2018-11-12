@@ -26,29 +26,29 @@ class CuratorDepositOnUserDocument extends React.Component {
   };
 
   componentWillMount () {
-    const { document, loggedInAccount, handleRewardOnDocuments } = this.props;
+    const { document, loggedInAccount, handleCurator3DayRewardOnDocuments, totalViewCountInfo} = this.props;
 
-    //console.log(document);
+    console.log("CuratorRewardOnUserDocument", loggedInAccount, document.documentId);
 
-    this.web3Apis.getCuratorDepositOnUserDocument(loggedInAccount, document.documentId).then((data) => {
+    const viewCount = totalViewCountInfo.count;
+    const totalViewCount = totalViewCountInfo.totalViewCount;
 
-      this.setState({curatorDepositOnUserDocument:data});
-
-
-    });
-
-    /*
     const blockchainTimestamp = this.web3Apis.getBlockchainTimestamp(new Date());
-    this.web3Apis.getCurator3DayRewardOnUserDocument(loggedInAccount, document.documentId, blockchainTimestamp).then((data) => {
+    const promise1 = this.web3Apis.getCurator3DayRewardOnUserDocument(loggedInAccount, document.documentId, blockchainTimestamp);
+    const promise2 = this.web3Apis.calculateCuratorReward("0xa4dA09DF8E5D0E05775c2C26ABCdFB97f3e84e15", document.documentId, viewCount, totalViewCount);
 
-      this.setState({curatorRewardOnDocuments:data});
+    Promise.all([promise1, promise2]).then((results) => {
+      console.log("CuratorDepositOnUserDocument Promise all", results);
+      this.setState({curatorRewardOnDocuments: results[0]});
       if(handleCurator3DayRewardOnDocuments){
         //console.log("getCuratorDepositOnUserDocument", data);
-        handleCurator3DayRewardOnDocuments(document.documentId, data);
+        handleCurator3DayRewardOnDocuments(document.documentId, results[0], results[1]);
       }
+    }).catch((err) => {
+      console.error("err!!!", err);
+    })
 
-    });
-    */
+
 
   }
 

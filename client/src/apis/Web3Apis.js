@@ -101,12 +101,12 @@ export default class Web3Apis {
   }
 
   calculateCuratorReward = (curatorId, documentId, viewCount, totalViewCount) => {
-    //contract calculateCuratorReward
+    //contract calculateCuratorReward(address _addr, bytes32 _docId, uint _pv, uint _tpvs)
 
-    //console.log("calculateCuratorReward", curatorId, documentId, viewCount, totalViewCount);
+    console.log("calculateCuratorReward", curatorId, documentId, viewCount, totalViewCount);
 
     return this.DocumentReg.methods.calculateCuratorReward(curatorId, this.asciiToHex(documentId), viewCount, totalViewCount).call({
-      from: defaultAccountId
+      from: curatorId
     });
 
   }
