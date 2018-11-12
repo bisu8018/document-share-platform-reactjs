@@ -182,7 +182,7 @@ class Author extends React.Component {
                           <div className="cardSide">
                               <Link to={"/content/view/" + result.documentId} >
                                   <span className="img">
-                                      <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.title?result.title:result.documentName} />
+                                      <img src={restapi.getThumbnail(result.documentId, 1, result.documentName)} alt={result.title?result.title:result.documentName} />
                                   </span>
                                  <div className="inner">
                                       <div className="tit"

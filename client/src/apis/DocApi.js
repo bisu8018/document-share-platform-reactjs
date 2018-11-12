@@ -19,8 +19,15 @@ export function getPageView(documentId, pageNo) {
   return imgDomain + "/document/get/" + documentId + "/" + pageNo;
 }
 
-export function getThumbnail(documentId, pageNo) {
-  return imgDomain+ "/document/thumb/" + documentId + "/" + pageNo;
+export function getThumbnail(documentId, pageNo, documentName) {
+  let imageUrl = imgDomain+ "/document/thumb/" + documentId + "/" + pageNo;
+  if(documentName){
+    if(documentName.lastIndexOf(".dotx")>0 || documentName.lastIndexOf(".dot")>0 || documentName.lastIndexOf(".docx")>0){
+      imageUrl = getPageView(documentId, 1);
+    }
+  }
+
+  return imageUrl;
 }
 
 export function getDocuments(params){

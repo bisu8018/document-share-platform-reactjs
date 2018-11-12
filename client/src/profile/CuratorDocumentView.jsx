@@ -49,7 +49,7 @@ class CuratorDocumentView extends React.Component {
         <div className="cardSide">
             <Link to={"/content/view/" + document.documentId} >
                 <span className="img">
-                    <img src={restapi.getThumbnail(document.documentId, 1)} alt={document.title?document.title:document.documentName} />
+                    <img src={restapi.getThumbnail(document.documentId, 1, document.documentName)} alt={document.title?document.title:document.documentName} />
                 </span>
                <div className="inner">
                   <div className="tit"
