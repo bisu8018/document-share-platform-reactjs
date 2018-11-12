@@ -24,7 +24,8 @@ class ContentList extends React.Component {
       isEndPage:false,
       tag: null,
       totalViewCountInfo: null,
-      path: null
+      path: null,
+      loading: false
     };
 
     tagSearch = (tag, path) => {
@@ -58,6 +59,10 @@ class ContentList extends React.Component {
 
     fetchDocuments = (args) => {
 
+        if(this.state.loading) return;
+
+        this.setState({loading:true});
+
         const params = {
           nextPageKey: args.nextPageKey,
           tag: args.tag,
@@ -65,23 +70,26 @@ class ContentList extends React.Component {
         }
 
         console.log("fetchDocument start", args, this.state, params);
+
+
+
         restapi.getDocuments(params).then((res)=>{
           console.log("Fetch Document", res.data);
+          this.setState({loading:false});
+
           if(res.data && res.data.resultList) {
             if(this.state.resultList && this.state.nextPageKey){
               this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey});
             } else {
               this.setState({resultList: res.data.resultList, nextPageKey:res.data.nextPageKey});
             }
-            if(res.data.nextPageKey){
-              this.setState({nextPageKey: res.data.nextPageKey});
-            }
-            console.log("list", this.state.resultList);
+
+            console.log("list", this.state.resultList, res.data.nextPageKey);
             if(!res.data.nextPageKey){
               this.setState({isEndPage:true});
             }
 
-            if(res.data.nextPageKey && res.data.resultList.length<50){
+            if(res.data.nextPageKey && res.data.resultList.length<10){
               this.fetchDocuments({nextPageKey: res.data.nextPageKey, tag: args.tag});
             }
           }
@@ -89,6 +97,9 @@ class ContentList extends React.Component {
           if(res.data && res.data.totalViewCountInfo && !this.state.totalViewCountInfo){
             this.setState({totalViewCountInfo: res.data.totalViewCountInfo});
           }
+        }).catch((err) => {
+          this.setState({loading:false});
+
         });
 
     }
@@ -102,7 +113,7 @@ class ContentList extends React.Component {
 
     componentWillMount() {
       const { match } = this.props;
-      console.log("componentWillMount", match);
+      //console.log("componentWillMount", match);
       this.setState({
         resultList: [],
         nextPageKey: null,
