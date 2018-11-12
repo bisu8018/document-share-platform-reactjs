@@ -35,7 +35,7 @@ class AuthorRevenueOnDocument extends React.Component {
   componentWillMount () {
     const { document, handleRevenueOnDocuments } = this.props;
 
-    //console.log(document);
+    console.log(document);
     this.web3Apis.getAuthor3DayRewardOnDocument(document.ethAccount, document.documentId).then((data) => {
 
       this.setState({author3DayRewardOnDocument:data});
