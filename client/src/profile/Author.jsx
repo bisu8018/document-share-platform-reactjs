@@ -115,7 +115,13 @@ class Author extends React.Component {
 
         <div className="contentGridView">
 
-            <AuthorSummary totalReward={this.state.totalReward} totalRevenue={this.state.totalRevenue} drizzleApis={drizzleApis} documentList={this.state.resultList} totalViewCountInfo={this.state.totalViewCountInfo} accountId={accountId} />
+            <AuthorSummary
+              totalReward={this.state.totalReward}
+              totalRevenue={this.state.totalRevenue}
+              drizzleApis={drizzleApis}
+              documentList={this.state.resultList}
+              totalViewCountInfo={this.state.totalViewCountInfo}
+              accountId={accountId} />
 
             <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} shared documents </h3>
               <InfiniteScroll
@@ -152,7 +158,7 @@ class Author extends React.Component {
                                 </div>
                             </Link>
 
-                            <AuthorClaim document={result} {...this.props}/>
+                            <AuthorClaim document={result} accountId={accountId} {...this.props}/>
                         </div>
                     </div>
                   ))}

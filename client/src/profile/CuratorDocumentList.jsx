@@ -96,7 +96,7 @@ class CuratorDocumentList extends React.Component {
               <div className="customGrid col3">
                 {this.state.resultList.map((result, index) => (
                   <div className="box" key={result.documentId}>
-                      <CuratorDocumentView {...this.props} documentId={result.documentId}/>
+                      <CuratorDocumentView {...this.props} documentId={result.documentId} accountId={accountId}/>
                   </div>
                 ))}
 

@@ -38,8 +38,6 @@ class AuthorSummary extends React.Component {
 
   state = {
     totalBalanceDataKey: null,
-    totalBalance: 0,
-    totalViewCountInfo: null,
     authorEstimatedToday: 0,
     curatorEstimatedToday: 0,
     todayVotedDocuments: null,
@@ -81,6 +79,10 @@ class AuthorSummary extends React.Component {
     })
   }
 */
+  safeNumber = (num) => {
+    return (typeof num == 'number') ? num : 0;
+  }
+
   componentWillMount() {
     const {drizzleApis} = this.props;
 
@@ -145,7 +147,7 @@ class AuthorSummary extends React.Component {
   }
 
   render() {
-    const {classes, accountId, drizzleApis, totalRevenue, totalReward} = this.props;
+    const {classes, accountId, drizzleApis, totalRevenue, totalReward, ...others} = this.props;
 
     if(!drizzleApis.isAuthenticated()) return (
       <h3 style={{margin:'0',fontSize:'26px'}}>Account
@@ -162,7 +164,17 @@ class AuthorSummary extends React.Component {
     const authorTodayReward = drizzleApis.toEther(this.state.authorEstimatedToday);
     const curator3DayReward = drizzleApis.toEther(totalReward);
     const curatorTodayReward = drizzleApis.toEther(this.state.curatorEstimatedToday);
-    const sumReward = author3DayReward + authorTodayReward + curator3DayReward + curatorTodayReward;
+
+    let sumReward = 0;
+    sumReward += this.safeNumber(author3DayReward);
+    sumReward += this.safeNumber(authorTodayReward);
+    sumReward += this.safeNumber(curator3DayReward);
+    sumReward += this.safeNumber(curatorTodayReward);
+
+    //console.log('author3DayReward:' + author3DayReward);
+    //console.log('authorTodayReward:' + authorTodayReward);
+    //console.log('curator3DayReward:' + curator3DayReward);
+    //console.log('curatorTodayReward:' + curatorTodayReward);
 
     return (
       <div>
@@ -170,20 +182,20 @@ class AuthorSummary extends React.Component {
           <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
         </h3>
         <ul className="detailList">
-            <li><BalanceOf balance={balance} sumReward={sumReward} {...this.props}></BalanceOf></li>
+            <li><BalanceOf balance={balance} sumReward={sumReward} drizzleApis={drizzleApis} {...others}></BalanceOf></li>
         </ul>
         <div className={this.props.classes.authorReward}>
         <h5>Author rewards</h5>
         <ul className="detailList">
-            <li>- Today(Est.) : <DollarWithDeck deck={authorTodayReward} {...this.props}/></li>
-            <li>- Last 3 days : <DollarWithDeck deck={author3DayReward} {...this.props}/></li>
+            <li>- Today(Est.) : <DollarWithDeck deck={authorTodayReward} drizzleApis={drizzleApis} {...others}/></li>
+            <li>- Last 3 days : <DollarWithDeck deck={author3DayReward} drizzleApis={drizzleApis} {...others}/></li>
         </ul>
         </div>
         <div className={this.props.classes.curatorReward}>
         <h5>Curator rewards</h5>
         <ul className="detailList">
-          <li>- Today(Est.) : <DollarWithDeck deck={curatorTodayReward} {...this.props}/></li>
-          <li>- Last 3 days : <DollarWithDeck deck={curator3DayReward} {...this.props}/></li>
+          <li>- Today(Est.) : <DollarWithDeck deck={curatorTodayReward} drizzleApis={drizzleApis} {...others}/></li>
+          <li>- Last 3 days : <DollarWithDeck deck={curator3DayReward} drizzleApis={drizzleApis} {...others}/></li>
         </ul>
         </div>
         <div className={this.props.classes.clear}></div>

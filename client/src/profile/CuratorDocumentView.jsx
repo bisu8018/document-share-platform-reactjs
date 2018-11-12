@@ -39,7 +39,7 @@ class CuratorDocumentView extends React.Component {
   }
 
   render() {
-      const {classes, drizzleApis, handleRewardOnDocuments} = this.props;
+      const {classes, drizzleApis, handleRewardOnDocuments, accountId} = this.props;
 
       if(!this.state.document) return "Loading Document";
 
@@ -71,7 +71,7 @@ class CuratorDocumentView extends React.Component {
 
                 </div>
             </Link>
-            <CuratorClaim {...this.props} document={this.state.document} />
+            <CuratorClaim {...this.props} accountId={accountId} document={this.state.document} />
         </div>
       );
   }

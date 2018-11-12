@@ -69,13 +69,17 @@ class AuthorClaim extends React.Component {
   }
 
   render() {
-    const {classes, drizzleApis} = this.props;
+    const {classes, drizzleApis, accountId} = this.props;
 
+    const loggedInAccount = drizzleApis.getLoggedInAccount();
+    if (loggedInAccount != accountId) {
+      return null;
+    }
+    
     if(!drizzleApis.isAuthenticated()){
       return (
         <div className='sweet-loading'>
           <ClipLoader
-            className={style}
             sizeUnit={"px"}
             width={5}
             height={15}
