@@ -71,7 +71,7 @@ class ContentViewRight extends React.Component {
                    <div className="badge">
                      <Badge color="info">View {result.totalViewCount?result.totalViewCount:0} </Badge>
                      <AuthorRevenueOnDocument document={result} {...this.props} />
-                     <Badge color="success">Vote $ {drizzleApis.toDollar(result.totalVoteAmount?result.totalVoteAmount:"0")}</Badge>
+                     <Badge color="success">Vote $ {drizzleApis.toDollar(result.confirmVoteAmount?result.confirmVoteAmount:"0")}</Badge>
                      {result.tags?result.tags.map((tag, index) => (
                        <Badge color="warning" key={index}>{tag}</Badge>
                      )):""}
