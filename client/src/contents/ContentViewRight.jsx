@@ -56,11 +56,11 @@ class ContentViewRight extends React.Component {
            <h3>See also</h3>
            {list.map((result, idx) => (
              <div className="cardSide" key={result.documentId}>
-               <Link to={"/content/view/" + result.documentId} >
+               <a href={"/content/view/" + result.documentId} replace>
                    <span className="img">
                        <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.documentName?result.documentName:result.documentId} alt={result.documentName?result.documentName:result.documentId} />
                    </span>
-               </Link>
+               </a>
                <div className="inner">
                    <div className="tit"
                        style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
