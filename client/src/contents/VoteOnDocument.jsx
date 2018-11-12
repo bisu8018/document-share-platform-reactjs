@@ -236,7 +236,7 @@ class voteOnDocument extends React.Component {
 
       returnBoolean = true;
       this.refresh();
-      
+
     } else if(txState=="error"){
       this.setState({
         vote: {done: true, error:"error", complete:false}
@@ -300,7 +300,7 @@ class voteOnDocument extends React.Component {
       //console.log("Print Balance on data key", this.state.totalBalanceDataKey, balance);
       return balance;
     }
-    return "-";
+    return 0;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -315,7 +315,7 @@ class voteOnDocument extends React.Component {
   render() {
     const { classes, ...other } = this.props;
     const loggedInAccount = this.props.drizzleApis.getLoggedInAccount();
-    const balanceOf = this.printBalance();
+    const balanceOf = (this.printBalance() * 1).toFixed(2);
 
     if (!this.props.drizzleApis.isAuthenticated()) {
       return null;
@@ -361,7 +361,7 @@ class voteOnDocument extends React.Component {
 
           <h4>2. Amount of available tokens</h4>
           <ul className="voteList">
-              <li><strong></strong><Tooltip title={balanceOf + " DECK"} placement="bottom"><span>${this.props.drizzleApis.deckToDollar(balanceOf)}</span></Tooltip></li>
+              <li><strong></strong><Tooltip title={this.props.drizzleApis.deckToDollar(balanceOf)} placement="bottom"><span>{balanceOf + " DECK"}</span></Tooltip></li>
           </ul>
 
           <h4>3. Enter the number of votes to commit</h4>

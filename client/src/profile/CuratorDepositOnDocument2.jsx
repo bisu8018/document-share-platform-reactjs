@@ -29,7 +29,7 @@ class CuratorDepositOnDocument extends React.Component {
     const { document, loggedInAccount } = this.props;
 
     //console.log(document);
-    this.web3Apis.getCuratorDepositOnUserDocument(loggedInAccount, document.documentId).then((data) => {
+    this.web3Apis.getCuratorDepositOnDocument(loggedInAccount, document.documentId).then((data) => {
       this.setState({curatorDepositOnDocument:data});
     });
   }
@@ -39,13 +39,14 @@ class CuratorDepositOnDocument extends React.Component {
     const { anchorEl, open } = this.state;
 
     const curatorDepositOnDocument = this.state.curatorDepositOnDocument;
-    const textDeck = drizzleApis.toEther(curatorDepositOnDocument?curatorDepositOnDocument:0) + " DECK";
+    const textDeck = drizzleApis.toEther(curatorDepositOnDocument?curatorDepositOnDocument:0).toFixed(2) + " DECK";
+    const textDollar = "$" + this.web3Apis.toDollar(curatorDepositOnDocument).toFixed(1);
 
     return (
      <span>
-       <Tooltip title={textDeck} placement="bottom">
+       <Tooltip title={textDollar} placement="bottom">
         <span className={classes.dollar}>
-          ${this.web3Apis.toDollar(curatorDepositOnDocument)}
+          {textDeck}
         </span>
       </Tooltip>
     </span>
