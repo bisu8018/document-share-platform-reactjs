@@ -11,7 +11,10 @@ import DrizzleApis from 'apis/DrizzleApis';
 import Web3Apis from 'apis/Web3Apis';
 import ClipLoader from 'react-spinners/ClipLoader'
 const style = {
-
+  claimButton: {
+    marginLeft: "15px",
+    marginTop: "0"
+  }
 };
 
 class CuratorClaim extends React.Component {
@@ -102,11 +105,11 @@ class CuratorClaim extends React.Component {
 
     if(disabled) return "";
 
-    const determineReward = this.web3Apis.toDeck(this.state.determineReward>0?this.state.determineReward:0);
+    const determineReward = this.web3Apis.toDollar(this.state.determineReward>0?this.state.determineReward:0);
 
     return (
       <div>
-          <Button onClick={ this.onClickClaim} color="rose" size="sm" disabled={disabled} >{determineReward} DECK</Button>
+        <Button className={this.props.classes.claimButton} onClick={this.onClickClaim} color="rose" size="sm" disabled={disabled} >Claim ${determineReward}</Button>
       </div>
     );
   }

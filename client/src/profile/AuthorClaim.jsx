@@ -11,7 +11,10 @@ import DrizzleApis from 'apis/DrizzleApis';
 import Web3Apis from 'apis/Web3Apis';
 import ClipLoader from 'react-spinners/ClipLoader'
 const style = {
-
+  claimButton: {
+    marginLeft: "15px",
+    marginTop: "0"
+  }
 };
 
 class AuthorClaim extends React.Component {
@@ -75,7 +78,7 @@ class AuthorClaim extends React.Component {
     if (loggedInAccount != accountId) {
       return null;
     }
-    
+
     if(!drizzleApis.isAuthenticated()){
       return (
         <div className='sweet-loading'>
@@ -102,7 +105,7 @@ class AuthorClaim extends React.Component {
 
     return (
       <div>
-          <Button onClick={ this.onClickClaim} color="rose" size="sm" disabled={disabled}>${determineReward}</Button>
+        <Button className={this.props.classes.claimButton} onClick={this.onClickClaim} color="rose" size="sm" disabled={disabled}>Claim ${determineReward}</Button>
       </div>
     );
   }
