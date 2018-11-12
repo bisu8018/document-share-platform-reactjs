@@ -76,7 +76,10 @@ class voteOnDocument extends React.Component {
     //console.log("subscribeDrizzle start");
     this.sendVoteInfo();
     this.handleApprove();
-    this.handleClose("classicModal");
+
+    if (this.state.buttonText == "Vote") {
+      this.handleClose("classicModal");
+    }
     //this.handleVoteOnDocument();
 
     //console.log("handleApprove start");
@@ -157,7 +160,7 @@ class voteOnDocument extends React.Component {
     const txReceipt = transactions[txHash].receipt;
     const confirmations = transactions[txHash].confirmations;
 
-    this.setState({buttonText: "Approve " + txState});
+    this.setState({buttonText: "Approval " + txState});
 
     if(txState=="success") {
       this.setState({
@@ -321,6 +324,8 @@ class voteOnDocument extends React.Component {
       return null;
     }
 
+    const disabled = this.state.buttonText != "Vote" ? true : false;
+
     return (
       <span>
         <Button color="rose" size="sm" onClick={() => this.handleClickOpen("classicModal")}>{this.state.buttonText}</Button>
@@ -385,7 +390,7 @@ class voteOnDocument extends React.Component {
 
           </DialogContent>
           <DialogActions className={classes.modalFooter}>
-            <Button onClick={() => this.onClickVote()} color="rose"  size="sm">Commit</Button>
+            <Button onClick={() => this.onClickVote()} color="rose" disabled={disabled} size="sm">Commit</Button>
             <Button onClick={() => this.handleClose("classicModal")} size="sm">Cancel</Button>
           </DialogActions>
         </Dialog>
