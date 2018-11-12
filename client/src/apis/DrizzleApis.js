@@ -372,7 +372,6 @@ export default class DrizzleApis {
     return this.fromWei(drizzleState.contracts.Deck.balanceOf[dataKey].value);
   };
 
-
   requestCalculateAuthorReward = (pageView, totalPageView) => {
 
     if(!this.isInitialized()){
@@ -413,6 +412,53 @@ export default class DrizzleApis {
     const contract = this.drizzle.contracts.DocumentReg;
 
     const v = this.drizzleState.contracts.DocumentReg.calculateAuthorReward[dataKey];
+
+    if(!v) return ;
+    //console.log("getCalculateAuthorReward", v);
+
+    return v.value;
+  };
+
+  requestCalculateCuratorReward = (addr, docId, pageView, totalPageViewSquare) => {
+
+    if(!this.isInitialized()){
+      console.error("Metamask doesn't initialized");
+      return;
+    }
+
+    if(!this.isAuthenticated()){
+      console.error("The Metamask login is required.")
+      return;
+    }
+
+    const ethAccount = this.drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.DocumentReg;
+
+    const dataKey = contract.methods.calculateCuratorReward.cacheCall(addr, docId, pageView, totalPageViewSquare, {
+      from: ethAccount
+    });
+
+    return dataKey;
+  };
+
+  getCalculateCuratorReward = (dataKey) => {
+
+    if(!this.isInitialized()){
+      console.error("Metamask doesn't initialized");
+      return;
+    }
+
+    if(!this.isAuthenticated()){
+      console.error("The Metamask login is required.")
+      return;
+    }
+
+    if(!dataKey) return;
+
+    const ethAccount = this.drizzleState.accounts[0];
+    const contract = this.drizzle.contracts.DocumentReg;
+
+    const v = this.drizzleState.contracts.DocumentReg.calculateCuratorReward[dataKey];
 
     if(!v) return ;
     //console.log("getCalculateAuthorReward", v);

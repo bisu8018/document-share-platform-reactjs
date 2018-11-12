@@ -10,8 +10,28 @@ import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
 import Web3Apis from 'apis/Web3Apis';
 import AuthorEstimatedToday from 'profile/AuthorEstimatedToday'
+import BalanceOf from './BalanceOf'
+import DollarWithDeck from './DollarWithDeck'
 const style = {
-
+  authorReward: {
+    float: "left",
+    paddingLeft: "10px",
+    paddingTop: "0px",
+    paddingRight: "10px",
+    paddingBottom: "0px",
+    margin: "0px"
+  },
+  curatorReward: {
+    float: "left",
+    paddingLeft: "50px",
+    paddingTop: "0px",
+    paddingRight: "10px",
+    paddingBottom: "0px",
+    margin: "0px"
+  },
+  clear: {
+    clear: "both"
+  }
 };
 
 class AuthorSummary extends React.Component {
@@ -20,6 +40,7 @@ class AuthorSummary extends React.Component {
     totalBalanceDataKey: null,
     totalBalance: 0,
     totalViewCountInfo: null,
+    authorEstimatedToday: 0,
     curatorEstimatedToday: 0,
     todayVotedDocuments: null,
     totalViewCount:null
@@ -67,6 +88,7 @@ class AuthorSummary extends React.Component {
   }
 
   handleRequestBalance = () => {
+
     const {drizzleApis, drizzleState, accountId} = this.props;
     if(this.state.totalBalanceDataKey) return;
 
@@ -79,6 +101,25 @@ class AuthorSummary extends React.Component {
       //const balance = drizzleApis.getTotalBalance(dataKey);
       //console.log("balance", balance);
     }
+
+  }
+
+  getCalculateAuthorReward = () => {
+    const {drizzleApis, documentList, accountId, totalViewCountInfo} = this.props;
+    if(this.state.authorEstimatedToday || !totalViewCountInfo) return;
+
+    let viewCount = 0;
+    for(const idx in documentList) {
+      const document = documentList[idx];
+      viewCount += document.viewCount;
+    }
+
+    this.web3Apis.getCalculateAuthorReward(accountId, viewCount, totalViewCountInfo.totalViewCount).then((data) =>{
+      this.setState({authorEstimatedToday: data});
+
+    }).catch((err) => {
+      console.error(err);
+    });
 
   }
 
@@ -96,34 +137,57 @@ class AuthorSummary extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-
     this.handleRequestBalance();
-
+    if(this.props.drizzleApis != null && this.props.drizzleApis.isAuthenticated()){
+      this.getCalculateAuthorReward();
+    }
     return true;
   }
 
-
   render() {
-    const {classes, accountId, drizzleApis, drizzleState, totalRevenue, totalReward} = this.props;
+    const {classes, accountId, drizzleApis, totalRevenue, totalReward} = this.props;
 
     if(!drizzleApis.isAuthenticated()) return (
+      <h3 style={{margin:'0',fontSize:'26px'}}>Account
+        <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
+      </h3>
+    );
+
+    const loggedInAccount = drizzleApis.getLoggedInAccount();
+    const myAccount = loggedInAccount == accountId ? accountId : null;
+
+    // Values in DECK
+    const balance = drizzleApis.toEther(this.printBalance());
+    const author3DayReward = drizzleApis.toEther(totalRevenue);
+    const authorTodayReward = drizzleApis.toEther(this.state.authorEstimatedToday);
+    const curator3DayReward = drizzleApis.toEther(totalReward);
+    const curatorTodayReward = drizzleApis.toEther(this.state.curatorEstimatedToday);
+    const sumReward = author3DayReward + authorTodayReward + curator3DayReward + curatorTodayReward;
+
+    return (
+      <div>
         <h3 style={{margin:'0',fontSize:'26px'}}>Account
           <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
         </h3>
-    );
-
-    const totalBalance = this.printBalance();
-    return (
-        <div>
-          <h3 style={{margin:'0',fontSize:'26px'}}>Account
-            <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
-          </h3>
-          <ul className="detailList">
-              <li> - Total balance : {totalBalance} DECK</li>
-              <li> - Estimated earnings for today : <AuthorEstimatedToday {...this.props} /> +  ${this.web3Apis.toDollar(this.state.curatorEstimatedToday)}</li>
-              <li> - Revenue for the last 3 days : $ {this.web3Apis.toDollar(totalRevenue)} + $ {this.web3Apis.toDollar(totalReward)}</li>
-          </ul>
+        <ul className="detailList">
+            <li><BalanceOf balance={balance} sumReward={sumReward} {...this.props}></BalanceOf></li>
+        </ul>
+        <div className={this.props.classes.authorReward}>
+        <h5>Author rewards</h5>
+        <ul className="detailList">
+            <li>- Today(Est.) : <DollarWithDeck deck={authorTodayReward} {...this.props}/></li>
+            <li>- Last 3 days : <DollarWithDeck deck={author3DayReward} {...this.props}/></li>
+        </ul>
         </div>
+        <div className={this.props.classes.curatorReward}>
+        <h5>Curator rewards</h5>
+        <ul className="detailList">
+          <li>- Today(Est.) : <DollarWithDeck deck={curatorTodayReward} {...this.props}/></li>
+          <li>- Last 3 days : <DollarWithDeck deck={curator3DayReward} {...this.props}/></li>
+        </ul>
+        </div>
+        <div className={this.props.classes.clear}></div>
+      </div>
     );
   }
 }
