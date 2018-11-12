@@ -4,7 +4,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Button from "components/CustomButtons/Button.jsx";
 import * as restapi from 'apis/DocApi';
 import ContentViewCarousel from './ContentViewCarousel';
-import AuthorRevenueOnDocument from "profile/AuthorRevenueOnDocument"
+import DeckInShort from "profile/DeckInShort"
+import DollarWithDeck from "profile/DollarWithDeck"
 import ContentViewComment from "./ContentViewComment"
 import VoteOnDocument from "./VoteOnDocument";
 import ContentViewRegistBlockchainButton from 'contents/ContentViewRegistBlockchainButton';
@@ -125,6 +126,10 @@ class ContentViewFullScreen extends Component {
       }
     }
 
+    const badgeReward = this.props.drizzleApis.toEther(this.props.document.confirmAuthorReward);
+    const badgeVote = this.props.drizzleApis.toEther(this.props.document.confirmVoteAmount);
+    const badgeView = this.props.document.totalViewCount ? this.props.document.totalViewCount : 0;
+
     return (
 
       <div className="ContentViewFullScreen">
@@ -149,9 +154,9 @@ class ContentViewFullScreen extends Component {
                 <ContentViewRegistBlockchainButton document={this.props.document} {...other} />
             </div>
             <span>
-               <Badge color="info">View {this.props.document.viewCount?this.props.document.viewCount:0 + this.props.document.confirmViewCount?this.props.document.confirmViewCount:0} </Badge>
-               <AuthorRevenueOnDocument document={this.props.document} {...other} />
-               <Badge color="success">Vote ${this.props.drizzleApis.toDollar(this.props.document.confirmVoteAmount?this.props.document.confirmVoteAmount:"0")}</Badge>
+               <Badge color="info">View {badgeView} </Badge>
+               <Badge color="success">Reward <DollarWithDeck deck={badgeReward} drizzleApis={this.props.drizzleApis} /></Badge>
+               <Badge color="success">Vote <DeckInShort deck={badgeVote} /></Badge>
                {
                  this.props.document.tags?this.props.document.tags.map((tag, index) => (
                    <Badge color="warning" key={index}>{tag}</Badge>

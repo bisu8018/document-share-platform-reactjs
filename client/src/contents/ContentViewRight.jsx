@@ -7,6 +7,8 @@ import Button from "components/CustomButtons/Button.jsx";
 import Badge from "components/Badge/Badge.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 //import ContentVote from 'contents/ContentVote';
+import DeckInShort from "profile/DeckInShort"
+import DollarWithDeck from "profile/DollarWithDeck"
 import ContentViewRegistBlockchainButton from 'contents/ContentViewRegistBlockchainButton';
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
@@ -35,6 +37,10 @@ class ContentViewRight extends React.Component {
     //if(drizzleApis.isAuthenticated()){
     //  voteTag = (<ContentVote {...this.props} document={document}/>);
     //}
+
+    const badgeReward = drizzleApis.toEther(document.confirmAuthorReward);
+    const badgeVote = drizzleApis.toEther(document.confirmVoteAmount);
+    const badgeView = document.totalViewCount ? document.totalViewCount : 0;
 
     return (
 
@@ -69,10 +75,9 @@ class ContentViewRight extends React.Component {
                     {result.desc}
                     </div>
                    <div className="badge">
-                     <Badge color="info">View {result.totalViewCount?result.totalViewCount:0} </Badge>
-                     {/*<AuthorRevenueOnDocument document={result} {...this.props} />*/}
-                     <Badge color="success">Reward $ {drizzleApis.toDollar(result.confirmAuthorReward)}</Badge>
-                     <Badge color="success">Vote $ {drizzleApis.toDollar(result.confirmVoteAmount?result.confirmVoteAmount:"0")}</Badge>
+                     <Badge color="info">View {badgeView} </Badge>
+                     <Badge color="success">Reward <DollarWithDeck deck={badgeReward} drizzleApis={drizzleApis} /></Badge>
+                     <Badge color="success">Vote <DeckInShort deck={badgeVote} /></Badge>
                      {result.tags?result.tags.map((tag, index) => (
                        <Badge color="warning" key={index}>{tag}</Badge>
                      )):""}

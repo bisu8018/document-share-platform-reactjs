@@ -6,8 +6,9 @@ import Button from '@material-ui/core/Button';
 import { Face } from "@material-ui/icons";
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
-import AuthorRevenueOnDocument from 'profile/AuthorRevenueOnDocument';
+import DollarWithDeck from 'profile/DollarWithDeck';
 import AuthorEstimatedToday from 'profile/AuthorEstimatedToday';
+import DeckInShort from 'profile/DeckInShort';
 
 const style = {
 
@@ -18,6 +19,10 @@ class ContentListItem extends React.Component {
 
     render() {
       const { classes, result, drizzleApis } = this.props;
+
+      const badgeReward = drizzleApis.toEther(result.confirmAuthorReward);
+      const badgeVote = drizzleApis.toEther(result.confirmVoteAmount);
+      const badgeView = result.totalViewCount ? result.totalViewCount : 0;
 
       return (
 
@@ -47,10 +52,10 @@ class ContentListItem extends React.Component {
                       >{result.desc}</div>
                  </Link>
                  <div className="badge">
-                     <Badge color="info">View {result.totalViewCount?result.totalViewCount:0} </Badge>
+                     <Badge color="info">View {badgeView} </Badge>
                      {/*<AuthorRevenueOnDocument document={result} {...this.props} />*/}
-                     <Badge color="success">Reward $ {drizzleApis.toDollar(result.confirmAuthorReward)}</Badge>
-                     <Badge color="success">Vote $ {drizzleApis.toDollar(result.confirmVoteAmount)}</Badge>
+                     <Badge color="success">Reward <DollarWithDeck deck={badgeReward} drizzleApis={drizzleApis} /></Badge>
+                     <Badge color="success">Vote <DeckInShort deck={badgeVote} /></Badge>
                      {result.tags?result.tags.map((tag, index) => (
                      <Badge color="warning" key={index}>{tag}</Badge>
                        )):""}
