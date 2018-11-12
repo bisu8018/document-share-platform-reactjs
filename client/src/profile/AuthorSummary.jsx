@@ -116,7 +116,8 @@ class AuthorSummary extends React.Component {
       viewCount += document.viewCount;
     }
 
-    this.web3Apis.getCalculateAuthorReward(accountId, viewCount, totalViewCountInfo.totalViewCount).then((data) =>{
+    const address = drizzleApis.getLoggedInAccount();
+    this.web3Apis.getCalculateAuthorReward(address, viewCount, totalViewCountInfo.totalViewCount).then((data) =>{
       this.setState({authorEstimatedToday: data});
 
     }).catch((err) => {
@@ -140,9 +141,7 @@ class AuthorSummary extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     this.handleRequestBalance();
-    if(this.props.drizzleApis != null && this.props.drizzleApis.isAuthenticated()){
-      this.getCalculateAuthorReward();
-    }
+    this.getCalculateAuthorReward();
     return true;
   }
 

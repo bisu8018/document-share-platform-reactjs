@@ -15,7 +15,7 @@ class DollarWithDeck extends React.Component {
     const {drizzleApis, deck} = this.props;
 
     const deckStr = deck.toFixed(2);
-    const dollarStr = drizzleApis.deckToDollar(deck).toFixed(2);
+    const dollarStr = drizzleApis.deckToDollar(deck).toFixed(2) + " DECK";
 
     return (
       <Tooltip title={deckStr} placement="bottom">
