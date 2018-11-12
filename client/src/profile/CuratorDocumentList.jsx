@@ -101,7 +101,11 @@ class CuratorDocumentList extends React.Component {
 
       );
     }
-    return null;
+    return(
+      <div>
+        <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >0 voted documents </h3>
+      </div>
+    )
   }
 
 }
