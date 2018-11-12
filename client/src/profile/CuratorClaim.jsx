@@ -42,9 +42,16 @@ class CuratorClaim extends React.Component {
       const receipt = transactions[txHash].receipt;
       const confirmations = transactions[txHash].confirmations;
 
-      //console.log(state, confirmations, receipt);
+      console.log(state, confirmations, receipt);
       this.setState({ message: state});
-      if(state!="pending"){
+      if(state=="pending"){
+        //pending
+      } else if(state=="error") {
+        // error
+        this.setState({stackId:null, determineReward: -1});
+        drizzleApis.unsubscribe(unsubscribe);
+      } else if(state == "success") {
+        //success
         this.setState({stackId:null, determineReward: -1});
         drizzleApis.unsubscribe(unsubscribe);
       }
