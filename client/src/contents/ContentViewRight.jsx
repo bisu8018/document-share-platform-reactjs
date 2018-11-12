@@ -42,6 +42,8 @@ class ContentViewRight extends React.Component {
     const badgeVote = drizzleApis.toEther(document.confirmVoteAmount);
     const badgeView = document.totalViewCount ? document.totalViewCount : 0;
 
+    const currentDocumentId = document.documentId;
+
     return (
 
       <div className="rightWrap">
@@ -56,7 +58,7 @@ class ContentViewRight extends React.Component {
            <h3>See also</h3>
            {list.map((result, idx) => (
              <div className="cardSide" key={result.documentId}>
-               <a href={"/content/view/" + result.documentId} replace>
+               <a href={"/content/view/" + result.documentId} >
                    <span className="img">
                        <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.documentName?result.documentName:result.documentId} alt={result.documentName?result.documentName:result.documentId} />
                    </span>
