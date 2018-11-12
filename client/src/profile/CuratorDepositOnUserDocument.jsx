@@ -29,7 +29,16 @@ class CuratorDepositOnUserDocument extends React.Component {
     const { document, loggedInAccount, handleRewardOnDocuments } = this.props;
 
     //console.log(document);
+    /*
     this.web3Apis.getCuratorDepositOnUserDocument(loggedInAccount, document.documentId).then((data) => {
+
+      this.setState({curatorDepositOnUserDocument:data});
+
+
+    });
+    */
+    const blockchainTimestamp = this.web3Apis.getBlockchainTimestamp(new Date());
+    this.web3Apis.getCurator3DayRewardOnUserDocument(loggedInAccount, document.documentId, blockchainTimestamp).then((data) => {
 
       this.setState({curatorDepositOnUserDocument:data});
       if(handleRewardOnDocuments){

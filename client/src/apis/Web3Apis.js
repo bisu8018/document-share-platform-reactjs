@@ -142,4 +142,11 @@ export default class Web3Apis {
 
     return this.DocumentReg.methods.determineCuratorReward(this.asciiToHex(documentId)).call({from: curatorId});
   }
+
+  getCurator3DayRewardOnUserDocument = (curator, documentId, blockchainTimestamp) => {
+      //function getCurator3DayRewardOnUserDocument(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint)
+
+      return this.DocumentReg.methods.getCurator3DayRewardOnUserDocument(curator, this.asciiToHex(documentId), blockchainTimestamp).call({from: curator});
+  }
+
 }

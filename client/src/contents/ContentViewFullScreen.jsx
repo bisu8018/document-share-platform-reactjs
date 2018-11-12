@@ -151,7 +151,7 @@ class ContentViewFullScreen extends Component {
             <span>
                <Badge color="info">View {this.props.document.viewCount?this.props.document.viewCount:0 + this.props.document.confirmViewCount?this.props.document.confirmViewCount:0} </Badge>
                <AuthorRevenueOnDocument document={this.props.document} {...other} />
-               <Badge color="success">Vote ${this.props.drizzleApis.toDollar(this.props.document.totalVoteAmount?this.props.document.totalVoteAmount:"0")}</Badge>
+               <Badge color="success">Vote ${this.props.drizzleApis.toDollar(this.props.document.confirmVoteAmount?this.props.document.confirmVoteAmount:"0")}</Badge>
                {
                  this.props.document.tags?this.props.document.tags.map((tag, index) => (
                    <Badge color="warning" key={index}>{tag}</Badge>
