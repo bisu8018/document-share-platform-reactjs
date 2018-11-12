@@ -86,7 +86,7 @@ class CuratorDocumentList extends React.Component {
     if (this.state.resultList.length > 0) {
       return (
         <div>
-            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} Voted documents </h3>
+            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} voted documents </h3>
             <InfiniteScroll
               dataLength={this.state.resultList.length}
               next={this.fetchMoreData}
