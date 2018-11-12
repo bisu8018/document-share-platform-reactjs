@@ -192,7 +192,7 @@ class Author extends React.Component {
                                 </div>
                             </Link>
 
-                            <AuthorClaim document={result} {...this.props}/>
+                            <AuthorClaim document={result} accountId={accountId} {...this.props}/>
                         </div>
                     </div>
                   ))}

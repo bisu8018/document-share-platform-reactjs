@@ -14,7 +14,7 @@ class DollarWithDeck extends React.Component {
   render() {
     const {drizzleApis, deck} = this.props;
 
-    const deckStr = deck.toFixed(2);
+    const deckStr = deck.toFixed(2) + " DECK";
     const dollarStr = drizzleApis.deckToDollar(deck).toFixed(2);
 
     return (

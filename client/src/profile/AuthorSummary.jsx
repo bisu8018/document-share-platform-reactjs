@@ -38,8 +38,6 @@ class AuthorSummary extends React.Component {
 
   state = {
     totalBalanceDataKey: null,
-    totalBalance: 0,
-    totalViewCountInfo: null,
     authorEstimatedToday: 0,
     curatorEstimatedToday: 0,
     todayVotedDocuments: null,
@@ -76,7 +74,8 @@ class AuthorSummary extends React.Component {
       viewCount += document.viewCount;
     }
 
-    this.web3Apis.getCalculateAuthorReward(accountId, viewCount, totalViewCountInfo.totalViewCount).then((data) =>{
+    const address = drizzleApis.getLoggedInAccount();
+    this.web3Apis.getCalculateAuthorReward(address, viewCount, totalViewCountInfo.totalViewCount).then((data) =>{
       this.setState({authorEstimatedToday: data});
 
     }).catch((err) => {
@@ -100,14 +99,17 @@ class AuthorSummary extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     this.handleRequestBalance();
-    if(this.props.drizzleApis != null && this.props.drizzleApis.isAuthenticated()){
-      this.getCalculateAuthorReward();
-    }
+    this.getCalculateAuthorReward();
     return true;
   }
 
+  safeNumber = (num) => {
+    return (typeof num == 'number') ? num : 0;
+  }
+
+
   render() {
-    const {classes, accountId, drizzleApis, totalAuthor3DayReward, totalCurator3DayReward} = this.props;
+    const {classes, accountId, drizzleApis, totalAuthor3DayReward, totalCurator3DayReward, ...others} = this.props;
 
     if(!drizzleApis.isAuthenticated()) return (
       <h3 style={{margin:'0',fontSize:'26px'}}>Account
@@ -124,7 +126,17 @@ class AuthorSummary extends React.Component {
     const authorTodayReward = drizzleApis.toEther(this.state.authorEstimatedToday);
     const curator3DayReward = drizzleApis.toEther(totalCurator3DayReward);
     const curatorTodayReward = drizzleApis.toEther(this.state.curatorEstimatedToday);
-    const sumReward = author3DayReward + authorTodayReward + curator3DayReward + curatorTodayReward;
+
+    let sumReward = 0;
+    sumReward += this.safeNumber(author3DayReward);
+    sumReward += this.safeNumber(authorTodayReward);
+    sumReward += this.safeNumber(curator3DayReward);
+    sumReward += this.safeNumber(curatorTodayReward);
+
+    //console.log('author3DayReward:' + author3DayReward);
+    //console.log('authorTodayReward:' + authorTodayReward);
+    //console.log('curator3DayReward:' + curator3DayReward);
+    //console.log('curatorTodayReward:' + curatorTodayReward);
 
     return (
       <div>
@@ -132,20 +144,20 @@ class AuthorSummary extends React.Component {
           <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
         </h3>
         <ul className="detailList">
-            <li><BalanceOf balance={balance} sumReward={sumReward} {...this.props}></BalanceOf></li>
+            <li><BalanceOf balance={balance} sumReward={sumReward} drizzleApis={drizzleApis} {...others}></BalanceOf></li>
         </ul>
         <div className={this.props.classes.authorReward}>
         <h5>Author rewards</h5>
         <ul className="detailList">
-            <li>- Today(Est.) : <DollarWithDeck deck={authorTodayReward} {...this.props}/></li>
-            <li>- Last 3 days : <DollarWithDeck deck={author3DayReward} {...this.props}/></li>
+            <li>- Today(Est.) : <DollarWithDeck deck={authorTodayReward} drizzleApis={drizzleApis} {...others}/></li>
+            <li>- Last 3 days : <DollarWithDeck deck={author3DayReward} drizzleApis={drizzleApis} {...others}/></li>
         </ul>
         </div>
         <div className={this.props.classes.curatorReward}>
         <h5>Curator rewards</h5>
         <ul className="detailList">
-          <li>- Today(Est.) : <DollarWithDeck deck={curatorTodayReward} {...this.props}/></li>
-          <li>- Last 3 days : <DollarWithDeck deck={curator3DayReward} {...this.props}/></li>
+          <li>- Today(Est.) : <DollarWithDeck deck={curatorTodayReward} drizzleApis={drizzleApis} {...others}/></li>
+          <li>- Last 3 days : <DollarWithDeck deck={curator3DayReward} drizzleApis={drizzleApis} {...others}/></li>
         </ul>
         </div>
         <div className={this.props.classes.clear}></div>
