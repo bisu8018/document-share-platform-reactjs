@@ -152,6 +152,7 @@ class Author extends React.Component {
             <AuthorSummary totalReward={this.state.totalReward}
               totalAuthor3DayReward={this.state.totalAuthor3DayReward}
               totalCurator3DayReward={this.state.totalCurator3DayReward}
+              totalCuratorEstimateRewards={this.state.totalCuratorEstimateRewards}
               drizzleApis={drizzleApis} documentList={this.state.resultList}
               curatorDocumentList={this.state.curatorDocumentList}
               totalViewCountInfo={this.state.totalViewCountInfo}

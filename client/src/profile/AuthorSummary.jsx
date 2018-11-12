@@ -109,7 +109,7 @@ class AuthorSummary extends React.Component {
 
 
   render() {
-    const {classes, accountId, drizzleApis, totalAuthor3DayReward, totalCurator3DayReward, ...others} = this.props;
+    const {classes, accountId, drizzleApis, totalAuthor3DayReward, totalCurator3DayReward, totalCuratorEstimateRewards, ...others} = this.props;
 
     if(!drizzleApis.isAuthenticated()) return (
       <h3 style={{margin:'0',fontSize:'26px'}}>Account
@@ -125,7 +125,7 @@ class AuthorSummary extends React.Component {
     const author3DayReward = drizzleApis.toEther(totalAuthor3DayReward);
     const authorTodayReward = drizzleApis.toEther(this.state.authorEstimatedToday);
     const curator3DayReward = drizzleApis.toEther(totalCurator3DayReward);
-    const curatorTodayReward = drizzleApis.toEther(this.state.curatorEstimatedToday);
+    const curatorTodayReward = drizzleApis.toEther(totalCuratorEstimateRewards);
 
     let sumReward = 0;
     sumReward += this.safeNumber(author3DayReward);

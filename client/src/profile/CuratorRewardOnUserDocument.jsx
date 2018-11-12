@@ -31,14 +31,14 @@ class CuratorDepositOnUserDocument extends React.Component {
     console.log("CuratorRewardOnUserDocument", loggedInAccount, document.documentId);
 
     const viewCount = totalViewCountInfo.count;
-    const totalViewCount = totalViewCountInfo.totalViewCount;
+    const totalViewCount = totalViewCountInfo.totalViewCountSquare;
 
     const blockchainTimestamp = this.web3Apis.getBlockchainTimestamp(new Date());
     const promise1 = this.web3Apis.getCurator3DayRewardOnUserDocument(loggedInAccount, document.documentId, blockchainTimestamp);
-    const promise2 = this.web3Apis.calculateCuratorReward("0xa4dA09DF8E5D0E05775c2C26ABCdFB97f3e84e15", document.documentId, viewCount, totalViewCount);
+    const promise2 = this.web3Apis.calculateCuratorReward(loggedInAccount, document.documentId, viewCount, totalViewCount);
 
     Promise.all([promise1, promise2]).then((results) => {
-      console.log("CuratorDepositOnUserDocument Promise all", results);
+      //console.log("CuratorDepositOnUserDocument Promise all", results);
       this.setState({curatorRewardOnDocuments: results[0]});
       if(handleCurator3DayRewardOnDocuments){
         //console.log("getCuratorDepositOnUserDocument", data);
