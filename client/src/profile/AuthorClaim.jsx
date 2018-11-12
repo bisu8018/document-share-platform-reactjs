@@ -59,7 +59,7 @@ class AuthorClaim extends React.Component {
     const {document, drizzleApis} = this.props;
     if(drizzleApis.isAuthenticated() && this.state.determineReward < 0){
       this.web3Apis.getDetermineAuthorReward(drizzleApis.getLoggedInAccount(), document.documentId).then((data) => {
-        console.log("getDetermineAuthorReward", drizzleApis.getLoggedInAccount(), data);
+        //console.log("getDetermineAuthorReward", drizzleApis.getLoggedInAccount(), data);
         this.setState({determineReward: data});
       }).catch((err) => {
         console.error(err);

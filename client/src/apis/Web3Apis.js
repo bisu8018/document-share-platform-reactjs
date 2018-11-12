@@ -50,10 +50,6 @@ export default class Web3Apis {
 
   toDollar = (deck) => {
 
-    if(isNaN(deck)) {
-      return 0;
-    }
-
     const c = 0.005;
 
 
@@ -63,6 +59,19 @@ export default class Web3Apis {
     const result = Math.round(dollar.toNumber() * 100) / 100;
     //120,000,000,000,000,000,000
     //console.log("toDollar", str, bn, dollar, result);
+
+    return result;
+  }
+
+  toDeck = (smalldeck) => {
+    console.log(smalldeck);
+
+    const d = new BigNumber("1e+18")
+    const bn = new BigNumber(smalldeck);
+    const deck = bn.dividedBy(d);
+    const result = Math.round(deck.toNumber() * 100) / 100;
+    //120,000,000,000,000,000,000
+    console.log("toDeck", bn, deck, deck.toNumber(), result);
 
     return result;
   }
@@ -94,7 +103,7 @@ export default class Web3Apis {
   calculateCuratorReward = (curatorId, documentId, viewCount, totalViewCount) => {
     //contract calculateCuratorReward
 
-    console.log("calculateCuratorReward", curatorId, documentId, viewCount, totalViewCount);
+    //console.log("calculateCuratorReward", curatorId, documentId, viewCount, totalViewCount);
 
     return this.DocumentReg.methods.calculateCuratorReward(curatorId, this.asciiToHex(documentId), viewCount, totalViewCount).call({
       from: defaultAccountId
@@ -107,7 +116,7 @@ export default class Web3Apis {
     const today = new Date();
 
     const blockchainTimestamp = this.getBlockchainTimestamp(today);
-    console.log("getCuratorDepositOnDocument", curatorId, documentId, blockchainTimestamp);
+    //console.log("getCuratorDepositOnDocument", curatorId, documentId, blockchainTimestamp);
     return this.DocumentReg.methods.getCuratorDepositOnDocument(this.asciiToHex(documentId), blockchainTimestamp).call({from: curatorId});
   };
 
@@ -116,21 +125,21 @@ export default class Web3Apis {
     const today = new Date();
 
     const blockchainTimestamp = this.getBlockchainTimestamp(today);
-    console.log("getCuratorDepositOnUserDocument", curatorId, documentId, blockchainTimestamp);
+    //console.log("getCuratorDepositOnUserDocument", curatorId, documentId, blockchainTimestamp);
     return this.DocumentReg.methods.getCuratorDepositOnUserDocument(curatorId, this.asciiToHex(documentId), blockchainTimestamp).call({from: curatorId});
   };
 
 
   getDetermineAuthorReward = (authorAddress, documentId) => {
 
-    console.log("determineAuthorToken", documentId, authorAddress);
+    //console.log("determineAuthorToken", documentId, authorAddress);
 
     return this.DocumentReg.methods.determineAuthorReward(authorAddress, this.asciiToHex(documentId)).call({from: authorAddress});
   };
 
-  getDetermineCuratorReward = (documentId) => {
+  getDetermineCuratorReward = (documentId, curatorId) => {
     //function determineCuratorReward(bytes32 _docId) public view returns (uint)
 
-    return this.DocumentReg.methods.determineCuratorReward(this.asciiToHex(documentId)).call({from: defaultAccountId});
+    return this.DocumentReg.methods.determineCuratorReward(this.asciiToHex(documentId)).call({from: curatorId});
   }
 }

@@ -56,9 +56,9 @@ class CuratorClaim extends React.Component {
 
   shouldComponentUpdate() {
     const {document, drizzleApis} = this.props;
-    if(drizzleApis.isAuthenticated() && this.state.determineReward<0){
-      this.web3Apis.getDetermineCuratorReward(document.documentId).then((data) => {
-        console.log("getDetermineCuratorReward", data)
+    if(document && drizzleApis.isAuthenticated() && this.state.determineReward < 0){
+      this.web3Apis.getDetermineCuratorReward(document.documentId, drizzleApis.getLoggedInAccount()).then((data) => {
+        console.log("getDetermineCuratorReward", document.documentId, data)
         this.setState({determineReward: data});
       }).catch((err) => {
         console.error(err);
@@ -91,11 +91,11 @@ class CuratorClaim extends React.Component {
 
     if(disabled) return "";
 
-    const determineReward = this.state.determineReward>0?this.state.determineReward:0;
+    const determineReward = this.web3Apis.toDeck(this.state.determineReward>0?this.state.determineReward:0);
 
     return (
       <div>
-          <Button onClick={ this.onClickClaim} color="rose" size="sm" disabled={disabled} >{determineReward}</Button>
+          <Button onClick={ this.onClickClaim} color="rose" size="sm" disabled={disabled} >{determineReward} DECK</Button>
       </div>
     );
   }

@@ -10,6 +10,7 @@ import * as restapi from 'apis/DocApi';
 import AuthorSummary from 'profile/AuthorSummary';
 import CuratorDepositOnDocument from 'profile/CuratorDepositOnDocument';
 import CuratorClaim from 'profile/CuratorClaim';
+import CuratorDocumentView from 'profile/CuratorDocumentView'
 
 const style = {
 
@@ -20,9 +21,10 @@ class CuratorDocumentList extends React.Component {
 
   state = {
     resultList: [],
+    resultKeyList: [],
     todayVotedDocuments: [],
     nextPageKey: null,
-    isEndPage:false,
+    isEndPage:true,
   };
 
   fetchMoreData = () => {
@@ -38,27 +40,34 @@ class CuratorDocumentList extends React.Component {
       const {classes, match} = this.props;
       const accountId = match.params.email;
       restapi.getCuratorDocuments({
-        accountId: accountId,
-        nextPageKey: this.state.nextPageKey
+        accountId: accountId
       }).then((res)=>{
-        console.log("Fetch Voted Document", res.data);
+        console.log("Fetch My Voted Document", res.data);
         if(res.data && res.data.resultList) {
-          if(this.state.resultList){
-            this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey});
-          } else {
-            this.setState({resultList: res.data.resultList, nextPageKey:res.data.nextPageKey});
-          }
-          console.log("list", this.state.resultList);
-          if(!res.data.nextPageKey){
-            this.setState({isEndPage:true});
-          }
+          //console.log("list", res.data.resultList);
+
+          let deduplicationList = this.state.resultList;
+          let deduplicationKeys = this.state.resultKeyList;
+          res.data.resultList.forEach((curItem) => {
+            if(!deduplicationKeys.includes(curItem.documentId)){
+              deduplicationKeys.push(curItem.documentId);
+              deduplicationList.push(curItem);
+              //console.log(curItem);
+            }
+          });
+
+          this.setState({resultList:deduplicationList});
+          this.setState({resultKeyList:deduplicationKeys});
+
 
           if(this.state.todayVotedDocuments){
             this.setState({todayVotedDocuments: res.data.todayVotedDocuments});
           }
+
         }
 
       });
+
 
   }
 
@@ -86,32 +95,8 @@ class CuratorDocumentList extends React.Component {
 
               <div className="customGrid col3">
                 {this.state.resultList.map((result, index) => (
-                  <div className="box" key={result.documentId + result.created}>
-                      <div className="cardSide">
-                          <Link to={"/content/view/" + result.documentId} >
-                              <span className="img">
-                                  <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.title?result.title:result.documentName} />
-                              </span>
-                             <div className="inner">
-                                <div className="tit"
-                                    style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                                    >{result.title?result.title:result.documentName}</div>
-                                  <div className="descript"
-                                      style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
-                                 {restapi.convertTimestampToString(result.created)}
-                                 </div>
-                                <div className="descript"
-                                    style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                                 >{result.desc}</div>
-                                 <div className="badge">
-                                     <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
-                                     <CuratorDepositOnDocument handleRewardOnDocuments={handleRewardOnDocuments} document={result.documentInfo} {...this.props} loggedInAccount={loggedInAccount} />
-                                 </div>
-
-                              </div>
-                          </Link>
-                          <CuratorClaim {...this.props} document={result} />
-                      </div>
+                  <div className="box" key={result.documentId}>
+                      <CuratorDocumentView {...this.props} documentId={result.documentId}/>
                   </div>
                 ))}
 
