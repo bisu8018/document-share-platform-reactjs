@@ -85,7 +85,7 @@ class CuratorDocumentList extends React.Component {
     if (curatorDocumentList.length > 0) {
       return (
         <div>
-            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} voted documents </h3>
+            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{curatorDocumentList.length} voted documents </h3>
 
 
             <div className="customGrid col3">

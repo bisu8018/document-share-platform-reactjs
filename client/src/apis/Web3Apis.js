@@ -1,28 +1,20 @@
 import {BigNumber} from 'bignumber.js';
 import Web3 from 'web3';
-import DocumentRegJsonString from '../contracts-rinkeby/DocumentReg.json';
+import DocumentReg from '../contracts-rinkeby/DocumentReg.json';
+import Deck from '../contracts-rinkeby/Deck.json';
 const defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
 
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c"));
-const jsonFile = "../contracts-rinkeby/DocumentReg.json";
-//const parsed= fs.readFileSync(jsonFile);
-/*
-const abis = parsed.abi;
 
-//contract abi is the array that you can get from the ethereum wallet or etherscan
-const contractABI = abis;
-const contractAddress = parsed.networks["4"].address;//"0xf84cffd9aab0c98ea4df989193a0419dfa00b07e";
-//creating contract object
-const DocumentReg = new web3.eth.Contract(abis, contractAddress, {
-  from: defaultAccountId
-});
-*/
 export default class Web3Apis {
 
   constructor(){
-    this.abis = DocumentRegJsonString.abi;
-    this.address = DocumentRegJsonString.networks["4"].address;
-    this.DocumentReg = new web3.eth.Contract(this.abis, this.address, {
+    this.network = "4";
+    this.DocumentReg = new web3.eth.Contract(DocumentReg.abi, DocumentReg.networks[this.network].address, {
+      from: defaultAccountId
+    });
+
+    this.Deck = new web3.eth.Contract(Deck.abi, Deck.networks[this.network].address, {
       from: defaultAccountId
     });
   };
@@ -75,6 +67,22 @@ export default class Web3Apis {
 
     return result;
   }
+
+  getApproved = (address) => {
+
+    return this.Deck.methods.allowance(address, Deck.networks[this.network].address).call({
+      from: address
+    });
+
+  };
+
+  getBalance = (address) => {
+
+    return this.Deck.methods.balanceOf(address).call({
+      from: address
+    });
+
+  };
 
   getCalculateAuthorReward = (address, viewCount, totalViewCount) => {
 

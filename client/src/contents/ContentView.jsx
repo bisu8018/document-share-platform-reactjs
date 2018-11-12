@@ -10,6 +10,7 @@ import CustomLinearProgress from "components/CustomLinearProgress/CustomLinearPr
 import ContentViewRight from "contents/ContentViewRight"
 import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
+import Web3Apis from 'apis/Web3Apis';
 import Spinner from 'react-spinkit'
 
 import AuthorEstimatedToday from "profile/AuthorEstimatedToday"
@@ -27,7 +28,10 @@ class ContentView extends React.Component {
     dataKey:null,
     determineAuthorToken:-1,
     list: null,
+    approved: -1
   }
+
+  web3Apis = new Web3Apis();
 
   getContentInfo = (documentId) => {
     restapi.getDocument(documentId).then((res) => {
@@ -43,12 +47,32 @@ class ContentView extends React.Component {
 
   }
 
+  getApproved = () => {
+    const { drizzleApis } = this.props;
+
+    if(drizzleApis.isAuthenticated() && this.state.approved < 0){
+
+      this.web3Apis.getApproved(drizzleApis.getLoggedInAccount()).then((data) => {
+        console.log("getApproved", data);
+        this.setState({approved: data});
+      }).catch((err) => {
+        console.log("getApproved Error", err);
+      });
+    }
+
+  }
+
   componentWillMount() {
     if(!this.state.document) {
       const { match } = this.props;
       const documentId = match.params.documentId;
       this.getContentInfo(documentId);
     }
+  }
+
+  shouldComponentUpdate(){
+    this.getApproved();
+    return true;
   }
 
   render() {

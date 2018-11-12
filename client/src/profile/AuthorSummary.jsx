@@ -41,11 +41,26 @@ class AuthorSummary extends React.Component {
     authorEstimatedToday: 0,
     curatorEstimatedToday: 0,
     todayVotedDocuments: null,
-    totalViewCount:null
-
+    totalViewCount:null,
+    balance:-1
   };
 
   web3Apis = new Web3Apis();
+
+
+  getBalance = () => {
+    const {drizzleApis, drizzleState, accountId} = this.props;
+
+    if(this.state.balance <0){
+      this.web3Apis.getBalance(accountId).then((data) => {
+        console.log("balance", data)
+        this.setState({balance: Number(data)});
+      }).catch((err) => {
+
+      })
+    }
+
+  }
 
   handleRequestBalance = () => {
 
@@ -98,8 +113,15 @@ class AuthorSummary extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    this.handleRequestBalance();
-    this.getCalculateAuthorReward();
+
+    const {drizzleApis, drizzleState} = this.props;
+
+    //this.handleRequestBalance();
+    if(drizzleApis.isAuthenticated()){
+      this.getBalance()
+      this.getCalculateAuthorReward();
+    }
+
     return true;
   }
 
@@ -144,7 +166,7 @@ class AuthorSummary extends React.Component {
           <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
         </h3>
         <ul className="detailList">
-            <li><BalanceOf balance={balance} sumReward={sumReward} drizzleApis={drizzleApis} {...others}></BalanceOf></li>
+            <li><BalanceOf balance={this.state.balance} sumReward={sumReward} drizzleApis={drizzleApis} {...others}></BalanceOf></li>
         </ul>
         <div className={this.props.classes.authorReward}>
         <h5>Author rewards</h5>
