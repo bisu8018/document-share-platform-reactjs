@@ -68,6 +68,14 @@ export default class Web3Apis {
     return result;
   }
 
+  getApproved = (address) => {
+
+    return this.Deck.methods.allowance(address, Deck.networks[this.network].address).call({
+      from: address
+    });
+
+  };
+
   getBalance = (address) => {
 
     return this.Deck.methods.balanceOf(address).call({

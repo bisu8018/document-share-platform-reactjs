@@ -74,6 +74,7 @@ class voteOnDocument extends React.Component {
   onClickVote = () => {
     //this.subscribeDrizzle();
     //console.log("subscribeDrizzle start");
+    this.sendVoteInfo();
     this.handleApprove();
     this.handleClose("classicModal");
     //this.handleVoteOnDocument();
@@ -113,7 +114,6 @@ class voteOnDocument extends React.Component {
 
       if(this.state.approve.done && this.checkVoteTransaction(this.state.vote.stackId, drizzleState)){
         this.setState({buttonText: "Vote"});
-        this.sendVoteInfo();
         this.clearVoteInfo();
       }
 
@@ -236,7 +236,7 @@ class voteOnDocument extends React.Component {
 
       returnBoolean = true;
       this.refresh();
-      
+
     } else if(txState=="error"){
       this.setState({
         vote: {done: true, error:"error", complete:false}
