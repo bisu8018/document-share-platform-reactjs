@@ -7,8 +7,8 @@ import { Face } from "@material-ui/icons";
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import DollarWithDeck from 'profile/DollarWithDeck';
-import AuthorEstimatedToday from 'profile/AuthorEstimatedToday';
 import DeckInShort from 'profile/DeckInShort';
+import AuthorEstimatedToday from 'profile/AuthorEstimatedToday';
 
 const style = {
 

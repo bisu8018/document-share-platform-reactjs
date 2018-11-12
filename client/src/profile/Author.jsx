@@ -12,10 +12,16 @@ import AuthorRevenueOnDocument from 'profile/AuthorRevenueOnDocument';
 import CuratorDocumentList from 'profile/CuratorDocumentList.jsx';
 import Web3Apis from 'apis/Web3Apis';
 import AuthorClaim from 'profile/AuthorClaim';
+import DollarWithDeck from 'profile/DollarWithDeck';
+import DeckInShort from 'profile/DeckInShort';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 const style = {
-
+  badge: {
+    marginTop: "0",
+    marginLeft: "15px",
+    marginBottom: "5px",
+  }
 };
 
 
@@ -160,7 +166,6 @@ class Author extends React.Component {
               totalViewCountInfo={this.state.totalViewCountInfo}
               accountId={accountId} />
 
-
             <Tabs
               forceRenderTabPanel={true}>
               <TabList>
@@ -184,29 +189,28 @@ class Author extends React.Component {
                                   <span className="img">
                                       <img src={restapi.getThumbnail(result.documentId, 1, result.documentName)} alt={result.title?result.title:result.documentName} />
                                   </span>
-                                 <div className="inner">
-                                      <div className="tit"
-                                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                                          >{result.title?result.title:result.documentName}</div>
-                                        <div className="descript"
-                                            style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
+                                  <div className="inner">
+                                    <div className="tit"
+                                         style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
+                                         >{result.title?result.title:result.documentName}</div>
+                                    <div className="descript"
+                                         style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
                                        {restapi.convertTimestampToString(result.created)}
-                                       </div>
-                                      <div className="descript"
-                                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                                       >{result.desc}</div>
-                                      <div className="badge">
-                                          <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
-                                          <AuthorRevenueOnDocument handleTotalAuthor3DayReward={this.handleTotalAuthor3DayReward} document={result} {...this.props} />
-                                          {/* <Badge color="success">Reward $ {drizzleApis.toDollar(result.confirmAuthorReward)}</Badge> */}
-                                          <Badge color="success">Vote $ {drizzleApis.toDollar(result.confirmVoteAmount)}</Badge>
-                                      </div>
+                                    </div>
+                                    <div className="descript"
+                                         style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
+                                    >{result.desc}
+                                    </div>
                                   </div>
-                              </Link>
-
-                              <AuthorClaim document={result} accountId={accountId} {...this.props}/>
-                          </div>
-                      </div>
+                                </Link>
+                                <div className={this.props.classes.badge}>
+                                  <Badge color="info">View {result.totalViewCount ? result.totalViewCount : 0} </Badge>
+                                  <Badge color="success">Reward <DollarWithDeck deck={drizzleApis.toEther(result.confirmAuthorReward)} drizzleApis={drizzleApis} /></Badge>
+                                  <Badge color="success">Vote <DeckInShort deck={drizzleApis.toEther(result.confirmVoteAmount)} /></Badge>
+                                </div>
+                                <AuthorClaim document={result} accountId={accountId} {...this.props}/>
+                            </div>
+                        </div>
                     ))}
 
                   </div>

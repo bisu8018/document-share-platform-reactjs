@@ -9,13 +9,18 @@ import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
 import AuthorSummary from 'profile/AuthorSummary';
 import CuratorRewardOnUserDocument from 'profile/CuratorRewardOnUserDocument';
+import DollarWithDeck from 'profile/DollarWithDeck';
+import DeckInShort from 'profile/DeckInShort';
 import CuratorClaim from 'profile/CuratorClaim';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const style = {
-
+  badge: {
+    marginTop: "0",
+    marginLeft: "15px",
+    marginBottom: "5px",
+  }
 };
-
 
 class CuratorDocumentView extends React.Component {
 
@@ -44,6 +49,11 @@ class CuratorDocumentView extends React.Component {
       if(!this.state.document) return "Loading Document";
 
       const document = this.state.document;
+
+      const badgeReward = drizzleApis.toEther(document.confirmAuthorReward);
+      const badgeVote = drizzleApis.toEther(document.confirmVoteAmount);
+      const badgeView = document.totalViewCount ? document.totalViewCount : 0;
+
       return (
 
         <div className="cardSide">
@@ -62,15 +72,13 @@ class CuratorDocumentView extends React.Component {
                   <div className="descript"
                       style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
                    >{document.desc}</div>
-                   <div className="badge">
-                       <Badge color="info">View {document.totalViewCount?document.totalViewCount:0}</Badge>
-                       <Badge color="success">
-                         <CuratorRewardOnUserDocument handleCurator3DayRewardOnDocuments={handleCurator3DayRewardOnDocuments} document={this.state.document} {...this.props} loggedInAccount={drizzleApis.getLoggedInAccount()} />
-                       </Badge>
-                   </div>
-
                 </div>
             </Link>
+            <div className={this.props.classes.badge}>
+              <Badge color="info">View {badgeView} </Badge>
+              <Badge color="success">Reward <DollarWithDeck deck={badgeReward} drizzleApis={drizzleApis} /></Badge>
+              <Badge color="success">Vote <DeckInShort deck={badgeVote} /></Badge>
+            </div>
             <CuratorClaim {...this.props} accountId={accountId} document={this.state.document} />
         </div>
       );

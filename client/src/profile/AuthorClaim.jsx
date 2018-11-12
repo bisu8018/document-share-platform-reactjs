@@ -12,8 +12,7 @@ import Web3Apis from 'apis/Web3Apis';
 import ClipLoader from 'react-spinners/ClipLoader'
 const style = {
   claimButton: {
-    marginLeft: "15px",
-    marginTop: "0"
+    marginLeft: "15px"
   }
 };
 

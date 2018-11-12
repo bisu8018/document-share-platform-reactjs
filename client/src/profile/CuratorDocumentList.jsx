@@ -78,16 +78,11 @@ class CuratorDocumentList extends React.Component {
   render() {
     const {classes, drizzleApis, match, handleCurator3DayRewardOnDocuments, curatorDocumentList, totalViewCountInfo} = this.props;
     const accountId = match.params.email;
-    if(!drizzleApis.isAuthenticated()) return "DrizzleState Loading!!";
-
-    const loggedInAccount = drizzleApis.getLoggedInAccount();
 
     if (curatorDocumentList.length > 0) {
       return (
         <div>
             <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{curatorDocumentList.length} voted documents </h3>
-
-
             <div className="customGrid col3">
               {curatorDocumentList.map((result, index) => (
                 <div className="box" key={result.documentId}>
@@ -96,9 +91,7 @@ class CuratorDocumentList extends React.Component {
               ))}
 
             </div>
-
         </div>
-
       );
     }
     return(
