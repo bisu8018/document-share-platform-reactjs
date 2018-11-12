@@ -12,6 +12,8 @@ import AuthorRevenueOnDocument from 'profile/AuthorRevenueOnDocument';
 import CuratorDocumentList from 'profile/CuratorDocumentList.jsx';
 import Web3Apis from 'apis/Web3Apis';
 import AuthorClaim from 'profile/AuthorClaim';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import "react-tabs/style/react-tabs.css";
 const style = {
 
 };
@@ -158,54 +160,71 @@ class Author extends React.Component {
               totalViewCountInfo={this.state.totalViewCountInfo}
               accountId={accountId} />
 
-            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} shared documents </h3>
-              <InfiniteScroll
-                dataLength={this.state.resultList.length}
-                next={this.fetchMoreData}
-                hasMore={!this.state.isEndPage}
-                loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
 
-                <div className="customGrid col3">
-                  {this.state.resultList.map((result, index) => (
-                    <div className="box" key={result.documentId}>
-                        <div className="cardSide">
-                            <Link to={"/content/view/" + result.documentId} >
-                                <span className="img">
-                                    <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.title?result.title:result.documentName} />
-                                </span>
-                               <div className="inner">
-                                    <div className="tit"
-                                        style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                                        >{result.title?result.title:result.documentName}</div>
+            <Tabs
+              forceRenderTabPanel={true}>
+              <TabList>
+                <Tab>Author</Tab>
+                <Tab>Voted</Tab>
+              </TabList>
+
+              <TabPanel>
+                <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} shared documents </h3>
+                <InfiniteScroll
+                  dataLength={this.state.resultList.length}
+                  next={this.fetchMoreData}
+                  hasMore={!this.state.isEndPage}
+                  loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
+
+                  <div className="customGrid col3">
+                    {this.state.resultList.map((result, index) => (
+                      <div className="box" key={result.documentId}>
+                          <div className="cardSide">
+                              <Link to={"/content/view/" + result.documentId} >
+                                  <span className="img">
+                                      <img src={restapi.getThumbnail(result.documentId, 1)} alt={result.title?result.title:result.documentName} />
+                                  </span>
+                                 <div className="inner">
+                                      <div className="tit"
+                                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
+                                          >{result.title?result.title:result.documentName}</div>
+                                        <div className="descript"
+                                            style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
+                                       {restapi.convertTimestampToString(result.created)}
+                                       </div>
                                       <div className="descript"
-                                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
-                                     {restapi.convertTimestampToString(result.created)}
-                                     </div>
-                                    <div className="descript"
-                                        style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                                     >{result.desc}</div>
-                                    <div className="badge">
-                                        <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
-                                        <AuthorRevenueOnDocument handleTotalAuthor3DayReward={this.handleTotalAuthor3DayReward} document={result} {...this.props} />
-                                        {/* <Badge color="success">Reward $ {drizzleApis.toDollar(result.confirmAuthorReward)}</Badge> */}
-                                        <Badge color="success">Vote $ {drizzleApis.toDollar(result.confirmVoteAmount)}</Badge>
-                                    </div>
-                                </div>
-                            </Link>
+                                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
+                                       >{result.desc}</div>
+                                      <div className="badge">
+                                          <Badge color="info">View {result.totalViewCount?result.totalViewCount:0}</Badge>
+                                          <AuthorRevenueOnDocument handleTotalAuthor3DayReward={this.handleTotalAuthor3DayReward} document={result} {...this.props} />
+                                          {/* <Badge color="success">Reward $ {drizzleApis.toDollar(result.confirmAuthorReward)}</Badge> */}
+                                          <Badge color="success">Vote $ {drizzleApis.toDollar(result.confirmVoteAmount)}</Badge>
+                                      </div>
+                                  </div>
+                              </Link>
 
-                            <AuthorClaim document={result} accountId={accountId} {...this.props}/>
-                        </div>
-                    </div>
-                  ))}
+                              <AuthorClaim document={result} accountId={accountId} {...this.props}/>
+                          </div>
+                      </div>
+                    ))}
 
-                </div>
-            </InfiniteScroll>
+                  </div>
+                </InfiniteScroll>
+              </TabPanel>
 
-            <CuratorDocumentList {...this.props}
-              handleCurator3DayRewardOnDocuments={this.handleCurator3DayRewardOnDocuments}
-              curatorDocumentList={this.state.curatorDocumentList}
-              totalViewCountInfo={this.state.totalViewCountInfo}
-                />
+              <TabPanel>
+                <CuratorDocumentList {...this.props}
+                  handleCurator3DayRewardOnDocuments={this.handleCurator3DayRewardOnDocuments}
+                  curatorDocumentList={this.state.curatorDocumentList}
+                  totalViewCountInfo={this.state.totalViewCountInfo}
+                    />
+              </TabPanel>
+            </Tabs>
+
+
+
+
         </div>
 
     );
