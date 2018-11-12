@@ -26,7 +26,7 @@ function SubHeaderLinks({ ...props }) {
         <Button href="/" color="transparent">Latest</Button>
         <Button href="/featured" color="transparent">Featured</Button>
         <Button href="/popular" color="transparent">Popular</Button>
-        <Button href="https://github.com/decompanyio/decompanyio-front-end" color="transparent">Help</Button>
+        <Button href="https://github.com/decompanyio" color="transparent">Help</Button>
         <div className="sortSearch">
           <CustomInput
             inputProps={{
