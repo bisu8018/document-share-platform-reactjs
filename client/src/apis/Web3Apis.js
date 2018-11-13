@@ -111,7 +111,7 @@ export default class Web3Apis {
   calculateCuratorReward = (curatorId, documentId, viewCount, totalViewCount) => {
     //contract calculateCuratorReward(address _addr, bytes32 _docId, uint _pv, uint _tpvs)
 
-    console.log("calculateCuratorReward", curatorId, documentId, viewCount, totalViewCount);
+    //console.log("calculateCuratorReward", curatorId, documentId, viewCount, totalViewCount);
 
     return this.DocumentReg.methods.calculateCuratorReward(curatorId, this.asciiToHex(documentId), viewCount, totalViewCount).call({
       from: curatorId
@@ -141,6 +141,9 @@ export default class Web3Apis {
   getDetermineAuthorReward = (authorAddress, documentId) => {
 
     //console.log("determineAuthorToken", documentId, authorAddress);
+    if(!documentId){
+      throw new Error("documentId is invaild!!!", documentId);
+    }
 
     return this.DocumentReg.methods.determineAuthorReward(authorAddress, this.asciiToHex(documentId)).call({from: authorAddress});
   };
@@ -153,7 +156,12 @@ export default class Web3Apis {
 
   getCurator3DayRewardOnUserDocument = (curator, documentId, blockchainTimestamp) => {
       //function getCurator3DayRewardOnUserDocument(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint)
-
+      if(!curator){
+        throw new Error("curator is invaild!!!", curator);
+      }
+      if(!documentId){
+        throw new Error("documentId is invaild!!!", documentId);
+      }
       return this.DocumentReg.methods.getCurator3DayRewardOnUserDocument(curator, this.asciiToHex(documentId), blockchainTimestamp).call({from: curator});
   }
 

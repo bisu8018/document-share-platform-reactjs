@@ -33,7 +33,6 @@ class Author extends React.Component {
     curatorDocumentKeyList: [],
     nextPageKey: null,
     isEndPage:false,
-    totalAuthor3DayReward: 0,
     totalCurator3DayReward: 0,
     totalCuratorEstimateRewards: 0
   };
@@ -69,7 +68,7 @@ class Author extends React.Component {
 
     if(this.curator3DayRewardOnDocuments.includes(documentId)) return;
 
-    console.log("handleCurator3DayRewardOnDocuments", documentId, reward, estimateReward);
+    //console.log("handleCurator3DayRewardOnDocuments", documentId, reward, estimateReward);
     this.curator3DayRewardOnDocuments.push(documentId);
     this.curator3DayRewards.push(Number(reward));
     this.curatorEstimateRewards.push(Number(estimateReward));
@@ -81,7 +80,8 @@ class Author extends React.Component {
         totalCurator3DayReward += Number(this.curator3DayRewards[idx]);
         totalCuratorEstimateRewards += Number(this.curatorEstimateRewards[idx]);
       }
-      //console.log("handleCurator3DayRewardOnDocuments", this.curator3DayRewards, "totalCurator3DayReward", totalCurator3DayReward, "totalCuratorEstimateRewards", totalCuratorEstimateRewards);
+      //console.log("totalCurator3DayReward", totalCurator3DayReward, this.web3Apis.toDeck(totalCurator3DayReward));
+      //console.log("totalCuratorEstimateRewards", totalCuratorEstimateRewards);
       this.setState({totalCurator3DayReward: totalCurator3DayReward, totalCuratorEstimateRewards: totalCuratorEstimateRewards});
 
   }
@@ -114,54 +114,24 @@ class Author extends React.Component {
 
   }
 
-  getCuratorDocuments = () => {
-
-      const {classes, match} = this.props;
-      const email = match.params.email;
-      restapi.getCuratorDocuments({
-        accountId: email
-      }).then((res)=>{
-        console.log("Fetch My Voted Document", res.data);
-        if(res.data && res.data.resultList) {
-          //console.log("list", res.data.resultList);
-
-          let deduplicationList = this.state.curatorDocumentList;
-          let deduplicationKeys = this.state.curatorDocumentKeyList;
-          res.data.resultList.forEach((curItem) => {
-            if(!deduplicationKeys.includes(curItem.documentId)){
-              deduplicationKeys.push(curItem.documentId);
-              deduplicationList.push(curItem);
-              //console.log(curItem);
-            }
-          });
-
-          this.setState({curatorDocumentList:deduplicationList, curatorDocumentKeyList:deduplicationKeys});
-
-        }
-
-      });
-  }
-
-
   componentWillMount() {
     this.fetchDocuments();
-    this.getCuratorDocuments();
   }
 
   render() {
     const {classes, drizzleApis, match} = this.props;
     const accountId = match.params.email;
-    if(!drizzleApis.isAuthenticated()) "DrizzleState Loading!!";
+    //if(!drizzleApis.isAuthenticated()) "DrizzleState Loading!!";
 
     return (
 
         <div className="contentGridView">
 
             <AuthorSummary totalReward={this.state.totalReward}
-              totalAuthor3DayReward={this.state.totalAuthor3DayReward}
               totalCurator3DayReward={this.state.totalCurator3DayReward}
               totalCuratorEstimateRewards={this.state.totalCuratorEstimateRewards}
-              drizzleApis={drizzleApis} documentList={this.state.resultList}
+              drizzleApis={drizzleApis}
+              documentList={this.state.resultList}
               curatorDocumentList={this.state.curatorDocumentList}
               totalViewCountInfo={this.state.totalViewCountInfo}
               accountId={accountId} />
@@ -218,10 +188,11 @@ class Author extends React.Component {
               </TabPanel>
 
               <TabPanel>
-                <CuratorDocumentList {...this.props}
-                  handleCurator3DayRewardOnDocuments={this.handleCurator3DayRewardOnDocuments}
-                  curatorDocumentList={this.state.curatorDocumentList}
-                  totalViewCountInfo={this.state.totalViewCountInfo}
+                <CuratorDocumentList
+                  {...this.props}
+                  handleCurator3DayRewardOnDocuments= {this.handleCurator3DayRewardOnDocuments}
+                  totalViewCountInfo= {this.state.totalViewCountInfo}
+                  accountId= {accountId}
                     />
               </TabPanel>
             </Tabs>

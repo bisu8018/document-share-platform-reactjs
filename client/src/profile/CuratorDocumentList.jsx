@@ -7,6 +7,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Spinner from 'react-spinkit';
 import { Link } from 'react-router-dom';
 import * as restapi from 'apis/DocApi';
+import Web3Apis from 'apis/Web3Apis';
 import AuthorSummary from 'profile/AuthorSummary';
 import CuratorDepositOnDocument from 'profile/CuratorDepositOnDocument';
 import CuratorClaim from 'profile/CuratorClaim';
@@ -21,11 +22,12 @@ class CuratorDocumentList extends React.Component {
 
   state = {
     resultList: [],
-    resultKeyList: [],
-    todayVotedDocuments: [],
     nextPageKey: null,
-    isEndPage:true,
+    isEndPage: true,
+    totalConfirmVoteAmount: 0,
   };
+
+  web3Apis = new Web3Apis();
 
   fetchMoreData = () => {
 
@@ -34,59 +36,76 @@ class CuratorDocumentList extends React.Component {
       })
 
   };
-/*
+
   fetchDocuments = (params) => {
+    const {classes, match, accountId, handleCurator3DayRewardOnDocuments, totalViewCountInfo} = this.props;
+    restapi.getCuratorDocuments({
+      accountId: accountId
+    }).then((res)=>{
+      console.log("Fetch My Voted Document", res.data);
+      if(res.data && res.data.resultList) {
 
-      const {classes, match} = this.props;
-      const accountId = match.params.email;
-      restapi.getCuratorDocuments({
-        accountId: accountId
-      }).then((res)=>{
-        console.log("Fetch My Voted Document", res.data);
-        if(res.data && res.data.resultList) {
-          //console.log("list", res.data.resultList);
+        this.setState({
+          resultList:res.data.resultList
+        });
 
-          let deduplicationList = this.state.resultList;
-          let deduplicationKeys = this.state.resultKeyList;
-          res.data.resultList.forEach((curItem) => {
-            if(!deduplicationKeys.includes(curItem.documentId)){
-              deduplicationKeys.push(curItem.documentId);
-              deduplicationList.push(curItem);
-              //console.log(curItem);
+        let totalConfirmVoteAmount = 0;
+        const viewCount = res.data.totalViewCountInfo.count;
+        const totalViewCountSquare = res.data.totalViewCountInfo.totalViewCountSquare;
+
+        res.data.resultList.forEach((item)=>{
+          this.getCuratorReward(accountId, item.documentId, viewCount, totalViewCountSquare).then((data)=>{
+
+            const reward = data[0];
+            const estimateReward = data[1];
+            //console.log(item.documentId, reward, estimateReward);
+            if(handleCurator3DayRewardOnDocuments){
+              handleCurator3DayRewardOnDocuments(item.documentId, Number(reward), Number(estimateReward));
             }
+          }).catch((err)=>{
+            console.error(err);
           });
+        });
+      }
 
-          this.setState({resultList:deduplicationList});
-          this.setState({resultKeyList:deduplicationKeys});
+    }).catch((err)=>{
+      console.error("Error CuratorDocumentList", err);
+    });
+
+  }
 
 
-          if(this.state.todayVotedDocuments){
-            this.setState({todayVotedDocuments: res.data.todayVotedDocuments});
-          }
+  getCuratorReward = (accountId, documentId, totalViewCount, totalViewCountSquare) => {
+    console.log("getCuratorReward", accountId, documentId, totalViewCount, totalViewCountSquare);
+    return new Promise((resolve, reject) => {
+      const blockchainTimestamp = this.web3Apis.getBlockchainTimestamp(new Date());
+      const promise1 = this.web3Apis.getCurator3DayRewardOnUserDocument(accountId, documentId, blockchainTimestamp);
+      const promise2 = this.web3Apis.calculateCuratorReward(accountId, documentId, totalViewCount, totalViewCountSquare);
 
-        }
-
-      });
-
+      Promise.all([promise1, promise2]).then((results) => {
+        resolve(results);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
 
   }
 
   componentWillMount() {
     this.fetchDocuments();
   }
-*/
-  render() {
-    const {classes, drizzleApis, match, handleCurator3DayRewardOnDocuments, curatorDocumentList, totalViewCountInfo} = this.props;
-    const accountId = match.params.email;
 
-    if (curatorDocumentList.length > 0) {
+  render() {
+    const {classes, drizzleApis, match, handleCurator3DayRewardOnDocuments, totalViewCountInfo, accountId} = this.props;
+    //console.log(this.state.resultList);
+    if (this.state.resultList.length > 0) {
       return (
         <div>
-            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{curatorDocumentList.length} voted documents </h3>
+            <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} voted documents </h3>
             <div className="customGrid col3">
-              {curatorDocumentList.map((result, index) => (
+              {this.state.resultList.map((result, index) => (
                 <div className="box" key={result.documentId}>
-                    <CuratorDocumentView {...this.props} documentId={result.documentId} totalViewCountInfo={totalViewCountInfo}/>
+                    <CuratorDocumentView {...this.props} document={result} totalViewCountInfo={totalViewCountInfo}/>
                 </div>
               ))}
 

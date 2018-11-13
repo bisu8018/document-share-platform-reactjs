@@ -38,6 +38,7 @@ class AuthorSummary extends React.Component {
 
   state = {
     totalBalanceDataKey: null,
+    totalAuthor3DayReward: 0,
     authorEstimatedToday: 0,
     curatorEstimatedToday: 0,
     todayVotedDocuments: null,
@@ -53,7 +54,7 @@ class AuthorSummary extends React.Component {
 
     if(this.state.balance <0){
       this.web3Apis.getBalance(accountId).then((data) => {
-        console.log("balance", data)
+        //console.log("balance", data)
         this.setState({balance: Number(data)});
       }).catch((err) => {
 
@@ -62,54 +63,32 @@ class AuthorSummary extends React.Component {
 
   }
 
-  handleRequestBalance = () => {
-
-    const {drizzleApis, drizzleState, accountId} = this.props;
-    if(this.state.totalBalanceDataKey) return;
-
-    const dataKey = drizzleApis.requestTotalBalance(accountId);
-    if(dataKey){
-      //console.log("handleRequestBalance", dataKey);
-      this.setState({totalBalanceDataKey: dataKey});
-      //setInterval(this.printBalance, 3000);
-
-      //const balance = drizzleApis.getTotalBalance(dataKey);
-      //console.log("balance", balance);
-    }
-
-  }
-
   getCalculateAuthorReward = () => {
     const {drizzleApis, documentList, accountId, totalViewCountInfo} = this.props;
-    if(this.state.authorEstimatedToday || !totalViewCountInfo) return;
-
     let viewCount = 0;
+    let totalAuthor3DayReward = 0;
     for(const idx in documentList) {
       const document = documentList[idx];
       viewCount += document.viewCount;
+      totalAuthor3DayReward += document.confirmAuthorReward;
     }
 
-    const address = drizzleApis.getLoggedInAccount();
-    this.web3Apis.getCalculateAuthorReward(address, viewCount, totalViewCountInfo.totalViewCount).then((data) =>{
-      this.setState({authorEstimatedToday: data});
-
-    }).catch((err) => {
-      console.error(err);
-    });
-
-  }
-
-  printBalance = () => {
-    const {drizzleApis, drizzleState} = this.props;
-    //console.log("printBalance", this.state.totalBalanceDataKey);
-    if(this.state.totalBalanceDataKey) {
-
-      const balance = drizzleApis.getTotalBalance(this.state.totalBalanceDataKey);
-    //  console.log("Print Balance on data key", this.state.totalBalanceDataKey, balance);
-      return balance;
+    if(totalAuthor3DayReward >this.state.totalAuthor3DayReward){
+      this.setState({totalAuthor3DayReward: totalAuthor3DayReward});
     }
 
-    return "-";
+
+    if(!this.state.authorEstimatedToday && totalViewCountInfo){
+      const address = accountId;//drizzleApis.getLoggedInAccount();
+      this.web3Apis.getCalculateAuthorReward(address, viewCount, totalViewCountInfo.totalViewCount).then((data) =>{
+        this.setState({authorEstimatedToday: data});
+
+      }).catch((err) => {
+        console.error(err);
+      });
+    }
+
+
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -117,10 +96,10 @@ class AuthorSummary extends React.Component {
     const {drizzleApis, drizzleState} = this.props;
 
     //this.handleRequestBalance();
-    if(drizzleApis.isAuthenticated()){
+    //if(drizzleApis.isAuthenticated()){
       this.getBalance()
       this.getCalculateAuthorReward();
-    }
+    //}
 
     return true;
   }
@@ -133,18 +112,18 @@ class AuthorSummary extends React.Component {
   render() {
     const {classes, accountId, drizzleApis, totalAuthor3DayReward, totalCurator3DayReward, totalCuratorEstimateRewards, ...others} = this.props;
 
+/*
     if(!drizzleApis.isAuthenticated()) return (
       <h3 style={{margin:'0',fontSize:'26px'}}>Account
         <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
       </h3>
     );
-
-    const loggedInAccount = drizzleApis.getLoggedInAccount();
-    const myAccount = loggedInAccount == accountId ? accountId : null;
+*/
+    const loggedInAccount = accountId;
 
     // Values in DECK
-    const balance = drizzleApis.toEther(this.printBalance());
-    const author3DayReward = drizzleApis.toEther(totalAuthor3DayReward);
+    const balance = drizzleApis.toEther(this.state.balance);
+    const author3DayReward = drizzleApis.toEther(this.state.totalAuthor3DayReward);
     const authorTodayReward = drizzleApis.toEther(this.state.authorEstimatedToday);
     const curator3DayReward = drizzleApis.toEther(totalCurator3DayReward);
     const curatorTodayReward = drizzleApis.toEther(totalCuratorEstimateRewards);

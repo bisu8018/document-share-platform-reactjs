@@ -24,31 +24,9 @@ const style = {
 
 class CuratorDocumentView extends React.Component {
 
-  state ={
-    document: null
-  }
-
-  getContentInfo = (documentId) => {
-    restapi.getDocument(documentId).then((res) => {
-      //console.log(res.data);
-      this.setState({document:res.data.document});
-    });
-
-  }
-
-  componentWillMount() {
-    const {documentId, drizzleApis} = this.props;
-
-    this.getContentInfo(documentId);
-
-  }
-
   render() {
-      const {classes, drizzleApis, handleCurator3DayRewardOnDocuments, accountId} = this.props;
+      const {classes, document, drizzleApis, handleCurator3DayRewardOnDocuments, accountId} = this.props;
 
-      if(!this.state.document) return "Loading Document";
-
-      const document = this.state.document;
 
       const badgeReward = drizzleApis.toEther(document.confirmAuthorReward);
       const badgeVote = drizzleApis.toEther(document.confirmVoteAmount);
@@ -79,7 +57,7 @@ class CuratorDocumentView extends React.Component {
               <Badge color="success">Reward <DollarWithDeck deck={badgeReward} drizzleApis={drizzleApis} /></Badge>
               <Badge color="success">Vote <DeckInShort deck={badgeVote} /></Badge>
             </div>
-            <CuratorClaim {...this.props} accountId={accountId} document={this.state.document} />
+            <CuratorClaim {...this.props} accountId={accountId} document={document} />
         </div>
       );
   }
