@@ -80,7 +80,8 @@ class UploadDocument extends React.Component {
     const { drizzleApis} = this.props;
 
     const account = drizzleApis.getLoggedInAccount();
-    this.setState({nickname: account});
+    const nickname = this.getNickname()?this.getNickname():account;
+    this.setState({nickname: nickname});
 
     /*
     if(!auth.isAuthenticated()){
@@ -164,11 +165,15 @@ class UploadDocument extends React.Component {
         */
         this.handleClose("classicModal");
         console.log("Regist Document End SUCCESS", result);
+
+        this.setNickname(nickname);
       });
   }
 
+
+
   onChangeNickname = (e) => {
-    console.log(e.target);
+    //console.log(e.target);
     const nickname = e.target.value;
     this.setState({nickname: nickname});
   }
@@ -238,6 +243,7 @@ class UploadDocument extends React.Component {
     console.log("registSmartContractAddress", drizzle, drizzleState, contract, account, result);
     // save the `stackId` for later reference
     this.setState({ stackId });
+
   };
 
 
