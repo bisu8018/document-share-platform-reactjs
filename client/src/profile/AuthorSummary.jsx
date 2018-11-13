@@ -70,9 +70,10 @@ class AuthorSummary extends React.Component {
     for(const idx in documentList) {
       const document = documentList[idx];
       viewCount += document.viewCount;
-      totalAuthor3DayReward += document.confirmAuthorReward;
+      totalAuthor3DayReward += isNaN(document.confirmAuthorReward)?0:Number(document.confirmAuthorReward);
+      console.log("totalAuth3DayReward", document.confirmAuthorReward, totalAuthor3DayReward)
     }
-
+    //console.log("totalAuth3DayReward", totalAuthor3DayReward)
     if(totalAuthor3DayReward >this.state.totalAuthor3DayReward){
       this.setState({totalAuthor3DayReward: totalAuthor3DayReward});
     }
