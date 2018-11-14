@@ -58,7 +58,7 @@ class Bounty extends React.Component {
       return (
         <span>
             <Button id="bountyButton" color="transparent"
-              onClick={this.onClickBounty} style={{text-transform: capitalize}}
+              onClick={this.onClickBounty} style={{'text-transform': 'capitalize'}}
             ><img src={showerhead} style={{height:"18px"}} />Free DECK</Button>
         </span>
       );
