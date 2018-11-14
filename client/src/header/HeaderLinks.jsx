@@ -16,6 +16,7 @@ import headerLinksStyle from "assets/jss/material-kit-react/components/headerLin
 
 import UploadDocument from "upload/UploadDocument";
 import LoginPopupWrapped from "./LoginPopup";
+import Bounty from "header/Bounty"
 
 class HeaderLinks extends React.Component {
 
@@ -48,7 +49,7 @@ class HeaderLinks extends React.Component {
   }
 
   render() {
-    const { classes, drizzle, drizzleState, drizzleApis} = this.props;
+    const { classes, drizzleApis} = this.props;
     //console.log("HeaderLinks render()", drizzleApis);
 
     if(!drizzleApis.isAuthenticated()) {
@@ -64,6 +65,7 @@ class HeaderLinks extends React.Component {
     return (
       <List className={classes.list}>
         <ListItem className={classes.listItem}>
+          <Bounty drizzleApis={drizzleApis} />
           <UploadDocument drizzleApis={drizzleApis} />
           <Link to={"/author/" + drizzleApis.getLoggedInAccount()} style={{ color: '#8b8b8b' }}>
             <Button id="address" color="transparent" className={classes.button} >

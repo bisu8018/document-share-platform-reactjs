@@ -2,6 +2,7 @@ import {BigNumber} from 'bignumber.js';
 import Web3 from 'web3';
 import DocumentReg from '../contracts-rinkeby/DocumentReg.json';
 import Deck from '../contracts-rinkeby/Deck.json';
+import Bounty from '../contracts-rinkeby/BountyOne.json';
 const defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
 
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c"));
@@ -15,6 +16,10 @@ export default class Web3Apis {
     });
 
     this.Deck = new web3.eth.Contract(Deck.abi, Deck.networks[this.network].address, {
+      from: defaultAccountId
+    });
+
+    this.Bounty = new web3.eth.Contract(Bounty.abi, Bounty.networks[this.network].address, {
       from: defaultAccountId
     });
   };
@@ -67,6 +72,14 @@ export default class Web3Apis {
 
     return result;
   }
+
+  getBountyAvailable = (address) => {
+
+    return this.Bounty.methods.available().call({
+      from: address
+    });
+
+  };
 
   getApproved = (address) => {
 

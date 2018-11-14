@@ -2,6 +2,7 @@
 import { Drizzle, generateStore } from "drizzle";
 import DocumentReg from "contracts-rinkeby/DocumentReg.json";
 import Deck from "contracts-rinkeby/Deck.json";
+import BountyOne from "contracts-rinkeby/BountyOne.json";
 
 import {BigNumber} from 'bignumber.js';
 // import drizzle functions and contract artifact
@@ -13,7 +14,7 @@ export default class DrizzleApis {
 
   // let drizzle know what contracts we want
   // let drizzle know what contracts we want
-  options = { contracts: [DocumentReg, Deck] };
+  options = { contracts: [DocumentReg, Deck, BountyOne] };
   // setup the drizzle store and drizzle
   drizzleStore = generateStore(this.options);
   drizzle = new Drizzle(this.options, this.drizzleStore);
@@ -188,6 +189,31 @@ export default class DrizzleApis {
     return false;
   }
 
+  bounty = () => {
+
+    if(!this.isAuthenticated()){
+      console.error("The Metamask login is required.")
+      return;
+    }
+
+    const ethAccount = this.drizzleState.accounts[0];
+
+    const BountyOne = this.drizzle.contracts.BountyOne;
+    console.log(this.drizzle.contracts);
+    console.log(BountyOne);
+    if(!BountyOne){
+      console.error("Bounty Contract is invaild");
+      return;
+    }
+
+
+    const stackId = BountyOne.methods["claim"].cacheSend({
+      from: ethAccount
+    });
+
+    console.log("bounty stackId", stackId);
+    return stackId;
+  };
 
 
   approve = (deposit) => {
