@@ -77,9 +77,9 @@ class ContentViewRight extends React.Component {
                     {result.desc}
                     </div>
                    <div className="badge">
-                     <Badge color="info">View {badgeView} </Badge>
-                     <Badge color="success">Reward <DollarWithDeck deck={badgeReward} drizzleApis={drizzleApis} /></Badge>
-                     <Badge color="success">Vote <DeckInShort deck={badgeVote} /></Badge>
+                     <Badge color="info">View {isNaN(result.totalViewCount)?0:result.totalViewCount} </Badge>
+                     <Badge color="success">Reward <DollarWithDeck deck={drizzleApis.toEther(result.confirmAuthorReward)} drizzleApis={drizzleApis} /></Badge>
+                     <Badge color="success">Vote <DeckInShort deck={drizzleApis.toEther(result.confirmVoteAmount)} /></Badge>
                      {result.tags?result.tags.map((tag, index) => (
                        <Badge color="warning" key={index}>{tag}</Badge>
                      )):""}
