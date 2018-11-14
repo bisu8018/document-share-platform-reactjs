@@ -67,13 +67,19 @@ class AuthorSummary extends React.Component {
     const {drizzleApis, documentList, accountId, totalViewCountInfo} = this.props;
     let viewCount = 0;
     let totalAuthor3DayReward = 0;
+    const blockchainTimestamp = this.web3Apis.getBlockchainTimestamp(new Date());
     for(const idx in documentList) {
       const document = documentList[idx];
-      viewCount += document.viewCount;
+      if(!isNaN(document.viewCountUpdated) && document.viewCountUpdated > blockchainTimestamp){
+        const docViewCount = isNaN(document.viewCount)?0:Number(document.viewCount);
+        viewCount += docViewCount;
+        console.log("viewCount", document.documentId, docViewCount, viewCount);
+      }
+
       totalAuthor3DayReward += isNaN(document.confirmAuthorReward)?0:Number(document.confirmAuthorReward);
-      console.log("totalAuth3DayReward", document.confirmAuthorReward, totalAuthor3DayReward)
+
     }
-    //console.log("totalAuth3DayReward", totalAuthor3DayReward)
+    console.log("totalAuth3DayReward", totalAuthor3DayReward, viewCount)
     if(totalAuthor3DayReward >this.state.totalAuthor3DayReward){
       this.setState({totalAuthor3DayReward: totalAuthor3DayReward});
     }
@@ -81,6 +87,7 @@ class AuthorSummary extends React.Component {
 
     if(!this.state.authorEstimatedToday && totalViewCountInfo){
       const address = accountId;//drizzleApis.getLoggedInAccount();
+      console.log("getCalculateAuthorReward", viewCount, totalViewCountInfo.totalViewCount);
       this.web3Apis.getCalculateAuthorReward(address, viewCount, totalViewCountInfo.totalViewCount).then((data) =>{
         this.setState({authorEstimatedToday: data});
 
