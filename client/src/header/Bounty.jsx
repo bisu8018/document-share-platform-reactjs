@@ -34,7 +34,7 @@ class Bounty extends React.Component {
     console.log("componentDidMount", this.state.available, drizzleApis.isAuthenticated() );
     if(drizzleApis.isAuthenticated()){
       this.web3Apis.getBountyAvailable(drizzleApis.getLoggedInAccount()).then((data) => {
-        console.log("getBountyAvailable", data);
+        //console.log("getBountyAvailable", data);
         this.setState({available:data});
       }).catch((err) => {
         console.error(err);
@@ -58,8 +58,8 @@ class Bounty extends React.Component {
       return (
         <span>
             <Button id="bountyButton" color="transparent"
-              onClick={this.onClickBounty}
-            ><img src={showerhead} style={{height:"18px"}} /></Button>
+              onClick={this.onClickBounty} style={{text-transform: capitalize}}
+            ><img src={showerhead} style={{height:"18px"}} />Free DECK</Button>
         </span>
       );
     } else {
