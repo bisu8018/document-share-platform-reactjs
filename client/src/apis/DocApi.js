@@ -16,11 +16,14 @@ const getDocumentDownloadUrl = "/api/document/download/";
 const voteDocumentUrl = "/api/document/vote/";
 
 export function getPageView(documentId, pageNo) {
-  return imgDomain + "/document/get/" + documentId + "/" + pageNo;
+  //return imgDomain + "/document/get/" + documentId + "/" + pageNo;
+  //http://dev-ca-document.s3-website-us-west-1.amazonaws.com/THUMBNAIL/002107e7ce7541fdafa256f50babafff/300X300/1
+  return imgDomain + "/THUMBNAIL/" + documentId + "/1200X1200/"  + pageNo;
 }
 
 export function getThumbnail(documentId, pageNo, documentName) {
-  let imageUrl = imgDomain+ "/document/thumb/" + documentId + "/" + pageNo;
+  //let imageUrl = imgDomain+ "/document/thumb/" + documentId + "/" + pageNo;
+  let imageUrl = imgDomain + "/THUMBNAIL/" + documentId + "/300X300/"  + pageNo;
   if(documentName){
     if(documentName.lastIndexOf(".dotx")>0 || documentName.lastIndexOf(".dot")>0 || documentName.lastIndexOf(".docx")>0){
       imageUrl = getPageView(documentId, 1);
