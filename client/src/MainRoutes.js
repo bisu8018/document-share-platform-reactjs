@@ -71,7 +71,7 @@ class MainRoutes extends Component {
       <Router history={history}>
       <div>
         <Header
-          brand="DECOMPANY.io"
+          brand="decompany.io"
           rightLinks={<HeaderLinks
             drizzleApis={this.state.drizzleApis} />}
           fixed
