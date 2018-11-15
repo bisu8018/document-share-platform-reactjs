@@ -50,21 +50,27 @@ class CuratorDocumentList extends React.Component {
         });
 
         let totalConfirmVoteAmount = 0;
-        const viewCount = res.data.totalViewCountInfo.count;
+
         const totalViewCountSquare = res.data.totalViewCountInfo.totalViewCountSquare;
 
         res.data.resultList.forEach((item)=>{
-          this.getCuratorReward(accountId, item.documentId, viewCount, totalViewCountSquare).then((data)=>{
+          const viewCount = isNaN(item.viewCount)?0:item.viewCount;
+          if(totalViewCountSquare > viewCount){
+            this.getCuratorReward(accountId, item.documentId, item.viewCount, totalViewCountSquare).then((data)=>{
 
-            const reward = data[0];
-            const estimateReward = data[1];
-            //console.log(item.documentId, reward, estimateReward);
-            if(handleCurator3DayRewardOnDocuments){
-              handleCurator3DayRewardOnDocuments(item.documentId, Number(reward), Number(estimateReward));
-            }
-          }).catch((err)=>{
-            console.error(err);
-          });
+              const reward = data[0];
+              const estimateReward = data[1];
+              //console.log(item.documentId, reward, estimateReward);
+              if(handleCurator3DayRewardOnDocuments){
+                handleCurator3DayRewardOnDocuments(item.documentId, Number(reward), Number(estimateReward));
+              }
+            }).catch((err)=>{
+              console.error("fetchDocument", err);
+            });
+          } else {
+            console.error("getCuratorReward total View count error", item, totalViewCountInfo);
+          }
+
         });
       }
 

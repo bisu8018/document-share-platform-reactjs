@@ -2,9 +2,9 @@ import axios from 'axios';
 import * as ajax from './CommonAjaxApis';
 import { APP_PROPERTIES } from '../resources/app.properties';
 
-const uploadDomain = APP_PROPERTIES.domain.upload + '/prod/upload' //"https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod/upload";
-const imgDomain = APP_PROPERTIES.domain.image;// + '/prod/document/get'//"https://24gvmjxwme.execute-api.us-west-1.amazonaws.com";
-const apiDomain = APP_PROPERTIES.domain.api;//"https://iwzx8ah5xf.execute-api.us-west-1.amazonaws.com/dev";
+const uploadDomain = APP_PROPERTIES.domain().upload + '/prod/upload' //"https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod/upload";
+const imgDomain = APP_PROPERTIES.domain().image;// + '/prod/document/get'//"https://24gvmjxwme.execute-api.us-west-1.amazonaws.com";
+const apiDomain = APP_PROPERTIES.domain().api;//"https://iwzx8ah5xf.execute-api.us-west-1.amazonaws.com/dev";
 
 const registDocumentInfoUrl = "/api/document/regist";
 const getDocumentsUrl = "/api/document/list";
