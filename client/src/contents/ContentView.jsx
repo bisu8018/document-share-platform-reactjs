@@ -12,6 +12,7 @@ import * as restapi from 'apis/DocApi';
 import DrizzleApis from 'apis/DrizzleApis';
 import Web3Apis from 'apis/Web3Apis';
 import Spinner from 'react-spinkit'
+import {Helmet} from "react-helmet";
 
 import AuthorEstimatedToday from "profile/AuthorEstimatedToday"
 import ContentViewFullScreen from "./ContentViewFullScreen";
@@ -84,10 +85,17 @@ class ContentView extends React.Component {
     }
 
     return (
-      <div className="contentGridView">
+
+      <div className="contentGridView application">
+
+        <Helmet>
+            <meta charSet="utf-8" />
+            <title>{document.title}</title>
+            <link rel="canonical" href={"http://share.decompany.io/content/view/" + document.documentId} />
+        </Helmet>
          <div className="leftWrap">
             <ContentViewFullScreen document={document} documentText={this.state.documentText} {...others}/>
-         </div>
+          </div>
          <ContentViewRight document={this.state.document} list={this.state.list} {...others}/>
       </div>
 
