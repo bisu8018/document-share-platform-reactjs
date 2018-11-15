@@ -27,14 +27,14 @@ import Web3Apis from "apis/Web3Apis"
 
 const styles = theme => ({
   popper: {
-     zIndex: 9000,
-   },
-   selbtn: {
-     marginTop: '0px',
-     marginRight: '7px',
-     marginLeft: '0px',
-     marginBottom: '12px'
-   }
+    zIndex: 9000,
+  },
+  selbtn: {
+    marginTop: '0px',
+    marginRight: '7px',
+    marginLeft: '0px',
+    marginBottom: '12px'
+  }
 });
 
 class Bounty extends React.Component {
@@ -81,40 +81,36 @@ class Bounty extends React.Component {
     console.log("render", drizzleApis.isAuthenticated());
 
     if(this.state.available > 0) {
-      const id = open ? 'scroll-playground' : null;
       return (
         <span>
-            <Button id="bountyButton" color="transparent"
-              buttonRef={node => {this.anchorEl = node;}}
-              variant="contained"
-              aria-describedby={id}
-              onClick={this.handleClickButton} style={{'text-transform': 'capitalize'}}
-            ><img src={showerhead} style={{height:"18px",margin:"3px"}} /> Free DECK!! </Button>
-            <Popper
-              id={id}
-              open={open}
-              anchorEl={this.anchorEl}
-              className={classes.popper}
-            >
-              {arrow ? <span className={classes.arrow} ref={this.handleArrowRef} /> : null}
-              <Paper className={classes.paper}>
-                <DialogTitle>{"Do you need DECK?"}</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    <div>New users can get 5000 DECK for free. (Gas fee is required)</div>
-                    <div>You can vote for good docs with DECK and get rewarded.</div>
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>s
-                  <Button className={classes.selbtn} size="sm" onClick={this.handleClickButton}>
-                    Disagree
-                  </Button>
-                  <Button className={classes.selbtn} size="sm" onClick={this.handleClickAgree} color="rose">
-                    Agree
-                  </Button>
-                </DialogActions>
-              </Paper>
-            </Popper>
+          <Button id="bountyButton" color="transparent"
+            buttonRef={node => {this.anchorEl = node;}}
+            variant="contained"
+            onClick={this.handleClickButton} style={{'text-transform': 'capitalize'}}
+          ><img src={showerhead} style={{height:"18px",margin:"3px"}} /> Free DECK!! </Button>
+          <Popper
+            open={open}
+            anchorEl={this.anchorEl}
+            className={classes.popper}
+          >
+            <Paper className={classes.paper}>
+              <DialogTitle>{"Do you need DECK?"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  <div>New users can get 5000 DECK for free. (Gas fee is required)</div>
+                  <div>You can vote for good docs with DECK and get rewarded.</div>
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>s
+                <Button className={classes.selbtn} size="sm" onClick={this.handleClickButton}>
+                  Disagree
+                </Button>
+                <Button className={classes.selbtn} size="sm" onClick={this.handleClickAgree} color="rose">
+                  Agree
+                </Button>
+              </DialogActions>
+            </Paper>
+          </Popper>
         </span>
       );
     } else {
