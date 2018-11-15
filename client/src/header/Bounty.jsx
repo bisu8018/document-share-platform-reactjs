@@ -8,6 +8,12 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
+import Popper from '@material-ui/core/Popper';
+import Paper from '@material-ui/core/Paper';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { Apps, CloudUpload , Face , Person} from "@material-ui/icons";
 
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.jsx";
@@ -19,17 +25,30 @@ import LoginPopupWrapped from "./LoginPopup";
 import showerhead from "shower-head.png"
 import Web3Apis from "apis/Web3Apis"
 
+const styles = theme => ({
+  popper: {
+     zIndex: 9000,
+   },
+   selbtn: {
+     marginTop: '0px',
+     marginRight: '7px',
+     marginLeft: '0px',
+     marginBottom: '12px'
+   }
+});
+
 class Bounty extends React.Component {
 
   web3Apis = new Web3Apis();
 
   state = {
-    available: 0
+    available: 0,
+    open: false,
+    placement: 'bottom',
   }
 
   componentDidMount() {
     const { drizzleApis } = this.props;
-
 
     console.log("componentDidMount", this.state.available, drizzleApis.isAuthenticated() );
     if(drizzleApis.isAuthenticated()){
@@ -42,24 +61,60 @@ class Bounty extends React.Component {
     }
   }
 
+  handleClickButton = () => {
+    this.setState(state => ({
+      open: !state.open,
+    }));
+  };
 
-  onClickBounty = () => {
+  handleClickAgree = () => {
     const { classes, drizzleApis } = this.props;
-
+    this.setState(state => ({
+      open: !state.open,
+    }));
     drizzleApis.bounty();
-
   }
 
   render() {
     const { classes, drizzleApis } = this.props;
+    const { open, placement, disablePortal, flip, preventOverflow, arrow, arrowRef } = this.state;
     console.log("render", drizzleApis.isAuthenticated());
 
     if(this.state.available > 0) {
+      const id = open ? 'scroll-playground' : null;
       return (
         <span>
             <Button id="bountyButton" color="transparent"
-              onClick={this.onClickBounty} style={{'text-transform': 'capitalize'}}
-            ><img src={showerhead} style={{height:"18px"}} />Free DECK</Button>
+              buttonRef={node => {this.anchorEl = node;}}
+              variant="contained"
+              aria-describedby={id}
+              onClick={this.handleClickButton} style={{'text-transform': 'capitalize'}}
+            ><img src={showerhead} style={{height:"18px",margin:"3px"}} /> Free DECK!! </Button>
+            <Popper
+              id={id}
+              open={open}
+              anchorEl={this.anchorEl}
+              className={classes.popper}
+            >
+              {arrow ? <span className={classes.arrow} ref={this.handleArrowRef} /> : null}
+              <Paper className={classes.paper}>
+                <DialogTitle>{"Do you need DECK?"}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    <div>New users can get 5000 DECK for free. (Gas fee is required)</div>
+                    <div>You can vote for good docs with DECK and get rewarded.</div>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>s
+                  <Button className={classes.selbtn} size="sm" onClick={this.handleClickButton}>
+                    Disagree
+                  </Button>
+                  <Button className={classes.selbtn} size="sm" onClick={this.handleClickAgree} color="rose">
+                    Agree
+                  </Button>
+                </DialogActions>
+              </Paper>
+            </Popper>
         </span>
       );
     } else {
@@ -71,4 +126,4 @@ class Bounty extends React.Component {
 
 }
 
-export default (Bounty);
+export default withStyles(styles)(Bounty);
