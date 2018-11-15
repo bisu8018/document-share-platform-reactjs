@@ -17,7 +17,9 @@ import ReactGA from 'react-ga';
 import { APP_PROPERTIES } from 'resources/app.properties';
 
 if (process.env.NODE_ENV === 'production') {
-  ReactGA.initialize('UA-129300994-1');
+  ReactGA.initialize('UA-129300994-1', {
+    debug: true
+  });
   ReactGA.pageview(window.location.pathname + window.location.search);
   console.log("google analytics on!!!", process.env)
 } else {
