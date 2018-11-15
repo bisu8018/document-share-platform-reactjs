@@ -12,7 +12,18 @@ import TopMenu from "./header/TopMenu";
 import ContentView from "contents/ContentView";
 import Author from "profile/Author";
 import DrizzleApis from 'apis/DrizzleApis';
+import ReactGA from 'react-ga';
 
+import { APP_PROPERTIES } from 'resources/app.properties';
+
+if (process.env.NODE_ENV !== 'production') {
+  ReactGA.initialize('UA-129300994-1');
+  ReactGA.pageview(window.location.pathname + window.location.search);
+  console.log("google analytics off!!!")
+}
+
+console.log("env", process.env);
+console.log(APP_PROPERTIES.env, APP_PROPERTIES.domain());
 
 const auth = new Auth();
 
