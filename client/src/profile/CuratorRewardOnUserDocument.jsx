@@ -28,7 +28,7 @@ class CuratorDepositOnUserDocument extends React.Component {
   componentWillMount () {
     const { document, loggedInAccount, handleCurator3DayRewardOnDocuments, totalViewCountInfo} = this.props;
 
-    console.log("CuratorRewardOnUserDocument", loggedInAccount, document.documentId);
+    console.log("CuratorRewardOnUserDocument", loggedInAccount, document.documentId, totalViewCountInfo);
 
     const viewCount = totalViewCountInfo.count;
     const totalViewCount = totalViewCountInfo.totalViewCountSquare;
