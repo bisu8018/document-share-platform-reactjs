@@ -18,14 +18,17 @@ import { APP_PROPERTIES } from 'resources/app.properties';
 
 if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize('UA-129300994-1', {
-    debug: true
+    debug: true,
+    gaOptions: {
+      env: process.env.NODE_ENV
+    }
   });
   ReactGA.pageview(window.location.pathname + window.location.search);
   console.log("google analytics on!!!", process.env)
 } else {
   console.log("google analytics off!!!")
 }
-
+//console.log(window.location);
 //console.log(APP_PROPERTIES.env, APP_PROPERTIES.domain());
 
 const auth = new Auth();
