@@ -42,7 +42,7 @@ class ContentView extends React.Component {
     });
 
     restapi.getDocumentText(documentId).then((res) => {
-      console.log("text ", res);
+      //console.log("text ", res);
       this.setState({documentText:res.data.text});
     });
 
@@ -68,6 +68,8 @@ class ContentView extends React.Component {
       const { match } = this.props;
       const documentId = match.params.documentId;
       this.getContentInfo(documentId);
+
+      console.log(documentId, "byte32", this.web3Apis.asciiToHex(documentId));
     }
   }
 
