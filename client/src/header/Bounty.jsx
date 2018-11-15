@@ -86,7 +86,7 @@ class Bounty extends React.Component {
           <Button id="bountyButton" color="transparent"
             buttonRef={node => {this.anchorEl = node;}}
             variant="contained"
-            onClick={this.handleClickButton} style={{'text-transform': 'capitalize'}}
+            onClick={this.handleClickButton} style={{'textTransform': 'capitalize'}}
           ><img src={showerhead} style={{height:"18px",margin:"3px"}} /> Free DECK!! </Button>
           <Popper
             open={open}
