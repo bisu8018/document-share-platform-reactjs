@@ -43,6 +43,8 @@ const handleLogout = ({location}) => {
   auth.logout();
 }
 
+var _hsq = window._hsq = window._hsq || [];
+
 class MainRoutes extends Component {
   state = { loading: true, drizzleState: null, drizzleApis: null};
 
@@ -62,9 +64,20 @@ class MainRoutes extends Component {
 
   }
 
+  componentDidMount() {
+    console.log(history);
+    this.sendPageView(history.location);
+    history.listen(this.sendPageView);
+  }
+
+  sendPageView(location) {
+    console.log("HubSpot Tracking", window.location.pathname + window.location.search)
+    _hsq.push(['setPath', window.location.pathname + window.location.search]);
+    _hsq.push(['trackPageView']);
+  }
+
   render() {
     const { classes, ...rest } = this.props;
-    //console.log("rest", rest);
     //if (this.state.loading) return (<Callback {...this.props} message="Loading Drizzle...." />);
 
     return (
