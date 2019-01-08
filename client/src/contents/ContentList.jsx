@@ -20,7 +20,7 @@ const style = {
 class ContentList extends React.Component {
     state = {
       resultList: [],
-      nextPageKey: null,
+      pageKey: null,
       isEndPage:false,
       tag: null,
       totalViewCountInfo: null,
@@ -34,7 +34,7 @@ class ContentList extends React.Component {
 
       this.setState({
         resultList: [],
-        nextPageKey: null,
+        pageKey: null,
         isEndPage:false,
         tag: tag,
         path: path
@@ -42,18 +42,18 @@ class ContentList extends React.Component {
 
       this.fetchDocuments({
         tag: tag,
-        nextPageKey: null,
+        pageKey: null,
         path: path
       });
     }
 
     fetchMoreData = () => {
-
-        this.fetchDocuments({
-          nextPageKey: this.state.nextPageKey,
-          tag: this.state.tag,
-          path: this.state.path
-        })
+      console.log("fetchMoreData", this.state);
+      this.fetchDocuments({
+        pageKey: this.state.pageKey,
+        tag: this.state.tag,
+        path: this.state.path
+      })
 
     };
 
@@ -64,7 +64,7 @@ class ContentList extends React.Component {
         this.setState({loading:true});
 
         const params = {
-          nextPageKey: args.nextPageKey,
+          pageKey: args.pageKey,
           tag: args.tag,
           path: args.path?args.path:this.state.path
         }
@@ -78,19 +78,19 @@ class ContentList extends React.Component {
           this.setState({loading:false});
 
           if(res.data && res.data.resultList) {
-            if(this.state.resultList && this.state.nextPageKey){
-              this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey});
+            if(this.state.resultList && this.state.pageKey){
+              this.setState({resultList: this.state.resultList.concat(res.data.resultList), pageKey:res.data.pageKey});
             } else {
-              this.setState({resultList: res.data.resultList, nextPageKey:res.data.nextPageKey});
+              this.setState({resultList: res.data.resultList, pageKey:res.data.pageKey});
             }
 
-            console.log("list", this.state.resultList, res.data.nextPageKey);
-            if(!res.data.nextPageKey){
+            console.log("list", this.state.resultList, res.data.pageKey);
+            if(!res.data.pageKey){
               this.setState({isEndPage:true});
             }
 
-            if(res.data.nextPageKey && res.data.resultList.length<10){
-              this.fetchDocuments({nextPageKey: res.data.nextPageKey, tag: args.tag});
+            if(res.data.pageKey && res.data.resultList.length<10){
+              this.fetchDocuments({pageKey: res.data.pageKey, tag: args.tag});
             }
           }
 
@@ -116,7 +116,7 @@ class ContentList extends React.Component {
       //console.log("componentWillMount", match);
       this.setState({
         resultList: [],
-        nextPageKey: null,
+        pageKey: null,
         isEndPage:false,
         tag: match.params.tag,
         path: match.url

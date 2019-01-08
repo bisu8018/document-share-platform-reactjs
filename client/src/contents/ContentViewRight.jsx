@@ -28,7 +28,7 @@ class ContentViewRight extends React.Component {
   }
 
   render() {
-    const { classes, document, list, drizzleApis } = this.props;
+    const { classes, document, featuredList, drizzleApis } = this.props;
 
     if(!document) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
@@ -56,7 +56,7 @@ class ContentViewRight extends React.Component {
                </span>
             </div>
            <h3>See also</h3>
-           {list.map((result, idx) => (
+           {featuredList.map((result, idx) => (
              <div className="cardSide" key={result.documentId}>
                <a href={"/content/view/" + result.documentId} >
                    <span className="img">

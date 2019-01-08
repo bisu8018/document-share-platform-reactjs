@@ -28,7 +28,7 @@ class ContentView extends React.Component {
     documentText:null,
     dataKey:null,
     determineAuthorToken:-1,
-    list: null,
+    featuredList: null,
     approved: -1
   }
 
@@ -37,13 +37,13 @@ class ContentView extends React.Component {
   getContentInfo = (documentId) => {
     restapi.getDocument(documentId).then((res) => {
       console.log(res.data);
-      this.setState({document:res.data.document, list:res.data.list});
+      this.setState({document: res.data.document, featuredList: res.data.featuredList});
 
     });
 
     restapi.getDocumentText(documentId).then((res) => {
       //console.log("text ", res);
-      this.setState({documentText:res.data.text});
+      this.setState({documentText: res.data.text});
     });
 
   }
@@ -98,7 +98,7 @@ class ContentView extends React.Component {
          <div className="leftWrap">
             <ContentViewFullScreen document={document} documentText={this.state.documentText} {...others}/>
           </div>
-         <ContentViewRight document={this.state.document} list={this.state.list} {...others}/>
+         <ContentViewRight document={this.state.document} featuredList={this.state.featuredList} {...others}/>
       </div>
 
     );

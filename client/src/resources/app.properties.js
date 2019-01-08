@@ -14,8 +14,8 @@ export const APP_PROPERTIES = {
       upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
       //image: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod',
       image: 'http://dev-ca-document.s3-website-us-west-1.amazonaws.com',
-      //api: "http://localhost:4000",
-      api: 'https://6chcj5b70g.execute-api.us-west-1.amazonaws.com/dev'
+      api: "http://localhost:4000",
+      //api: 'https://6chcj5b70g.execute-api.us-west-1.amazonaws.com/dev'
     }
   },
   production:{
