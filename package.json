@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "decompanyio-front-end",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -82,5 +82,13 @@
   "main": "index.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/decompanyio/decompanyio-front-end.git"
+  },
+  "bugs": {
+    "url": "https://github.com/decompanyio/decompanyio-front-end/issues"
+  },
+  "homepage": "https://github.com/decompanyio/decompanyio-front-end#readme"
 }

@@ -69,9 +69,7 @@ class ContentList extends React.Component {
           path: args.path?args.path:this.state.path
         }
 
-        console.log("fetchDocument start", args, this.state, params);
-
-
+        console.log("fetchDocument start", params);
 
         restapi.getDocuments(params).then((res)=>{
           console.log("Fetch Document", res.data);
@@ -83,8 +81,7 @@ class ContentList extends React.Component {
             } else {
               this.setState({resultList: res.data.resultList, pageKey:res.data.pageKey});
             }
-
-            console.log("list", this.state.resultList, res.data.pageKey);
+            
             if(!res.data.pageKey){
               this.setState({isEndPage:true});
             }

@@ -36,9 +36,9 @@ export function getThumbnail(documentId, pageNo, documentName) {
 export function getDocuments(params){
 
   let key = null
-  if(params.nextPageKey){
-    key = btoa(JSON.stringify(params.nextPageKey));
-    console.log(params," base64 encoded to ", key);
+  if(params.pageKey){
+    key = btoa(JSON.stringify(params.pageKey));
+    console.log(params.key," base64 encoded to ", key);
   } else {
     console.log("first page");
   }
@@ -49,8 +49,8 @@ export function getDocuments(params){
        'Content-Type':'application/json'
     },
     params: {
-      nextPageKey:key,
-      email:params.email,
+      pageKey: key,
+      email: params.email,
       tag: params.tag,
       path: params.path
     }
