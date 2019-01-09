@@ -96,8 +96,8 @@ class Author extends React.Component {
 
   fetchDocuments = (params) => {
       const {classes, match} = this.props;
-      const email = match.params.email;
-      restapi.getDocuments({email:email, nextPageKey: this.state.nextPageKey}).then((res)=>{
+      const accountId = match.params.accountId;
+      restapi.getDocuments({accountId:accountId, nextPageKey: this.state.nextPageKey}).then((res)=>{
         console.log("Fetch Author Document", res.data);
         if(res.data && res.data.resultList) {
           if(this.state.resultList){
@@ -120,7 +120,7 @@ class Author extends React.Component {
 
   render() {
     const {classes, drizzleApis, match} = this.props;
-    const accountId = match.params.email;
+    const accountId = match.params.accountId;
     //if(!drizzleApis.isAuthenticated()) "DrizzleState Loading!!";
 
     return (

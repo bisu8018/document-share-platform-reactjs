@@ -108,8 +108,8 @@ class MainRoutes extends Component {
 
             <Route path="/tag/:tag" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/content/view/:documentId" render={(props) => <ContentView drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
-            <Route path="/author/:email" render={(props) => <Author drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} {...props} />} />
-            <Route path="/curator/:email" render={(props) => <Author drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} {...props} />} />
+            <Route path="/author/:accountId" render={(props) => <Author drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} {...props} />} />
+            <Route path="/curator/:accountId" render={(props) => <Author drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} {...props} />} />
             <Route path="/callback" render={(props) => {
               handleAuthentication(props);
               return <Callback {...props} />

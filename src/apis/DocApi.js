@@ -50,7 +50,7 @@ export function getDocuments(params){
     },
     params: {
       pageKey: key,
-      email: params.email,
+      accountId: params.accountId,
       tag: params.tag,
       path: params.path
     }
