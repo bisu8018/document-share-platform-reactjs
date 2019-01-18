@@ -50,7 +50,7 @@ class Bounty extends React.Component {
   componentDidMount() {
     const { drizzleApis } = this.props;
 
-    console.log("componentDidMount", this.state.available, drizzleApis.isAuthenticated() );
+    //console.log("componentDidMount", this.state.available, drizzleApis.isAuthenticated() );
     if(drizzleApis.isAuthenticated()){
       this.web3Apis.getBountyAvailable(drizzleApis.getLoggedInAccount()).then((data) => {
         //console.log("getBountyAvailable", data);
@@ -78,7 +78,7 @@ class Bounty extends React.Component {
   render() {
     const { classes, drizzleApis } = this.props;
     const { open, placement, disablePortal, flip, preventOverflow, arrow, arrowRef } = this.state;
-    console.log("render", drizzleApis.isAuthenticated());
+    //console.log("render", drizzleApis.isAuthenticated());
 
     if(this.state.available > 0) {
       return (

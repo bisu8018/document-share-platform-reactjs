@@ -5,6 +5,7 @@ import App from './App';
 import Callback from './callback/callback';
 import Auth from './auth/auth';
 import history from './history';
+import SignIn from './signin/SignIn'
 
 import Header from "./header/Header";
 import HeaderLinks from "./header/HeaderLinks";
@@ -51,6 +52,7 @@ class MainRoutes extends Component {
   componentWillMount() {
     // subscribe to changes in the store
     console.log("env", process.env);
+    //auth.syncUser();
     const drizzleApis = new DrizzleApis((drizzleApis, drizzle, drizzleState) => {
       //console.log("MainRoutes", drizzleApis, drizzle, drizzleState);
       this.setState({drizzleApis: drizzleApis});
@@ -65,7 +67,6 @@ class MainRoutes extends Component {
   }
 
   componentDidMount() {
-    console.log(history);
     this.sendPageView(history.location);
     history.listen(this.sendPageView);
   }
@@ -85,8 +86,11 @@ class MainRoutes extends Component {
       <div>
         <Header
           brand="decompany.io"
-          rightLinks={<HeaderLinks
-            drizzleApis={this.state.drizzleApis} />}
+          rightLinks={
+            <HeaderLinks
+              drizzleApis={this.state.drizzleApis} 
+              auth={auth} />
+          }
           fixed
           color="white"
           {...rest}
@@ -101,11 +105,10 @@ class MainRoutes extends Component {
 
           <Switch>
             <Route exact path="/" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
-
+            <Route path="/sign-in" render={(props) => <SignIn drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/latest" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/popular" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/featured" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
-
             <Route path="/tag/:tag" render={(props) => <App drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/content/view/:documentId" render={(props) => <ContentView drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} auth={auth} {...props} />} />
             <Route path="/author/:accountId" render={(props) => <Author drizzleApis={this.state.drizzleApis} drizzleState={this.state.drizzleState} {...props} />} />

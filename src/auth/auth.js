@@ -2,6 +2,7 @@ import history from '../history';
 import auth0 from 'auth0-js';
 import { AUTH_CONFIG } from '../resources/auth.properties';
 import { APP_PROPERTIES } from '../resources/app.properties';
+import * as authApis from 'apis/AuthApis';
 
 export default class Auth {
   auth0 = new auth0.WebAuth({
@@ -12,31 +13,45 @@ export default class Auth {
     scope: 'openid profile email'
   });
 
+  tokenRenewalTimeout;
+
+  expiresAt = -1;
+
   constructor() {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.setSession = this.setSession.bind(this);
+
+    if(this.isAuthenticated()){
+      this.scheduleRenewal();
+    }
   }
 
-  login() {
-    this.auth0.authorize();
+  login(isSilentAuthentication) {
+    if(isSilentAuthentication){
+      this.auth0.authorize({prompt: "none"});
+    } else {
+      this.auth0.authorize();
+    }
+    
   }
 
   logout = () => {
     this.clearSession();
     this.auth0.logout({
-      returnTo: APP_PROPERTIES.mainHost,
+      returnTo: APP_PROPERTIES.domain().mainHost,
       clientID: AUTH_CONFIG.clientId
     });
 
   }
 
   handleAuthentication() {
+    console.log("auth", "handleAuthentication");
     this.auth0.parseHash((err, authResult) => {
 
-      console.log("handleAuthentication", authResult, this);
+      console.log("handleAuthentication", authResult, err);
 
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.auth0.client.userInfo(authResult.accessToken, (err, user) => {
@@ -46,6 +61,11 @@ export default class Auth {
           } else {
               console.log('Getting Userinfo Success!!', {user, authResult});
               this.setSession(authResult, user);
+
+              this.syncUser();
+
+              this.scheduleRenewal();
+
           }
           history.replace('/');
 
@@ -71,11 +91,14 @@ export default class Auth {
 
   setSession(authResult, userInfo) {
     // Set the time that the access token will expire at
-    let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+    this.expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
-    localStorage.setItem('user_info', JSON.stringify(userInfo));
+    localStorage.setItem('expires_at', this.expiresAt);
+    if(userInfo){
+      localStorage.setItem('user_info', JSON.stringify(userInfo));
+    }
+    
   }
 
   getSession() {
@@ -85,6 +108,17 @@ export default class Auth {
       idToken: localStorage.getItem('id_token'),
       userInfo: JSON.parse(localStorage.getItem('user_info'))
     }
+  }
+
+  syncUser() {
+    const session = this.getSession();
+    const idToken = localStorage.getItem('id_token');
+    if(idToken && session){
+      authApis.sync(session.idToken);
+    } else {
+      console.log("session is not init...")
+    }
+    
   }
 
   getUserInfo = () => {
@@ -101,8 +135,6 @@ export default class Auth {
     localStorage.removeItem('user_info');
   }
 
-
-
   isAuthenticated() {
     // Check whether the current time is past the
     // access token's expiry time
@@ -114,5 +146,37 @@ export default class Auth {
       this.clearSession();
     }
     return isUnExpired;
+  }
+
+  renewSession() {
+    this.auth0.checkSession({}, (err, authResult) => {
+        if (authResult && authResult.accessToken && authResult.idToken) {
+          //console.log("renewSession", authResult);
+          this.setSession(authResult);
+          this.scheduleRenewal();
+        } else if (err) {
+          this.logout();
+          console.log(err);
+          alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
+        }
+    });
+  }
+
+
+  scheduleRenewal() {
+    
+    let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    const timeout = expiresAt - Date.now(); //mms
+    //console.log("scheduleRenewal", expiresAt, timeout, this.tokenRenewalTimeout);
+    if (timeout > 0) {
+      this.tokenRenewalTimeout = setTimeout(() => {
+        this.renewSession();
+      }, timeout);
+    }
+  }
+
+  getExpiryDate() {
+    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    return JSON.stringify(new Date(expiresAt));
   }
 }

@@ -27,7 +27,9 @@ class LoginPopup extends React.Component {
   }
 
   handleOpen = () => {
-    this.setState({ open: true });
+    //this.setState({ open: true });
+    const {auth} = this.props;
+    auth.login();
   };
 
   handleClose = () => {

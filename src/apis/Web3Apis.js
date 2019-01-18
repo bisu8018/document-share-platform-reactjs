@@ -10,6 +10,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io
 export default class Web3Apis {
 
   constructor(){
+    
     this.network = "4";
     this.DocumentReg = new web3.eth.Contract(DocumentReg.abi, DocumentReg.networks[this.network].address, {
       from: defaultAccountId

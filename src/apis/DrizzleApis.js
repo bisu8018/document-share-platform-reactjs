@@ -17,10 +17,10 @@ export default class DrizzleApis {
   options = { contracts: [DocumentReg, Deck, BountyOne] };
   // setup the drizzle store and drizzle
   drizzleStore = generateStore(this.options);
-  drizzle = new Drizzle(this.options, this.drizzleStore);
 
-  constructor(callback){
-
+  constructor(callback) {
+    try{
+      this.drizzle = new Drizzle(this.options, this.drizzleStore);
 
       this.unsubscribe = this.drizzle.store.subscribe(() => {
 
@@ -29,11 +29,11 @@ export default class DrizzleApis {
         //console.log("DrizzleApis subscribe", this.drizzleState);
         // check to see if it's ready, if so, update local component state
         if(callback) callback(this, this.drizzle, this.drizzleState);
-
+  
         if (this.drizzleState.drizzleStatus.initialized) {
           //console.log("DrizzleApis", "drizzleStatus initialized", this.drizzleState);
           //this.setState({ loading: false, this.drizzleState });
-
+  
           for(const idx in this.callbackFuncs){
             const callbackFunc = this.callbackFuncs[idx];
             if(callbackFunc){
@@ -41,8 +41,12 @@ export default class DrizzleApis {
             }
           }
         }
-
+  
       });
+    } catch(e){
+      console.error("DrizzleApis initialize fail", e);
+    }
+    
 
   }
 
@@ -300,7 +304,13 @@ export default class DrizzleApis {
       return;
     }
 
+    if(!this.isAuthenticated()){
+      console.error("The Metamask login is required.")
+      return;
+    }
+
     const drizzleState = this.drizzle.store.getState();
+    console.log("drizzleState", drizzleState);
     const ethAccount = drizzleState.accounts[0];
     const contract = this.drizzle.contracts.DocumentReg;
     const stackId = contract.methods["register"].cacheSend(this.fromAscii(documentId), {

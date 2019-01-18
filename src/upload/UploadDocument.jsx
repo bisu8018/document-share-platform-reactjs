@@ -77,26 +77,20 @@ class UploadDocument extends React.Component {
 
   handleClickOpen = (modal) => {
 
-    const { drizzleApis} = this.props;
+    const { drizzleApis, auth} = this.props;
 
     const account = drizzleApis.getLoggedInAccount();
     const nickname = this.getNickname()?this.getNickname():account;
     this.setState({nickname: nickname});
 
-    /*
     if(!auth.isAuthenticated()){
-      auth.login();
+      auth.login(true);
       return "Loading";
     } else {
       var x = [];
       x[modal] = true;
       this.setState(x);
     }
-    */
-    var x = [];
-    x[modal] = true;
-    this.setState(x);
-
   }
   handleClose = (modal) => {
     var x = [];
@@ -123,10 +117,10 @@ class UploadDocument extends React.Component {
 
 
   onRegistDoc = () => {
-    const { drizzleApis } = this.props;
+    const { auth, drizzleApis } = this.props;
     const self = this;
-    if(!drizzleApis.isAuthenticated()){
-      alert('dirzzle is not Authenticated');
+    if(!auth.isAuthenticated()){
+      alert('Unauthenticated');
       return;
     }
 
@@ -135,7 +129,7 @@ class UploadDocument extends React.Component {
     const title = document.getElementById("title").value;
     const desc = document.getElementById("desc").value;
     const nickname = document.getElementById("nickname").value;
-    const userInfo = {nickname: nickname};//this.props.auth.getUserInfo();
+    const userInfo = auth.getUserInfo();
 
     if(!this.state.fileInfo || !this.state.fileInfo.file){
       alert("Please select a document file");

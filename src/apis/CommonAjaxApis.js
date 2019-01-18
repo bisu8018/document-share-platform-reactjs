@@ -5,32 +5,49 @@ const commonHeader = {
    'Access-Control-Allow-Origin': '*'
  }
 
-export function post(url, params){
+/**
+ * call post method
+ * @param {*} url : url
+ * @param {*} data : 
+ *  {
+ *   header : header
+ *   params : parameter
+ *  }
+ */
+export function post(url, data){
 
-  const config = {
-    method : "post",
-    url : url,
-    data:params,
-    header: {
-      commonHeader
-    }
+  let header = commonHeader;
+
+  for(var key in data.header){
+    header[key]=data.header[key];
   }
 
-  return axios.post(url, config);
+  return axios.post(url, data.params?data.params:data, {headers: header});
 
 }
-
-export function get(url, params){
-
+/**
+ * call get method
+ * @param {*} url : url
+ * @param {*} data : 
+ *  {
+ *   header : header
+ *   params : parameter
+ *  }
+ */
+export function get(url, data){
+  let header = commonHeader;
+  /*
   const config = {
-    method : "post",
-    url : url,
-    data:params,
+    data: params,
     header: {
       commonHeader
     }
   }
+  */
+  for(var key in data.header){
+    header[key]=data.header[key];
+  }
 
-  return axios.get(url, config);
+  return axios.get(url, data.params?data.params:data, {headers:header});
 
 }

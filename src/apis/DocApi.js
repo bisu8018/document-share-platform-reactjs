@@ -143,15 +143,20 @@ export function registDocument(args, callback) {
     // 1. Regist Document Meta Info
     const url = apiDomain + registDocumentInfoUrl;//localhost:4000/document/regist"
     console.log("Regist Document Meta Info", url, fileInfo);
-    const promise = ajax.post(url, {
-      filename: fileInfo.file.name,
-      size: fileInfo.file.size,
-      nickname: user.nickname,
-      username: ethAccount,
-      ethAccount: ethAccount,
-      title: title,
-      desc: desc,
-      tags:tags }).then((res) => {
+    const data = {
+      params: {
+        filename: fileInfo.file.name,
+        size: fileInfo.file.size,
+        nickname: user.nickname,
+        username: user.username,
+        userid: user.sub,
+        ethAccount: ethAccount,
+        title: title,
+        desc: desc,
+        tags:tags 
+      }
+    }
+    const promise = ajax.post(url, data).then((res) => {
 
         console.log("Getting Response Regist Document Meta Info", res);
         //2. Upload File Binary

@@ -49,14 +49,14 @@ class HeaderLinks extends React.Component {
   }
 
   render() {
-    const { classes, drizzleApis} = this.props;
+    const { classes, drizzleApis, auth} = this.props;
     //console.log("HeaderLinks render()", drizzleApis);
 
-    if(!drizzleApis.isAuthenticated()) {
+    if(!auth.isAuthenticated()) {
       return (
         <List className={classes.list}>
           <ListItem className={classes.listItem}>
-            <LoginPopupWrapped />
+            <LoginPopupWrapped {...this.props}/>
           </ListItem>
         </List>
       );
@@ -66,15 +66,16 @@ class HeaderLinks extends React.Component {
       <List className={classes.list}>
         <ListItem className={classes.listItem}>
           <Bounty drizzleApis={drizzleApis} />
-          <UploadDocument drizzleApis={drizzleApis} />
+          <UploadDocument {...this.props} />
+          {/*
           <Link to={"/author/" + drizzleApis.getLoggedInAccount()} style={{ color: '#8b8b8b' }}>
             <Button id="address" color="transparent" className={classes.button} >
               <Person className={classes.icons} />
                 {drizzleApis.getLoggedInAccount()}
             </Button>
           </Link>
-
-          {/*
+          */}
+          
           {auth.isAuthenticated() &&
             <Button color="transparent" className={classes.button} onClick={auth.logout} >
               <Person className={classes.icons} /> {auth.getUserInfo().nickname}
@@ -83,7 +84,7 @@ class HeaderLinks extends React.Component {
           {!auth.isAuthenticated() &&
             <Button color="transparent" className={classes.navLink} onClick={auth.login} ><Person className={classes.icons} /> Log-in</Button>
           }
-          */}
+  
         </ListItem>
       </List>
 
