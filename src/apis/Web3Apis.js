@@ -91,10 +91,15 @@ export default class Web3Apis {
   };
 
   getBalance = (address) => {
-
-    return this.Deck.methods.balanceOf(address).call({
-      from: address
-    });
+    try{
+      return this.Deck.methods.balanceOf(address).call({
+        from: address
+      });
+    } catch(e){
+      console.error(e);
+      return Promise.reject(e);
+    }
+    
 
   };
 

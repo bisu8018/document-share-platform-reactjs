@@ -1,9 +1,8 @@
 import axios from 'axios';
 
 const commonHeader = {
-  "Content-Type":"application/json",
-   'Access-Control-Allow-Origin': '*'
- }
+  "Content-Type":"application/json"
+}
 
 /**
  * call post method
@@ -16,13 +15,23 @@ const commonHeader = {
  */
 export function post(url, data){
 
-  let header = commonHeader;
-
-  for(var key in data.header){
-    header[key]=data.header[key];
+  let header = {};
+  let params = data.params?data.params:{};
+  console.log("post data", data, header);
+  if(data.header){
+    header = Object.assign(data.header, commonHeader);
+    /*
+    for(var key in data.header){
+      header[key]=data.header[key];
+    }
+    */
+    params = data.params?data.params:{}; 
+  } else {
+    params = data.params?data.params:data;
   }
 
-  return axios.post(url, data.params?data.params:data, {headers: header});
+  console.log("post header", header,"parameter", params);
+  return axios.post(url, params, {headers:header});
 
 }
 /**
@@ -35,19 +44,10 @@ export function post(url, data){
  *  }
  */
 export function get(url, data){
-  let header = commonHeader;
-  /*
-  const config = {
-    data: params,
-    header: {
-      commonHeader
-    }
-  }
-  */
-  for(var key in data.header){
-    header[key]=data.header[key];
-  }
-
-  return axios.get(url, data.params?data.params:data, {headers:header});
+  let header = {};
+ 
+  header = data.header?Object.assign(data.header, commonHeader):Object.assign({}, commonHeader)
+  const params = data.params?data.params:null;
+  return axios.get(url, params, {headers:header});
 
 }

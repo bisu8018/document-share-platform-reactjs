@@ -67,12 +67,16 @@ class UploadDocument extends React.Component {
 
   setNickname = (nickname) => {
     //console.log("clear session", localStorage);
-    localStorage.setItem('nickname', nickname);
+    //localStorage.setItem('nickname', nickname);
   }
 
   getNickname = () => {
+    const { drizzleApis, auth} = this.props;
+    const userInfo = auth.getUserInfo();
+    const nickname = userInfo.nickname;
+    return nickname;
     //console.log("clear session", localStorage);
-    return localStorage.getItem('nickname');
+    //return localStorage.getItem('nickname');
   }
 
   handleClickOpen = (modal) => {

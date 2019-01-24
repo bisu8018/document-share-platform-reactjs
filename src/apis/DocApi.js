@@ -43,20 +43,14 @@ export function getDocuments(params){
     console.log("first page");
   }
 
-  const config = {
-    header: {
-       'Access-Control-Allow-Origin': '*',
-       'Content-Type':'application/json'
-    },
-    params: {
-      pageKey: key,
-      accountId: params.accountId,
-      tag: params.tag,
-      path: params.path
-    }
+  const data = {
+    pageKey: key,
+    accountId: params.accountId,
+    tag: params.tag,
+    path: params.path
   }
 
-  return axios.post(apiDomain + getDocumentsUrl, config);
+  return axios.post(apiDomain + getDocumentsUrl, data);
 }
 
 export function getCuratorDocuments(params) {
@@ -85,41 +79,23 @@ export function getCuratorDocuments(params) {
 
 export function getTodayVotedDocumentsByCurator(params) {
 
-  const config = {
-    header: {
-       'Access-Control-Allow-Origin': '*',
-       'Content-Type':'application/json'
-    },
-    params: {
-      accountId: params.accountId,
-    }
+  const data = {
+    accountId: params.accountId,
   }
 
-  return axios.post(apiDomain + getTodayVotedDocumentsByCuratorUrl, config);
+  return axios.post(apiDomain + getTodayVotedDocumentsByCuratorUrl, data);
 }
 
 export function getDocument(documentId){
 
-  const config = {
-    header: {
-       'Access-Control-Allow-Origin': '*',
-       'Content-Type':'application/json'
-    }
-  }
   const url = apiDomain + getDocumentUrl + documentId;
-  return axios.get(url, config);
+  return axios.get(url, null);
 }
 
 export function getDocumentText(documentId){
 
-  const config = {
-    header: {
-       'Access-Control-Allow-Origin': '*',
-       'Content-Type':'application/json'
-    }
-  }
   const url = apiDomain + getDocumentTextUrl + documentId;
-  return axios.get(url, config);
+  return axios.get(url, {});
 }
 
 export function registDocument(args, callback) {
@@ -141,26 +117,26 @@ export function registDocument(args, callback) {
   return new Promise(function(resolve, reject) {
 
     // 1. Regist Document Meta Info
-    const url = apiDomain + registDocumentInfoUrl;//localhost:4000/document/regist"
+    const url = apiDomain + registDocumentInfoUrl;
     console.log("Regist Document Meta Info", url, fileInfo);
+
     const data = {
-      params: {
-        filename: fileInfo.file.name,
-        size: fileInfo.file.size,
-        nickname: user.nickname,
-        username: user.username,
-        userid: user.sub,
-        ethAccount: ethAccount,
-        title: title,
-        desc: desc,
-        tags:tags 
-      }
+      filename: fileInfo.file.name,
+      size: fileInfo.file.size,
+      nickname: user.nickname,
+      username: user.name,
+      accountId: user.email,
+      sub: user.sub,
+      ethAccount: ethAccount,
+      title: title,
+      desc: desc,
+      tags:tags 
     }
     const promise = ajax.post(url, data).then((res) => {
 
         console.log("Getting Response Regist Document Meta Info", res);
         //2. Upload File Binary
-        if(res && res.status == 200){
+        if(res && res.data && res.data.success){
           const documentId = res.data.documentId;
           const owner = res.data.accountId;
           const signedUrl = res.data.signedUrl;
@@ -186,6 +162,8 @@ export function registDocument(args, callback) {
             }
             reject(new Error("regist document response data is invalid!"));
         }
+      }).catch((err) => {
+        console.error("Document Registration Error", err)
       });
 
 
@@ -232,8 +210,8 @@ function fileUpload(params) {
 }
 
 export function sendVoteInfo(ethAccount, curatorId, voteAmount, document, transactionResult) {
-  console.log("sendVoteInfo", curatorId, voteAmount, document);
-  if(!curatorId || !document || isNaN(voteAmount) || voteAmount<=0 || !ethAccount) {
+  console.log("sendVoteInfo", curatorId, voteAmount);
+  if(!curatorId || !document|| isNaN(voteAmount) || voteAmount<=0 || !ethAccount) {
     console.error("sendVoteInfo Parameter Invaild", params);
     return;
   }
@@ -244,7 +222,6 @@ export function sendVoteInfo(ethAccount, curatorId, voteAmount, document, transa
     curatorId: curatorId,
     voteAmount: voteAmount,
     documentId: document.documentId,
-    documentInfo: document,
     ethAccount: ethAccount,
     transaction: transactionResult
   }
@@ -261,14 +238,8 @@ export function getContentDownload(accountId, documentId) {
 
   return new Promise((resolve, reject) => {
 
-    const config = {
-      header: {
-         'Access-Control-Allow-Origin': '*',
-         'Content-Type':'application/json'
-      }
-    }
     const url = apiDomain + getDocumentDownloadUrl + accountId + "/" + documentId;
-    axios.get(url, config).then((res) => {
+    axios.get(url, null).then((res) => {
       console.log(res.data);
       const downloadUrl = res.data.downloadUrl;
       const filename = res.data.document.documentName;
@@ -277,8 +248,6 @@ export function getContentDownload(accountId, documentId) {
       const config = {
         responseType: 'arraybuffer', // important
         headers: {
-           'Access-Control-Allow-Origin': '*',
-           'Access-Control-Allow-Credentials': true,
            'Accept':'application/pdf'
         }
       }

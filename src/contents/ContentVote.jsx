@@ -40,21 +40,31 @@ class ContentVote extends React.Component {
   }
 
   sendVoteInfo = (transactionResult) => {
-    const { document, drizzleApis } = this.props;
+    const { document, drizzleApis, auth } = this.props;
+    console.log("sendVoteInfo");
+    if(!auth.isAuthenticated()){
+      console.log("No Authenticated");
+      alert("No Authenticated");
+      return;
+    }
 
     if(!drizzleApis.isAuthenticated()){
-      console.log("Drizzle is not signed");
+      console.log("No Drizzle Authenticated");
+      alert("No Drizzle Authenticated");
       return;
     }
 
     if(isNaN(this.state.deposit)){
       console.log("Deposit is not number");
+      alert("Deposit is not number");
       return;
     }
-
+   
     const ethAccount = drizzleApis.getLoggedInAccount();
-    const curatorId = drizzleApis.getLoggedInAccount();//drizzleState.accounts[0];
+    const curatorId = user.getEmail();
     const voteAmount = drizzleApis.fromWei(this.state.deposit);
+
+    console.log(ethAccount, curatorId, voteAmount);
 
     restapi.sendVoteInfo(ethAccount, curatorId, voteAmount, document, transactionResult);
 

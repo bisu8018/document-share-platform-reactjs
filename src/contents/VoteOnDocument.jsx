@@ -57,10 +57,10 @@ class voteOnDocument extends React.Component {
   }
 
   sendVoteInfo = (transactionResult) => {
-    const { document, drizzleApis } = this.props;
+    const { document, drizzleApis, auth } = this.props;
 
     const ethAccount = drizzleApis.getLoggedInAccount();
-    const curatorId = drizzleApis.getLoggedInAccount();//drizzleState.accounts[0];
+    const curatorId = auth.getEmail();//drizzleApis.getLoggedInAccount();//drizzleState.accounts[0];
     const voteAmount = drizzleApis.fromWei(this.state.deposit);
 
     restapi.sendVoteInfo(ethAccount, curatorId, voteAmount, document, transactionResult);

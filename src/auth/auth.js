@@ -91,11 +91,13 @@ export default class Auth {
 
   setSession(authResult, userInfo) {
     // Set the time that the access token will expire at
+    
     this.expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', this.expiresAt);
     if(userInfo){
+      this.userInfo = userInfo;
       localStorage.setItem('user_info', JSON.stringify(userInfo));
     }
     
@@ -123,8 +125,16 @@ export default class Auth {
 
   getUserInfo = () => {
     const userInfo = JSON.parse(localStorage.getItem('user_info'));
-    //console.log(userInfo);
+    if(!userInfo){
+      this.renewSession();
+      return {}
+    }
     return userInfo;
+  }
+
+  getEmail = () => {
+    const userInfo = JSON.parse(localStorage.getItem('user_info'));
+    return userInfo.email;
   }
 
   clearSession() {

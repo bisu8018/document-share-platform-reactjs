@@ -81,7 +81,7 @@ class ContentView extends React.Component {
   render() {
     const { classes, ...others } = this.props;
     const document = this.state.document;
-
+    
     if(!document) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     }
