@@ -33,7 +33,7 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 .contentGrid .rightWrap .cardCont button {padding:1px;-webkit-transition:all .2s linear;-o-transition:all .2s linear;transition:all .2s linear}
 .contentGrid .rightWrap .cardCont button:hover {color:#e91e63;}
 .contentGrid .rightWrap .cardCont button a {color:inherit;}
-.contentGrid .rightWrap .cardCont button a {text-transform: capitalize;}
+.contentGrid .rightWrap .cardCont button a {text-transform: capitalize; text-align: left;}
 
 .contentGrid {padding:20px 15px;padding-left:310px;}
 .contentGrid * {font-weight:400}
