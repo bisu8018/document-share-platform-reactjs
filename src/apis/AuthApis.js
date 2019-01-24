@@ -10,16 +10,14 @@ export function getUserInfo(idToken) {
 }
 
 
-export async function sync(token){
+export function sync(token){
   //console.log("sync", token);
   const url = apiDomain + "/api/account/sync";
-  const config = {
+  const data = {
     header: {
-       'Access-Control-Allow-Origin': '*',
-       'Content-Type':'application/json',
        'Authorization': `Bearer ${token}`
     }
   }
 
-  return ajax.post(url, config);
+  return ajax.post(url, data);
 }
