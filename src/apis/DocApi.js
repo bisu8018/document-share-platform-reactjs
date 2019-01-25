@@ -35,22 +35,7 @@ export function getThumbnail(documentId, pageNo, documentName) {
 
 export function getDocuments(params){
 
-  let key = null
-  if(params.pageKey){
-    key = btoa(JSON.stringify(params.pageKey));
-    console.log(params.key," base64 encoded to ", key);
-  } else {
-    console.log("first page");
-  }
-
-  const data = {
-    pageKey: key,
-    accountId: params.accountId,
-    tag: params.tag,
-    path: params.path
-  }
-
-  return axios.post(apiDomain + getDocumentsUrl, data);
+  return axios.post(apiDomain + getDocumentsUrl, params);
 }
 
 export function getCuratorDocuments(params) {

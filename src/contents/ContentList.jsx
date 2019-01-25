@@ -20,7 +20,7 @@ const style = {
 class ContentList extends React.Component {
     state = {
       resultList: [],
-      pageKey: null,
+      pageNo: 1,
       isEndPage:false,
       tag: null,
       totalViewCountInfo: null,
@@ -34,7 +34,7 @@ class ContentList extends React.Component {
 
       this.setState({
         resultList: [],
-        pageKey: null,
+        pageNo: 1,
         isEndPage:false,
         tag: tag,
         path: path
@@ -42,15 +42,14 @@ class ContentList extends React.Component {
 
       this.fetchDocuments({
         tag: tag,
-        pageKey: null,
+        pageNo: 1,
         path: path
       });
     }
 
     fetchMoreData = () => {
-      console.log("fetchMoreData", this.state);
       this.fetchDocuments({
-        pageKey: this.state.pageKey,
+        pageNo: this.state.pageNo + 1,
         tag: this.state.tag,
         path: this.state.path
       })
@@ -64,7 +63,7 @@ class ContentList extends React.Component {
         this.setState({loading:true});
 
         const params = {
-          pageKey: args.pageKey,
+          pageNo: args.pageNo,
           tag: args.tag,
           path: args.path?args.path:this.state.path
         }
@@ -72,23 +71,21 @@ class ContentList extends React.Component {
         console.log("fetchDocument start", params);
 
         restapi.getDocuments(params).then((res)=>{
-          console.log("Fetch Document", res.data);
+          console.log("Fetch Document end", res.data);
           this.setState({loading:false});
-
-          if(res.data && res.data.resultList) {
-            if(this.state.resultList && this.state.pageKey){
-              this.setState({resultList: this.state.resultList.concat(res.data.resultList), pageKey:res.data.pageKey});
+          const resData = res.data;
+          const resultList = resData.resultList?resData.resultList:[];
+          const pageNo = resData.pageNo;
+          
+          if(resultList.length>0) {
+            if(this.state.resultList && this.state.resultList.length>0){
+               this.setState({resultList: this.state.resultList.concat(resultList), pageNo:pageNo});              
             } else {
-              this.setState({resultList: res.data.resultList, pageKey:res.data.pageKey});
+              this.setState({resultList: resultList, pageNo:pageNo});
             }
             
-            if(!res.data.pageKey){
-              this.setState({isEndPage:true});
-            }
-
-            if(res.data.pageKey && res.data.resultList.length<10){
-              this.fetchDocuments({pageKey: res.data.pageKey, tag: args.tag});
-            }
+          } else {
+             this.setState({isEndPage:true});
           }
 
           if(res.data && res.data.totalViewCountInfo && !this.state.totalViewCountInfo){
@@ -113,7 +110,7 @@ class ContentList extends React.Component {
       //console.log("componentWillMount", match);
       this.setState({
         resultList: [],
-        pageKey: null,
+        pageNo: null,
         isEndPage:false,
         tag: match.params.tag,
         path: match.url

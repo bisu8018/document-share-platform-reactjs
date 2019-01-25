@@ -31,7 +31,7 @@ class Author extends React.Component {
     resultList: [],
     curatorDocumentList: [],
     curatorDocumentKeyList: [],
-    nextPageKey: null,
+    pageNo: null,
     isEndPage:false,
     totalCurator3DayReward: 0,
     totalCuratorEstimateRewards: 0
@@ -89,7 +89,7 @@ class Author extends React.Component {
   fetchMoreData = () => {
 
       this.fetchDocuments({
-        nextPageKey: this.state.nextPageKey
+        pageNo: this.state.pageNo + 1
       })
 
   };
@@ -97,16 +97,17 @@ class Author extends React.Component {
   fetchDocuments = (params) => {
       const {classes, match} = this.props;
       const accountId = match.params.accountId;
-      restapi.getDocuments({accountId:accountId, nextPageKey: this.state.nextPageKey}).then((res)=>{
-        console.log("Fetch Author Document", res.data);
+      const pageNo = (!params || isNaN(params.pageNo))?1:Number(params.pageNo);
+      restapi.getDocuments({accountId:accountId, pageNo: pageNo}).then((res)=>{
+        
         if(res.data && res.data.resultList) {
           if(this.state.resultList){
-            this.setState({resultList: this.state.resultList.concat(res.data.resultList), nextPageKey:res.data.nextPageKey, totalViewCountInfo: res.data.totalViewCountInfo});
+            this.setState({resultList: this.state.resultList.concat(res.data.resultList), pageNo:res.data.pageNo, totalViewCountInfo: res.data.totalViewCountInfo});
           } else {
-            this.setState({resultList: res.data.resultList, nextPageKey:res.data.nextPageKey, totalViewCountInfo: res.data.totalViewCountInfo});
+            this.setState({resultList: res.data.resultList, pageNo:res.data.pageNo, totalViewCountInfo: res.data.totalViewCountInfo});
           }
           console.log("list", this.state.resultList);
-          if(!res.data.nextPageKey){
+          if(!res.data.count===0){
             this.setState({isEndPage:true});
           }
         }
