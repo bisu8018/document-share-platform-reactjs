@@ -1,3 +1,4 @@
 # package directories
+.DS_store
 node_modules
 build
