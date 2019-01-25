@@ -1,4 +1,4 @@
-.DS_Store
-client/.DS_Store
-package-lock.json
-node_modules/*
+# package directories
+.DS_store
+node_modules
+build
