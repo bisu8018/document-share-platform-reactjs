@@ -63,17 +63,11 @@ export function getCuratorDocuments(params) {
   }
 
   const config = {
-    headers: {
-       'Access-Control-Allow-Origin': '*',
-       'Content-Type':'application/json'
-    },
-    params: {
-      nextPageKey:key,
-      accountId:params.accountId,
-      tag: params.tag
-    }
+    nextPageKey:key,
+    accountId:params.accountId,
+    tag: params.tag
   }
-
+  
   return axios.post(apiDomain + getCuratorDocumentsUrl, config);
 }
 

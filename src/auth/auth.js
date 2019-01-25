@@ -115,8 +115,19 @@ export default class Auth {
   syncUser() {
     const session = this.getSession();
     const idToken = localStorage.getItem('id_token');
+    const userInfo = localStorage.getItem('user_info');
     if(idToken && session){
-      authApis.sync(session.idToken);
+      authApis.sync(session.idToken, userInfo).then((res)=>{
+        
+        if(res.data.success){
+          console.log(res.data);
+        } else {
+          alert("Login failed because USER sync failed.");
+          this.logout();
+        }
+      }).catch((err)=>{
+        console.log(err);
+      });
     } else {
       console.log("session is not init...")
     }

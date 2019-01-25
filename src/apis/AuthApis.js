@@ -10,13 +10,14 @@ export function getUserInfo(idToken) {
 }
 
 
-export function sync(token){
+export function sync(token, userInfo){
   //console.log("sync", token);
   const url = apiDomain + "/api/account/sync";
   const data = {
     header: {
        'Authorization': `Bearer ${token}`
-    }
+    },
+    params: userInfo
   }
 
   return ajax.post(url, data);
