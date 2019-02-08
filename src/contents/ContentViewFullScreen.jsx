@@ -49,14 +49,26 @@ class ContentViewFullScreen extends Component {
   }
 
   handlePage = (page) => {
+    const documentId = this.props.document.documentId;
     if (this.state.totalPages > 0 && !this.state.isFull) {
       this.setState({currentPage:page});
+      restapi.getTracking({
+        id: documentId,
+        n: page,
+        e: "tracking_tester@decompany.io"
+      });
     }
   }
 
   handleFull = (page) => {
+    const documentId = this.props.document.documentId;
     if (this.state.totalPages > 0 && this.state.isFull) {
       this.setState({currentPage:page});
+      restapi.getTracking({
+        id: documentId,
+        n: page,
+        e: "tracking_tester@decompany.io"
+      });
     }
   }
 
@@ -80,6 +92,10 @@ class ContentViewFullScreen extends Component {
       console.error(err);
     });
 
+  }
+
+  componentDidMount() {
+    
   }
 
   handleDownloadContent = () => {
@@ -148,6 +164,7 @@ class ContentViewFullScreen extends Component {
              {restapi.convertTimestampToString(this.props.document.created)}
              </div>
             <div>
+                <div class="oss-widget-interface"></div>
                 <VoteOnDocument document={this.props.document} {...other} />
                 <Button color="rose" size="sm">Share</Button>
                 <Button color="rose" size="sm" onClick={this.handleDownloadContent}>Download</Button>

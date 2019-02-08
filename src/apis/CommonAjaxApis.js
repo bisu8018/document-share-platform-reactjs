@@ -15,22 +15,16 @@ const commonHeader = {
  */
 export function post(url, data){
 
-  let header = {};
+  let header = Object.assign(data.header?data.header:{}, commonHeader);
   let params = data.params?data.params:{};
-  console.log("post data", data, header);
+  
   if(data.header){
-    header = Object.assign(data.header, commonHeader);
-    /*
-    for(var key in data.header){
-      header[key]=data.header[key];
-    }
-    */
     params = data.params?data.params:{}; 
   } else {
     params = data.params?data.params:data;
   }
 
-  console.log("post header", header,"parameter", params);
+  
   return axios.post(url, params, {headers:header});
 
 }
@@ -44,10 +38,24 @@ export function post(url, data){
  *  }
  */
 export function get(url, data){
+   
   let header = {};
- 
-  header = data.header?Object.assign(data.header, commonHeader):Object.assign({}, commonHeader)
-  const params = data.params?data.params:null;
-  return axios.get(url, params, {headers:header});
+  if(!data) data = {};
+  if(data && data.header){
+    header = Object.assign(data.header, commonHeader);
+  } else {
+    header = Object.assign({}, commonHeader);
+  }
 
+  const params = (data && data.params)?data.params:data;
+  console.log(url, params, header)
+  return axios.get(url, {params: params}, {headers:header});
+
+}
+
+function getTrackingCode(){
+  //console.log("getTrackingCode");
+  //console.log(document.cookie);
+  //console.log(localStorage);
+  //console.log(sessionStorage);
 }

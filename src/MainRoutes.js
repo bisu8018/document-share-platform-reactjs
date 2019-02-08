@@ -17,14 +17,13 @@ import ReactGA from 'react-ga';
 
 import { APP_PROPERTIES } from 'resources/app.properties';
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV != 'production') {
   ReactGA.initialize('UA-129300994-1', {
-    debug: true,
+    debug: false,
     gaOptions: {
       env: process.env.NODE_ENV
     }
   });
-  ReactGA.pageview(window.location.pathname + window.location.search);
   console.log("google analytics on!!!", process.env)
 } else {
   console.log("google analytics off!!!")
@@ -45,6 +44,7 @@ const handleLogout = ({location}) => {
   auth.logout();
 }
 
+//hubspot tracking
 var _hsq = window._hsq = window._hsq || [];
 
 class MainRoutes extends Component {
@@ -73,9 +73,13 @@ class MainRoutes extends Component {
   }
 
   sendPageView(location) {
-    console.log("HubSpot Tracking", window.location.pathname + window.location.search)
+    //hubspot tracking
+    console.log("Tracking sendPageView event", window.location.pathname + window.location.search)
     _hsq.push(['setPath', window.location.pathname + window.location.search]);
     _hsq.push(['trackPageView']);
+
+    //hubspot tracking
+    ReactGA.pageview(window.location.pathname + window.location.search);
   }
 
   render() {
