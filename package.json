@@ -73,7 +73,8 @@
     "start-js": "react-scripts start",
     "start": "NODE_ENV=local PORT=8000 react-scripts start",
     "build": "npm run build-css && react-scripts build",
-    "deploy": "aws s3 sync build/ s3://share.decompany.io",
+    "deploy:dev": "aws s3 sync build/ s3://dev.decompany.io",
+    "deploy:production": "aws s3 sync build/ s3://share.decompany.io",
     "invaildate": "aws cloudfront create-invalidation --distribution-id EDFUPNJU9XKGX --paths '/*'",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
