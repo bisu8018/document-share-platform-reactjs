@@ -47,12 +47,19 @@ export function getTracking(params) {
   try{
     trackingInfo = JSON.parse(localStorage.getItem("tracking_info"));
   } catch(e){
+    console.error(e);
+    
+  }
+
+  if(!trackingInfo){
+    
     trackingInfo = {
       sid: makeid(),
       cid: makeid(),
       touchAt: timestamp
     }
   }
+  
   
   console.log("trackingInfo", trackingInfo);
   
