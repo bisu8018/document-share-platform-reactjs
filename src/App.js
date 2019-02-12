@@ -11,7 +11,7 @@ class App extends Component {
   state = { loading: true, resultList:[], selected: null, fetching:false };
 
   componentDidMount() {
-    
+    console.log(process.env);
   }
 
   compomentWillUnmount() {
