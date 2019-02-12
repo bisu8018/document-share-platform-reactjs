@@ -14,6 +14,8 @@ import FileDownload from "js-file-download";
 import DrizzleApis from 'apis/DrizzleApis';
 import { NavigateBefore, NavigateNext, Face } from "@material-ui/icons";
 import { Link } from 'react-router-dom';
+import Linkify from 'react-linkify';
+
 
 const style = {
   pageViewer: {
@@ -145,7 +147,7 @@ class ContentViewFullScreen extends Component {
     const badgeReward = this.props.drizzleApis.toEther(this.props.document.confirmAuthorReward);
     const badgeVote = this.props.drizzleApis.toEther(this.props.document.confirmVoteAmount);
     const badgeView = this.props.document.totalViewCount ? this.props.document.totalViewCount : 0;
-
+    
     return (
 
       <div className="ContentViewFullScreen">
@@ -188,11 +190,11 @@ class ContentViewFullScreen extends Component {
                   <Button className={classes.button}><Link to={"/author/" + this.props.document.accountId} >{this.props.document.nickname?this.props.document.nickname:this.props.document.accountId}</Link></Button>
                 </span>
             </div>
-            <div className="proFileDescript">{this.props.document.desc?this.props.document.desc:""}</div>
-             <ContentViewComment/>
-             <div className="documentText">
-               {this.props.documentText?this.props.documentText:"No Text"}
-             </div>
+            <div className="proFileDescript"><Linkify properties={{target:"_blank"}} >{this.props.document.desc?this.props.document.desc:""}</Linkify></div>
+              <ContentViewComment/>
+              <div className="documentText">
+              {this.props.documentText?this.props.documentText:"No Text"}
+              </div>
           </div>
           <div id="full" className={classes.fullViewer}>
             <ContentViewCarousel id="fullCarousel" target={this.props.document} onChange={this.handleFull} page={this.state.currentPage} {...other}/>
