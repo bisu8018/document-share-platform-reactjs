@@ -54,15 +54,16 @@ class CuratorDocumentList extends React.Component {
         const totalViewCountSquare = res.data.totalViewCountInfo.totalViewCountSquare;
 
         res.data.resultList.forEach((item)=>{
-          const viewCount = isNaN(item.viewCount)?0:item.viewCount;
+          const document = item.documentInfo;
+          const viewCount = isNaN(document.viewCount)?0:document.viewCount;
           if(totalViewCountSquare > viewCount){
-            this.getCuratorReward(accountId, item.documentId, item.viewCount, totalViewCountSquare).then((data)=>{
+            this.getCuratorReward(accountId, document.documentId, document.viewCount, totalViewCountSquare).then((data)=>{
 
               const reward = data[0];
               const estimateReward = data[1];
               //console.log(item.documentId, reward, estimateReward);
               if(handleCurator3DayRewardOnDocuments){
-                handleCurator3DayRewardOnDocuments(item.documentId, Number(reward), Number(estimateReward));
+                handleCurator3DayRewardOnDocuments(document.documentId, Number(reward), Number(estimateReward));
               }
             }).catch((err)=>{
               console.error("fetchDocument", err);
@@ -111,7 +112,7 @@ class CuratorDocumentList extends React.Component {
             <div className="customGrid col3">
               {this.state.resultList.map((result, index) => (
                 <div className="box" key={result.documentId}>
-                    <CuratorDocumentView {...this.props} document={result} totalViewCountInfo={totalViewCountInfo}/>
+                    <CuratorDocumentView {...this.props} document={result.documentInfo} totalViewCountInfo={totalViewCountInfo}/>
                 </div>
               ))}
 

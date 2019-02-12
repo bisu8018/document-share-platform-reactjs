@@ -2,9 +2,9 @@ import axios from 'axios';
 import * as ajax from './CommonAjaxApis';
 import { APP_PROPERTIES } from '../resources/app.properties';
 
-const uploadDomain = APP_PROPERTIES.domain().upload + '/prod/upload' //"https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod/upload";
-const imgDomain = APP_PROPERTIES.domain().image;// + '/prod/document/get'//"https://24gvmjxwme.execute-api.us-west-1.amazonaws.com";
-const apiDomain = APP_PROPERTIES.domain().api;//"https://iwzx8ah5xf.execute-api.us-west-1.amazonaws.com/dev";
+const uploadDomain = APP_PROPERTIES.domain().upload + '/prod/upload';
+const imgDomain = APP_PROPERTIES.domain().image;
+const apiDomain = APP_PROPERTIES.domain().api;
 
 const registDocumentInfoUrl = "/api/document/regist";
 const getDocumentsUrl = "/api/document/list";
@@ -14,11 +14,84 @@ const getDocumentUrl = "/api/document/info/";
 const getDocumentTextUrl = "/api/document/text/";
 const getDocumentDownloadUrl = "/api/document/download/";
 const voteDocumentUrl = "/api/document/vote/";
+const trackingUrl = "/api/document/tracking";
+const trackingInfoUrl = "/api/document/trackinginfo";
+
+function jsonToQueryString(json) {
+  return '?' + 
+      Object.keys(json).map(function(key) {
+          return encodeURIComponent(key) + '=' +
+              encodeURIComponent(json[key]);
+      }).join('&');
+}
+
+function makeid() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 5; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
 
 export function getPageView(documentId, pageNo) {
   //return imgDomain + "/document/get/" + documentId + "/" + pageNo;
   //http://dev-ca-document.s3-website-us-west-1.amazonaws.com/THUMBNAIL/002107e7ce7541fdafa256f50babafff/300X300/1
   return imgDomain + "/THUMBNAIL/" + documentId + "/1200X1200/"  + pageNo;
+}
+
+export function getTracking(params) {
+  const timestamp = Date.now();
+  let trackingInfo = null;
+  try{
+    trackingInfo = JSON.parse(localStorage.getItem("tracking_info"));
+  } catch(e){
+    console.error(e);
+    
+  }
+
+  if(!trackingInfo){
+    
+    trackingInfo = {
+      sid: makeid(),
+      cid: makeid(),
+      touchAt: timestamp
+    }
+  }
+  
+  
+  console.log("trackingInfo", trackingInfo);
+  
+  if(!trackingInfo.sid || timestamp - trackingInfo.touchAt > 1000 * 60 * 20 /**20 min */){
+    //sid는 30분 지나면 새로 갱신함
+    const sid = makeid();  
+    console.log("renew sid", sid);
+    trackingInfo.sid =  sid;
+  }
+
+  if(!trackingInfo.cid ||timestamp - trackingInfo.touchAt > 1000 * 60 * 60 * 10 /*10 hours */ ){
+    //cid는 10시간이 지나면 새로 갱신함
+    const cid = makeid();  
+    console.log("renew cid", cid);
+    trackingInfo.cid =  cid;
+  }
+  trackingInfo.touchAt = timestamp;
+
+  params.sid = trackingInfo.sid;
+  params.cid = trackingInfo.cid;
+  params.t = timestamp;
+  const querystring = jsonToQueryString(params);
+  const tracking = apiDomain + trackingUrl + querystring;
+  
+  document.getElementById("tracking").src = tracking;
+  localStorage.setItem("tracking_info", JSON.stringify(trackingInfo));
+}
+
+export async function  getTrackingInfo(documentId){
+  console.log("getTrackingInfo", documentId);
+   
+  return await ajax.get(apiDomain + trackingInfoUrl, {documentId: documentId})
 }
 
 export function getThumbnail(documentId, pageNo, documentName) {
@@ -35,7 +108,7 @@ export function getThumbnail(documentId, pageNo, documentName) {
 
 export function getDocuments(params){
 
-  return axios.post(apiDomain + getDocumentsUrl, params);
+  return ajax.post(apiDomain + getDocumentsUrl, params);
 }
 
 export function getCuratorDocuments(params) {
@@ -45,15 +118,8 @@ export function getCuratorDocuments(params) {
     console.log(params," base64 encoded to ", key);
   } else {
     console.log("first page");
-  }
-
-  const config = {
-    nextPageKey:key,
-    accountId:params.accountId,
-    tag: params.tag
-  }
-  
-  return axios.post(apiDomain + getCuratorDocumentsUrl, config);
+  }  
+  return ajax.post(apiDomain + getCuratorDocumentsUrl, params);
 }
 
 export function getTodayVotedDocumentsByCurator(params) {
@@ -62,19 +128,19 @@ export function getTodayVotedDocumentsByCurator(params) {
     accountId: params.accountId,
   }
 
-  return axios.post(apiDomain + getTodayVotedDocumentsByCuratorUrl, data);
+  return ajax.post(apiDomain + getTodayVotedDocumentsByCuratorUrl, data);
 }
 
 export function getDocument(documentId){
 
   const url = apiDomain + getDocumentUrl + documentId;
-  return axios.get(url, null);
+  return ajax.get(url, null);
 }
 
 export function getDocumentText(documentId){
 
   const url = apiDomain + getDocumentTextUrl + documentId;
-  return axios.get(url, {});
+  return ajax.get(url, {});
 }
 
 export function registDocument(args, callback) {
@@ -205,7 +271,7 @@ export function sendVoteInfo(ethAccount, curatorId, voteAmount, document, transa
     transaction: transactionResult
   }
 
-  return axios.post(url, params);
+  return ajax.post(url, params);
 }
 
 export function convertTimestampToString(timestamp) {
@@ -230,7 +296,7 @@ export function getContentDownload(accountId, documentId) {
            'Accept':'application/pdf'
         }
       }
-      axios.get(downloadUrl, config).then((response) => {
+      ajax.get(downloadUrl, config).then((response) => {
         const blob = new Blob([response.data], {type: response.data.type});
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');

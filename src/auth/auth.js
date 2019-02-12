@@ -121,8 +121,9 @@ export default class Auth {
         
         if(res.data.success){
           console.log(res.data);
+          localStorage.setItem('user_sync', JSON.stringify(res.data));
         } else {
-          alert("Login failed because USER sync failed.");
+          alert("Login failed because user sync failed.");
           this.logout();
         }
       }).catch((err)=>{
