@@ -15,7 +15,8 @@ import DrizzleApis from 'apis/DrizzleApis';
 import { NavigateBefore, NavigateNext, Face } from "@material-ui/icons";
 import { Link } from 'react-router-dom';
 import Linkify from 'react-linkify';
-import $ from "jquery";
+import Drawer from 'react-drag-drawer'
+import ContentStatistics from './ContentStatistics';
 
 
 const style = {
@@ -43,11 +44,20 @@ const style = {
   }
 }
 
+
+
 class ContentViewFullScreen extends Component {
 
   state = {
     isFull: false,
-    totalPages: 0
+    totalPages: 0,
+    popupToggle: false
+  }
+
+  popupToggle = () => {
+    let { popupToggle } = this.state
+    console.log(this.state)
+    this.setState({ popupToggle: !popupToggle })
   }
   /*
   handlePage = (page) => {
@@ -107,7 +117,7 @@ class ContentViewFullScreen extends Component {
   }
 
   render() {
-
+    const { popupToggle } = this.state;
     const { classes, ...other } = this.props;
 
     if (this.state.totalPages != this.props.document.totalPages) {
@@ -137,6 +147,7 @@ class ContentViewFullScreen extends Component {
     const badgeView = this.props.document.totalViewCount ? this.props.document.totalViewCount : 0;
     
     return (
+      
 
       <div className="ContentViewFullScreen">
         <Fullscreen
@@ -158,6 +169,15 @@ class ContentViewFullScreen extends Component {
                 <VoteOnDocument document={this.props.document} {...other} />
                 <Button color="rose" size="sm">Share</Button>
                 <Button color="rose" size="sm" onClick={this.handleDownloadContent}>Download</Button>
+                <Button color="rose" size="sm" onClick={this.popupToggle}>Statistics</Button>
+                <Drawer
+                  {...this.props}
+                  open={popupToggle}
+                  onRequestClose={this.popupToggle}
+                >
+                  
+                  <ContentStatistics document={this.props.document}/>
+                </Drawer>
                 <ContentViewRegistBlockchainButton document={this.props.document} {...other} />
             </div>
             <span>

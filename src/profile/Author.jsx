@@ -142,7 +142,6 @@ class Author extends React.Component {
               <TabList>
                 <Tab>Author</Tab>
                 <Tab>Voted</Tab>
-                <Tab>Statistics</Tab>
               </TabList>
 
               <TabPanel>
@@ -198,61 +197,7 @@ class Author extends React.Component {
                     />
               </TabPanel>
 
-              <TabPanel>
-                <h3 style={{margin:'20px 0 0 0',fontSize:'26px'}} >{this.state.resultList.length} shared documents </h3>
-                  <InfiniteScroll
-                    dataLength={this.state.resultList.length}
-                    next={this.fetchMoreData}
-                    hasMore={!this.state.isEndPage}
-                    loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
-
-                    <div className="customGrid col3">
-                      {this.state.resultList.map((result, index) => (
-                        <div className="box" key={result.documentId}>
-                            <div className="cardSide">
-                                <button onClick={async ()=>{
-                                  const res = await restapi.getTrackingInfo(result.documentId);
-                                  console.log(res);
-                                  /*
-                                  res.data.resultList.map((trackingInfo) =>{
-                                    trackingInfo.resultList.sort((b, a)=>{
-                                      return b.t - a.t;
-                                    }).map((tracking, index, array) => {
-                                      let elapsedTime = 0;
-                                      if(index<array.length-1){
-                                        elapsedTime = Number(array[index+1].t) - Number(tracking.t);
-                                      }
-                                      console.log(tracking.e, tracking.n, "page", "cid:", tracking.cid, "sid:", tracking.sid, "Elapsed Time", elapsedTime, "Time", tracking.t)
-                                    })
-                                    
-                                    
-                                  });
-                                  */
-                                }} >
-                                    <span className="img">
-                                        <img src={restapi.getThumbnail(result.documentId, 1, result.documentName)} alt={result.title?result.title:result.documentName} />
-                                    </span>
-                                    <div className="inner">
-                                      <div className="tit"
-                                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                                          >{result.title?result.title:result.documentName}</div>
-                                      <div className="descript"
-                                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
-                                        {restapi.convertTimestampToString(result.created)}
-                                      </div>
-                                      <div className="descript"
-                                          style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}
-                                      >{result.desc}
-                                      </div>
-                                    </div>
-                                 </button>
-                             </div>
-                          </div>
-                      ))}
-
-                    </div>
-                  </InfiniteScroll>
-                </TabPanel>
+              
             </Tabs>
 
 

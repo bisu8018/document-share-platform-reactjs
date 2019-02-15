@@ -154,3 +154,28 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 .sortSearch .jss0188:after {display:none;}
 .sortSearch .jss0188:before {display:none;}
 */
+.modal {
+    outline: none;
+    background: white;
+    font-size: 1.6rem;
+    width: 76rem;
+    max-width: 90%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    z-index: 15;
+    min-height: 47rem;
+  
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+  }
+  
+  @media (max-width: 768px) {
+    .modal {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 0;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+  }
