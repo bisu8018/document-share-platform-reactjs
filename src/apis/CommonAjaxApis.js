@@ -37,7 +37,7 @@ export function post(url, data){
  *   params : parameter
  *  }
  */
-export function get(url, data){
+export async function get(url, data){
    
   let header = {};
   if(!data) data = {};
@@ -48,14 +48,7 @@ export function get(url, data){
   }
 
   const params = (data && data.params)?data.params:data;
-  console.log(url, params, header)
-  return axios.get(url, {params: params}, {headers:header});
+  //console.log(url, params, header)
+  return await axios.get(url, {params: params}, {headers:header});
 
-}
-
-function getTrackingCode(){
-  //console.log("getTrackingCode");
-  //console.log(document.cookie);
-  //console.log(localStorage);
-  //console.log(sessionStorage);
 }

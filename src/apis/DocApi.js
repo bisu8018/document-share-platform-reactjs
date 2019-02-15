@@ -15,77 +15,12 @@ const getDocumentTextUrl = "/api/document/text/";
 const getDocumentDownloadUrl = "/api/document/download/";
 const voteDocumentUrl = "/api/document/vote/";
 const trackingUrl = "/api/document/tracking";
-const trackingInfoUrl = "/api/document/trackinginfo";
-
-function jsonToQueryString(json) {
-  return '?' + 
-      Object.keys(json).map(function(key) {
-          return encodeURIComponent(key) + '=' +
-              encodeURIComponent(json[key]);
-      }).join('&');
-}
-
-function makeid() {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  for (var i = 0; i < 5; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  return text;
-}
+const trackingInfoUrl = "/api/tracking/info";
 
 export function getPageView(documentId, pageNo) {
   //return imgDomain + "/document/get/" + documentId + "/" + pageNo;
   //http://dev-ca-document.s3-website-us-west-1.amazonaws.com/THUMBNAIL/002107e7ce7541fdafa256f50babafff/300X300/1
   return imgDomain + "/THUMBNAIL/" + documentId + "/1200X1200/"  + pageNo;
-}
-
-export function getTracking(params) {
-  const timestamp = Date.now();
-  let trackingInfo = null;
-  try{
-    trackingInfo = JSON.parse(localStorage.getItem("tracking_info"));
-  } catch(e){
-    console.error(e);
-    
-  }
-
-  if(!trackingInfo){
-    
-    trackingInfo = {
-      sid: makeid(),
-      cid: makeid(),
-      touchAt: timestamp
-    }
-  }
-  
-  
-  console.log("trackingInfo", trackingInfo);
-  
-  if(!trackingInfo.sid || timestamp - trackingInfo.touchAt > 1000 * 60 * 20 /**20 min */){
-    //sid는 30분 지나면 새로 갱신함
-    const sid = makeid();  
-    console.log("renew sid", sid);
-    trackingInfo.sid =  sid;
-  }
-
-  if(!trackingInfo.cid ||timestamp - trackingInfo.touchAt > 1000 * 60 * 60 * 10 /*10 hours */ ){
-    //cid는 10시간이 지나면 새로 갱신함
-    const cid = makeid();  
-    console.log("renew cid", cid);
-    trackingInfo.cid =  cid;
-  }
-  trackingInfo.touchAt = timestamp;
-
-  params.sid = trackingInfo.sid;
-  params.cid = trackingInfo.cid;
-  params.t = timestamp;
-  const querystring = jsonToQueryString(params);
-  const tracking = apiDomain + trackingUrl + querystring;
-  
-  document.getElementById("tracking").src = tracking;
-  localStorage.setItem("tracking_info", JSON.stringify(trackingInfo));
 }
 
 export async function  getTrackingInfo(documentId){

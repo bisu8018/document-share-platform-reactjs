@@ -212,7 +212,8 @@ class Author extends React.Component {
                             <div className="cardSide">
                                 <button onClick={async ()=>{
                                   const res = await restapi.getTrackingInfo(result.documentId);
-                                  
+                                  console.log(res);
+                                  /*
                                   res.data.resultList.map((trackingInfo) =>{
                                     trackingInfo.resultList.sort((b, a)=>{
                                       return b.t - a.t;
@@ -221,12 +222,12 @@ class Author extends React.Component {
                                       if(index<array.length-1){
                                         elapsedTime = Number(array[index+1].t) - Number(tracking.t);
                                       }
-                                      //console.log(tracking);
-                                      console.log(tracking.e, tracking.n, "page", "cid:", tracking.cid, "sid:", tracking.sid, "Elapsed Time", elapsedTime, "Time", tracking.t /*new Date(Number(tracking.t)).toISOString()*/)
+                                      console.log(tracking.e, tracking.n, "page", "cid:", tracking.cid, "sid:", tracking.sid, "Elapsed Time", elapsedTime, "Time", tracking.t)
                                     })
                                     
+                                    
                                   });
-
+                                  */
                                 }} >
                                     <span className="img">
                                         <img src={restapi.getThumbnail(result.documentId, 1, result.documentName)} alt={result.title?result.title:result.documentName} />
