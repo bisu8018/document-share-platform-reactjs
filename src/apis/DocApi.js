@@ -16,6 +16,7 @@ const getDocumentDownloadUrl = "/api/document/download/";
 const voteDocumentUrl = "/api/document/vote/";
 const trackingUrl = "/api/document/tracking";
 const trackingInfoUrl = "/api/tracking/info";
+const trackingListUrl = "/api/tracking/list";
 
 export function getPageView(documentId, pageNo) {
   //return imgDomain + "/document/get/" + documentId + "/" + pageNo;
@@ -27,6 +28,12 @@ export async function  getTrackingInfo(documentId){
   console.log("getTrackingInfo", documentId);
    
   return await ajax.get(apiDomain + trackingInfoUrl, {documentId: documentId})
+}
+
+export async function  getTrackingList(documentId, cid, sid){
+  console.log("getTrackingList", documentId, cid, sid);
+   
+  return await ajax.get(apiDomain + trackingListUrl, {documentId: documentId, cid: cid, sid: sid})
 }
 
 export function getThumbnail(documentId, pageNo, documentName) {

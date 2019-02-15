@@ -18,7 +18,7 @@ import TrackingApis from 'apis/TrackingApis'
 
 import { APP_PROPERTIES } from 'resources/app.properties';
 
-if (process.env.NODE_ENV != 'production') {
+if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize('UA-129300994-1', {
     debug: false,
     gaOptions: {
@@ -76,7 +76,7 @@ class MainRoutes extends Component {
 
   sendPageView(location) {
     //hubspot tracking
-    console.log("Tracking sendPageView event", window.location.pathname + window.location.search)
+    //console.log("Tracking sendPageView event", window.location.pathname + window.location.search)
     _hsq.push(['setPath', window.location.pathname + window.location.search]);
     _hsq.push(['trackPageView']);
 
