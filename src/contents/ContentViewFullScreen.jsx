@@ -15,6 +15,7 @@ import DrizzleApis from 'apis/DrizzleApis';
 import { NavigateBefore, NavigateNext, Face } from "@material-ui/icons";
 import { Link } from 'react-router-dom';
 import Linkify from 'react-linkify';
+import $ from "jquery";
 
 
 const style = {
@@ -46,33 +47,24 @@ class ContentViewFullScreen extends Component {
 
   state = {
     isFull: false,
-    currentPage: 0,
     totalPages: 0
   }
-
+  /*
   handlePage = (page) => {
     const documentId = this.props.document.documentId;
     if (this.state.totalPages > 0 && !this.state.isFull) {
-      this.setState({currentPage:page});
-      restapi.getTracking({
-        id: documentId,
-        n: page,
-        e: "tracking_tester@decompany.io"
-      });
+      this.handleTracking(documentId, page+1);
     }
   }
+
 
   handleFull = (page) => {
     const documentId = this.props.document.documentId;
     if (this.state.totalPages > 0 && this.state.isFull) {
-      this.setState({currentPage:page});
-      restapi.getTracking({
-        id: documentId,
-        n: page,
-        e: "tracking_tester@decompany.io"
-      });
+     
     }
   }
+  */
 
   getContentDownload = (accountId, documentId, documentName) => {
 
@@ -94,10 +86,6 @@ class ContentViewFullScreen extends Component {
       console.error(err);
     });
 
-  }
-
-  componentDidMount() {
-    
   }
 
   handleDownloadContent = () => {
@@ -156,7 +144,7 @@ class ContentViewFullScreen extends Component {
           onChange={isFull => this.setState({isFull})}
         >
           <div id="page" className={classes.pageViewer}>
-            <ContentViewCarousel id="pageCarousel" target={this.props.document} onChange={this.handlePage} page={this.state.currentPage} {...other}/>
+            <ContentViewCarousel id="pageCarousel" target={this.props.document} {...other} tracking={true}/>
             <div className={classes.fullscreenBar}>
               <Button className={classes.fullscreenBtn} onClick={this.goFull}>View full screen</Button>
             </div>
@@ -197,7 +185,7 @@ class ContentViewFullScreen extends Component {
               </div>
           </div>
           <div id="full" className={classes.fullViewer}>
-            <ContentViewCarousel id="fullCarousel" target={this.props.document} onChange={this.handleFull} page={this.state.currentPage} {...other}/>
+            <ContentViewCarousel id="fullCarousel" target={this.props.document} {...other} />
           </div>
         </Fullscreen>
       </div>

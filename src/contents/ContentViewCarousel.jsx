@@ -4,7 +4,9 @@ import ReactDOM from 'react-dom';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import * as restapi from 'apis/DocApi';
+import TrackingApis from 'apis/TrackingApis';
 import withStyles from "@material-ui/core/styles/withStyles";
+
 
 const style = {
   container: {
@@ -22,12 +24,45 @@ class ContentViewCarousel extends React.Component {
     this.classes = classes;
   }
 
+  handleTracking = (documentId, page) => {
+ 
+    TrackingApis.tracking({
+      id: documentId,
+      n: page,
+      e: "tracking_tester@decompany.io",
+      ev: "view"
+    }, true);
+
+  }
+
+  componentWillMount() {
+    
+    const {tracking, target} = this.props
+    const documentId = target.documentId;
+    if(tracking){
+      this.handleTracking(documentId, 1);
+      window.addEventListener("unload", function _handler(event) {
+        try{
+          TrackingApis.tracking({
+            id: documentId,
+            n: -1,
+            e: "tracking_tester@decompany.io",
+            ev: "leave"
+          }, false, true);
+        } catch(e){
+          console.error(e);
+        }
+        window.removeEventListener("unload", _handler);
+
+      });
+    }
+    
+  }
+
   render() {
     const {
       classes,
-      target,
-      page,
-      onChange
+      target
     } = this.props;
 
     let arr = [target.totalPages];
@@ -37,7 +72,10 @@ class ContentViewCarousel extends React.Component {
 
     return (
       <div className={this.classes.container}>
-        <Carousel useKeyboardArrows onChange={onChange} selectedItem={page}>
+        <Carousel onChange={(index)=>{
+          this.handleTracking(target.documentId, index+1);
+          return true;
+        }}>
           {arr.length > 0 ? arr.map((addr, index) => (
             <img className={this.classes.img} key={index} src={addr} />
           )):""}

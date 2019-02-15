@@ -14,6 +14,7 @@ import ContentView from "contents/ContentView";
 import Author from "profile/Author";
 import DrizzleApis from 'apis/DrizzleApis';
 import ReactGA from 'react-ga';
+import TrackingApis from 'apis/TrackingApis'
 
 import { APP_PROPERTIES } from 'resources/app.properties';
 
@@ -24,6 +25,7 @@ if (process.env.NODE_ENV != 'production') {
       env: process.env.NODE_ENV
     }
   });
+
   console.log("google analytics on!!!", process.env)
 } else {
   console.log("google analytics off!!!")
@@ -52,7 +54,7 @@ class MainRoutes extends Component {
 
   componentWillMount() {
     // subscribe to changes in the store
-    console.log("env", process.env);
+    // console.log("env", process.env);
     //auth.syncUser();
     const drizzleApis = new DrizzleApis((drizzleApis, drizzle, drizzleState) => {
       //console.log("MainRoutes", drizzleApis, drizzle, drizzleState);
@@ -78,7 +80,7 @@ class MainRoutes extends Component {
     _hsq.push(['setPath', window.location.pathname + window.location.search]);
     _hsq.push(['trackPageView']);
 
-    //hubspot tracking
+    //GA tracking
     ReactGA.pageview(window.location.pathname + window.location.search);
   }
 
