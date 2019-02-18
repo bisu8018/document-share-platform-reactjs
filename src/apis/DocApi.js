@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as ajax from './CommonAjaxApis';
-import { APP_PROPERTIES } from '../resources/app.properties';
+import { APP_PROPERTIES } from 'properties/app.properties';
 
 const uploadDomain = APP_PROPERTIES.domain().upload + '/prod/upload';
 const imgDomain = APP_PROPERTIES.domain().image;
@@ -26,13 +26,13 @@ export function getPageView(documentId, pageNo) {
 
 export async function  getTrackingInfo(documentId){
   console.log("getTrackingInfo", documentId);
-   
+
   return await ajax.get(apiDomain + trackingInfoUrl, {documentId: documentId})
 }
 
 export async function  getTrackingList(documentId, cid, sid){
   console.log("getTrackingList", documentId, cid, sid);
-   
+
   return await ajax.get(apiDomain + trackingListUrl, {documentId: documentId, cid: cid, sid: sid})
 }
 
@@ -60,7 +60,7 @@ export function getCuratorDocuments(params) {
     console.log(params," base64 encoded to ", key);
   } else {
     console.log("first page");
-  }  
+  }
   return ajax.post(apiDomain + getCuratorDocumentsUrl, params);
 }
 
@@ -68,7 +68,7 @@ export function getTodayVotedDocumentsByCurator(params) {
 
   const data = {
     accountId: params.accountId,
-  }
+  };
 
   return ajax.post(apiDomain + getTodayVotedDocumentsByCuratorUrl, data);
 }
@@ -117,41 +117,41 @@ export function registDocument(args, callback) {
       ethAccount: ethAccount,
       title: title,
       desc: desc,
-      tags:tags 
+      tags:tags
     }
     const promise = ajax.post(url, data).then((res) => {
 
-        console.log("Getting Response Regist Document Meta Info", res);
-        //2. Upload File Binary
-        if(res && res.data && res.data.success){
-          const documentId = res.data.documentId;
-          const owner = res.data.accountId;
-          const signedUrl = res.data.signedUrl;
-          fileUpload({
-              file: fileInfo.file,
-              fileid : documentId,
-              fileindex : 1,
-              ext: fileInfo.ext,
-              owner: owner,
-              signedUrl: signedUrl,
-              callback: callback
-            }).then((res)=>{
+      console.log("Getting Response Regist Document Meta Info", res);
+      //2. Upload File Binary
+      if(res && res.data && res.data.success){
+        const documentId = res.data.documentId;
+        const owner = res.data.accountId;
+        const signedUrl = res.data.signedUrl;
+        fileUpload({
+          file: fileInfo.file,
+          fileid : documentId,
+          fileindex : 1,
+          ext: fileInfo.ext,
+          owner: owner,
+          signedUrl: signedUrl,
+          callback: callback
+        }).then((res)=>{
 
-            console.log("Upload Document Complete", res);
-            resolve({documentId:documentId, accountId:owner});
-          });
+          console.log("Upload Document Complete", res);
+          resolve({documentId:documentId, accountId:owner});
+        });
 
-        } else {
+      } else {
 
-            let detail = null;
-            if(res && res.data){
-                detail = JSON.stringify(res.data);
-            }
-            reject(new Error("regist document response data is invalid!"));
+        let detail = null;
+        if(res && res.data){
+          detail = JSON.stringify(res.data);
         }
-      }).catch((err) => {
-        console.error("Document Registration Error", err)
-      });
+        reject(new Error("regist document response data is invalid!"));
+      }
+    }).catch((err) => {
+      console.error("Document Registration Error", err)
+    });
 
 
   });
@@ -179,19 +179,19 @@ function fileUpload(params) {
   const formData = new FormData();
   formData.append('file', params.file);
   const config = {
-      headers: {
-          "content-type": 'application/octet-stream',
-          "Signature": query.Signature,
-          "x-amz-acl": "authenticated-read"
-      },
-      onUploadProgress: (e) => {
-        console.log("onUploadProgress : " + e.loaded + "/" + e.total);
-        if (e.laod !== null && params.callback !== null) {
-            params.callback(e);
-        }
-      },
+    headers: {
+      "content-type": 'application/octet-stream',
+      "Signature": query.Signature,
+      "x-amz-acl": "authenticated-read"
+    },
+    onUploadProgress: (e) => {
+      console.log("onUploadProgress : " + e.loaded + "/" + e.total);
+      if (e.laod !== null && params.callback !== null) {
+        params.callback(e);
+      }
+    },
 
-  }
+  };
 
   return axios.put(url, params.file, config);
 }
@@ -211,7 +211,7 @@ export function sendVoteInfo(ethAccount, curatorId, voteAmount, document, transa
     documentId: document.documentId,
     ethAccount: ethAccount,
     transaction: transactionResult
-  }
+  };
 
   return ajax.post(url, params);
 }
@@ -235,9 +235,9 @@ export function getContentDownload(accountId, documentId) {
       const config = {
         responseType: 'arraybuffer', // important
         headers: {
-           'Accept':'application/pdf'
+          'Accept':'application/pdf'
         }
-      }
+      };
       ajax.get(downloadUrl, config).then((response) => {
         const blob = new Blob([response.data], {type: response.data.type});
         const url = window.URL.createObjectURL(blob);

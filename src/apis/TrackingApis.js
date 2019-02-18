@@ -1,7 +1,7 @@
 import $ from "jquery";
 import shortid from 'shortid'
 import ReactGA from 'react-ga';
-import { APP_PROPERTIES } from '../resources/app.properties';
+import { APP_PROPERTIES } from 'properties/app.properties';
 
 const apiDomain = APP_PROPERTIES.domain().api;
 

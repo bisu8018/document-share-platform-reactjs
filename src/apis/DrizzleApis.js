@@ -1,8 +1,8 @@
 // import drizzle functions and contract artifact
 import { Drizzle, generateStore } from "drizzle";
-import DocumentReg from "contracts-rinkeby/DocumentReg.json";
-import Deck from "contracts-rinkeby/Deck.json";
-import BountyOne from "contracts-rinkeby/BountyOne.json";
+import DocumentReg from "apis/contracts-rinkeby/DocumentReg.json";
+import Deck from "apis/contracts-rinkeby/Deck.json";
+import BountyOne from "apis/contracts-rinkeby/BountyOne.json";
 
 import {BigNumber} from 'bignumber.js';
 // import drizzle functions and contract artifact
@@ -54,41 +54,41 @@ export default class DrizzleApis {
     if(!this.drizzleState) return;
 
     return this.drizzleState.drizzleStatus.initialized;
-  }
+  };
 
   isAuthenticated = () => {
 
     if(!this.drizzle) return;
 
-    //console.log(this.drizzleState);
+    console.log(this.drizzleState);
 
     if(!this.drizzleState) return;
 
     if(this.drizzleState.accounts && this.drizzleState.accounts[0]) return this.isInitialized() && true;
 
     return false;
-  }
+  };
 
   getLoggedInAccount = () => {
     if(!this.isAuthenticated()) return;
 
     return this.drizzleState.accounts[0];
-  }
+  };
 
   getReaderAccount = () => {
     if(this.isAuthenticated()) return this.getLoggedInAccount();
 
     return defaultAccountId;
-  }
+  };
 
   fromAscii = (str) => {
     return this.drizzle.web3.utils.fromAscii(str);
-  }
+  };
 
   fromWei = (str) => {
 
     return this.drizzle.web3.utils.fromWei(str, "ether");
-  }
+  };
 
   toDollar = (str) => {
 
@@ -111,7 +111,7 @@ export default class DrizzleApis {
 
     //return this.drizzle.web3.utils.fromWei(bn, "ether");
     return result;
-  }
+  };
 
   deckToDollar = (str) => {
 
@@ -125,7 +125,7 @@ export default class DrizzleApis {
     const result = Math.round(dollar.toNumber() * 100) / 100;
 
     return result;
-  }
+  };
 
   toEther = (str) => {
 
@@ -135,18 +135,18 @@ export default class DrizzleApis {
     const result = Math.round(ether.toNumber() * 100) / 100;
 
     return result;
-  }
+  };
 
   toNumber = (number) => {
     return isNaN(parseInt(number, 10)) ? 0 : parseInt(number, 10);
-  }
+  };
 
 
   toBigNumber = (str) => {
     const v = this.drizzle.web3.utils.toWei(str, 'ether');
     //console.log(str, "to bignumber ", v);
     return v;
-  }
+  };
 
   requestIsExistDocument = (documentId) => {
 
@@ -170,7 +170,7 @@ export default class DrizzleApis {
     console.log(dataKey);
     return dataKey;
 
-  }
+  };
 
   isExistDocument = (dataKey) => {
 
@@ -191,7 +191,7 @@ export default class DrizzleApis {
 //      this.setState({isExistInBlockChain: isExistDocument});
     }
     return false;
-  }
+  };
 
   bounty = () => {
 
@@ -339,7 +339,7 @@ export default class DrizzleApis {
 
     return stackId;
 
-  }
+  };
 
   claimCuratorReward = (documentId) => {
     //function claimCuratorReward(bytes32 _docId) public
@@ -358,7 +358,7 @@ export default class DrizzleApis {
 
     return stackId;
 
-  }
+  };
 
 
   requestTotalBalance = (accountId) => {
@@ -528,7 +528,7 @@ export default class DrizzleApis {
     });
 
     return dataKey;
-  }
+  };
 
   getAuthor3DayRewardOnDocument = (dataKey) => {
     //contract getAuthor3DayRewardOnDocument
@@ -554,18 +554,18 @@ export default class DrizzleApis {
 
     return v.value;
     //return v.value;
-  }
+  };
 
   subscribe = (callback) => {
     this.callbackFuncs.push(callback);
     return callback;
-  }
+  };
 
   unsubscribe = (callback) => {
     if(this.callbackFuncs.includes(callback)) {
       this.callbackFuncs.remove(callback);
     }
-  }
+  };
 
   getBlockchainTimestamp = (date) => {
     // daily YYYY-MM-DD 00:00:00(실행기준에서 전날 일자)
