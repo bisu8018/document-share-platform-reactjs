@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React from "react";
 import PropTypes from 'prop-types';
 
@@ -35,7 +34,7 @@ class LoginPopup extends React.Component {
   };
 
   refresh = () => {
-    location.reload();
+    window.location.reload();
   };
 
   render() {

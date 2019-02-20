@@ -4,6 +4,8 @@ const commonHeader = {
   "Content-Type":"application/json"
 };
 
+
+
 /**
  * call post method
  * @param {*} url : url
@@ -14,7 +16,6 @@ const commonHeader = {
  *  }
  */
 export function post(url, data){
-
   let header = Object.assign(data.header?data.header:{}, commonHeader);
   let params = data.params?data.params:{};
 
@@ -23,11 +24,11 @@ export function post(url, data){
   } else {
     params = data.params?data.params:data;
   }
-
-
   return axios.post(url, params, {headers:header});
-
 }
+
+
+
 /**
  * call get method
  * @param {*} url : url
@@ -38,7 +39,6 @@ export function post(url, data){
  *  }
  */
 export async function get(url, data){
-
   let header = {};
   if(!data) data = {};
   if(data && data.header){
@@ -46,7 +46,6 @@ export async function get(url, data){
   } else {
     header = Object.assign({}, commonHeader);
   }
-
   const params = (data && data.params)?data.params:data;
   //console.log(url, params, header)
   return await axios.get(url, {params: params}, {headers:header});

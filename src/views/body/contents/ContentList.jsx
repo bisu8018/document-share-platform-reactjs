@@ -3,9 +3,9 @@ import React, {Component} from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Spinner from 'react-spinkit';
-import * as restapi from 'apis/DocApi';
 import ContentTags from "./ContentTags";
 import ContentListItem from "./ContentListItem";
+import MainRepository from "../../../redux/MainRepository";
 /*import ContentListItem from './ContentListItem';
 import ContentTags from './ContentTags';*/
 
@@ -25,7 +25,7 @@ class ContentList extends Component {
 
     componentWillMount() {
         const { match } = this.props;
-        console.log("componentWillMount", match);
+        //console.log("componentWillMount", match);
         this.setState({
             resultList: [],
             pageNo: null,
@@ -57,30 +57,30 @@ class ContentList extends Component {
           path: args.path?args.path:this.state.path
         };
 
-        console.log("fetchDocument start", params);
+        //console.log("fetchDocument start", params);
 
-        restapi.getDocuments(params).then((res)=>{
-          console.log("Fetch Document end", res.data);
+        MainRepository.Document.getDocumentList(params, (res) => {
+          console.log("Fetch Document end", res);
           this.setState({loading:false});
-          const resData = res.data;
+          const resData = res;
           const resultList = resData.resultList?resData.resultList:[];
           const pageNo = resData.pageNo;
 
           if(resultList.length>0) {
             if(this.state.resultList && this.state.resultList.length>0){
-               this.setState({resultList: this.state.resultList.concat(resultList), pageNo:pageNo});
+              this.setState({resultList: this.state.resultList.concat(resultList), pageNo:pageNo});
             } else {
               this.setState({resultList: resultList, pageNo:pageNo});
             }
 
           } else {
-             this.setState({isEndPage:true});
+            this.setState({isEndPage:true});
           }
 
-          if(res.data && res.data.totalViewCountInfo && !this.state.totalViewCountInfo){
-            this.setState({totalViewCountInfo: res.data.totalViewCountInfo});
+          if(res && res.totalViewCountInfo && !this.state.totalViewCountInfo){
+            this.setState({totalViewCountInfo: res.totalViewCountInfo});
           }
-        }).catch((err) => {
+        }, (err) => {
           this.setState({loading:false});
         });
     };
@@ -103,9 +103,9 @@ class ContentList extends Component {
     };
 
     render() {
-      const { classes, match } = this.props;
+      const { match } = this.props;
       const resultList = this.state.resultList;
-      const tag = this.state.tag;
+      //const tag = this.state.tag;
       let title = "latest";
 
       if(this.state.path

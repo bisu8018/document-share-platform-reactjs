@@ -35,7 +35,6 @@ ethereum network와의 통신을 위해 사용함, 현재 프로젝트에서는 
 ### 참고소스
 
  - /src/auth/auth.js : Auth0와 연동을 위한 js
- - /src/apis/AuthApis.js : JWT를 기반으로한 Authed Backend Rest API 모음 js
 
 - MainRoutes.js 초기 로딩 및 인증/로그아웃 연동
 

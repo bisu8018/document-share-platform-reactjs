@@ -3,7 +3,7 @@ import Main from "./views/Main";
 
 class App extends Component {
   componentDidMount() {
-    console.log(process.env);
+    //console.log(process.env);
   }
 
   render() {

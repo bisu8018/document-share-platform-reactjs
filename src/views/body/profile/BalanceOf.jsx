@@ -33,7 +33,6 @@ class BalanceOf extends React.Component {
 
   render() {
     const {classes, drizzleApis, balance, sumReward, ...others} = this.props;
-
     const balanceDollarStr = "$" + this.web3Apis.toDollar(balance).toFixed(2);//'$' + drizzleApis.deckToDollar(balance).toFixed(2);
     const balanceDeckStr = this.web3Apis.toDeck(balance).toFixed(2) + " DECK";//balance.toFixed(2) + ' DECK';
 
@@ -43,7 +42,9 @@ class BalanceOf extends React.Component {
         <span className={this.props.classes.deck}> ({balanceDeckStr}) </span>
         <div>
           <span className={this.props.classes.reward}>Total rewards : </span>
-          <span className={this.props.classes.dollar}> <DollarWithDeck deck={sumReward} drizzleApis={drizzleApis} {...others}/></span>
+          <span className={this.props.classes.dollar}>
+            <DollarWithDeck deck={sumReward} drizzleApis={drizzleApis} {...others}/>
+          </span>
         </div>
       </div>
     );

@@ -13,7 +13,7 @@ class ContentViewBlockchainButton extends React.Component {
     };
 
     componentDidMount() {
-        const {document, classes, drizzleApis} = this.props;
+        const {drizzleApis} = this.props;
         //const drizzleState = drizzle.store.getState();
         // subscribe to changes in the store
         this.unsubscribe = drizzleApis.subscribe((drizzle, drizzleState) => {
@@ -29,7 +29,7 @@ class ContentViewBlockchainButton extends React.Component {
         });
     }
 
-    componentDidUnmount() {
+    componentWillUnmount() {
         const {drizzleApis} = this.props;
         drizzleApis.unsubscribe(this.unsubscribe);
     }
@@ -91,14 +91,14 @@ class ContentViewBlockchainButton extends React.Component {
 
         const txState = transactions[txHash].status;
         const txReceipt = transactions[txHash].receipt;
-        const confirmations = transactions[txHash].confirmations;
+        //const confirmations = transactions[txHash].confirmations;
 
 
         console.log("printTxStatus", txState, txReceipt, transactions[txHash]);
     };
 
     render() {
-        const {document, classes, drizzleApis} = this.props;
+        const {document, drizzleApis} = this.props;
 
         if (!drizzleApis.isAuthenticated()) return null;
 

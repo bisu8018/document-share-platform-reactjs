@@ -20,7 +20,7 @@ const style = {
 class CuratorDocumentView extends React.Component {
 
   render() {
-      const {document, drizzleApis, handleCurator3DayRewardOnDocuments, accountId} = this.props;
+      const {document, drizzleApis, accountId} = this.props;
 
 
       const badgeReward = drizzleApis.toEther(document.confirmAuthorReward);

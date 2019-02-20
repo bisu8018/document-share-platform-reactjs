@@ -80,7 +80,7 @@ class AuthorSummary extends React.Component {
 
     if(!this.state.authorEstimatedToday && totalViewCountInfo){
       const address = accountId;//drizzleApis.getLoggedInAccount();
-      console.log("getCalculateAuthorReward", viewCount, totalViewCountInfo.totalViewCount, totalViewCountInfo);
+      //console.log("getCalculateAuthorReward", viewCount, totalViewCountInfo.totalViewCount, totalViewCountInfo);
       this.web3Apis.getCalculateAuthorReward(address, viewCount, totalViewCountInfo.totalViewCount).then((data) =>{
         this.setState({authorEstimatedToday: data});
 
@@ -94,11 +94,11 @@ class AuthorSummary extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
 
-    const {drizzleApis, drizzleState} = this.props;
+//    const {drizzleApis, drizzleState} = this.props;
 
     //this.handleRequestBalance();
     //if(drizzleApis.isAuthenticated()){
-      this.getBalance()
+      this.getBalance();
       this.getCalculateAuthorReward();
     //}
 
@@ -120,10 +120,10 @@ class AuthorSummary extends React.Component {
       </h3>
     );
 */
-    const loggedInAccount = accountId;
+   // const loggedInAccount = accountId;
 
     // Values in DECK
-    const balance = drizzleApis.toEther(this.state.balance);
+    //const balance = drizzleApis.toEther(this.state.balance);
     const author3DayReward = drizzleApis.toEther(this.state.totalAuthor3DayReward);
     const authorTodayReward = drizzleApis.toEther(this.state.authorEstimatedToday);
     const curator3DayReward = drizzleApis.toEther(totalCurator3DayReward);
@@ -146,7 +146,7 @@ class AuthorSummary extends React.Component {
           <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
         </h3>
         <ul className="detailList">
-            <li><BalanceOf balance={this.state.balance} sumReward={sumReward} drizzleApis={drizzleApis} {...others}></BalanceOf></li>
+            <li><BalanceOf balance={this.state.balance} sumReward={sumReward} drizzleApis={drizzleApis} {...others}/></li>
         </ul>
         <div className={this.props.classes.authorReward}>
         <h5>Author rewards</h5>

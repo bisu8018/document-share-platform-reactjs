@@ -20,7 +20,7 @@ function jsonToQueryString(json){
     }).join('&');
 }
 
-function makeid(){
+function makeId(){
     return shortid.generate();
 }
 
@@ -37,14 +37,14 @@ function tracking(params, async, sidClear){
     if(!trackingInfo){
         
         trackingInfo = {
-        sid: makeid(),
+        sid: makeId(),
         touchAt: timestamp
         }
     }
     
     if(!trackingInfo.sid || timestamp - trackingInfo.touchAt > 1000 * 60 * 30 /**30 min */){
         //sid는 30분 지나면 새로 갱신함(이벤트마다 갱신됨)
-        const sid = makeid();  
+        const sid = makeId();
         console.log("renew sid", sid);
         trackingInfo.sid =  sid;
     }

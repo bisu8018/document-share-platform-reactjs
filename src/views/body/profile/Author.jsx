@@ -15,6 +15,7 @@ import CuratorDocumentList from './CuratorDocumentList.jsx';
 import DollarWithDeck from './DollarWithDeck';
 import DeckInShort from './DeckInShort';
 import Badge from "components/badge/Badge";
+import MainRepository from "../../../redux/MainRepository";
 
 const style = {
   badge: {
@@ -38,7 +39,6 @@ class Author extends React.Component {
 
   author3DayRewardOnDocuments = [];
   author3DayRewards = [];
-
   curator3DayRewardOnDocuments = [];
   curator3DayRewards = [];
   curatorEstimateRewards = [];
@@ -63,7 +63,6 @@ class Author extends React.Component {
     }
     //console.log("handleTotalAuthor3DayReward", this.author3DayRewards, "totalAuthor3DayRewards", totalAuthor3DayRewards);
     this.setState({totalAuthor3DayReward: totalAuthor3DayRewards});
-
   };
 
   handleCurator3DayRewardOnDocuments = (documentId, reward, estimateReward) =>{
@@ -78,7 +77,6 @@ class Author extends React.Component {
     let totalCuratorEstimateRewards = 0;
       //console.log(this.revenues);
       for(const idx in this.curator3DayRewards){
-
         totalCurator3DayReward += Number(this.curator3DayRewards[idx]);
         totalCuratorEstimateRewards += Number(this.curatorEstimateRewards[idx]);
       }
@@ -89,39 +87,34 @@ class Author extends React.Component {
   };
 
   fetchMoreData = () => {
-
       this.fetchDocuments({
         pageNo: this.state.pageNo + 1
       })
-
   };
 
   fetchDocuments = (params) => {
       const {match} = this.props;
       const accountId = match.params.accountId;
       const pageNo = (!params || isNaN(params.pageNo))?1:Number(params.pageNo);
-      restapi.getDocuments({accountId:accountId, pageNo: pageNo}).then((res)=>{
-
-        if(res.data && res.data.resultList) {
+      MainRepository.Document.getDocumentList({accountId:accountId, pageNo: pageNo}, (res)=> {
+        let resData = res;
+        if(resData && resData.resultList) {
           if(this.state.resultList){
-            this.setState({resultList: this.state.resultList.concat(res.data.resultList), pageNo:res.data.pageNo, totalViewCountInfo: res.data.totalViewCountInfo});
+            this.setState({resultList: this.state.resultList.concat(resData.resultList), pageNo:resData.pageNo, totalViewCountInfo: resData.totalViewCountInfo});
           } else {
-            this.setState({resultList: res.data.resultList, pageNo:res.data.pageNo, totalViewCountInfo: res.data.totalViewCountInfo});
+            this.setState({resultList: resData.resultList, pageNo:resData.pageNo, totalViewCountInfo: resData.totalViewCountInfo});
           }
           console.log("list", this.state.resultList);
-          if(!res.data.count===0){
+          if(resData.count === 0){
             this.setState({isEndPage:true});
           }
         }
       });
-
   };
 
   render() {
-    const {classes, drizzleApis, match} = this.props;
+    const { drizzleApis, match } = this.props;
     const accountId = match.params.accountId;
-    //if(!drizzleApis.isAuthenticated()) "DrizzleState Loading!!";
-
     return (
 
         <div className="contentGridView">

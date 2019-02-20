@@ -60,7 +60,7 @@ export default class DrizzleApis {
 
     if(!this.drizzle) return;
 
-    console.log(this.drizzleState);
+    //console.log(this.drizzleState);
 
     if(!this.drizzleState) return;
 

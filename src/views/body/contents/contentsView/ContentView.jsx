@@ -9,6 +9,7 @@ import Web3Apis from 'apis/Web3Apis';
 
 import ContentViewFullScreen from "./ContentViewFullScreen";
 import ContentViewRight from "./ContentViewRight";
+import MainRepository from "../../../../redux/MainRepository";
 
 const style = {};
 
@@ -30,7 +31,7 @@ class ContentView extends React.Component {
             const documentId = match.params.documentId;
             this.getContentInfo(documentId);
 
-            console.log(documentId, "byte32", this.web3Apis.asciiToHex(documentId));
+            //console.log(documentId, "byte32", this.web3Apis.asciiToHex(documentId));
         }
     }
 
@@ -40,17 +41,17 @@ class ContentView extends React.Component {
     }
 
     getContentInfo = (documentId) => {
-        restapi.getDocument(documentId).then((res) => {
-            console.log(res.data);
-            this.setState({document: res.data.document, featuredList: res.data.featuredList});
-
+        MainRepository.Document.getDocument(documentId, (res) => {
+            const resData = res;
+            //console.log(typeof res.data.featuredList);
+            this.setState({document: resData.document, featuredList: resData.featuredList});
         });
 
-        restapi.getDocumentText(documentId).then((res) => {
-            //console.log("text ", res);
+        MainRepository.Document.getDocumentText(documentId, (res) => {
+            console.log("text ", res);
+            console.log(res);
             this.setState({documentText: res.data.text});
         });
-
     };
     getApproved = () => {
         const {drizzleApis} = this.props;

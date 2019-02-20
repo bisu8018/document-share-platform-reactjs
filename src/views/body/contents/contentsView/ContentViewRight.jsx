@@ -26,11 +26,11 @@ class ContentViewRight extends React.Component {
         //  voteTag = (<ContentVote {...this.props} document={document}/>);
         //}
 
-        const badgeReward = drizzleApis.toEther(document.confirmAuthorReward);
-        const badgeVote = drizzleApis.toEther(document.confirmVoteAmount);
-        const badgeView = document.totalViewCount ? document.totalViewCount : 0;
+        //const badgeReward = drizzleApis.toEther(document.confirmAuthorReward);
+        //const badgeVote = drizzleApis.toEther(document.confirmVoteAmount);
+        //const badgeView = document.totalViewCount ? document.totalViewCount : 0;
 
-        const currentDocumentId = document.documentId;
+        //const currentDocumentId = document.documentId;
 
         return (
 
