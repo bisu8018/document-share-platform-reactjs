@@ -1,15 +1,40 @@
-body {background:#fcfcfc;}
-#root {padding-top:103px;}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background:#fcfcfc !important;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
 ul {margin:0;padding:0;}
 ul li {list-style:none;}
+
+
+
+
+
+#root {padding-top:103px;}
 #address {text-transform: none; font-size: 12px;}
+
+
+
+
+
 
 .contentGridView .leftWrap #full img {position:relative;max-height:100vh;}
 .contentGridView .leftWrap #page img {max-width:640px}
 
 .spinner {padding:20px 0;text-align:center;}
 
-ul.subHeader {z-index:2;position:fixed;top:52px;left:0;right:0;margin:0;padding:5px 0;border-bottom:1px solid #ddd;background:#fff;-webkit-box-shadow: 0 2px 2px 0 rgba(153, 153, 153, 0.14);box-shadow: 0 2px 2px 0 rgba(153, 153, 153, 0.14)}
+ul.subHeader {z-index:2;position:fixed;top:51px;left:0;right:0;margin:0;padding:5px 0;border-bottom:1px solid #ddd;background:#fff;-webkit-box-shadow: 0 2px 2px 0 rgba(153, 153, 153, 0.14);box-shadow: 0 2px 2px 0 rgba(153, 153, 153, 0.14)}
 ul.subHeader li {display:block;padding:0 20px;text-align:left;}
 ul.subHeader li a {display:inline-block;padding:5px 30px;font-size:14px;font-weight:500;border-radius:0;-webkit-transition:all .2s linear;-o-transition:all .2s linear;transition:all .2s linear}
 ul.subHeader li a .MuiTouchRipple-root-96 {display:none;}
@@ -74,7 +99,7 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 .profileImg .userImg svg {margin:4px 0 0 4px;}
 .profileImg .userName {font-size:14px;line-height:1.2;font-weight:bold}
 .profileImg .userName a {}
-.profileImg .txt {display:block;font-size:14px;font-weight:normal;color:#}
+.profileImg .txt {display:block;font-size:14px;font-weight:normal;}
 
 .proFileDescript {font-size:15px;white-space:pre-wrap;}
 
@@ -94,8 +119,8 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 .cardCont .img img {display:block;max-width:190px;max-height:147px;}
 .cardCont .inner {}
 .cardCont .inner div {overflow:hidden;}
-.cardCont .inner div.tit {margin:8px 0 0 0;font-size:16px;font-weight:bold;line-height:1.2;white-space:nowrap;overflow:hidden;white-space:normal;text-align:left;word-wrap:break-word;-webkit-line-clamp:2;}
-.cardCont .inner div.descript {margin:8px 0 0 0;font-size:14px;line-height:1.2;white-space:nowrap;overflow:hidden;white-space:normal;text-align:left;word-wrap:break-word;-webkit-line-clamp:2;}
+.cardCont .inner div.tit {-webkit-line-clamp:2;display: -webkit-box; textOverflow: ellipsis; WebkitBoxOrient: vertical;margin:8px 0 0 0;font-size:16px;font-weight:bold;line-height:1.2;overflow:hidden;white-space:normal;text-align:left;word-wrap:break-word;}
+.cardCont .inner div.descript {-webkit-line-clamp:2;display: -webkit-box; textOverflow: ellipsis; WebkitBoxOrient: vertical;margin:8px 0 0 0;font-size:14px;line-height:1.2;overflow:hidden;white-space:normal;text-align:left;word-wrap:break-word;}
 .cardCont .inner div.badge {margin:10px 0 0 0;}
 
 
@@ -139,14 +164,14 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 
 .customGrid.col3 {-ms-flex-wrap:wrap;flex-wrap:wrap;}
 .customGrid.col3 .box {width:32.3%;margin-top:15px;}
-.customGrid.col3 .box:nth-child(1)
+.customGrid.col3 .box:nth-child(1),
 .customGrid.col3 .box:nth-child(2),
-.customGrid.col3 .box:nth-child(3), {margin-top:0}
+.customGrid.col3 .box:nth-child(3) {margin-top:0}
 .customGrid.col3 .box:nth-child(3n + 1) {margin-left:0;}
 .customGrid.col3 .box:nth-child(2n) {}
 .customGrid.col3 .box:nth-child(3n) {}
 
-.uploadStatus {margin:0px 0px 0px 3px;font-size:12px;line-height:1.2;height: 50px;}
+.uploadStatus {margin:0 0 0 3px;font-size:12px;line-height:1.2;height: 50px;}
 .uploadProgress {width:100%}
 
 /*
@@ -154,6 +179,7 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
 .sortSearch .jss0188:after {display:none;}
 .sortSearch .jss0188:before {display:none;}
 */
+
 .modal {
     outline: none;
     background: white;
@@ -165,17 +191,17 @@ ul.subHeader li .sortSearch > button {width:28px;min-width:28px;margin:0;height:
     flex-direction: column;
     z-index: 15;
     min-height: 47rem;
-  
+
     will-change: transform;
     transform: translate3d(0, 0, 0);
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .modal {
-      width: 100%;
-      max-width: 100%;
-      margin-bottom: 0;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 0;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
     }
-  }
+}

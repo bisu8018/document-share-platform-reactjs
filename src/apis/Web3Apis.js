@@ -1,8 +1,8 @@
 import {BigNumber} from 'bignumber.js';
 import Web3 from 'web3';
-import DocumentReg from '../contracts-rinkeby/DocumentReg.json';
-import Deck from '../contracts-rinkeby/Deck.json';
-import Bounty from '../contracts-rinkeby/BountyOne.json';
+import DocumentReg from 'apis/contracts-rinkeby/DocumentReg.json';
+import Deck from 'apis/contracts-rinkeby/Deck.json';
+import Bounty from 'apis/contracts-rinkeby/BountyOne.json';
 const defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
 
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c"));
