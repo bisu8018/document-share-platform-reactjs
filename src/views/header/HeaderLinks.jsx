@@ -21,6 +21,7 @@ class HeaderLinks extends React.Component {
 
     componentDidMount() {
         const {classes, auth, drizzle, drizzleState} = this.props;
+        console.log(auth.isAuthenticated());
         /*
         this.unsubscribe = drizzle.store.subscribe(() => {
 

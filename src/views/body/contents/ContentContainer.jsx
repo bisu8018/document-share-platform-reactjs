@@ -7,8 +7,8 @@ import ContentList from "./ContentList";
 class ContentContainer extends Component {
     state = {loading: true, resultList: [], selected: null, fetching: false};
 
-    componentDidMount() {
-        //console.log(process.env);
+    componentWillMount() {
+        console.log(this.props);
     }
 
     render() {

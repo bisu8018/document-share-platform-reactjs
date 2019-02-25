@@ -187,7 +187,6 @@ handleFull = (page) => {
                             </Drawer>
                             <ContentViewRegistBlockchainButton document={this.props.document} {...rest} />
                         </div>
-
                         <span>
                            <Badge color="info">
                                View {badgeView}

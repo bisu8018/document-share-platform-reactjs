@@ -13,7 +13,6 @@ export default class DrizzleApis {
   callbackFuncs = [];
 
   // let drizzle know what contracts we want
-  // let drizzle know what contracts we want
   options = { contracts: [DocumentReg, Deck, BountyOne] };
   // setup the drizzle store and drizzle
   drizzleStore = generateStore(this.options);

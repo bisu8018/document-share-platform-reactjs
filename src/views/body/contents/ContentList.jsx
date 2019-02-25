@@ -60,7 +60,7 @@ class ContentList extends Component {
         //console.log("fetchDocument start", params);
 
         MainRepository.Document.getDocumentList(params, (res) => {
-          console.log("Fetch Document end", res);
+          //console.log("Fetch Document end", res);
           this.setState({loading:false});
           const resData = res;
           const resultList = resData.resultList?resData.resultList:[];
