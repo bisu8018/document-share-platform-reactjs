@@ -21,17 +21,21 @@ export default {
   DEBUG: function() {
     return false;
   },
-  _request: function(url, type, data, success, failure) {
+  _request: function(url, type, data, success, failure, header) {
     if (this.DEBUG()) {
       console.log("[request]\nurl: " + url + "\ndata: " + data);
     }
+
+    let _header = {"Content-Type": "application/json"};
+    if(header){
+      _header = Object.assign(header,_header);
+    }
+
     axios({
       method: type,
       url: this.getRootUrlWithApi() + url,
       data: data,
-      headers: {
-        "Content-Type": "application/json"
-      }
+      headers: _header
     })
       .then((response) => {
         if (this.DEBUG()) {
@@ -90,6 +94,19 @@ export default {
       JSON.stringify(data),
       success,
       failure
+    )
+  },
+  _requestWithHeader: function (url, type, data, success, failure) {
+    const _header = data.header || {};
+    const _params = data.params || {};
+
+    this._request(
+      url ,
+      type,
+      _params,
+      success,
+      failure,
+      _header
     )
   },
 };
