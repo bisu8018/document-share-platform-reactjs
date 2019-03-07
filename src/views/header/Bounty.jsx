@@ -1,31 +1,28 @@
 /*eslint-disable*/
 import React from "react";
-// react components for routing our app without refresh
-//import { Link } from "react-router-dom";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import Popper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Popper from "@material-ui/core/Popper";
+import Paper from "@material-ui/core/Paper";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "components/custom/HeaderButton";
-import showerhead from "assets/image/shower-head.png"
-import Web3Apis from "apis/Web3Apis"
+import Web3Apis from "apis/Web3Apis";
 
-const styles = theme => ({
+const styles = {
   popper: {
-    zIndex: 9000,
+    zIndex: 9000
   },
   selbtn: {
-    marginTop: '0px',
-    marginRight: '7px',
-    marginLeft: '0px',
-    marginBottom: '12px'
+    marginTop: "0px",
+    marginRight: "7px",
+    marginLeft: "0px",
+    marginBottom: "12px"
   }
-});
+};
 
 class Bounty extends React.Component {
 
@@ -34,51 +31,56 @@ class Bounty extends React.Component {
   state = {
     available: 0,
     open: false,
-    placement: 'bottom',
+    placement: "bottom"
   };
 
   componentDidMount() {
     const { drizzleApis } = this.props;
 
     //console.log("componentDidMount", this.state.available, drizzleApis.isAuthenticated() );
-    if(drizzleApis.isAuthenticated()){
+    if (drizzleApis.isAuthenticated()) {
       this.web3Apis.getBountyAvailable(drizzleApis.getLoggedInAccount()).then((data) => {
         //console.log("getBountyAvailable", data);
-        this.setState({available:data});
+        this.setState({ available: data });
       }).catch((err) => {
         console.error(err);
-      })
+      });
     }
   }
 
   handleClickButton = () => {
     this.setState(state => ({
-      open: !state.open,
+      open: !state.open
     }));
   };
 
   handleClickAgree = () => {
-    const { classes, drizzleApis } = this.props;
+    const { drizzleApis } = this.props;
     this.setState(state => ({
-      open: !state.open,
+      open: !state.open
     }));
     drizzleApis.bounty();
   };
 
   render() {
-    const { classes, drizzleApis } = this.props;
-    const { open, placement, disablePortal, flip, preventOverflow, arrow, arrowRef } = this.state;
+    const { classes } = this.props;
+    const { open } = this.state;
     //console.log("render", drizzleApis.isAuthenticated());
 
-    if(this.state.available > 0) {
+    if (this.state.available > 0) {
       return (
 
         <span>
           <Button id="bountyButton" color="transparent"
-            buttonRef={node => {this.anchorEl = node;}}
-            variant="contained"
-            onClick={this.handleClickButton} style={{'textTransform': 'capitalize'}}
-          ><img src={require(assets/image/shower-head.png)} style={{height:"18px",margin:"3px"}} /> Free DECK!! </Button>
+                  buttonRef={node => {
+                    this.anchorEl = node;
+                  }}
+                  variant="contained"
+                  onClick={this.handleClickButton} style={{ "textTransform": "capitalize" }}
+          >
+            <img src={require("assets/image/shower-head.png")} style={{ height: "18px", margin: "3px" }}/>
+             Free DECK!!
+          </Button>
           <Popper
             open={open}
             anchorEl={this.anchorEl}
@@ -106,7 +108,7 @@ class Bounty extends React.Component {
 
       );
     } else {
-      return null
+      return null;
     }
   }
 }

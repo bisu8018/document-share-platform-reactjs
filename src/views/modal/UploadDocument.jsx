@@ -2,15 +2,12 @@ import React from "react";
 
 import withStyles from "@material-ui/core/styles/withStyles";
 import Slide from "@material-ui/core/Slide";
-import IconButton from "@material-ui/core/IconButton";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-import CustomInput from "components/custom/CustomInput";
-import Button from "components/custom/HeaderButton";
 
-import { Close, CloudUpload } from "@material-ui/icons";
+import { CloudUpload } from "@material-ui/icons";
 import javascriptStyles from "assets/jss/material-kit-react/views/componentsSections/javascriptStyles.jsx";
 
 import Autosuggest from "react-autosuggest";
@@ -43,7 +40,9 @@ class UploadDocument extends React.Component {
     super(props);
 
     this.state = {
+      percentage: 0,
       nickname: "",
+      fullWidth: true,
       classicModal: false,
       openLeft: false,
       openTop: false,
@@ -53,7 +52,9 @@ class UploadDocument extends React.Component {
         file: null,
         size: -1,
         ext: null,
-        owner: null
+        owner: null,
+        title: null,
+        filename: null
       },
       stackId: null,
       tags: [],
@@ -61,22 +62,11 @@ class UploadDocument extends React.Component {
     };
   }
 
-  setNickname = (nickname) => {
-    //console.log("clear session", localStorage);
-    //localStorage.setItem('nickname', nickname);
-  };
-
   getNickname = () => {
-    const { auth } = this.props;
-    const userInfo = auth.getUserInfo();
-    const nickname = userInfo.nickname;
-    return nickname;
-    //console.log("clear session", localStorage);
-    //return localStorage.getItem('nickname');
+    return this.props.auth.getUserInfo().nickname;
   };
 
   handleClickOpen = (modal) => {
-
     const { drizzleApis, auth } = this.props;
 
     const account = drizzleApis.getLoggedInAccount();
@@ -92,6 +82,7 @@ class UploadDocument extends React.Component {
       this.setState(x);
     }
   };
+
   handleClose = (modal) => {
     const x = [];
     x[modal] = false;
@@ -99,23 +90,12 @@ class UploadDocument extends React.Component {
     this.clearForm();
     this.clearFileInfo();
   };
-  handleClosePopover = (state) => {
-    this.setState({
-      [state]: false
-    });
-  };
-  handleClickButton = (state) => {
-    this.setState({
-      [state]: true
-    });
-  };
 
   onChangeTag = (tags) => {
     this.setState({ tags });
   };
 
-
-  onRegistDoc = () => {
+  onUploadDoc = () => {
     const { auth, drizzleApis } = this.props;
     const self = this;
     if (!auth.isAuthenticated()) {
@@ -125,16 +105,16 @@ class UploadDocument extends React.Component {
 
     const fileInfo = this.state.fileInfo;
     const tags = this.state.tags ? this.state.tags : [];
-    const title = document.getElementById("title").value;
-    const desc = document.getElementById("desc").value;
-    const nickname = document.getElementById("nickname").value;
+    const title = document.getElementById("docTitle").value;
+    const desc = document.getElementById("docDesc").value;
+    //const nickname = this.props.auth.getUserInfo().nickname;
     const userInfo = auth.getUserInfo();
 
     if (!this.state.fileInfo || !this.state.fileInfo.file) {
       alert("Please select a document file");
       return;
     }
-
+    document.getElementById("progressModal").style.display = "block";
     const ethAccount = drizzleApis.getLoggedInAccount();
     console.log("Selected a Document File", this.state.fileInfo);
     restapi.registDocument({
@@ -146,7 +126,7 @@ class UploadDocument extends React.Component {
       tags: tags
     }, this.progressHandler).then((result) => {
       console.log("UploadDocument", result);
-      //this.registDocumentToSmartContract(result);
+      document.getElementById("progressModal").style.display = "none";
       const stackId = drizzleApis.registDocumentToSmartContract(result.documentId);
       self.setState({ stackId });
       /*
@@ -158,8 +138,6 @@ class UploadDocument extends React.Component {
       */
       this.handleClose("classicModal");
       console.log("Regist Document End SUCCESS", result);
-
-      this.setNickname(nickname);
     });
   };
 
@@ -176,73 +154,51 @@ class UploadDocument extends React.Component {
     this.setState({ nickname: nickname });
   };
 
-  onChange = (e) => {
-
-    const file = e.target.files[0];
-    console.log("onChange", file);
-
-    let filename = file.name;
-    let filesize = file.size;
-    let ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length).toLowerCase();
-
-    //console.log(filename, filesize, ext);
-    this.setState({
-      fileInfo: {
-        file: file,
-        size: filesize,
-        ext: ext
-      }
-    });
-  };
-
   progressHandler = (e) => {
     let percent = Math.round((e.loaded / e.total) * 100);
     if (percent !== null) {
-      if (percent < 100) {
-        document.getElementById("uploadProgress").value = percent;
-        document.getElementById("uploadStatus").innerHTML = percent + "% uploaded... please wait";
-      } else {
-        document.getElementById("uploadStatus").innerHTML = "100% uploaded!";
-      }
+      this.setState.percentage = percent;
     }
   };
 
   clearForm = () => {
-    document.getElementById("title").value = null;
-    document.getElementById("desc").value = null;
-    document.getElementById("file").value = null;
-    document.getElementById("nickname").value = null;
-    document.getElementById("uploadStatus").innerHTML = null;
+    document.getElementById("docTitle").value = null;
+    document.getElementById("docDesc").value = null;
+    document.getElementById("docFileInput").value = null;
+    document.getElementById("docFile").value = null;
     this.setState({ tags: [] });
   };
 
-  clearFileInfo = () => {
-    this.setState({ fileInfo: null });
+  fileUpload = () => {
+    document.getElementById("docFile").click();
   };
 
-  registDocumentToSmartContract = (result) => {
-    const { drizzle, drizzleState } = this.props;
-    if (!result || !result.documentId) {
-      alert("documentId is nothing");
-      return;
-    }
-
-    const documentId = result.documentId;
-    const account = drizzleState.accounts[0];
-
-    const contract = drizzle.contracts.DocumentRegistry;
-    const stackId = contract.methods["register"].cacheSend(drizzle.web3.utils.fromAscii(documentId), {
-      from: account
+  handleChange = (e) => {
+    const file = e[0];
+    let filename = file.name;
+    let filesize = file.size;
+    let ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length).toLowerCase();
+    this.setState({
+      fileInfo: {
+        file: file,
+        size: filesize,
+        ext: ext,
+        filename: filename
+      }
     });
-    console.log("registSmartContractAddress", drizzle, drizzleState, contract, account, result);
-    // save the `stackId` for later reference
-    this.setState({ stackId });
-
   };
 
-  validateTag = (tag) => {
-    //console.log(tag);
-    return false;
+  clearFileInfo = () => {
+    this.setState({
+      fileInfo: {
+        file: null,
+        size: -1,
+        ext: null,
+        owner: null,
+        title: null,
+        filename: null
+      }
+    });
   };
 
   autocompleteRenderInput = ({ addTag, ...props }) => {
@@ -283,109 +239,66 @@ class UploadDocument extends React.Component {
 
   render() {
     const { classes } = this.props;
-
     return (
       <span>
-            <Button href="#" color="transparent" onClick={() => this.handleClickOpen("classicModal")}>
-              <CloudUpload className={classes.icons}/>
-              Upload
-            </Button>
+            <div className="upload-btn" onClick={() => this.handleClickOpen("classicModal")}>
+                 <CloudUpload className={classes.icons}/>
+            </div>
+
+
             <Dialog
-              classes={{
-                root: classes.center,
-                paper: classes.modal
-              }}
+              fullWidth={this.state.fullWidth}
               open={this.state.classicModal}
               TransitionComponent={Transition}
               keepMounted
-              onClose={() => this.handleClose("classicModal")}
               aria-labelledby="classic-modal-slide-title"
               aria-describedby="classic-modal-slide-description">
+
+
               <DialogTitle
                 id="classic-modal-slide-title"
                 disableTypography
                 className={classes.modalHeader}>
-                <IconButton
-                  className={classes.modalCloseButton}
-                  key="close"
-                  aria-label="Close"
-                  color="inherit"
-                  onClick={() => this.handleClose("classicModal")}>
-                  <Close className={classes.modalClose}/>
-                </IconButton>
-                <h4 className={classes.modalTitle}>Upload a document</h4>
+                <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
+                <h3 className={classes.modalTitle}>Upload document</h3>
               </DialogTitle>
-              <DialogContent
-                id="classic-modal-slide-description"
-                className={classes.modalBody}>
-
-                <CustomInput
-                  labelText="Nickname"
-                  id="nickname"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    type: "labelText",
-                    value: this.state.nickname,
-                    onChange: this.onChangeNickname
-                  }}/>
-                {/*
-                  <CustomDropdown
-                    buttonText="Category"
-                    dropdownList={categories}
-                    buttonProps={{
-                      onChange: this.onChangeCategory
-                    }}
-                  />
-                  */}
-                <CustomInput
-                  labelText="Title"
-                  id="title"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    type: "labelText"
-                  }}/>
-
-                  <CustomInput
-                    labelText="Description"
-                    id="desc"
-                    formControlProps={{
-                      fullWidth: true,
-                      className: classes.textArea
-                    }}
-                    inputProps={{
-                      multiline: true,
-                      rows: 5
-                    }}/>
-
-                <CustomInput
-                  labelText="file"
-                  id="file"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    type: "file",
-                    onChange: this.onChange
-                  }}/>
 
 
-                <progress className="uploadProgress" id="uploadProgress" value="0" max="100"/>
-                <div className="uploadStatus" id="uploadStatus"/>
+              <DialogContent id="classic-modal-slide-description" className={classes.modalBody}>
+                <div className="dialog-subject">Title</div>
+                <input type="text" placeholder="Title of the uploading document" id="docTitle"
+                       className="custom-input"/>
 
+
+                <div className="dialog-subject">Description</div>
+                <textarea id="docDesc" className="custom-input"/>
+
+
+                <div className="dialog-subject">File</div>
+                <input type="text" value={this.state.fileInfo.filename || ""} readOnly
+                       placeholder="Click here to upload document" id="docFileInput" className="custom-input-file"
+                       onClick={this.fileUpload}/>
+                <input type="file" id="docFile" onChange={(e) => this.handleChange(e.target.files)}/>
+
+
+                <div className="dialog-subject mb-1">Tag</div>
                 <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
                            value={this.state.tags} onChange={this.onChangeTag} validate={this.validateTag} onlyUnique/>
-
               </DialogContent>
-              <DialogActions className={classes.modalFooter}>
-                <Button onClick={() => this.onRegistDoc()} color="rose" size="sm">Ok</Button>
-                <Button onClick={() => this.handleClose("classicModal")} size="sm">Close</Button>
+
+
+              <DialogActions className="modal-footer">
+                <div onClick={() => this.handleClose("classicModal") } className="cancel-btn">Cancel</div>
+                <div onClick={() => this.onUploadDoc()} className="ok-btn">Upload</div>
               </DialogActions>
+              <div className="progress-modal" id="progressModal">
+                <div className="progress-modal-second">
+                  <span className="progress-percent">{this.state.percentage}%</span>
+                  <img src={require("assets/image/common/g_progress_circle.gif")} alt="progress circle"/>
+                </div>
+              </div>
             </Dialog>
-        </span>
+      </span>
     );
   }
 }

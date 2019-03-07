@@ -2,6 +2,8 @@ import ContentContainer from "../views/body/contents/ContentContainer";
 import ContentView from "../views/body/contents/contentsView/ContentView";
 import Author from "../views/body/profile/Author";
 import SignIn from "../views/body/signIn/SignIn";
+import AudienceTracking from "../views/body/tracking/AudienceTracking";
+import AudienceTrackingDetail from "../views/body/tracking/AudienceTrackingDetail";
 
 export default ({
     routes: [
@@ -13,7 +15,12 @@ export default ({
       {
         path: "/latest",
         name: "Latest",
-        component: ContentContainer
+        component: ContentContainer,
+      },
+      {
+        path: "/latest/:tag",
+        name: "LatestTag",
+        component: ContentContainer,
       },
       {
         path: "/popular",
@@ -23,11 +30,6 @@ export default ({
       {
         path: "/featured",
         name: "Featured",
-        component: ContentContainer
-      },
-      {
-        path: "/tag/:tag",
-        name: "Tag",
         component: ContentContainer
       },
       {
@@ -44,12 +46,22 @@ export default ({
         path: "/author/:accountId",
         name: "Author",
         component: Author
-      },
+      },/*
       {
         path: "/curator/:accountId",
         name: "Curator",
         component: Author
-      }
+      }*/
+      {
+        path: "/tracking/:accountId/:documentId",
+        name: "tracking",
+        component: AudienceTracking
+      },
+      {
+        path: "/trackingDetail/:accountId/:documentId",
+        name: "trackingDetail",
+        component: AudienceTrackingDetail
+      },
     ]
   }
 );

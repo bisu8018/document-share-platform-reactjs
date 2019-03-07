@@ -76,7 +76,6 @@ export default {
   _requestWithUrlPram: function(url, type, data, success, failure) {
     data = data || {};
     let params = data?"?" + qs.stringify(data) : "" ;
-
     this._request(
       url + params,
       type,

@@ -3,7 +3,6 @@ import * as axiosCustom from '../service/AxiosCustomService';
 import { APP_PROPERTIES } from 'properties/app.properties';
 import DocService from "../service/document/DocService";
 
-const uploadDomain = APP_PROPERTIES.domain().upload + '/prod/upload';
 const imgDomain = APP_PROPERTIES.domain().image;
 const apiDomain = APP_PROPERTIES.domain().api;
 
@@ -63,10 +62,10 @@ export function registDocument(args, callback) {
     const promise = DocService.POST.promise(data,(res) => {
       console.log("Getting Response Regist Document Meta Info", res);
       //2. Upload File Binary
-      if(res && res.data && res.data.success){
-        const documentId = res.data.documentId;
-        const owner = res.data.accountId;
-        const signedUrl = res.data.signedUrl;
+      if(res &&  res.success){
+        const documentId = res.documentId;
+        const owner = res.accountId;
+        const signedUrl = res.signedUrl;
         fileUpload({
           file: fileInfo.file,
           fileid : documentId,
@@ -81,8 +80,8 @@ export function registDocument(args, callback) {
         });
       } else {
         let detail = null;
-        if(res && res.data){
-          detail = JSON.stringify(res.data);
+        if(res){
+          detail = JSON.stringify(res);
         }
         reject(new Error("regist document response data is invalid!"));
       }
@@ -128,13 +127,6 @@ function fileUpload(params) {
   };
   return axios.put(url, params.file, config);
 }
-
-
-export function convertTimestampToString(timestamp) {
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: "2-digit", minute: "2-digit" };
-  return (new Date(timestamp)).toLocaleString("en-US", options);
-}
-
 
 export function getContentDownload(accountId, documentId) {
   return new Promise((resolve, reject) => {

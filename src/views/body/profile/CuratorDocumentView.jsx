@@ -8,6 +8,7 @@ import Badge from "components/badge/Badge";
 import DollarWithDeck from './DollarWithDeck';
 import DeckInShort from './DeckInShort';
 import CuratorClaim from './CuratorClaim';
+import Common from "../../../common/Common";
 
 const style = {
   badge: {
@@ -41,7 +42,7 @@ class CuratorDocumentView extends React.Component {
                       >{document.title?document.title:document.documentName}</div>
                     <div className="descript"
                         style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}>
-                   {restapi.convertTimestampToString(document.created)}
+                   {Common.convertTimestampToString(document.created)}
                    </div>
                   <div className="descript"
                       style={{ display: '-webkit-box', textOverflow:'ellipsis','WebkitBoxOrient':'vertical'}}

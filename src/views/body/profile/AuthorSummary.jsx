@@ -141,26 +141,41 @@ class AuthorSummary extends React.Component {
     //console.log('curatorTodayReward:' + curatorTodayReward);
 
     return (
-      <div>
-        <h3 style={{margin:'0',fontSize:'26px'}}>Account
-          <span style={{margin:'0',fontSize:'18px',color:'555'}}> : {accountId}</span>
-        </h3>
-        <ul className="detailList">
-            <li><BalanceOf balance={this.state.balance} sumReward={sumReward} drizzleApis={drizzleApis} {...others}/></li>
-        </ul>
-        <div className={this.props.classes.authorReward}>
-        <h5>Author rewards</h5>
-        <ul className="detailList">
-            <li>- Today(Est.) : <DollarWithDeck deck={authorTodayReward} drizzleApis={drizzleApis} {...others}/></li>
-            <li>- Last 3 days : <DollarWithDeck deck={author3DayReward} drizzleApis={drizzleApis} {...others}/></li>
-        </ul>
+
+      <div className="profile_container">
+        <div className="row  profile_top">
+          <div className="col-sm-4 ">
+            <div className="thumb_image">
+                  <img src={require("assets/image/tempImg/profile.jpg")} alt="profile" className="img-fluid"/>
+                </div>
+          </div>
+          <div className="col-sm-8 ">
+            <div className="profile_info_name"><strong>Account : {accountId}</strong>
+            </div>
+            <div className="profile_info_desc">
+              <p>* Total balance : <span className="color"><BalanceOf balance={this.state.balance} sumReward={sumReward} drizzleApis={drizzleApis} {...others}/></span></p>
+              <p className="desc2">* Estimated earnings for today : <span className="color"><DollarWithDeck deck={authorTodayReward} drizzleApis={drizzleApis} {...others}/></span></p>
+              <p className="desc2">* Revenue for the last 7 days : <span className="color"> none </span></p>
+            </div>
+          </div>
         </div>
-        <div className={this.props.classes.curatorReward}>
-        <h5>Curator rewards</h5>
-        <ul className="detailList">
-          <li>- Today(Est.) : <DollarWithDeck deck={curatorTodayReward} drizzleApis={drizzleApis} {...others}/></li>
-          <li>- Last 3 days : <DollarWithDeck deck={curator3DayReward} drizzleApis={drizzleApis} {...others}/></li>
-        </ul>
+        <div className=" profile_creator">
+          <div className="col-sm-12 col-md-12">
+            <h5>Author rewards</h5>
+            <div className="profile_info_desc">
+              <p>* Estimated earnings for today : <span><DollarWithDeck deck={authorTodayReward} drizzleApis={drizzleApis} {...others}/></span></p>
+              <p>* Revenue for the last 7 days : <span><DollarWithDeck deck={author3DayReward} drizzleApis={drizzleApis} {...others}/></span></p>
+            </div>
+          </div>
+        </div>
+        <div className=" profile_creator">
+          <div className="col-sm-12 col-md-12">
+            <h5>Curator rewards</h5>
+            <div className="profile_info_desc">
+              <p>* Estimated earnings for today : <span><DollarWithDeck deck={curatorTodayReward} drizzleApis={drizzleApis} {...others}/></span></p>
+              <p>* Revenue for the last 7 days : <span><DollarWithDeck deck={curator3DayReward} drizzleApis={drizzleApis} {...others}/></span></p>
+            </div>
+          </div>
         </div>
         <div className={this.props.classes.clear}/>
       </div>

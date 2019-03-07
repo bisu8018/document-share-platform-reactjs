@@ -61,8 +61,6 @@ class CuratorDepositOnDocument extends React.Component {
 
   render() {
     const { classes, drizzleApis } = this.props;
-    const { anchorEl, open } = this.state;
-
     const curatorDepositOnDocument = this.state.curatorDepositOnDocument;
     const textDeck = drizzleApis.toEther(curatorDepositOnDocument?curatorDepositOnDocument:0) + " DECK";
 

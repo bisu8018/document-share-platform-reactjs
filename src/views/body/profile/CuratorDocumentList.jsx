@@ -27,8 +27,8 @@ class CuratorDocumentList extends React.Component {
 
   };
 
-  fetchDocuments = (params) => {
-    const { classes, match, accountId, handleCurator3DayRewardOnDocuments, totalViewCountInfo } = this.props;
+  fetchDocuments = () => {
+    const {accountId, handleCurator3DayRewardOnDocuments, totalViewCountInfo } = this.props;
 
     MainRepository.Document.getCuratorDocuments({ accountId: accountId }, (res) => {
       let resData = res;

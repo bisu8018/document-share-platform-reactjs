@@ -78,14 +78,14 @@ export default class Auth {
   }
 
 
-  handleLogout() {
+  handleLogout = () => {
     alert("handleLogout()");
     this.clearSession();
     // navigate to the home route
     history.replace("/");
-  }
+  };
 
-  setSession(authResult, userInfo) {
+  setSession = (authResult, userInfo) => {
     // Set the time that the access token will expire at
     this.expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem("access_token", authResult.accessToken);
@@ -96,17 +96,15 @@ export default class Auth {
       localStorage.setItem("user_info", JSON.stringify(userInfo));
     }
 
-  }
+  };
 
-  getSession() {
-    return {
-      accessToken: localStorage.getItem("access_token"),
-      idToken: localStorage.getItem("id_token"),
-      userInfo: JSON.parse(localStorage.getItem("user_info"))
-    };
-  }
+  getSession = () => ({
+    accessToken: localStorage.getItem("access_token"),
+    idToken: localStorage.getItem("id_token"),
+    userInfo: JSON.parse(localStorage.getItem("user_info"))
+  });
 
-  syncUser() {
+  syncUser = () => {
     const session = this.getSession();
     const idToken = localStorage.getItem("id_token");
     const userInfo = localStorage.getItem("user_info");
@@ -126,7 +124,7 @@ export default class Auth {
     } else {
       console.log("session is not init...");
     }
-  }
+  };
 
   getUserInfo = () => {
     const userInfo = JSON.parse(localStorage.getItem("user_info"));
@@ -142,13 +140,13 @@ export default class Auth {
     return userInfo.email;
   };
 
-  clearSession() {
+  clearSession = () => {
     //console.log("clear session", localStorage);
     localStorage.removeItem("access_token");
     localStorage.removeItem("id_token");
     localStorage.removeItem("expires_at");
     localStorage.removeItem("user_info");
-  }
+  };
 
   isAuthenticated() {
     // Check whether the current time is past the

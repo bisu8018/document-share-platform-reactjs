@@ -2,7 +2,7 @@ import AxiosService from "../AxiosService";
 
 const trackingInfoUrl = "tracking/info";
 const trackingListUrl = "tracking/list";
-const trackingUrl = "document/tracking";
+//const trackingUrl = "document/tracking";
 const getDocumentUrl = "document/info/";
 const documentTextUrl = "document/text/";
 const getDocumentListUrl = "document/list";
@@ -38,7 +38,7 @@ export default {
     },
     documentText: (data, callback) => {
       AxiosService._requestWithUrlPram( documentTextUrl + data, "GET", {},
-        (data) => {console.log(123);
+        (data) => {
           callback(data);
         }, (err) => {console.log(err);
         });
@@ -78,7 +78,7 @@ export default {
         });
     },
     promise: (data, callback, error) => {
-      AxiosService._requestWithUrlPram(registDocumentInfoUrl, "POST", data,
+      AxiosService._requestWithBody(registDocumentInfoUrl, "POST", data,
         (data) => {
           callback(data);
         }, (err) => {

@@ -28,18 +28,18 @@ export default {
     }
   },
   Document: {
-    getTrackingInfo: (documentId, callback) => {
-      const data = { documentId: documentId };
+    getTrackingInfo: (cid, documentId, callback) => {
+      const data = {cid: cid , documentId: documentId};
       //console.log("getTrackingInfo", data);
       DocService.GET.trackingInfo(data, (result) => {
         callback(result);
       });
     },
-    getTrackingList: (documentId, cid, sid, callback) => {
-      const data = { documentId: documentId, cid: cid, sid: sid };
+    getTrackingList: (documentId, callback) => {
+      const data = { documentId: documentId};
       //console.log("getTrackingList", data);
       DocService.GET.trackingList(data, (result) => {
-        return result;
+        callback(result);
       });
     },
     getDocument: (documentId, callback) => {
@@ -89,7 +89,7 @@ export default {
     sendVoteInfo: (ethAccount, curatorId, voteAmount, document, transactionResult, callback, error) => {
       console.log("sendVoteInfo", curatorId, voteAmount);
       if (!curatorId || !document || isNaN(voteAmount) || voteAmount <= 0 || !ethAccount) {
-        console.error("sendVoteInfo Parameter Invaild", params);
+        console.error("sendVoteInfo Parameter Invaild", error);
         return;
       }
 

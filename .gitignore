@@ -2,3 +2,9 @@
 .DS_store
 node_modules
 build
+/package.json
+/package-lock.json
+src/redux/config/
+src/redux/controller/
+src/redux/modules/
+/.idea/

@@ -1,31 +1,34 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Button from "components/custom/HeaderButton";
 import CustomInput from "components/custom/CustomInput";
 
-const style = {
-};
+const style = {};
 
 class ContentViewComment extends React.Component {
 
-  addComment = () => {};
+  addComment = () => {
+  };
 
   render() {
     //const { classes } = this.props;
     //const document = this.state.document;
 
     return (
-      <div>
-        <CustomInput
-          labelText="Add your comments..."
-          id="comment"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: "commentText"
-          }} />
-        <Button onClick={() => this.addComment()} color="rose" size="sm">Add</Button>
+      <div className="row">
+        <div className="col-10">
+          <CustomInput
+            labelText="Add your comments..."
+            id="comment"
+            formControlProps={{
+              fullWidth: true
+            }}
+            inputProps={{
+              type: "commentText"
+            }}/>
+        </div>
+        <div className="col-2">
+          <div className="claim-btn" onClick={() => this.addComment()}>ADD</div>
+        </div>
       </div>
     );
   }

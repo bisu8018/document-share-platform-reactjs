@@ -2,7 +2,6 @@ import React from "react";
 
 import withStyles from "@material-ui/core/styles/withStyles";
 import Web3Apis from 'apis/Web3Apis';
-import DollarWithDeck from './DollarWithDeck';
 
 const style = {
   balance: {
@@ -32,20 +31,14 @@ class BalanceOf extends React.Component {
   web3Apis = new Web3Apis();
 
   render() {
-    const {classes, drizzleApis, balance, sumReward, ...others} = this.props;
+    const { balance} = this.props;
     const balanceDollarStr = "$" + this.web3Apis.toDollar(balance).toFixed(2);//'$' + drizzleApis.deckToDollar(balance).toFixed(2);
     const balanceDeckStr = this.web3Apis.toDeck(balance).toFixed(2) + " DECK";//balance.toFixed(2) + ' DECK';
 
     return (
-      <div>
-        <span className={this.props.classes.balance}>Balance : {balanceDollarStr} </span>
+      <div className="d-inline">
+        <span className={this.props.classes.balance}> {balanceDollarStr} </span>
         <span className={this.props.classes.deck}> ({balanceDeckStr}) </span>
-        <div>
-          <span className={this.props.classes.reward}>Total rewards : </span>
-          <span className={this.props.classes.dollar}>
-            <DollarWithDeck deck={sumReward} drizzleApis={drizzleApis} {...others}/>
-          </span>
-        </div>
       </div>
     );
   }

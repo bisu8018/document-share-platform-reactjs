@@ -26,7 +26,7 @@ class CuratorDepositOnUserDocument extends React.Component {
   };
 
   componentWillMount () {
-    const { document, loggedInAccount, handleRewardOnDocuments } = this.props;
+    const { document, loggedInAccount } = this.props;
 
     //console.log(document);
 
@@ -70,8 +70,7 @@ class CuratorDepositOnUserDocument extends React.Component {
   };
 
   render() {
-    const { classes, drizzleApis, deposit } = this.props;
-    const { anchorEl, open } = this.state;
+    const { classes} = this.props;
 
     const curatorRewardOnDocuments = this.state.curatorRewardOnUserDocument;
     const textDeck = this.web3Apis.toDeck(curatorRewardOnDocuments?curatorRewardOnDocuments:0).toFixed(2) + " DECK";

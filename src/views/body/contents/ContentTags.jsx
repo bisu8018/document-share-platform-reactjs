@@ -1,57 +1,39 @@
 import React from "react";
-import {Link} from 'react-router-dom';
-
-import withStyles from "@material-ui/core/styles/withStyles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-
-import Button from "components/custom/HeaderButton";
-
-const style = {};
-
-const categories = [
-    "Art & Photos", "Automotive", "Business", "Career", "Data & Analytics", "Design",
-    "Devices & Hardware", "Economy & Finance", "Education", "Engineering", "Entertainment & Humor", "Environment", "Food",
-    "Government & Nonprofit", "Health & Medicine", "Healthcare", "Engineering", "Internet", "Investor Relations", "Law",
-    "Leadership & Management", "Lifestyle", "Marketing", "Mobile", "News & Politics", "Presentations & Public Speaking", "Real Estate",
-    "Recruiting & HR", "Retail", "Sales", "Science", "Self Improvement", "Services", "Small Business & Entrepreneurship", "Social Media",
-    "Software", "Spiritual", "Sports", "Technology", "Templates", "Travel"
-];
+import { NavLink } from "react-router-dom";
+import Common from "../../../common/Common";
 
 class ContentTags extends React.Component {
 
-    handleOnClick = (e) => {
-        const {tagSearch, path} = this.props;
-        const tag = e.target.text;
-        window.scrollTo(0, 0);
-        //console.log("handleOnClick", path, tag);
+  render() {
+    const { categories, path } = this.props;
+    return (
 
-        tagSearch(tag, path);
-    };
+      <div className="u__left d-none d-lg-block">
+        <div className="tags_menu_search_container">
+          <div className="tags_menu_search_wrapper">
+          <input type="text" placeholder="Tag Search . . ."/>
+          <button><i className="material-icons">search</i></button>
+          </div>
+        </div>
+        <ul className="tags_menu">
+          <li className="tags_menu_all_tags">
+            <NavLink exact to={path + "/"} activeClassName="on" onClick={Common.handleOnClick}>All Tags</NavLink>
+          </li>
+          {
+            categories.map((category, idx) => {
+              return (
+                <li key={idx}>
+                  <NavLink to={path + "/" + category} activeClassName="on"
+                           onClick={Common.handleOnClick}>{category}</NavLink>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
 
-    render() {
-        return (
-
-            <div className="leftWrap">
-                <List>
-                    {
-                        categories.map((category, idx) => {
-                            return (
-
-                                <ListItem key={idx}>
-                                    <Button key={category} color="transparent">
-                                        <Link to="#" onClick={this.handleOnClick}>{category}</Link>
-                                    </Button>
-                                </ListItem>
-
-                            );
-                        })
-                    }
-                </List>
-            </div>
-
-        );
-    }
+    );
+  }
 }
 
-export default withStyles(style)(ContentTags);
+export default ContentTags;

@@ -1,20 +1,17 @@
 import React from "react";
 
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Close } from "@material-ui/icons";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Slide from "@material-ui/core/Slide";
 
-import Button from "components/custom/HeaderButton";
 import CustomInput from "components/custom/CustomInput.jsx";
-import CuratorDepositOnUserDocument from "../../profile/CuratorDepositOnUserDocument";
-import CuratorDepositOnDocument from "../../profile/CuratorDepositOnDocument";
-import MainRepository from "../../../../redux/MainRepository";
+import MainRepository from "../../redux/MainRepository";
+import CuratorDepositOnUserDocument from "../body/profile/CuratorDepositOnUserDocument";
+import CuratorDepositOnDocument from "../body/profile/CuratorDepositOnDocument";
 
 
 const style = {
@@ -29,7 +26,7 @@ function Transition(props) {
   return <Slide direction="down" {...props} />;
 }
 
-class voteOnDocument extends React.Component {
+class VoteDocument extends React.Component {
 
   state = {
     buttonText: "Vote",
@@ -43,7 +40,7 @@ class voteOnDocument extends React.Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    this._handleRequestBalance();
+    this.handleRequestBalance();
     return true;
   }
 
@@ -86,7 +83,7 @@ class voteOnDocument extends React.Component {
     this._handleApprove();
 
     if (this.state.buttonText === "Vote") {
-      this._handleClose("classicModal");
+      this.handleClose("classicModal");
     }
     //this._handleVoteOnDocument();
 
@@ -106,9 +103,9 @@ class voteOnDocument extends React.Component {
     }
 
     drizzleApis.subscribe((drizzle, drizzleState) => {
-      if (this.state.approve.stackId) {
-        this._getTransactionStatus(this.state.approve.stackId, drizzleState);
-      }
+      /*  if (this.state.approve.stackId) {
+          this._getTransactionStatus(this.state.approve.stackId, drizzleState);
+        }*/
 
       if (!this.state.approve.done && this.checkApproveTransaction(this.state.approve.stackId, drizzleState)) {
         //console.log("start vote");
@@ -116,7 +113,7 @@ class voteOnDocument extends React.Component {
         this.setState({ vote: { stackId: stackId } });
       }
 
-      if (this.state.approve.done && this._checkVoteTransaction(this.state.vote.stackId, drizzleState)) {
+      if (this.state.approve.done && this.checkVoteTransaction(this.state.vote.stackId, drizzleState)) {
         this.setState({ buttonText: "Vote" });
         this._clearVoteInfo();
       }
@@ -128,18 +125,19 @@ class voteOnDocument extends React.Component {
 
   };
 
-  _getTransactionStatus = (stackId, drizzleState) => {
-    const { transactions, transactionStack } = drizzleState;
-    const txHash = transactionStack[stackId];
+  /* _getTransactionStatus = (stackId, drizzleState) => {
+     const { transactionStack } = drizzleState;
+     const txHash = transactionStack[stackId];
 
-    if (!txHash) return;
+     if (!txHash)
+       return;
 
-    /*const txState = transactions[txHash].status;
-    const txReceipt = transactions[txHash].receipt;
-    const confirmations = transactions[txHash].confirmations;*/
+     const txState = transactions[txHash].status;
+     const txReceipt = transactions[txHash].receipt;
+     const confirmations = transactions[txHash].confirmations;
 
-    //console.log(txState, txReceipt, confirmations);
-  };
+     console.log(txState, txReceipt, confirmations);
+   };*/
 
   checkApproveTransaction = (stackId, drizzleState) => {
     let resultBoolean = false;
@@ -215,7 +213,7 @@ class voteOnDocument extends React.Component {
       });
     };*/
 
-  _checkVoteTransaction = (stackId, drizzleState) => {
+  checkVoteTransaction = (stackId, drizzleState) => {
     let returnBoolean = false;
     if (this.state.vote.done) return;
 
@@ -236,134 +234,113 @@ class voteOnDocument extends React.Component {
       this.setState({
         vote: { done: true, complete: true, receipt: txReceipt }
       });
-
       returnBoolean = true;
-      this._refresh();
-
+      this.refresh();
     } else if (txState === "error") {
       this.setState({
         vote: { done: true, error: "error", complete: false }
       });
     }
-
-    //console.log("getTxVoteStatus", txState, txReceipt);
     return returnBoolean;
   };
 
-  _clearForm = () => {
+
+  clearForm = () => {
     document.getElementById("deposit").value = null;
   };
 
-  _handleClickOpen = (modal) => {
 
+  handleClickOpen = (modal) => {
     //const { drizzleApis } = this.props;
     //const account = drizzleApis.getLoggedInAccount();
     const x = [];
     x[modal] = true;
     this.setState(x);
   };
-  _handleClose = (modal) => {
+
+
+  handleClose = (modal) => {
     const x = [];
     x[modal] = false;
     this.setState(x);
-    this._clearForm();
+    this.clearForm();
   };
-  /*  _handleClosePopover = (state) => {
-      this.setState({
-        [state]: false
-      });
-    };
 
-    _handleClickButton = (state) => {
-      this.setState({
-        [state]: true
-      });
-    };*/
 
-  _handleRequestBalance = () => {
+  handleRequestBalance = () => {
     const { drizzleApis } = this.props;
     if (this.state.totalBalanceDataKey) return;
 
     const loggedInAccount = this.props.drizzleApis.getLoggedInAccount();
     const dataKey = drizzleApis.requestTotalBalance(loggedInAccount);
     if (dataKey) {
-      //console.log("_handleRequestBalance", dataKey);
       this.setState({ totalBalanceDataKey: dataKey });
-      //setInterval(this._printBalance, 3000);
-
-      //const balance = drizzleApis.getTotalBalance(dataKey);
-      //console.log("balance", balance);
+      //setInterval(this.printBalance, 3000);
     }
   };
 
-  _printBalance = () => {
+
+  printBalance = () => {
     const { drizzleApis } = this.props;
-    //console.log("_printBalance", this.state.totalBalanceDataKey);
+    //console.log("printBalance", this.state.totalBalanceDataKey);
     if (this.state.totalBalanceDataKey) {
-      const balance = drizzleApis.getTotalBalance(this.state.totalBalanceDataKey);
+      let balance = drizzleApis.getTotalBalance(this.state.totalBalanceDataKey);
       //console.log("Print Balance on data key", this.state.totalBalanceDataKey, balance);
       return balance;
     }
     return 0;
   };
 
-  _refresh = () => {
+
+  refresh = () => {
     document.location.reload();
   };
 
+
   render() {
-    const { classes, ...rest } = this.props;
+    const { classes, drizzleApis, dataKey, ...rest  } = this.props;
     const loggedInAccount = this.props.drizzleApis.getLoggedInAccount();
-    const balanceOf = (this._printBalance() * 1).toFixed(2);
-
-    if (!this.props.drizzleApis.isAuthenticated()) {
-      return null;
-    }
-
-    const disabled = this.state.buttonText !== "Vote";
+    const balanceOf = (this.printBalance() * 1).toFixed(2);
+    if (!drizzleApis.isExistDocument(dataKey))  return null;
 
     return (
       <span>
-        <Button color="rose" size="sm"
-                onClick={() => this._handleClickOpen("classicModal")}>{this.state.buttonText}</Button>
-        <Dialog
-          classes={{
-            root: classes.center,
-            paper: classes.modal
-          }}
-          open={this.state.classicModal}
-          TransitionComponent={Transition}
-          keepMounted
-          onClose={() => this._handleClose("classicModal")}
-          aria-labelledby="classic-modal-slide-title"
-          aria-describedby="classic-modal-slide-description">
-          <DialogTitle
-            id="classic-modal-slide-title"
-            disableTypography
-            className={classes.modalHeader}>
-            <IconButton
-              className={classes.modalCloseButton}
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              onClick={() => this._handleClose("classicModal")}>
-              <Close className={classes.modalClose}/>
-            </IconButton>
-            <h4 className={classes.modalTitle}>Vote on the document</h4>
-          </DialogTitle>
-          <DialogContent
-            id="classic-modal-slide-description"
-            className={classes.modalBody}>
+              <div className="vote-btn" title="Vote on this document"
+                   onClick={() => this.handleClickOpen("classicModal")}>
+                  <i className="material-icons">how_to_vote</i>
+              </div>
 
-          <h4>1. Total amount of tokens voted</h4>
-          <ul className="voteList">
-              <li><strong>You : </strong><CuratorDepositOnUserDocument document={this.props.document}
+
+            <Dialog
+              fullWidth={this.state.fullWidth}
+              open={this.state.classicModal}
+              TransitionComponent={Transition}
+              keepMounted
+              aria-labelledby="classic-modal-slide-title"
+              aria-describedby="classic-modal-slide-description">
+
+
+              <DialogTitle
+                id="classic-modal-slide-title"
+                disableTypography
+                className={classes.modalHeader}>
+                <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
+                <h3 className={classes.modalTitle}>Vote on document</h3>
+              </DialogTitle>
+
+
+              <DialogContent id="classic-modal-slide-description" className={classes.modalBody}>
+              <h4>1. Total amount of tokens voted</h4>
+              <ul className="voteList">
+                <li><strong>You : </strong><CuratorDepositOnUserDocument document={this.props.document}
+                                                                         drizzleApis={drizzleApis}
+                                                                         deposit={this.state.deposit} {...rest}
+                                                                         loggedInAccount={loggedInAccount}/></li>
+                <li><strong>Total : </strong><CuratorDepositOnDocument document={this.props.document}
+                                                                       drizzleApis={drizzleApis}
                                                                        deposit={this.state.deposit} {...rest}
                                                                        loggedInAccount={loggedInAccount}/></li>
-              <li><strong>Total : </strong><CuratorDepositOnDocument document={this.props.document}
-                                                                     deposit={this.state.deposit} {...rest}
-                                                                     loggedInAccount={loggedInAccount}/></li>
-          </ul>
+              </ul>
 
           <h4>2. Amount of available tokens</h4>
           <ul className="voteList">
@@ -387,18 +364,24 @@ class voteOnDocument extends React.Component {
 
               />
           </div>
+              <p className="notiTxt mt-4">Note: The token used for voting can be withdrawn after 3 days.</p>
+              </DialogContent>
 
-          <p className="notiTxt">Note: The token used for voting can be withdrawn after 3 days.</p>
 
-          </DialogContent>
-          <DialogActions className={classes.modalFooter}>
-            <Button onClick={() => this._onClickVote()} color="rose" disabled={disabled} size="sm">Commit</Button>
-            <Button onClick={() => this._handleClose("classicModal")} size="sm">Cancel</Button>
-          </DialogActions>
-        </Dialog>
+              <DialogActions className="modal-footer">
+                <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">Cancel</div>
+                <div onClick={() => this.onUploadDoc()} className="ok-btn">Commit</div>
+              </DialogActions>
+              <div className="progress-modal" id="progressModal">
+                <div className="progress-modal-second">
+                  <span className="progress-percent">{this.state.percentage}%</span>
+                  <img src={require("assets/image/common/g_progress_circle.gif")} alt="progress circle"/>
+                </div>
+              </div>
+            </Dialog>
       </span>
     );
   }
 }
 
-export default withStyles(style)(voteOnDocument);
+export default withStyles(style)(VoteDocument);

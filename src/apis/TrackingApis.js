@@ -55,7 +55,6 @@ function tracking(params, async, sidClear){
         
     });
     //const cid = localStorage.getItem("clientId");
-    
     if(!trackingInfo.cid){
         throw new Error("client id invalid on tracking");
     }
@@ -64,8 +63,7 @@ function tracking(params, async, sidClear){
     params.sid = trackingInfo.sid; //session id
     params.cid = trackingInfo.cid; //clinet id
     params.t = timestamp; //touch time
-    
-    console.log("tracking params", params);
+
     const querystring = jsonToQueryString(params);
     const tracking = apiDomain + trackingUrl + querystring;
     

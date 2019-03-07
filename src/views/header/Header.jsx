@@ -1,149 +1,93 @@
 import React from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-
-import withStyles from "@material-ui/core/styles/withStyles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
-import Hidden from "@material-ui/core/Hidden";
-import Drawer from "@material-ui/core/Drawer";
-import Menu from "@material-ui/icons/Menu";
-import headerStyle from "assets/jss/material-kit-react/components/headerStyle.jsx";
+import UploadDocument from "../modal/UploadDocument";
+import { NavLink } from "react-router-dom";
 
 class Header extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            mobileOpen: false
-        };
-        this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
-        this.headerColorChange = this.headerColorChange.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      mobileOpen: false
+    };
+    this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
+  }
+
+  handleDrawerToggle() {
+    this.setState({ mobileOpen: !this.state.mobileOpen });
+  }
+
+  handleOpen = () => {
+    const { auth } = this.props;
+    auth.login();
+  };
+
+  componentWillMount() {
+    const pathname = window.location.pathname;
+    if (pathname === "/") {
+      window.location.pathname += "latest";
     }
+  }
 
-    componentDidMount() {
-        if (this.props.changeColorOnScroll) {
-            window.addEventListener("scroll", this.headerColorChange);
-        }
-    }
+  render() {
+    const { auth } = this.props;
 
-    componentWillUnmount() {
-        if (this.props.changeColorOnScroll) {
-            window.removeEventListener("scroll", this.headerColorChange);
-        }
-    }
+    return (
 
-    handleDrawerToggle() {
-        this.setState({mobileOpen: !this.state.mobileOpen});
-    }
+      <header id="header">
+        <nav className="navbar navbar-default navbar-expand-lg fixed-top" id="header__main-nav">
+          <div className="container-fluid">
+            <div className="col-5 col-md-3">
+              <a className="navbar-brand" href="/">
+                <img src={require("assets/image/logo.png")} alt="DECOMPANY"/>
+              </a>
+            </div>
 
-    headerColorChange() {
+            <div className="navbar-menu col-md-6 d-none d-md-block">
+              <ul>
+                <li className="navbar-menu-latest" title="latest"><NavLink to="/latest" activeClassName="on">Latest</NavLink></li>
+                <li className="navbar-menu-featured" title="featured"><NavLink to="/featured" activeClassName="on">Featured</NavLink>
+                </li>
+                <li className="navbar-menu-popular" title="popular"><NavLink to="/popular" activeClassName="on">Popular</NavLink></li>
+              </ul>
+            </div>
 
-    }
+            <div className="navbar-menu  col-7 col-md-3">
+              {auth.isAuthenticated() ?
+                <ul className="float-right">
+                  <li title="upload">
+                    <UploadDocument {...this.props} />
+                  </li>
+                  <li onClick={auth.logout} title="logout">
+                    <div className="avatar">
+                      { auth.getUserInfo().nickname[0]}
+                    </div>
+                  </li>
+                </ul>
+                :
+                <ul className="float-right">
+                  <li className="login-btn" onClick={this.handleOpen} title="login">
+                      Log-in
+                  </li>
+                </ul>
+              }
+            </div>
 
-    render() {
-        const {
-            classes,
-            color,
-            rightLinks,
-            brand,
-            fixed,
-            absolute
-        } = this.props;
 
-        const appBarClasses = classNames({
-            [classes.appBar]: true,
-            [classes[color]]: color,
-            [classes.absolute]: absolute,
-            [classes.fixed]: fixed
-        });
+          </div>
 
-        const brandComponent = <Button className={classes.title} href="/"><img src={require("assets/image/logo.png")}
-                                                                               alt={brand}/> </Button>;
+          <div className="color-divider flex-row">
+            <div className="color-section seafoam-regular"/>
+            <div className="color-section teal-dark"/>
+            <div className="color-section teal-light"/>
+            <div className="color-section midnight-light"/>
+            <div className="color-section wine-light"/>
+            <div className="color-section yellow-dark"/>
+          </div>
 
+        </nav>
+      </header>
 
-        return (
-
-            <AppBar className={appBarClasses}>
-                    <Toolbar className={classes.container}>
-                        {brandComponent}
-                        <Hidden smDown implementation="css">
-                            {rightLinks}
-                        </Hidden>
-                        <Hidden mdUp>
-                            <IconButton
-                                color="inherit"
-                                aria-label="open drawer"
-                                onClick={this.handleDrawerToggle}
-                            >
-                                <Menu/>
-                            </IconButton>
-                        </Hidden>
-                    </Toolbar>
-
-                    <Hidden mdUp implementation="css">
-                        <Drawer
-                            variant="temporary"
-                            anchor={"right"}
-                            open={this.state.mobileOpen}
-                            classes={{
-                                paper: classes.drawerPaper
-                            }}
-                            onClose={this.handleDrawerToggle}
-                        >
-                            <div className={classes.appResponsive}>
-                                {rightLinks}
-                            </div>
-                        </Drawer>
-                    </Hidden>
-            </AppBar>
-
-        );
-    }
+    );
+  }
 }
 
-Header.defaultProp = {
-    color: "white"
-};
-
-Header.propTypes = {
-    classes: PropTypes.object.isRequired,
-    color: PropTypes.oneOf([
-        "primary",
-        "info",
-        "success",
-        "warning",
-        "danger",
-        "transparent",
-        "white",
-        "rose",
-        "dark"
-    ]),
-    rightLinks: PropTypes.node,
-    brand: PropTypes.string,
-    fixed: PropTypes.bool,
-    absolute: PropTypes.bool,
-    // this will cause the sidebar to change the color from
-    // this.props.color (see above) to changeColorOnScroll.color
-    // when the window.pageYOffset is heigher or equal to
-    // changeColorOnScroll.height and then when it is smaller than
-    // changeColorOnScroll.height change it back to
-    // this.props.color (see above)
-    changeColorOnScroll: PropTypes.shape({
-        height: PropTypes.number.isRequired,
-        color: PropTypes.oneOf([
-            "primary",
-            "info",
-            "success",
-            "warning",
-            "danger",
-            "transparent",
-            "white",
-            "rose",
-            "dark"
-        ]).isRequired
-    })
-};
-
-export default withStyles(headerStyle)(Header);
+export default Header;

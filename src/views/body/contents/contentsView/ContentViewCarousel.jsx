@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
+import { Carousel } from "react-responsive-carousel";
 
-import * as restapi from 'apis/DocApi';
-import TrackingApis from 'apis/TrackingApis';
+import * as restapi from "apis/DocApi";
+import TrackingApis from "apis/TrackingApis";
 
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -11,7 +11,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 const style = {
   container: {
     position: "relative",
-    maxWidth:"100vw"
+    maxWidth: "100vw"
   }
 };
 
@@ -25,7 +25,7 @@ class ContentViewCarousel extends React.Component {
   }
 
   handleTracking = (documentId, page) => {
- 
+
     TrackingApis.tracking({
       id: documentId,
       n: page,
@@ -36,20 +36,20 @@ class ContentViewCarousel extends React.Component {
   };
 
   componentWillMount() {
-    
-    const {tracking, target} = this.props;
+
+    const { tracking, target } = this.props;
     let documentId = target.documentId;
-    if(tracking){
+    if (tracking) {
       this.handleTracking(documentId, 1);
       window.addEventListener("unload", function _handler() {
-        try{
+        try {
           TrackingApis.tracking({
             id: documentId,
             n: -1,
             e: "tracking_tester@decompany.io",
             ev: "leave"
           }, false, true);
-        } catch(e){
+        } catch (e) {
           console.error(e);
         }
         window.removeEventListener("unload", _handler);
@@ -62,20 +62,28 @@ class ContentViewCarousel extends React.Component {
     const { target } = this.props;
 
     const arr = [target.totalPages];
-    for (let i=0; i<target.totalPages; i++) {
-      arr[i] = restapi.getPageView(target.documentId, i+1);
+    for (let i = 0; i < target.totalPages; i++) {
+      arr[i] = restapi.getPageView(target.documentId, i + 1);
     }
 
     return (
-      <div className={this.classes.container}>
-        <Carousel onChange={(index)=>{
-          this.handleTracking(target.documentId, index+1);
-          return true;
-        }}>
-          {arr.length > 0 ? arr.map((addr, index) => (
-            <img className={this.classes.img} key={index} src={addr} alt={ "carousel" }/>
-          )):""}
-        </Carousel>
+      <div className="card card-raised">
+        <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel" data-interval="3000">
+
+          <Carousel
+            showThumbs={false}
+            showIndicators={false}
+            swipeable
+            onChange={(index) => {
+              this.handleTracking(target.documentId, index + 1);
+              return true;
+            }}>
+            {arr.length > 0 ? arr.map((addr, index) => (
+              <img className={this.classes.img} key={index} src={addr} alt={"carousel"}/>
+            )) : ""}
+          </Carousel>
+
+        </div>
       </div>
     );
   }
