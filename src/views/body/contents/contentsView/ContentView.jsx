@@ -72,7 +72,7 @@ class ContentView extends React.Component {
             <Helmet>
               <meta charSet="utf-8"/>
               <title>{document.title}</title>
-              <link rel="canonical" href={"http://share.decompany.io/content/view/" + document.documentId}/>
+              <link rel="canonical" href={"http://dev.share.decompany.io/content/view/" + document.documentId}/>
             </Helmet>
 
             <div className="col-md-12 col-lg-8 view_left">
