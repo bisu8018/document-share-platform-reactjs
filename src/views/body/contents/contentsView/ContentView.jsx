@@ -24,11 +24,7 @@ class ContentView extends React.Component {
 
   getContentInfo = (documentId) => {
     MainRepository.Document.getDocument(documentId, (res) => {
-      const resData = res;
-      this.setState({ document: resData.document, featuredList: resData.featuredList });
-    });
-    MainRepository.Document.getDocumentText(documentId, (res) => {
-      this.setState({ documentText: res.data.text });
+      this.setState({ document: res.document, featuredList: res.featuredList, documentText: res.text  });
     });
   };
 
@@ -80,7 +76,7 @@ class ContentView extends React.Component {
             </div>
 
             <div className="col-md-12 col-lg-4 ">
-              <ContentViewRight document={this.state.document} featuredList={this.state.featuredList} {...rest}/>
+              <ContentViewRight document={document} featuredList={this.state.featuredList} {...rest}/>
             </div>
 
           </div>

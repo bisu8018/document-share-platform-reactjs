@@ -50,7 +50,7 @@ body {
 }
 
 hr {
-    border: 1px solid #f6f6f6;
+    border: 0.5px solid #929292;
     margin-bottom: 5px;
     margin-top: 10px;
 }
@@ -417,10 +417,6 @@ template {
 
     .navbar {
         display: none;
-    }
-
-    .badge {
-        border: 1px solid #000;
     }
 
     .table {
@@ -5814,77 +5810,6 @@ label {
     border-radius: 0;
 }
 
-.badge {
-    padding: 5px 12px;
-    text-transform: uppercase;
-    font-size: 10px;
-    color: #fff;
-}
-
-.badge.badge-primary {
-    background-color: #81c144;
-}
-
-.badge.badge-info {
-    background-color: #00bcd4;
-}
-
-.badge.badge-success {
-    background-color: #4caf50;
-}
-
-.badge.badge-warning {
-    background-color: #ff9800;
-}
-
-.badge.badge-danger {
-    background-color: #f44336;
-}
-
-.badge.badge-rose {
-    background-color: #e91e63;
-}
-
-.badge.badge-default {
-    background-color: #999;
-}
-
-.badge-default[href]:hover,
-.badge-default[href]:focus {
-    background-color: #c1c1c1;
-}
-
-.badge-primary[href]:hover,
-.badge-primary[href]:focus {
-    background-color: #89229b;
-}
-
-.badge-info[href]:hover,
-.badge-info[href]:focus {
-    background-color: #00a5bb;
-}
-
-.badge-success[href]:hover,
-.badge-success[href]:focus {
-    background-color: #449d48;
-}
-
-.badge-warning[href]:hover,
-.badge-warning[href]:focus {
-    background-color: #e68900;
-    color: #fff;
-}
-
-.badge-danger[href]:hover,
-.badge-danger[href]:focus {
-    background-color: #f32c1e;
-}
-
-.badge-rose[href]:hover,
-.badge-rose[href]:focus {
-    background-color: #d81558;
-}
-
 .pagination > .page-item > .page-link,
 .pagination > .page-item > span {
     border: 0;
@@ -7214,9 +7139,9 @@ h2.title {
 /*u__left*/
 .u__left {
     padding: 20px 30px;
-    background-image: -webkit-linear-gradient(bottom, #fefff3, #ffefef 35%, #e8faff 67%, #f1ffe5);
-    background-image: linear-gradient(0deg, #fefff3, #ffefef 35%, #e8faff 67%, #f1ffe5);
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.17);
+    background-color: #fff;
+    box-shadow: 7px 7px 0 0 rgb(127, 194, 65);
+    border: 1px solid #c7c7c7;
 }
 
 .tags_menu {
@@ -7316,7 +7241,8 @@ h2.title {
     min-height: 1000px;
     padding: 20px 30px;
     background-color: #fff;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.17);
+    box-shadow: 7px 7px 0 0 rgb(127, 194, 65);
+    border: 1px solid #c7c7c7;
 }
 
 .u__center .u__center_mobile {
@@ -7382,7 +7308,7 @@ h2.title {
 .u_center_inner {
     margin: 10px 0 10px 0;
     padding: 10px 0 10px 0;
-    border-bottom: 1px solid #f6f6f6;
+    border-bottom: 1px solid #cecece;
 }
 
 .thumb_image {
@@ -7515,18 +7441,6 @@ h2.title {
         text-align: center;
     }
 
-    .u__center-container {
-        padding: 0;
-    }
-
-    .u_center_inner {
-        border: none
-    }
-
-    .u__center {
-        padding: 20px 0;
-    }
-
     .profile-center {
         padding: 20px 20px;
     }
@@ -7540,9 +7454,26 @@ h2.title {
     margin-bottom: 50px;
 }
 
-.profile_top {
-    margin: 30px 0;
+.tracking-detail-container .profile_top {
+    margin: 30px 0 -25px 0;
 }
+
+.tracking-detail-container .profile_top .thumb_image {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    border: 1px solid #ddd;
+}
+
+.profile_top {
+margin: 30px 0;
+}
+
+.profile_top >a {
+display: inline-flex;
+}
+
 
 .profile_top .thumb_image {
     text-align: center;
@@ -7554,15 +7485,14 @@ h2.title {
 }
 
 .profile_info_name {
-    margin-bottom: 15px;
-    margin-top: 15px;
-}
-
-.profile_info_name strong {
+    text-align: center;
+    display: inline-block;
+    margin-left: 25px;
     font-weight: 600;
     font-size: 20px;
     color: #333;
     word-break: break-all;
+    margin-top: 15px;
 }
 
 .profile_info_desc p {
@@ -7796,7 +7726,8 @@ h2.title {
     max-width: 1400px;
     padding: 20px 30px;
     background-color: #fff;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.17);
+    box-shadow: 7px 7px 0 0 rgb(127, 194, 65);
+    border: 1px solid #c7c7c7;
 }
 
 .u__view .view_top {
@@ -7997,7 +7928,8 @@ h2.title {
     min-height: 800px;
     padding: 20px 30px;
     background-color: #fff;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.17);
+    box-shadow: 7px 7px 0 0 rgb(127, 194, 65);
+    border: 1px solid #c7c7c7;
 }
 
 .u__right h5 {
@@ -8010,7 +7942,8 @@ h2.title {
 
 .see-also-container {
     max-height: 120px;
-    min-height: 63px;
+    min-height: 75px;
+    border-bottom: 1px solid #cecece;
     margin: 15px 0;
 }
 
@@ -8085,7 +8018,9 @@ h2.title {
 
     .u__right {
         padding: 15px;
-        margin: 20px -30px;
+        margin: 0 -30px;
+        border-top: none;
+        box-shadow: none;
     }
 
     .view_left {
@@ -8114,8 +8049,20 @@ h2.title {
         white-space: normal;
     }
 
+    #container {
+        margin-bottom: 0;
+        margin-top: 57px;
+    }
     #container.container_view .card {
         border-radius: 0
+    }
+
+    .u__center-container {
+        padding: 0;
+    }
+
+    .u__center, .u__left, .u__right, .u__view {
+        box-shadow: none;
     }
 
     .view_content {
@@ -8132,8 +8079,13 @@ h2.title {
         padding: 8px;
     }
 
-    #container {
-        margin-top: 60px;
+
+    .u_center_inner {
+        border: none
+    }
+
+    .u__center {
+        padding: 20px 0;
     }
 }
 
@@ -8237,8 +8189,8 @@ h2.title {
 
 .tracking_fulldown_list .tfl_desc dd {
     position: relative;
-    padding-left: 118px;
-    margin-bottom: .6rem;
+    padding-left: 100px;
+    margin-bottom: 1.6rem;
 }
 
 .tracking_fulldown_list .tfl_desc dd .time {
@@ -8255,9 +8207,9 @@ h2.title {
     content: '';
     position: absolute;
     top: 5px;
-    right: -45px;
-    width: 10px;
-    height: 10px;
+    right: -24px;
+    width: 11px;
+    height: 11px;
     background-color: #fff;
     border: 2px solid #7b9268;
     box-sizing: border-box;
@@ -8288,6 +8240,13 @@ h2.title {
     -ms-transform: rotate(90deg);
     -m-transform: rotate(90deg);
     transform: rotate(90deg);
+}
+
+.tracking-status {
+    font-weight: bold;
+    color: #7f9468;
+    margin-bottom: 5px;
+    text-transform: uppercase;
 }
 
 .scroll-out {
@@ -8344,11 +8303,11 @@ h2.title {
     }
 
     .tracking_fulldown_list .tfl_desc dl:before {
-        left: 66px;
+        left: 94px;
     }
 
     .tracking_fulldown_list .tfl_desc dd .time:after {
-        right: -35px;
+        right: -22px;
     }
 
     .tracking_fulldown_list .tfl_desc dd {

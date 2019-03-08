@@ -1,12 +1,15 @@
 import React from "react";
 import "react-tabs/style/react-tabs.css";
 import { Link, withRouter } from "react-router-dom";
+import LinesEllipsis from "react-lines-ellipsis";
+
 import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../common/Common";
 
 class AudienceTrackingDetail extends React.Component {
   state = {
-    resultList: []
+    resultList: [],
+    textList: []
   };
 
   handleClick = (e) => {
@@ -28,9 +31,28 @@ class AudienceTrackingDetail extends React.Component {
     MainRepository.Document.getTrackingInfo(cid, location.state.document.documentId, (res) => {
       let resData = res;
       this.setState({ resultList: resData.resultList ? resData.resultList : [] });
-      console.log(this.state.resultList);
-
+      console.log(res);
+      this.getText();
     });
+  };
+
+  getImgUrl = (page) => {
+    const { location } = this.props;
+    return Common.getThumbnail(location.state.document.documentId, page);
+  };
+
+  getText = () => {
+    const { location } = this.props;
+    let page = location.state.document.totalPages;
+    let arr = [];
+    for (let i = 0; i < page; i++) {
+      Common.getText(location.state.document.documentId, i + 1, (result) => {
+        arr[i] = result;
+        if (i === page - 1) {
+          this.setState({ textList: arr });
+        }
+      });
+    }
   };
 
   componentWillMount() {
@@ -41,25 +63,24 @@ class AudienceTrackingDetail extends React.Component {
     const { location, history } = this.props;
     const rst = this.state.resultList;
     const data = location.state.document;
+
     return (
 
       <div className="row">
-        <div className="col-sm-12 col-lg-10 offset-lg-1 u__center profile-center">
+        <div className="col-sm-12 col-lg-10 offset-lg-1 u__center profile-center tracking-detail-container">
 
           <div className="back-btn" onClick={history.goBack}>
             <i className="material-icons">keyboard_backspace</i>
             Back to visitor list
           </div>
 
-          <div className="  profile_top">
+          <div className="profile_top">
             <Link to={"/author/" + data.accountId}>
               <div className="thumb_image">
                 <img src={require("assets/image/tempImg/profile.jpg")} alt="profile" className="img-fluid"/>
               </div>
-              <div className="profile_info_name tac">
-                <strong>
+              <div className="profile_info_name">
                   {data.nickname ? data.nickname + " (" + data.accountId + ")" : data.accountId}
-                </strong>
               </div>
             </Link>
           </div>
@@ -76,16 +97,33 @@ class AudienceTrackingDetail extends React.Component {
                     <li>
                       <div className="tfl_title" onClick={this.handleClick}>
                         <i><img src={require("assets/image/common/i_faq.png")} alt="dropdown icon"/></i>
-                        <strong> {Common.timestampToDate(result.viewTiemstamp)} </strong>
+                        <strong title={Common.timestampToDate(result.viewTimestamp)}> {Common.timestampToDate(result.viewTimestamp)} </strong>
                       </div>
                       <div className="tfl_desc ">
                         <dl>
-                          {result.viewTracking.map((_result, idx) => (
-                            <dd>
-                              <span className="time"> { Common.timestampToTime(_result.t) } </span>
-                              <div className="text-uppercase">
-                                { _result.ev }
+                          {result.viewTracking.sort((a, b) => a.t - b.t).map((_result, idx) => (
+                            <dd key={idx}>
+                              <span className="time" itle={Common.timestampToTime(_result.t)}> {Common.timestampToTime(_result.t)} </span>
+                              <div className="tracking-status">
+                                {_result.ev}
                               </div>
+                              {_result.ev !== "leave" &&
+                              <Link to={"/content/view/" + result.documentId} title="link to document">
+                                <div className="d-inline-block">
+                                  <div className="see-also-thumbnail">
+                                    <img src={this.getImgUrl(_result.n)} alt="thumbnail"/>
+                                  </div>
+                                  <LinesEllipsis
+                                    text={this.state.textList[_result.n]}
+                                    maxLine='1'
+                                    ellipsis='...'
+                                    trimRight
+                                    basedOn='letters'
+                                    className="d-none d-sm-block"
+                                  />
+                                </div>
+                              </Link>
+                              }
                             </dd>
                           ))}
                         </dl>

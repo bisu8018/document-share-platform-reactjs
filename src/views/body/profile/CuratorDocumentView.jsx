@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import * as restapi from 'apis/DocApi';
 import Badge from "components/badge/Badge";
 import DollarWithDeck from './DollarWithDeck';
 import DeckInShort from './DeckInShort';
@@ -34,7 +33,7 @@ class CuratorDocumentView extends React.Component {
 
             <Link to={"/content/view/" + document.documentId} >
                 <span className="img">
-                    <img src={restapi.getThumbnail(document.documentId, 1, document.documentName)} alt={document.title?document.title:document.documentName} />
+                    <img src={Common.getThumbnail(document.documentId, 1, document.documentName)} alt={document.title?document.title:document.documentName} />
                 </span>
                <div className="inner">
                   <div className="tit"

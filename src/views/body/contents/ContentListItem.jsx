@@ -2,8 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 
-import * as restapi from "apis/DocApi";
-
 import DollarWithDeck from "../profile/DollarWithDeck";
 import DeckInShort from "../profile/DeckInShort";
 import Common from "../../../common/Common";
@@ -14,10 +12,10 @@ class ContentListItem extends React.Component {
     const badgeReward = drizzleApis.toEther(result.confirmAuthorReward);
     const badgeVote = drizzleApis.toEther(result.confirmVoteAmount);
     const badgeView = result.totalViewCount ? result.totalViewCount : 0;
-    let imageUrl = restapi.getThumbnail(result.documentId, 1);
+    let imageUrl = Common.getThumbnail(result.documentId, 1);
 
     if (result.documentName.lastIndexOf(".dotx") > 0 || result.documentName.lastIndexOf(".dot") > 0 || result.documentName.lastIndexOf(".docx") > 0) {
-      imageUrl = restapi.getPageView(result.documentId, 1);
+      imageUrl = Common.getPageView(result.documentId, 1);
     }
 
     return (

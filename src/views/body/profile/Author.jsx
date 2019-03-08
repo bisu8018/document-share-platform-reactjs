@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 
 import Web3Apis from "apis/Web3Apis";
-import * as restapi from "apis/DocApi";
 
 import AuthorSummary from "./AuthorSummary";
 import CuratorDocumentList from "./CuratorDocumentList.jsx";
@@ -151,7 +150,7 @@ class Author extends React.Component {
                     <div className="col-sm-3 col-md-3 col-thumb">
                       <Link to={"/content/view/" + result.documentId}>
                         <div className="thumb_image">
-                          <img src={restapi.getThumbnail(result.documentId, 1, result.documentName)}
+                          <img src={Common.getThumbnail(result.documentId, 1, result.documentName)}
                                alt={result.title ? result.title : result.documentName} className="img-fluid"/>
                         </div>
                       </Link>

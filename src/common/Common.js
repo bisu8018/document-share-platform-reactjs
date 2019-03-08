@@ -1,3 +1,8 @@
+import { APP_PROPERTIES } from "../properties/app.properties";
+
+const imgDomain = APP_PROPERTIES.domain().image;
+//const apiDomain = APP_PROPERTIES.domain().api;
+
 export default ({
     timestampToDateTime: (timestamp) => {
       let date = new Date(timestamp);
@@ -26,7 +31,8 @@ export default ({
       let date = new Date(timestamp);
       let hour = date.getHours();
       let min = date.getMinutes();
-      let time = (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min;
+      let sec = date.getSeconds();
+      let time = (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
 
       return time;
     },
@@ -51,6 +57,27 @@ export default ({
         minute: "2-digit"
       };
       return (new Date(timestamp)).toLocaleString("en-US", options);
+    },
+    getThumbnail: (documentId, pageNo, documentName) => {
+      let imageUrl = imgDomain + "/THUMBNAIL/" + documentId + "/300X300/"  + pageNo;
+      if(documentName){
+        if(documentName.lastIndexOf(".dotx")>0 || documentName.lastIndexOf(".dot")>0 || documentName.lastIndexOf(".docx")>0){
+          imageUrl = this.getPageView(documentId, 1);
+        }
+      }
+      return imageUrl;
+    },
+    getText: (documentId, pageNo, callback) => {
+      let textUrl = imgDomain + "/THUMBNAIL/" + documentId + "/text/"  + pageNo;
+
+      fetch(textUrl).then((result)=> {
+        result.text().then((_result) => {
+          callback(_result);
+        });
+      });
+    },
+    getPageView: (documentId, pageNo) => {
+      return imgDomain + "/THUMBNAIL/" + documentId + "/1200X1200/"  + pageNo;
     }
   }
 );

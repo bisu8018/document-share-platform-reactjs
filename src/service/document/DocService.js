@@ -16,7 +16,6 @@ export default {
     trackingInfo: (data, callback) => {
       AxiosService._requestWithUrlPram(trackingInfoUrl, "GET", data,
         (data) => {
-        console.log(data);
           callback(data);
         }, () => {
         });
@@ -24,7 +23,6 @@ export default {
     trackingList: (data, callback) => {
       AxiosService._requestWithUrlPram(trackingListUrl, "GET", data,
         (data) => {
-          console.log(data);
           callback(data);
         }, () => {
         });

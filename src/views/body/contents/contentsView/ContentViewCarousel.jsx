@@ -2,10 +2,10 @@ import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 
-import * as restapi from "apis/DocApi";
 import TrackingApis from "apis/TrackingApis";
 
 import withStyles from "@material-ui/core/styles/withStyles";
+import Common from "../../../../common/Common";
 
 
 const style = {
@@ -63,7 +63,7 @@ class ContentViewCarousel extends React.Component {
 
     const arr = [target.totalPages];
     for (let i = 0; i < target.totalPages; i++) {
-      arr[i] = restapi.getPageView(target.documentId, i + 1);
+      arr[i] = Common.getPageView(target.documentId, i + 1);
     }
 
     return (
