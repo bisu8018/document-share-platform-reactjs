@@ -4,7 +4,7 @@ import Web3Apis from 'apis/Web3Apis';
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import BalanceOf from './BalanceOf'
-import DollarWithDeck from './DollarWithDeck'
+import DollarWithDeck from '../../../../components/common/DollarWithDeck'
 
 const style = {
   authorReward: {
@@ -155,7 +155,7 @@ class AuthorSummary extends React.Component {
             <div className="profile_info_desc">
               <p>* Total balance : <span className="color"><BalanceOf balance={this.state.balance} sumReward={sumReward} drizzleApis={drizzleApis} {...others}/></span></p>
               <p className="desc2">* Estimated earnings for today : <span className="color"><DollarWithDeck deck={authorTodayReward} drizzleApis={drizzleApis} {...others}/></span></p>
-              <p className="desc2">* Revenue for the last 7 days : <span className="color"> none </span></p>
+              <p className="desc2">* Revenue for the last 7 days : <span className="color"> $0.00 </span></p>
             </div>
           </div>
         </div>

@@ -6749,6 +6749,11 @@ h2.title {
     font-weight: 400;
 }
 
+.info_btn {
+    position: absolute;
+    right: 0;
+}
+
 .ok-btn:hover {
     background: #81ca3f;
     box-shadow: 1px 3px 6px 1px rgb(100, 154, 51);
@@ -6795,16 +6800,8 @@ h2.title {
 }
 
 
-.claim-btn {
-    color: white;
-    background: #7fc241;
-    cursor: pointer;
-    padding: 7px 20px;
-    border-radius: 3px;
-    font-weight: 400;
-    font-size: 14px;
-    text-align: center;
-}
+
+
 
 .share-btn {
     cursor: pointer;
@@ -7140,7 +7137,7 @@ h2.title {
 .u__left {
     padding: 20px 30px;
     background-color: #fff;
-    box-shadow: 7px 7px 0 0 rgb(127, 194, 65);
+    box-shadow: 7px 7px 0 0 #5d5d5d;
     border: 1px solid #c7c7c7;
 }
 
@@ -7329,10 +7326,6 @@ h2.title {
     line-height: 1.4;
 }
 
-.info_btn {
-    position: absolute;
-    right: 0;
-}
 
 .info_name {
     display: inline-block !important;
@@ -7487,12 +7480,15 @@ display: inline-flex;
 .profile_info_name {
     text-align: center;
     display: inline-block;
-    margin-left: 25px;
     font-weight: 600;
     font-size: 20px;
     color: #333;
     word-break: break-all;
     margin-top: 15px;
+}
+
+.tracking-detail-container .profile_info_name {
+    margin-left: 25px;
 }
 
 .profile_info_desc p {
@@ -7885,6 +7881,16 @@ display: inline-flex;
     white-space: pre-wrap;
 }
 
+.u__view .view_desc {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 70px;
+    border-bottom: 1px solid #929292;
+    padding-bottom: 20px;
+    white-space: pre-wrap;
+}
+
 .u__view .view_screen button {
     padding: 10px;
 }
@@ -7928,7 +7934,7 @@ display: inline-flex;
     min-height: 800px;
     padding: 20px 30px;
     background-color: #fff;
-    box-shadow: 7px 7px 0 0 rgb(127, 194, 65);
+    box-shadow: 7px 7px 0 0 #5d5d5d;
     border: 1px solid #c7c7c7;
 }
 
@@ -8455,4 +8461,11 @@ display: inline-flex;
 
 dialog {
     width: 100%;
+}
+
+.spinner {
+    z-index: 1;
+    text-align: center;
+    position: relative;
+    margin-top: 20px;
 }

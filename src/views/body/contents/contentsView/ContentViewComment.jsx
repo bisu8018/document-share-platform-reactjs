@@ -1,6 +1,6 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import CustomInput from "components/custom/CustomInput";
+import CustomInput from "components/common/CustomInput";
 
 const style = {};
 

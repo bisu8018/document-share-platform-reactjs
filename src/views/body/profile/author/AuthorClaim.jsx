@@ -3,7 +3,7 @@ import ClipLoader from 'react-spinners/ClipLoader'
 
 import withStyles from "@material-ui/core/styles/withStyles";
 import Web3Apis from 'apis/Web3Apis';
-import Button from "components/custom/HeaderButton";
+import Button from "components/common/HeaderButton";
 
 const style = {
   claimButton: {

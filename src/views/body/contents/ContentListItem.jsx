@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 
-import DollarWithDeck from "../profile/DollarWithDeck";
-import DeckInShort from "../profile/DeckInShort";
+import DollarWithDeck from "../../../components/common/DollarWithDeck";
+import DeckInShort from "../../../components/common/DeckInShort";
 import Common from "../../../common/Common";
 
 class ContentListItem extends React.Component {

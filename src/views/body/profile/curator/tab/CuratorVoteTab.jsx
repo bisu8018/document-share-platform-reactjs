@@ -1,14 +1,10 @@
 import React from "react";
 
-import withStyles from "@material-ui/core/styles/withStyles";
 import Web3Apis from "apis/Web3Apis";
-import CuratorDocumentView from "./CuratorDocumentView";
-import MainRepository from "../../../redux/MainRepository";
+import CuratorTabItem from "./CuratorTabItem";
+import MainRepository from "../../../../../redux/MainRepository";
 
-const style = {};
-
-
-class CuratorDocumentList extends React.Component {
+class CuratorVoteTab extends React.Component {
 
   state = {
     resultList: [],
@@ -28,20 +24,19 @@ class CuratorDocumentList extends React.Component {
   };
 
   fetchDocuments = () => {
-    const {accountId, handleCurator3DayRewardOnDocuments, totalViewCountInfo } = this.props;
+    const { accountId, handleCurator3DayRewardOnDocuments, totalViewCountInfo } = this.props;
 
     MainRepository.Document.getCuratorDocuments({ accountId: accountId }, (res) => {
-      let resData = res;
-      console.log("Fetch My Voted Document", resData);
-      if (resData && resData.resultList) {
+      console.log("Fetch My Voted Document", res);
+      if (res && res.resultList) {
 
         this.setState({
-          resultList: resData.resultList
+          resultList: res.resultList
         });
 
-        const totalViewCountSquare = resData.totalViewCountInfo.totalViewCountSquare;
+        const totalViewCountSquare = res.totalViewCountInfo.totalViewCountSquare;
 
-        resData.resultList.forEach((item) => {
+        res.resultList.forEach((item) => {
           const document = item.documentInfo;
           const viewCount = isNaN(document.viewCount) ? 0 : document.viewCount;
           if (totalViewCountSquare > viewCount) {
@@ -88,34 +83,26 @@ class CuratorDocumentList extends React.Component {
 
   render() {
     const { totalViewCountInfo } = this.props;
-    //console.log(this.state.resultList);
     if (this.state.resultList.length > 0) {
       return (
         <div>
-          <h3 style={{ margin: "20px 0 0 0", fontSize: "26px" }}>{this.state.resultList.length} voted
-            documents </h3>
-
+          <h3 style={{ margin: "20px 0 0 0", fontSize: "26px" }}>{this.state.resultList.length} voted documents </h3>
           <div className="customGrid col3">
-            {this.state.resultList.map((result, index) => (
-              <div className="box" key={result.documentId}>
-                <CuratorDocumentView {...this.props} document={result.documentInfo}
-                                     totalViewCountInfo={totalViewCountInfo}/>
-              </div>
+            {this.state.resultList.map((result, idx) => (
+              <CuratorTabItem {...this.props}
+                              document={result.documentInfo}
+                              key={idx}
+                              totalViewCountInfo={totalViewCountInfo}/>
             ))}
           </div>
         </div>
       );
-    }
-
-    return (
-
-      <div>
+    }else{
+      return (
         <h3 style={{ margin: "20px 0 0 0", fontSize: "26px" }}>0 voted documents </h3>
-      </div>
-
-    );
+      )
+    }
   }
-
 }
 
-export default withStyles(style)(CuratorDocumentList);
+export default CuratorVoteTab;

@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 
 import Common from "common/Common";
 import MainRepository from "../../../redux/MainRepository";
-import DollarWithDeck from "../profile/DollarWithDeck";
-import DeckInShort from "../profile/DeckInShort";
+import DollarWithDeck from "../../../components/common/DollarWithDeck";
+import DeckInShort from "../../../components/common/DeckInShort";
 
 class AudienceTracking extends React.Component {
   state = {

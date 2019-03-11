@@ -24,10 +24,16 @@ class ContentView extends React.Component {
 
   getContentInfo = (documentId) => {
     MainRepository.Document.getDocument(documentId, (res) => {
-      this.setState({ document: res.document, featuredList: res.featuredList, documentText: res.text  });
+      this.setState({ document: res.document, featuredList: res.featuredList  });
     });
   };
 
+  getDocumentText = (documentId) => {
+    MainRepository.Document.getDocumentText(documentId, (res) => {
+      this.setState({ documentText: res.text  });
+
+    });
+  };
 
   getApproved = () => {
     const { drizzleApis } = this.props;
@@ -45,6 +51,7 @@ class ContentView extends React.Component {
       const { match } = this.props;
       const documentId = match.params.documentId;
       this.getContentInfo(documentId);
+      this.getDocumentText(documentId);
     }
   }
 

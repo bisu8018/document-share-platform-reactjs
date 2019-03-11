@@ -1,5 +1,5 @@
 import React from "react";
-import UploadDocument from "../modal/UploadDocument";
+import UploadDocument from "../../components/modal/UploadDocument";
 import { NavLink } from "react-router-dom";
 
 class Header extends React.Component {

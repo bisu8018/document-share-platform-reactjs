@@ -149,7 +149,6 @@ class ContentContainer extends Component {
             </div>
 
             <hr className="d-none d-sm-block"/>
-
             <InfiniteScroll
               dataLength={resultList.length}
               next={this.fetchMoreData}

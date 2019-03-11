@@ -1,7 +1,6 @@
 import ContentContainer from "../views/body/contents/ContentContainer";
 import ContentView from "../views/body/contents/contentsView/ContentView";
-import Author from "../views/body/profile/Author";
-import SignIn from "../views/body/signIn/SignIn";
+import Author from "../views/body/profile/author/Author";
 import AudienceTracking from "../views/body/tracking/AudienceTracking";
 import AudienceTrackingDetail from "../views/body/tracking/AudienceTrackingDetail";
 
@@ -31,11 +30,6 @@ export default ({
         path: "/featured",
         name: "Featured",
         component: ContentContainer
-      },
-      {
-        path: "/sign-in",
-        name: "Sign in",
-        component: SignIn
       },
       {
         path: "/content/view/:documentId",

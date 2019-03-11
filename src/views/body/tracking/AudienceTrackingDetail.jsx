@@ -31,7 +31,6 @@ class AudienceTrackingDetail extends React.Component {
     MainRepository.Document.getTrackingInfo(cid, location.state.document.documentId, (res) => {
       let resData = res;
       this.setState({ resultList: resData.resultList ? resData.resultList : [] });
-      console.log(res);
       this.getText();
     });
   };
@@ -51,6 +50,8 @@ class AudienceTrackingDetail extends React.Component {
         if (i === page - 1) {
           this.setState({ textList: arr });
         }
+      }, (err) => {
+        this.setState({ textList: null });
       });
     }
   };
@@ -80,7 +81,7 @@ class AudienceTrackingDetail extends React.Component {
                 <img src={require("assets/image/tempImg/profile.jpg")} alt="profile" className="img-fluid"/>
               </div>
               <div className="profile_info_name">
-                  {data.nickname ? data.nickname + " (" + data.accountId + ")" : data.accountId}
+                {data.nickname ? data.nickname + " (" + data.accountId + ")" : data.accountId}
               </div>
             </Link>
           </div>
@@ -97,22 +98,25 @@ class AudienceTrackingDetail extends React.Component {
                     <li>
                       <div className="tfl_title" onClick={this.handleClick}>
                         <i><img src={require("assets/image/common/i_faq.png")} alt="dropdown icon"/></i>
-                        <strong title={Common.timestampToDate(result.viewTimestamp)}> {Common.timestampToDate(result.viewTimestamp)} </strong>
+                        <strong
+                          title={Common.timestampToDate(result.viewTimestamp)}> {Common.timestampToDate(result.viewTimestamp)} </strong>
                       </div>
                       <div className="tfl_desc ">
                         <dl>
                           {result.viewTracking.sort((a, b) => a.t - b.t).map((_result, idx) => (
                             <dd key={idx}>
-                              <span className="time" itle={Common.timestampToTime(_result.t)}> {Common.timestampToTime(_result.t)} </span>
+                              <span className="time"
+                                    itle={Common.timestampToTime(_result.t)}> {Common.timestampToTime(_result.t)} </span>
                               <div className="tracking-status">
                                 {_result.ev}
                               </div>
                               {_result.ev !== "leave" &&
-                              <Link to={"/content/view/" + result.documentId} title="link to document">
+                              <Link to={"/content/view/" + data.documentId} title="link to document">
                                 <div className="d-inline-block">
                                   <div className="see-also-thumbnail">
                                     <img src={this.getImgUrl(_result.n)} alt="thumbnail"/>
                                   </div>
+                                  {this.state.textList &&
                                   <LinesEllipsis
                                     text={this.state.textList[_result.n]}
                                     maxLine='1'
@@ -121,6 +125,7 @@ class AudienceTrackingDetail extends React.Component {
                                     basedOn='letters'
                                     className="d-none d-sm-block"
                                   />
+                                  }
                                 </div>
                               </Link>
                               }

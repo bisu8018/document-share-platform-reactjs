@@ -74,6 +74,7 @@ class ContentViewCarousel extends React.Component {
             showThumbs={false}
             showIndicators={false}
             swipeable
+            useKeyboardArrows={true}
             onChange={(index) => {
               this.handleTracking(target.documentId, index + 1);
               return true;

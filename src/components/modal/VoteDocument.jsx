@@ -8,10 +8,10 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Tooltip from "@material-ui/core/Tooltip";
 import Slide from "@material-ui/core/Slide";
 
-import CustomInput from "components/custom/CustomInput.jsx";
+import CustomInput from "components/common/CustomInput.jsx";
 import MainRepository from "../../redux/MainRepository";
-import CuratorDepositOnUserDocument from "../body/profile/CuratorDepositOnUserDocument";
-import CuratorDepositOnDocument from "../body/profile/CuratorDepositOnDocument";
+import CuratorDepositOnUserDocument from "../../views/body/profile/curator/CuratorDepositOnUserDocument";
+import CuratorDepositOnDocument from "../../views/body/profile/curator/CuratorDepositOnDocument";
 
 
 const style = {

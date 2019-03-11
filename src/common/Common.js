@@ -67,10 +67,11 @@ export default ({
       }
       return imageUrl;
     },
-    getText: (documentId, pageNo, callback) => {
+    getText: (documentId, pageNo, callback, error) => {
       let textUrl = imgDomain + "/THUMBNAIL/" + documentId + "/text/"  + pageNo;
 
       fetch(textUrl).then((result)=> {
+        if(result.status === 404) return error(result.statusText);
         result.text().then((_result) => {
           callback(_result);
         });

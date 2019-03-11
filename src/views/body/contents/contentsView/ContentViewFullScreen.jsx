@@ -4,13 +4,13 @@ import FileDownload from "js-file-download";
 import { Link } from "react-router-dom";
 
 import * as restapi from "apis/DocApi";
-import DollarWithDeck from "../../profile/DollarWithDeck";
-import DeckInShort from "../../profile/DeckInShort";
+import DollarWithDeck from "../../../../components/common/DollarWithDeck";
+import DeckInShort from "../../../../components/common/DeckInShort";
 import ContentViewCarousel from "./ContentViewCarousel";
 import ContentViewRegistBlockchainButton from "./ContentViewRegistBlockchainButton";
 // import ContentViewComment from "./ContentViewComment";
 import Common from "../../../../common/Common";
-import VoteDocument from "../../../modal/VoteDocument";
+import VoteDocument from "../../../../components/modal/VoteDocument";
 
 class ContentViewFullScreen extends Component {
 
@@ -67,7 +67,7 @@ class ContentViewFullScreen extends Component {
   }
 
   render() {
-    const { classes, ...rest } = this.props;
+    const { documentText, ...rest } = this.props;
     if (this.state.totalPages !== this.props.document.totalPages) {
       this.setState({ totalPages: this.props.document.totalPages });
     }
@@ -87,6 +87,8 @@ class ContentViewFullScreen extends Component {
         full.style.display = "none";
       }
     }
+
+
 
     const badgeReward = this.props.drizzleApis.toEther(this.props.document.confirmAuthorReward);
     const badgeVote = this.props.drizzleApis.toEther(this.props.document.confirmVoteAmount);
@@ -155,8 +157,11 @@ class ContentViewFullScreen extends Component {
             </div>
             <div className="row">
               <div className="col-sm-12 col-md-12">
-                <p className="view_editor">
+                <p className="view_desc">
                   {this.props.document.desc ? this.props.document.desc : ""}
+                </p>
+                <p className="view_editor">
+                  {documentText ? documentText : ""}
                 </p>
               </div>
             </div>
