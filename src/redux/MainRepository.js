@@ -4,6 +4,7 @@ import DocumentList from "./model/DocumentList";
 import Document from "./model/Document";
 import DocumentText from "./model/DocumentText";
 import CuratorDocuments from "./model/CuratorDocuments";
+import TagList from "./model/TagList";
 
 export default {
   init: () => {
@@ -25,18 +26,26 @@ export default {
       }, (err) => {
         error(err);
       });
+    },
+    getAccountInfo: (callback, error) => {
+      AuthService.GET.accountInfo((result) => {
+        console.log(result);
+        callback(result);
+      }, err => {
+        error(err);
+      });
     }
   },
   Document: {
     getTrackingInfo: (cid, documentId, callback) => {
-      const data = {cid: cid , documentId: documentId};
+      const data = { cid: cid, documentId: documentId };
       //console.log("getTrackingInfo", data);
       DocService.GET.trackingInfo(data, (result) => {
         callback(result);
       });
     },
     getTrackingList: (documentId, callback) => {
-      const data = { documentId: documentId};
+      const data = { documentId: documentId };
       //console.log("getTrackingList", data);
       DocService.GET.trackingList(data, (result) => {
         callback(result);
@@ -52,6 +61,12 @@ export default {
       DocService.GET.documentText(documentId, (result) => {
         let documentText = new DocumentText(result);
         callback(documentText);
+      });
+    },
+    getTagList: (callback, error) => {
+      DocService.GET.tagList( result => {
+        let tagList = new TagList((result));
+        callback(tagList);
       });
     },
     getDocumentList: (params, callback, error) => {

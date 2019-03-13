@@ -31,13 +31,13 @@ class ContentViewFullScreen extends Component {
 
 
   handleDownloadContent = () => {
-    if (!this.props.document) {
+    if (!this.props.documentData) {
       console.log("getting document meta information!");
       return;
     }
-    const accountId = this.props.document.accountId;
-    const documentId = this.props.document.documentId;
-    const documentName = this.props.document.documentName;
+    const accountId = this.props.documentData.accountId;
+    const documentId = this.props.documentData.documentId;
+    const documentName = this.props.documentData.documentName;
     this.getContentDownload(accountId, documentId, documentName);
   };
 
@@ -47,13 +47,13 @@ class ContentViewFullScreen extends Component {
   };
 
   checkDocumentInBlockChain = () => {
-    const {document, drizzleApis} = this.props;
+    const {documentData, drizzleApis} = this.props;
     if (!drizzleApis.isInitialized() || !drizzleApis.isAuthenticated()) return;
     if (this.state.dataKey) return;
-    if (!document) return;
+    if (!documentData) return;
 
     try {
-      const dataKey = drizzleApis.requestIsExistDocument(document.documentId);
+      const dataKey = drizzleApis.requestIsExistDocument(documentData.documentId);
       this.setState({dataKey: dataKey});
       //console.log("checkDocumentInBlockChain dataKey  :::::  ", dataKey);
     } catch (e) {
@@ -67,9 +67,9 @@ class ContentViewFullScreen extends Component {
   }
 
   render() {
-    const { documentText, ...rest } = this.props;
-    if (this.state.totalPages !== this.props.document.totalPages) {
-      this.setState({ totalPages: this.props.document.totalPages });
+    const { documentData, documentText, ...rest } = this.props;
+    if (this.state.totalPages !== documentData.totalPages) {
+      this.setState({ totalPages: documentData.totalPages });
     }
     let page = document.getElementById("page");
     if (page !== null) {
@@ -88,11 +88,9 @@ class ContentViewFullScreen extends Component {
       }
     }
 
-
-
-    const badgeReward = this.props.drizzleApis.toEther(this.props.document.confirmAuthorReward);
-    const badgeVote = this.props.drizzleApis.toEther(this.props.document.confirmVoteAmount);
-    const badgeView = this.props.document.totalViewCount ? this.props.document.totalViewCount : 0;
+    const badgeReward = this.props.drizzleApis.toEther(documentData.confirmAuthorReward);
+    const badgeVote = this.props.drizzleApis.toEther(documentData.confirmVoteAmount);
+    const badgeView = documentData.totalViewCount ? documentData.totalViewCount : 0;
 
     return (
 
@@ -101,7 +99,7 @@ class ContentViewFullScreen extends Component {
         <Fullscreen enabled={this.state.isFull} onChange={isFull => this.setState({ isFull })}>
 
           <div className="view_top">
-            <ContentViewCarousel id="pageCarousel" target={this.props.document} {...rest} tracking={true}/>
+            <ContentViewCarousel id="pageCarousel" target={documentData} {...rest} tracking={true}/>
 
             <div className="view_screen">
               <i className="material-icons" onClick={this.goFull}>fullscreen</i>
@@ -110,20 +108,20 @@ class ContentViewFullScreen extends Component {
           <div className="view_content">
             <div className="row">
               <div className="col-sm-12">
-                <h2 className="u_title">   {this.props.document.title ? this.props.document.title : ""}</h2>
+                <h2 className="u_title">   {documentData.title ? documentData.title : ""}</h2>
               </div>
               <div className="col-sm-12 col-view">
                 <span className="txt_view">{badgeView}</span>
                 <span className="view_date view-reward">Reward <span><DollarWithDeck deck={badgeReward}
                                                                                      drizzleApis={this.props.drizzleApis}/></span></span>
                 <span className="view_date view-reward">Voting <span><DeckInShort deck={badgeVote}/></span></span>
-                <span className="view_date"> {Common.timestampToDateTime(this.props.document.created)}</span>
+                <span className="view_date"> {Common.timestampToDateTime(documentData.created)}</span>
               </div>
             </div>
             <div className="row">
               <div className="col-sm-12 col-md-12 view_btns_inner">
-                <ContentViewRegistBlockchainButton document={ this.props.document } dataKey={ this.state.dataKey } { ...rest } />
-                <VoteDocument document={this.props.document} dataKey={ this.state.dataKey } { ...rest } />
+                <ContentViewRegistBlockchainButton documentData={ documentData } dataKey={ this.state.dataKey } { ...rest } />
+                <VoteDocument documentData={documentData} dataKey={ this.state.dataKey } { ...rest } />
                 <div className="share-btn" title="Share this document">
                   <i className="material-icons">share</i>
                 </div>
@@ -131,8 +129,8 @@ class ContentViewFullScreen extends Component {
                   <i className="material-icons">save</i>
                 </div>
                 <Link to={{
-                  pathname: "/tracking/" + this.props.document.accountId + "/" + this.props.document.documentId,
-                  state: this.props.document
+                  pathname: "/tracking/" + documentData.accountId + "/" + documentData.documentId,
+                  state: documentData
                 }}>
                   <div className="statistics-btn" title="See statistics of this document">
                     <i className="material-icons">insert_chart</i>
@@ -142,13 +140,13 @@ class ContentViewFullScreen extends Component {
             </div>
             <div className="row">
               <div className="col-sm-12 col-md-12">
-                <Link to={"/author/" + this.props.document.accountId} className="info_name"
+                <Link to={"/author/" + documentData.accountId} className="info_name"
                       title={"Go to profile page"}>
                   <i className="material-icons img-thumbnail">face</i>
-                  {this.props.document.nickname ? this.props.document.nickname : this.props.document.accountId}
+                  {documentData.nickname ? documentData.nickname : documentData.accountId}
                 </Link>
                 <span className="view_tag">
-                     {this.props.document.tags ? this.props.document.tags.map((tag, index) => (
+                     {documentData.tags ? documentData.tags.map((tag, index) => (
                        <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
                              className="tag"> {tag} </Link>
                      )) : ""}
@@ -158,7 +156,7 @@ class ContentViewFullScreen extends Component {
             <div className="row">
               <div className="col-sm-12 col-md-12">
                 <p className="view_desc">
-                  {this.props.document.desc ? this.props.document.desc : ""}
+                  {documentData.desc ? documentData.desc : ""}
                 </p>
                 <p className="view_editor">
                   {documentText ? documentText : ""}

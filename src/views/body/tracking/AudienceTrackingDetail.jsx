@@ -5,6 +5,7 @@ import LinesEllipsis from "react-lines-ellipsis";
 
 import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../common/Common";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class AudienceTrackingDetail extends React.Component {
   state = {
@@ -70,8 +71,8 @@ class AudienceTrackingDetail extends React.Component {
       <div className="row">
         <div className="col-sm-12 col-lg-10 offset-lg-1 u__center profile-center tracking-detail-container">
 
-          <div className="back-btn" onClick={history.goBack}>
-            <i className="material-icons">keyboard_backspace</i>
+          <div className="back-btn " onClick={history.goBack}>
+            <i className="material-icons ml-2">keyboard_backspace</i>
             Back to visitor list
           </div>
 
@@ -81,7 +82,8 @@ class AudienceTrackingDetail extends React.Component {
                 <img src={require("assets/image/tempImg/profile.jpg")} alt="profile" className="img-fluid"/>
               </div>
               <div className="profile_info_name">
-                {data.nickname ? data.nickname + " (" + data.accountId + ")" : data.accountId}
+                {data.nickname ? data.nickname : data.accountId} <br/>
+                {data.nickname ? "(" + data.accountId + ")" : ""}
               </div>
             </Link>
           </div>
@@ -105,30 +107,46 @@ class AudienceTrackingDetail extends React.Component {
                         <dl>
                           {result.viewTracking.sort((a, b) => a.t - b.t).map((_result, idx) => (
                             <dd key={idx}>
-                              <span className="time"
-                                    itle={Common.timestampToTime(_result.t)}> {Common.timestampToTime(_result.t)} </span>
-                              <div className="tracking-status">
-                                {_result.ev}
-                              </div>
-                              {_result.ev !== "leave" &&
-                              <Link to={"/content/view/" + data.documentId} title="link to document">
-                                <div className="d-inline-block">
-                                  <div className="see-also-thumbnail">
-                                    <img src={this.getImgUrl(_result.n)} alt="thumbnail"/>
-                                  </div>
+                              <div className="d-flex">
+                                <span className="time"
+                                      title={Common.timestampToTime(_result.t)}> {Common.timestampToTime(_result.t)} </span>
+                                <div className="d-inline-block mr-3">
+                                  <span className="tracking-status">{_result.ev}</span>
+                                </div>
+                                {_result.ev !== "leave" &&
+
+                                <div className="d-inline-block mr-3">
+                                  <Tooltip
+                                    title={
+                                      <img src={this.getImgUrl(_result.n)} alt="thumbnail" className="w-100"/>
+                                    }
+                                    disableFocusListener
+                                    disableTouchListener
+                                    className="tooltip-style"
+                                    placement="bottom">
+                                    <span className="info-btn">i</span>
+                                  </Tooltip>
+                                </div>
+                                }
+                                {_result.ev !== "leave" &&
+                                <div className="d-flex">
                                   {this.state.textList &&
                                   <LinesEllipsis
-                                    text={this.state.textList[_result.n]}
+                                    text={this.state.textList[_result.n - 1]}
                                     maxLine='1'
-                                    ellipsis='...'
+                                    ellipsis="..."
                                     trimRight
                                     basedOn='letters'
-                                    className="d-none d-sm-block"
+                                    className=""
                                   />
                                   }
+                                {/*  <Link to={"/content/view/" + data.documentId} title="link to document">
+                                    <i className="material-icons link-arrow-btn">call_made</i>
+                                  </Link>*/}
+
                                 </div>
-                              </Link>
-                              }
+                                }
+                              </div>
                             </dd>
                           ))}
                         </dl>

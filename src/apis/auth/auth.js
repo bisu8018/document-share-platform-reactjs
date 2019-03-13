@@ -45,27 +45,28 @@ export default class Auth {
     });
   };
 
+  setUserInfo(authResult, callback) {
+      this.auth0.client.userInfo(authResult.accessToken, (err, user) => {
+        if (err) {
+          console.error("Getting userInfo", err);
+          alert(`Error: ${err.error}. Getting UserInfo`);
+        } else {
+          console.log("Getting Userinfo Success!!", { user, authResult });
+          callback(user);
+        }
+        history.replace("/");
+      });
+  };
+
   handleAuthentication() {
     console.log("auth", "handleAuthentication");
     this.auth0.parseHash((err, authResult) => {
-
       console.log("handleAuthentication", authResult, err);
-
       if (authResult && authResult.accessToken && authResult.idToken) {
-        this.auth0.client.userInfo(authResult.accessToken, (err, user) => {
-          if (err) {
-            console.error("Getting userInfo", err);
-            alert(`Error: ${err.error}. Getting UserInfo`);
-          } else {
-            console.log("Getting Userinfo Success!!", { user, authResult });
-            this.setSession(authResult, user);
-
-            this.syncUser();
-
-            this.scheduleRenewal();
-
-          }
-          history.replace("/");
+        this.setUserInfo(authResult, user => {
+          this.setSession(authResult, user);
+          this.syncUser();
+          this.scheduleRenewal();
         });
       } else if (err) {
         this.clearSession();
@@ -112,7 +113,6 @@ export default class Auth {
       MainRepository.Account.sync(session.idToken, userInfo, (res) => {
         let resData = res;
         if (resData.success) {
-          console.log(resData);
           localStorage.setItem("user_sync", JSON.stringify(resData));
         } else {
           alert("Login failed because user sync failed.");
@@ -128,7 +128,7 @@ export default class Auth {
 
   getUserInfo = () => {
     const userInfo = JSON.parse(localStorage.getItem("user_info"));
-    if (!userInfo) {
+    if (!userInfo && this.isAuthenticated()) {
       this.renewSession();
       return {};
     }
@@ -141,7 +141,6 @@ export default class Auth {
   };
 
   clearSession = () => {
-    //console.log("clear session", localStorage);
     localStorage.removeItem("access_token");
     localStorage.removeItem("id_token");
     localStorage.removeItem("expires_at");
@@ -152,7 +151,6 @@ export default class Auth {
     // Check whether the current time is past the
     // access token's expiry time
     const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
-    //console.log("isAuthenticated", new Date(expiresAt), localStorage);
 
     const isUnExpired = new Date().getTime() < expiresAt;
     if (!isUnExpired) {
@@ -166,8 +164,10 @@ export default class Auth {
     this.auth0.checkSession({}, (err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         //console.log("renewSession", authResult);
-        this.setSession(authResult);
-        this.scheduleRenewal();
+        this.setUserInfo(authResult, user => {
+          this.setSession(authResult, user);
+          this.scheduleRenewal();
+        });
       } else if (err) {
         this.logout();
         console.log(err);

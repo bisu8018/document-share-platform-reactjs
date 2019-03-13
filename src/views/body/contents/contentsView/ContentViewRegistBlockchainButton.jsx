@@ -20,9 +20,9 @@ class ContentViewBlockchainButton extends React.Component {
   }
 
   handleRegistDocumentInBlockChain = () => {
-    const { document, drizzleApis } = this.props;
-    if (!document) return;
-    const stackId = drizzleApis.registDocumentToSmartContract(document.documentId);
+    const { documentData, drizzleApis } = this.props;
+    if (!documentData) return;
+    const stackId = drizzleApis.registDocumentToSmartContract(documentData.documentId);
     this.setState({ stackId: stackId });
   };
 
@@ -42,8 +42,8 @@ class ContentViewBlockchainButton extends React.Component {
 
 
   render() {
-    const { document, drizzleApis } = this.props;
-    const disabled = document.accountId === drizzleApis.getLoggedInAccount();
+    const { documentData, drizzleApis } = this.props;
+    const disabled = documentData.accountId === drizzleApis.getLoggedInAccount();
     if (drizzleApis.isExistDocument(this.props.dataKey) || disabled) return null;
 
     return (

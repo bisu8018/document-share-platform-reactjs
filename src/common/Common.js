@@ -44,7 +44,7 @@ export default ({
 
       return restDate;
     },
-    handleOnClick: () => {
+    scrollTop: () => {
       window.scrollTo(0, 0);
     },
     convertTimestampToString: (timestamp) => {
@@ -79,6 +79,9 @@ export default ({
     },
     getPageView: (documentId, pageNo) => {
       return imgDomain + "/THUMBNAIL/" + documentId + "/1200X1200/"  + pageNo;
+    },
+    escapeRegexCharacters: str => {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
   }
 );

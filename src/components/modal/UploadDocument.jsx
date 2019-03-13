@@ -1,4 +1,9 @@
 import React from "react";
+import Autosuggest from "react-autosuggest";
+import TagsInput from "react-tagsinput";
+import "react-tagsinput/react-tagsinput.css"; // If using WebPack and style-loader.
+import * as restapi from "apis/DocApi";
+import javascriptStyles from "assets/jss/material-kit-react/views/componentsSections/javascriptStyles.jsx";
 
 import withStyles from "@material-ui/core/styles/withStyles";
 import Slide from "@material-ui/core/Slide";
@@ -6,28 +11,11 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-
 import { CloudUpload } from "@material-ui/icons";
-import javascriptStyles from "assets/jss/material-kit-react/views/componentsSections/javascriptStyles.jsx";
-
-import Autosuggest from "react-autosuggest";
-import TagsInput from "react-tagsinput";
-import "react-tagsinput/react-tagsinput.css"; // If using WebPack and style-loader.
-import * as restapi from "apis/DocApi";
-
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
 }
-
-const categories = [
-  "Art & Photos", "Automotive", "Business", "Career", "Data & Analytics", "Design", "Devices & Hardware", "Design",
-  "Devices & Hardware", "Economy & Finance", "Education", "Engineering", "Entertainment & Humor", "Environment", "Food",
-  "Government & Nonprofit", "Health & Medicine", "Healthcare", "Engineering", "Internet", "Investor Relations", "Law",
-  "Leadership & Management", "Lifestyle", "Marketing", "Mobile", "News & Politics", "Presentations & Public Speaking", "Real Estate",
-  "Recruiting & HR", "Retail", "Sales", "Science", "Self Improvement", "Services", "Small Business & Entrepreneurship", "Social Media",
-  "Software", "Spiritual", "Sports", "Technology", "Templates", "Travel"
-];
 
 class UploadDocument extends React.Component {
 
@@ -141,7 +129,6 @@ class UploadDocument extends React.Component {
     });
   };
 
-
   onChangeNickname = (e) => {
     //console.log(e.target);
     const nickname = e.target.value;
@@ -210,12 +197,13 @@ class UploadDocument extends React.Component {
       }
     };
 
-    const inputValue = (props.value && props.value.trim().toLowerCase()) || "";
-    const inputLength = inputValue.length;
-
-    let suggestions = categories.filter((categories) => {
-      return categories.toLowerCase().slice(0, inputLength) === inputValue;
-    });
+    let inputValue = (props.value && props.value.trim().toLowerCase()) || "";
+    let inputLength = inputValue.length;
+    let suggestions = this.props.tagList.length > 0 ?
+      this.props.tagList.filter((tag) => {
+        return tag._id.toLowerCase().slice(0, inputLength) === inputValue;
+      })
+      : [];
 
     return (
       <Autosuggest
@@ -223,7 +211,7 @@ class UploadDocument extends React.Component {
         suggestions={suggestions}
         shouldRenderSuggestions={(value) => value && value.trim().length > 0}
         getSuggestionValue={(suggestion) => suggestion}
-        renderSuggestion={(suggestion) => <span>{suggestion}</span>}
+        renderSuggestion={(suggestion) => <span key={suggestion.value}>{suggestion._id}</span>}
         inputProps={{ ...props, onChange: handleOnChange }}
         onSuggestionSelected={(e, { suggestion }) => {
           addTag(suggestion);
@@ -288,7 +276,7 @@ class UploadDocument extends React.Component {
 
 
               <DialogActions className="modal-footer">
-                <div onClick={() => this.handleClose("classicModal") } className="cancel-btn">Cancel</div>
+                <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">Cancel</div>
                 <div onClick={() => this.onUploadDoc()} className="ok-btn">Upload</div>
               </DialogActions>
               <div className="progress-modal" id="progressModal">

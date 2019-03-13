@@ -7,13 +7,13 @@ import Common from "../../../../common/Common";
 class ContentViewRight extends React.Component {
 
   render() {
-    const { document, featuredList } = this.props;
-    if (!document) {
+    const { documentData, featuredList } = this.props;
+    if (!documentData) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     } else {
       return (
         <div className="u__right">
-          <h5>See also</h5>
+          <h4>See also</h4>
           <hr/>
           {featuredList.map((result, idx) => (
             <div key={idx}>
@@ -28,7 +28,7 @@ class ContentViewRight extends React.Component {
                 </Link>
 
                 <div className="see-also-content">
-                  <Link to={"/author/" + result.accountId} className="info_name see-also-author">
+                  <Link to={"/author/" + result.accountId} className="info_name see-also-author" >
                     {result.nickname ? result.nickname : result.accountId}
                   </Link>
                 </div>

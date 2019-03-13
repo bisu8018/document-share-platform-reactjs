@@ -10,6 +10,7 @@ import Header from "views/header/Header";
 import Callback from "./body/callback/callback";
 
 import RouterList from "../common/RouterList";
+import MainRepository from "../redux/MainRepository";
 
 if (process.env.NODE_ENV === "production") {
   ReactGA.initialize("UA-129300994-1", {
@@ -36,27 +37,32 @@ const handleAuthentication = ({ location }) => {
 let _hsq = window._hsq = window._hsq || [];
 
 class Main extends Component {
-  state = { loading: true, drizzleState: null, drizzleApis: null };
+  state = {
+    loading: true,
+    drizzleState: null,
+    drizzleApis: null,
+    tagList: []
+  };
 
   sendPageView = () => {
-    //hubspot tracking
-    //console.log("Tracking sendPageView event", window.location.pathname + window.location.search)
     _hsq.push(["setPath", window.location.pathname + window.location.search]);
     _hsq.push(["trackPageView"]);
 
-    //hubspot tracking
     ReactGA.pageview(window.location.pathname + window.location.search);
   };
 
-  componentWillMount() {
-    // subscribe to changes in the store
-    //console.log("env", process.env);
-    //auth.syncUser();
+  getTagList = () => {
+    MainRepository.Document.getTagList(result => {
+      this.setState({ tagList: result.resultList });
+    });
+  };
 
-    const drizzleApis = new DrizzleApis((drizzleApis, drizzle, drizzleState) => {
+  componentWillMount() {
+    const drizzleApis = new DrizzleApis((drizzleApis) => {
       this.setState({ drizzleApis: drizzleApis });
     });
     this.setState({ drizzleApis: drizzleApis });
+    this.getTagList();
   }
 
   componentDidMount() {
@@ -64,18 +70,16 @@ class Main extends Component {
     history.listen(this.sendPageView);
   }
 
-  componentWillUnmount() {
-    //this.unsubscribe();
-  }
-
   render() {
+    const { drizzleApis, drizzleState, tagList  } = this.state;
     return (
 
       <Router history={history}>
         <div>
           <Header
             brand="decompany.io"
-            drizzleApis={this.state.drizzleApis}
+            drizzleApis={drizzleApis}
+            tagList={tagList}
             fixed
             auth={auth}
             color="white"
@@ -92,8 +96,9 @@ class Main extends Component {
                       <Route exact={flag} key={result.name}
                              path={result.path}
                              render={(props) =>
-                               <result.component drizzleApis={this.state.drizzleApis}
-                                                 drizzleState={this.state.drizzleState}
+                               <result.component drizzleApis={drizzleApis}
+                                                 drizzleState={drizzleState}
+                                                 tagList={tagList}
                                                  auth={auth} {...props} />}
                       />
                     );

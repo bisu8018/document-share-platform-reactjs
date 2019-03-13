@@ -33,7 +33,7 @@ export function registDocument(args, callback) {
       size: fileInfo.file.size,
       nickname: user.nickname,
       username: user.name,
-      accountId: user.email,
+      accountId: user.sub,
       sub: user.sub,
       ethAccount: ethAccount,
       title: title,

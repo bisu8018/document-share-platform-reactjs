@@ -1,116 +1,119 @@
 /*eslint-disable*/
 import React from "react";
 
-// @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-import Popper from "@material-ui/core/Popper";
-import Paper from "@material-ui/core/Paper";
+import Slide from "@material-ui/core/Slide";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Button from "components/common/HeaderButton";
 import Web3Apis from "apis/Web3Apis";
+import Dialog from "@material-ui/core/Dialog";
 
-const styles = {
-  popper: {
-    zIndex: 9000
-  },
-  selbtn: {
-    marginTop: "0px",
-    marginRight: "7px",
-    marginLeft: "0px",
-    marginBottom: "12px"
-  }
-};
+function Transition(props) {
+  return <Slide direction="down" {...props} />;
+}
 
 class Bounty extends React.Component {
-
-  web3Apis = new Web3Apis();
-
   state = {
     available: 0,
-    open: false,
+    isAuthenticated: false,
+    fullWidth: true,
+    classicModal: false,
+    openLeft: false,
+    openTop: false,
+    openBottom: false,
+    openRight: false,
     placement: "bottom"
   };
 
-  componentDidMount() {
-    const { drizzleApis } = this.props;
+  web3Apis = new Web3Apis();
 
-    //console.log("componentDidMount", this.state.available, drizzleApis.isAuthenticated() );
-    if (drizzleApis.isAuthenticated()) {
-      this.web3Apis.getBountyAvailable(drizzleApis.getLoggedInAccount()).then((data) => {
-        //console.log("getBountyAvailable", data);
-        this.setState({ available: data });
-      }).catch((err) => {
-        console.error(err);
-      });
+  handleClose = (modal) => {
+    const x = [];
+    x[modal] = false;
+    this.setState(x);
+  };
+
+  handleClickOpen = (modal) => {
+    const { auth } = this.props;
+
+    if (!auth.isAuthenticated()) {
+      auth.login(true);
+      return "Loading";
+    } else {
+      const x = [];
+      x[modal] = true;
+      this.setState(x);
     }
-  }
-
-  handleClickButton = () => {
-    this.setState(state => ({
-      open: !state.open
-    }));
   };
 
   handleClickAgree = () => {
     const { drizzleApis } = this.props;
-    this.setState(state => ({
-      open: !state.open
-    }));
+    this.handleClose("classicModal");
     drizzleApis.bounty();
   };
 
-  render() {
+  componentDidUpdate = () => {
+    const { drizzleApis } = this.props;
+    let isAuthenticated = drizzleApis.isAuthenticated();
+    if (isAuthenticated && !this.state.isAuthenticated) {
+      this.web3Apis.getBountyAvailable(drizzleApis.getLoggedInAccount()).then((data) => {
+        this.setState({ isAuthenticated: true });
+        this.setState({ available: data });
+      }).catch((err) => {
+        console.error(err);
+      });
+    } else if (!isAuthenticated && this.state.isAuthenticated) {
+      this.setState({ isAuthenticated: false });
+    }
+  };
+
+  render = () => {
     const { classes } = this.props;
-    const { open } = this.state;
-    //console.log("render", drizzleApis.isAuthenticated());
 
     if (this.state.available > 0) {
       return (
-
         <span>
-          <Button id="bountyButton" color="transparent"
-                  buttonRef={node => {
-                    this.anchorEl = node;
-                  }}
-                  variant="contained"
-                  onClick={this.handleClickButton} style={{ "textTransform": "capitalize" }}
-          >
-            <img src={require("assets/image/shower-head.png")} style={{ height: "18px", margin: "3px" }}/>
-             Free DECK!!
-          </Button>
-          <Popper
-            open={open}
-            anchorEl={this.anchorEl}
-            className={classes.popper}
-          >
-            <Paper className={classes.paper}>
-              <DialogTitle>{"Do you need DECK?"}</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  <div>New users can get 5000 DECK for free. (Gas fee is required)</div>
-                  <div>You can vote for good docs with DECK and get rewarded.</div>
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>s
-                <Button className={classes.selbtn} size="sm" onClick={this.handleClickButton}>
-                  Disagree
-                </Button>
-                <Button className={classes.selbtn} size="sm" onClick={this.handleClickAgree} color="rose">
-                  Agree
-                </Button>
-              </DialogActions>
-            </Paper>
-          </Popper>
+             <div className="bounty-btn" onClick={() => this.handleClickOpen("classicModal")} title="Get Free Deck">
+                 GET<br/>FREE DECK !!
+            </div>
+
+
+            <Dialog
+              fullWidth={this.state.fullWidth}
+              open={this.state.classicModal}
+              TransitionComponent={Transition}
+              keepMounted
+              aria-labelledby="classic-modal-slide-title"
+              aria-describedby="classic-modal-slide-description">
+
+                <DialogTitle
+                  id="classic-modal-slide-title"
+                  disableTypography
+                  className={classes.modalHeader}>
+                  <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
+                  <h3 className={classes.modalTitle}>Do you need DECK?</h3>
+                </DialogTitle>
+
+
+                <DialogContent id="classic-modal-slide-description" className={classes.modalBody}>
+                  <div className="dialog-subject">New users can get 5000 DECK for free. (Gas fee is required)</div>
+                  <div className="dialog-subject">You can vote for good docs with DECK and get rewarded.</div>
+                </DialogContent>
+
+
+                <DialogActions className="modal-footer">
+                  <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">Cancel</div>
+                  <div onClick={() => this.handleClickAgree()} className="ok-btn">Upload</div>
+                </DialogActions>
+
+            </Dialog>
         </span>
 
       );
     } else {
       return null;
     }
-  }
+  };
 }
 
-export default withStyles(styles)(Bounty);
+export default Bounty;

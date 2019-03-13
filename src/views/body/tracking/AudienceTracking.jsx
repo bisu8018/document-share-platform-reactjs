@@ -10,12 +10,26 @@ import DeckInShort from "../../../components/common/DeckInShort";
 
 class AudienceTracking extends React.Component {
   state = {
-    resultList: []
+    resultList: [],
+    filterList: null
   };
 
-  componentWillMount() {
-    this.print();
+  constructor() {
+    super();
+    this.handleKeyUp = this.keyUpHandler.bind(this);
   }
+
+  keyUpHandler = (e) => {
+    let searchValue = document.getElementById('searchInput').value;
+    let filteredResult = null;
+    if(searchValue){
+      let result = this.state.resultList;
+      filteredResult = result.filter(el => {
+        if(el.user.length > 0) return el.user[0].e.indexOf(searchValue) !== -1
+      });
+    }
+    this.setState({filterList : filteredResult});
+  };
 
   print = () => {
     const { location } = this.props;
@@ -25,12 +39,16 @@ class AudienceTracking extends React.Component {
     });
   };
 
+  componentWillMount() {
+    this.print();
+  }
+
   render() {
     const { location, drizzleApis, match } = this.props;
-    const rst = this.state.resultList;
+    const rst = !this.state.filterList ? this.state.resultList : this.state.filterList;
     const addr = Common.getThumbnail(location.state.documentId, 1);
-    const badgeReward = this.props.drizzleApis.toEther(location.state.confirmAuthorReward);
-    const badgeVote = this.props.drizzleApis.toEther(location.state.confirmVoteAmount);
+    const badgeReward = drizzleApis.toEther(location.state.confirmAuthorReward);
+    const badgeVote = drizzleApis.toEther(location.state.confirmVoteAmount);
     const badgeView = location.state.totalViewCount ? location.state.totalViewCount : 0;
 
     return (
@@ -38,6 +56,8 @@ class AudienceTracking extends React.Component {
       <div className="row">
         <div className="col-sm-12 col-lg-10  offset-lg-1 u__center profile-center">
           <div className="row">
+
+
             <div className="col-sm-3 col-md-3 col-thumb">
               <Link to={"/content/view/" + location.state.documentId}>
                 <div className="thumb_image">
@@ -47,6 +67,8 @@ class AudienceTracking extends React.Component {
                 </div>
               </Link>
             </div>
+
+
             <div className="col-sm-9 col-md-9 col-details_info">
               <dl className="details_info">
                 <Link to={"/content/view/" + location.state.documentId} className="info_title">
@@ -75,13 +97,15 @@ class AudienceTracking extends React.Component {
               </dl>
             </div>
           </div>
+
+
           <div className="row tracking_inner">
             <div className="col-sm-12 col-md-12">
               <div className="tracking_top">
                 <h3 className="u_title">Visitors</h3>
                 <div className="tags_menu_search_container">
                   <div className="tags_menu_search_wrapper">
-                    <input type="text" placeholder="Tag Search . . ."/>
+                    <input id="searchInput" type="text" autocomplete="off" placeholder="Name Search . . ." onKeyUp={this.handleKeyUp}/>
                     <button><i className="material-icons">search</i></button>
                   </div>
                 </div>
@@ -95,7 +119,6 @@ class AudienceTracking extends React.Component {
                     <th className="col2">Views</th>
                     <th className="col3">Last <br/> viewed</th>
                   </tr>
-
                   {rst.map((result, idx) => (
                     <tr key={idx}>
                       <td className="col1">
@@ -111,8 +134,12 @@ class AudienceTracking extends React.Component {
                         className="col3">{Common.dateAgo(result.viewTimestamp) === 0 ? "Today" : Common.dateAgo(result.viewTimestamp) + " days ago"} </td>
                     </tr>
                   ))}
+
                   </tbody>
                 </table>
+
+                {rst.length === 0 && <div className="no-data">No data</div>}
+
               </div>
             </div>
           </div>

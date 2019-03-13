@@ -10,6 +10,7 @@ const getCuratorDocumentsUrl = "curator/document/list";
 const getTodayVotedDocumentsByCuratorUrl = "curator/document/today";
 const voteDocumentUrl = "document/vote/";
 const registDocumentInfoUrl = "document/regist";
+const tagListUrl = "tags";
 
 export default {
   GET: {
@@ -38,9 +39,17 @@ export default {
       AxiosService._requestWithUrlPram( documentTextUrl + data, "GET", {},
         (data) => {
           callback(data);
-        }, (err) => {console.log(err);
+        }, (err) => {
         });
     },
+    tagList: (callback) => {
+      AxiosService._requestPlain( tagListUrl, "GET",
+        (data) => {
+          callback(data);
+        }, (err) => {
+        });
+    },
+
   },
   POST: {
     documentList: (data, callback, error) => {

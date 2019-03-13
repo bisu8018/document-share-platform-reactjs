@@ -60,13 +60,13 @@ class VoteDocument extends React.Component {
   };
 
   _sendVoteInfo = (transactionResult) => {
-    const { document, drizzleApis, auth } = this.props;
+    const { documentData, drizzleApis, auth } = this.props;
 
     const ethAccount = drizzleApis.getLoggedInAccount();
     const curatorId = auth.getEmail();//drizzleApis.getLoggedInAccount();//drizzleState.accounts[0];
     const voteAmount = drizzleApis.fromWei(this.state.deposit);
 
-    MainRepository.Document.sendVoteInfo(ethAccount, curatorId, voteAmount, document, transactionResult, () => {
+    MainRepository.Document.sendVoteInfo(ethAccount, curatorId, voteAmount, documentData, transactionResult, () => {
     }, () => {
     });
 
@@ -76,7 +76,7 @@ class VoteDocument extends React.Component {
       this._sendVoteInfo();
     };*/
 
-  _onClickVote = () => {
+  onClickVote = () => {
     //this.subscribeDrizzle();
     //console.log("subscribeDrizzle start");
     this._sendVoteInfo();
@@ -92,10 +92,10 @@ class VoteDocument extends React.Component {
 
   _handleApprove = () => {
 
-    const { document, drizzleApis } = this.props;
+    const { documentData, drizzleApis } = this.props;
     const deposit = this.state.deposit;
 
-    if (!document) return;
+    if (!documentData) return;
     if (!drizzleApis.isAuthenticated()) return;
     if (deposit <= 0) {
       alert("Deposit must be greater than zero.");
@@ -109,7 +109,7 @@ class VoteDocument extends React.Component {
 
       if (!this.state.approve.done && this.checkApproveTransaction(this.state.approve.stackId, drizzleState)) {
         //console.log("start vote");
-        const stackId = drizzleApis.voteOnDocument(document.documentId, deposit);
+        const stackId = drizzleApis.voteOnDocument(documentData.documentId, deposit);
         this.setState({ vote: { stackId: stackId } });
       }
 
@@ -332,11 +332,11 @@ class VoteDocument extends React.Component {
               <DialogContent id="classic-modal-slide-description" className={classes.modalBody}>
               <h4>1. Total amount of tokens voted</h4>
               <ul className="voteList">
-                <li><strong>You : </strong><CuratorDepositOnUserDocument document={this.props.document}
+                <li><strong>You : </strong><CuratorDepositOnUserDocument documentData={this.props.documentData}
                                                                          drizzleApis={drizzleApis}
                                                                          deposit={this.state.deposit} {...rest}
                                                                          loggedInAccount={loggedInAccount}/></li>
-                <li><strong>Total : </strong><CuratorDepositOnDocument document={this.props.document}
+                <li><strong>Total : </strong><CuratorDepositOnDocument documentData={this.props.documentData}
                                                                        drizzleApis={drizzleApis}
                                                                        deposit={this.state.deposit} {...rest}
                                                                        loggedInAccount={loggedInAccount}/></li>
@@ -370,7 +370,7 @@ class VoteDocument extends React.Component {
 
               <DialogActions className="modal-footer">
                 <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">Cancel</div>
-                <div onClick={() => this.onUploadDoc()} className="ok-btn">Commit</div>
+                <div onClick={() => this.onClickVote()} className="ok-btn">Commit</div>
               </DialogActions>
               <div className="progress-modal" id="progressModal">
                 <div className="progress-modal-second">

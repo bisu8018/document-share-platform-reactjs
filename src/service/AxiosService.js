@@ -73,6 +73,15 @@ export default {
 
       }).then(() => {});
   },
+  _requestPlain: function(url, type, success, failure) {
+    this._request(
+      url,
+      type,
+      "",
+      success,
+      failure
+    );
+  },
   _requestWithUrlPram: function(url, type, data, success, failure) {
     data = data || {};
     let params = data?"?" + qs.stringify(data) : "" ;

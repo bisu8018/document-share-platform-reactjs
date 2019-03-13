@@ -15,7 +15,6 @@ export default class DrizzleApis {
   // setup the drizzle store and drizzle
   drizzleStore = generateStore(this.options);
 
-
   constructor(callback) {
     try{
       this.drizzle = new Drizzle(this.options, this.drizzleStore);
@@ -23,6 +22,7 @@ export default class DrizzleApis {
       this.unsubscribe = this.drizzle.store.subscribe(() => {
         // every time the store updates, grab the state from drizzle
         this.drizzleState = this.drizzle.store.getState();
+       // console.log(this.drizzleState);
         // check to see if it's ready, if so, update local component state
         if(callback) callback(this, this.drizzle, this.drizzleState);
         if (this.drizzleState.drizzleStatus.initialized) {
@@ -48,10 +48,20 @@ export default class DrizzleApis {
 
 
   isAuthenticated = () => {
-    if(!this.drizzle) return;
-    if(!this.drizzleState) return;
-    if(this.drizzleState.accounts && this.drizzleState.accounts[0]) return this.isInitialized() && true;
-    return false;
+    //console.log(1);
+    //console.log(this.drizzleState);
+    if(!this.drizzle) {
+      //console.log(2);
+      return false;}
+    if(!this.drizzleState) {
+      //console.log(3);
+      return false;
+    }
+    if(this.drizzleState.accounts && this.drizzleState.accounts[0]) {
+      //console.log(4);
+      return this.isInitialized() && true;
+    }
+    return true;
   };
 
 

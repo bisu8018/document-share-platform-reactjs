@@ -26,11 +26,11 @@ class CuratorDepositOnUserDocument extends React.Component {
   };
 
   componentWillMount () {
-    const { document, loggedInAccount } = this.props;
+    const { documentData, loggedInAccount } = this.props;
 
     //console.log(document);
 
-    this.web3Apis.getCuratorDepositOnUserDocument(loggedInAccount, document.documentId).then((data) => {
+    this.web3Apis.getCuratorDepositOnUserDocument(loggedInAccount, documentData.documentId).then((data) => {
 
       this.setState({curatorRewardOnUserDocument:data});
 

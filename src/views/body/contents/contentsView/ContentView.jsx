@@ -13,7 +13,7 @@ const style = {};
 
 class ContentView extends React.Component {
   state = {
-    document: null,
+    documentData: null,
     documentText: null,
     determineAuthorToken: -1,
     featuredList: null,
@@ -22,9 +22,19 @@ class ContentView extends React.Component {
 
   web3Apis = new Web3Apis();
 
+  clearState = () => {
+    this.setState({
+      documentData: null,
+      documentText: null,
+      determineAuthorToken: -1,
+      featuredList: null,
+      approved: -1
+    })
+  };
+
   getContentInfo = (documentId) => {
     MainRepository.Document.getDocument(documentId, (res) => {
-      this.setState({ document: res.document, featuredList: res.featuredList  });
+      this.setState({ documentData: res.document, featuredList: res.featuredList  });
     });
   };
 
@@ -47,7 +57,7 @@ class ContentView extends React.Component {
   };
 
   componentWillMount() {
-    if (!this.state.document) {
+    if (!this.state.documentData) {
       const { match } = this.props;
       const documentId = match.params.documentId;
       this.getContentInfo(documentId);
@@ -55,15 +65,28 @@ class ContentView extends React.Component {
     }
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate = () => {
     this.getApproved();
     return true;
-  }
+  };
+
+  componentDidUpdate = () => {
+    const { match } = this.props;
+    const oldDocumentId = this.state.documentData ? this.state.documentData.documentId : null;
+    if(oldDocumentId){
+      const newDocumentId = match.params.documentId;
+      if(newDocumentId !== oldDocumentId) {
+        this.clearState();
+        this.getContentInfo(newDocumentId);
+        this.getDocumentText(newDocumentId);
+      }
+    }
+  };
 
   render() {
     const { ...rest } = this.props;
-    const document = this.state.document;
-    if (!document) {
+    const documentData = this.state.documentData;
+    if (!documentData) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     }
     return (
@@ -74,16 +97,16 @@ class ContentView extends React.Component {
 
             <Helmet>
               <meta charSet="utf-8"/>
-              <title>{document.title}</title>
-              <link rel="canonical" href={"http://dev.share.decompany.io/content/view/" + document.documentId}/>
+              <title>{documentData.title}</title>
+              <link rel="canonical" href={"http://dev.share.decompany.io/content/view/" + documentData.documentId}/>
             </Helmet>
 
             <div className="col-md-12 col-lg-8 view_left">
-              <ContentViewFullScreen document={document} documentText={this.state.documentText} {...rest}/>
+              <ContentViewFullScreen documentData={documentData} documentText={this.state.documentText} {...rest}/>
             </div>
 
             <div className="col-md-12 col-lg-4 ">
-              <ContentViewRight document={document} featuredList={this.state.featuredList} {...rest}/>
+              <ContentViewRight documentData={documentData} featuredList={this.state.featuredList} {...rest}/>
             </div>
 
           </div>

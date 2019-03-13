@@ -1,22 +1,10 @@
 import React, { Component } from "react";
 
-import withStyles from "@material-ui/core/styles/withStyles";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "react-spinkit";
 import ContentTags from "./ContentTags";
 import ContentListItem from "./ContentListItem";
 import MainRepository from "../../../redux/MainRepository";
-
-const style = {};
-
-const categories = [
-  "Art & Photos", "Automotive", "Business", "Career", "Data & Analytics", "Design",
-  "Devices & Hardware", "Economy & Finance", "Education", "Engineering", "Entertainment & Humor", "Environment", "Food",
-  "Government & Nonprofit", "Health & Medicine", "Healthcare", "Engineering", "Internet", "Investor Relations", "Law",
-  "Leadership & Management", "Lifestyle", "Marketing", "Mobile", "News & Politics", "Presentations & Public Speaking", "Real Estate",
-  "Recruiting & HR", "Retail", "Sales", "Science", "Self Improvement", "Services", "Small Business & Entrepreneurship", "Social Media",
-  "Software", "Spiritual", "Sports", "Technology", "Templates", "Travel"
-];
 
 class ContentContainer extends Component {
   state = {
@@ -95,13 +83,13 @@ class ContentContainer extends Component {
     });
   };
 
-  componentDidUpdate() {
+  componentDidUpdate = () => {
     const { location } = this.props;
     const pathArr = location.pathname.split("/");
     if (pathArr.length > 2 && pathArr[2] !== this.state.tag) {
       this.setFetch();
     }
-  }
+  };
 
   componentWillMount() {
     this.setFetch();
@@ -120,7 +108,7 @@ class ContentContainer extends Component {
       <div className="row">
 
         <div className="col-lg-3 ">
-          <ContentTags path={match.path} url={match.url} categories={categories}/>
+          <ContentTags path={match.path} url={match.url} { ...this.props }/>
         </div>
 
         <div className="col-sm-12 col-lg-9 u__center-container">
@@ -167,4 +155,4 @@ class ContentContainer extends Component {
   }
 }
 
-export default withStyles(style)(ContentContainer);
+export default ContentContainer;
