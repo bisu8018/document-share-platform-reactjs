@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "react-spinkit";
+import { Link } from "react-router-dom";
+
 import ContentTags from "./ContentTags";
 import ContentListItem from "./ContentListItem";
+import AutoSuggestInput from "../../../components/common/AutoSuggestInput";
 import MainRepository from "../../../redux/MainRepository";
 
 class ContentContainer extends Component {
@@ -14,9 +16,14 @@ class ContentContainer extends Component {
     tag: null,
     totalViewCountInfo: null,
     path: null,
-    loading: false
+    loading: false,
+    selectedTag: null
   };
 
+  constructor(props) {
+    super(props);
+    this.handleCategories = this.handleCategories.bind(this);
+  }
 
   fetchMoreData = () => {
     this.fetchDocuments({
@@ -83,6 +90,19 @@ class ContentContainer extends Component {
     });
   };
 
+  handleCategories = ( e ) => {
+    const { location } = this.props;
+    let path = e.target.value;
+    let sec_path = location.pathname.split("/").length > 2 ? location.pathname.split("/")[2] : null;
+
+    if (sec_path) this.props.history.push("/" + path + "/" + sec_path);
+    else this.props.history.push("/" + path + "/");
+  };
+
+  onSuggestionSelected = (tag) => {
+    this.setState({selectedTag : tag._id});
+  };
+
   componentDidUpdate = () => {
     const { location } = this.props;
     const pathArr = location.pathname.split("/");
@@ -96,7 +116,9 @@ class ContentContainer extends Component {
   }
 
   render() {
-    const { match } = this.props;
+    const { tagList, match, location } = this.props;
+    let path = match.path.split("/")[1];
+    let sec_path = location.pathname.split("/").length>2 ? location.pathname.split("/")[2] : null;
     const resultList = this.state.resultList;
     let _title = "latest";
 
@@ -120,17 +142,21 @@ class ContentContainer extends Component {
 
             <div className="u__center_mobile d-lg-none">
               <div className="left_menu_list col-4">
-                <select className="select-custom" id="exampleFormControlSelect1">
-                  <option>Latest</option>
-                  <option>Featured</option>
-                  <option>Popular</option>
+                <select className="select-custom" value={path} id="exampleFormControlSelect1" onChange={this.handleCategories}>
+                  <option value="latest" >Latest</option>
+                  <option value="featured" >Featured</option>
+                  <option value="popular" >Popular</option>
                 </select>
               </div>
               <div className="left_menu_list col-8">
                 <div className="tags_menu_search_container">
                   <div className="tags_menu_search_wrapper">
-                    <input type="text" placeholder="Tag Search . . ."/>
-                    <button><i className="material-icons">search</i></button>
+                    <AutoSuggestInput dataList={tagList} search={this.onSuggestionSelected} type={"tag"} bindValue={sec_path}/>
+                    <Link to={"/" +path + "/" + (this.state.selectedTag ? this.state.selectedTag : "")}>
+                      <div className="search-btn">
+                        <i className="material-icons">search</i>
+                      </div>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -146,6 +172,7 @@ class ContentContainer extends Component {
                 <ContentListItem key={result.documentId + result.accountId} result={result}
                                  totalViewCountInfo={this.state.totalViewCountInfo} {...this.props} />
               ))}
+              {resultList.length === 0 && <div className="no-data">No data</div>}
             </InfiniteScroll>
           </div>
         </div>

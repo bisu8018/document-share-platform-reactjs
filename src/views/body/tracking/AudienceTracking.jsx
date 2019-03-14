@@ -26,6 +26,7 @@ class AudienceTracking extends React.Component {
       let result = this.state.resultList;
       filteredResult = result.filter(el => {
         if(el.user.length > 0) return el.user[0].e.indexOf(searchValue) !== -1
+        return false;
       });
     }
     this.setState({filterList : filteredResult});
@@ -106,7 +107,9 @@ class AudienceTracking extends React.Component {
                 <div className="tags_menu_search_container">
                   <div className="tags_menu_search_wrapper">
                     <input id="searchInput" type="text" autocomplete="off" placeholder="Name Search . . ." onKeyUp={this.handleKeyUp}/>
-                    <button><i className="material-icons">search</i></button>
+                    <div className="search-btn">
+                      <i className="material-icons">search</i>
+                    </div>
                   </div>
                 </div>
               </div>

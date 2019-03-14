@@ -7,7 +7,8 @@ import MainRepository from "../../redux/MainRepository";
 
 class Header extends React.Component {
   state = {
-    accountId: null
+    accountId: null,
+    prevScrollPos: null
   };
 
   constructor(props) {
@@ -35,13 +36,31 @@ class Header extends React.Component {
     });
   };
 
+  handleScroll = () => {
+    let currentScrollPos = window.pageYOffset;
+    if (this.state.prevScrollPos > currentScrollPos) {
+      document.getElementById("header__main-nav").style.top = "0";
+    } else {
+      document.getElementById("header__main-nav").style.top = "-60px";
+    }
+    this.setState({prevScrollPos : currentScrollPos});
+  };
+
   componentWillMount() {
     const pathname = window.location.pathname;
     if (pathname === "/") {
       window.location.pathname += "latest";
     }
-    this.setState(this.props.tagList);
+    this.setState({prevScrollPos : window.pageYOffset});
     this.getAccount();
+  }
+
+  componentDidMount() {
+    window.addEventListener("scroll", this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
   }
 
   render() {
@@ -52,13 +71,13 @@ class Header extends React.Component {
       <header id="header">
         <nav className="navbar navbar-default navbar-expand-lg fixed-top" id="header__main-nav">
           <div className="container-fluid">
-            <div className="col-4 col-lg-3">
+            <div className="col-4 col-lg-4">
               <a className="navbar-brand" href="/">
                 <img src={require("assets/image/logo.png")} alt="DECOMPANY"/>
               </a>
             </div>
 
-            <div className="navbar-menu col-lg-6 d-none d-lg-block">
+            <div className="navbar-menu col-lg-4 d-none d-lg-block">
               <ul>
                 <li className="navbar-menu-latest" title="latest"><NavLink to="/latest"
                                                                            activeClassName="on">Latest</NavLink></li>
@@ -71,12 +90,12 @@ class Header extends React.Component {
             </div>
 
 
-            <div className="navbar-menu  col-8 col-lg-3">
-              {auth.isAuthenticated() ?
-                <ul className="float-right">
-                  <li title="upload">
-                    <UploadDocument {...this.props} />
-                  </li>
+            <div className="navbar-menu  col-8 col-lg-4">
+              <ul className="float-right">
+                <li title="upload">
+                  <UploadDocument {...this.props} />
+                </li>
+                {auth.isAuthenticated() ?
                   <li title="profile" className=" d-none d-sm-inline-block">
                     {this.state.accountId &&
                     <Link to={"/author/" + this.state.accountId} className="avatar">
@@ -89,17 +108,17 @@ class Header extends React.Component {
                     </Link>
                     }
                   </li>
-                  <li title="menu">
-                    <Menu {...this.props} />
-                  </li>
-                </ul>
-                :
-                <ul className="float-right">
-                  <li className="login-btn" onClick={this.handleOpen} title="login">
+                  :
+                  <li className="d-none d-sm-inline-block login-btn" onClick={this.handleOpen} title="login">
+                    <i className="material-icons">edit</i>
                     Log-in
                   </li>
-                </ul>
-              }
+
+                }
+                <li title="menu">
+                  <Menu {...this.props} />
+                </li>
+              </ul>
             </div>
           </div>
 

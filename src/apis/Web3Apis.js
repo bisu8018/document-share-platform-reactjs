@@ -70,25 +70,23 @@ export default class Web3Apis {
     const result = Math.round(deck.toNumber() * 100) / 100;
     //120,000,000,000,000,000,000
     //console.log("toDeck", bn, deck, deck.toNumber(), result);
-
     return result;
-  }
+  };
+
 
   getBountyAvailable = (address) => {
-
     return this.Bounty.methods.available().call({
       from: address
     });
-
   };
 
-  getApproved = (address) => {
 
+  getApproved = (address) => {
     return this.Deck.methods.allowance(address, Deck.networks[this.network].address).call({
       from: address
     });
-
   };
+
 
   getBalance = (address) => {
     try{
@@ -99,17 +97,15 @@ export default class Web3Apis {
       console.error(e);
       return Promise.reject(e);
     }
-    
-
   };
 
-  getCalculateAuthorReward = (address, viewCount, totalViewCount) => {
 
+  getCalculateAuthorReward = (address, viewCount, totalViewCount) => {
     return this.DocumentReg.methods.calculateAuthorReward(viewCount, totalViewCount).call({
       from: address
     });
-
   };
+
 
   getAuthor3DayRewardOnDocument = (accountId, documentId) => {
     //contract getAuthor3DayRewardOnDocument

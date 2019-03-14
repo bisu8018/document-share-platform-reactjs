@@ -61,6 +61,12 @@ class AutoSuggestInput extends React.Component {
     this.props.search(suggestion);
   };
 
+  componentWillMount(): void {
+    if(this.props.bindValue){
+      this.setState({value : this.props.bindValue});
+    }
+  }
+
   render() {
     const { type } = this.props;
     const { value, suggestions } = this.state;

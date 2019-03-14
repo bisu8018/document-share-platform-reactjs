@@ -1699,6 +1699,10 @@ pre code {
     display: block;
 }
 
+#header__main-nav {
+    transition: top 0.3s;
+}
+
 .navbar {
     position: relative;
     display: flex;
@@ -6724,18 +6728,52 @@ h2.title {
 .login-btn {
     cursor: pointer;
     display: inline-block;
-    margin: 0 14px;
+    padding: 6px 14px 6px 27px;
+    top: 4px;
+    font-weight: 500;
     position: relative;
-    padding: 7px 0;
-    font-weight: 400;
-    color: #333;
-    font-size: 1.125rem;
-    top: 7px;
+    border-radius: 3px;
+    font-size: 13px;
+    -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
+    color: #333;
+    background: white;
+}
+.login-btn > i {
+    font-size: 17px;
+    position: absolute;
+    left: 6px;
+    top: 6px;
 }
 
 .login-btn:hover {
     color: #7fc241;
+    transition: 0.2s all ease-in-out;
+}
+
+.upload-btn {
+    cursor: pointer;
+    display: inline-block;
+    padding: 7px 15px 7px 35px;
+    top: 3px;
+    font-weight: 500;
+    position: relative;
+    border-radius: 3px;
+    font-size: 13px;
+    -webkit-transition: 0.2s all ease-in-out;
+    transition: 0.2s all ease-in-out;
+    color: white;
+    background:#4f41c2;
+}
+
+.upload-btn > i {
+    font-size: 18px;
+    position: absolute;
+    left: 11px;
+}
+
+.upload-btn:hover {
+    background: #6c27f1;
     transition: 0.2s all ease-in-out;
 }
 
@@ -6772,6 +6810,7 @@ h2.title {
     transition: 0.2s all ease-in-out;
     padding-top: 6px;
     padding-left: 17px;
+    padding-right: 8px;
 }
 
 .search-btn:hover {
@@ -6984,44 +7023,18 @@ h2.title {
     transition: 0.2s all ease-in-out;
 }
 
-
-.upload-btn {
-    cursor: pointer;
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    position: relative;
-    font-weight: 500;
-    border-radius: 20px;
-    font-size: 13px;
-    top: 10px;
-    -webkit-transition: 0.2s all ease-in-out;
-    transition: 0.2s all ease-in-out;
-    color: #4144c2;
-    border: 1px solid #4144c2;
-    text-transform: uppercase;
-    padding-top: 5px;
-}
-
-.upload-btn:hover {
-    background: #4144c2;
-    color: white;
-    transition: 0.2s all ease-in-out;
-}
-
-
 .avatar {
-    width: 39px;
-    height: 39px;
+    width: 33px;
+    height: 33px;
     border: 1px solid #333;
-    border-radius: 20px;
+    border-radius: 19px;
     text-transform: uppercase;
     font-weight: 500 !important;
     cursor: pointer;
-    font-size: 20px !important;;
-    padding-top: 3px !important;;
+    font-size: 20px !important;
+    padding-top: 0px !important;
     top: 5px;
-    position: relative !important;;
+    position: relative !important;
 }
 
 .avatar:hover {
@@ -7273,7 +7286,7 @@ h2.title {
     display: flex;
 }
 
-.tags_menu_search_container .tags_menu_search_wrapper:focus-within {
+.u__left .tags_menu_search_container .tags_menu_search_wrapper:focus-within {
     border-radius: 22px 22px 0 0;
 }
 
@@ -7288,27 +7301,8 @@ h2.title {
     width: 85%;
 }
 
-.tags_menu_search_container .tags_menu_search_wrapper button {
-    cursor: pointer;
-    font-size: 24px;
-    height: 40px;
-    min-width: 40px;
-    padding: 4px 0 0 1px;
-    overflow: hidden;
-    position: relative;
-    line-height: 40px;
-    background: none;
-    border: none;
-    border-radius: 50%;
-    color: #717171;
-    margin-left: 9px;
-    width: 15%;
-    transition: 0.2s all ease-in-out;
-}
-
-.tags_menu_search_container .tags_menu_search_wrapper button:hover {
-    color: #68ad28;
-    transition: 0.2s all ease-in-out;
+.left_menu_list .tags_menu_search_container .tags_menu_search_wrapper input {
+    padding-left: 0 !important;
 }
 
 .tags_menu li a.on,
@@ -7348,14 +7342,15 @@ h2.title {
 }
 
 .select-custom {
-    border: none;
+    border: 1px solid #cecece;
     width: 85%;
     color: #333;
     background: white;
     border-radius: 35px;
-    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.17);
     height: 40px;
     padding-left: 15px;
+    font-size: 15px;
+    cursor: pointer;
 }
 
 
@@ -7506,6 +7501,7 @@ h2.title {
     .col-thumb,
     .col-details_info {
         max-width: 100%;
+        padding: 0 30px;
     }
 
     .tracking-detail-container .profile_top,
@@ -7764,6 +7760,7 @@ h2.title {
 .tracking_table tr:hover {
     background-color: #f7f7f7;
 }
+
 .no-data {
     font-weight: bold;
     text-align: center;
@@ -7841,7 +7838,7 @@ h2.title {
 
 .u__view .view_top {
     position: relative;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.17);
+    border: 1px solid #cecece;
 }
 
 .u__view .view_screen {

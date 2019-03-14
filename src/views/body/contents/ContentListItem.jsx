@@ -32,17 +32,17 @@ class ContentListItem extends React.Component {
         <div className="col-sm-9 col-md-9 col-details_info">
           <dl className="details_info">
             <dt className="blind">info desc</dt>
-            <Link to={"/content/view/" + result.documentId}>
+            <Link to={"/content/view/" + result.documentId} title={result.title}>
               <dd className="info_title">  {result.title ? result.title : result.documentName} </dd>
             </Link>
-            <Link to={"/author/" + result.accountId} className="info_name">
+            <Link to={"/author/" + result.accountId} className="info_name" title= {result.nickname ? result.nickname : result.accountId}>
               <i className="material-icons img-thumbnail">face</i>
               {result.nickname ? result.nickname : result.accountId}
             </Link>
             <span className="info_date">
               {Common.dateAgo(result.created) === 0 ? "Today" : Common.dateAgo(result.created) + " days ago"}
               </span>
-            <Link to={"/content/view/" + result.documentId} className="info_desc">
+            <Link to={"/content/view/" + result.documentId} className="info_desc" title="description">
               <LinesEllipsis
                 text={result.desc}
                 maxLine='2'

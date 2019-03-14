@@ -3,15 +3,12 @@ import Autosuggest from "react-autosuggest";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css"; // If using WebPack and style-loader.
 import * as restapi from "apis/DocApi";
-import javascriptStyles from "assets/jss/material-kit-react/views/componentsSections/javascriptStyles.jsx";
 
-import withStyles from "@material-ui/core/styles/withStyles";
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-import { CloudUpload } from "@material-ui/icons";
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -56,19 +53,17 @@ class UploadDocument extends React.Component {
 
   handleClickOpen = (modal) => {
     const { drizzleApis, auth } = this.props;
-
-    const account = drizzleApis.getLoggedInAccount();
-    const nickname = this.getNickname() ? this.getNickname() : account;
-    this.setState({ nickname: nickname });
-
     if (!auth.isAuthenticated()) {
-      auth.login(true);
-      return "Loading";
+      return auth.login(true);
     } else {
       const x = [];
       x[modal] = true;
       this.setState(x);
     }
+
+    const account = drizzleApis.getLoggedInAccount();
+    const nickname = this.getNickname() ? this.getNickname() : account;
+    this.setState({ nickname: nickname });
   };
 
   handleClose = (modal) => {
@@ -86,10 +81,6 @@ class UploadDocument extends React.Component {
   onUploadDoc = () => {
     const { auth, drizzleApis } = this.props;
     const self = this;
-    if (!auth.isAuthenticated()) {
-      alert("Unauthenticated");
-      return;
-    }
 
     const fileInfo = this.state.fileInfo;
     const tags = this.state.tags ? this.state.tags : [];
@@ -226,13 +217,15 @@ class UploadDocument extends React.Component {
 
 
   render() {
-    const { classes } = this.props;
     return (
       <span>
-            <div className="upload-btn" onClick={() => this.handleClickOpen("classicModal")}>
-                 <CloudUpload className={classes.icons}/>
+            <div className="upload-btn d-none d-sm-inline-block" onClick={() => this.handleClickOpen("classicModal")}>
+              <i className="material-icons">cloud_upload</i>
+              Upload
             </div>
-
+        {this.props.type && this.props.type === 'menu' &&
+        <span className="d-inline-block d-sm-none" onClick={() => this.handleClickOpen("classicModal")}>Upload</span>
+        }
 
             <Dialog
               fullWidth={this.state.fullWidth}
@@ -245,14 +238,13 @@ class UploadDocument extends React.Component {
 
               <DialogTitle
                 id="classic-modal-slide-title"
-                disableTypography
-                className={classes.modalHeader}>
+                disableTypography>
                 <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                <h3 className={classes.modalTitle}>Upload document</h3>
+                <h3 >Upload document</h3>
               </DialogTitle>
 
 
-              <DialogContent id="classic-modal-slide-description" className={classes.modalBody}>
+              <DialogContent id="classic-modal-slide-description" >
                 <div className="dialog-subject">Title</div>
                 <input type="text" placeholder="Title of the uploading document" id="docTitle"
                        className="custom-input"/>
@@ -291,4 +283,4 @@ class UploadDocument extends React.Component {
   }
 }
 
-export default withStyles(javascriptStyles)(UploadDocument);
+export default UploadDocument;

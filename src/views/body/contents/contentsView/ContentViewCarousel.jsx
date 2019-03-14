@@ -1,61 +1,51 @@
 import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-
 import TrackingApis from "apis/TrackingApis";
-
-import withStyles from "@material-ui/core/styles/withStyles";
 import Common from "../../../../common/Common";
-
-
-const style = {
-  container: {
-    position: "relative",
-    maxWidth: "100vw"
-  }
-};
 
 class ContentViewCarousel extends React.Component {
 
-  constructor(props) {
-    super(props);
-    const { target, classes } = props;
-    this.target = target;
-    this.classes = classes;
-  }
+  state = {
+    isFull: false,
+    dataKey: null,
+    totalPages: 0,
+    readPage: 0
+  };
 
   handleTracking = (documentId, page) => {
-
+    if(page !== 1){
+      let pageNum = Number(page.key.split('$')[1]);
+      if(pageNum === this.state.readPage) return;
+      this.setState({readPage : pageNum});
+    }
     TrackingApis.tracking({
       id: documentId,
       n: page,
-      e: "tracking_tester@decompany.io",
       ev: "view"
     }, true);
-
   };
 
   componentWillMount() {
-
     const { tracking, target } = this.props;
     let documentId = target.documentId;
     if (tracking) {
       this.handleTracking(documentId, 1);
-      window.addEventListener("unload", function _handler() {
-        try {
-          TrackingApis.tracking({
-            id: documentId,
-            n: -1,
-            e: "tracking_tester@decompany.io",
-            ev: "leave"
-          }, false, true);
-        } catch (e) {
-          console.error(e);
-        }
-        window.removeEventListener("unload", _handler);
-      });
     }
+  }
 
+  componentWillUnmount() {
+    const { target } = this.props;
+    let documentId = target.documentId;
+    try {
+      TrackingApis.tracking({
+        id: documentId,
+        n: -1,
+        ev: "leave"
+      }, false, true);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   render() {
@@ -65,7 +55,6 @@ class ContentViewCarousel extends React.Component {
     for (let i = 0; i < target.totalPages; i++) {
       arr[i] = Common.getPageView(target.documentId, i + 1);
     }
-
     return (
       <div className="card card-raised">
         <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel" data-interval="3000">
@@ -74,14 +63,15 @@ class ContentViewCarousel extends React.Component {
             showThumbs={false}
             showIndicators={false}
             swipeable
+            selectedItem= {this.state.readPage}
             useKeyboardArrows={true}
-            onChange={(index) => {
-              this.handleTracking(target.documentId, index + 1);
-              return true;
-            }}>
+            onChange={this.handleTracking.bind(this)}
+          >
+
             {arr.length > 0 ? arr.map((addr, index) => (
-              <img className={this.classes.img} key={index} src={addr} alt={"carousel"}/>
-            )) : ""}
+              <img  key={index} src={addr} alt={"carousel"}/>
+            )) : "no data"}
+
           </Carousel>
 
         </div>
@@ -90,4 +80,4 @@ class ContentViewCarousel extends React.Component {
   }
 }
 
-export default withStyles(style)(ContentViewCarousel);
+export default ContentViewCarousel;

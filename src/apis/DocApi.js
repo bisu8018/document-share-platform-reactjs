@@ -3,7 +3,7 @@ import * as axiosCustom from '../service/AxiosCustomService';
 import { APP_PROPERTIES } from 'properties/app.properties';
 import DocService from "../service/document/DocService";
 
-const imgDomain = APP_PROPERTIES.domain().image;
+//const imgDomain = APP_PROPERTIES.domain().image;
 const apiDomain = APP_PROPERTIES.domain().api;
 
 const getDocumentDownloadUrl = "/api/document/download/";
@@ -80,10 +80,10 @@ function fileUpload(params) {
     return;
   }
   console.log("fileUpload", params);
-  const fileid = params.fileid;
+  /*const fileid = params.fileid;
   const fileindex = params.fileindex;
   const ext = params.ext;
-  const owner = params.owner;
+  const owner = params.owner;*/
   //const url = uploadDomain + "/" + fileid + "/" + owner + "/" + ext;
   const urlSplits = params.signedUrl.split("?");
 

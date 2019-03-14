@@ -1,4 +1,5 @@
 import React from "react";
+import Tooltip from "../../../../components/modal/VoteDocument";
 
 class ContentViewBlockchainButton extends React.Component {
 
@@ -43,14 +44,15 @@ class ContentViewBlockchainButton extends React.Component {
 
   render() {
     const { documentData, drizzleApis } = this.props;
-    const disabled = documentData.accountId === drizzleApis.getLoggedInAccount();
+    let disabled = documentData.accountId === drizzleApis.getLoggedInAccount();
     if (drizzleApis.isExistDocument(this.props.dataKey) || disabled) return null;
 
     return (
-      <div className="register-btn" title="Register this document to blockchain"
-           onClick={this.handleRegistDocumentInBlockChain} >
-        <i className="material-icons">add_box</i>
-      </div>
+      <Tooltip title="Register this document to blockchain" placement="bottom">
+        <div className="register-btn"  onClick={this.handleRegistDocumentInBlockChain}>
+          <i className="material-icons">add_box</i>
+        </div>
+      </Tooltip>
     );
   }
 }

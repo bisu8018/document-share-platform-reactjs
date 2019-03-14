@@ -11,6 +11,7 @@ import ContentViewRegistBlockchainButton from "./ContentViewRegistBlockchainButt
 // import ContentViewComment from "./ContentViewComment";
 import Common from "../../../../common/Common";
 import VoteDocument from "../../../../components/modal/VoteDocument";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class ContentViewFullScreen extends Component {
 
@@ -47,14 +48,14 @@ class ContentViewFullScreen extends Component {
   };
 
   checkDocumentInBlockChain = () => {
-    const {documentData, drizzleApis} = this.props;
+    const { documentData, drizzleApis } = this.props;
     if (!drizzleApis.isInitialized() || !drizzleApis.isAuthenticated()) return;
     if (this.state.dataKey) return;
     if (!documentData) return;
 
     try {
       const dataKey = drizzleApis.requestIsExistDocument(documentData.documentId);
-      this.setState({dataKey: dataKey});
+      this.setState({ dataKey: dataKey });
       //console.log("checkDocumentInBlockChain dataKey  :::::  ", dataKey);
     } catch (e) {
       //console.error("checkDocumentInBlockChain error", e);
@@ -67,7 +68,7 @@ class ContentViewFullScreen extends Component {
   }
 
   render() {
-    const { documentData, documentText, ...rest } = this.props;
+    const { auth, documentData, documentText, drizzleApis } = this.props;
     if (this.state.totalPages !== documentData.totalPages) {
       this.setState({ totalPages: documentData.totalPages });
     }
@@ -88,8 +89,8 @@ class ContentViewFullScreen extends Component {
       }
     }
 
-    const badgeReward = this.props.drizzleApis.toEther(documentData.confirmAuthorReward);
-    const badgeVote = this.props.drizzleApis.toEther(documentData.confirmVoteAmount);
+    const badgeReward =drizzleApis.toEther(documentData.confirmAuthorReward);
+    const badgeVote = drizzleApis.toEther(documentData.confirmVoteAmount);
     const badgeView = documentData.totalViewCount ? documentData.totalViewCount : 0;
 
     return (
@@ -99,7 +100,7 @@ class ContentViewFullScreen extends Component {
         <Fullscreen enabled={this.state.isFull} onChange={isFull => this.setState({ isFull })}>
 
           <div className="view_top">
-            <ContentViewCarousel id="pageCarousel" target={documentData} {...rest} tracking={true}/>
+            <ContentViewCarousel id="pageCarousel" target={documentData} tracking={true}/>
 
             <div className="view_screen">
               <i className="material-icons" onClick={this.goFull}>fullscreen</i>
@@ -113,35 +114,44 @@ class ContentViewFullScreen extends Component {
               <div className="col-sm-12 col-view">
                 <span className="txt_view">{badgeView}</span>
                 <span className="view_date view-reward">Reward <span><DollarWithDeck deck={badgeReward}
-                                                                                     drizzleApis={this.props.drizzleApis}/></span></span>
+                                                                                     drizzleApis={drizzleApis}/></span></span>
                 <span className="view_date view-reward">Voting <span><DeckInShort deck={badgeVote}/></span></span>
                 <span className="view_date"> {Common.timestampToDateTime(documentData.created)}</span>
               </div>
             </div>
             <div className="row">
               <div className="col-sm-12 col-md-12 view_btns_inner">
-                <ContentViewRegistBlockchainButton documentData={ documentData } dataKey={ this.state.dataKey } { ...rest } />
-                <VoteDocument documentData={documentData} dataKey={ this.state.dataKey } { ...rest } />
-                <div className="share-btn" title="Share this document">
-                  <i className="material-icons">share</i>
-                </div>
-                <div className="share-btn" title="Download this document" onClick={this.handleDownloadContent}>
-                  <i className="material-icons">save</i>
-                </div>
-                <Link to={{
-                  pathname: "/tracking/" + documentData.accountId + "/" + documentData.documentId,
-                  state: documentData
-                }}>
-                  <div className="statistics-btn" title="See statistics of this document">
-                    <i className="material-icons">insert_chart</i>
+                {drizzleApis.isAuthenticated() && auth.isAuthenticated() &&
+                  <span>
+                    <ContentViewRegistBlockchainButton documentData={documentData} dataKey={this.state.dataKey}  drizzleApis={drizzleApis} />
+                    <VoteDocument documentData={documentData} dataKey={this.state.dataKey}  drizzleApis={drizzleApis} auth={auth} />
+                  </span>
+                }
+                <Tooltip title="Share this document" placement="bottom">
+                  <div className="share-btn">
+                    <i className="material-icons">share</i>
                   </div>
-                </Link>
+                </Tooltip>
+                <Tooltip title="Download this document" placement="bottom">
+                  <div className="share-btn" onClick={this.handleDownloadContent}>
+                    <i className="material-icons">save</i>
+                  </div>
+                </Tooltip>
+                <Tooltip title="See statistics of this document" placement="bottom">
+                  <Link to={{
+                    pathname: "/tracking/" + documentData.accountId + "/" + documentData.documentId,
+                    state: documentData
+                  }}>
+                    <div className="statistics-btn">
+                      <i className="material-icons">insert_chart</i>
+                    </div>
+                  </Link>
+                </Tooltip>
               </div>
             </div>
             <div className="row">
               <div className="col-sm-12 col-md-12">
-                <Link to={"/author/" + documentData.accountId} className="info_name"
-                      title={"Go to profile page"}>
+                <Link to={"/author/" + documentData.accountId} className="info_name" title="Go to profile page">
                   <i className="material-icons img-thumbnail">face</i>
                   {documentData.nickname ? documentData.nickname : documentData.accountId}
                 </Link>

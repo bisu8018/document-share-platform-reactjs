@@ -47,7 +47,7 @@ class ContentView extends React.Component {
 
   getApproved = () => {
     const { drizzleApis } = this.props;
-    if (drizzleApis.isAuthenticated() && this.state.approved < 0) {
+    if (drizzleApis.getLoggedInAccount() && this.state.approved < 0) {
       this.web3Apis.getApproved(drizzleApis.getLoggedInAccount()).then((data) => {
         this.setState({ approved: data });
       }).catch((err) => {
@@ -84,7 +84,7 @@ class ContentView extends React.Component {
   };
 
   render() {
-    const { ...rest } = this.props;
+    const { drizzleApis, auth, ...rest } = this.props;
     const documentData = this.state.documentData;
     if (!documentData) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
@@ -102,7 +102,7 @@ class ContentView extends React.Component {
             </Helmet>
 
             <div className="col-md-12 col-lg-8 view_left">
-              <ContentViewFullScreen documentData={documentData} documentText={this.state.documentText} {...rest}/>
+              <ContentViewFullScreen documentData={documentData} documentText={this.state.documentText} drizzleApis={drizzleApis} auth={auth}/>
             </div>
 
             <div className="col-md-12 col-lg-4 ">

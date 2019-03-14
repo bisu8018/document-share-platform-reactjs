@@ -31,7 +31,7 @@ export default class Auth {
 
   login(isSilentAuthentication) {
     if (isSilentAuthentication) {
-      this.auth0.authorize({ prompt: "none" });
+      this.auth0.authorize({ redirectUri: "http://localhost:8000/featured" });
     } else {
       this.auth0.authorize();
     }

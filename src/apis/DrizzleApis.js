@@ -48,25 +48,15 @@ export default class DrizzleApis {
 
 
   isAuthenticated = () => {
-    //console.log(1);
-    //console.log(this.drizzleState);
-    if(!this.drizzle) {
-      //console.log(2);
-      return false;}
-    if(!this.drizzleState) {
-      //console.log(3);
-      return false;
-    }
-    if(this.drizzleState.accounts && this.drizzleState.accounts[0]) {
-      //console.log(4);
-      return this.isInitialized() && true;
-    }
+    if(!this.drizzle) return false;
+    if(!this.drizzleState) return false;
+    if(this.drizzleState.accounts && this.drizzleState.accounts[0])  return this.isInitialized() && true;
     return true;
   };
 
 
   getLoggedInAccount = () => {
-    if(!this.isAuthenticated()) return;
+    if(!this.isAuthenticated())  return false;
     return this.drizzleState.accounts[0];
   };
 
@@ -137,15 +127,8 @@ export default class DrizzleApis {
 
 
   requestIsExistDocument = (documentId) => {
-    if(!this.isInitialized()){
-      console.error("requestIsExistDocument");
-      console.error("Metamask doesn't initialized");
-      return;
-    }
-    if(!this.isAuthenticated()){
-      console.error("The Metamask login is required.")
-      return;
-    }
+    if(!this.isInitialized()) return;
+    if(!this.isAuthenticated()) return;
     const ethAccount = this.drizzleState.accounts[0];
     const contract = this.drizzle.contracts.DocumentReg;
     const dataKey = contract.methods["contains"].cacheCall(this.fromAscii(documentId), {
@@ -157,14 +140,8 @@ export default class DrizzleApis {
 
 
   isExistDocument = (dataKey) => {
-    if(!this.isInitialized()){
-      console.error("Metamask doesn't initialized");
-      return;
-    }
-    if(!this.isAuthenticated()){
-      console.error("The Metamask login is required.");
-      return;
-    }
+    if(!this.isInitialized()) return;
+    if(!this.isAuthenticated()) return;
     if(this.drizzleState.contracts.DocumentReg.contains[dataKey]){
       const isExistInBlockChain = this.drizzleState.contracts.DocumentReg.contains[dataKey].value;
       return isExistInBlockChain;
@@ -174,10 +151,7 @@ export default class DrizzleApis {
 
 
   bounty = () => {
-    if(!this.isAuthenticated()){
-      console.error("The Metamask login is required.")
-      return;
-    }
+    if(!this.isAuthenticated()) return;
     const ethAccount = this.drizzleState.accounts[0];
     const BountyOne = this.drizzle.contracts.BountyOne;
     console.log(this.drizzle.contracts);
@@ -189,7 +163,6 @@ export default class DrizzleApis {
     const stackId = BountyOne.methods["claim"].cacheSend({
       from: ethAccount
     });
-    console.log("bounty stackId", stackId);
     return stackId;
   };
 
@@ -296,7 +269,6 @@ export default class DrizzleApis {
 
 
   claimCuratorReward = (documentId) => {
-    //function claimCuratorReward(bytes32 _docId) public
     if(!this.isAuthenticated()){
       console.error("The Metamask login is required.")
       return;
