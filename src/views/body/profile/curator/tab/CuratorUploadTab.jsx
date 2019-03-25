@@ -12,16 +12,20 @@ class CuratorUploadTab extends React.Component {
     resultList: [],
     pageNo: null,
     isEndPage: false,
+    moreDataFlag: false
   };
+
   fetchMoreData = () => {
-    this.fetchDocuments({
-      pageNo: this.state.pageNo + 1
-    });
+    const { pageNo } = this.state;
+    if(this.state.moreDataFlag) {
+      this.fetchDocuments({
+        pageNo: pageNo + 1
+      });
+    }
   };
 
   fetchDocuments = (params) => {
-    const { match } = this.props;
-    const accountId = match.params.accountId;
+    const { accountId } = this.props;
     const pageNo = (!params || isNaN(params.pageNo)) ? 1 : Number(params.pageNo);
     MainRepository.Document.getDocumentList({ accountId: accountId, pageNo: pageNo }, (res) => {
       if (res && res.resultList) {
@@ -29,17 +33,17 @@ class CuratorUploadTab extends React.Component {
           this.setState({
             resultList: this.state.resultList.concat(res.resultList),
             pageNo: res.pageNo,
-            totalViewCountInfo: res.totalViewCountInfo
           });
         } else {
           this.setState({
             resultList: res.resultList,
             pageNo: res.pageNo,
-            totalViewCountInfo: res.totalViewCountInfo
           });
         }
 
-        if (res.count === 0) {
+        this.setState({ moreDataFlag: true });
+
+        if (res.count === 0 || res.resultList.length < 10) {
           this.setState({ isEndPage: true });
         }
       }
@@ -52,12 +56,13 @@ class CuratorUploadTab extends React.Component {
 
 
   render() {
-    const { totalViewCountInfo } = this.props;
+    const { drizzleApis } = this.props;
     return (
 
       <div>
-        <h3 style={{ margin: "20px 0 0 0", fontSize: "26px" }}>{this.state.resultList.length} shared
-          documents </h3>
+        <div className="document-total-num">
+          Total documents : <span>{this.state.resultList.length}</span>
+        </div>
         <InfiniteScroll
           dataLength={this.state.resultList.length}
           next={this.fetchMoreData}
@@ -66,10 +71,9 @@ class CuratorUploadTab extends React.Component {
 
 
           {this.state.resultList.map((result, idx) => (
-            <CuratorTabItem {...this.props}
-                            document={result}
+            <CuratorTabItem document={result}
                             key={idx}
-                            totalViewCountInfo={totalViewCountInfo}/>
+                            drizzleApis={drizzleApis}/>
           ))}
         </InfiniteScroll>
       </div>

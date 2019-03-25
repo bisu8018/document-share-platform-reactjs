@@ -3,17 +3,8 @@ import { APP_PROPERTIES } from "../properties/app.properties";
 import * as qs from "qs";
 
 export default {
-  getRootUrl: function() {
-    /*  if (window.location.hostname == 'localhost') {
-        return window.location.protocol + '//' + 'localhost' + ':' + '8080' //window.location.port
-      } else {
-        return window.location.protocol + '//' + window.location.hostname
-      }*/
-    const apiDomain = APP_PROPERTIES.domain().api;
-    return apiDomain;
-  },
   getRootUrlWithApi: function() {
-    return this.getRootUrl() + "/api/";
+    return  APP_PROPERTIES.domain().api + "/api/";
   },
   /**
    * @return {boolean}
@@ -26,7 +17,10 @@ export default {
       console.log("[request]\nurl: " + url + "\ndata: " + data);
     }
 
-    let _header = {"Content-Type": "application/json"};
+    let _header = {};
+    if(type !== 'GET'){
+      _header = {"Content-Type": "application/json"};
+    }
     if(header){
       _header = Object.assign(header,_header);
     }
@@ -62,7 +56,6 @@ export default {
             console.log("Error!\ncode:" + status + "\nmessage:" + statusText + "\nerror:" + error);
           }
           console.log("Status: " + status);
-
         } else if (error.request) {
           console.log(error.request);
         } else {
@@ -94,24 +87,48 @@ export default {
     );
   },
   _requestWithBody: function (url, type, data, success, failure) {
-    data = data || {};
+    let _data = data || {};
 
     this._request(
       url,
       type,
-      JSON.stringify(data),
+      JSON.stringify(_data),
       success,
       failure
     )
   },
   _requestWithHeader: function (url, type, data, success, failure) {
     const _header = data.header || {};
-    const _params = data.params || {};
-
+    const _data = data.data || {};
     this._request(
       url ,
       type,
-      _params,
+      _data,
+      success,
+      failure,
+      _header
+    )
+  },
+  _requestWithHeaderBody: function (url, type, data, success, failure) {
+    const _header = data.header || {};
+    const _data = data.data || {};
+    this._request(
+      url ,
+      type,
+      JSON.stringify(_data),
+      success,
+      failure,
+      _header
+    )
+  },
+  _requestGetWithHeader: function (url, type, data, success, failure) {
+    const _header = data.header || {};
+    let _params = data.params?"?" + qs.stringify(data.params) : "" ;
+
+    this._request(
+      url + _params ,
+      type,
+      null,
       success,
       failure,
       _header

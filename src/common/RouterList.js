@@ -32,7 +32,7 @@ export default ({
         component: ContentContainer
       },
       {
-        path: "/content/view/:documentId",
+        path: "/doc/:documentId",
         name: "Content view",
         component: ContentView
       },

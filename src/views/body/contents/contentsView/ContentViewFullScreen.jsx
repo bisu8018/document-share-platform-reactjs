@@ -12,6 +12,8 @@ import ContentViewRegistBlockchainButton from "./ContentViewRegistBlockchainButt
 import Common from "../../../../common/Common";
 import VoteDocument from "../../../../components/modal/VoteDocument";
 import Tooltip from "@material-ui/core/Tooltip";
+import MainRepository from "../../../../redux/MainRepository";
+import CopyModal from "../../../../components/modal/CopyModal";
 
 class ContentViewFullScreen extends Component {
 
@@ -21,7 +23,6 @@ class ContentViewFullScreen extends Component {
     totalPages: 0
   };
 
-
   getContentDownload = (accountId, documentId, documentName) => {
     restapi.getContentDownload(accountId, documentId).then((res) => {
       FileDownload(new Blob([res.data]), documentName);
@@ -29,7 +30,6 @@ class ContentViewFullScreen extends Component {
       console.error(err);
     });
   };
-
 
   handleDownloadContent = () => {
     if (!this.props.documentData) {
@@ -42,9 +42,9 @@ class ContentViewFullScreen extends Component {
     this.getContentDownload(accountId, documentId, documentName);
   };
 
-
   goFull = () => {
-    this.setState({ isFull: true });
+    if (this.state.isFull) this.setState({ isFull: false });
+    if (!this.state.isFull) this.setState({ isFull: true });
   };
 
   checkDocumentInBlockChain = () => {
@@ -62,123 +62,127 @@ class ContentViewFullScreen extends Component {
     }
   };
 
-  shouldComponentUpdate() {
+  getAuthSub = () => {
+    let authSub = "";
+    let isAuthenticated = MainRepository.Account.isAuthenticated();
+
+    if (isAuthenticated) {
+      authSub = MainRepository.Account.getUserInfo().sub || "";
+    }
+
+    return authSub;
+  };
+
+  componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
     this.checkDocumentInBlockChain();
     return true;
   }
 
   render() {
-    const { auth, documentData, documentText, drizzleApis } = this.props;
+    const { documentData, documentText, drizzleApis } = this.props;
+
+    let badgeReward = drizzleApis.toEther(documentData.latestReward);
+    let badgeVote = drizzleApis.toEther(documentData.latestVoteAmount) || 0;
+    let badgeView = documentData.totalViewCount ? documentData.totalViewCount : 0;
+    let accountId = documentData.accountId || "";
+
     if (this.state.totalPages !== documentData.totalPages) {
       this.setState({ totalPages: documentData.totalPages });
     }
-    let page = document.getElementById("page");
-    if (page !== null) {
-      if (this.state.isFull) {
-        page.style.display = "none";
-      } else {
-        page.style.display = "block";
-      }
-    }
-    let full = document.getElementById("full");
-    if (full !== null) {
-      if (this.state.isFull) {
-        full.style.display = "block";
-      } else {
-        full.style.display = "none";
-      }
-    }
-
-    const badgeReward =drizzleApis.toEther(documentData.confirmAuthorReward);
-    const badgeVote = drizzleApis.toEther(documentData.confirmVoteAmount);
-    const badgeView = documentData.totalViewCount ? documentData.totalViewCount : 0;
 
     return (
 
-      <div className="u__view row">
-
+      <div className="u__view">
         <Fullscreen enabled={this.state.isFull} onChange={isFull => this.setState({ isFull })}>
 
           <div className="view_top">
             <ContentViewCarousel id="pageCarousel" target={documentData} tracking={true}/>
-
             <div className="view_screen">
-              <i className="material-icons" onClick={this.goFull}>fullscreen</i>
+              <i title="Fullsceen button" className="material-icons" onClick={this.goFull}>fullscreen</i>
             </div>
           </div>
+
+
+
           <div className="view_content">
-            <div className="row">
-              <div className="col-sm-12">
-                <h2 className="u_title">   {documentData.title ? documentData.title : ""}</h2>
-              </div>
-              <div className="col-sm-12 col-view">
-                <span className="txt_view">{badgeView}</span>
-                <span className="view_date view-reward">Reward <span><DollarWithDeck deck={badgeReward}
-                                                                                     drizzleApis={drizzleApis}/></span></span>
-                <span className="view_date view-reward">Voting <span><DeckInShort deck={badgeVote}/></span></span>
-                <span className="view_date"> {Common.timestampToDateTime(documentData.created)}</span>
-              </div>
+            <div className="u_title h2">   {documentData.title ? documentData.title : ""}</div>
+            <div className="col-view">
+              <span className="txt_view">{badgeView}</span>
+              <span className="view_date view-reward">
+                <DollarWithDeck deck={badgeReward} drizzleApis={drizzleApis}/>
+              </span>
+              <span className="view_date view-reward">
+                <DeckInShort deck={badgeVote}/>
+              </span>
+              <span className="view_date">
+                {Common.timestampToDateTime(documentData.created)}
+              </span>
             </div>
-            <div className="row">
-              <div className="col-sm-12 col-md-12 view_btns_inner">
-                {drizzleApis.isAuthenticated() && auth.isAuthenticated() &&
-                  <span>
-                    <ContentViewRegistBlockchainButton documentData={documentData} dataKey={this.state.dataKey}  drizzleApis={drizzleApis} />
-                    <VoteDocument documentData={documentData} dataKey={this.state.dataKey}  drizzleApis={drizzleApis} auth={auth} />
-                  </span>
-                }
-                <Tooltip title="Share this document" placement="bottom">
-                  <div className="share-btn">
-                    <i className="material-icons">share</i>
-                  </div>
+
+
+            <div className="row view_btns_inner">
+              {accountId === this.getAuthSub() &&
+              <Tooltip title="Settings of this document" placement="bottom">
+                  <div className="statistics-btn pt-1"><i className="material-icons">settings</i></div>
                 </Tooltip>
-                <Tooltip title="Download this document" placement="bottom">
-                  <div className="share-btn" onClick={this.handleDownloadContent}>
-                    <i className="material-icons">save</i>
-                  </div>
-                </Tooltip>
-                <Tooltip title="See statistics of this document" placement="bottom">
-                  <Link to={{
-                    pathname: "/tracking/" + documentData.accountId + "/" + documentData.documentId,
-                    state: documentData
-                  }}>
-                    <div className="statistics-btn">
-                      <i className="material-icons">insert_chart</i>
-                    </div>
-                  </Link>
-                </Tooltip>
-              </div>
+              }
+
+              <Tooltip title="Share this document" placement="bottom">
+                <div className="share-btn">
+                  <i className="material-icons">share</i>
+                </div>
+              </Tooltip>
+
+              <CopyModal/>
+
+              <Tooltip title="Download this document" placement="bottom">
+                <div className="share-btn" onClick={this.handleDownloadContent}>
+                  <i className="material-icons">save</i>
+                </div>
+              </Tooltip>
+
+              {accountId === this.getAuthSub() &&
+              <Tooltip title="See statistics of this document" placement="bottom">
+                <Link to={{
+                  pathname: "/tracking/" + documentData.accountId + "/" + documentData.documentId,
+                  state: documentData
+                }}>
+                  <div className="statistics-btn"><i className="material-icons">bar_chart</i></div>
+                </Link></Tooltip>
+              }
+
+              <ContentViewRegistBlockchainButton documentData={documentData} dataKey={this.state.dataKey} drizzleApis={drizzleApis}/>
+              <VoteDocument documentData={documentData} dataKey={this.state.dataKey} drizzleApis={drizzleApis}/>
             </div>
-            <div className="row">
-              <div className="col-sm-12 col-md-12">
-                <Link to={"/author/" + documentData.accountId} className="info_name" title="Go to profile page">
-                  <i className="material-icons img-thumbnail">face</i>
-                  {documentData.nickname ? documentData.nickname : documentData.accountId}
-                </Link>
-                <span className="view_tag">
-                     {documentData.tags ? documentData.tags.map((tag, index) => (
-                       <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
-                             className="tag"> {tag} </Link>
-                     )) : ""}
-                </span>
-              </div>
+
+
+
+            <Link to={"/author/" + documentData.accountId} className="info_name" title={"Go to profile page of " + (documentData.nickname ? documentData.nickname : documentData.accountId)}>
+              <i className="material-icons img-thumbnail">face</i>
+              {documentData.nickname ? documentData.nickname : documentData.accountId}
+            </Link>
+
+
+            <div className="view_tag">
+              {documentData.tags ? documentData.tags.map((tag, index) => (
+                <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
+                      className="tag"> {tag} </Link>
+              )) : ""}
             </div>
-            <div className="row">
-              <div className="col-sm-12 col-md-12">
-                <p className="view_desc">
-                  {documentData.desc ? documentData.desc : ""}
-                </p>
-                <p className="view_editor">
-                  {documentText ? documentText : ""}
-                </p>
-              </div>
+
+
+            <div className="view_desc">
+              {documentData.desc ? documentData.desc : ""}
+              <hr className="mt-4 mb-4"/>
+              {documentText ? documentText : ""}
             </div>
+
 
             {/*<ContentViewComment/>*/}
           </div>
 
-        </Fullscreen>
 
+        </Fullscreen>
       </div>
     );
   }

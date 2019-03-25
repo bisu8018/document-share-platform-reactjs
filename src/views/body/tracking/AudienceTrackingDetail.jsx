@@ -89,10 +89,8 @@ class AudienceTrackingDetail extends React.Component {
           </div>
 
           <div className="row tracking_inner">
-            <div className="col-sm-12 col-md-12">
-              <div className="tracking_top">
-                <h3 className="u_title">Views</h3>
-              </div>
+            <div className="col-sm-12 col-md-12 tracking_top">
+                <div className="u_title h3">Views</div>
 
               <div className="tracking_fulldown_list">
                 {rst.map((result, idx) => (

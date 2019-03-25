@@ -7,6 +7,7 @@ import Web3Apis from "apis/Web3Apis";
 import AuthorSummary from "./AuthorSummary";
 import CuratorVoteTab from "../curator/tab/CuratorVoteTab.jsx";
 import CuratorUploadTab from "../curator/tab/CuratorUploadTab";
+import CuratorAnalyticsTab from "../curator/tab/CuratorAnalyticsTab";
 
 
 class Author extends React.Component {
@@ -91,13 +92,12 @@ class Author extends React.Component {
             <TabList>
               <Tab>Uploaded</Tab>
               <Tab>Voted</Tab>
+              <Tab>Analytics</Tab>
             </TabList>
 
             <TabPanel>
              <CuratorUploadTab
-               {...this.props}
-               handleCurator3DayRewardOnDocuments={this.handleCurator3DayRewardOnDocuments}
-               totalViewCountInfo={this.state.totalViewCountInfo}
+               drizzleApis={drizzleApis}
                accountId={accountId}
              />
             </TabPanel>
@@ -107,6 +107,12 @@ class Author extends React.Component {
                 {...this.props}
                 handleCurator3DayRewardOnDocuments={this.handleCurator3DayRewardOnDocuments}
                 totalViewCountInfo={this.state.totalViewCountInfo}
+                accountId={accountId}
+              />
+            </TabPanel>
+
+            <TabPanel>
+              <CuratorAnalyticsTab
                 accountId={accountId}
               />
             </TabPanel>

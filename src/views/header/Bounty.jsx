@@ -7,6 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Web3Apis from "apis/Web3Apis";
 import Dialog from "@material-ui/core/Dialog";
+import MainRepository from "../../redux/MainRepository";
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -34,10 +35,8 @@ class Bounty extends React.Component {
   };
 
   handleClickOpen = (modal) => {
-    const { auth } = this.props;
-
-    if (!auth.isAuthenticated()) {
-      auth.login(true);
+    if (!MainRepository.Account.isAuthenticated()) {
+      MainRepository.Account.login(true);
       return "Loading";
     } else {
       const x = [];

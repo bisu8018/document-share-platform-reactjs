@@ -1,5 +1,6 @@
 import React from "react";
-import Tooltip from "../../../../components/modal/VoteDocument";
+import Tooltip from "@material-ui/core/Tooltip";
+import MainRepository from "../../../../redux/MainRepository";
 
 class ContentViewBlockchainButton extends React.Component {
 
@@ -20,10 +21,10 @@ class ContentViewBlockchainButton extends React.Component {
     drizzleApis.unsubscribe(this.unsubscribe);
   }
 
-  handleRegistDocumentInBlockChain = () => {
+  handleRegisterDocumentInBlockChain = () => {
     const { documentData, drizzleApis } = this.props;
     if (!documentData) return;
-    const stackId = drizzleApis.registDocumentToSmartContract(documentData.documentId);
+    const stackId = drizzleApis.registerDocumentToSmartContract(documentData.documentId);
     this.setState({ stackId: stackId });
   };
 
@@ -43,16 +44,20 @@ class ContentViewBlockchainButton extends React.Component {
 
 
   render() {
-    const { documentData, drizzleApis } = this.props;
-    let disabled = documentData.accountId === drizzleApis.getLoggedInAccount();
-    if (drizzleApis.isExistDocument(this.props.dataKey) || disabled) return null;
-
+    const { documentData, drizzleApis, dataKey } = this.props;
+    let idFromDoc = documentData.accountId;
+    let idFromAuth = MainRepository.Account.getUserInfo();
+    let sub = idFromAuth ? idFromAuth.sub : null;
+    let isExistDocument = drizzleApis.isExistDocument(dataKey);
+    if (isExistDocument || idFromDoc !== sub) return null;
     return (
-      <Tooltip title="Register this document to blockchain" placement="bottom">
-        <div className="register-btn"  onClick={this.handleRegistDocumentInBlockChain}>
-          <i className="material-icons">add_box</i>
-        </div>
-      </Tooltip>
+      <span>
+        <Tooltip title="Register this document to blockchain" placement="bottom">
+          <div className="register-btn"  onClick={this.handleRegisterDocumentInBlockChain}>
+            <i className="material-icons">add_box</i>
+          </div>
+        </Tooltip>
+      </span>
     );
   }
 }

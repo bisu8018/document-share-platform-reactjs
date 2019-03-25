@@ -1,14 +1,14 @@
 import React from "react";
-import Autosuggest from "react-autosuggest";
+import AutoSuggest from "react-autosuggest";
 import TagsInput from "react-tagsinput";
-import "react-tagsinput/react-tagsinput.css"; // If using WebPack and style-loader.
-import * as restapi from "apis/DocApi";
+import "react-tagsinput/react-tagsinput.css";
 
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import MainRepository from "../../redux/MainRepository";
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -16,23 +16,15 @@ function Transition(props) {
 
 class UploadDocument extends React.Component {
 
-  anchorElLeft = null;
-  anchorElTop = null;
-  anchorElBottom = null;
-  anchorElRight = null;
-
   constructor(props) {
     super(props);
 
     this.state = {
       percentage: 0,
-      nickname: "",
-      fullWidth: true,
-      classicModal: false,
-      openLeft: false,
-      openTop: false,
-      openBottom: false,
-      openRight: false,
+      title: "",
+      titleError: "",
+      tags: [],
+      tagError: "",
       fileInfo: {
         file: null,
         size: -1,
@@ -41,28 +33,122 @@ class UploadDocument extends React.Component {
         title: null,
         filename: null
       },
-      stackId: null,
-      tags: [],
-      category: null
+      fileInfoError: "",
+      useTracking: false,
+      registerOnChain: false,
+      classicModal: false,
+      nickname: null
     };
   }
 
-  getNickname = () => {
-    return this.props.auth.getUserInfo().nickname;
+  clearForm = () => {
+    document.getElementById("docTitle").value = null;
+    document.getElementById("docDesc").value = null;
+    document.getElementById("docFileInput").value = null;
+    document.getElementById("docFile").value = null;
+  };
+
+
+  clearState = () => {
+    this.setState({
+      percentage: 0,
+      title: "",
+      titleError: "",
+      tags: [],
+      tagError: "",
+      fileInfo: {
+        file: null,
+        size: -1,
+        ext: null,
+        owner: null,
+        title: null,
+        filename: null
+      },
+      fileInfoError: "",
+      useTracking: false,
+      registerOnChain: false,
+      classicModal: false,
+      nickname: null
+    });
+  };
+
+  fileUpload = () => {
+    document.getElementById("docFile").click();
+  };
+
+  //업로드 함수
+  handleUpload = () => {
+    const { drizzleApis } = this.props;
+    const { title, fileInfo, tags, useTracking, registerOnChain } = this.state;
+    const desc = document.getElementById("docDesc").value;
+    const ethAccount = drizzleApis.getLoggedInAccount();
+    let userInfo = MainRepository.Account.getUserInfo();
+
+    document.getElementById("progressModal").style.display = "block";
+
+    MainRepository.Document.registerDocument({
+      fileInfo: fileInfo,
+      userInfo: userInfo,
+      ethAccount: ethAccount,
+      title: title,
+      desc: desc,
+      tags: tags,
+      useTracking: useTracking,
+    }, this.handleProgress, (result) => { //문서 업로드 완료
+      if(registerOnChain) drizzleApis.registerDocumentToSmartContract(result.documentId); //문서 블록체인 등록
+      document.getElementById("progressModal").style.display = "none"; //진행도 모달 닫기
+      this.handleClose("classicModal"); //모달 닫기
+    });
+  };
+
+  handleUploadBtn = () => {
+    // input 값 유효성 검사
+    if (!this.validateTitle() || !this.validateFile() || !this.validateTag()) {
+      return false;
+    }
+    this.handleUpload();
+  };
+
+  // 파일 업로드 로딩 바 핸들 함수
+  handleProgress = (e) => {
+    let percent = Math.round((e.loaded / e.total) * 100);
+    if (percent !== null) {
+      this.setState({ percentage: percent });
+    }
+  };
+
+  //file input 등록/변경 시
+  handleFileChange = (e) => {
+    const file = e[0];
+    if (!file) return false;
+    let filename = file.name;
+    let fileSize = file.size;
+    let ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length).toLowerCase();
+    this.setState({
+      fileInfo: {
+        file: file,
+        size: fileSize,
+        ext: ext,
+        filename: filename
+      }
+    }, () => {
+      this.validateFile();
+    });
   };
 
   handleClickOpen = (modal) => {
-    const { drizzleApis, auth } = this.props;
-    if (!auth.isAuthenticated()) {
-      return auth.login(true);
+    const { drizzleApis } = this.props;
+    if (!MainRepository.Account.isAuthenticated()) {
+      return MainRepository.Account.login();
     } else {
       const x = [];
       x[modal] = true;
       this.setState(x);
     }
 
-    const account = drizzleApis.getLoggedInAccount();
-    const nickname = this.getNickname() ? this.getNickname() : account;
+    let nickName = MainRepository.Account.getUserInfo().nickname;
+    let account = drizzleApis.getLoggedInAccount();
+    let nickname = nickName ? nickName : account;
     this.setState({ nickname: nickname });
   };
 
@@ -71,116 +157,70 @@ class UploadDocument extends React.Component {
     x[modal] = false;
     this.setState(x);
     this.clearForm();
-    this.clearFileInfo();
+    this.clearState();
   };
 
-  onChangeTag = (tags) => {
-    this.setState({ tags });
-  };
-
-  onUploadDoc = () => {
-    const { auth, drizzleApis } = this.props;
-    const self = this;
-
-    const fileInfo = this.state.fileInfo;
-    const tags = this.state.tags ? this.state.tags : [];
-    const title = document.getElementById("docTitle").value;
-    const desc = document.getElementById("docDesc").value;
-    //const nickname = this.props.auth.getUserInfo().nickname;
-    const userInfo = auth.getUserInfo();
-
-    if (!this.state.fileInfo || !this.state.fileInfo.file) {
-      alert("Please select a document file");
-      return;
-    }
-    document.getElementById("progressModal").style.display = "block";
-    const ethAccount = drizzleApis.getLoggedInAccount();
-    console.log("Selected a Document File", this.state.fileInfo);
-    restapi.registDocument({
-      fileInfo: fileInfo,
-      userInfo: userInfo,
-      ethAccount: ethAccount,
-      title: title,
-      desc: desc,
-      tags: tags
-    }, this.progressHandler).then((result) => {
-      console.log("UploadDocument", result);
-      document.getElementById("progressModal").style.display = "none";
-      const stackId = drizzleApis.registDocumentToSmartContract(result.documentId);
-      self.setState({ stackId });
-      /*
-      if(stackId){
-        self.setState({ stackId });
-      } else {
-        alert('Document registration Smart contract failed.');
-      }
-      */
-      this.handleClose("classicModal");
-      console.log("Regist Document End SUCCESS", result);
+  handleTitleChange = e => {
+    this.setState({ title: e.target.value }, () => {
+      this.validateTitle();
     });
   };
 
-  onChangeNickname = (e) => {
-    //console.log(e.target);
-    const nickname = e.target.value;
-    this.setState({ nickname: nickname });
+  handleTagChange = (tags) => {
+    this.setState({ tags }, () => {
+      this.validateTag();
+    });
   };
 
-  onChangeCategory = (e) => {
-    console.log(e.target);
-    const nickname = e.target.value;
-    this.setState({ nickname: nickname });
-  };
-
-  progressHandler = (e) => {
-    let percent = Math.round((e.loaded / e.total) * 100);
-    if (percent !== null) {
-      this.setState.percentage = percent;
-    }
-  };
-
-  clearForm = () => {
-    document.getElementById("docTitle").value = null;
-    document.getElementById("docDesc").value = null;
-    document.getElementById("docFileInput").value = null;
-    document.getElementById("docFile").value = null;
-    this.setState({ tags: [] });
-  };
-
-  fileUpload = () => {
-    document.getElementById("docFile").click();
-  };
-
-  handleChange = (e) => {
-    const file = e[0];
-    let filename = file.name;
-    let filesize = file.size;
-    let ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length).toLowerCase();
+  handleTrackingCheckbox= () => {
+    const { useTracking } = this.state;
+    let newValue = !useTracking;
     this.setState({
-      fileInfo: {
-        file: file,
-        size: filesize,
-        ext: ext,
-        filename: filename
-      }
+      useTracking: newValue
     });
   };
 
-  clearFileInfo = () => {
+  handleChainCheckbox= () => {
+    const { registerOnChain } = this.state;
+    let newValue = !registerOnChain;
     this.setState({
-      fileInfo: {
-        file: null,
-        size: -1,
-        ext: null,
-        owner: null,
-        title: null,
-        filename: null
-      }
+      registerOnChain: newValue
     });
   };
 
+  //제목 유효성 체크
+  validateTitle = () => {
+    const { title } = this.state;
+    this.setState({
+      titleError:
+        title.length > 0 ? "" : "Title must be longer than 1 character ."
+    });
+    return title.length > 0;
+  };
+
+  //태그 유효성 체크
+  validateTag = () => {
+    const { tags } = this.state;
+    this.setState({
+      tagError:
+        tags.length > 0 ? "" : "Tag must be at least 1 tag ."
+    });
+    return tags.length > 0;
+  };
+
+  //파일 유효성 체크
+  validateFile = () => {
+    const { fileInfo } = this.state;
+    this.setState({
+      fileInfoError:
+        fileInfo.title === null || fileInfo.filename === null ? "Please upload a document file ." : ""
+    });
+    return !(fileInfo.title === null || fileInfo.filename === null);
+  };
+
+  // 자동완성 및 태그 관련 라이브러리 함수
   autocompleteRenderInput = ({ addTag, ...props }) => {
-    const handleOnChange = (e, { newValue, method }) => {
+    let handleOnChange = (e, { newValue, method }) => {
       if (method === "enter") {
         e.preventDefault();
       } else {
@@ -197,15 +237,17 @@ class UploadDocument extends React.Component {
       : [];
 
     return (
-      <Autosuggest
+      <AutoSuggest
         ref={props.ref}
         suggestions={suggestions}
         shouldRenderSuggestions={(value) => value && value.trim().length > 0}
         getSuggestionValue={(suggestion) => suggestion}
-        renderSuggestion={(suggestion) => <span key={suggestion.value}>{suggestion._id}</span>}
+        renderSuggestion={(suggestion) => <span key={suggestion._id}>{suggestion._id}</span>}
         inputProps={{ ...props, onChange: handleOnChange }}
         onSuggestionSelected={(e, { suggestion }) => {
-          addTag(suggestion);
+          console.log(suggestion);
+          console.log(this.state.tags);
+          addTag(suggestion._id);
         }}
         onSuggestionsClearRequested={() => {
         }}
@@ -215,65 +257,83 @@ class UploadDocument extends React.Component {
     );
   };
 
-
   render() {
+    const { classicModal, fileInfo, tags, percentage, titleError, fileInfoError, tagError, useTracking, registerOnChain } = this.state;
+    const { type } = this.props;
+
     return (
       <span>
-            <div className="upload-btn d-none d-sm-inline-block" onClick={() => this.handleClickOpen("classicModal")}>
+            <div className="upload-btn d-none d-sm-inline-block" id="uploadBtn"
+                 onClick={() => this.handleClickOpen("classicModal")}>
               <i className="material-icons">cloud_upload</i>
               Upload
             </div>
-        {this.props.type && this.props.type === 'menu' &&
+        {type && type === "menu" &&
         <span className="d-inline-block d-sm-none" onClick={() => this.handleClickOpen("classicModal")}>Upload</span>
         }
 
-            <Dialog
-              fullWidth={this.state.fullWidth}
-              open={this.state.classicModal}
-              TransitionComponent={Transition}
-              keepMounted
-              aria-labelledby="classic-modal-slide-title"
-              aria-describedby="classic-modal-slide-description">
+        <Dialog
+          fullWidth={true}
+          open={classicModal}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-labelledby="classic-modal-slide-title"
+          aria-describedby="classic-modal-slide-description">
 
 
               <DialogTitle
                 id="classic-modal-slide-title"
                 disableTypography>
                 <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                <h3 >Upload document</h3>
+                <h3>Upload document</h3>
               </DialogTitle>
 
 
-              <DialogContent id="classic-modal-slide-description" >
+              <DialogContent id="classic-modal-slide-description">
                 <div className="dialog-subject">Title</div>
                 <input type="text" placeholder="Title of the uploading document" id="docTitle"
-                       className="custom-input"/>
+                       className={"custom-input " + (titleError.length > 0 ? "custom-input-warning" : "")}
+                       onChange={(e) => this.handleTitleChange(e)}/>
+                <span>{titleError}</span>
 
+                <div className="dialog-subject mt-3 mb-2">Description</div>
+                <textarea id="docDesc" placeholder="Description of the uploading document" className="custom-textarea"/>
 
-                <div className="dialog-subject">Description</div>
-                <textarea id="docDesc" className="custom-input"/>
-
-
-                <div className="dialog-subject">File</div>
-                <input type="text" value={this.state.fileInfo.filename || ""} readOnly
-                       placeholder="Click here to upload document" id="docFileInput" className="custom-input-file"
+                <div className="dialog-subject mt-3">File</div>
+                <input type="text" value={fileInfo.filename || ""} readOnly
+                       placeholder="Click here to upload document" id="docFileInput"
+                       className={"custom-input-file " + (fileInfoError.length > 0 ? "custom-input-warning" : "")}
                        onClick={this.fileUpload}/>
-                <input type="file" id="docFile" onChange={(e) => this.handleChange(e.target.files)}/>
+                <span>{fileInfoError}</span>
+                <input type="file" id="docFile" onChange={(e) => this.handleFileChange(e.target.files)}/>
 
-
-                <div className="dialog-subject mb-1">Tag</div>
+                <div className="dialog-subject mt-3">Tag</div>
                 <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
-                           value={this.state.tags} onChange={this.onChangeTag} validate={this.validateTag} onlyUnique/>
+                           className={"react-tagsinput " + (tagError.length > 0 ? "tag-input-warning" : "")}
+                           value={tags} onChange={this.handleTagChange} validate={false} onlyUnique/>
+                           <span>{tagError}</span>
+
+                <div className="dialog-subject mb-1 mt-3">Option</div>
+                <label className="c-pointer col-12 col-sm-6 p-0">
+                  <input type="checkbox" onChange={(e) => this.handleTrackingCheckbox(e)} checked={useTracking}/>
+                  <span className="checkbox-text">Use audience tracking.</span>
+                </label>
+                <label className="c-pointer col-12 col-sm-6 float-righ p-0">
+                  <input type="checkbox" onChange={(e) => this.handleChainCheckbox(e)} checked={registerOnChain}/>
+                  <span className="checkbox-text">Register on blockchain.</span>
+                </label>
               </DialogContent>
 
 
               <DialogActions className="modal-footer">
                 <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">Cancel</div>
-                <div onClick={() => this.onUploadDoc()} className="ok-btn">Upload</div>
+                <div onClick={() => this.handleUploadBtn()} className="ok-btn">Upload</div>
               </DialogActions>
+
+
               <div className="progress-modal" id="progressModal">
                 <div className="progress-modal-second">
-                  <span className="progress-percent">{this.state.percentage}%</span>
+                  <span className="progress-percent">{percentage}%</span>
                   <img src={require("assets/image/common/g_progress_circle.gif")} alt="progress circle"/>
                 </div>
               </div>

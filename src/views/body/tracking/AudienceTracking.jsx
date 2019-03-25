@@ -60,7 +60,7 @@ class AudienceTracking extends React.Component {
 
 
             <div className="col-sm-3 col-md-3 col-thumb">
-              <Link to={"/content/view/" + location.state.documentId}>
+              <Link to={"/doc/" + location.state.documentId}>
                 <div className="thumb_image">
                   <img src={addr}
                        alt={location.state.title ? location.state.title : location.state.documentName}
@@ -72,14 +72,14 @@ class AudienceTracking extends React.Component {
 
             <div className="col-sm-9 col-md-9 col-details_info">
               <dl className="details_info">
-                <Link to={"/content/view/" + location.state.documentId} className="info_title">
+                <Link to={"/doc/" + location.state.documentId} className="info_title">
                   {location.state.title}
                 </Link>
-                <Link to={"/author/" + location.state.accountId} title={"Go to profile page"} className="info_name">
+                <Link to={"/author/" + location.state.accountId} title={"Go to profile page of " + (location.state.nickname ? location.state.nickname : location.state.accountId) } className="info_name">
                   <i className="material-icons img-thumbnail">face</i>
                   {location.state.nickname ? location.state.nickname : location.state.accountId}
                 </Link>
-                <Link to={"/content/view/" + location.state.documentId} className="info_desc">
+                <Link to={"/doc/" + location.state.documentId} className="info_desc">
                   <LinesEllipsis
                     text={location.state.desc}
                     maxLine='2'
@@ -92,7 +92,7 @@ class AudienceTracking extends React.Component {
                   <span className="txt_view">{badgeView}</span>
                   <span className="view_date view-reward">Reward <span><DollarWithDeck deck={badgeReward}
                                                                                        drizzleApis={drizzleApis}/></span></span>
-                  <span className="view_date view-reward">Voting <span><DeckInShort deck={badgeVote}/></span></span>
+                  <span className="view_date view-reward"><span><DeckInShort deck={badgeVote}/></span></span>
                   <span className="view_date"> {Common.timestampToDateTime(location.state.created)}</span>
                 </div>
               </dl>
@@ -101,17 +101,13 @@ class AudienceTracking extends React.Component {
 
 
           <div className="row tracking_inner">
-            <div className="col-sm-12 col-md-12">
-              <div className="tracking_top">
+            <div className="col-sm-12 col-md-12 tracking_top">
                 <h3 className="u_title">Visitors</h3>
                 <div className="tags_menu_search_container">
-                  <div className="tags_menu_search_wrapper">
-                    <input id="searchInput" type="text" autocomplete="off" placeholder="Name Search . . ." onKeyUp={this.handleKeyUp}/>
+                    <input id="searchInput" type="text" autoComplete="off" placeholder="Name Search . . ." onKeyUp={this.handleKeyUp}/>
                     <div className="search-btn">
                       <i className="material-icons">search</i>
                     </div>
-                  </div>
-                </div>
               </div>
 
               <div className="tracking_table">
@@ -137,7 +133,6 @@ class AudienceTracking extends React.Component {
                         className="col3">{Common.dateAgo(result.viewTimestamp) === 0 ? "Today" : Common.dateAgo(result.viewTimestamp) + " days ago"} </td>
                     </tr>
                   ))}
-
                   </tbody>
                 </table>
 

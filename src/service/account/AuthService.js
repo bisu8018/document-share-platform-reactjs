@@ -15,8 +15,8 @@ export default {
     },
   },
   GET: {
-    accountInfo: (callback, error) => {
-      AxiosService._requestPlain(accountGet, "GET",
+    accountInfo: (data, callback, error) => {
+      AxiosService._requestGetWithHeader(accountGet, "GET", data,
         (data) => {
           callback(data);
         }, (err) => {

@@ -1,16 +1,16 @@
 import AxiosService from "../AxiosService";
 
-const trackingInfoUrl = "tracking/info";
-const trackingListUrl = "tracking/list";
+let trackingInfoUrl = "tracking/info";
+let trackingListUrl = "tracking/list";
 //const trackingUrl = "document/tracking";
-const getDocumentUrl = "document/info/";
-const documentTextUrl = "document/text/";
-const getDocumentListUrl = "document/list";
-const getCuratorDocumentsUrl = "curator/document/list";
-const getTodayVotedDocumentsByCuratorUrl = "curator/document/today";
-const voteDocumentUrl = "document/vote/";
-const registDocumentInfoUrl = "document/regist";
-const tagListUrl = "tags";
+let getDocumentUrl = "document/info/";
+let getDocumentListUrl = "document/list";
+let getCuratorDocumentsUrl = "curator/document/list";
+let getTodayVotedDocumentsByCuratorUrl = "curator/document/today";
+let getAnalyticsListUrl = "analytics/list";
+let voteDocumentUrl = "document/vote/";
+let registerDocumentInfoUrl = "document/regist";
+let tagListUrl = "tags";
 
 export default {
   GET: {
@@ -35,13 +35,6 @@ export default {
         }, () => {
         });
     },
-    documentText: (data, callback) => {
-      AxiosService._requestWithUrlPram( documentTextUrl + data, "GET", {},
-        (data) => {
-          callback(data);
-        }, (err) => {
-        });
-    },
     tagList: (callback) => {
       AxiosService._requestPlain( tagListUrl, "GET",
         (data) => {
@@ -49,7 +42,13 @@ export default {
         }, (err) => {
         });
     },
-
+    analyticsList: (data, callback) => {
+      AxiosService._requestWithUrlPram(getAnalyticsListUrl, "GET", data,
+        (data) => {
+          callback(data);
+        }, () => {
+        });
+    },
   },
   POST: {
     documentList: (data, callback, error) => {
@@ -84,8 +83,8 @@ export default {
           error(err);
         });
     },
-    promise: (data, callback, error) => {
-      AxiosService._requestWithBody(registDocumentInfoUrl, "POST", data,
+    registerDocument: (data, callback, error) => {
+      AxiosService._requestWithHeaderBody(registerDocumentInfoUrl, "POST", data,
         (data) => {
           callback(data);
         }, (err) => {

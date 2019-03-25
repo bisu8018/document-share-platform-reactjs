@@ -9,8 +9,8 @@ import Common from "../../../common/Common";
 class ContentListItem extends React.Component {
   render() {
     const { result, drizzleApis } = this.props;
-    const badgeReward = drizzleApis.toEther(result.confirmAuthorReward);
-    const badgeVote = drizzleApis.toEther(result.confirmVoteAmount);
+    const badgeReward = drizzleApis.toEther(result.latestReward);
+    const badgeVote = drizzleApis.toEther(result.latestVoteAmount) || 0;
     const badgeView = result.totalViewCount ? result.totalViewCount : 0;
     let imageUrl = Common.getThumbnail(result.documentId, 1);
 
@@ -19,10 +19,10 @@ class ContentListItem extends React.Component {
     }
 
     return (
-      <div className="row u_center_inner" key={result.documentId}>
+      <div className="row u_center_inner" key={result.seoTitle}>
 
         <div className="col-sm-3 col-md-3 col-thumb">
-          <Link to={"/content/view/" + result.documentId}>
+          <Link to={"/doc/" + result.seoTitle}>
             <div className="thumb_image">
               <img src={imageUrl} alt={result.title} className="img-fluid"/>
             </div>
@@ -31,18 +31,18 @@ class ContentListItem extends React.Component {
 
         <div className="col-sm-9 col-md-9 col-details_info">
           <dl className="details_info">
-            <dt className="blind">info desc</dt>
-            <Link to={"/content/view/" + result.documentId} title={result.title}>
-              <dd className="info_title">  {result.title ? result.title : result.documentName} </dd>
-            </Link>
-            <Link to={"/author/" + result.accountId} className="info_name" title= {result.nickname ? result.nickname : result.accountId}>
+            <div className="info_date d-md-inline-block d-none">
+              {Common.dateAgo(result.created) === 0 ? "Today" : Common.dateAgo(result.created) + " days ago"}
+            </div>
+            <dd className="info_title">
+              <Link to={"/doc/" + result.seoTitle} title={result.title}> {result.title ? result.title : result.documentName}</Link>
+            </dd>
+            <Link to={"/author/" + result.accountId} className="info_name"
+                  title={result.nickname ? result.nickname : result.accountId}>
               <i className="material-icons img-thumbnail">face</i>
               {result.nickname ? result.nickname : result.accountId}
             </Link>
-            <span className="info_date">
-              {Common.dateAgo(result.created) === 0 ? "Today" : Common.dateAgo(result.created) + " days ago"}
-              </span>
-            <Link to={"/content/view/" + result.documentId} className="info_desc" title="description">
+            <Link to={"/doc/" + result.seoTitle} className="info_desc" title="description">
               <LinesEllipsis
                 text={result.desc}
                 maxLine='2'
@@ -53,9 +53,12 @@ class ContentListItem extends React.Component {
             </Link>
             <dd className="info_detail">
               <span className="txt_view ">{badgeView}</span>
-              <span className="view_date view-reward">  <DollarWithDeck deck={badgeReward}
+              <span className="view_date view-reward"><DollarWithDeck deck={badgeReward}
                                                                         drizzleApis={drizzleApis}/></span>
-              <span className="view_date view-reward">VOTE <DeckInShort deck={badgeVote}/></span>
+              <span className="view_date view-reward"><DeckInShort deck={badgeVote}/></span>
+              <div className="info_date d-inline-block d-md-none">
+                {Common.dateAgo(result.created) === 0 ? "Today" : Common.dateAgo(result.created) + " days ago"}
+              </div>
             </dd>
           </dl>
         </div>

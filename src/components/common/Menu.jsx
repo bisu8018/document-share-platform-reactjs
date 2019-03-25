@@ -7,6 +7,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import UploadDocument from "../../components/modal/UploadDocument";
+import MainRepository from "../../redux/MainRepository";
 
 class Menu extends React.Component {
   state = {
@@ -22,19 +23,21 @@ class Menu extends React.Component {
     });
   };
 
-  handleClickEvent = () => {
-    const { auth } = this.props;
-    auth.logout();
+  handleLogout = () => {
+    MainRepository.Account.logout();
+  };
+
+  handleLogin = () => {
+    MainRepository.Account.login();
   };
 
   render() {
-    const { auth } = this.props;
-    let userInfo = auth.getUserInfo();
+    let userInfo = MainRepository.Account.getUserInfo();
 
     const sideList = (
       <div>
         <List>
-          {auth.isAuthenticated() &&
+          {MainRepository.Account.isAuthenticated() &&
           <ListItem button className="d-sm-none">
             <ListItemIcon>
               <Link to={"/author/" + this.state.accountId} className="avatar-menu">
@@ -45,12 +48,18 @@ class Menu extends React.Component {
           </ListItem>
           }
 
-          {auth.isAuthenticated() ?
-            <ListItem button>
-              <ListItemText primary="Log-out" onClick={this.handleClickEvent.bind(this)}/>
+          {MainRepository.Account.isAuthenticated() ?
+            <ListItem button onClick={this.handleLogout.bind(this)}>
+              <ListItemIcon>
+                <i className="material-icons">power_settings_new</i>
+              </ListItemIcon>
+              <ListItemText primary="Log-out" />
             </ListItem> :
-            <ListItem>
-              <ListItemText primary="Log-in"/>
+            <ListItem button onClick={this.handleLogin.bind(this)}>
+              <ListItemIcon>
+                <i className="material-icons">create</i>
+              </ListItemIcon>
+              <ListItemText primary="Log-in" />
             </ListItem>
           }
         </List>
@@ -59,8 +68,8 @@ class Menu extends React.Component {
     );
 
     return (
-      <div>
-        <i className="material-icons menu-btn" onClick={this.toggleDrawer("right", true)}>menu</i>
+      <span>
+        <i className="material-icons menu-btn d-inline-block " onClick={this.toggleDrawer("right", true)}>menu</i>
 
         <Drawer anchor="right" open={this.state.right} onClose={this.toggleDrawer("right", false)}>
           <div
@@ -80,7 +89,7 @@ class Menu extends React.Component {
             </ListItemText>
           </ListItem>
         </Drawer>
-      </div>
+      </span>
     );
   }
 }

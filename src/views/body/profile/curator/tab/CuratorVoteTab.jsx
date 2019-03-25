@@ -27,20 +27,20 @@ class CuratorVoteTab extends React.Component {
     const { accountId, handleCurator3DayRewardOnDocuments, totalViewCountInfo } = this.props;
 
     MainRepository.Document.getCuratorDocuments({ accountId: accountId }, (res) => {
-      console.log("Fetch My Voted Document", res);
+      //console.log("Fetch My Voted Document", res);
       if (res && res.resultList) {
 
         this.setState({
           resultList: res.resultList
         });
 
-        const totalViewCountSquare = res.totalViewCountInfo.totalViewCountSquare;
+        const totalPageviewSquare = res.totalViewCountInfo.totalPageviewSquare;
 
         res.resultList.forEach((item) => {
           const document = item.documentInfo;
-          const viewCount = isNaN(document.viewCount) ? 0 : document.viewCount;
-          if (totalViewCountSquare > viewCount) {
-            this.getCuratorReward(accountId, document.documentId, document.viewCount, totalViewCountSquare).then((data) => {
+          const totalViewCount = isNaN(document.totalViewCount) ? 0 : document.totalViewCount;
+          if (totalPageviewSquare > totalViewCount) {
+            this.getCuratorReward(accountId, document.documentId, document.totalViewCount, totalPageviewSquare).then((data) => {
 
               const reward = data[0];
               const estimateReward = data[1];
@@ -82,7 +82,6 @@ class CuratorVoteTab extends React.Component {
   }
 
   render() {
-    const { totalViewCountInfo } = this.props;
     if (this.state.resultList.length > 0) {
       return (
         <div>
@@ -91,15 +90,16 @@ class CuratorVoteTab extends React.Component {
             {this.state.resultList.map((result, idx) => (
               <CuratorTabItem {...this.props}
                               document={result.documentInfo}
-                              key={idx}
-                              totalViewCountInfo={totalViewCountInfo}/>
+                              key={idx}/>
             ))}
           </div>
         </div>
       );
     }else{
       return (
-        <h3 style={{ margin: "20px 0 0 0", fontSize: "26px" }}>0 voted documents </h3>
+        <div className="document-total-num">
+          Total documents : <span>0</span>
+        </div>
       )
     }
   }

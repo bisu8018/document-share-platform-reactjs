@@ -53,10 +53,10 @@ class VoteDocument extends React.Component {
   };
 
   sendVoteInfo = (transactionResult) => {
-    const { documentData, drizzleApis, auth } = this.props;
-    const ethAccount = drizzleApis.getLoggedInAccount();
-    const curatorId = auth.getEmail();//drizzleApis.getLoggedInAccount();//drizzleState.accounts[0];
-    const voteAmount = drizzleApis.fromWei(this.state.deposit);
+    const { documentData, drizzleApis } = this.props;
+    let ethAccount = drizzleApis.getLoggedInAccount();
+    let curatorId = MainRepository.Account.getEmail();
+    let voteAmount = drizzleApis.fromWei(this.state.deposit);
     MainRepository.Document.sendVoteInfo(ethAccount, curatorId, voteAmount, documentData, transactionResult, () => {
     }, () => {
     });
@@ -171,7 +171,9 @@ class VoteDocument extends React.Component {
   };
 
 
-  handleClickOpen = (modal) => {
+  handleClickOpen = (modal, drizzleApis) => {
+    if (drizzleApis && !drizzleApis.isAuthenticated()) return null;
+
     const x = [];
     x[modal] = true;
     this.setState(x);
@@ -213,7 +215,6 @@ class VoteDocument extends React.Component {
     document.location.reload();
   };
 
-
   shouldComponentUpdate = () => {
     const { drizzleApis } = this.props;
     if (!drizzleApis) return false;
@@ -222,18 +223,29 @@ class VoteDocument extends React.Component {
   };
 
   render() {
-    const { documentData, drizzleApis, dataKey } = this.props;
+    const { documentData, dataKey, drizzleApis } = this.props;
     const balanceOf = (this.printBalance() * 1).toFixed(2);
-    if (!drizzleApis || !drizzleApis.isExistDocument(dataKey)) return null;
 
     return (
       <span>
-              <Tooltip title="Vote on this document" placement="bottom">
-                <div className="vote-btn" onClick={() => this.handleClickOpen("classicModal")}>
-                    <i className="material-icons">how_to_vote</i>
-                </div>
-              </Tooltip>
-
+         {drizzleApis && !drizzleApis.isExistDocument(dataKey) &&
+         <div/>
+         }
+        {drizzleApis && !drizzleApis.getLoggedInAccount() &&
+        <Tooltip title="Please, work with MetaMask" placement="bottom">
+          <div className="vote-btn">
+            <i className="material-icons">how_to_vote</i>
+          </div>
+        </Tooltip>
+        }
+        {drizzleApis && drizzleApis.isExistDocument(dataKey) &&
+        <Tooltip title="Vote on this document" placement="bottom">
+          <div className="vote-btn" onClick={() => this.handleClickOpen("classicModal", drizzleApis)}>
+            <i className="material-icons">how_to_vote</i>
+          </div>
+        </Tooltip>
+        }
+        {drizzleApis && drizzleApis.getLoggedInAccount() &&
         <Dialog
           fullWidth={this.state.fullWidth}
           open={this.state.classicModal}
@@ -254,15 +266,19 @@ class VoteDocument extends React.Component {
           <DialogContent id="classic-modal-slide-description">
             <h4>1. Total amount of tokens voted</h4>
             <ul className="voteList">
-              <li><strong>You : </strong><CuratorDepositOnUserDocument documentData={documentData}
-                                                                       drizzleApis={drizzleApis}
-                                                                       deposit={this.state.deposit}
-                                                                       loggedInAccount={drizzleApis.getLoggedInAccount()}/>
+              <li>
+                <strong>You : </strong>
+                <CuratorDepositOnUserDocument documentData={documentData}
+                                              drizzleApis={drizzleApis}
+                                              deposit={this.state.deposit}
+                                              loggedInAccount={drizzleApis.getLoggedInAccount()}/>
               </li>
-              <li><strong>Total : </strong><CuratorDepositOnDocument documentData={documentData}
-                                                                     drizzleApis={drizzleApis}
-                                                                     deposit={this.state.deposit}
-                                                                     loggedInAccount={drizzleApis.getLoggedInAccount()}/>
+              <li>
+                <strong>Total : </strong>
+                <CuratorDepositOnDocument documentData={documentData}
+                                          drizzleApis={drizzleApis}
+                                          deposit={this.state.deposit}
+                                          loggedInAccount={drizzleApis.getLoggedInAccount()}/>
               </li>
             </ul>
 
@@ -302,6 +318,7 @@ class VoteDocument extends React.Component {
             </div>
           </div>
         </Dialog>
+        }
       </span>
     );
   }

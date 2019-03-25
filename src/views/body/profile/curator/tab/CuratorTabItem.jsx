@@ -12,17 +12,16 @@ class CuratorTabItem extends React.Component {
   render() {
       const {document, drizzleApis, accountId} = this.props;
 
-
       const badgeReward = drizzleApis.toEther(document.confirmAuthorReward);
-      const badgeVote = drizzleApis.toEther(document.confirmVoteAmount);
-      const badgeView = document.totalViewCount ? document.totalViewCount : 0;
+      const badgeVote = drizzleApis.toEther(document.confirmVoteAmount) || 0;
+      const badgeView = document.totalViewCount || 0;
 
       return (
 
         <div className="row u_center_inner" >
 
           <div className="col-sm-3 col-md-3 col-thumb">
-            <Link to={"/content/view/" + document.documentId}>
+            <Link to={"/doc/" + document.documentId}>
               <div className="thumb_image">
                 <img src={Common.getThumbnail(document.documentId, 1, document.documentName)}
                      alt={document.title ? document.title : document.documentName} className="img-fluid"/>
@@ -32,7 +31,7 @@ class CuratorTabItem extends React.Component {
 
           <div className="col-sm-9 col-md-9 col-details_info">
             <dl className="details_info">
-              <Link to={"/content/view/" + document.documentId}>
+              <Link to={"/doc/" + document.documentId}>
                 <dd className="info_title">  {document.title ? document.title : document.documentName} </dd>
               </Link>
               <Link to={"/author/" + document.accountId} className="info_name">
@@ -42,7 +41,7 @@ class CuratorTabItem extends React.Component {
               <span className="info_date">
                              {Common.dateAgo(document.created) === 0 ? "Today" : Common.dateAgo(document.created) + " days ago"}
                           </span>
-              <Link to={"/content/view/" + document.documentId} className="info_desc">
+              <Link to={"/doc/" + document.documentId} className="info_desc">
                 <LinesEllipsis
                   text={document.desc}
                   maxLine='1'
@@ -53,9 +52,9 @@ class CuratorTabItem extends React.Component {
               </Link>
               <dd className="info_detail">
                 <span className="txt_view ">{badgeView}</span>
-                <span className="view_date view-reward">  <DollarWithDeck deck={badgeReward}
+                <span className="view_date view-reward"><DollarWithDeck deck={badgeReward}
                                                                           drizzleApis={drizzleApis}/></span>
-                <span className="view_date view-reward">VOTE <DeckInShort deck={badgeVote}/></span>
+                <span className="view_date view-reward"><DeckInShort deck={badgeVote}/></span>
               </dd>
             </dl>
           </div>

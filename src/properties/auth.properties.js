@@ -6,4 +6,4 @@ export const AUTH_CONFIG = {
   callbackUrl: APP_PROPERTIES.domain().mainHost + '/callback'
   //callbackUrl: 'http://localhost:8000/callback'
   //callbackUrl: 'http://share.decompany.io/callback'
-}
+};

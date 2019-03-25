@@ -134,7 +134,6 @@ export default class DrizzleApis {
     const dataKey = contract.methods["contains"].cacheCall(this.fromAscii(documentId), {
       from: ethAccount
     });
-    console.log(dataKey);
     return dataKey;
   };
 
@@ -229,18 +228,16 @@ export default class DrizzleApis {
   };
 
 
-  registDocumentToSmartContract = (documentId) => {
-    console.log(documentId, this.drizzle);
+  registerDocumentToSmartContract = (documentId) => {
     if(!documentId){
-      alert("documentId is nothing");
+      console.error("documentId is nothing");
       return;
     }
     if(!this.isAuthenticated()){
-      console.error("The Metamask login is required.")
+      console.error("The Metamask login is required.");
       return;
     }
     const drizzleState = this.drizzle.store.getState();
-    console.log("drizzleState", drizzleState);
     const ethAccount = drizzleState.accounts[0];
     const contract = this.drizzle.contracts.DocumentReg;
     const stackId = contract.methods["register"].cacheSend(this.fromAscii(documentId), {
@@ -294,7 +291,7 @@ export default class DrizzleApis {
     }
     const ethAccount = this.drizzleState.accounts[0];
     const contract = this.drizzle.contracts.Deck;
-    console.log("Metamask logged in account", ethAccount, "Profile account", accountId);
+//    console.log("Metamask logged in account", ethAccount, "Profile account", accountId);
     const dataKey = contract.methods.balanceOf.cacheCall(accountId, {
       from: ethAccount
     });

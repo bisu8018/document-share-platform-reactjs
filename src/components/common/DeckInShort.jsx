@@ -1,9 +1,5 @@
 import React from "react";
 
-import withStyles from "@material-ui/core/styles/withStyles";
-
-const style = {
-};
 
 class DeckInShort extends React.Component {
 
@@ -16,9 +12,9 @@ class DeckInShort extends React.Component {
     const deckStr = deck1m > 0 ? deck1m.toFixed(1) + "m" : deck1k > 0 ? deck1k + "k" : deck + "";
 
     return (
-      <span>{deckStr}</span>
+      <span><i className="material-icons thumb-up-icon">thumb_up_alt</i>{deckStr}</span>
     );
   }
 }
 
-export default withStyles(style)(DeckInShort);
+export default DeckInShort;

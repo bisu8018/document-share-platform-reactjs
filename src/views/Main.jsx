@@ -3,14 +3,13 @@ import { Route, Router, Switch } from "react-router-dom";
 import ReactGA from "react-ga";
 
 import history from "apis/history/history";
-import Auth from "apis/auth/auth";
 import DrizzleApis from "apis/DrizzleApis";
 
 import Header from "views/header/Header";
 import Callback from "./body/callback/callback";
-
 import RouterList from "../common/RouterList";
 import MainRepository from "../redux/MainRepository";
+import GuideModal from "../components/modal/GuideModal";
 
 if (process.env.NODE_ENV === "production") {
   ReactGA.initialize("UA-129300994-1", {
@@ -20,21 +19,7 @@ if (process.env.NODE_ENV === "production") {
     }
   });
   //console.log("google analytics on!!!", process.env)
-} else {
-
-  //console.log("google analytics off!!!")
 }
-
-const auth = new Auth();
-
-const handleAuthentication = ({ location }) => {
-  if (/access_token|id_token|error/.test(location.hash)) {
-    auth.handleAuthentication();
-  }
-};
-
-//hubspot tracking
-let _hsq = window._hsq = window._hsq || [];
 
 class Main extends Component {
   state = {
@@ -44,13 +29,6 @@ class Main extends Component {
     tagList: []
   };
 
-  sendPageView = () => {
-    _hsq.push(["setPath", window.location.pathname + window.location.search]);
-    _hsq.push(["trackPageView"]);
-
-    ReactGA.pageview(window.location.pathname + window.location.search);
-  };
-
   getTagList = () => {
     MainRepository.Document.getTagList(result => {
       this.setState({ tagList: result.resultList });
@@ -58,6 +36,7 @@ class Main extends Component {
   };
 
   componentWillMount() {
+    MainRepository.init();
     const drizzleApis = new DrizzleApis((drizzleApis) => {
       this.setState({ drizzleApis: drizzleApis });
     });
@@ -66,24 +45,28 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    this.sendPageView(history.location);
-    history.listen(this.sendPageView);
+    history.listen(MainRepository.Analytics.sendPageView);
   }
-
   render() {
-    const { drizzleApis, drizzleState, tagList  } = this.state;
+    const { drizzleApis, drizzleState, tagList } = this.state;
+    let pathName =
+      history.location.pathname === "/latest" ||
+      history.location.pathname === "/featured" ||
+      history.location.pathname === "/popular";
+
     return (
 
       <Router history={history}>
-        <div>
+        <div id="container-wrapper">
+
           <Header
             brand="decompany.io"
             drizzleApis={drizzleApis}
             tagList={tagList}
             fixed
-            auth={auth}
             color="white"
           />
+
           <div id="container" data-parallax="true">
             <div className="container">
               <Switch>
@@ -99,19 +82,20 @@ class Main extends Component {
                                <result.component drizzleApis={drizzleApis}
                                                  drizzleState={drizzleState}
                                                  tagList={tagList}
-                                                 auth={auth} {...props} />}
+                                                 {...props} />}
                       />
                     );
                   }
                 )}
-
                 <Route path="/callback" render={(props) => {
-                  handleAuthentication(props);
+                  MainRepository.Account.handleAuthentication(props);
                   return <Callback {...props} />;
                 }}/>
               </Switch>
             </div>
           </div>
+          {pathName  && <GuideModal/>}
+
         </div>
       </Router>
 

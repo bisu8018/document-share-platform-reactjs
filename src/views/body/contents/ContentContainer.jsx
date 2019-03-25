@@ -45,9 +45,8 @@ class ContentContainer extends Component {
     MainRepository.Document.getDocumentList(params, (res) => {
       //console.log("Fetch Document end", res);
       this.setState({ loading: false });
-      const resData = res;
-      const resultList = resData.resultList ? resData.resultList : [];
-      const pageNo = resData.pageNo;
+      const resultList = res.resultList ? res.resultList : [];
+      const pageNo = res.pageNo;
 
       if (resultList.length > 0) {
         if (this.state.resultList && this.state.resultList.length > 0) {
@@ -128,6 +127,11 @@ class ContentContainer extends Component {
 
     return (
       <div className="row">
+        <div className="main-banner d-none d-md-block"/>
+        <div className="main-banner-text col-12 d-none d-md-block">
+          <div className="h2"><div className="d-inline-block">G r o w</div> &nbsp; <div className="d-inline-block">y o u r </div> &nbsp; <div className="d-inline-block">a u d i e n c e .</div></div>
+          <div className="h4">Share your document. <br/> Track your readers and become more perfect. </div>
+        </div>
 
         <div className="col-lg-3 ">
           <ContentTags path={match.path} url={match.url} { ...this.props }/>
@@ -136,8 +140,8 @@ class ContentContainer extends Component {
         <div className="col-sm-12 col-lg-9 u__center-container">
           <div className="u__center">
             <h3 className="d-none d-lg-block text-uppercase font-weight-bold mx-3 list-inline-item">
-              {_title} <span
-              className="h4 text-lowercase font-weight-bold-light"># {this.state.tag ? this.state.tag : "All Tags"}</span>
+              {_title}
+              <span className="h4 text-lowercase font-weight-bold-light"># {this.state.tag ? this.state.tag : "All Tags"}</span>
             </h3>
 
             <div className="u__center_mobile d-lg-none">
@@ -150,14 +154,12 @@ class ContentContainer extends Component {
               </div>
               <div className="left_menu_list col-8">
                 <div className="tags_menu_search_container">
-                  <div className="tags_menu_search_wrapper">
                     <AutoSuggestInput dataList={tagList} search={this.onSuggestionSelected} type={"tag"} bindValue={sec_path}/>
                     <Link to={"/" +path + "/" + (this.state.selectedTag ? this.state.selectedTag : "")}>
                       <div className="search-btn">
                         <i className="material-icons">search</i>
                       </div>
                     </Link>
-                  </div>
                 </div>
               </div>
             </div>
@@ -172,7 +174,6 @@ class ContentContainer extends Component {
                 <ContentListItem key={result.documentId + result.accountId} result={result}
                                  totalViewCountInfo={this.state.totalViewCountInfo} {...this.props} />
               ))}
-              {resultList.length === 0 && <div className="no-data">No data</div>}
             </InfiniteScroll>
           </div>
         </div>

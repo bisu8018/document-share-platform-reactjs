@@ -34,8 +34,6 @@ ethereum network와의 통신을 위해 사용함, 현재 프로젝트에서는 
 
 ### 참고소스
 
- - /src/auth/auth.js : Auth0와 연동을 위한 js
-
 - MainRoutes.js 초기 로딩 및 인증/로그아웃 연동
 
 ```javascript
