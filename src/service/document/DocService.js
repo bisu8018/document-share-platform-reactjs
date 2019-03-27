@@ -10,6 +10,7 @@ let getTodayVotedDocumentsByCuratorUrl = "curator/document/today";
 let getAnalyticsListUrl = "analytics/list";
 let voteDocumentUrl = "document/vote/";
 let registerDocumentInfoUrl = "document/regist";
+let updateDocument = "document/update";
 let tagListUrl = "tags";
 
 export default {
@@ -91,5 +92,14 @@ export default {
           error(err);
         });
     },
+    updateDocument: (data, callback, error) => {
+      AxiosService._requestWithHeaderBody(updateDocument, "POST", data,
+        (data) => {
+          callback(data);
+        }, (err) => {
+          error(err);
+        });
+    },
+
   },
 };

@@ -12,6 +12,11 @@ class ContentTags extends React.Component {
     this.setState({selectedTag : tag._id});
   };
 
+  handleClick = () => {
+    Common.scrollTop();
+    document.getElementsByClassName("react-autosuggest__input")[0].value  = "";
+  };
+
   render() {
     const { tagList, path } = this.props;
     return (
@@ -19,7 +24,7 @@ class ContentTags extends React.Component {
       <div className="u__left d-none d-lg-block">
         <div className="tags_menu_search_container" id="tagsMenuSearchContainer">
             <AutoSuggestInput dataList={tagList} search={this.onSuggestionSelected} type={"tag"}/>
-            <Link to={"/" +path + "/" + (this.state.selectedTag ? this.state.selectedTag : "")}>
+            <Link to={path + "/" + (this.state.selectedTag ? this.state.selectedTag : "")}>
               <div className="search-btn">
                 <i className="material-icons">search</i>
               </div>
@@ -27,7 +32,7 @@ class ContentTags extends React.Component {
         </div>
         <ul className="tags_menu">
           <li className="tags_menu_all_tags">
-            <NavLink exact to={path + "/"} activeClassName="on" onClick={Common.scrollTop}>All Tags</NavLink>
+            <NavLink exact to={path + "/"} activeClassName="on" onClick={() => {this.handleClick()}}>All Tags</NavLink>
           </li>
           {tagList.length > 0 && tagList.map((rst, idx) => {
             return (

@@ -52,7 +52,7 @@ function tracking(params, async, sidClear){
     });
 
     if(!trackingInfo.cid){
-        throw new Error("client id invalid on tracking");
+       console.log("client id invalid on tracking");
     }
     
     params.sid = trackingInfo.sid; //session id

@@ -34,7 +34,7 @@ body {
     font-size: 1rem;
     line-height: 1.5;
     text-align: left;
-    background-color: #fbfbfb;
+    background-color: #f9f9f9;
     -ms-text-size-adjust: none;
     -webkit-text-size-adjust: none;
     color: #3C4858;
@@ -4918,6 +4918,7 @@ a .material-icons {
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
 }
+
 .space {
     height: 130px;
     display: block;
@@ -5058,7 +5059,6 @@ form {
 .navbar form .btn {
     margin-bottom: 0;
 }
-
 
 
 .is-focused .valid-feedback {
@@ -5890,6 +5890,7 @@ b {
 #header__lnb li {
     list-style: none;
 }
+
 .start-btn {
     cursor: pointer;
     font-size: 15px;
@@ -5908,6 +5909,7 @@ b {
     transition: 0.2s all ease-in-out;
     background: #7fc241;
 }
+
 .login-btn {
     cursor: pointer;
     display: inline-block;
@@ -5923,6 +5925,7 @@ b {
     color: #333;
     background: white;
 }
+
 .login-btn > i {
     font-size: 17px;
     position: absolute;
@@ -5941,14 +5944,14 @@ b {
     cursor: pointer;
     display: inline-block;
     padding: 7px 15px 7px 35px;
-    font-weight: 500;
+    font-weight: bold;
     position: relative;
     border-radius: 3px;
     font-size: 13px;
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
-    color: white;
-    background: #7f41c2;
+    color: #4f41c2;
+    border: 1px solid #4f41c2;
     z-index: 4;
 }
 
@@ -5959,8 +5962,21 @@ b {
 }
 
 .upload-btn:hover {
-    background: #6c27f1;
+    background: #4f41c2;
+    color: white;
     transition: 0.2s all ease-in-out;
+}
+
+.sns-share-icon {
+    cursor: pointer;
+    margin-left: 0.25rem;
+    display: inline-block;
+    position: relative;
+}
+
+.sns-share-icon-wrapper {
+    height: 30px;
+    margin-top: 20px;
 }
 
 .link-arrow-btn {
@@ -6106,6 +6122,31 @@ b {
     margin-right: 10px;
 }
 
+.export-btn-disabled {
+    cursor: default;
+    display: inline-block;
+    color: #CCCCCC;
+}
+
+.export-btn {
+    cursor: pointer;
+    display: inline-block;
+    color: #505050;
+    -webkit-transition: 0.2s all ease-in-out;
+    transition: 0.2s all ease-in-out;
+}
+
+.export-btn i,
+.export-btn-disabled i{
+    top: 10px;
+    position: relative;
+    font-size: 25px;
+}
+
+.export-btn:hover {
+    color: #1f9252;
+    transition: 0.2s all ease-in-out;
+}
 
 .share-btn {
     cursor: pointer;
@@ -6267,7 +6308,7 @@ b {
     padding: 7px 0;
     font-weight: 400;
     color: #333;
-    font-size: 1.125rem;
+    font-size: 1rem;
     transition: 0.2s all ease-in-out;
 }
 
@@ -6468,10 +6509,16 @@ b {
     position: relative;
 }
 
+@media (max-width: 1140px){
+    .tags_menu_search_container {
+        width: 85%;
+    }
+}
 
-.tags_menu_search_container  input {
+
+.tags_menu_search_container input {
     font-size: 15px;
-    padding-left: 20px;
+    padding-left: 15px;
     height: 40px;
     background: none;
     color: #333;
@@ -6479,7 +6526,7 @@ b {
     width: 85%;
 }
 
-.left_menu_list .tags_menu_search_container  input {
+.left_menu_list .tags_menu_search_container input {
     padding-left: 0 !important;
 }
 
@@ -6624,7 +6671,6 @@ b {
 }
 
 .info_desc {
-    min-height: 40px;
     padding-top: 3px;
     font-size: 14px;
 }
@@ -6764,6 +6810,7 @@ b {
     font-size: 20px;
     color: #333;
     word-break: break-all;
+    padding-top: 10px;
 }
 
 .tracking-detail-container .profile_info_name {
@@ -6792,7 +6839,9 @@ b {
 .profile_creator h5 {
     margin-top: 0;
     font-weight: 500;
-    border-bottom: 1px solid #7b7b7b;
+    background: #676767;
+    color: white;
+    padding-left: 10px;
 }
 
 
@@ -6840,7 +6889,7 @@ author tap list analytics*/
     border-bottom: 1px solid #cecece;
 }
 
-.analytics-thumb-image{
+.analytics-thumb-image {
     width: 80px;
     height: 50px;
     overflow: hidden;
@@ -6870,7 +6919,7 @@ author tap list analytics*/
 
 .analytics-inner .analytics-btn-div {
     position: relative;
-    top: -3px;
+    top: -2px;
     cursor: pointer;
 }
 
@@ -6903,41 +6952,41 @@ author tap list analytics*/
     height: 10px;
 }
 
-.analytics-table{
+.analytics-table {
     width: 100%;
     margin-top: 5px;
     font-size: 14px;
 }
 
-.analytics-table tr:first-child{
+.analytics-table tr:first-child {
     padding: 10px;
     color: white;
     font-size: 17px;
 }
 
-.analytics-table tr:last-child{
+.analytics-table tr:last-child {
     border-bottom: none;
 }
 
-.analytics-table tr{
+.analytics-table tr {
     border-bottom: 1px solid white;
 }
 
-.analytics-table th{
+.analytics-table th {
     padding: 8px;
     text-align: center;
-    background:  #7fc241;;
+    background: #7fc241;;
 }
 
 
-.analytics-table td{
+.analytics-table td {
     padding: 5px;
     text-align: center;
     background: #f3f3f3;
     font-weight: 500;
 }
 
-.analytics-table td:hover{
+.analytics-table td:hover {
     background: #d8d8d8;
 }
 
@@ -7156,6 +7205,7 @@ Dean
     z-index: 2;
     float: right;
 }
+
 .u__view .fullscreen-enabled .screen-option-bar {
     position: absolute;
     top: 50px;
@@ -7190,7 +7240,7 @@ Dean
 
 .screen-option {
     cursor: pointer;
-    background: #00000052;
+    background: #00000078;
     position: absolute;
 }
 
@@ -7218,6 +7268,11 @@ Dean
 
 .view_content {
     margin-top: 15px;
+}
+
+.view_content .view_content-desc {
+    margin-bottom: 20px;
+    min-height: 20px;
 }
 
 .u__view h2.u_title {
@@ -7264,6 +7319,7 @@ Dean
     background-color: #ccc;
     vertical-align: middle;
 }
+
 
 .view_btns_inner {
     margin: 0px 0 20px;
@@ -7734,6 +7790,7 @@ Dean
         max-height: 0;
     }
 }
+
 @-webkit-keyframes scroll-out {
     0% {
         opacity: 0;
@@ -7859,6 +7916,7 @@ Dean
     top: 58px;
     font-weight: 500;
 }
+
 .checkbox-text {
     font-size: 15px;
     font-weight: 400;
@@ -7905,7 +7963,7 @@ Dean
     width: 100%;
 }
 
-.custom-input{
+.custom-input {
     background-image: linear-gradient(to top, #80c242 2px, rgba(156, 39, 176, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
@@ -7959,8 +8017,7 @@ Dean
 
 .custom-input-warning,
 .custom-input-warning:focus,
-.custom-input-warning:hover
-{
+.custom-input-warning:hover {
     background-image: linear-gradient(to top, red 2px, rgba(156, 39, 176, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
     background-image: -webkit-linear-gradient(bottom, red 2px, rgba(156, 39, 176, 0) 2px),
@@ -7970,16 +8027,15 @@ Dean
 
 .tag-input-warning,
 .tag-input-warning:hover,
-.tag-input-warning:focus-within{
+.tag-input-warning:focus-within {
     border: 1px solid red;
 }
 
 .custom-input-warning + span,
-.tag-input-warning + span{
+.tag-input-warning + span {
     color: red;
     font-size: 13px;
 }
-
 
 
 dialog {
@@ -8005,12 +8061,21 @@ dialog {
     text-align: center;
     font-weight: 500;
 }
-@media only screen and (orientation:portrait){
-    .fullscreen-enabled .landscape-show { display:none!important; }
-    .fullscreen-enabled .landscape-warning-message { display:block!important;}
+
+@media only screen and (orientation: portrait) {
+    .fullscreen-enabled .landscape-show {
+        display: none !important;
+    }
+
+    .fullscreen-enabled .landscape-warning-message {
+        display: block !important;
+    }
 }
-@media only screen and (orientation:landscape){
-    .fullscreen-enabled .landscape-warning-message { display:block!important; }
+
+@media only screen and (orientation: landscape) {
+    .fullscreen-enabled .landscape-warning-message {
+        display: block !important;
+    }
 }
 
 
@@ -8082,15 +8147,14 @@ contentContainer 배너 CSS*/
 }
 
 @media (max-width: 576px) {
-    .main-banner-text .h2{
+    .main-banner-text .h2 {
         font-size: 1.8rem !important;
     }
 
-    .main-banner-text .h4{
+    .main-banner-text .h4 {
         font-size: 1rem !important;
     }
 }
-
 
 
 /*2019-03-18
@@ -8160,11 +8224,58 @@ Dean
         right: 155px;
     }
 }
+
 .start-btn-wrapper {
     left: calc(50% - 55px);
     top: 70%;
     position: relative;
 }
+
+/*2019-03-26
+Dean
+쿠키 허용 모달*/
+.cookie-policy-wrapper {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid black;
+}
+
+.cookie-policy-wrapper .cookie-policy-text{
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.cookie-policy-wrapper .cookie-policy-btn-wrapper{
+    width: 70px;
+}
+
+.privacy-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 1.3rem 1.5rem;
+    background: #fff;
+    z-index: 3;
+    color: #000;
+    font-size: 14px;
+    margin: 0;
+    border-radius: 40px 40px 0 0;
+    border-top: 8px solid rgb(93, 93, 93);
+}
+.privacy-banner p {
+    margin: 0;
+    color: #000;
+    text-align: center;
+    font-weight: 400;
+}
+
+
+
 
 .card {
     font-size: .875rem;

@@ -8,10 +8,10 @@ class FeaturedList extends React.Component {
     return (
         <div className="see-also-container">
 
-          <Link to={"/doc/" + resultItem.seoTitle }>
+          <Link to={ "/doc/" + resultItem.seoTitle}>
             <div className="see-also-thumbnail">
-              <img src={Common.getThumbnail(resultItem.documentId, 1)}
-                   alt={resultItem.documentName ? resultItem.documentName : resultItem.documentId}/>
+              <img src={ Common.getThumbnail(resultItem.documentId, 1) }
+                   alt={ resultItem.documentName ? resultItem.documentName : resultItem.documentId }/>
             </div>
             <div className="see-also-title"> {resultItem.title} </div>
           </Link>

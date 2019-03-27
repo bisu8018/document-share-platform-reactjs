@@ -19,11 +19,29 @@ class ContentViewCarousel extends React.Component {
     emailFlag: false
   };
 
+  handleUrl = () => {
+    const { readPage } = this.state;
+    const { documentText, getPageNum } = this.props;
+
+    let pageNum = window.location.pathname.split("/");
+    let url = window.location.origin + "/" + pageNum[1] + "/" + pageNum[2] + "/";
+    let _readPage = readPage + 1;
+
+    let _documentText= "";
+    if(documentText && documentText.length > 0) _documentText= documentText[readPage].substr(0, 10).trim().replace(/([^A-Za-z0-9 ])+/g, "").replace(/([ ])+/g, "-");
+    if(_documentText.length >0) _documentText= "-" + _documentText;
+
+    if (pageNum !== _readPage) {
+      window.history.replaceState({}, _readPage + _documentText , url + (_readPage === 1 ? "" : _readPage + _documentText));
+      getPageNum(_readPage);  //Parent 인 ContentView 로 pageNum 전달, page 에 따른 문서 설명 전환 용. redux 로 대체 가능
+    }
+  };
+
   handleTracking = (page) => {
     const { target } = this.props;
 
     // 문서 옵션 useTracking 일때만
-    if(target.useTracking){
+    if (target.useTracking) {
       let emailFromAuth = MainRepository.Account.getEmail();
       let emailFromSession = sessionStorage.getItem("tracking_email");
 
@@ -37,7 +55,9 @@ class ContentViewCarousel extends React.Component {
     }
 
     if (page === this.state.readPage) return;
-    this.setState({ readPage: page });
+    this.setState({ readPage: page }, () => {
+      this.handleUrl();
+    });
 
     TrackingApis.tracking({
       id: target.documentId,
@@ -57,7 +77,8 @@ class ContentViewCarousel extends React.Component {
 
   componentWillMount() {
     const { tracking } = this.props;
-    if (tracking) this.handleTracking(0);
+    let pageNum = window.location.pathname.split("/")[3];
+    if (tracking) this.handleTracking(pageNum && pageNum !== "0" ? Number(pageNum.substr(0,1)) - 1 : 0);
   }
 
   componentWillUnmount() {
@@ -75,7 +96,7 @@ class ContentViewCarousel extends React.Component {
   }
 
   render() {
-    const { target } = this.props;
+    const { target, documentText } = this.props;
     const { emailFlag } = this.state;
 
     const arr = [target.totalPages];
@@ -95,7 +116,6 @@ class ContentViewCarousel extends React.Component {
               </div>
             </div>
           </div>
-
           <Carousel
             showThumbs={false}
             showStatus={false}
@@ -107,8 +127,9 @@ class ContentViewCarousel extends React.Component {
             useKeyboardArrows={true}
             onChange={this.handleTracking.bind(this.index)}
           >
-            {arr.length > 0 ? arr.map((addr, index) => (
-              <img key={index} src={addr} alt={"carousel"} className="landscape-show"/>
+            {arr.length > 0 ? arr.map((addr, idx) => (
+              <img key={idx} title={target.title} src={addr} alt={documentText[idx]} data-small="" data-normal=""
+                   data-full="" className="landscape-show"/>
             )) : "no data"}
           </Carousel>
         </div>

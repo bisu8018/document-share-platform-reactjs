@@ -11,6 +11,7 @@ import Document from "./model/Document";
 import CuratorDocuments from "./model/CuratorDocuments";
 import TagList from "./model/TagList";
 import AnalyticsList from "./model/AnalyticsList";
+import DocumentInfo from "./model/DocumentInfo";
 
 let instance: any;
 
@@ -432,6 +433,26 @@ export default {
       DocService.GET.analyticsList(data, (result) => {
         let analyticsList = new AnalyticsList(result);
         callback(analyticsList);
+      });
+    },
+    async updateDocument(data, callback){
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const _data = {
+        data: {
+          documentId : data.documentId,
+          desc : data.desc,
+          title : data.title,
+          tags : data.tags,
+          useTracking : data.useTracking
+        },
+        header: {
+          "Authorization": `Bearer ${token}`
+        }
+      };
+      DocService.POST.updateDocument(_data, (rst) => {
+        let documentInfo = new DocumentInfo(rst.result);
+        callback(documentInfo);
       });
     }
   }

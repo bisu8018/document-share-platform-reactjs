@@ -21,7 +21,7 @@ export default ({
     },
     timestampToDate: (timestamp) => {
       let date = new Date(timestamp);
-      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       let year = date.getFullYear();
       let month = months[date.getMonth()];
       let day = date.getDate();
@@ -37,6 +37,10 @@ export default ({
       let time = (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
 
       return time;
+    },
+    setDateType: (year, month, date) => {
+      let _date = year + "-" + (month < 10 ? "0" : "") + month +  "-" + (date < 10 ? "0" : "") + date;
+      return _date;
     },
     dateAgo: (timestamp) => {
       let currentDate = new Date();

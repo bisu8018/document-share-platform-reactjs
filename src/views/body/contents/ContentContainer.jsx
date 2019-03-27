@@ -115,22 +115,22 @@ class ContentContainer extends Component {
   }
 
   render() {
-    const { tagList, match, location } = this.props;
-    let path = match.path.split("/")[1];
+    const { tagList, match, location, path, isEndPage, totalViewCountInfo, selectedTag, tag  } = this.props;
+    const { resultList } = this.state;
+    let matchPath = match.path.split("/")[1];
     let sec_path = location.pathname.split("/").length>2 ? location.pathname.split("/")[2] : null;
-    const resultList = this.state.resultList;
     let _title = "latest";
 
-    if (this.state.path && (this.state.path.lastIndexOf("featured") > 0 || this.state.path.lastIndexOf("popular") > 0)) {
-      _title = this.state.path.substring(1);
+    if (path && (path.lastIndexOf("featured") > 0 || path.lastIndexOf("popular") > 0)) {
+      _title = path.substring(1);
     }
 
     return (
       <div className="row">
         <div className="main-banner d-none d-md-block"/>
         <div className="main-banner-text col-12 d-none d-md-block">
-          <div className="h2"><div className="d-inline-block">G r o w</div> &nbsp; <div className="d-inline-block">y o u r </div> &nbsp; <div className="d-inline-block">a u d i e n c e .</div></div>
-          <div className="h4">Share your document. <br/> Track your readers and become more perfect. </div>
+          <div className="h2"><div className="d-inline-block">G r o w</div> &nbsp; <div className="d-inline-block">y o u r </div> &nbsp; <div className="d-inline-block">a u d i e n c e</div></div>
+          <div className="h4">Track your readers and become more perfect. <br/> Share your document.</div>
         </div>
 
         <div className="col-lg-3 ">
@@ -141,12 +141,12 @@ class ContentContainer extends Component {
           <div className="u__center">
             <h3 className="d-none d-lg-block text-uppercase font-weight-bold mx-3 list-inline-item">
               {_title}
-              <span className="h4 text-lowercase font-weight-bold-light"># {this.state.tag ? this.state.tag : "All Tags"}</span>
+              <span className="h4 text-lowercase font-weight-bold-light"># {tag ? tag : "All Tags"}</span>
             </h3>
 
             <div className="u__center_mobile d-lg-none">
               <div className="left_menu_list col-4">
-                <select className="select-custom" value={path} id="exampleFormControlSelect1" onChange={this.handleCategories}>
+                <select className="select-custom" value={matchPath} id="exampleFormControlSelect1" onChange={this.handleCategories}>
                   <option value="latest" >Latest</option>
                   <option value="featured" >Featured</option>
                   <option value="popular" >Popular</option>
@@ -155,7 +155,7 @@ class ContentContainer extends Component {
               <div className="left_menu_list col-8">
                 <div className="tags_menu_search_container">
                     <AutoSuggestInput dataList={tagList} search={this.onSuggestionSelected} type={"tag"} bindValue={sec_path}/>
-                    <Link to={"/" +path + "/" + (this.state.selectedTag ? this.state.selectedTag : "")}>
+                    <Link to={"/" +matchPath + "/" + (selectedTag ? selectedTag : "")}>
                       <div className="search-btn">
                         <i className="material-icons">search</i>
                       </div>
@@ -168,11 +168,11 @@ class ContentContainer extends Component {
             <InfiniteScroll
               dataLength={resultList.length}
               next={this.fetchMoreData}
-              hasMore={!this.state.isEndPage}
+              hasMore={!isEndPage}
               loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
               {resultList.map((result) => (
                 <ContentListItem key={result.documentId + result.accountId} result={result}
-                                 totalViewCountInfo={this.state.totalViewCountInfo} {...this.props} />
+                                 totalViewCountInfo={totalViewCountInfo} {...this.props} />
               ))}
             </InfiniteScroll>
           </div>

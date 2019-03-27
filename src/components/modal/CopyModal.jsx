@@ -60,7 +60,7 @@ class CopyModal extends React.Component {
       <span>
          <Tooltip title="Clip the URL of this document" placement="bottom">
                 <div className="share-btn" onClick={() => this.handleClickOpen("classicModal")}>
-                  <i className="material-icons">file_copy</i>
+                  <i className="material-icons">share</i>
                 </div>
               </Tooltip>
 
@@ -82,7 +82,7 @@ class CopyModal extends React.Component {
 
 
               <DialogContent id="classic-modal-slide-description">
-                <div className="position-relative">
+                <div className="position-relative mb-2">
                   <input type="text" value={url}
                          id="copyInput"
                          readOnly

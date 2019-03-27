@@ -6,7 +6,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import UploadDocument from "../../components/modal/UploadDocument";
+import UploadDocumentModal from "../modal/UploadDocumentModal";
 import MainRepository from "../../redux/MainRepository";
 
 class Menu extends React.Component {
@@ -59,7 +59,7 @@ class Menu extends React.Component {
               <ListItemIcon>
                 <i className="material-icons">create</i>
               </ListItemIcon>
-              <ListItemText primary="Log-in" />
+              <ListItemText primary="Login" />
             </ListItem>
           }
         </List>
@@ -85,7 +85,7 @@ class Menu extends React.Component {
               <i className="material-icons">cloud_upload</i>
             </ListItemIcon>
             <ListItemText>
-              <UploadDocument {...this.props} type='menu'/>
+              <UploadDocumentModal {...this.props} type='menu'/>
             </ListItemText>
           </ListItem>
         </Drawer>

@@ -10,6 +10,7 @@ import Callback from "./body/callback/callback";
 import RouterList from "../common/RouterList";
 import MainRepository from "../redux/MainRepository";
 import GuideModal from "../components/modal/GuideModal";
+import CookiePolicyModal from "../components/modal/CookiePolicyModal";
 
 if (process.env.NODE_ENV === "production") {
   ReactGA.initialize("UA-129300994-1", {
@@ -94,7 +95,9 @@ class Main extends Component {
               </Switch>
             </div>
           </div>
+
           {pathName  && <GuideModal/>}
+          <CookiePolicyModal/>
 
         </div>
       </Router>

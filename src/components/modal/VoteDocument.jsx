@@ -226,11 +226,14 @@ class VoteDocument extends React.Component {
     const { documentData, dataKey, drizzleApis } = this.props;
     const balanceOf = (this.printBalance() * 1).toFixed(2);
 
+    if(drizzleApis && !drizzleApis.isExistDocument(dataKey)){
+      return (
+        <div/>
+      )
+    }
+
     return (
       <span>
-         {drizzleApis && !drizzleApis.isExistDocument(dataKey) &&
-         <div/>
-         }
         {drizzleApis && !drizzleApis.getLoggedInAccount() &&
         <Tooltip title="Please, work with MetaMask" placement="bottom">
           <div className="vote-btn">

@@ -2,8 +2,16 @@ import React, { Component } from "react";
 import Fullscreen from "react-full-screen";
 import FileDownload from "js-file-download";
 import { Link } from "react-router-dom";
-
 import * as restapi from "apis/DocApi";
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  TwitterShareButton,
+  TwitterIcon,
+} from "react-share";
+
 import DollarWithDeck from "../../../../components/common/DollarWithDeck";
 import DeckInShort from "../../../../components/common/DeckInShort";
 import ContentViewCarousel from "./ContentViewCarousel";
@@ -14,13 +22,15 @@ import VoteDocument from "../../../../components/modal/VoteDocument";
 import Tooltip from "@material-ui/core/Tooltip";
 import MainRepository from "../../../../redux/MainRepository";
 import CopyModal from "../../../../components/modal/CopyModal";
+import EditDocumentModal from "../../../../components/modal/EditDocumentModal";
 
 class ContentViewFullScreen extends Component {
 
   state = {
     isFull: false,
     dataKey: null,
-    totalPages: 0
+    totalPages: 0,
+    text: ""
   };
 
   getContentDownload = (accountId, documentId, documentName) => {
@@ -73,36 +83,39 @@ class ContentViewFullScreen extends Component {
     return authSub;
   };
 
+  getPageNum = (page) => {
+    this.setState({page : page})
+  };
+
   componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
     this.checkDocumentInBlockChain();
     return true;
   }
 
   render() {
-    const { documentData, documentText, drizzleApis } = this.props;
-
+    const { documentData, documentText, drizzleApis, tagList } = this.props;
+    const { page, totalPages, isFull, dataKey } = this.state;
     let badgeReward = drizzleApis.toEther(documentData.latestReward);
     let badgeVote = drizzleApis.toEther(documentData.latestVoteAmount) || 0;
     let badgeView = documentData.totalViewCount ? documentData.totalViewCount : 0;
     let accountId = documentData.accountId || "";
+    let url = window.location.href;
 
-    if (this.state.totalPages !== documentData.totalPages) {
+    if (totalPages !== documentData.totalPages) {
       this.setState({ totalPages: documentData.totalPages });
     }
 
     return (
 
       <div className="u__view">
-        <Fullscreen enabled={this.state.isFull} onChange={isFull => this.setState({ isFull })}>
+        <Fullscreen enabled={isFull} onChange={isFull => this.setState({ isFull })}>
 
           <div className="view_top">
-            <ContentViewCarousel id="pageCarousel" target={documentData} tracking={true}/>
+            <ContentViewCarousel id="pageCarousel" target={documentData} documentText={documentText} tracking={true} getPageNum={(page)=> {this.getPageNum(page)}}/>
             <div className="view_screen">
               <i title="Fullsceen button" className="material-icons" onClick={this.goFull}>fullscreen</i>
             </div>
           </div>
-
-
 
           <div className="view_content">
             <div className="u_title h2">   {documentData.title ? documentData.title : ""}</div>
@@ -119,25 +132,16 @@ class ContentViewFullScreen extends Component {
               </span>
             </div>
 
-
             <div className="row view_btns_inner">
-              {accountId === this.getAuthSub() &&
-              <Tooltip title="Settings of this document" placement="bottom">
-                  <div className="statistics-btn pt-1"><i className="material-icons">settings</i></div>
-                </Tooltip>
+              {accountId === this.getAuthSub() && documentData &&
+              <EditDocumentModal documentData={documentData} tagList={tagList}/>
               }
-
-              <Tooltip title="Share this document" placement="bottom">
-                <div className="share-btn">
-                  <i className="material-icons">share</i>
-                </div>
-              </Tooltip>
 
               <CopyModal/>
 
               <Tooltip title="Download this document" placement="bottom">
                 <div className="share-btn" onClick={this.handleDownloadContent}>
-                  <i className="material-icons">save</i>
+                  <i className="material-icons">save_alt</i>
                 </div>
               </Tooltip>
 
@@ -151,17 +155,16 @@ class ContentViewFullScreen extends Component {
                 </Link></Tooltip>
               }
 
-              <ContentViewRegistBlockchainButton documentData={documentData} dataKey={this.state.dataKey} drizzleApis={drizzleApis}/>
-              <VoteDocument documentData={documentData} dataKey={this.state.dataKey} drizzleApis={drizzleApis}/>
+              <ContentViewRegistBlockchainButton documentData={documentData} dataKey={dataKey}
+                                                 drizzleApis={drizzleApis}/>
+              <VoteDocument documentData={documentData} dataKey={dataKey} drizzleApis={drizzleApis}/>
             </div>
 
-
-
-            <Link to={"/author/" + documentData.accountId} className="info_name" title={"Go to profile page of " + (documentData.nickname ? documentData.nickname : documentData.accountId)}>
+            <Link to={"/author/" + documentData.accountId} className="info_name"
+                  title={"Go to profile page of " + (documentData.nickname ? documentData.nickname : documentData.accountId)}>
               <i className="material-icons img-thumbnail">face</i>
               {documentData.nickname ? documentData.nickname : documentData.accountId}
             </Link>
-
 
             <div className="view_tag">
               {documentData.tags ? documentData.tags.map((tag, index) => (
@@ -170,13 +173,43 @@ class ContentViewFullScreen extends Component {
               )) : ""}
             </div>
 
-
             <div className="view_desc">
               {documentData.desc ? documentData.desc : ""}
-              <hr className="mt-4 mb-4"/>
-              {documentText ? documentText : ""}
-            </div>
 
+              <div className="sns-share-icon-wrapper">
+
+                <Tooltip title="Share with Twitter" placement="bottom">
+                  <div className="float-right d-inline-block">
+                    <TwitterShareButton url={url} className="sns-share-icon" hashtags={documentData.tags}
+                                        title={documentData.title}>
+                      <TwitterIcon size={28}/>
+                    </TwitterShareButton>
+                  </div>
+                </Tooltip>
+
+                <Tooltip title="Share with Line" placement="bottom">
+                <div className="float-right d-inline-block">
+                  <LinkedinShareButton url={url} className="sns-share-icon " title={documentData.title}>
+                    <LinkedinIcon size={28}/>
+                  </LinkedinShareButton>
+                 </div>
+                </Tooltip>
+
+                <Tooltip title="Share with Facebook" placement="bottom">
+                <div className="float-right d-inline-block">
+                  <FacebookShareButton url={url} className="sns-share-icon">
+                    <FacebookIcon size={28}/>
+                  </FacebookShareButton>
+                </div>
+                </Tooltip>
+              </div>
+
+              <hr className="mb-4"/>
+              <div className="view_content-desc">
+              {documentText[page]}
+              </div>
+            </div>
+            <hr/>
 
             {/*<ContentViewComment/>*/}
           </div>

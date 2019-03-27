@@ -2,10 +2,12 @@ import React from "react";
 import "react-tabs/style/react-tabs.css";
 import Spinner from "react-spinkit";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import MainRepository from "../../../../../redux/MainRepository";
 import { Link } from "react-router-dom";
 import Common from "../../../../../common/Common";
+import CustomChart from "../../../../../components/common/CustomChart";
 
 class CuratorAnalyticsTab extends React.Component {
   state = {
@@ -18,25 +20,26 @@ class CuratorAnalyticsTab extends React.Component {
   };
 
   handleClick = (e) => {
+
     const parentElement = e.currentTarget.parentElement;
     const anotherItem = document.getElementsByClassName("scroll-out");
     const anotherArrow = document.getElementsByClassName("on");
     let dataKey = e.currentTarget.getAttribute("data-key");
     let dataId = e.currentTarget.getAttribute("data-id");
 
-    if (parentElement.children[3].classList.length > 2) {
-      parentElement.children[3].classList.remove("on");
-      parentElement.children[4].classList.remove("scroll-out");
-      parentElement.children[4].classList.add("scroll-up");
+    if (parentElement.children[4].classList.length > 3) {
+      parentElement.children[4].classList.remove("on");
+      parentElement.children[5].classList.remove("scroll-out");
+      parentElement.children[5].classList.add("scroll-up");
     } else {
       if (anotherArrow.length > 0 || anotherItem.length > 0) {
         anotherItem[0].classList.remove("scroll-out");
         anotherArrow[0].classList.remove("on");
         this.setState({ spreadItem: null });
       }
-      parentElement.children[3].classList.add("on");
-      parentElement.children[4].classList.remove("scroll-up");
-      parentElement.children[4].classList.add("scroll-out");
+      parentElement.children[4].classList.add("on");
+      parentElement.children[5].classList.remove("scroll-up");
+      parentElement.children[5].classList.add("scroll-out");
 
       this.getAnalytics(dataId, dataKey);
     }
@@ -44,7 +47,7 @@ class CuratorAnalyticsTab extends React.Component {
 
   fetchMoreData = () => {
     const { pageNo } = this.state;
-    if(this.state.moreDataFlag) {
+    if (this.state.moreDataFlag) {
       this.fetchDocuments({
         pageNo: pageNo + 1
       });
@@ -59,12 +62,12 @@ class CuratorAnalyticsTab extends React.Component {
         if (this.state.resultList) {
           this.setState({
             resultList: this.state.resultList.concat(res.resultList),
-            pageNo: res.pageNo,
+            pageNo: res.pageNo
           });
         } else {
           this.setState({
             resultList: res.resultList,
-            pageNo: res.pageNo,
+            pageNo: res.pageNo
           });
         }
 
@@ -124,8 +127,7 @@ class CuratorAnalyticsTab extends React.Component {
 
 
   render() {
-    const { resultList, spreadItem, isEndPage } = this.state;
-
+    const { resultList, spreadItem, isEndPage, analyticsList } = this.state;
     return (
       <div>
         <div className="document-total-num">
@@ -141,7 +143,7 @@ class CuratorAnalyticsTab extends React.Component {
           {resultList.map((result, idx) => (
             <div className="row analytics-inner" key={idx}>
 
-              <div className="col-3 col-sm-2">
+              <div className="d-none d-sm-inline-block col-sm-2">
                 <Link to={"/doc/" + result.documentId}>
                   <div className="analytics-thumb-image">
                     <img src={Common.getThumbnail(result.documentId, 1, result.documentName)}
@@ -150,22 +152,44 @@ class CuratorAnalyticsTab extends React.Component {
                 </Link>
               </div>
 
-              <div className="col-5 col-sm-6">
+              <div className="col-8 col-sm-6">
                 <Link to={"/doc/" + result.documentId}>
                   <div className="analytics-info-title">  {result.title ? result.title : result.documentName} </div>
                 </Link>
               </div>
 
-              <div className="col-3 analytics-info-date">
-                {Common.dateAgo(result.created) === 0 ? "Today" : Common.timestampToDateTime(result.created)}
+              <div className="d-none d-sm-inline-block col-sm-2 analytics-info-date">
+                {Common.dateAgo(result.created) === 0 ? "Today" : Common.timestampToDate(result.created)}
               </div>
 
-              <div className="col-1 analytics-btn-div" onClick={this.handleClick.bind(this)}
+              <div className="col-2 col-sm-1">
+                {(idx !== spreadItem ) &&
+                <Tooltip title="Please click the right arrow button." placement="bottom">
+                    <div className="export-btn-disabled">
+                      <i className="material-icons">save</i>
+                    </div>
+                </Tooltip>
+                }
+                {idx === spreadItem && analyticsList &&
+                <Tooltip title="Export analytics of this document." placement="bottom">
+                  <a href={analyticsList.csvDownloadUrl}>
+                    <div className="export-btn">
+                      <i className="material-icons">save</i>
+                    </div>
+                  </a>
+                </Tooltip>
+                }
+              </div>
+
+              <div className="col-2 col-sm-1 analytics-btn-div" onClick={this.handleClick.bind(this)}
                    title="See analytics of this document" data-key={idx} data-id={result.documentId}>
                 <i><img src={require("assets/image/common/i_faq_reverse.png")} alt="dropdown icon"/></i>
               </div>
-              <div className="col-12">
-                {idx === spreadItem && this.getGraph()}
+
+              <div className="col-12 ">
+                {idx === spreadItem && analyticsList &&
+                    <CustomChart chartData={analyticsList} subject="analytics"/>
+                }
               </div>
             </div>
           ))}

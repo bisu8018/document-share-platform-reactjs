@@ -31,4 +31,4 @@ export const APP_PROPERTIES = {
 
   }
 
-}
+};

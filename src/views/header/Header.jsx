@@ -1,5 +1,5 @@
 import React from "react";
-import UploadDocument from "../../components/modal/UploadDocument";
+import UploadDocumentModal from "../../components/modal/UploadDocumentModal";
 import { Link, NavLink } from "react-router-dom";
 // import Bounty from "./Bounty";
 import Menu from "../../components/common/Menu";
@@ -69,15 +69,15 @@ class Header extends React.Component {
 
             <div className="navbar-menu col-lg-4 d-none d-lg-block">
               <NavLink to="/latest" className="nav-menu-link"
-                       activeClassName="on">Latest</NavLink>
+                       activeClassName="on">LATEST</NavLink>
               <NavLink to="/featured" className="nav-menu-link"
-                       activeClassName="on">Featured</NavLink>
+                       activeClassName="on">FEATURED</NavLink>
               <NavLink to="/popular" className="nav-menu-link"
-                       activeClassName="on">Popular</NavLink>
+                       activeClassName="on">POPULAR</NavLink>
             </div>
 
             <div className="navbar-menu tar  col-8 col-lg-4">
-              <UploadDocument {...this.props} />
+              <UploadDocumentModal {...this.props} />
               {MainRepository.Account.isAuthenticated() ?
                 <span className="d-none d-sm-inline-block">
                     <Link to={"/author/" + userInfo.sub}>
@@ -87,7 +87,7 @@ class Header extends React.Component {
                 :
                 <div className="d-none d-sm-inline-block login-btn" onClick={this.handleOpen.bind(this)} title="login">
                   <i className="material-icons">edit</i>
-                  Log-in
+                  Login
                 </div>
               }
               <Menu {...this.props} />

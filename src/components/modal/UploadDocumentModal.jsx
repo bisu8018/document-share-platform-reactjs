@@ -14,7 +14,7 @@ function Transition(props) {
   return <Slide direction="down" {...props} />;
 }
 
-class UploadDocument extends React.Component {
+class UploadDocumentModal extends React.Component {
 
   constructor(props) {
     super(props);
@@ -79,9 +79,8 @@ class UploadDocument extends React.Component {
   //업로드 함수
   handleUpload = () => {
     const { drizzleApis } = this.props;
-    const { title, fileInfo, tags, useTracking, registerOnChain } = this.state;
-    const desc = document.getElementById("docDesc").value;
-    const ethAccount = drizzleApis.getLoggedInAccount();
+    const { title, fileInfo, tags, desc, useTracking, registerOnChain } = this.state;
+    let ethAccount = drizzleApis.getLoggedInAccount();
     let userInfo = MainRepository.Account.getUserInfo();
 
     document.getElementById("progressModal").style.display = "block";
@@ -167,9 +166,13 @@ class UploadDocument extends React.Component {
   };
 
   handleTagChange = (tags) => {
-    this.setState({ tags }, () => {
+    this.setState({ tags : tags }, () => {
       this.validateTag();
     });
+  };
+
+  handleDescChange = (e) => {
+    this.setState({ desc : e.target.value });
   };
 
   handleTrackingCheckbox= () => {
@@ -245,8 +248,6 @@ class UploadDocument extends React.Component {
         renderSuggestion={(suggestion) => <span key={suggestion._id}>{suggestion._id}</span>}
         inputProps={{ ...props, onChange: handleOnChange }}
         onSuggestionSelected={(e, { suggestion }) => {
-          console.log(suggestion);
-          console.log(this.state.tags);
           addTag(suggestion._id);
         }}
         onSuggestionsClearRequested={() => {
@@ -297,7 +298,10 @@ class UploadDocument extends React.Component {
                 <span>{titleError}</span>
 
                 <div className="dialog-subject mt-3 mb-2">Description</div>
-                <textarea id="docDesc" placeholder="Description of the uploading document" className="custom-textarea"/>
+                <textarea id="docDesc"
+                          placeholder="Description of the uploading document"
+                          className="custom-textarea"
+                          onChange={(e) => this.handleDescChange(e)}/>
 
                 <div className="dialog-subject mt-3">File</div>
                 <input type="text" value={fileInfo.filename || ""} readOnly
@@ -343,4 +347,4 @@ class UploadDocument extends React.Component {
   }
 }
 
-export default UploadDocument;
+export default UploadDocumentModal;

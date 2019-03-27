@@ -125,7 +125,7 @@ class AudienceTracking extends React.Component {
                           pathname: "/trackingDetail/" + match.params.accountId + "/" + location.state.documentId,
                           state: { document: location.state, addr: addr, cid: result.cid }
                         }}>
-                          {result.user.length > 0 ? result.user[0].e : "Anonymous"}
+                          {result.user.length > 0 && result.user[0].e !== "null" ? result.user[0].e : "Anonymous"}
                         </Link>
                       </td>
                       <td className="col2">{result.count}</td>
