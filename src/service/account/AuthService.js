@@ -1,7 +1,10 @@
 import AxiosService from "../AxiosService";
 
-const accountSync =  "account/sync";
-const accountGet =  "account/get";
+let accountSync =  "account/sync";
+let accountGet =  "account/get";
+let accountUpdate =  "account/update";
+let profileImageUpdate =  "account/picture";
+let profileGet = "profile/get";
 
 export default {
   POST: {
@@ -13,10 +16,34 @@ export default {
           error(err);
         });
     },
+    accountUpdate: (data, callback, error) => {
+      AxiosService._requestWithHeader(accountUpdate, "POST", data,
+        (data) => {
+          callback(data);
+        }, (err) => {
+          error(err);
+        });
+    },
+    profileImageUpdate: (data, callback, error) => {
+      AxiosService._requestWithHeader(profileImageUpdate, "POST", data,
+        (data) => {
+          callback(data);
+        }, (err) => {
+          error(err);
+        });
+    },
   },
   GET: {
     accountInfo: (data, callback, error) => {
       AxiosService._requestGetWithHeader(accountGet, "GET", data,
+        (data) => {
+          callback(data);
+        }, (err) => {
+          error(err);
+        });
+    },
+    profileGet: (data, callback, error) => {
+      AxiosService._requestWithUrlPram(profileGet, "GET", data,
         (data) => {
           callback(data);
         }, (err) => {

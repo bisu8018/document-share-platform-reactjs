@@ -16,7 +16,8 @@ class ContentViewCarousel extends React.Component {
     autoSlideFlag: false,
     slideOptionFlag: false,
     audienceEmail: null,
-    emailFlag: false
+    emailFlag: false,
+    emailFlagTemp: false,
   };
 
   handleUrl = () => {
@@ -37,18 +38,22 @@ class ContentViewCarousel extends React.Component {
     }
   };
 
+  handleForceTracking = () => {
+    this.setState({emailFlagTemp : true});
+  };
+
+  // 문서 옵션 useTracking true 일때만
   handleTracking = (page) => {
     const { target } = this.props;
 
-    // 문서 옵션 useTracking 일때만
     if (target.useTracking) {
-      let emailFromAuth = MainRepository.Account.getEmail();
+      let emailFromAuth = MainRepository.Account.getMyEmail();
       let emailFromSession = sessionStorage.getItem("tracking_email");
 
       if (emailFromAuth) this.setState({ audienceEmail: emailFromAuth });
       else if (emailFromSession) this.setState({ audienceEmail: emailFromSession });
 
-      if (page > 0 && !this.state.audienceEmail) {       // email 입력 모달 출력 함수
+      if (page > 0 && !this.state.audienceEmail && !this.state.emailFlagTemp) {       // email 입력 모달 출력 함수
         this.setState({ emailFlag: true });
         return false;
       }
@@ -101,7 +106,7 @@ class ContentViewCarousel extends React.Component {
 
     const arr = [target.totalPages];
     for (let i = 0; i < target.totalPages; i++) {
-      arr[i] = Common.getPageView(target.documentId, i + 1);
+      arr[i] = Common.getThumbnail(target.documentId, 1024,i + 1);
     }
     return (
       <div className="card card-raised">
@@ -140,7 +145,7 @@ class ContentViewCarousel extends React.Component {
         </div>
 
         {emailFlag && target.useTracking &&
-        <EmailModal handleTracking={() => this.handleTracking()}/>
+        <EmailModal handleTracking={() => this.handleTracking()} forceTracking={() => this.handleForceTracking()}/>
         }
       </div>
     );

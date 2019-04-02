@@ -22,7 +22,7 @@ class ContentTags extends React.Component {
     return (
 
       <div className="u__left d-none d-lg-block">
-        <div className="tags_menu_search_container" id="tagsMenuSearchContainer">
+        <div className="tags_menu_search_container tags-menu-search-container-width" id="tagsMenuSearchContainer">
             <AutoSuggestInput dataList={tagList} search={this.onSuggestionSelected} type={"tag"}/>
             <Link to={path + "/" + (this.state.selectedTag ? this.state.selectedTag : "")}>
               <div className="search-btn">

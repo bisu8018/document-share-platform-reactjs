@@ -12,19 +12,16 @@ export const APP_PROPERTIES = {
     domain:{
       mainHost: 'http://localhost:8000',
       upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
-      //image: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com/prod',
-      image: 'http://dev-ca-document.s3-website-us-west-1.amazonaws.com',
-      //api: "http://localhost:4080",
-      //api: "http://local-api.decompany.io:4080"
-      api: "https://j5hgenjo04.execute-api.us-west-1.amazonaws.com/dev"
+      image: 'https://thumb.share.decompany.io',
+      api: "https://api.share.decompany.io/dev"
     }
   },
   production:{
     domain:{
       mainHost: 'http://dev.share.decompany.io',
       upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
-      image: 'http://dev-ca-document.s3-website-us-west-1.amazonaws.com',
-      api: "https://j5hgenjo04.execute-api.us-west-1.amazonaws.com/dev"
+      image: 'https://thumb.share.decompany.io',
+      api: "https://api.share.decompany.io/dev"
     }
   },
   service_endpoint:{

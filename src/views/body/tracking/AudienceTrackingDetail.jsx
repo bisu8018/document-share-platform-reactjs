@@ -6,11 +6,13 @@ import LinesEllipsis from "react-lines-ellipsis";
 import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../common/Common";
 import Tooltip from "@material-ui/core/Tooltip";
+import Spinner from "react-spinkit";
 
 class AudienceTrackingDetail extends React.Component {
   state = {
     resultList: [],
-    textList: []
+    textList: [],
+    loading: false
   };
 
   handleClick = (e) => {
@@ -26,11 +28,14 @@ class AudienceTrackingDetail extends React.Component {
     }
   };
 
-  printDetail = () => {
+  getTrackingInfo = () => {
     const { location } = this.props;
     let cid = location.state.cid;
+    this.setState({ loading: true });
+
     MainRepository.Document.getTrackingInfo(cid, location.state.document.documentId, (res) => {
       let resData = res;
+      this.setState({ loading: false });
       this.setState({ resultList: resData.resultList ? resData.resultList : [] });
       this.getText();
     });
@@ -38,7 +43,7 @@ class AudienceTrackingDetail extends React.Component {
 
   getImgUrl = (page) => {
     const { location } = this.props;
-    return Common.getThumbnail(location.state.document.documentId, page);
+    return Common.getThumbnail(location.state.document.documentId, 320, page);
   };
 
   getText = () => {
@@ -58,13 +63,14 @@ class AudienceTrackingDetail extends React.Component {
   };
 
   componentWillMount() {
-    this.printDetail();
+    this.getTrackingInfo();
   }
 
   render() {
-    const { location, history } = this.props;
-    const rst = this.state.resultList;
-    const data = location.state.document;
+    const { history, location } = this.props;
+    const { loading, resultList } = this.state;
+
+    console.log(this.state);
 
     return (
 
@@ -76,24 +82,12 @@ class AudienceTrackingDetail extends React.Component {
             Back to visitor list
           </div>
 
-          <div className="profile_top">
-            <Link to={"/author/" + data.accountId}>
-              <div className="thumb_image">
-                <img src={require("assets/image/tempImg/profile.jpg")} alt="profile" className="img-fluid"/>
-              </div>
-              <div className="profile_info_name">
-                {data.nickname ? data.nickname : data.accountId} <br/>
-                {data.nickname ? "(" + data.accountId + ")" : ""}
-              </div>
-            </Link>
-          </div>
-
           <div className="row tracking_inner">
             <div className="col-sm-12 col-md-12 tracking_top">
                 <div className="u_title h3">Views</div>
 
               <div className="tracking_fulldown_list">
-                {rst.map((result, idx) => (
+                {resultList.map((result, idx) => (
                   <ul key={idx}>
                     <li>
                       <div className="tfl_title" onClick={this.handleClick}>
@@ -138,9 +132,9 @@ class AudienceTrackingDetail extends React.Component {
                                     className=""
                                   />
                                   }
-                                {/*  <Link to={"/content/view/" + data.documentId} title="link to document">
-                                    <i className="material-icons link-arrow-btn">call_made</i>
-                                  </Link>*/}
+                                  <Link to={"/doc/" + location.state.document.seoTitle + "/"  + _result.n} title="link to document">
+                                    <i className="material-icons link-arrow-btn">reply</i>
+                                  </Link>
 
                                 </div>
                                 }
@@ -152,6 +146,9 @@ class AudienceTrackingDetail extends React.Component {
                     </li>
                   </ul>
                 ))}
+
+                {loading && <div className="spinner"><Spinner name="ball-pulse-sync"/></div>}
+
               </div>
             </div>
           </div>

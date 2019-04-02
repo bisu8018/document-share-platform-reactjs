@@ -35,9 +35,9 @@ class UploadDocumentModal extends React.Component {
       },
       fileInfoError: "",
       useTracking: false,
-      registerOnChain: false,
+      forceTracking: false,
       classicModal: false,
-      nickname: null
+      username: null
     };
   }
 
@@ -66,22 +66,22 @@ class UploadDocumentModal extends React.Component {
       },
       fileInfoError: "",
       useTracking: false,
-      registerOnChain: false,
+      forceTracking: false,
       classicModal: false,
-      nickname: null
+      username: null
     });
   };
 
-  fileUpload = () => {
+  handleFileUpload = () => {
     document.getElementById("docFile").click();
   };
 
   //업로드 함수
   handleUpload = () => {
     const { drizzleApis } = this.props;
-    const { title, fileInfo, tags, desc, useTracking, registerOnChain } = this.state;
+    const { title, fileInfo, tags, desc, useTracking, forceTracking } = this.state;
     let ethAccount = drizzleApis.getLoggedInAccount();
-    let userInfo = MainRepository.Account.getUserInfo();
+    let userInfo = MainRepository.Account.getMyInfo();
 
     document.getElementById("progressModal").style.display = "block";
 
@@ -93,8 +93,9 @@ class UploadDocumentModal extends React.Component {
       desc: desc,
       tags: tags,
       useTracking: useTracking,
+      forceTracking: !useTracking ? false : forceTracking,
     }, this.handleProgress, (result) => { //문서 업로드 완료
-      if(registerOnChain) drizzleApis.registerDocumentToSmartContract(result.documentId); //문서 블록체인 등록
+      if(drizzleApis && drizzleApis.getLoggedInAccount()) drizzleApis.registerDocumentToSmartContract(result.documentId);
       document.getElementById("progressModal").style.display = "none"; //진행도 모달 닫기
       this.handleClose("classicModal"); //모달 닫기
     });
@@ -145,10 +146,10 @@ class UploadDocumentModal extends React.Component {
       this.setState(x);
     }
 
-    let nickName = MainRepository.Account.getUserInfo().nickname;
+    let username = MainRepository.Account.getMyInfo().username;
     let account = drizzleApis.getLoggedInAccount();
-    let nickname = nickName ? nickName : account;
-    this.setState({ nickname: nickname });
+    let _username = username ? username : account;
+    this.setState({ username: _username });
   };
 
   handleClose = (modal) => {
@@ -183,11 +184,11 @@ class UploadDocumentModal extends React.Component {
     });
   };
 
-  handleChainCheckbox= () => {
-    const { registerOnChain } = this.state;
-    let newValue = !registerOnChain;
+  handleForceTrackingCheckbox= () => {
+    const { forceTracking } = this.state;
+    let newValue = !forceTracking;
     this.setState({
-      registerOnChain: newValue
+      forceTracking: newValue
     });
   };
 
@@ -259,7 +260,7 @@ class UploadDocumentModal extends React.Component {
   };
 
   render() {
-    const { classicModal, fileInfo, tags, percentage, titleError, fileInfoError, tagError, useTracking, registerOnChain } = this.state;
+    const { classicModal, fileInfo, tags, percentage, titleError, fileInfoError, tagError, useTracking, forceTracking } = this.state;
     const { type } = this.props;
 
     return (
@@ -307,7 +308,7 @@ class UploadDocumentModal extends React.Component {
                 <input type="text" value={fileInfo.filename || ""} readOnly
                        placeholder="Click here to upload document" id="docFileInput"
                        className={"custom-input-file " + (fileInfoError.length > 0 ? "custom-input-warning" : "")}
-                       onClick={this.fileUpload}/>
+                       onClick={this.handleFileUpload}/>
                 <span>{fileInfoError}</span>
                 <input type="file" id="docFile" onChange={(e) => this.handleFileChange(e.target.files)}/>
 
@@ -323,8 +324,8 @@ class UploadDocumentModal extends React.Component {
                   <span className="checkbox-text">Use audience tracking.</span>
                 </label>
                 <label className="c-pointer col-12 col-sm-6 float-righ p-0">
-                  <input type="checkbox" onChange={(e) => this.handleChainCheckbox(e)} checked={registerOnChain}/>
-                  <span className="checkbox-text">Register on blockchain.</span>
+                  <input type="checkbox" onChange={(e) => this.handleForceTrackingCheckbox(e)} checked={forceTracking} disabled={!useTracking}/>
+                  <span className="checkbox-text">Force the audience to tracking.</span>
                 </label>
               </DialogContent>
 

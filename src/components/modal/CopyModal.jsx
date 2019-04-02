@@ -87,7 +87,7 @@ class CopyModal extends React.Component {
                          id="copyInput"
                          readOnly
                          className="custom-input"/>
-                         <span className="custom-input-copy-text" onClick={() => this.handleCopy()}>{copyText}</span>
+                  <div className="custom-input-copy-text" onClick={() => this.handleCopy()}>{copyText}</div>
                 </div>
               </DialogContent>
             </Dialog>

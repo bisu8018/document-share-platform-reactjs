@@ -27,9 +27,10 @@ class EditDocumentModal extends React.Component {
       tags: [],
       tagError: "",
       useTracking: false,
+      forceTracking: false,
       registerOnChain: false,
       classicModal: false,
-      nickname: null
+      username: null
     };
   }
 
@@ -45,8 +46,9 @@ class EditDocumentModal extends React.Component {
       tags: [],
       tagError: "",
       useTracking: false,
+      forceTracking: false,
       classicModal: false,
-      nickname: null
+      username: null
     });
   };
 
@@ -60,13 +62,14 @@ class EditDocumentModal extends React.Component {
 
   handleConfirm = () => {
     const { documentData } = this.props;
-    const { title, desc, tags, useTracking } = this.state;
+    const { title, desc, tags, useTracking, forceTracking } = this.state;
     const data = {
-      documentId : documentData.documentId,
-      desc : desc,
-      title : title,
-      tags : tags,
-      useTracking : useTracking
+      documentId: documentData.documentId,
+      desc: desc,
+      title: title,
+      tags: tags,
+      useTracking: useTracking,
+      forceTracking: forceTracking
     };
     MainRepository.Document.updateDocument(data, (result) => {
       history.push("/doc/" + result.seoTitle);
@@ -84,13 +87,14 @@ class EditDocumentModal extends React.Component {
       this.setState(x);
     }
 
-    let nickName = MainRepository.Account.getUserInfo().nickname;
-    let _nickname = nickName ? nickName : documentData.accountId;
-    this.setState({ nickname: _nickname });
+    let username = MainRepository.Account.getMyInfo().username;
+    let _username = username ? username : documentData.accountId;
+    this.setState({ username: _username });
     this.setState({ title: documentData.title });
     this.setState({ desc: documentData.desc });
     this.setState({ tags: documentData.tags });
     this.setState({ useTracking: documentData.useTracking || false });
+    this.setState({ forceTracking: documentData.forceTracking || false });
   };
 
   handleClose = (modal) => {
@@ -108,13 +112,13 @@ class EditDocumentModal extends React.Component {
   };
 
   handleTagChange = (tags) => {
-    this.setState({ tags : tags }, () => {
+    this.setState({ tags: tags }, () => {
       this.validateTag();
     });
   };
 
   handleDescChange = (e) => {
-    this.setState({ desc : e.target.value });
+    this.setState({ desc: e.target.value });
   };
 
   handleTrackingCheckbox = () => {
@@ -122,6 +126,14 @@ class EditDocumentModal extends React.Component {
     let newValue = !useTracking;
     this.setState({
       useTracking: newValue
+    });
+  };
+
+  handleForceTrackingCheckbox = () => {
+    const { forceTracking } = this.state;
+    let newValue = !forceTracking;
+    this.setState({
+      forceTracking: newValue
     });
   };
 
@@ -183,7 +195,7 @@ class EditDocumentModal extends React.Component {
   };
 
   render() {
-    const { classicModal, title, desc, tags, useTracking, titleError, tagError } = this.state;
+    const { classicModal, title, desc, tags, useTracking, forceTracking, titleError, tagError } = this.state;
     const { type } = this.props;
 
     return (
@@ -238,6 +250,10 @@ class EditDocumentModal extends React.Component {
                   <input type="checkbox" onChange={(e) => this.handleTrackingCheckbox(e)} checked={useTracking}/>
                   <span className="checkbox-text">Use audience tracking.</span>
                   </label>
+                <label className="c-pointer col-12 col-sm-6 float-righ p-0">
+                  <input type="checkbox" onChange={(e) => this.handleForceTrackingCheckbox(e)} checked={forceTracking}/>
+                  <span className="checkbox-text">Force the audience to tracking.</span>
+                </label>
                   </DialogContent>
 
 

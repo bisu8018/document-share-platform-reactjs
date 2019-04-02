@@ -55,7 +55,7 @@ class VoteDocument extends React.Component {
   sendVoteInfo = (transactionResult) => {
     const { documentData, drizzleApis } = this.props;
     let ethAccount = drizzleApis.getLoggedInAccount();
-    let curatorId = MainRepository.Account.getEmail();
+    let curatorId = MainRepository.Account.getMyEmail();
     let voteAmount = drizzleApis.fromWei(this.state.deposit);
     MainRepository.Document.sendVoteInfo(ethAccount, curatorId, voteAmount, documentData, transactionResult, () => {
     }, () => {

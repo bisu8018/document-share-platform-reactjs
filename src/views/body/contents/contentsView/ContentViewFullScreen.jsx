@@ -20,7 +20,6 @@ import ContentViewRegistBlockchainButton from "./ContentViewRegistBlockchainButt
 import Common from "../../../../common/Common";
 import VoteDocument from "../../../../components/modal/VoteDocument";
 import Tooltip from "@material-ui/core/Tooltip";
-import MainRepository from "../../../../redux/MainRepository";
 import CopyModal from "../../../../components/modal/CopyModal";
 import EditDocumentModal from "../../../../components/modal/EditDocumentModal";
 
@@ -72,17 +71,6 @@ class ContentViewFullScreen extends Component {
     }
   };
 
-  getAuthSub = () => {
-    let authSub = "";
-    let isAuthenticated = MainRepository.Account.isAuthenticated();
-
-    if (isAuthenticated) {
-      authSub = MainRepository.Account.getUserInfo().sub || "";
-    }
-
-    return authSub;
-  };
-
   getPageNum = (page) => {
     this.setState({page : page})
   };
@@ -93,13 +81,15 @@ class ContentViewFullScreen extends Component {
   }
 
   render() {
-    const { documentData, documentText, drizzleApis, tagList } = this.props;
+    const { documentData, documentText, drizzleApis, tagList, author } = this.props;
     const { page, totalPages, isFull, dataKey } = this.state;
     let badgeReward = drizzleApis.toEther(documentData.latestReward);
     let badgeVote = drizzleApis.toEther(documentData.latestVoteAmount) || 0;
     let badgeView = documentData.totalViewCount ? documentData.totalViewCount : 0;
     let accountId = documentData.accountId || "";
     let url = window.location.href;
+    let profileUrl = author ? author.picture : null;
+    let personality = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId;
 
     if (totalPages !== documentData.totalPages) {
       this.setState({ totalPages: documentData.totalPages });
@@ -133,7 +123,7 @@ class ContentViewFullScreen extends Component {
             </div>
 
             <div className="row view_btns_inner">
-              {accountId === this.getAuthSub() && documentData &&
+              {accountId === Common.getMySub() && documentData &&
               <EditDocumentModal documentData={documentData} tagList={tagList}/>
               }
 
@@ -145,7 +135,7 @@ class ContentViewFullScreen extends Component {
                 </div>
               </Tooltip>
 
-              {accountId === this.getAuthSub() &&
+              {accountId === Common.getMySub() &&
               <Tooltip title="See statistics of this document" placement="bottom">
                 <Link to={{
                   pathname: "/tracking/" + documentData.accountId + "/" + documentData.documentId,
@@ -160,56 +150,59 @@ class ContentViewFullScreen extends Component {
               <VoteDocument documentData={documentData} dataKey={dataKey} drizzleApis={drizzleApis}/>
             </div>
 
-            <Link to={"/author/" + documentData.accountId} className="info_name"
-                  title={"Go to profile page of " + (documentData.nickname ? documentData.nickname : documentData.accountId)}>
-              <i className="material-icons img-thumbnail">face</i>
-              {documentData.nickname ? documentData.nickname : documentData.accountId}
+            <Link to={"/author/" + personality} className="info_name"
+                  title={"Go to profile page of " + personality}>
+              {profileUrl ?
+                <img src={profileUrl} alt="profile"/> :
+                <i className="material-icons img-thumbnail">face</i>
+              }
+              {personality}
             </Link>
 
-            <div className="view_tag">
-              {documentData.tags ? documentData.tags.map((tag, index) => (
-                <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
-                      className="tag"> {tag} </Link>
-              )) : ""}
-            </div>
+            <div className="sns-share-icon-wrapper">
 
-            <div className="view_desc">
-              {documentData.desc ? documentData.desc : ""}
+              <Tooltip title="Share with Twitter" placement="bottom">
+                <div className="d-inline-block">
+                  <TwitterShareButton url={url} className="sns-share-icon" hashtags={documentData.tags}
+                                      title={documentData.title}>
+                    <TwitterIcon size={28}/>
+                  </TwitterShareButton>
+                </div>
+              </Tooltip>
 
-              <div className="sns-share-icon-wrapper">
-
-                <Tooltip title="Share with Twitter" placement="bottom">
-                  <div className="float-right d-inline-block">
-                    <TwitterShareButton url={url} className="sns-share-icon" hashtags={documentData.tags}
-                                        title={documentData.title}>
-                      <TwitterIcon size={28}/>
-                    </TwitterShareButton>
-                  </div>
-                </Tooltip>
-
-                <Tooltip title="Share with Line" placement="bottom">
-                <div className="float-right d-inline-block">
+              <Tooltip title="Share with Line" placement="bottom">
+                <div className="d-inline-block">
                   <LinkedinShareButton url={url} className="sns-share-icon " title={documentData.title}>
                     <LinkedinIcon size={28}/>
                   </LinkedinShareButton>
-                 </div>
-                </Tooltip>
+                </div>
+              </Tooltip>
 
-                <Tooltip title="Share with Facebook" placement="bottom">
-                <div className="float-right d-inline-block">
+              <Tooltip title="Share with Facebook" placement="bottom">
+                <div className="d-inline-block">
                   <FacebookShareButton url={url} className="sns-share-icon">
                     <FacebookIcon size={28}/>
                   </FacebookShareButton>
                 </div>
-                </Tooltip>
+              </Tooltip>
+            </div>
+
+
+            <div className="view_desc">
+              {documentData.desc ? documentData.desc : ""}
+
+              <div className="view_tag">
+                {documentData.tags ? documentData.tags.map((tag, index) => (
+                  <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
+                        className="tag"> {tag} </Link>
+                )) : ""}
               </div>
 
               <hr className="mb-4"/>
               <div className="view_content-desc">
-              {documentText[page]}
+              {documentText[page-1]}
               </div>
             </div>
-            <hr/>
 
             {/*<ContentViewComment/>*/}
           </div>

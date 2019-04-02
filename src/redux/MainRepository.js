@@ -12,6 +12,10 @@ import CuratorDocuments from "./model/CuratorDocuments";
 import TagList from "./model/TagList";
 import AnalyticsList from "./model/AnalyticsList";
 import DocumentInfo from "./model/DocumentInfo";
+import UserInfo from "./model/UserInfo";
+import TrackingExport from "./model/TrackingExport";
+import AnalysticsExport from "./model/AnalysticsExport";
+import UserProfile from "./model/UserProfile";
 
 let instance: any;
 
@@ -123,7 +127,7 @@ export default {
     renewSession() {
       instance.InitData.authData.checkSession({}, (err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
-          this.setUserInfo(authResult, user => {
+          this.setMyInfo(authResult, user => {
             this.setSession(authResult, user);
           });
         } else if (err) {
@@ -137,7 +141,7 @@ export default {
         instance.InitData.authData.checkSession({}, (err, authResult) => {
           if (authResult && authResult.accessToken && authResult.idToken) {
             resolve(authResult);
-            this.setUserInfo(authResult, user => {
+            this.setMyInfo(authResult, user => {
               this.setSession(authResult, user);
             });
           } else if (err) {
@@ -151,8 +155,8 @@ export default {
       if (/access_token|id_token|error/.test(location.hash)) {
         instance.InitData.authData.parseHash((err, authResult) => {
           if (authResult && authResult.accessToken && authResult.idToken) {
-            console.log("handleAuthentication", authResult, err);
-            this.setUserInfo(authResult, user => {
+            //console.log("handleAuthentication", authResult, err);
+            this.setMyInfo(authResult, user => {
               this.setSession(authResult, user);
               this.scheduleRenewal();
               this.syncUser();
@@ -172,7 +176,7 @@ export default {
       // navigate to the home route
       history.replace("/");
     },
-    setUserInfo(authResult, callback) {
+    setMyInfo(authResult, callback) {
       instance.InitData.authData.client.userInfo(authResult.accessToken, (err, user) => {
         if (err) {
           //console.error("Getting userInfo", err);
@@ -184,7 +188,6 @@ export default {
       });
     },
     setSession(authResult, userInfo) {
-      console.log("access_token", authResult.accessToken);
       let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
       sessionStorage.setItem("access_token", authResult.accessToken);
       sessionStorage.setItem("id_token", authResult.idToken);
@@ -193,8 +196,9 @@ export default {
         sessionStorage.setItem("user_info", JSON.stringify(userInfo));
       }
     },
-    getAccountInfo(id, callback, error) {
-      const token = sessionStorage.getItem("id_token");
+    async getAccountInfo(id, callback, error) {
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
       const data = {
         header: {
           "Authorization": `Bearer ${token}`
@@ -204,32 +208,42 @@ export default {
         }
       };
 
-      AuthService.GET.accountInfo(data, (result) => {
-        callback(result);
-      }, err => {
+      AuthService.GET.accountInfo(data, (result => {
+        let userInfo = new UserInfo(result.user);
+        callback(userInfo);
+      }), err => {
         error(err);
       });
     },
-    getUserInfo() {
-      const userInfo = JSON.parse(sessionStorage.getItem("user_info"));
+    getProfileInfo (params, callback, error) {
+      AuthService.GET.profileGet(params, (result => {
+        let userInfo = new UserInfo(result.user);
+        callback(userInfo);
+      }), err => {
+        error(err);
+      });
+    },
+    getMyInfo() {
+      let userInfo = JSON.parse(sessionStorage.getItem("user_info"));
       if (!userInfo && this.isAuthenticated()) {
         this.renewSession();
         return {};
       }
-      return userInfo;
+      let _userInfo = new UserInfo(userInfo);
+      return _userInfo;
     },
     getExpireDate() {
-      const expiresAt = JSON.parse(sessionStorage.getItem("expires_at"));
+      let expiresAt = JSON.parse(sessionStorage.getItem("expires_at"));
       if (!expiresAt && this.isAuthenticated()) {
         this.renewSession();
         return {};
       }
       return JSON.stringify(new Date(expiresAt));
     },
-    getEmail() {
-      const userInfo = JSON.parse(sessionStorage.getItem("user_info"));
+    getMyEmail() {
+      let userInfo = JSON.parse(sessionStorage.getItem("user_info"));
 
-      if(!userInfo && !this.isAuthenticated()){
+      if (!userInfo && !this.isAuthenticated()) {
         return false;
       }
 
@@ -247,6 +261,85 @@ export default {
           userInfo: JSON.parse(sessionStorage.getItem("user_info")),
           expiresAt: JSON.parse(sessionStorage.getItem("expires_at"))
         });
+    },
+    async getProfileImageUploadUrl(callback, error) {
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const _data = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        }
+      };
+      AuthService.POST.profileImageUpdate(_data, (result) => {
+        let userProfile = new UserProfile(result);
+        callback(userProfile);
+      });
+    },
+    async updateUsername(username, callback) {
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const _data = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        data: {
+          "username": username
+        }
+      };
+      AuthService.POST.accountUpdate(_data, (result) => {
+        this.renewSession();
+        callback();
+      }, err => {
+      });
+    },
+    async updateProfileImage(url, callback, error) {
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const _data = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        data: {
+          "picture": url
+        }
+      };
+      AuthService.POST.accountUpdate(_data, (result) => {
+        this.renewSession();
+        callback();
+      }, err => {
+      });
+    },
+    profileImageUpload(params, callback, error) {
+      if (params.file == null) {
+        console.error("file object is null", params);
+        return;
+      }
+      const urlSplits = params.signedUrl.split("?");
+
+      let url = urlSplits[0];
+      let search = urlSplits[1];
+      let query = JSON.parse("{\"" + search.replace(/&/g, "\",\"").replace(/=/g, "\":\"") + "\"}", function(key, value) {
+        return key === "" ? value : decodeURIComponent(value);
+      });
+
+      const config = {
+        headers: {
+          "content-type": params.file.type,
+          "Signature": query.Signature,
+          "x-amz-acl": "authenticated-read"
+        }
+      };
+      axios.put(url, params.file, config)
+        .then(
+          response => {
+            callback(response);
+          }
+        )
+        .catch(
+          err => {
+            error(err);
+          }
+        );
     },
     clearSession() {
       sessionStorage.removeItem("access_token");
@@ -271,7 +364,7 @@ export default {
         data: {
           filename: fileInfo.file.name,
           size: fileInfo.file.size,
-          username: user.name,
+          username: user.userName,
           sub: user.sub,
           ethAccount: ethAccount,
           title: title,
@@ -294,7 +387,7 @@ export default {
           let owner = res.accountId;
           let signedUrl = res.signedUrl;
 
-          this.fileUpload({
+          this.documentUpload({
             file: fileInfo.file,
             fileid: documentId,
             fileindex: 1,
@@ -314,12 +407,11 @@ export default {
         console.error("Document Registration Error", err);
       });
     },
-    fileUpload(params) {
+    documentUpload(params) {
       if (params.file == null || params.fileid == null || params.ext == null) {
         console.error("file object is null", params);
         return;
       }
-      console.log("fileUpload", params);
       const urlSplits = params.signedUrl.split("?");
 
       let url = urlSplits[0];
@@ -327,15 +419,12 @@ export default {
       let query = JSON.parse("{\"" + search.replace(/&/g, "\",\"").replace(/=/g, "\":\"") + "\"}", function(key, value) {
         return key === "" ? value : decodeURIComponent(value);
       });
-      const formData = new FormData();
-
-      formData.append("file", params.file);
 
       const config = {
         headers: {
           "content-type": "application/octet-stream",
           "Signature": query.Signature,
-          "x-amz-acl": "authenticated-read",
+          "x-amz-acl": "authenticated-read"
         },
         onUploadProgress: (e) => {
           if (e.load !== null && params.callback !== null) {
@@ -365,18 +454,72 @@ export default {
         callback(result);
       });
     },
-    getTrackingInfo(cid, documentId, callback) {
-      const data = { cid: cid, documentId: documentId };
-      //console.log("getTrackingInfo", data);
-      DocService.GET.trackingInfo(data, (result) => {
+    async getTrackingInfo(cid, documentId, callback) {
+      const authResult = await instance.Account.renewSessionPromise();
+      const token = authResult.idToken;
+      const params = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        params: {
+          "cid": cid,
+          "documentId": documentId
+        }
+      };
+      DocService.GET.trackingInfo(params, (result) => {
         callback(result);
       });
     },
-    getTrackingList(documentId, callback) {
-      const data = { documentId: documentId };
+    async getTrackingList(documentId, callback) {
+      const authResult = await instance.Account.renewSessionPromise();
+      const token = authResult.idToken;
+      const params = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        params: {
+          "documentId": documentId
+        }
+      };
       //console.log("getTrackingList", data);
-      DocService.GET.trackingList(data, (result) => {
+      DocService.GET.trackingList(params, (result) => {
         callback(result);
+      });
+    },
+    async getTrackingExport(documentId, callback) {
+      const authResult = await instance.Account.renewSessionPromise();
+      const token = authResult.idToken;
+      const params = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        params: {
+          "documentId": documentId
+        }
+      };
+
+      DocService.GET.trackingExport(params, (result) => {
+        let trackingExport = new TrackingExport(result);
+        callback(trackingExport);
+      });
+    },
+    async getAnalyticsExport(data, callback) {
+      const authResult = await instance.Account.renewSessionPromise();
+      const token = authResult.idToken;
+      const params = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        params: {
+          "documentId": data.documentId,
+          "year": data.year,
+          "week": data.week
+        }
+      };
+
+      DocService.GET.analyticsExport(params, (result) => {
+        let analysticsExport = new AnalysticsExport(result);
+        callback(analysticsExport);
       });
     },
     getDocument(documentId, callback) {
@@ -392,11 +535,9 @@ export default {
       });
     },
     getDocumentList(params, callback, error) {
-      DocService.POST.documentList(params, (result) => {
-        let documents = new DocumentList(result);
-        callback(documents);
-      }, (err) => {
-        error(err);
+      DocService.GET.documentList(params, result => {
+        let tagList = new DocumentList((result));
+        callback(tagList);
       });
     },
     getCuratorDocuments(params, callback, error) {
@@ -423,28 +564,35 @@ export default {
         callback(result);
       });
     },
-    getAnalyticsList(params, callback){
-      const data = {
-        csv: true,
-        userid: null,
-        week: params.week,
-        documentId: params.documentId
+    async getAnalyticsList(params, callback) {
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const _params = {
+        params: {
+          userid: null,
+          week: params.week,
+          year: params.year,
+          documentId: params.documentId
+        },
+        header: {
+          "Authorization": `Bearer ${token}`
+        }
       };
-      DocService.GET.analyticsList(data, (result) => {
+      DocService.GET.analyticsList(_params, (result) => {
         let analyticsList = new AnalyticsList(result);
         callback(analyticsList);
       });
     },
-    async updateDocument(data, callback){
+    async updateDocument(data, callback) {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
         data: {
-          documentId : data.documentId,
-          desc : data.desc,
-          title : data.title,
-          tags : data.tags,
-          useTracking : data.useTracking
+          documentId: data.documentId,
+          desc: data.desc,
+          title: data.title,
+          tags: data.tags,
+          useTracking: data.useTracking
         },
         header: {
           "Authorization": `Bearer ${token}`

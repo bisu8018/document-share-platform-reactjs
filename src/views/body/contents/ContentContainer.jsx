@@ -7,6 +7,7 @@ import ContentTags from "./ContentTags";
 import ContentListItem from "./ContentListItem";
 import AutoSuggestInput from "../../../components/common/AutoSuggestInput";
 import MainRepository from "../../../redux/MainRepository";
+import Common from "../../../common/Common";
 
 class ContentContainer extends Component {
   state = {
@@ -26,16 +27,16 @@ class ContentContainer extends Component {
   }
 
   fetchMoreData = () => {
-    this.fetchDocuments({
-      pageNo: this.state.pageNo + 1,
-      tag: this.state.tag,
-      path: this.state.path
+    this.setState({ loading: true }, () => {
+      this.fetchDocuments({
+        pageNo: this.state.pageNo + 1,
+        tag: this.state.tag,
+        path: this.state.path
+      });
     });
   };
 
   fetchDocuments = (args) => {
-    if (this.state.loading) return;
-    this.setState({ loading: true });
     const params = {
       pageNo: args.pageNo,
       tag: args.tag,
@@ -67,45 +68,34 @@ class ContentContainer extends Component {
   };
 
   setFetch = () => {
-    const { match, location } = this.props;
-    const pathArr = location.pathname.split("/");
-    let tag = "";
-
-    if (pathArr.length > 2) {
-      tag = pathArr[2];
-    }
-
     this.setState({
       resultList: [],
       pageNo: null,
       isEndPage: false,
-      tag: tag,
-      path: match.url
+      tag: Common.getTag(),
+      path: Common.getPath()
     });
 
     this.fetchDocuments({
-      tag: tag,
-      path: match.url
+      tag: Common.getTag(),
+      path: Common.getPath()
     });
   };
 
-  handleCategories = ( e ) => {
-    const { location } = this.props;
-    let path = e.target.value;
-    let sec_path = location.pathname.split("/").length > 2 ? location.pathname.split("/")[2] : null;
+  handleCategories = (e) => {
+    let path = Common.getPath();
+    let sec_path = Common.getTag();
 
-    if (sec_path) this.props.history.push("/" + path + "/" + sec_path);
-    else this.props.history.push("/" + path + "/");
+    this.props.history.push("/" + path + "/" + sec_path);
   };
 
   onSuggestionSelected = (tag) => {
-    this.setState({selectedTag : tag._id});
+    this.setState({ selectedTag: tag._id });
   };
 
   componentDidUpdate = () => {
-    const { location } = this.props;
-    const pathArr = location.pathname.split("/");
-    if (pathArr.length > 2 && pathArr[2] !== this.state.tag) {
+    let pathArr = window.location.pathname.split("/");
+    if (pathArr.length > 2 && decodeURI(pathArr[2]) !== this.state.tag) {
       this.setFetch();
     }
   };
@@ -115,66 +105,75 @@ class ContentContainer extends Component {
   }
 
   render() {
-    const { tagList, match, location, path, isEndPage, totalViewCountInfo, selectedTag, tag  } = this.props;
+    const { tagList, match, isEndPage, totalViewCountInfo, selectedTag } = this.props;
     const { resultList } = this.state;
-    let matchPath = match.path.split("/")[1];
-    let sec_path = location.pathname.split("/").length>2 ? location.pathname.split("/")[2] : null;
-    let _title = "latest";
 
-    if (path && (path.lastIndexOf("featured") > 0 || path.lastIndexOf("popular") > 0)) {
-      _title = path.substring(1);
-    }
+    let matchPath = Common.getPath();
+    let matchTag = Common.getTag();
 
     return (
       <div className="row">
         <div className="main-banner d-none d-md-block"/>
         <div className="main-banner-text col-12 d-none d-md-block">
-          <div className="h2"><div className="d-inline-block">G r o w</div> &nbsp; <div className="d-inline-block">y o u r </div> &nbsp; <div className="d-inline-block">a u d i e n c e</div></div>
-          <div className="h4">Track your readers and become more perfect. <br/> Share your document.</div>
+          <div className="h2">
+            <div className="d-inline-block">G r o w</div>
+
+            <div className="d-inline-block">y o u r</div>
+            &nbsp;
+            <div className="d-inline-block">a u d i e n c e</div>
+          </div>
+          <div className="h4">Share your slides and and generate high quality leads.</div>
         </div>
 
         <div className="col-lg-3 ">
-          <ContentTags path={match.path} url={match.url} { ...this.props }/>
+          <ContentTags path={match.path} url={match.url} {...this.props}/>
         </div>
 
         <div className="col-sm-12 col-lg-9 u__center-container">
           <div className="u__center">
             <h3 className="d-none d-lg-block text-uppercase font-weight-bold mx-3 list-inline-item">
-              {_title}
-              <span className="h4 text-lowercase font-weight-bold-light"># {tag ? tag : "All Tags"}</span>
+              {matchPath || "latest"}
+              <span className="h4 text-lowercase ml-2 font-weight-bold-light"># {matchTag || "All Tags"}</span>
             </h3>
 
-            <div className="u__center_mobile d-lg-none">
+            <div className="u__center_mobile d-lg-none mt-3 mt-sm-0">
               <div className="left_menu_list col-4">
-                <select className="select-custom" value={matchPath} id="exampleFormControlSelect1" onChange={this.handleCategories}>
-                  <option value="latest" >Latest</option>
-                  <option value="featured" >Featured</option>
-                  <option value="popular" >Popular</option>
+                <select className="select-custom" value={matchPath} id="exampleFormControlSelect1"
+                        onChange={this.handleCategories}>
+                  <option value="latest">Latest</option>
+                  <option value="featured">Featured</option>
+                  <option value="popular">Popular</option>
                 </select>
               </div>
               <div className="left_menu_list col-8">
                 <div className="tags_menu_search_container">
-                    <AutoSuggestInput dataList={tagList} search={this.onSuggestionSelected} type={"tag"} bindValue={sec_path}/>
-                    <Link to={"/" +matchPath + "/" + (selectedTag ? selectedTag : "")}>
-                      <div className="search-btn">
-                        <i className="material-icons">search</i>
-                      </div>
-                    </Link>
+                  <AutoSuggestInput dataList={tagList} search={this.onSuggestionSelected} type={"tag"}
+                                    bindValue={matchTag}/>
+                  <Link to={"/" + matchPath + "/" + (selectedTag ? selectedTag : "")}>
+                    <div className="search-btn">
+                      <i className="material-icons">search</i>
+                    </div>
+                  </Link>
                 </div>
               </div>
             </div>
 
-            <hr className="d-none d-sm-block"/>
+            <hr className="d-none d-md-block"/>
+
             <InfiniteScroll
+              className="overflow-hidden"
               dataLength={resultList.length}
               next={this.fetchMoreData}
               hasMore={!isEndPage}
-              loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
+            >
               {resultList.map((result) => (
                 <ContentListItem key={result.documentId + result.accountId} result={result}
                                  totalViewCountInfo={totalViewCountInfo} {...this.props} />
               ))}
             </InfiniteScroll>
+            {this.state.loading &&
+            <div className="spinner"><Spinner name="ball-pulse-sync"/></div>
+            }
           </div>
         </div>
 

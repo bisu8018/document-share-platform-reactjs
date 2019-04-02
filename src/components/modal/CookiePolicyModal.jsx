@@ -42,10 +42,10 @@ class CookiePolicyModal extends React.PureComponent {
     else return (
 
         <div className="privacy-banner" >
-            <p>
+            <div className="tac">
               We use cookies to provide and improve our services. By using our site, you consent to our Cookies Policy.
               <div className="ok-btn d-sm-inline-block mt-3 mt-sm-0 ml-sm-3" onClick={this.getStarted.bind(this)}>Accept</div>
-            </p>
+            </div>
         </div>
 
     );

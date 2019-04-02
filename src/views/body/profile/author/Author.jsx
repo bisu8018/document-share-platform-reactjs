@@ -8,11 +8,15 @@ import AuthorSummary from "./AuthorSummary";
 import CuratorVoteTab from "../curator/tab/CuratorVoteTab.jsx";
 import CuratorUploadTab from "../curator/tab/CuratorUploadTab";
 import CuratorAnalyticsTab from "../curator/tab/CuratorAnalyticsTab";
+import MainRepository from "../../../../redux/MainRepository";
+import Common from "../../../../common/Common";
+import Spinner from "react-spinkit";
 
 
 class Author extends React.Component {
   state = {
     resultList: [],
+    userInfo: null,
     curatorDocumentList: [],
     curatorDocumentKeyList: [],
     pageNo: null,
@@ -67,18 +71,42 @@ class Author extends React.Component {
       totalCurator3DayReward: totalCurator3DayReward,
       totalCuratorEstimateRewards: totalCuratorEstimateRewards
     });
-
   };
 
+  getParam = () => {
+    let pathArr = window.location.pathname.split("/");
+    return decodeURI(pathArr[2]);
+  };
+
+  componentWillMount(): void {
+    const { myInfo } = this.props;
+    let presentValue = this.getParam();
+    let params = {};
+
+    if(myInfo.username !== presentValue && myInfo.email !== presentValue && myInfo.sub !== presentValue) {
+      if(Common.checkEmailForm(presentValue)) params = {email : presentValue};
+      else params = {username : presentValue};
+
+      MainRepository.Account.getProfileInfo(params, result => {
+        this.setState({ userInfo: result });
+      });
+    }else{
+      this.setState({ userInfo: myInfo });
+    }
+  }
+
   render() {
-    const { drizzleApis, match } = this.props;
-    const accountId = match.params.accountId;
+    const { drizzleApis, myInfo } = this.props;
+    const { userInfo } = this.state;
+
+    let param = this.getParam();
     return (
 
       <div className="row">
+
         <div className="col-sm-12 col-lg-10 offset-lg-1 u__center profile-center">
 
-
+          {userInfo &&
           <AuthorSummary totalReward={this.state.totalReward}
                          totalCurator3DayReward={this.state.totalCurator3DayReward}
                          totalCuratorEstimateRewards={this.state.totalCuratorEstimateRewards}
@@ -86,20 +114,22 @@ class Author extends React.Component {
                          documentList={this.state.resultList}
                          curatorDocumentList={this.state.curatorDocumentList}
                          totalViewCountInfo={this.state.totalViewCountInfo}
-                         accountId={accountId}/>
-
+                         userInfo={userInfo}/>
+          }
+          {!userInfo && <div className="spinner"><Spinner name="ball-pulse-sync"/></div>}
+          {userInfo &&
           <Tabs forceRenderTabPanel={true}>
             <TabList>
               <Tab>Uploaded</Tab>
               <Tab>Voted</Tab>
-              <Tab>Analytics</Tab>
+              {(param === myInfo.username || param === myInfo.email || param === Common.getMySub()) && <Tab>Analytics</Tab>}
             </TabList>
 
             <TabPanel>
-             <CuratorUploadTab
-               drizzleApis={drizzleApis}
-               accountId={accountId}
-             />
+              <CuratorUploadTab
+                drizzleApis={drizzleApis}
+                userInfo={userInfo}
+              />
             </TabPanel>
 
             <TabPanel>
@@ -107,17 +137,20 @@ class Author extends React.Component {
                 {...this.props}
                 handleCurator3DayRewardOnDocuments={this.handleCurator3DayRewardOnDocuments}
                 totalViewCountInfo={this.state.totalViewCountInfo}
-                accountId={accountId}
+                accountId={param}
               />
             </TabPanel>
 
+            {(param === myInfo.username || param === myInfo.email || param === Common.getMySub()) &&
             <TabPanel>
               <CuratorAnalyticsTab
-                accountId={accountId}
+                userInfo={userInfo}
               />
             </TabPanel>
 
+            }
           </Tabs>
+          }
         </div>
       </div>
 

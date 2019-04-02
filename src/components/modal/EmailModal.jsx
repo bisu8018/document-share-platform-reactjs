@@ -38,9 +38,11 @@ class EmailModal extends React.Component {
   };
 
   handleClose = (modal) => {
+    const { forceTracking } = this.props;
     const x = [];
     x[modal] = false;
     this.setState(x);
+    if(!sessionStorage.getItem("tracking_email"))  forceTracking();
     this.clearState();
   };
 

@@ -14,6 +14,7 @@ class ContentView extends React.Component {
     documentTitle: null,
     documentData: null,
     documentText: null,
+    author: null,
     determineAuthorToken: -1,
     featuredList: null,
     approved: -1
@@ -29,6 +30,7 @@ class ContentView extends React.Component {
         documentData: res.document,
         featuredList: res.featuredList,
         documentText: res.text,
+        author: res.author,
         determineAuthorToken: -1,
         approved: -1
       });
@@ -53,7 +55,7 @@ class ContentView extends React.Component {
 
   getImgUrl = () => {
     const { documentData } = this.state;
-    return Common.getThumbnail(documentData.documentId, 1);
+    return Common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName);
   };
 
   componentWillMount() {
@@ -78,7 +80,7 @@ class ContentView extends React.Component {
 
   render() {
     const { drizzleApis, auth, tagList, ...rest } = this.props;
-    const { documentData, documentText, featuredList } = this.state;
+    const { documentData, documentText, featuredList, author } = this.state;
     if (!documentData) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     }
@@ -100,7 +102,7 @@ class ContentView extends React.Component {
           <meta content={documentData.desc} class="fb_og_meta" property="og:description" name="og_description"/>
           <meta content={Common.timestampToDateTime(documentData.created)} class="fb_og_meta"
                 property="decompany:created_time" name="document_created_time"/>
-          <meta content={documentData.userName || documentData.accountId} class="fb_og_meta" property="decompany:author"
+          <meta content={documentData.username || documentData.accountId} class="fb_og_meta" property="decompany:author"
                 name="document_created_time_author"/>
           <meta content={documentData.viewCount} class="fb_og_meta" property="decompany:view_count"
                 name="document_view_count"/>
@@ -115,11 +117,11 @@ class ContentView extends React.Component {
 
         <div className="col-md-12 col-lg-8 view_left">
           <ContentViewFullScreen documentData={documentData} documentText={documentText} drizzleApis={drizzleApis}
-                                 auth={auth} tagList={tagList}/>
+                                 auth={auth} author={author} tagList={tagList}/>
         </div>
 
         <div className="col-md-12 col-lg-4 ">
-          <ContentViewRight documentData={documentData} featuredList={featuredList} {...rest}/>
+          <ContentViewRight documentData={documentData} author={author} featuredList={featuredList} {...rest}/>
         </div>
       </div>
 

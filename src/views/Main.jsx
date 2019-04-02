@@ -11,6 +11,7 @@ import RouterList from "../common/RouterList";
 import MainRepository from "../redux/MainRepository";
 import GuideModal from "../components/modal/GuideModal";
 import CookiePolicyModal from "../components/modal/CookiePolicyModal";
+import UserInfo from "../redux/model/UserInfo";
 
 if (process.env.NODE_ENV === "production") {
   ReactGA.initialize("UA-129300994-1", {
@@ -25,6 +26,7 @@ if (process.env.NODE_ENV === "production") {
 class Main extends Component {
   state = {
     loading: true,
+    myInfo: new UserInfo(),
     drizzleState: null,
     drizzleApis: null,
     tagList: []
@@ -36,6 +38,15 @@ class Main extends Component {
     });
   };
 
+  getMyInfo = () => {
+    if (MainRepository.Account.isAuthenticated()) {
+      let myInfo = MainRepository.Account.getMyInfo();
+      MainRepository.Account.getAccountInfo(myInfo.sub, result => {
+        this.setState({ myInfo: result });
+      });
+    }
+  };
+
   componentWillMount() {
     MainRepository.init();
     const drizzleApis = new DrizzleApis((drizzleApis) => {
@@ -43,13 +54,16 @@ class Main extends Component {
     });
     this.setState({ drizzleApis: drizzleApis });
     this.getTagList();
+    this.getMyInfo();
+
   }
 
   componentDidMount() {
     history.listen(MainRepository.Analytics.sendPageView);
   }
+
   render() {
-    const { drizzleApis, drizzleState, tagList } = this.state;
+    const { drizzleApis, drizzleState, tagList, myInfo } = this.state;
     let pathName =
       history.location.pathname === "/latest" ||
       history.location.pathname === "/featured" ||
@@ -58,11 +72,13 @@ class Main extends Component {
     return (
 
       <Router history={history}>
+        {myInfo &&
         <div id="container-wrapper">
 
           <Header
             brand="decompany.io"
             drizzleApis={drizzleApis}
+            myInfo={myInfo}
             tagList={tagList}
             fixed
             color="white"
@@ -83,6 +99,7 @@ class Main extends Component {
                                <result.component drizzleApis={drizzleApis}
                                                  drizzleState={drizzleState}
                                                  tagList={tagList}
+                                                 myInfo={myInfo}
                                                  {...props} />}
                       />
                     );
@@ -96,10 +113,11 @@ class Main extends Component {
             </div>
           </div>
 
-          {pathName  && <GuideModal/>}
+          {pathName && <GuideModal/>}
           <CookiePolicyModal/>
 
         </div>
+        }
       </Router>
 
     );

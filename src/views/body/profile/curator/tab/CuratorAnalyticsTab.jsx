@@ -8,6 +8,7 @@ import MainRepository from "../../../../../redux/MainRepository";
 import { Link } from "react-router-dom";
 import Common from "../../../../../common/Common";
 import CustomChart from "../../../../../components/common/CustomChart";
+import NoDataIcon from "../../../../../components/common/NoDataIcon";
 
 class CuratorAnalyticsTab extends React.Component {
   state = {
@@ -16,35 +17,14 @@ class CuratorAnalyticsTab extends React.Component {
     spreadItem: null,
     pageNo: null,
     isEndPage: false,
-    moreDataFlag: false
+    moreDataFlag: false,
+    week: 1,
+    year: null,
+    documentId: null,
+    chartFlag: false,
   };
 
-  handleClick = (e) => {
-
-    const parentElement = e.currentTarget.parentElement;
-    const anotherItem = document.getElementsByClassName("scroll-out");
-    const anotherArrow = document.getElementsByClassName("on");
-    let dataKey = e.currentTarget.getAttribute("data-key");
-    let dataId = e.currentTarget.getAttribute("data-id");
-
-    if (parentElement.children[4].classList.length > 3) {
-      parentElement.children[4].classList.remove("on");
-      parentElement.children[5].classList.remove("scroll-out");
-      parentElement.children[5].classList.add("scroll-up");
-    } else {
-      if (anotherArrow.length > 0 || anotherItem.length > 0) {
-        anotherItem[0].classList.remove("scroll-out");
-        anotherArrow[0].classList.remove("on");
-        this.setState({ spreadItem: null });
-      }
-      parentElement.children[4].classList.add("on");
-      parentElement.children[5].classList.remove("scroll-up");
-      parentElement.children[5].classList.add("scroll-out");
-
-      this.getAnalytics(dataId, dataKey);
-    }
-  };
-
+  // infinity scroll 문서 리스트 추가 로드
   fetchMoreData = () => {
     const { pageNo } = this.state;
     if (this.state.moreDataFlag) {
@@ -54,10 +34,18 @@ class CuratorAnalyticsTab extends React.Component {
     }
   };
 
+  // 문서 리스트 GET
   fetchDocuments = (params) => {
-    const { accountId } = this.props;
+    const { userInfo } = this.props;
     const pageNo = (!params || isNaN(params.pageNo)) ? 1 : Number(params.pageNo);
-    MainRepository.Document.getDocumentList({ accountId: accountId, pageNo: pageNo }, (res) => {
+    let _params = {
+      pageNo: pageNo
+    };
+
+    if (userInfo.username && userInfo.username.length > 0) _params = { username: userInfo.username };
+    else _params = { email: userInfo.email };
+
+    MainRepository.Document.getDocumentList(_params, (res) => {
       if (res && res.resultList) {
         if (this.state.resultList) {
           this.setState({
@@ -80,60 +68,124 @@ class CuratorAnalyticsTab extends React.Component {
     });
   };
 
+  // 차트 정보 GET
   getAnalytics = (documentId, dataKey) => {
+    const { week, year } = this.state;
     MainRepository.Document.getAnalyticsList({
-        week: 4,
+        week: week,
+        year: year,
         documentId: documentId
       }, result => {
         this.setState({ spreadItem: Number(dataKey) });
-        this.setState({ analyticsList: result });
+        this.setState({ documentId: documentId });
+        this.setState({ analyticsList: result }, () =>{
+          this.setState({chartFlag : true}); //차트 데이터 props 타이밍 동기화
+        });
       }
     );
   };
 
-  getGraph = () => {
-    const { analyticsList } = this.state;
-    if (analyticsList && analyticsList.resultList.length > 0) {
-      return (
-        <table className="analytics-table" border="0" cellSpacing="0" cellPadding="0">
-          <tbody>
-          <tr>
-            <th className="col1">DATE</th>
-            <th className="col2">VISIT COUNT</th>
-          </tr>
-          {analyticsList.resultList.map((rst, idx) => (
-            <tr key={idx}>
-              <td className="col1">
-                <span>{(rst.month < 10 ? "0" : "") + rst.month} / </span>
-                <span>{(rst.dayOfMonth < 10 ? "0" : "") + rst.dayOfMonth} / </span>
-                <span>{rst.year}  </span>
-              </td>
-              <td className="col2">{rst.count}</td>
-            </tr>
-          ))}
-          </tbody>
-        </table>
-      );
+
+  // 스크롤 아웃 관리 메소드
+  handleClick = (e) => {
+    const parentElement = e.currentTarget.parentElement;
+    const anotherItem = document.getElementsByClassName("scroll-out");
+    const anotherArrow = document.getElementsByClassName("on");
+    let dataKey = e.currentTarget.getAttribute("data-key");
+    let dataId = e.currentTarget.getAttribute("data-id");
+
+    if (parentElement.children[3].classList.length > 3) {
+      parentElement.children[3].classList.remove("on");
+      parentElement.children[4].classList.remove("scroll-out");
+      parentElement.children[4].classList.add("scroll-up");
+    } else {
+      if (anotherArrow.length > 0 || anotherItem.length > 0) {
+        anotherItem[0].classList.remove("scroll-out");
+        anotherArrow[0].classList.remove("on");
+        this.setState({ spreadItem: null });
+      }
+      parentElement.children[3].classList.add("on");
+      parentElement.children[4].classList.remove("scroll-up");
+      parentElement.children[4].classList.add("scroll-out");
+
+      this.setState({chartFlag : false});   //차트 데이터 props 타이밍 동기화
+      this.getAnalytics(dataId, dataKey);      //차트 데이터 GET
+    }
+  };
+
+  // 엑셀 추출 버튼
+  handleExport = (seoTitle) => {
+    const { week, year, documentId } = this.state;
+    const data = {
+      documentId: documentId,
+      year: week,
+      week: year
+    };
+    MainRepository.Document.getAnalyticsExport(data, rst => {
+      const a = document.createElement("a");
+      a.style.display = "none";
+      document.body.appendChild(a);
+
+      a.href = rst.csvDownloadUrl;
+
+      a.setAttribute("download", "analystics_" + seoTitle + ".xls");
+      a.click();
+
+      window.URL.revokeObjectURL(a.href);
+      document.body.removeChild(a);
+    });
+  };
+
+  // 날짜 선택 버튼
+  handleWeekBtnClick = (e) => {
+    const { documentId, spreadItem } = this.state;
+    let weekValue = e.target.dataset.value;
+    let weekValueNum = null;
+
+    switch (weekValue) {
+      case "1w" :
+        weekValueNum = 1;
+        break;
+      case "1m" :
+        weekValueNum = 4;
+        break;
+      case "3m" :
+        weekValueNum = 12;
+        break;
+      case "6m" :
+        weekValueNum = 24;
+        break;
+      case "1y" :
+        weekValueNum = 1;
+        break;
+      default:
+        break;
     }
 
-    return (
-      <div className="no-data">No data</div>
-    );
+    this.setState({
+      week: weekValue !== "1y" ? weekValueNum : null,
+      year : weekValue !== "1y" ? null: weekValueNum
+    }, () => {
+      this.setState({chartFlag : false});   //차트 데이터 props 타이밍 동기화
+      this.getAnalytics(documentId, spreadItem);
+    });
   };
+
 
   componentWillMount() {
     this.fetchDocuments();
   }
 
-
   render() {
-    const { resultList, spreadItem, isEndPage, analyticsList } = this.state;
+    const { resultList, spreadItem, isEndPage, analyticsList, year, week, chartFlag } = this.state;
+
     return (
       <div>
-        <div className="document-total-num">
+        <div className="document-total-num mb-2">
           Total documents : <span>{resultList.length}</span>
         </div>
         <InfiniteScroll
+          className="overflow-hidden"
           dataLength={resultList.length}
           next={this.fetchMoreData}
           hasMore={!isEndPage}
@@ -144,16 +196,16 @@ class CuratorAnalyticsTab extends React.Component {
             <div className="row analytics-inner" key={idx}>
 
               <div className="d-none d-sm-inline-block col-sm-2">
-                <Link to={"/doc/" + result.documentId}>
+                <Link to={"/doc/" + result.seoTitle}>
                   <div className="analytics-thumb-image">
-                    <img src={Common.getThumbnail(result.documentId, 1, result.documentName)}
+                    <img src={Common.getThumbnail(result.documentId, 320, 1, result.documentName)}
                          alt={result.title ? result.title : result.documentName} className="img-fluid"/>
                   </div>
                 </Link>
               </div>
 
-              <div className="col-8 col-sm-6">
-                <Link to={"/doc/" + result.documentId}>
+              <div className="col-10 col-sm-7 mb-4">
+                <Link to={"/doc/" + result.seoTitle}>
                   <div className="analytics-info-title">  {result.title ? result.title : result.documentName} </div>
                 </Link>
               </div>
@@ -162,33 +214,36 @@ class CuratorAnalyticsTab extends React.Component {
                 {Common.dateAgo(result.created) === 0 ? "Today" : Common.timestampToDate(result.created)}
               </div>
 
-              <div className="col-2 col-sm-1">
-                {(idx !== spreadItem ) &&
-                <Tooltip title="Please click the right arrow button." placement="bottom">
-                    <div className="export-btn-disabled">
-                      <i className="material-icons">save</i>
-                    </div>
-                </Tooltip>
-                }
-                {idx === spreadItem && analyticsList &&
-                <Tooltip title="Export analytics of this document." placement="bottom">
-                  <a href={analyticsList.csvDownloadUrl}>
-                    <div className="export-btn">
-                      <i className="material-icons">save</i>
-                    </div>
-                  </a>
-                </Tooltip>
-                }
-              </div>
-
               <div className="col-2 col-sm-1 analytics-btn-div" onClick={this.handleClick.bind(this)}
                    title="See analytics of this document" data-key={idx} data-id={result.documentId}>
                 <i><img src={require("assets/image/common/i_faq_reverse.png")} alt="dropdown icon"/></i>
               </div>
 
               <div className="col-12 ">
-                {idx === spreadItem && analyticsList &&
-                    <CustomChart chartData={analyticsList} subject="analytics"/>
+                {idx === spreadItem && analyticsList && analyticsList.resultList.length > 0 &&
+                <span>
+                    <div className="chart-date-btn ml-3 ml-sm-4" onClick={this.handleWeekBtnClick.bind(this)}>
+                      <div data-value="1w" className={week === 1 ? "clicked" : ""}>1w</div>
+                      <div data-value="1m" className={week === 4 ? "clicked" : ""}>1m</div>
+                      <div data-value="3m" className={week === 12 ? "clicked" : ""}>3m</div>
+                      <div data-value="6m" className={week === 24 ? "clicked" : ""}>6m</div>
+                      <div data-value="1y" className={year === 1 ? "clicked" : ""}>1y</div>
+                    </div>
+
+                    <Tooltip title="Export tracking data as Excel file." placement="bottom">
+                      <div className="export-btn-big float-right"
+                           onClick={() => this.handleExport(result.seoTitle)}>
+                        <i className="material-icons">save</i>
+                        Export
+                      </div>
+                    </Tooltip>
+                  {chartFlag &&
+                  <CustomChart chartData={analyticsList} week={week} year={year} subject="analytics"/>
+                  }
+                </span>
+                }
+                {analyticsList && analyticsList.resultList.length === 0 &&
+                    <NoDataIcon/>
                 }
               </div>
             </div>

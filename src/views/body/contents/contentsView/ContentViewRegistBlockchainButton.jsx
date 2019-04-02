@@ -46,7 +46,7 @@ class ContentViewBlockchainButton extends React.Component {
   render() {
     const { documentData, drizzleApis, dataKey } = this.props;
     let idFromDoc = documentData.accountId;
-    let idFromAuth = MainRepository.Account.getUserInfo();
+    let idFromAuth = MainRepository.Account.getMyInfo();
     let sub = idFromAuth ? idFromAuth.sub : null;
     let isExistDocument = drizzleApis.isExistDocument(dataKey);
     if (isExistDocument || idFromDoc !== sub) return null;

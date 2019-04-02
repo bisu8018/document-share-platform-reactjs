@@ -4,6 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 // import Bounty from "./Bounty";
 import Menu from "../../components/common/Menu";
 import MainRepository from "../../redux/MainRepository";
+import Common from "../../common/Common";
 
 class Header extends React.Component {
   state = {
@@ -55,7 +56,8 @@ class Header extends React.Component {
   }
 
   render() {
-    let userInfo = MainRepository.Account.getUserInfo();
+    const { myInfo } = this.props;
+
     return (
 
       <header id="header">
@@ -68,20 +70,20 @@ class Header extends React.Component {
             </div>
 
             <div className="navbar-menu col-lg-4 d-none d-lg-block">
-              <NavLink to="/latest" className="nav-menu-link"
+              <NavLink to={"/latest/" + Common.getTag()} className="nav-menu-link"
                        activeClassName="on">LATEST</NavLink>
-              <NavLink to="/featured" className="nav-menu-link"
+              <NavLink to={"/featured/" + Common.getTag()} className="nav-menu-link"
                        activeClassName="on">FEATURED</NavLink>
-              <NavLink to="/popular" className="nav-menu-link"
+              <NavLink to={"/popular/" + Common.getTag()} className="nav-menu-link"
                        activeClassName="on">POPULAR</NavLink>
             </div>
 
             <div className="navbar-menu tar  col-8 col-lg-4">
               <UploadDocumentModal {...this.props} />
-              {MainRepository.Account.isAuthenticated() ?
+              {MainRepository.Account.isAuthenticated() && myInfo.email.length > 0?
                 <span className="d-none d-sm-inline-block">
-                    <Link to={"/author/" + userInfo.sub}>
-                      <div className="avatar">{userInfo.nickname[0]}</div>
+                    <Link to={"/author/" + (myInfo.username.length && myInfo.username.length > 0 ? myInfo.username : myInfo.email)}>
+                      <img src={myInfo.picture} className="avatar" alt="user profile"/>
                     </Link>
                   </span>
                 :

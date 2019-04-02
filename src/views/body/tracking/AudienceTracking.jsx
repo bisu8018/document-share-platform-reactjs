@@ -1,17 +1,19 @@
 import React from "react";
 import "react-tabs/style/react-tabs.css";
-import LinesEllipsis from "react-lines-ellipsis";
 import { Link } from "react-router-dom";
 
 import Common from "common/Common";
 import MainRepository from "../../../redux/MainRepository";
 import DollarWithDeck from "../../../components/common/DollarWithDeck";
 import DeckInShort from "../../../components/common/DeckInShort";
+import Spinner from "react-spinkit";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class AudienceTracking extends React.Component {
   state = {
     resultList: [],
-    filterList: null
+    filterList: null,
+    loading: false
   };
 
   constructor() {
@@ -20,47 +22,69 @@ class AudienceTracking extends React.Component {
   }
 
   keyUpHandler = (e) => {
-    let searchValue = document.getElementById('searchInput').value;
+    let searchValue = document.getElementById("searchInput").value;
     let filteredResult = null;
-    if(searchValue){
+    if (searchValue) {
       let result = this.state.resultList;
       filteredResult = result.filter(el => {
-        if(el.user.length > 0) return el.user[0].e.indexOf(searchValue) !== -1
+        if (el.user.length > 0) return el.user[0].e.indexOf(searchValue) !== -1;
         return false;
       });
     }
-    this.setState({filterList : filteredResult});
+    this.setState({ filterList: filteredResult });
   };
 
-  print = () => {
+  getTrackingList = () => {
     const { location } = this.props;
+
+    this.setState({ loading: true });
     MainRepository.Document.getTrackingList(location.state.documentId, (res) => {
       let resData = res;
+      this.setState({ loading: false });
       this.setState({ resultList: resData.resultList ? resData.resultList : [] });
     });
   };
 
+  handleExport = () => {
+    const { location } = this.props;
+    console.log(123);
+    MainRepository.Document.getTrackingExport(location.state.documentId, rst => {
+      const a = document.createElement("a");
+      a.style.display = "none";
+      document.body.appendChild(a);
+
+      a.href = rst.downloadUrl;
+
+      a.setAttribute("download", "tracking_" + location.state.seoTitle + ".xls");
+      a.click();
+
+      window.URL.revokeObjectURL(a.href);
+      document.body.removeChild(a);
+    });
+  };
+
   componentWillMount() {
-    this.print();
+    this.getTrackingList();
   }
 
   render() {
     const { location, drizzleApis, match } = this.props;
+    const { loading } = this.state;
     const rst = !this.state.filterList ? this.state.resultList : this.state.filterList;
-    const addr = Common.getThumbnail(location.state.documentId, 1);
-    const badgeReward = drizzleApis.toEther(location.state.confirmAuthorReward);
-    const badgeVote = drizzleApis.toEther(location.state.confirmVoteAmount);
-    const badgeView = location.state.totalViewCount ? location.state.totalViewCount : 0;
+    let addr = Common.getThumbnail(location.state.documentId, 320, 1);
+    let badgeReward = drizzleApis.toEther(location.state.confirmAuthorReward);
+    let badgeVote = drizzleApis.toEther(location.state.confirmVoteAmount);
+    let badgeView = location.state.totalViewCount ? location.state.totalViewCount : 0;
 
     return (
 
       <div className="row">
         <div className="col-sm-12 col-lg-10  offset-lg-1 u__center profile-center">
+
+
           <div className="row">
-
-
-            <div className="col-sm-3 col-md-3 col-thumb">
-              <Link to={"/doc/" + location.state.documentId}>
+            <div className="col-sm-3 col-md-3 col-thumb p-0 p-sm-3">
+              <Link to={"/doc/" + location.state.seoTitle}>
                 <div className="thumb_image">
                   <img src={addr}
                        alt={location.state.title ? location.state.title : location.state.documentName}
@@ -69,32 +93,26 @@ class AudienceTracking extends React.Component {
               </Link>
             </div>
 
-
-            <div className="col-sm-9 col-md-9 col-details_info">
+            <div className="col-sm-9 col-md-9 col-details_info p-sm-3">
               <dl className="details_info">
-                <Link to={"/doc/" + location.state.documentId} className="info_title">
+                <Link to={"/doc/" + location.state.seoTitle} className="info_title mb-2">
                   {location.state.title}
                 </Link>
-                <Link to={"/author/" + location.state.accountId} title={"Go to profile page of " + (location.state.nickname ? location.state.nickname : location.state.accountId) } className="info_name">
-                  <i className="material-icons img-thumbnail">face</i>
-                  {location.state.nickname ? location.state.nickname : location.state.accountId}
-                </Link>
-                <Link to={"/doc/" + location.state.documentId} className="info_desc">
-                  <LinesEllipsis
-                    text={location.state.desc}
-                    maxLine='2'
-                    ellipsis='...'
-                    trimRight
-                    basedOn='letters'
-                  />
-                </Link>
-                <div className="col-view">
+                <div className="col-view tracking-item mb-1">
                   <span className="txt_view">{badgeView}</span>
-                  <span className="view_date view-reward">Reward <span><DollarWithDeck deck={badgeReward}
-                                                                                       drizzleApis={drizzleApis}/></span></span>
+                  <span className="view_date view-reward"><span><DollarWithDeck deck={badgeReward}
+                                                                                drizzleApis={drizzleApis}/></span></span>
                   <span className="view_date view-reward"><span><DeckInShort deck={badgeVote}/></span></span>
-                  <span className="view_date"> {Common.timestampToDateTime(location.state.created)}</span>
+                  <span className="ml-4 info_date"> {Common.timestampToDate(location.state.created)}</span>
                 </div>
+                {location &&
+                <Tooltip title="Export tracking data as Excel file." placement="bottom">
+                  <div className="export-btn-big" onClick={() => this.handleExport()}>
+                    <i className="material-icons">save</i>
+                    Export
+                  </div>
+                </Tooltip>
+                }
               </dl>
             </div>
           </div>
@@ -102,12 +120,14 @@ class AudienceTracking extends React.Component {
 
           <div className="row tracking_inner">
             <div className="col-sm-12 col-md-12 tracking_top">
-                <h3 className="u_title">Visitors</h3>
-                <div className="tags_menu_search_container">
-                    <input id="searchInput" type="text" autoComplete="off" placeholder="Name Search . . ." onKeyUp={this.handleKeyUp}/>
-                    <div className="search-btn">
-                      <i className="material-icons">search</i>
-                    </div>
+              <h3 className="u_title col-5 col-lg-9">Visitors</h3>
+
+              <div className="tags_menu_search_container p-0 mb-2 col-7 col-lg-3">
+                <input id="searchInput" type="text" autoComplete="off" placeholder="Name Search . . ."
+                       onKeyUp={this.handleKeyUp}/>
+                <div className="search-btn">
+                  <i className="material-icons">search</i>
+                </div>
               </div>
 
               <div className="tracking_table">
@@ -118,6 +138,7 @@ class AudienceTracking extends React.Component {
                     <th className="col2">Views</th>
                     <th className="col3">Last <br/> viewed</th>
                   </tr>
+
                   {rst.map((result, idx) => (
                     <tr key={idx}>
                       <td className="col1">
@@ -136,7 +157,8 @@ class AudienceTracking extends React.Component {
                   </tbody>
                 </table>
 
-                {rst.length === 0 && <div className="no-data">No data</div>}
+                {loading && <div className="spinner"><Spinner name="ball-pulse-sync"/></div>}
+                {!loading && rst.length === 0 && <div className="no-data">No data</div>}
 
               </div>
             </div>

@@ -38,8 +38,31 @@ export default ({
 
       return time;
     },
+    dateString: (date) => {
+      let dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        .toISOString()
+        .split("T")[0];
+      return dateString;
+    },
+    monthToString: (month) => {
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      return months[month-1];
+    },
+    getMonday: (date) => {
+      date = new Date(date);
+      let day = date.getDay(),
+        diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+      return new Date(date.setDate(diff));
+    },
+    getWeeksCount: (year, month) => {
+      const dayThreshold = [5, 1, 5, 6, 5, 6, 5, 5, 6, 5, 6, 5];
+      let firstDay = new Date(year, month, 1).getDay();
+      let baseWeeks = (month === 1 ? 4 : 5);
+
+      return baseWeeks + (firstDay >= dayThreshold[month] ? 1 : 0);
+    },
     setDateType: (year, month, date) => {
-      let _date = year + "-" + (month < 10 ? "0" : "") + month +  "-" + (date < 10 ? "0" : "") + date;
+      let _date = year + "-" + (month < 10 ? "0" : "") + month + "-" + (date < 10 ? "0" : "") + date;
       return _date;
     },
     dateAgo: (timestamp) => {
@@ -64,13 +87,15 @@ export default ({
       };
       return (new Date(timestamp)).toLocaleString("en-US", options);
     },
-    getThumbnail: (documentId, pageNo, documentName) => {
-      let imageUrl = imgDomain + "/THUMBNAIL/" + documentId + "/300X300/" + pageNo;
+    getThumbnail: (documentId, size, pageNo, documentName) => {
+      let _size = size;
       if (documentName) {
         if (documentName.lastIndexOf(".dotx") > 0 || documentName.lastIndexOf(".dot") > 0 || documentName.lastIndexOf(".docx") > 0) {
-          imageUrl = this.getPageView(documentId, 1);
+          _size = "1024";
         }
       }
+      let imageUrl = imgDomain + "/" + documentId + "/" + _size + "/" + pageNo;
+
       return imageUrl;
     },
     getText: (documentId, pageNo, callback, error) => {
@@ -83,14 +108,34 @@ export default ({
         });
       });
     },
-    getPageView: (documentId, pageNo) => {
-      return imgDomain + "/THUMBNAIL/" + documentId + "/1200X1200/" + pageNo;
+    getPath: () => {
+      const pathArr = window.location.pathname.split("/");
+      return pathArr[1];
+    },
+    getMySub: () => {
+      let authSub = "";
+      let isAuthenticated = MainRepository.Account.isAuthenticated();
+
+      if (isAuthenticated) {
+        authSub = MainRepository.Account.getMyInfo().sub || "";
+      }
+
+      return authSub;
+    },
+
+    getTag: () => {
+      const pathArr = window.location.pathname.split("/");
+      let tag = "";
+      if (pathArr.length > 2 && (pathArr[1] === "latest" || pathArr[1] === "featured" || pathArr[1] === "popular")) {
+        tag = decodeURI(pathArr[2]);
+      }
+      return tag;
     },
     escapeRegexCharacters: str => {
       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     },
     loginCheck: () => {
-      if (!MainRepository.Account.isAuthenticated()) return  MainRepository.Account.login();
+      if (!MainRepository.Account.isAuthenticated()) return MainRepository.Account.login();
     },
     mmCheck: () => {
       DrizzleApis.isAuthenticated();
@@ -115,6 +160,10 @@ export default ({
       d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
       let expires = "expires=" + d.toUTCString();
       document.cookie = cname + "=" + cvalue + "; " + expires;
+    },
+    checkEmailForm: (email) => {
+      let exptext = /^[A-Za-z0-9_]+@[A-Za-z0-9]+\.[A-Za-z0-9]+/;
+      return exptext.test(email);
     }
   }
 );

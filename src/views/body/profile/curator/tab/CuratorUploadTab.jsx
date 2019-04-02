@@ -17,7 +17,7 @@ class CuratorUploadTab extends React.Component {
 
   fetchMoreData = () => {
     const { pageNo } = this.state;
-    if(this.state.moreDataFlag) {
+    if (this.state.moreDataFlag) {
       this.fetchDocuments({
         pageNo: pageNo + 1
       });
@@ -25,19 +25,26 @@ class CuratorUploadTab extends React.Component {
   };
 
   fetchDocuments = (params) => {
-    const { accountId } = this.props;
-    const pageNo = (!params || isNaN(params.pageNo)) ? 1 : Number(params.pageNo);
-    MainRepository.Document.getDocumentList({ accountId: accountId, pageNo: pageNo }, (res) => {
+    const { userInfo } = this.props;
+    let pageNo = (!params || isNaN(params.pageNo)) ? 1 : Number(params.pageNo);
+    let _params = {
+      pageNo: pageNo
+    };
+
+    if (userInfo.username && userInfo.username.length > 0) _params = { username: userInfo.username };
+    else _params = { email: userInfo.email };
+
+    MainRepository.Document.getDocumentList(_params, (res) => {
       if (res && res.resultList) {
         if (this.state.resultList) {
           this.setState({
             resultList: this.state.resultList.concat(res.resultList),
-            pageNo: res.pageNo,
+            pageNo: res.pageNo
           });
         } else {
           this.setState({
             resultList: res.resultList,
-            pageNo: res.pageNo,
+            pageNo: res.pageNo
           });
         }
 
@@ -64,6 +71,7 @@ class CuratorUploadTab extends React.Component {
           Total documents : <span>{this.state.resultList.length}</span>
         </div>
         <InfiniteScroll
+          className="overflow-hidden"
           dataLength={this.state.resultList.length}
           next={this.fetchMoreData}
           hasMore={!this.state.isEndPage}

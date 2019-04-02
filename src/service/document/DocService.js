@@ -5,6 +5,8 @@ let trackingListUrl = "tracking/list";
 //const trackingUrl = "document/tracking";
 let getDocumentUrl = "document/info/";
 let getDocumentListUrl = "document/list";
+let getTrackingExportUrl = "tracking/export";
+let getAnalyticsExportUrl = "analytics/export";
 let getCuratorDocumentsUrl = "curator/document/list";
 let getTodayVotedDocumentsByCuratorUrl = "curator/document/today";
 let getAnalyticsListUrl = "analytics/list";
@@ -16,14 +18,14 @@ let tagListUrl = "tags";
 export default {
   GET: {
     trackingInfo: (data, callback) => {
-      AxiosService._requestWithUrlPram(trackingInfoUrl, "GET", data,
+      AxiosService._requestGetWithHeader(trackingInfoUrl, "GET", data,
         (data) => {
           callback(data);
         }, () => {
         });
     },
     trackingList: (data, callback) => {
-      AxiosService._requestWithUrlPram(trackingListUrl, "GET", data,
+      AxiosService._requestGetWithHeader(trackingListUrl, "GET", data,
         (data) => {
           callback(data);
         }, () => {
@@ -44,22 +46,36 @@ export default {
         });
     },
     analyticsList: (data, callback) => {
-      AxiosService._requestWithUrlPram(getAnalyticsListUrl, "GET", data,
+      AxiosService._requestGetWithHeader(getAnalyticsListUrl, "GET", data,
         (data) => {
           callback(data);
         }, () => {
         });
     },
-  },
-  POST: {
+    trackingExport: (data, callback) => {
+      AxiosService._requestGetWithHeader(getTrackingExportUrl, "GET", data,
+        (data) => {
+          callback(data);
+        }, () => {
+        });
+    },
+    analyticsExport: (data, callback) => {
+      AxiosService._requestGetWithHeader(getAnalyticsExportUrl, "GET", data,
+        (data) => {
+          callback(data);
+        }, () => {
+        });
+    },
     documentList: (data, callback, error) => {
-      AxiosService._requestWithBody(getDocumentListUrl, "POST", data,
+      AxiosService._requestWithUrlPram(getDocumentListUrl, "GET", data,
         (data) => {
           callback(data);
         }, (err) => {
           error(err);
         });
-    },
+    }
+  },
+  POST: {
     curatorDocuments: (data, callback, error) => {
       AxiosService._requestWithBody(getCuratorDocumentsUrl, "POST", data,
         (data) => {

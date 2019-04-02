@@ -505,9 +505,7 @@ mark,
 
 .img-fluid {
     max-width: 100%;
-    height: inherit;
     width: inherit;
-    border: 1px solid #eee;
 }
 
 .img-thumbnail {
@@ -519,9 +517,6 @@ mark,
 }
 
 .container {
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -543,8 +538,6 @@ mark,
 .row {
     display: flex;
     flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
 }
 
 .no-gutters {
@@ -5893,48 +5886,121 @@ b {
 
 .start-btn {
     cursor: pointer;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 400;
     display: inline-block;
-    padding: 10px 16px;
+    padding: 10px 40px;
     border-radius: 3px;
-    background: #558a2526;
+    background: #7fc241;
     border: 1px solid #7fc241;
-    color: #7fc241;
+    color: white;
     transition: 0.2s all ease-in-out;
 }
 
 .start-btn:hover {
     color: white;
     transition: 0.2s all ease-in-out;
-    background: #7fc241;
+    background: #8cd845;
 }
 
 .login-btn {
     cursor: pointer;
     display: inline-block;
-    padding: 6px 14px 6px 27px;
+    padding: 7px 15px 7px 35px;
     top: -5px;
     margin-right: 20px;
     font-weight: 500;
     position: relative;
     border-radius: 3px;
-    font-size: 15px;
+    font-size: 13px;
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
     color: #333;
+    border: 1px solid #333;
     background: white;
 }
 
 .login-btn > i {
-    font-size: 17px;
+    font-size: 18px;
     position: absolute;
-    left: 6px;
-    top: 7px;
+    left: 11px;
 }
 
 .login-btn:hover {
-    color: #7fc241;
+    color: white;
+    border: 1px solid #7fc241;
+    background: #7fc241;
+    transition: 0.2s all ease-in-out;
+    -webkit-transition: 0.2s all ease-in-out;
+}
+
+
+/*2019-03-29
+dean
+차트 날짜 선택 버튼 (프로필 페이지 분석탭)*/
+.chart-date-btn {
+    display: inline-block;
+    border: 1px solid #aaaaaa;
+    border-radius: 3px;
+    float: right;
+}
+
+.chart-date-btn > div:first-child {
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+}
+.chart-date-btn > div:last-child {
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+    border: none;
+}
+
+.chart-date-btn > div{
+    display: inline-block;
+    padding: 5px 8px;
+    font-size: 14px;
+    text-align: center;
+    border-right: 1px solid #aaaaaa;
+    font-weight: 400;
+    -webkit-transition: 0.2s all ease-in-out;
+    transition: 0.2s all ease-in-out;
+    cursor: pointer;
+}
+
+.chart-date-btn > div:hover,
+.chart-date-btn .clicked{
+    background: #7fc241;
+    color: white;
+}
+
+
+.export-btn-big {
+    cursor: pointer;
+    display: inline-block;
+    padding: 7px 15px 7px 35px;
+    font-weight: 500;
+    position: relative;
+    border-radius: 3px;
+    font-size: 13px;
+    -webkit-transition: 0.2s all ease-in-out;
+    transition: 0.2s all ease-in-out;
+    color: #fff;
+    background: #349023;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.export-btn-big > i {
+    font-size: 18px;
+    position: absolute;
+    left: 11px;
+}
+
+.export-btn-big:hover {
+    background: #2d8c1c;
     transition: 0.2s all ease-in-out;
 }
 
@@ -5951,8 +6017,14 @@ b {
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
     color: #4f41c2;
+    background: white;
     border: 1px solid #4f41c2;
     z-index: 4;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .upload-btn > i {
@@ -5969,22 +6041,30 @@ b {
 
 .sns-share-icon {
     cursor: pointer;
-    margin-left: 0.25rem;
+    margin-right: 0.25rem;
     display: inline-block;
     position: relative;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .sns-share-icon-wrapper {
     height: 30px;
-    margin-top: 20px;
+    margin-top: 5px;
 }
 
 .link-arrow-btn {
     font-size: 17px;
-    font-weight: bold;
-    color: #7fc241;
+    color: #a7a7a7;
     cursor: pointer;
-    margin-left: 5px;
+    margin-left: -7px;
+}
+
+.link-arrow-btn:hover {
+    color: #7fc241;
 }
 
 .info-btn {
@@ -5997,6 +6077,11 @@ b {
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
     font-size: 12px;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .info-btn:hover {
@@ -6013,6 +6098,11 @@ b {
     padding-top: 6px;
     padding-left: 17px;
     padding-right: 8px;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .search-btn:hover {
@@ -6065,17 +6155,51 @@ b {
     box-shadow: 1px 2px 5px 1px rgb(169, 169, 169);
     font-size: 15px;
     font-weight: 400;
-}
-
-.info_btn {
-    position: absolute;
-    right: 0;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .ok-btn:hover {
     background: #81ca3f;
     box-shadow: 1px 3px 6px 1px rgb(100, 154, 51);
     transition: 0.2s all ease-in-out;
+}
+
+.username-edit-btn  {
+    cursor: pointer;
+}
+
+.username-edit-btn:hover  {
+    color: #7fc241;
+}
+
+.username-edit-btn > i {
+    font-size: 19px;
+    position: relative;
+    top: 3px;
+    cursor: pointer;
+}
+
+.username-edit-input {
+    border-radius: 3px;
+    border: 1px solid #b1b1b1;
+    font-size: 15px;
+    padding: 5px 10px;
+    position: relative;
+    width: 250px;
+}
+
+.username-edit-input:hover,
+.username-edit-input:focus {
+    border: 1px solid #7fc241;
+}
+
+.info_btn {
+    position: absolute;
+    right: 0;
 }
 
 .cancel-btn {
@@ -6257,26 +6381,14 @@ b {
 }
 
 .avatar {
-    border: 1px solid #333;
     border-radius: 19px;
-    text-transform: uppercase;
-    font-weight: 500 !important;
     cursor: pointer;
-    font-size: 20px !important;
     position: relative !important;
-    top: -3px;
+    top: -5px;
     margin-right: 20px;
-    width: 35px;
+    width: 34px;
     height: 35px;
-    text-align: center;
-    padding-top: 1px;
-}
-
-.avatar:hover {
-    color: white !important;
-    border-color: #7fc241;
-    background: #7fc241;
-    transition: 0.2s all ease-in-out;
+    border: 1px solid #d0d0d0;
 }
 
 .avatar:after {
@@ -6463,6 +6575,12 @@ b {
     max-width: calc(100% - 225px);
 }
 
+.tracking-item .info_date {
+    top: 1px;
+    float: none;
+}
+
+
 /*u__left*/
 .u__left {
     padding: 20px 30px;
@@ -6505,16 +6623,8 @@ b {
     background: white;
     border: 1px solid #cecece;
     display: flex;
-    margin-bottom: 10px;
     position: relative;
 }
-
-@media (max-width: 1140px){
-    .tags_menu_search_container {
-        width: 85%;
-    }
-}
-
 
 .tags_menu_search_container input {
     font-size: 15px;
@@ -6551,7 +6661,7 @@ b {
 
 .u__center {
     max-width: 1400px;
-    min-height: 1000px;
+    min-height: 100vh;
     padding: 20px 30px;
     background-color: #fff;
     box-shadow: 7px 7px 0 0 rgb(127, 194, 65);
@@ -6561,26 +6671,30 @@ b {
 .u__center .u__center_mobile {
     display: flex;
 }
-
-.profile-center {
-    padding: 40px 50px;
-}
-
 .select-custom {
     border: 1px solid #cecece;
     width: 85%;
     color: #333;
     background: white;
-    border-radius: 35px;
     height: 40px;
     padding-left: 15px;
     font-size: 15px;
     cursor: pointer;
 }
 
+.select-custom select {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+}
+
+.select-custom select:focus {
+    outline: none;
+}
 
 .u_title {
-    display: inline-block;
     margin: 0;
     font-weight: 600;
     vertical-align: middle;
@@ -6596,10 +6710,6 @@ b {
 }
 
 @media (max-width: 767px) {
-    .profile-center {
-        padding: 20px 40px;
-    }
-
     .top_inner {
         display: none;
     }
@@ -6620,8 +6730,8 @@ b {
 }
 
 .u_center_inner {
-    margin: 12px 0 0 0;
-    padding: 12px 0 0 0;
+    margin: 10px 0 0 0;
+    padding: 10px 0 0 0;
     border-bottom: 1px solid #cecece;
 }
 
@@ -6630,6 +6740,8 @@ b {
     height: 102px;
     overflow: hidden;
     text-align: center;
+    background: #dadada;
+    border: 1px solid #d0d0d0;
 }
 
 .details_info {
@@ -6649,6 +6761,14 @@ b {
     vertical-align: middle;
     font-size: 13px;
     color: #333;
+}
+.info_name > img {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: .4rem;
+    border: 1px solid #d0d0d0;
 }
 
 .info_name i {
@@ -6677,7 +6797,7 @@ b {
 
 .info_date {
     margin-left: 18px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     font-size: 12px;
     position: relative;
     top: 4px;
@@ -6694,6 +6814,12 @@ b {
 @media (max-width: 1400px) {
     .d-none-max {
         display: none
+    }
+}
+
+@media (max-width: 1080px) {
+    .tags-menu-search-container-width {
+        width: 80%;
     }
 }
 
@@ -6728,13 +6854,6 @@ b {
     .col-thumb,
     .col-details_info {
         max-width: 100%;
-        padding: 0 15px;
-    }
-
-    .tracking-detail-container .profile_top,
-    .tracking_top {
-        padding-left: 10px;
-        padding-right: 10px;
     }
 
     .tracking_fulldown_list {
@@ -6743,7 +6862,6 @@ b {
 
     .col-thumb {
         margin-bottom: 15px;
-        padding: 0
     }
 
     .col-thumb > div {
@@ -6751,21 +6869,14 @@ b {
         margin: 0 auto;
     }
 
-    .thumb_image img {
-        width: 100%;
-    }
-
     .thumb_image {
-        height: 54vw;;
+        height: auto;
         width: 100%;
+        min-height: 160px;
     }
 
     .profile_info_name {
         text-align: center;
-    }
-
-    .img-fluid {
-        border: 1px solid #cacaca;
     }
 }
 
@@ -6777,7 +6888,7 @@ b {
     margin: 30px 0 -25px 0;
 }
 
-.tracking-detail-container .profile_top .thumb_image {
+.tracking-detail-container .profile_top .profile-image {
     border-radius: 50%;
     max-width: 60px;
     height: 60px;
@@ -6786,7 +6897,7 @@ b {
 }
 
 .profile_top {
-    margin: 30px 0;
+    margin: 15px 0;
 }
 
 .profile_top > a {
@@ -6794,13 +6905,17 @@ b {
 }
 
 
-.profile_top .thumb_image {
-    text-align: center;
-    border-radius: 50%;
+.profile_top .profile-image {
     width: 100px;
     height: 100px;
-    margin: 0 auto;
-    border: 1px solid #ddd
+    margin: 10px auto;
+}
+
+.profile_top .profile-image .img-fluid {
+    border-radius: 50%;
+    max-width: 100%;
+    width: inherit;
+    border: 1px solid #d0d0d0;
 }
 
 .profile_info_name {
@@ -6833,7 +6948,7 @@ b {
 
 
 .profile_creator {
-    padding: 1.5rem;
+    padding: 15px;
 }
 
 .profile_creator h5 {
@@ -6843,6 +6958,33 @@ b {
     color: white;
     padding-left: 10px;
 }
+
+
+.profile-image-edit {
+    cursor: pointer;
+    top: 10px;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    color: white;
+    font-weight: 500;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 18px;
+    transition: 0.2s all ease-in-out;
+    opacity: 0;
+}
+.profile-image-edit:hover {
+    background: #94c2418c;
+    opacity: 1;
+    transition: 0.2s all ease-in-out;
+}
+
+.profile-image-edit > i {
+    position: relative;
+    top: 38%;
+}
+
 
 
 .profile_list {
@@ -6884,8 +7026,8 @@ Dean
 author tap list analytics*/
 
 .analytics-inner {
-    margin: 12px 0 12px 0;
-    padding: 0 0 12px 0;
+    margin: 10px 0 10px 0;
+    padding: 0 0 10px 0;
     border-bottom: 1px solid #cecece;
 }
 
@@ -7008,6 +7150,9 @@ author tap list analytics*/
 }
 
 @media (max-width: 575px) {
+    .tracking-wrapper {
+        margin-right: 15px !important;
+    }
     .details_info {
         padding-right: 0;
     }
@@ -7050,8 +7195,9 @@ author tap list analytics*/
 
 
 .tracking_inner {
-    margin-top: 50px;
+    margin-top: 20px;
 }
+
 
 .tracking_top {
     overflow: hidden;
@@ -7059,10 +7205,6 @@ author tap list analytics*/
 
 .tracking_top h3 {
     float: left;
-}
-
-.tracking_top .tags_menu_search_container {
-    float: right;
 }
 
 .tracking_table table {
@@ -7186,6 +7328,7 @@ author tap list analytics*/
 .u__view .view_top {
     min-height: 179px;
     position: relative;
+    background: #e0e0e0;
     border: 1px solid #cecece;
 }
 
@@ -7224,7 +7367,7 @@ Dean
     font-size: 30px;
     color: #ffffff91;
     cursor: pointer;
-    background: #0000001c;
+    background: #0000002b;
     -ms-user-select: none;
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
@@ -7276,7 +7419,7 @@ Dean
 }
 
 .u__view h2.u_title {
-    font-size: 30px;
+    font-size: 25px;
     color: #333;
 }
 
@@ -7372,7 +7515,7 @@ Dean
 
 .u__view .view_tag {
     display: block;
-    margin-bottom: 5px;
+    margin-top: 15px;
 }
 
 .u__view .view_tag .tag {
@@ -7419,7 +7562,7 @@ Dean
 .comments_inner .bu_list li {
     position: relative;
     margin-bottom: 5px;
-    padding-left: 12px;
+    padding-left: 10px;
     font-size: 14px;
     list-style: none;
     line-height: 1.5
@@ -7459,7 +7602,7 @@ Dean
     max-height: 120px;
     min-height: 75px;
     border-bottom: 1px solid #cecece;
-    padding: 12px 0;
+    padding: 10px 0;
     display: inline-table;
     width: 100%;
 }
@@ -7524,7 +7667,7 @@ Dean
 
 @media (max-width: 991.98px) {
     .u__right {
-        margin: 20px -15px;
+        margin: 20px 0;
     }
 }
 
@@ -7534,7 +7677,7 @@ Dean
     }
 
     .u__right {
-        margin: 0 -30px;
+        margin: 0 -15px;
         border-top: none;
         box-shadow: none;
     }
@@ -7584,15 +7727,17 @@ Dean
 
 @media (max-width: 575px) {
     .u_center_inner {
-        border: none
+        border: none;
+        padding: 0;
+        margin: 20px 0;
+    }
+
+    .u_center_inner .col-thumb {
+        padding: 0;
     }
 
     .u__center {
-        padding: 20px 0;
-    }
-
-    .u_title {
-        font-size: 30px;
+        padding: 0;
     }
 }
 
@@ -7652,7 +7797,7 @@ Dean
 .tracking_fulldown_list .tfl_title i {
     position: absolute;
     left: 20px;
-    top: 12px;
+    top: 10px;
     margin-right: 10px;
     -webkit-transform: rotate(0deg);
     -ms-transform: rotate(0deg);
@@ -7725,11 +7870,10 @@ Dean
 
 .tracking_fulldown_list .tfl_desc dd .btn {
     display: inline-block;
-    margin-left: 12px;
     max-width: 18px;
     width: 18px;
     height: 18px;
-    margin: 0;
+    margin: 0 0 0 10px;
     margin-left: 10px;
     padding: 0;
     line-height: 18px;
@@ -7938,12 +8082,13 @@ Dean
 }
 
 .custom-input-copy-text {
-    position: absolute;
+    text-align: right;
     right: 0;
     top: 5px;
     font-weight: 400;
     color: #333;
     cursor: pointer;
+    padding-top: 10px;
 }
 
 .custom-input-copy-text:hover {
@@ -8046,7 +8191,7 @@ dialog {
     z-index: 1;
     text-align: center;
     position: relative;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .landscape-warning-message {
@@ -8121,7 +8266,7 @@ contentContainer 배너 CSS*/
 
 .main-banner-text .h4 {
     color: #ffffff;
-    font-weight: 100;
+    font-weight: 400;
     opacity: 1;
     animation: main-banner-text 2s ease-in-out;
     -webkit-animation: main-banner-text 2s ease-in-out;
@@ -8260,7 +8405,7 @@ Dean
     max-width: 100%;
     padding: 1.3rem 1.5rem;
     background: #fff;
-    z-index: 3;
+    z-index: 2;
     color: #000;
     font-size: 14px;
     margin: 0;
@@ -8287,4 +8432,20 @@ Dean
     top: 3px;
     position: relative;
     margin-right: 5px;
+}
+
+.overflow-hidden {
+ overflow: hidden !important;
+}
+
+.no-data-icon {
+    color: #cccccc;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+}
+
+.no-data-icon > i {
+    font-size: 70px;
+    color: #cccccc
 }

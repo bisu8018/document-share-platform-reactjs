@@ -32,7 +32,7 @@ class Menu extends React.Component {
   };
 
   render() {
-    let userInfo = MainRepository.Account.getUserInfo();
+    let userInfo = MainRepository.Account.getMyInfo();
 
     const sideList = (
       <div>
@@ -41,10 +41,10 @@ class Menu extends React.Component {
           <ListItem button className="d-sm-none">
             <ListItemIcon>
               <Link to={"/author/" + this.state.accountId} className="avatar-menu">
-                {userInfo.nickname[0]}
+                <img src={userInfo.picture} className="avatar" alt="user profile"/>
               </Link>
             </ListItemIcon>
-            <ListItemText primary={userInfo.nickname}/>
+            <ListItemText primary={userInfo.username}/>
           </ListItem>
           }
 
