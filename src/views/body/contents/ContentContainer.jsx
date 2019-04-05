@@ -18,7 +18,8 @@ class ContentContainer extends Component {
     totalViewCountInfo: null,
     path: null,
     loading: false,
-    selectedTag: null
+    selectedTag: null,
+    tagSearchFlag: false
   };
 
   constructor(props) {
@@ -37,23 +38,24 @@ class ContentContainer extends Component {
   };
 
   fetchDocuments = (args) => {
+    const { path, resultList, tagSearchFlag } = this.state;
     const params = {
       pageNo: args.pageNo,
       tag: args.tag,
-      path: args.path ? args.path : this.state.path
+      path: args.path ? args.path : path
     };
 
     MainRepository.Document.getDocumentList(params, (res) => {
-      //console.log("Fetch Document end", res);
+      // console.log("Fetch Document end", res);
       this.setState({ loading: false });
-      const resultList = res.resultList ? res.resultList : [];
+      const _resultList = res.resultList ? res.resultList : [];
       const pageNo = res.pageNo;
 
-      if (resultList.length > 0) {
-        if (this.state.resultList && this.state.resultList.length > 0) {
-          this.setState({ resultList: this.state.resultList.concat(resultList), pageNo: pageNo });
+      if (_resultList.length > 0) {
+        if (resultList.length > 0 && !tagSearchFlag) {
+          this.setState({ resultList: resultList.concat(_resultList), pageNo: pageNo });
         } else {
-          this.setState({ resultList: resultList, pageNo: pageNo });
+          this.setState({ resultList: _resultList, pageNo: pageNo, tagSearchFlag: false });
         }
       } else {
         this.setState({ isEndPage: true });
@@ -70,15 +72,16 @@ class ContentContainer extends Component {
   setFetch = () => {
     this.setState({
       resultList: [],
-      pageNo: null,
+      pageNo: 1,
       isEndPage: false,
       tag: Common.getTag(),
-      path: Common.getPath()
-    });
-
-    this.fetchDocuments({
-      tag: Common.getTag(),
-      path: Common.getPath()
+      path: Common.getPath(),
+      tagSearchFlag: true
+    }, () => {
+      this.fetchDocuments({
+        tag: Common.getTag(),
+        path: Common.getPath()
+      });
     });
   };
 
@@ -115,14 +118,14 @@ class ContentContainer extends Component {
       <div className="row">
         <div className="main-banner d-none d-md-block"/>
         <div className="main-banner-text col-12 d-none d-md-block">
-          <div className="h2">
-            <div className="d-inline-block">G r o w</div>
-
-            <div className="d-inline-block">y o u r</div>
-            &nbsp;
-            <div className="d-inline-block">a u d i e n c e</div>
+          <div className="main-banner-wrapper">
+            <div className="h2">
+              <div className="d-inline-block mr-4">G r o w</div>
+              <div className="d-inline-block mr-4">y o u r</div>
+              <div className="d-inline-block">a u d i e n c e</div>
+            </div>
+            <div className="h4">Share your slides and and generate high quality leads.</div>
           </div>
-          <div className="h4">Share your slides and and generate high quality leads.</div>
         </div>
 
         <div className="col-lg-3 ">
@@ -166,7 +169,7 @@ class ContentContainer extends Component {
               next={this.fetchMoreData}
               hasMore={!isEndPage}
             >
-              {resultList.map((result) => (
+              {resultList.length > 0 && resultList.map((result) => (
                 <ContentListItem key={result.documentId + result.accountId} result={result}
                                  totalViewCountInfo={totalViewCountInfo} {...this.props} />
               ))}

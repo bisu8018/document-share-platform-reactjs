@@ -50,7 +50,7 @@
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start": "set PORT=8000 && react-scripts start",
     "build": "npm run build-css && react-scripts build",
-    "deploy": "npm run deploy:production",
+    "deploy": "npm run deploy:dev",
     "deploy:dev": "aws s3 sync build/ s3://dev.share.decompany.io",
     "deploy:production": "aws s3 sync build/ s3://share.decompany.io && npm run invaildate",
     "invaildate": "aws cloudfront create-invalidation --distribution-id EDFUPNJU9XKGX --paths /*",

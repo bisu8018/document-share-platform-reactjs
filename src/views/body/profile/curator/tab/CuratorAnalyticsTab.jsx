@@ -21,7 +21,7 @@ class CuratorAnalyticsTab extends React.Component {
     week: 1,
     year: null,
     documentId: null,
-    chartFlag: false,
+    chartFlag: false
   };
 
   // infinity scroll 문서 리스트 추가 로드
@@ -78,8 +78,8 @@ class CuratorAnalyticsTab extends React.Component {
       }, result => {
         this.setState({ spreadItem: Number(dataKey) });
         this.setState({ documentId: documentId });
-        this.setState({ analyticsList: result }, () =>{
-          this.setState({chartFlag : true}); //차트 데이터 props 타이밍 동기화
+        this.setState({ analyticsList: result }, () => {
+          this.setState({ chartFlag: true }); //차트 데이터 props 타이밍 동기화
         });
       }
     );
@@ -108,7 +108,7 @@ class CuratorAnalyticsTab extends React.Component {
       parentElement.children[4].classList.remove("scroll-up");
       parentElement.children[4].classList.add("scroll-out");
 
-      this.setState({chartFlag : false});   //차트 데이터 props 타이밍 동기화
+      this.setState({ chartFlag: false });   //차트 데이터 props 타이밍 동기화
       this.getAnalytics(dataId, dataKey);      //차트 데이터 GET
     }
   };
@@ -164,9 +164,9 @@ class CuratorAnalyticsTab extends React.Component {
 
     this.setState({
       week: weekValue !== "1y" ? weekValueNum : null,
-      year : weekValue !== "1y" ? null: weekValueNum
+      year: weekValue !== "1y" ? null : weekValueNum
     }, () => {
-      this.setState({chartFlag : false});   //차트 데이터 props 타이밍 동기화
+      this.setState({ chartFlag: false });   //차트 데이터 props 타이밍 동기화
       this.getAnalytics(documentId, spreadItem);
     });
   };
@@ -178,6 +178,8 @@ class CuratorAnalyticsTab extends React.Component {
 
   render() {
     const { resultList, spreadItem, isEndPage, analyticsList, year, week, chartFlag } = this.state;
+    const { userInfo } = this.props;
+    let identification = userInfo.username && userInfo.username.length > 0 ? userInfo.username : userInfo.email;
 
     return (
       <div>
@@ -192,11 +194,11 @@ class CuratorAnalyticsTab extends React.Component {
           loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
 
 
-          {resultList.map((result, idx) => (
+          {resultList.length > 0 && resultList.map((result, idx) => (
             <div className="row analytics-inner" key={idx}>
 
               <div className="d-none d-sm-inline-block col-sm-2">
-                <Link to={"/doc/" + result.seoTitle}>
+                <Link to={"/" + identification + "/" + result.seoTitle}>
                   <div className="analytics-thumb-image">
                     <img src={Common.getThumbnail(result.documentId, 320, 1, result.documentName)}
                          alt={result.title ? result.title : result.documentName} className="img-fluid"/>
@@ -205,7 +207,7 @@ class CuratorAnalyticsTab extends React.Component {
               </div>
 
               <div className="col-10 col-sm-7 mb-4">
-                <Link to={"/doc/" + result.seoTitle}>
+                <Link to={"/" + identification + "/" + result.seoTitle}>
                   <div className="analytics-info-title">  {result.title ? result.title : result.documentName} </div>
                 </Link>
               </div>
@@ -243,7 +245,7 @@ class CuratorAnalyticsTab extends React.Component {
                 </span>
                 }
                 {analyticsList && analyticsList.resultList.length === 0 &&
-                    <NoDataIcon/>
+                <NoDataIcon/>
                 }
               </div>
             </div>

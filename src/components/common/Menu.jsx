@@ -40,7 +40,7 @@ class Menu extends React.Component {
           {MainRepository.Account.isAuthenticated() &&
           <ListItem button className="d-sm-none">
             <ListItemIcon>
-              <Link to={"/author/" + this.state.accountId} className="avatar-menu">
+              <Link to={"/" + userInfo.username || userInfo.email} className="avatar-menu">
                 <img src={userInfo.picture} className="avatar" alt="user profile"/>
               </Link>
             </ListItemIcon>

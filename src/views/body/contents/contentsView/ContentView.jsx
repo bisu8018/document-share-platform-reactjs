@@ -7,12 +7,14 @@ import ContentViewFullScreen from "./ContentViewFullScreen";
 import ContentViewRight from "./ContentViewRight";
 import MainRepository from "../../../../redux/MainRepository";
 import Common from "../../../../common/Common";
+import NotFoundPage from "../../../../components/common/NotFoundPage";
 
 
 class ContentView extends React.Component {
   state = {
     documentTitle: null,
     documentData: null,
+    errMessage: null,
     documentText: null,
     author: null,
     determineAuthorToken: -1,
@@ -32,6 +34,18 @@ class ContentView extends React.Component {
         documentText: res.text,
         author: res.author,
         determineAuthorToken: -1,
+        approved: -1,
+        errMessage : null
+      });
+    }, err => {
+      this.setState({
+        documentTitle: null,
+        documentData: null,
+        errMessage: err,
+        documentText: null,
+        author: null,
+        determineAuthorToken: -1,
+        featuredList: null,
         approved: -1
       });
     });
@@ -71,19 +85,24 @@ class ContentView extends React.Component {
 
   // 해당 이벤트는 See Also 이동 시에만 발생
   componentDidUpdate = () => {
-    let oldDocumentId = this.state.documentTitle;
+    const { documentTitle, errMessage  } = this.state;
+    let oldDocumentId = documentTitle;
     let newDocumentId = window.location.pathname.split("/")[2];
-    if (newDocumentId !== oldDocumentId) {
+    if (newDocumentId !== oldDocumentId && !errMessage) {
       this.getContentInfo(newDocumentId);
     }
   };
 
   render() {
-    const { drizzleApis, auth, tagList, ...rest } = this.props;
-    const { documentData, documentText, featuredList, author } = this.state;
-    if (!documentData) {
+    const { drizzleApis, auth, tagList,match, myInfo, ...rest } = this.props;
+    const { documentData, documentText, featuredList, author, errMessage } = this.state;
+    if (!documentData && !errMessage) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     }
+    if (!documentData && errMessage) {
+      return  (errMessage && <NotFoundPage errMessage={ errMessage }/>);
+    }
+
     return (
 
       <div data-parallax="true" className="container_view row col-re">
@@ -92,7 +111,7 @@ class ContentView extends React.Component {
           <title>{documentData.seoTitle}</title>
           <meta name="description" content={documentData.desc}/>
           <meta name="thumbnail" content={this.getImgUrl()}/>
-          <link rel="canonical" href={"http://dev.share.decompany.io/doc/" + documentData.seoTitle}/>
+          <link rel="canonical" href={"https://share.decompany.io/" + match.params.identification + "/" + match.params.seoTitle}/>
 
           <meta content="2237550809844881" class="fb_og_meta" property="fb:app_id" name="fb_app_id"/>
           <meta content="decompany:document" class="fb_og_meta" property="og:type" name="og_type"/>
@@ -117,7 +136,7 @@ class ContentView extends React.Component {
 
         <div className="col-md-12 col-lg-8 view_left">
           <ContentViewFullScreen documentData={documentData} documentText={documentText} drizzleApis={drizzleApis}
-                                 auth={auth} author={author} tagList={tagList}/>
+                                 auth={auth} author={author} myInfo={myInfo} tagList={tagList}/>
         </div>
 
         <div className="col-md-12 col-lg-4 ">

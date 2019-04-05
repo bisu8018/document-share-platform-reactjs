@@ -15,13 +15,13 @@ class ContentListItem extends React.Component {
     let badgeView = result.totalViewCount ? result.totalViewCount : 0;
     let imageUrl = Common.getThumbnail(result.documentId, 320, 1, result.documentName);
     let profileUrl = result.author ? result.author.picture : null;
-    let personality = result.author ? (result.author.username && result.author.username.length > 0 ? result.author.username : result.author.email) : result.accountId;
+    let identification = result.author ? (result.author.username && result.author.username.length > 0 ? result.author.username : result.author.email) : result.accountId;
 
     return (
       <div className="row u_center_inner" key={result.seoTitle}>
 
         <div className="col-sm-3 col-md-3 col-thumb  mb-3">
-          <Link to={"/" + result.seoTitle}>
+          <Link to={"/" + identification + "/" + result.seoTitle}>
             <div className="thumb_image">
               <img src={imageUrl} alt={result.title} className="img-fluid"/>
             </div>
@@ -34,25 +34,27 @@ class ContentListItem extends React.Component {
               {Common.dateAgo(result.created) === 0 ? "Today" : Common.dateAgo(result.created) + " days ago"}
             </div>
             <dd className="info_title">
-              <Link to={"/doc/" + result.seoTitle}
+              <Link to={"/" + identification + "/" + result.seoTitle}
                     title={result.title}> {result.title ? result.title : result.documentName}</Link>
             </dd>
-            <Link to={"/author/" + personality} className="info_name"
-                  title={personality}>
+            <Link to={"/" + identification} className="info_name"
+                  title={identification}>
               {profileUrl ?
                 <img src={profileUrl} alt="profile"/> :
                 <i className="material-icons img-thumbnail">face</i>
               }
-                {personality}
+                {identification}
             </Link>
-            <Link to={"/doc/" + result.seoTitle} className="info_desc" title="description">
+            <Link to={"/" + identification + "/" + result.seoTitle} className="info_desc" title="description">
+              {result.desc &&
               <LinesEllipsis
                 text={result.desc}
-                maxLine='2'
+                maxLine
                 ellipsis='...'
                 trimRight
-                basedOn='letters'
+                basedOn='words'
               />
+              }
             </Link>
             <dd className="info_detail">
               <span className="txt_view ">{badgeView}</span>

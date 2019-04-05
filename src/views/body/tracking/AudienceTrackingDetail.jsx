@@ -37,7 +37,6 @@ class AudienceTrackingDetail extends React.Component {
       let resData = res;
       this.setState({ loading: false });
       this.setState({ resultList: resData.resultList ? resData.resultList : [] });
-      this.getText();
     });
   };
 
@@ -46,31 +45,15 @@ class AudienceTrackingDetail extends React.Component {
     return Common.getThumbnail(location.state.document.documentId, 320, page);
   };
 
-  getText = () => {
-    const { location } = this.props;
-    let page = location.state.document.totalPages;
-    let arr = [];
-    for (let i = 0; i < page; i++) {
-      Common.getText(location.state.document.documentId, i + 1, (result) => {
-        arr[i] = result;
-        if (i === page - 1) {
-          this.setState({ textList: arr });
-        }
-      }, (err) => {
-        this.setState({ textList: null });
-      });
-    }
-  };
-
   componentWillMount() {
     this.getTrackingInfo();
   }
 
   render() {
-    const { history, location } = this.props;
+    const { history, match, location } = this.props;
     const { loading, resultList } = this.state;
 
-    console.log(this.state);
+    const documentText = location.state.documentText;
 
     return (
 
@@ -87,7 +70,7 @@ class AudienceTrackingDetail extends React.Component {
                 <div className="u_title h3">Views</div>
 
               <div className="tracking_fulldown_list">
-                {resultList.map((result, idx) => (
+                {resultList.length > 0 && resultList.map((result, idx) => (
                   <ul key={idx}>
                     <li>
                       <div className="tfl_title" onClick={this.handleClick}>
@@ -102,11 +85,14 @@ class AudienceTrackingDetail extends React.Component {
                               <div className="d-flex">
                                 <span className="time"
                                       title={Common.timestampToTime(_result.t)}> {Common.timestampToTime(_result.t)} </span>
-                                <div className="d-inline-block mr-3">
-                                  <span className="tracking-status">{_result.ev}</span>
-                                </div>
-                                {_result.ev !== "leave" &&
 
+                                {_result.ev === "leave" &&
+                                <div className="d-inline-block mr-3">
+                                  <span
+                                    className="tracking-status">{ _result.ev }</span>
+                                </div>
+                                }
+                                {_result.ev !== "leave" &&
                                 <div className="d-inline-block mr-3">
                                   <Tooltip
                                     title={
@@ -116,28 +102,29 @@ class AudienceTrackingDetail extends React.Component {
                                     disableTouchListener
                                     className="tooltip-style"
                                     placement="bottom">
-                                    <span className="info-btn">i</span>
+                                    <span className="info-btn"> { _result.n }</span>
                                   </Tooltip>
                                 </div>
                                 }
+
                                 {_result.ev !== "leave" &&
                                 <div className="d-flex">
-                                  {this.state.textList &&
+                                  {documentText &&
                                   <LinesEllipsis
-                                    text={this.state.textList[_result.n - 1]}
+                                    text={documentText[_result.n - 1]}
                                     maxLine='1'
                                     ellipsis="..."
                                     trimRight
                                     basedOn='letters'
-                                    className=""
+                                    className="d-none d-sm-inline-block"
                                   />
                                   }
-                                  <Link to={"/doc/" + location.state.document.seoTitle + "/"  + _result.n} title="link to document">
+                                  <Link to={"/" + match.params.identification + "/" + match.params.seoTitle + "/"  + _result.n} title="link to document">
                                     <i className="material-icons link-arrow-btn">reply</i>
                                   </Link>
-
                                 </div>
                                 }
+
                               </div>
                             </dd>
                           ))}

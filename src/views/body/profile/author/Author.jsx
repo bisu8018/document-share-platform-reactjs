@@ -11,12 +11,14 @@ import CuratorAnalyticsTab from "../curator/tab/CuratorAnalyticsTab";
 import MainRepository from "../../../../redux/MainRepository";
 import Common from "../../../../common/Common";
 import Spinner from "react-spinkit";
+import NotFoundPage from "../../../../components/common/NotFoundPage";
 
 
 class Author extends React.Component {
   state = {
     resultList: [],
     userInfo: null,
+    errMessage: null,
     curatorDocumentList: [],
     curatorDocumentKeyList: [],
     pageNo: null,
@@ -75,11 +77,12 @@ class Author extends React.Component {
 
   getParam = () => {
     let pathArr = window.location.pathname.split("/");
-    return decodeURI(pathArr[2]);
+    return decodeURI(pathArr[1]);
   };
 
   componentWillMount(): void {
     const { myInfo } = this.props;
+
     let presentValue = this.getParam();
     let params = {};
 
@@ -88,18 +91,21 @@ class Author extends React.Component {
       else params = {username : presentValue};
 
       MainRepository.Account.getProfileInfo(params, result => {
-        this.setState({ userInfo: result });
+        this.setState({ userInfo: result, errMessage : null });
+      }, err =>{
+        this.setState({ userInfo: null, errMessage: err });
       });
     }else{
-      this.setState({ userInfo: myInfo });
+      this.setState({ userInfo: myInfo, errMessage : null });
     }
   }
 
   render() {
     const { drizzleApis, myInfo } = this.props;
-    const { userInfo } = this.state;
+    const { userInfo, errMessage } = this.state;
 
     let param = this.getParam();
+
     return (
 
       <div className="row">
@@ -116,7 +122,8 @@ class Author extends React.Component {
                          totalViewCountInfo={this.state.totalViewCountInfo}
                          userInfo={userInfo}/>
           }
-          {!userInfo && <div className="spinner"><Spinner name="ball-pulse-sync"/></div>}
+          {!userInfo && !errMessage && <div className="spinner"><Spinner name="ball-pulse-sync"/></div>}
+          {errMessage && <NotFoundPage errMessage={ errMessage }/>}
           {userInfo &&
           <Tabs forceRenderTabPanel={true}>
             <TabList>

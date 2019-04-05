@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import loading from 'assets/image/loading.svg';
+import MainRepository from "../../../redux/MainRepository";
 
 class Callback extends Component {
+  componentWillMount(): void {
+    MainRepository.Account.handleAuthentication(this.props);
+  }
+
   render() {
     const style = {
       position: 'absolute',

@@ -49,7 +49,7 @@ class ContentViewBlockchainButton extends React.Component {
     let idFromAuth = MainRepository.Account.getMyInfo();
     let sub = idFromAuth ? idFromAuth.sub : null;
     let isExistDocument = drizzleApis.isExistDocument(dataKey);
-    if (isExistDocument || idFromDoc !== sub) return null;
+    if (isExistDocument || idFromDoc !== sub || !drizzleApis.isInitialized()|| !drizzleApis.isAuthenticated()) return null;
     return (
       <span>
         <Tooltip title="Register this document to blockchain" placement="bottom">

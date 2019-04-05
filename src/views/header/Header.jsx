@@ -57,6 +57,7 @@ class Header extends React.Component {
 
   render() {
     const { myInfo } = this.props;
+    const { prevScrollPos } = this.state;
 
     return (
 
@@ -64,7 +65,7 @@ class Header extends React.Component {
         <nav className="navbar navbar-default navbar-expand-lg fixed-top" id="header__main-nav">
           <div className="container-fluid">
             <div className="col-4 col-lg-4 mt-1">
-              <a className="navbar-brand" href="/">
+              <a className="navbar-brand" href="/latest">
                 <img src={require("assets/image/logo.png")} alt="DECOMPANY"/>
               </a>
             </div>
@@ -80,14 +81,16 @@ class Header extends React.Component {
 
             <div className="navbar-menu tar  col-8 col-lg-4">
               <UploadDocumentModal {...this.props} />
-              {MainRepository.Account.isAuthenticated() && myInfo.email.length > 0?
-                <span className="d-none d-sm-inline-block">
-                    <Link to={"/author/" + (myInfo.username.length && myInfo.username.length > 0 ? myInfo.username : myInfo.email)}>
-                      <img src={myInfo.picture} className="avatar" alt="user profile"/>
-                    </Link>
-                  </span>
-                :
-                <div className="d-none d-sm-inline-block login-btn" onClick={this.handleOpen.bind(this)} title="login">
+              { myInfo.email.length > 0 &&
+              <span className="d-none d-sm-inline-block">
+                  <Link
+                    to={"/" + (myInfo.username.length && myInfo.username.length > 0 ? myInfo.username : myInfo.email)}>
+                    <img src={myInfo.picture} className="avatar" alt="user profile"/>
+                  </Link>
+                </span>
+              }
+              {!MainRepository.Account.isAuthenticated() &&
+              <div className="d-none d-sm-inline-block login-btn" onClick={this.handleOpen.bind(this)} title="login">
                   <i className="material-icons">edit</i>
                   Login
                 </div>
@@ -107,7 +110,10 @@ class Header extends React.Component {
         </nav>
 
         {/*<Bounty {...this.props} />*/}
-
+        {prevScrollPos > 100 &&
+        <div className="scroll-top-btn" onClick={() => Common.scrollTop()} title="scroll top button"><i
+          className="material-icons">keyboard_arrow_up</i></div>
+        }
       </header>
 
     );

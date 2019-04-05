@@ -200,20 +200,20 @@ export default class DrizzleApis {
       return;
     }
     if(!this.isAuthenticated()){
-      console.error("The Metamask login is required.")
+      console.error("The Metamask login is required.");
       return;
     }
     if(!documentId){
-      alert("documentId is nothing");
+      console.error("documentId is nothing");
       return;
     }
     if(deposit<=0){
-      alert("Deposit must be greater than zero.");
+      console.error("Deposit must be greater than zero.");
       return;
     }
     const ethAccount = this.drizzleState.accounts[0];
     if(!ethAccount){
-      alert("Metamast Account is invaild");
+      console.error("Metamast Account is invaild");
       return;
     }
     const contract = this.drizzle.contracts.DocumentReg;

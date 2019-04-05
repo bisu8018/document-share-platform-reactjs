@@ -3,14 +3,14 @@ import AxiosService from "../AxiosService";
 let trackingInfoUrl = "tracking/info";
 let trackingListUrl = "tracking/list";
 //const trackingUrl = "document/tracking";
-let getDocumentUrl = "document/info/";
+let getDocumentUrl = "document/info";
 let getDocumentListUrl = "document/list";
 let getTrackingExportUrl = "tracking/export";
 let getAnalyticsExportUrl = "analytics/export";
 let getCuratorDocumentsUrl = "curator/document/list";
 let getTodayVotedDocumentsByCuratorUrl = "curator/document/today";
 let getAnalyticsListUrl = "analytics/list";
-let voteDocumentUrl = "document/vote/";
+let voteDocumentUrl = "document/vote";
 let registerDocumentInfoUrl = "document/regist";
 let updateDocument = "document/update";
 let tagListUrl = "tags";
@@ -32,7 +32,7 @@ export default {
         });
     },
     document: (data, callback) => {
-      AxiosService._requestWithUrlPram( getDocumentUrl + data, "GET", null,
+      AxiosService._requestWithUrlPram( getDocumentUrl + "/" + data, "GET", null,
         (data) => {
           callback(data);
         }, () => {
@@ -73,7 +73,7 @@ export default {
         }, (err) => {
           error(err);
         });
-    }
+    },
   },
   POST: {
     curatorDocuments: (data, callback, error) => {

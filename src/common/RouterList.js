@@ -3,6 +3,8 @@ import ContentView from "../views/body/contents/contentsView/ContentView";
 import Author from "../views/body/profile/author/Author";
 import AudienceTracking from "../views/body/tracking/AudienceTracking";
 import AudienceTrackingDetail from "../views/body/tracking/AudienceTrackingDetail";
+import Callback from "../views/body/callback/callback";
+import NotFoundPage from "../components/common/NotFoundPage";
 
 export default ({
     routes: [
@@ -32,29 +34,39 @@ export default ({
         component: ContentContainer
       },
       {
-        path: "/doc/:documentId",
-        name: "Content view",
-        component: ContentView
+        path: "/callback",
+        name: "Callback",
+        component: Callback
       },
       {
-        path: "/author/:accountId",
-        name: "Author",
-        component: Author
-      },/*
-      {
-        path: "/curator/:accountId",
-        name: "Curator",
-        component: Author
-      }*/
-      {
-        path: "/tracking/:accountId/:documentId",
+        path: "/tracking/:identification/:seoTitle",
         name: "tracking",
         component: AudienceTracking
       },
       {
-        path: "/trackingDetail/:accountId/:documentId",
+        path: "/trackingDetail/:identification/:seoTitle",
         name: "trackingDetail",
         component: AudienceTrackingDetail
+      },
+      {
+        path: "/NotFoundPage",
+        name: "NotFoundPage",
+        component: NotFoundPage
+      },
+      {
+        path: "/:identification/:documentId",
+        name: "ContentView",
+        component: ContentView
+      },
+      {
+        path: "/:identification",
+        name: "Author",
+        component: Author
+      },
+      {
+        path: '*',
+        name: 'NotFoundPage',
+        component: NotFoundPage,
       },
     ]
   }

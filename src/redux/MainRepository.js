@@ -23,7 +23,6 @@ export default {
   init() {
     // 자기 참조
     instance = this;
-
     if (this.Account.isAuthenticated()) {
       this.Account.scheduleRenewal();
     } else {
@@ -90,7 +89,7 @@ export default {
           if (res.success) {
             sessionStorage.setItem("user_sync", JSON.stringify(res));
           } else {
-            alert("Login failed because user sync failed.");
+            console.error("Login failed because user sync failed.");
             this.logout();
           }
         }, (err) => {
@@ -171,7 +170,7 @@ export default {
       }
     },
     handleLogout: () => {
-      alert("handleLogout()");
+      console.error("handleLogout()");
       this.clearSession();
       // navigate to the home route
       history.replace("/");
@@ -180,7 +179,7 @@ export default {
       instance.InitData.authData.client.userInfo(authResult.accessToken, (err, user) => {
         if (err) {
           //console.error("Getting userInfo", err);
-          alert(`Error: ${err.error}. Getting UserInfo`);
+          console.error(`Error: ${err.error}. Getting UserInfo`);
         } else {
           //console.log("Getting Userinfo Success!!", { user, authResult });
           callback(user);
@@ -217,8 +216,13 @@ export default {
     },
     getProfileInfo (params, callback, error) {
       AuthService.GET.profileGet(params, (result => {
-        let userInfo = new UserInfo(result.user);
-        callback(userInfo);
+        let userInfo = null;
+        if(result.user){
+          userInfo = new UserInfo(result.user);
+          callback(userInfo);
+        }else{
+          error(result.message);
+        }
       }), err => {
         error(err);
       });
@@ -522,10 +526,14 @@ export default {
         callback(analysticsExport);
       });
     },
-    getDocument(documentId, callback) {
+    getDocument(documentId, callback, error) {
       DocService.GET.document(documentId, (result) => {
-        let document = new Document(result);
-        callback(document);
+        if(!result.message) {
+          let document = new Document(result);
+          callback(document);
+        }else{
+          error(result.message);
+        }
       });
     },
     getTagList(callback, error) {
@@ -536,8 +544,8 @@ export default {
     },
     getDocumentList(params, callback, error) {
       DocService.GET.documentList(params, result => {
-        let tagList = new DocumentList((result));
-        callback(tagList);
+        let documentList = new DocumentList((result));
+        callback(documentList);
       });
     },
     getCuratorDocuments(params, callback, error) {

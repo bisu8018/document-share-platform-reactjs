@@ -30,7 +30,8 @@ class EditDocumentModal extends React.Component {
       forceTracking: false,
       registerOnChain: false,
       classicModal: false,
-      username: null
+      username: null,
+      desc: ""
     };
   }
 
@@ -48,7 +49,8 @@ class EditDocumentModal extends React.Component {
       useTracking: false,
       forceTracking: false,
       classicModal: false,
-      username: null
+      username: null,
+      desc: ""
     });
   };
 
@@ -61,7 +63,7 @@ class EditDocumentModal extends React.Component {
   };
 
   handleConfirm = () => {
-    const { documentData } = this.props;
+    const { documentData, match } = this.props;
     const { title, desc, tags, useTracking, forceTracking } = this.state;
     const data = {
       documentId: documentData.documentId,
@@ -72,7 +74,7 @@ class EditDocumentModal extends React.Component {
       forceTracking: forceTracking
     };
     MainRepository.Document.updateDocument(data, (result) => {
-      history.push("/doc/" + result.seoTitle);
+      history.push("/" + match.params.identification + "/" + result.seoTitle);
       this.handleClose();
     });
   };
@@ -88,7 +90,8 @@ class EditDocumentModal extends React.Component {
     }
 
     let username = MainRepository.Account.getMyInfo().username;
-    let _username = username ? username : documentData.accountId;
+    let email = MainRepository.Account.getMyInfo().email;
+    let _username = username ? username : (email ? email : documentData.accountId);
     this.setState({ username: _username });
     this.setState({ title: documentData.title });
     this.setState({ desc: documentData.desc });

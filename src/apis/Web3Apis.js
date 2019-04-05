@@ -35,16 +35,16 @@ export default class Web3Apis {
     const d = Math.floor(date / (60 * 60 *24 * 1000)) * (60 * 60 *24 * 1000);
     //console.log("getBlockchainTimestamp", d, new Date(d));
     return d;
-  }
+  };
   asciiToHex = (str) => {
     //deprecated fromAscii
     return web3.utils.asciiToHex(str);
-  }
+  };
 
   fromWei = (str) => {
 
     return web3.utils.fromWei(str, "ether");
-  }
+  };
 
   toDollar = (deck) => {
 
@@ -59,7 +59,7 @@ export default class Web3Apis {
     //console.log("toDollar", str, bn, dollar, result);
 
     return result;
-  }
+  };
 
   toDeck = (smalldeck) => {
     //console.log(smalldeck);
@@ -121,7 +121,7 @@ export default class Web3Apis {
     });
 
     return promise;
-  }
+  };
 
   calculateCuratorReward = (curatorId, documentId, viewCount, totalViewCount) => {
     //contract calculateCuratorReward(address _addr, bytes32 _docId, uint _pv, uint _tpvs)
@@ -132,7 +132,7 @@ export default class Web3Apis {
       from: curatorId
     });
 
-  }
+  };
 
   getCuratorDepositOnDocument = (curatorId, documentId) => {
     //function getCuratorDepositOnDocument(bytes32 _docId, uint _dateMillis) public view returns (uint)
@@ -167,7 +167,7 @@ export default class Web3Apis {
     //function determineCuratorReward(bytes32 _docId) public view returns (uint)
 
     return this.DocumentReg.methods.determineCuratorReward(this.asciiToHex(documentId)).call({from: curatorId});
-  }
+  };
 
   getCurator3DayRewardOnUserDocument = (curator, documentId, blockchainTimestamp) => {
       //function getCurator3DayRewardOnUserDocument(address _addr, bytes32 _docId, uint _dateMillis) public view returns (uint)

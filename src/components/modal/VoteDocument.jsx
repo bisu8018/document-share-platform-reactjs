@@ -79,7 +79,7 @@ class VoteDocument extends React.Component {
     if (!documentData) return;
     if (!drizzleApis.isAuthenticated()) return;
     if (deposit <= 0) {
-      alert("Deposit must be greater than zero.");
+      console.error("Deposit must be greater than zero.");
       return;
     }
 
@@ -226,7 +226,10 @@ class VoteDocument extends React.Component {
     const { documentData, dataKey, drizzleApis } = this.props;
     const balanceOf = (this.printBalance() * 1).toFixed(2);
 
-    if(drizzleApis && !drizzleApis.isExistDocument(dataKey)){
+    console.log(dataKey);
+    console.log(drizzleApis.isInitialized());
+
+    if(drizzleApis && (!drizzleApis.isInitialized() || !drizzleApis.isExistDocument(dataKey))){
       return (
         <div/>
       )
@@ -234,7 +237,7 @@ class VoteDocument extends React.Component {
 
     return (
       <span>
-        {drizzleApis && !drizzleApis.getLoggedInAccount() &&
+        {(!drizzleApis || !drizzleApis.getLoggedInAccount()) &&
         <Tooltip title="Please, work with MetaMask" placement="bottom">
           <div className="vote-btn">
             <i className="material-icons">how_to_vote</i>

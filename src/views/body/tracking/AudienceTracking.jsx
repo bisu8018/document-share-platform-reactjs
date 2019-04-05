@@ -36,9 +36,9 @@ class AudienceTracking extends React.Component {
 
   getTrackingList = () => {
     const { location } = this.props;
-
+    const documentData = location.state.documentData;
     this.setState({ loading: true });
-    MainRepository.Document.getTrackingList(location.state.documentId, (res) => {
+    MainRepository.Document.getTrackingList(documentData.documentId, (res) => {
       let resData = res;
       this.setState({ loading: false });
       this.setState({ resultList: resData.resultList ? resData.resultList : [] });
@@ -47,15 +47,15 @@ class AudienceTracking extends React.Component {
 
   handleExport = () => {
     const { location } = this.props;
-    console.log(123);
-    MainRepository.Document.getTrackingExport(location.state.documentId, rst => {
+    const documentData = location.state.documentData;
+    MainRepository.Document.getTrackingExport(documentData.documentId, rst => {
       const a = document.createElement("a");
       a.style.display = "none";
       document.body.appendChild(a);
 
       a.href = rst.downloadUrl;
 
-      a.setAttribute("download", "tracking_" + location.state.seoTitle + ".xls");
+      a.setAttribute("download", "tracking_" + documentData.seoTitle + ".xls");
       a.click();
 
       window.URL.revokeObjectURL(a.href);
@@ -71,10 +71,12 @@ class AudienceTracking extends React.Component {
     const { location, drizzleApis, match } = this.props;
     const { loading } = this.state;
     const rst = !this.state.filterList ? this.state.resultList : this.state.filterList;
-    let addr = Common.getThumbnail(location.state.documentId, 320, 1);
-    let badgeReward = drizzleApis.toEther(location.state.confirmAuthorReward);
-    let badgeVote = drizzleApis.toEther(location.state.confirmVoteAmount);
-    let badgeView = location.state.totalViewCount ? location.state.totalViewCount : 0;
+    const documentData = location.state.documentData;
+    const documentText = location.state.documentText;
+    let addr = Common.getThumbnail(documentData.documentId, 320, 1);
+    let badgeReward = drizzleApis.toEther(documentData.confirmAuthorReward);
+    let badgeVote = drizzleApis.toEther(documentData.confirmVoteAmount);
+    let badgeView = documentData.totalViewCount ? documentData.totalViewCount : 0;
 
     return (
 
@@ -84,10 +86,10 @@ class AudienceTracking extends React.Component {
 
           <div className="row">
             <div className="col-sm-3 col-md-3 col-thumb p-0 p-sm-3">
-              <Link to={"/doc/" + location.state.seoTitle}>
+              <Link to={"/" + match.params.identification + "/" + documentData.seoTitle}>
                 <div className="thumb_image">
                   <img src={addr}
-                       alt={location.state.title ? location.state.title : location.state.documentName}
+                       alt={documentData.title ? documentData.title : documentData.documentName}
                        className="img-fluid"/>
                 </div>
               </Link>
@@ -95,15 +97,15 @@ class AudienceTracking extends React.Component {
 
             <div className="col-sm-9 col-md-9 col-details_info p-sm-3">
               <dl className="details_info">
-                <Link to={"/doc/" + location.state.seoTitle} className="info_title mb-2">
-                  {location.state.title}
+                <Link to={"/" + match.params.identification + "/" + documentData.seoTitle} className="info_title mb-2">
+                  {documentData.title}
                 </Link>
                 <div className="col-view tracking-item mb-1">
                   <span className="txt_view">{badgeView}</span>
                   <span className="view_date view-reward"><span><DollarWithDeck deck={badgeReward}
                                                                                 drizzleApis={drizzleApis}/></span></span>
                   <span className="view_date view-reward"><span><DeckInShort deck={badgeVote}/></span></span>
-                  <span className="ml-4 info_date"> {Common.timestampToDate(location.state.created)}</span>
+                  <span className="ml-4 info_date"> {Common.timestampToDate(documentData.created)}</span>
                 </div>
                 {location &&
                 <Tooltip title="Export tracking data as Excel file." placement="bottom">
@@ -134,17 +136,17 @@ class AudienceTracking extends React.Component {
                 <table border="0" cellSpacing="0" cellPadding="0">
                   <tbody>
                   <tr>
-                    <th className="col1">Name <br/> (job title)</th>
+                    <th className="col1">Name</th>
                     <th className="col2">Views</th>
-                    <th className="col3">Last <br/> viewed</th>
+                    <th className="col3">Last Viewed</th>
                   </tr>
 
-                  {rst.map((result, idx) => (
+                  {rst.length > 0 && rst.map((result, idx) => (
                     <tr key={idx}>
                       <td className="col1">
                         <Link to={{
-                          pathname: "/trackingDetail/" + match.params.accountId + "/" + location.state.documentId,
-                          state: { document: location.state, addr: addr, cid: result.cid }
+                          pathname: "/trackingDetail/" + match.params.identification + "/" + match.params.seoTitle,
+                          state: { document: documentData, documentText: documentText, addr: addr, cid: result.cid }
                         }}>
                           {result.user.length > 0 && result.user[0].e !== "null" ? result.user[0].e : "Anonymous"}
                         </Link>

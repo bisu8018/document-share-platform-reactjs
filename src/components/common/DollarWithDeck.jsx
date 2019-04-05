@@ -13,7 +13,7 @@ class DollarWithDeck extends React.Component {
     const dollarStr = drizzleApis.deckToDollar(deck).toFixed(2);
 
     return (
-      <Tooltip title={"Expected reward : " + deckStr} placement="bottom">
+      <Tooltip title={"Creator payout $" + dollarStr + " (" + deckStr + ") \n in 7 days"} placement="bottom">
         <span>
           $ {dollarStr}
         </span>

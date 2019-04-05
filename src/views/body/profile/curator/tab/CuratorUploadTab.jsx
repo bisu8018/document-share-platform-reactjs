@@ -27,12 +27,9 @@ class CuratorUploadTab extends React.Component {
   fetchDocuments = (params) => {
     const { userInfo } = this.props;
     let pageNo = (!params || isNaN(params.pageNo)) ? 1 : Number(params.pageNo);
-    let _params = {
-      pageNo: pageNo
-    };
-
-    if (userInfo.username && userInfo.username.length > 0) _params = { username: userInfo.username };
-    else _params = { email: userInfo.email };
+    let _params = {};
+    if (userInfo.username && userInfo.username.length > 0) _params = { pageNo: pageNo, username: userInfo.username };
+    else _params = { pageNo: pageNo, email: userInfo.email };
 
     MainRepository.Document.getDocumentList(_params, (res) => {
       if (res && res.resultList) {
@@ -64,21 +61,23 @@ class CuratorUploadTab extends React.Component {
 
   render() {
     const { drizzleApis } = this.props;
+    const { resultList, isEndPage } = this.state;
+
     return (
 
       <div>
         <div className="document-total-num">
-          Total documents : <span>{this.state.resultList.length}</span>
+          Total documents : <span>{resultList.length}</span>
         </div>
         <InfiniteScroll
           className="overflow-hidden"
-          dataLength={this.state.resultList.length}
+          dataLength={resultList.length}
           next={this.fetchMoreData}
-          hasMore={!this.state.isEndPage}
+          hasMore={!isEndPage}
           loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
 
 
-          {this.state.resultList.map((result, idx) => (
+          {resultList.length > 0 && resultList.map((result, idx) => (
             <CuratorTabItem document={result}
                             key={idx}
                             drizzleApis={drizzleApis}/>

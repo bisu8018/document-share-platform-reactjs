@@ -13,7 +13,7 @@ class ContentViewRight extends React.Component {
         <div className="u__right">
           <h4>See also</h4>
           <hr/>
-          {featuredList.map((result, idx) => (
+          {featuredList.length > 0 && featuredList.map((result, idx) => (
             <FeaturedList resultItem={result} key={idx}/>
           ))}
         </div>

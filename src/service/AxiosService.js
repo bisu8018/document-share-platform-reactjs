@@ -37,8 +37,10 @@ export default {
         }
         if (response.data.success) {
           success(response.data);
+          //성공 alert
         } else {
           failure(response.data.message);
+          //실패 alert
         }
       })
       .catch((error) => {

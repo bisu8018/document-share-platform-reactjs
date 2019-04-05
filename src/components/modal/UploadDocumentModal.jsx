@@ -37,13 +37,14 @@ class UploadDocumentModal extends React.Component {
       useTracking: false,
       forceTracking: false,
       classicModal: false,
-      username: null
+      username: null,
+      desc: ""
     };
   }
 
   clearForm = () => {
     document.getElementById("docTitle").value = null;
-    document.getElementById("docDesc").value = null;
+    document.getElementById("docDesc").value = "";
     document.getElementById("docFileInput").value = null;
     document.getElementById("docFile").value = null;
   };
@@ -68,7 +69,8 @@ class UploadDocumentModal extends React.Component {
       useTracking: false,
       forceTracking: false,
       classicModal: false,
-      username: null
+      username: null,
+      desc: ""
     });
   };
 
@@ -338,7 +340,7 @@ class UploadDocumentModal extends React.Component {
 
               <div className="progress-modal" id="progressModal">
                 <div className="progress-modal-second">
-                  <span className="progress-percent">{percentage}%</span>
+                  <div className="progress-percent">{percentage}%</div>
                   <img src={require("assets/image/common/g_progress_circle.gif")} alt="progress circle"/>
                 </div>
               </div>

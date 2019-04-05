@@ -9,7 +9,7 @@ import {
   LinkedinIcon,
   LinkedinShareButton,
   TwitterShareButton,
-  TwitterIcon,
+  TwitterIcon
 } from "react-share";
 
 import DollarWithDeck from "../../../../components/common/DollarWithDeck";
@@ -29,6 +29,7 @@ class ContentViewFullScreen extends Component {
     isFull: false,
     dataKey: null,
     totalPages: 0,
+    carouselClass: null,
     text: ""
   };
 
@@ -52,8 +53,23 @@ class ContentViewFullScreen extends Component {
   };
 
   goFull = () => {
-    if (this.state.isFull) this.setState({ isFull: false });
-    if (!this.state.isFull) this.setState({ isFull: true });
+    let element = document.getElementsByClassName("selected")[0].firstChild;
+    let imgWidth = element.clientWidth;
+    let imgHeight = element.clientHeight;
+    let deviceRatio = window.innerWidth/window.innerHeight;
+    let imgRatio = imgWidth/imgHeight;
+
+    if (this.state.isFull) {
+      this.setState({ isFull: false });
+    }else {
+      this.setState({ isFull: true }, () => {
+        if(deviceRatio > imgRatio){
+          this.setState({carouselClass : "deviceRatio"})
+        }else{
+          this.setState({carouselClass : "imgRatio"})
+        }
+      });
+    }
   };
 
   checkDocumentInBlockChain = () => {
@@ -63,7 +79,8 @@ class ContentViewFullScreen extends Component {
     if (!documentData) return;
 
     try {
-      const dataKey = drizzleApis.requestIsExistDocument(documentData.documentId);
+      let dataKey = drizzleApis.requestIsExistDocument(documentData.documentId);
+      console.log(dataKey);
       this.setState({ dataKey: dataKey });
       //console.log("checkDocumentInBlockChain dataKey  :::::  ", dataKey);
     } catch (e) {
@@ -72,7 +89,14 @@ class ContentViewFullScreen extends Component {
   };
 
   getPageNum = (page) => {
-    this.setState({page : page})
+    this.setState({ page: page });
+  };
+
+  handleFullChange = (_isFull) => {
+    const { isFull } = this.state;
+    if(isFull !== _isFull){
+      this.goFull();
+    }
   };
 
   componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
@@ -81,15 +105,15 @@ class ContentViewFullScreen extends Component {
   }
 
   render() {
-    const { documentData, documentText, drizzleApis, tagList, author } = this.props;
-    const { page, totalPages, isFull, dataKey } = this.state;
+    const { documentData, documentText, drizzleApis, tagList, author, myInfo } = this.props;
+    const { page, totalPages, isFull, dataKey, carouselClass } = this.state;
     let badgeReward = drizzleApis.toEther(documentData.latestReward);
     let badgeVote = drizzleApis.toEther(documentData.latestVoteAmount) || 0;
     let badgeView = documentData.totalViewCount ? documentData.totalViewCount : 0;
     let accountId = documentData.accountId || "";
     let url = window.location.href;
     let profileUrl = author ? author.picture : null;
-    let personality = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId;
+    let identification = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId;
 
     if (totalPages !== documentData.totalPages) {
       this.setState({ totalPages: documentData.totalPages });
@@ -97,118 +121,121 @@ class ContentViewFullScreen extends Component {
 
     return (
 
-      <div className="u__view">
-        <Fullscreen enabled={isFull} onChange={isFull => this.setState({ isFull })}>
-
-          <div className="view_top">
-            <ContentViewCarousel id="pageCarousel" target={documentData} documentText={documentText} tracking={true} getPageNum={(page)=> {this.getPageNum(page)}}/>
+      <div className={"u__view " +  (isFull && (carouselClass === "deviceRatio" ? "device-ratio" : "img-ratio"))}>
+        <div className="view_top" >
+        <Fullscreen enabled={isFull} onChange={isFull => this.handleFullChange(isFull)}>
+            <ContentViewCarousel id="pageCarousel" target={documentData} documentText={documentText} tracking={true} myInfo={myInfo}
+                                 getPageNum={(page) => {
+                                   this.getPageNum(page);
+                                 }}/>
             <div className="view_screen">
-              <i title="Fullsceen button" className="material-icons" onClick={this.goFull}>fullscreen</i>
+              <i title="Fullscreen button" className="material-icons" onClick={this.goFull}>fullscreen</i>
             </div>
-          </div>
-
-          <div className="view_content">
-            <div className="u_title h2">   {documentData.title ? documentData.title : ""}</div>
-            <div className="col-view">
-              <span className="txt_view">{badgeView}</span>
-              <span className="view_date view-reward">
+        </Fullscreen>
+        </div>
+        <div className="view_content">
+          <div className="u_title h4">   {documentData.title ? documentData.title : ""}</div>
+          <div className="col-view">
+            <span className="txt_view">{badgeView}</span>
+            <span className="view_date view-reward">
                 <DollarWithDeck deck={badgeReward} drizzleApis={drizzleApis}/>
               </span>
-              <span className="view_date view-reward">
+            <span className="view_date view-reward">
                 <DeckInShort deck={badgeVote}/>
               </span>
-              <span className="view_date">
+            <span className="view_date">
                 {Common.timestampToDateTime(documentData.created)}
               </span>
-            </div>
+          </div>
 
-            <div className="row view_btns_inner">
-              {accountId === Common.getMySub() && documentData &&
-              <EditDocumentModal documentData={documentData} tagList={tagList}/>
-              }
+          <div className="row view_btns_inner">
+            {accountId === Common.getMySub() && documentData &&
+            <EditDocumentModal documentData={documentData} tagList={tagList}/>
+            }
 
-              <CopyModal/>
+            <CopyModal/>
 
-              <Tooltip title="Download this document" placement="bottom">
-                <div className="share-btn" onClick={this.handleDownloadContent}>
-                  <i className="material-icons">save_alt</i>
-                </div>
-              </Tooltip>
-
-              {accountId === Common.getMySub() &&
-              <Tooltip title="See statistics of this document" placement="bottom">
-                <Link to={{
-                  pathname: "/tracking/" + documentData.accountId + "/" + documentData.documentId,
-                  state: documentData
-                }}>
-                  <div className="statistics-btn"><i className="material-icons">bar_chart</i></div>
-                </Link></Tooltip>
-              }
-
-              <ContentViewRegistBlockchainButton documentData={documentData} dataKey={dataKey}
-                                                 drizzleApis={drizzleApis}/>
-              <VoteDocument documentData={documentData} dataKey={dataKey} drizzleApis={drizzleApis}/>
-            </div>
-
-            <Link to={"/author/" + personality} className="info_name"
-                  title={"Go to profile page of " + personality}>
-              {profileUrl ?
-                <img src={profileUrl} alt="profile"/> :
-                <i className="material-icons img-thumbnail">face</i>
-              }
-              {personality}
-            </Link>
-
-            <div className="sns-share-icon-wrapper">
-
-              <Tooltip title="Share with Twitter" placement="bottom">
-                <div className="d-inline-block">
-                  <TwitterShareButton url={url} className="sns-share-icon" hashtags={documentData.tags}
-                                      title={documentData.title}>
-                    <TwitterIcon size={28}/>
-                  </TwitterShareButton>
-                </div>
-              </Tooltip>
-
-              <Tooltip title="Share with Line" placement="bottom">
-                <div className="d-inline-block">
-                  <LinkedinShareButton url={url} className="sns-share-icon " title={documentData.title}>
-                    <LinkedinIcon size={28}/>
-                  </LinkedinShareButton>
-                </div>
-              </Tooltip>
-
-              <Tooltip title="Share with Facebook" placement="bottom">
-                <div className="d-inline-block">
-                  <FacebookShareButton url={url} className="sns-share-icon">
-                    <FacebookIcon size={28}/>
-                  </FacebookShareButton>
-                </div>
-              </Tooltip>
-            </div>
-
-
-            <div className="view_desc">
-              {documentData.desc ? documentData.desc : ""}
-
-              <div className="view_tag">
-                {documentData.tags ? documentData.tags.map((tag, index) => (
-                  <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
-                        className="tag"> {tag} </Link>
-                )) : ""}
+            <Tooltip title="Download this document" placement="bottom">
+              <div className="share-btn" onClick={this.handleDownloadContent}>
+                <i className="material-icons">save_alt</i>
               </div>
+            </Tooltip>
 
-              <hr className="mb-4"/>
-              <div className="view_content-desc">
-              {documentText[page-1]}
+            {accountId === Common.getMySub() &&
+            <Tooltip title="Tracking activity of your audience." placement="bottom">
+              <Link to={{
+                pathname: "/tracking/" + identification + "/" + documentData.seoTitle,
+                state: { documentData: documentData, documentText: documentText }
+              }}>
+                <div className="statistics-btn"><i className="material-icons">bar_chart</i></div>
+              </Link></Tooltip>
+            }
+
+            <ContentViewRegistBlockchainButton documentData={documentData} dataKey={dataKey}
+                                               drizzleApis={drizzleApis}/>
+            <VoteDocument documentData={documentData} dataKey={dataKey} drizzleApis={drizzleApis}/>
+          </div>
+
+          <Link to={"/" + identification} className="info_name"
+                title={"Go to profile page of " + identification}>
+            {profileUrl ?
+              <img src={profileUrl} alt="profile"/> :
+              <i className="material-icons img-thumbnail">face</i>
+            }
+            {identification}
+          </Link>
+
+          <div className="sns-share-icon-wrapper">
+
+            <Tooltip title="Share with Facebook" placement="bottom">
+              <div className="d-inline-block">
+                <FacebookShareButton url={url} className="sns-share-icon">
+                  <FacebookIcon size={28}/>
+                </FacebookShareButton>
               </div>
-            </div>
+            </Tooltip>
 
-            {/*<ContentViewComment/>*/}
+            <Tooltip title="Share with Line" placement="bottom">
+              <div className="d-inline-block">
+                <LinkedinShareButton url={url} className="sns-share-icon " title={documentData.title}>
+                  <LinkedinIcon size={28}/>
+                </LinkedinShareButton>
+              </div>
+            </Tooltip>
+
+            <Tooltip title="Share with Twitter" placement="bottom">
+              <div className="d-inline-block">
+                <TwitterShareButton url={url} className="sns-share-icon" hashtags={documentData.tags}
+                                    title={documentData.title}>
+                  <TwitterIcon size={28}/>
+                </TwitterShareButton>
+              </div>
+            </Tooltip>
+
           </div>
 
 
-        </Fullscreen>
+          <div className="view_desc">
+            {documentData.desc ? documentData.desc : ""}
+
+            <div className="view_tag">
+              <i className="material-icons" title="tag">local_offer</i>
+              {documentData.tags ? documentData.tags.map((tag, index) => (
+                <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
+                      className="tag"> {tag} </Link>
+              )) : ""}
+            </div>
+
+            <hr className="mb-4"/>
+            <div className="view_content-desc">
+              {documentText[page - 1]}
+            </div>
+          </div>
+
+          {/*<ContentViewComment/>*/}
+        </div>
+
+
       </div>
     );
   }

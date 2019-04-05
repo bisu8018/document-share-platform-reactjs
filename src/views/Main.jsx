@@ -6,7 +6,6 @@ import history from "apis/history/history";
 import DrizzleApis from "apis/DrizzleApis";
 
 import Header from "views/header/Header";
-import Callback from "./body/callback/callback";
 import RouterList from "../common/RouterList";
 import MainRepository from "../redux/MainRepository";
 import GuideModal from "../components/modal/GuideModal";
@@ -105,10 +104,6 @@ class Main extends Component {
                     );
                   }
                 )}
-                <Route path="/callback" render={(props) => {
-                  MainRepository.Account.handleAuthentication(props);
-                  return <Callback {...props} />;
-                }}/>
               </Switch>
             </div>
           </div>

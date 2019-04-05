@@ -5,12 +5,12 @@ import Common from "../../common/Common";
 class FeaturedList extends React.Component {
   render() {
     const { resultItem} = this.props;
-    let personality = resultItem.author ? (resultItem.author.username && resultItem.author.username.length > 0 ? resultItem.author.username : resultItem.author.email) : resultItem.accountId;
+    let identification = resultItem.author ? (resultItem.author.username && resultItem.author.username.length > 0 ? resultItem.author.username : resultItem.author.email) : resultItem.accountId;
 
     return (
         <div className="see-also-container">
 
-          <Link to={ "/doc/" + resultItem.seoTitle}>
+          <Link to={ "/" + identification + "/" + resultItem.seoTitle}>
             <div className="see-also-thumbnail">
               <img src={ Common.getThumbnail(resultItem.documentId,320,  1, resultItem.documentName) }
                    alt={ resultItem.documentName ? resultItem.documentName : resultItem.documentId }/>
@@ -19,8 +19,8 @@ class FeaturedList extends React.Component {
           </Link>
 
           <div className="see-also-content">
-            <Link to={"/author/" + personality} className="info_name see-also-author" >
-              {personality}
+            <Link to={"/" + identification} className="info_name see-also-author" >
+              {identification}
             </Link>
           </div>
 

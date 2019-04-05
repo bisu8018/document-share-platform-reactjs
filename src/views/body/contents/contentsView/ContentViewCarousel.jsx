@@ -9,7 +9,6 @@ import EmailModal from "../../../../components/modal/EmailModal";
 class ContentViewCarousel extends React.Component {
 
   state = {
-    isFull: false,
     dataKey: null,
     totalPages: 0,
     readPage: null,
@@ -44,7 +43,7 @@ class ContentViewCarousel extends React.Component {
 
   // 문서 옵션 useTracking true 일때만
   handleTracking = (page) => {
-    const { target } = this.props;
+    const { target, myInfo } = this.props;
 
     if (target.useTracking) {
       let emailFromAuth = MainRepository.Account.getMyEmail();
@@ -65,7 +64,7 @@ class ContentViewCarousel extends React.Component {
     });
 
     TrackingApis.tracking({
-      id: target.documentId,
+      id: myInfo.username || myInfo.email,
       n: page + 1,
       e: this.state.audienceEmail,
       ev: "view"
