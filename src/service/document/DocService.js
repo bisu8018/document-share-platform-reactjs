@@ -11,6 +11,7 @@ let getCuratorDocumentsUrl = "curator/document/list";
 let getTodayVotedDocumentsByCuratorUrl = "curator/document/today";
 let getAnalyticsListUrl = "analytics/list";
 let voteDocumentUrl = "document/vote";
+let documentDownloadUrl = "document/download";
 let registerDocumentInfoUrl = "document/regist";
 let updateDocument = "document/update";
 let tagListUrl = "tags";
@@ -74,8 +75,14 @@ export default {
           error(err);
         });
     },
-  },
-  POST: {
+    documentDownloadUrl: (data, callback, error) => {
+      AxiosService._requestWithUrlPram(documentDownloadUrl, "GET", data,
+        (data) => {
+          callback(data);
+        }, (err) => {
+          error(err);
+        });
+    },
     curatorDocuments: (data, callback, error) => {
       AxiosService._requestWithBody(getCuratorDocumentsUrl, "POST", data,
         (data) => {
@@ -84,6 +91,8 @@ export default {
           error(err);
         });
     },
+  },
+  POST: {
     todayVotedDocumentsByCurator: (data, callback, error) => {
       AxiosService._requestWithUrlPram(getTodayVotedDocumentsByCuratorUrl, "POST", data,
         (data) => {

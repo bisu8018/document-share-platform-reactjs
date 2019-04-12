@@ -9,6 +9,7 @@ let trackingUrl = "/api/tracking/collect";
 function initialize (opts) {
     console.log("Tracking initialize!!");
     sessionStorage.setItem("clientId", opts.cid);
+    console.log(sessionStorage.getItem("clientId"));
 }
 
 function jsonToQueryString(json){
@@ -25,6 +26,7 @@ function makeId(){
 
     
 function tracking(params, async, sidClear){
+    if (process.env.NODE_ENV !== "production") return false;
     const timestamp = Date.now();
     let trackingInfo = null;
     try{
@@ -61,18 +63,16 @@ function tracking(params, async, sidClear){
 
     let querystring = jsonToQueryString(params);
     let tracking = apiDomain + trackingUrl + querystring;
-    
     //document.getElementById("tracking").src = tracking;
-    
+
+
     $.ajax({
         type: 'GET',
         async: async,
         url: tracking
     });
     
-    //const result = await ajax.get(tracking);
-    //console.log(result);
-    
+
     if(sidClear){
         trackingInfo.sid = undefined;
     }

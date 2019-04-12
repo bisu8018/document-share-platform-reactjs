@@ -1,6 +1,6 @@
 import React from "react";
 import Web3Apis from "apis/Web3Apis";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@material-ui/core/Tooltip/index";
 
 class DollarWithDeck extends React.Component {
 

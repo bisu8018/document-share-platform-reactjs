@@ -1,6 +1,6 @@
 export default class UserProfile {
-  picture;
-  signedUploadUrl;
+  picture: string;
+  signedUploadUrl: string;
 
   constructor(data) {
     this.signedUploadUrl = data && data.signedUploadUrl ? data.signedUploadUrl : "";

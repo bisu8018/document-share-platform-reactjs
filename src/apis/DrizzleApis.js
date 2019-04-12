@@ -326,7 +326,7 @@ export default class DrizzleApis {
       return;
     }
     if(!this.isAuthenticated()){
-      console.error("The Metamask login is required.")
+      console.error("The Metamask login is required.");
       return;
     }
     const ethAccount = this.drizzleState.accounts[0];

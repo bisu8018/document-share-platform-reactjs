@@ -6,6 +6,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import Common from "../../util/Common";
 
 
 function Transition(props) {
@@ -42,7 +43,7 @@ class EmailModal extends React.Component {
     const x = [];
     x[modal] = false;
     this.setState(x);
-    if(!sessionStorage.getItem("tracking_email"))  forceTracking();
+    forceTracking();
     this.clearState();
   };
 
@@ -55,19 +56,23 @@ class EmailModal extends React.Component {
   handleSendBtn = () => {
     const { email } = this.state;
     const { handleTracking } = this.props;
-    sessionStorage.setItem("tracking_email", email);
-    if(sessionStorage.getItem("tracking_email")) handleTracking();
-    this.handleClose();
+    if(this.validateEmail()) {
+      Common.setCookie("tracking_email", email);
+      if(Common.getCookie("tracking_email")) handleTracking();
+      this.handleClose();
+    }
   };
 
   //이메일 유효성 체크
   validateEmail = () => {
     const { email } = this.state;
+    let checkEmail = Common.checkEmailForm(email);
     this.setState({
       emailError:
-        email.length > 0 ? "" : "Email address does not fit the form ."
+        checkEmail ? "" : "Email address does not fit the form ."
     });
-    return email.length > 0;
+    console.log(checkEmail);
+    return checkEmail;
   };
 
   componentWillMount() {

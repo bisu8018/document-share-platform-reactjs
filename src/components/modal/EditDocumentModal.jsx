@@ -11,6 +11,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../redux/MainRepository";
 import Tooltip from "@material-ui/core/Tooltip";
+import Common from "../../util/Common";
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -63,7 +64,7 @@ class EditDocumentModal extends React.Component {
   };
 
   handleConfirm = () => {
-    const { documentData, match } = this.props;
+    const { documentData } = this.props;
     const { title, desc, tags, useTracking, forceTracking } = this.state;
     const data = {
       documentId: documentData.documentId,
@@ -71,11 +72,14 @@ class EditDocumentModal extends React.Component {
       title: title,
       tags: tags,
       useTracking: useTracking,
-      forceTracking: forceTracking
+      forceTracking: !useTracking ? false : forceTracking,
     };
     MainRepository.Document.updateDocument(data, (result) => {
-      history.push("/" + match.params.identification + "/" + result.seoTitle);
+      history.push("/" + Common.getPath() + "/" + result.seoTitle);
       this.handleClose();
+
+      //임시로 사용, redux로 교체 필요
+      document.location.reload();
     });
   };
 
@@ -124,14 +128,22 @@ class EditDocumentModal extends React.Component {
     this.setState({ desc: e.target.value });
   };
 
-  handleTrackingCheckbox = () => {
+  // 유저 트래킹 체크박스
+  handleTrackingCheckbox= () => {
     const { useTracking } = this.state;
     let newValue = !useTracking;
     this.setState({
       useTracking: newValue
+    }, () => {
+      if(!useTracking) {
+        this.setState({
+          forceTracking: false
+        })
+      }
     });
   };
 
+  // 강제 트래킹 체크박스
   handleForceTrackingCheckbox = () => {
     const { forceTracking } = this.state;
     let newValue = !forceTracking;
@@ -170,10 +182,11 @@ class EditDocumentModal extends React.Component {
       }
     };
 
+    let tagList = this.props.getTagList;
     let inputValue = (props.value && props.value.trim().toLowerCase()) || "";
     let inputLength = inputValue.length;
-    let suggestions = this.props.tagList.length > 0 ?
-      this.props.tagList.filter((tag) => {
+    let suggestions = tagList.length > 0 ?
+      tagList.filter((tag) => {
         return tag._id.toLowerCase().slice(0, inputLength) === inputValue;
       })
       : [];
@@ -254,7 +267,7 @@ class EditDocumentModal extends React.Component {
                   <span className="checkbox-text">Use audience tracking.</span>
                   </label>
                 <label className="c-pointer col-12 col-sm-6 float-righ p-0">
-                  <input type="checkbox" onChange={(e) => this.handleForceTrackingCheckbox(e)} checked={forceTracking}/>
+                  <input type="checkbox" onChange={(e) => this.handleForceTrackingCheckbox(e)} checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
                   <span className="checkbox-text">Force the audience to tracking.</span>
                 </label>
                   </DialogContent>

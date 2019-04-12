@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Common from "../../common/Common";
+import Common from "../../util/Common";
 
 class FeaturedList extends React.Component {
   render() {

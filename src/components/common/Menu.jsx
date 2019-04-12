@@ -1,13 +1,13 @@
 import React from "react";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import Drawer from "@material-ui/core/Drawer/index";
+import List from "@material-ui/core/List/index";
+import Divider from "@material-ui/core/Divider/index";
+import ListItem from "@material-ui/core/ListItem/index";
+import ListItemText from "@material-ui/core/ListItemText/index";
 import { Link } from "react-router-dom";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import UploadDocumentModal from "../modal/UploadDocumentModal";
+import ListItemIcon from "@material-ui/core/ListItemIcon/index";
 import MainRepository from "../../redux/MainRepository";
+import UploadDocumentModalContainer from "../../container/modal/UploadDocumentModalContainer";
 
 class Menu extends React.Component {
   state = {
@@ -85,7 +85,7 @@ class Menu extends React.Component {
               <i className="material-icons">cloud_upload</i>
             </ListItemIcon>
             <ListItemText>
-              <UploadDocumentModal {...this.props} type='menu'/>
+              <UploadDocumentModalContainer {...this.props} type='menu'/>
             </ListItemText>
           </ListItem>
         </Drawer>

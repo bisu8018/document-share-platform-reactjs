@@ -1,5 +1,5 @@
 export default class AnalysticsExport {
-  csvDownloadUrl;
+  csvDownloadUrl: string;
 
   constructor(data) {
     this.csvDownloadUrl = data && data.csvDownloadUrl ? data.csvDownloadUrl : "";

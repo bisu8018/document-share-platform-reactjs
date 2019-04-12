@@ -1,6 +1,6 @@
 export default class CuratorDocuments {
-  resultList;
-  totalViewCountInfo;
+  resultList : [];
+  totalViewCountInfo : number;
 
   constructor(data) {
     this.resultList = data.resultList ? data.resultList :[];

@@ -1,5 +1,5 @@
 import React from "react";
-import Common from "../../common/Common";
+import Common from "../../util/Common";
 
 class GuideModal extends React.PureComponent {
   state = {
@@ -34,14 +34,14 @@ class GuideModal extends React.PureComponent {
 
   getStarted = () => {
     this.modalClose();
-    Common.setCookie("guidedValue", true, 1000);
+    Common.setCookie("gv", true, 1000);
     this.setState({ guidedValue: true });
   };
 
   componentWillMount() {
-    let _guidedValue = Common.getCookie("guidedValue");
+    let _guidedValue = Common.getCookie("gv");
     if (!_guidedValue) {
-      Common.setCookie("guidedValue", false, 1000);
+      Common.setCookie("gv", false, 1000);
       this.setState({ guidedValue: false });
     } else if (_guidedValue === "true") {
       this.setState({ guidedValue: true });

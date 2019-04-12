@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
+import FormControl from "@material-ui/core/FormControl/index";
+import InputLabel from "@material-ui/core/InputLabel/index";
+import Input from "@material-ui/core/Input/index";
 
 import customInputStyle from "assets/jss/material-kit-react/components/customInputStyle.jsx";
 

@@ -1,17 +1,17 @@
 import React from "react";
 
 import withStyles from "@material-ui/core/styles/withStyles";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Tooltip from "@material-ui/core/Tooltip";
-import Slide from "@material-ui/core/Slide";
+import Dialog from "@material-ui/core/Dialog/index";
+import DialogTitle from "@material-ui/core/DialogTitle/index";
+import DialogContent from "@material-ui/core/DialogContent/index";
+import DialogActions from "@material-ui/core/DialogActions/index";
+import Tooltip from "@material-ui/core/Tooltip/index";
+import Slide from "@material-ui/core/Slide/index";
 
-import CustomInput from "components/common/CustomInput.jsx";
+import CustomInput from "../common/CustomInput.jsx";
 import MainRepository from "../../redux/MainRepository";
-import CuratorDepositOnUserDocument from "../../views/body/profile/curator/CuratorDepositOnUserDocument";
-import CuratorDepositOnDocument from "../../views/body/profile/curator/CuratorDepositOnDocument";
+import CuratorDepositOnUserDocument from "../body/profile/curator/CuratorDepositOnUserDocument";
+import CuratorDepositOnDocument from "../body/profile/curator/CuratorDepositOnDocument";
 
 
 const style = {
@@ -200,6 +200,10 @@ class VoteDocument extends React.Component {
     }
   };
 
+  handleLogin = () => {
+    MainRepository.Account.login();
+  };
+
 
   printBalance = () => {
     const { drizzleApis } = this.props;
@@ -224,15 +228,21 @@ class VoteDocument extends React.Component {
 
   render() {
     const { documentData, dataKey, drizzleApis } = this.props;
-    const balanceOf = (this.printBalance() * 1).toFixed(2);
-
-    console.log(dataKey);
-    console.log(drizzleApis.isInitialized());
-
-    if(drizzleApis && (!drizzleApis.isInitialized() || !drizzleApis.isExistDocument(dataKey))){
+    let balanceOf = (this.printBalance() * 1).toFixed(2);
+    let isLogin = MainRepository.Account.isAuthenticated();
+    if (drizzleApis && (!drizzleApis.isInitialized() || !drizzleApis.isExistDocument(dataKey))) {
       return (
         <div/>
-      )
+      );
+    }
+    if (!isLogin) {
+      return (
+        <Tooltip title="Please, login" placement="bottom">
+          <div className="vote-btn" onClick={this.handleLogin.bind(this)}>
+            <i className="material-icons">how_to_vote</i>
+          </div>
+        </Tooltip>
+      );
     }
 
     return (

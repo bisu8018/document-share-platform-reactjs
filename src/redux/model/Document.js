@@ -1,8 +1,8 @@
 export default class Document {
-  document;
-  featuredList;
-  author;
-  text;
+  document : any;
+  featuredList : [];
+  author : any;
+  text : string;
 
   constructor(data) {
     this.document = data.document ? data.document :{};

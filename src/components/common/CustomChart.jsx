@@ -1,7 +1,7 @@
 import React from "react";
-import { Chart } from "react-google-charts";
 import Spinner from "react-spinkit";
-import Common from "../../common/Common";
+import Chart from "react-google-charts";
+import Common from "../../util/Common";
 
 //https://www.npmjs.com/package/react-google-charts#quick-start
 //구글 리액트 차트 라이브러리

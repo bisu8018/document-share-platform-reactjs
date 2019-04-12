@@ -1,5 +1,5 @@
 export default class TagList {
-  resultList;
+  resultList: [];
 
   constructor(data) {
     this.resultList = data.resultList ? data.resultList.sort(compare) : [

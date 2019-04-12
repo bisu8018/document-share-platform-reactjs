@@ -178,14 +178,22 @@ class UploadDocumentModal extends React.Component {
     this.setState({ desc : e.target.value });
   };
 
+  // 유저 트래킹 체크박스
   handleTrackingCheckbox= () => {
     const { useTracking } = this.state;
     let newValue = !useTracking;
     this.setState({
       useTracking: newValue
+    }, () => {
+      if(!useTracking) {
+        this.setState({
+          forceTracking: false
+        })
+      }
     });
   };
 
+  // 강제 트래킹 체크박스
   handleForceTrackingCheckbox= () => {
     const { forceTracking } = this.state;
     let newValue = !forceTracking;
@@ -234,16 +242,18 @@ class UploadDocumentModal extends React.Component {
       }
     };
 
+    let tagList = this.props.getTagList;
     let inputValue = (props.value && props.value.trim().toLowerCase()) || "";
     let inputLength = inputValue.length;
-    let suggestions = this.props.tagList.length > 0 ?
-      this.props.tagList.filter((tag) => {
+    let suggestions = tagList.length > 0 ?
+      tagList.sort((a, b) => b.value - a.value).filter((tag) => {
         return tag._id.toLowerCase().slice(0, inputLength) === inputValue;
       })
       : [];
 
     return (
       <AutoSuggest
+        highlightFirstSuggestion={true}
         ref={props.ref}
         suggestions={suggestions}
         shouldRenderSuggestions={(value) => value && value.trim().length > 0}
@@ -326,7 +336,7 @@ class UploadDocumentModal extends React.Component {
                   <span className="checkbox-text">Use audience tracking.</span>
                 </label>
                 <label className="c-pointer col-12 col-sm-6 float-righ p-0">
-                  <input type="checkbox" onChange={(e) => this.handleForceTrackingCheckbox(e)} checked={forceTracking} disabled={!useTracking}/>
+                  <input type="checkbox" onChange={(e) => this.handleForceTrackingCheckbox(e)} checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
                   <span className="checkbox-text">Force the audience to tracking.</span>
                 </label>
               </DialogContent>

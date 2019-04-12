@@ -1,11 +1,16 @@
 import ReactGA from "react-ga";
 import auth0 from "auth0-js";
 import axios from "axios";
+import * as Sentry from "@sentry/browser";
+
 import history from "apis/history/history";
+
 import { AUTH_CONFIG } from "properties/auth.properties";
 import { APP_PROPERTIES } from "properties/app.properties";
+
 import DocService from "../service/document/DocService";
 import AuthService from "../service/account/AuthService";
+
 import DocumentList from "./model/DocumentList";
 import Document from "./model/Document";
 import CuratorDocuments from "./model/CuratorDocuments";
@@ -16,22 +21,29 @@ import UserInfo from "./model/UserInfo";
 import TrackingExport from "./model/TrackingExport";
 import AnalysticsExport from "./model/AnalysticsExport";
 import UserProfile from "./model/UserProfile";
+import DocumentDownload from "./model/DocumentDownload";
 
 let instance: any;
 
 export default {
-  init() {
+  init(callback: () => any) {
     // 자기 참조
     instance = this;
-    if (this.Account.isAuthenticated()) {
-      this.Account.scheduleRenewal();
+
+    //센트리 초기화
+    Sentry.init({
+      dsn: "https://fdafe95e12a84551a16451289c5d66b5@sentry.io/1428811"
+    });
+
+    if (instance.Account.isAuthenticated()) {
+      instance.Account.scheduleRenewal();
     } else {
-      this.Account.clearSession();
+      instance.Account.clearSession();
     }
 
-    this.InitData.hsq = window._hsq = window._hsq || [];
+    instance.InitData.hsq = window._hsq = window._hsq || [];
 
-    this.InitData.authData = new auth0.WebAuth({
+    instance.InitData.authData = new auth0.WebAuth({
       domain: AUTH_CONFIG.domain,
       clientID: AUTH_CONFIG.clientId,
       redirectUri: AUTH_CONFIG.callbackUrl,
@@ -150,7 +162,7 @@ export default {
         });
       });
     },
-    handleAuthentication({ location }) {
+    handleAuthentication({ location }, callback) {
       if (/access_token|id_token|error/.test(location.hash)) {
         instance.InitData.authData.parseHash((err, authResult) => {
           if (authResult && authResult.accessToken && authResult.idToken) {
@@ -159,7 +171,7 @@ export default {
               this.setSession(authResult, user);
               this.scheduleRenewal();
               this.syncUser();
-              history.push("/");
+              callback();
             });
 
           } else if (err) {
@@ -214,13 +226,13 @@ export default {
         error(err);
       });
     },
-    getProfileInfo (params, callback, error) {
+    getProfileInfo(params, callback, error) {
       AuthService.GET.profileGet(params, (result => {
         let userInfo = null;
-        if(result.user){
+        if (result.user) {
           userInfo = new UserInfo(result.user);
           callback(userInfo);
-        }else{
+        } else {
           error(result.message);
         }
       }), err => {
@@ -233,8 +245,7 @@ export default {
         this.renewSession();
         return {};
       }
-      let _userInfo = new UserInfo(userInfo);
-      return _userInfo;
+      return new UserInfo(userInfo);
     },
     getExpireDate() {
       let expiresAt = JSON.parse(sessionStorage.getItem("expires_at"));
@@ -248,7 +259,7 @@ export default {
       let userInfo = JSON.parse(sessionStorage.getItem("user_info"));
 
       if (!userInfo && !this.isAuthenticated()) {
-        return false;
+        return "";
       }
 
       if (!userInfo && this.isAuthenticated()) {
@@ -528,10 +539,10 @@ export default {
     },
     getDocument(documentId, callback, error) {
       DocService.GET.document(documentId, (result) => {
-        if(!result.message) {
+        if (!result.message) {
           let document = new Document(result);
           callback(document);
-        }else{
+        } else {
           error(result.message);
         }
       });
@@ -548,6 +559,12 @@ export default {
         callback(documentList);
       });
     },
+    getDocumentDownloadUrl(params, callback, error) {
+      DocService.GET.documentDownloadUrl(params, result => {
+        let documentDownload = new DocumentDownload(result);
+        callback(documentDownload);
+      });
+    },
     getCuratorDocuments(params, callback, error) {
       let key = null;
       if (params.nextPageKey) {
@@ -557,7 +574,7 @@ export default {
         //console.log("first page");
       }
 
-      DocService.POST.curatorDocuments(params, (result) => {
+      DocService.GET.curatorDocuments(params, (result) => {
         let curatorDocuments = new CuratorDocuments(result);
         callback(curatorDocuments);
       }, (err) => {
@@ -600,7 +617,8 @@ export default {
           desc: data.desc,
           title: data.title,
           tags: data.tags,
-          useTracking: data.useTracking
+          useTracking: data.useTracking,
+          forceTracking: data.forceTracking
         },
         header: {
           "Authorization": `Bearer ${token}`
@@ -609,6 +627,8 @@ export default {
       DocService.POST.updateDocument(_data, (rst) => {
         let documentInfo = new DocumentInfo(rst.result);
         callback(documentInfo);
+      }, error => {
+        console.log(error);
       });
     }
   }

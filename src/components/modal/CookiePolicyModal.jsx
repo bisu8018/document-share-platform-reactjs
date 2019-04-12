@@ -1,5 +1,5 @@
 import React from "react";
-import Common from "../../common/Common";
+import Common from "../../util/Common";
 
 class CookiePolicyModal extends React.PureComponent {
   state = {
@@ -18,14 +18,14 @@ class CookiePolicyModal extends React.PureComponent {
 
   getStarted = () => {
     this.modalClose();
-    Common.setCookie("cookiePolicyValue", true, 1000);
+    Common.setCookie("cpv", true, 1000);
     this.setState({ cookiePolicyValue: true });
   };
 
   componentWillMount() {
-    let _cookiePolicyValue = Common.getCookie("cookiePolicyValue");
+    let _cookiePolicyValue = Common.getCookie("cpv");
     if (!_cookiePolicyValue) {
-      Common.setCookie("cookiePolicyValue", false, 1000);
+      Common.setCookie("cpv", false, 1000);
       this.setState({ cookiePolicyValue: false });
     } else if (_cookiePolicyValue === "true") {
       this.setState({ cookiePolicyValue: true });

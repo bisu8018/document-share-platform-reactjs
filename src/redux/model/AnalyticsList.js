@@ -1,7 +1,7 @@
 export default class AnalyticsList {
-  csvDownloadUrl;
-  isWeekly;
-  resultList;
+  csvDownloadUrl : string;
+  isWeekly : boolean;
+  resultList : [];
 
   constructor(data) {
     this.csvDownloadUrl = data.csvDownloadUrl ? data.csvDownloadUrl :"";

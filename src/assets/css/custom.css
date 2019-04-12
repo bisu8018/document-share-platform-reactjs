@@ -4896,6 +4896,10 @@ a .material-icons {
     }
 }
 
+.text-transform-capitalize {
+    text-transform: capitalize;
+}
+
 .hinge {
     -webkit-animation-name: hinge;
     animation-name: hinge;
@@ -5935,11 +5939,34 @@ b {
     -webkit-transition: 0.2s all ease-in-out;
 }
 
+.tracking_inner .option-menu-btn {
+    right: 10px;
+    top: 5px;
+}
+
+.tracking-time {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.option-menu-btn {
+    cursor: pointer;
+    position: absolute;
+    right: -16px;
+    top: 0;
+    transition: 0.2s all ease-in-out;
+    -webkit-transition: 0.2s all ease-in-out;
+}
+
+.option-menu-btn:hover > i {
+    color: #7fc241;
+}
+
 .scroll-top-btn {
     position: fixed;
     right: 50px;
-    bottom: 50px;
-    padding: 5px 7px 3px 7px;
+    bottom: 40px;
+    padding: 6px 7px 2px 7px;
     background: #7fc241;
     cursor: pointer;
     border-radius: 50%;
@@ -5972,13 +5999,14 @@ dean
     border-bottom-left-radius: 3px;
     border-top-left-radius: 3px;
 }
+
 .chart-date-btn > div:last-child {
     border-bottom-right-radius: 3px;
     border-top-right-radius: 3px;
     border: none;
 }
 
-.chart-date-btn > div{
+.chart-date-btn > div {
     display: inline-block;
     padding: 5px 8px;
     font-size: 14px;
@@ -5991,7 +6019,7 @@ dean
 }
 
 .chart-date-btn > div:hover,
-.chart-date-btn .clicked{
+.chart-date-btn .clicked {
     background: #7fc241;
     color: white;
 }
@@ -6010,7 +6038,6 @@ dean
     color: #fff;
     background: #349023;
     -ms-user-select: none;
-    -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
@@ -6029,7 +6056,6 @@ dean
 
 .upload-btn {
     top: -5px;
-    margin-right: 20px;
     cursor: pointer;
     display: inline-block;
     padding: 7px 15px 7px 35px;
@@ -6044,7 +6070,6 @@ dean
     border: 1px solid #4f41c2;
     z-index: 4;
     -ms-user-select: none;
-    -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
@@ -6059,7 +6084,34 @@ dean
 .upload-btn:hover {
     background: #4f41c2;
     color: white;
+}
+
+.main-upload-btn {
+    cursor: pointer;
+    border-radius: 30px;
+    display: inline-block;
+    background-image: linear-gradient( 135deg, #FF6FD8 10%, #3813C2 100%);
+    color: white;
+    font-weight: bold;
+    padding: 10px 40px;
     transition: 0.2s all ease-in-out;
+}
+
+.main-upload-btn:hover {
+    box-shadow: 2px 3px 3px 1px rgb(51, 0, 150);
+}
+
+.main-learn-more-btn {
+    cursor: pointer;
+    display: inline-block;
+    color: white;
+    font-weight: bold;
+    padding: 10px 40px;
+    transition: 0.2s all ease-in-out;
+}
+
+.main-learn-more-btn:hover {
+    color: #a9ff5a;
 }
 
 .sns-share-icon {
@@ -6068,7 +6120,6 @@ dean
     display: inline-block;
     position: relative;
     -ms-user-select: none;
-    -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
@@ -6081,7 +6132,7 @@ dean
 
 .link-arrow-btn {
     font-size: 17px;
-    color: #a7a7a7;
+    color: #d2d2d2;
     cursor: pointer;
     margin-left: 5px;
 }
@@ -6101,7 +6152,6 @@ dean
     transition: 0.2s all ease-in-out;
     font-size: 12px;
     -ms-user-select: none;
-    -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
@@ -6110,7 +6160,6 @@ dean
 .info-btn:hover {
     color: white;
     background: #7fc241;
-    transition: 0.2s all ease-in-out;
 }
 
 .search-btn {
@@ -6122,7 +6171,6 @@ dean
     padding-left: 17px;
     padding-right: 8px;
     -ms-user-select: none;
-    -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
@@ -6130,7 +6178,6 @@ dean
 
 .search-btn:hover {
     color: #7fc241;
-    transition: 0.2s all ease-in-out;
 }
 
 .bounty-btn {
@@ -6165,7 +6212,6 @@ dean
 
 .menu-btn:hover {
     color: #7fc241;
-    transition: 0.2s all ease-in-out;
 }
 
 .ok-btn {
@@ -6179,7 +6225,6 @@ dean
     font-size: 15px;
     font-weight: 400;
     -ms-user-select: none;
-    -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
@@ -6188,14 +6233,13 @@ dean
 .ok-btn:hover {
     background: #81ca3f;
     box-shadow: 1px 3px 6px 1px rgb(100, 154, 51);
-    transition: 0.2s all ease-in-out;
 }
 
-.username-edit-btn  {
+.username-edit-btn {
     cursor: pointer;
 }
 
-.username-edit-btn:hover  {
+.username-edit-btn:hover {
     color: #7fc241;
 }
 
@@ -6237,7 +6281,6 @@ dean
 
 .cancel-btn:hover {
     color: #f92121;
-    transition: 0.2s all ease-in-out;
 }
 
 .modal-close-btn {
@@ -6284,7 +6327,7 @@ dean
 }
 
 .export-btn i,
-.export-btn-disabled i{
+.export-btn-disabled i {
     top: 10px;
     position: relative;
     font-size: 25px;
@@ -6292,7 +6335,19 @@ dean
 
 .export-btn:hover {
     color: #1f9252;
-    transition: 0.2s all ease-in-out;
+}
+
+.main-banner-close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.main-banner-close-btn > i {
+    font-size: 30px;
+    color: white;
 }
 
 .share-btn {
@@ -6316,7 +6371,6 @@ dean
     background: #7fc241;
     color: white;
     border-color: #7fc241;
-    transition: 0.2s all ease-in-out;
 }
 
 .register-btn {
@@ -6340,7 +6394,6 @@ dean
 .register-btn:hover {
     background: #f508a1;
     border-color: #f508a1;
-    transition: 0.2s all ease-in-out;
 }
 
 .vote-btn {
@@ -6364,7 +6417,6 @@ dean
 .vote-btn:hover {
     background: #ffc800;
     border-color: #ffc800;
-    transition: 0.2s all ease-in-out;
 }
 
 .share-btn i,
@@ -6400,7 +6452,6 @@ dean
     background: #7fc241;
     color: white;
     border-color: #7fc241;
-    transition: 0.2s all ease-in-out;
 }
 
 .avatar {
@@ -6412,6 +6463,11 @@ dean
     width: 34px;
     height: 35px;
     border: 1px solid #d0d0d0;
+    transition: 0.2s all ease-in-out;
+}
+
+.avatar:hover {
+    opacity: 0.7;
 }
 
 .avatar:after {
@@ -6437,6 +6493,7 @@ dean
 }
 
 .navbar-menu .nav-menu-link {
+    cursor: pointer;
     position: relative;
     display: inline-block;
     margin: 0 14px;
@@ -6477,7 +6534,6 @@ dean
 
 .navbar-menu .nav-menu-link:hover {
     color: #7fc241;
-    transition: 0.2s all ease-in-out;
 }
 
 .navbar-menu .nav-menu-link.on:after,
@@ -6695,12 +6751,14 @@ dean
 .u__center .u__center_mobile {
     display: flex;
 }
+
 .select-custom {
+    float: left;
     border: 1px solid #cecece;
     width: 85%;
     color: #333;
     background: white;
-    height: 40px;
+    height: 42px;
     padding-left: 15px;
     font-size: 15px;
     cursor: pointer;
@@ -6777,8 +6835,8 @@ dean
 .details_info a {
     display: block;
     line-height: 1.4;
+    padding-right: 20px;
 }
-
 
 .info_name {
     display: inline-block !important;
@@ -6786,6 +6844,7 @@ dean
     font-size: 13px;
     color: #333;
 }
+
 .info_name > img {
     display: inline-block;
     width: 25px;
@@ -6875,6 +6934,15 @@ dean
 }
 
 @media (max-width: 575px) {
+    .select-custom {
+        margin-left: 20px;
+    }
+
+    .left_menu_list .tags_menu_search_container {
+        margin-right: 20px;
+        float: right;
+    }
+
     .scroll-top-btn {
         right: 30px;
         bottom: 30px;
@@ -6906,6 +6974,8 @@ dean
         height: auto;
         width: 100%;
         min-height: 160px;
+        border-left: none;
+        border-right: none;
     }
 
     .profile_info_name {
@@ -7008,6 +7078,7 @@ dean
     transition: 0.2s all ease-in-out;
     opacity: 0;
 }
+
 .profile-image-edit:hover {
     background: #94c2418c;
     opacity: 1;
@@ -7018,7 +7089,6 @@ dean
     position: relative;
     top: 38%;
 }
-
 
 
 .profile_list {
@@ -7187,6 +7257,7 @@ author tap list analytics*/
     .tracking-wrapper {
         margin-right: 15px !important;
     }
+
     .details_info {
         padding-right: 0;
     }
@@ -7239,6 +7310,29 @@ author tap list analytics*/
 
 .tracking_top h3 {
     float: left;
+}
+
+.option-table {
+    position: absolute;
+    top: 30px;
+    right: 5px;
+    z-index: 3;
+    float: right;
+    border: 1px solid #e0e0e0;
+    background: white;
+    padding: 5px 10px;
+    box-shadow: 4px 2px 6px 0 rgb(212, 212, 212);
+}
+
+.option-table:hover {
+    background: #7fc241;
+    color: white;
+}
+
+.option-table > div {
+    font-size: 13px;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .tracking_table table {
@@ -7405,7 +7499,6 @@ Dean
     cursor: pointer;
     background: #0000004a;
     -ms-user-select: none;
-    -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
@@ -7450,7 +7543,6 @@ Dean
 }
 
 .view_content .view_content-desc {
-    margin-bottom: 20px;
     min-height: 20px;
 }
 
@@ -7591,6 +7683,7 @@ Dean
 
 .view_desc {
     margin-top: 20px;
+    margin-bottom: 20px;
     font-size: 15px;
     line-height: 1.5;
     min-height: 70px;
@@ -7725,9 +7818,17 @@ Dean
         padding: 0;
     }
 
-    .u__right {
-        margin: 0 -15px;
+    .u__view .view_top {
+        border-right: none;
+        border-left: none;
         border-top: none;
+    }
+
+    .u__right {
+        margin-left: -15px;
+        margin-right: -15px;
+        padding: 20px 15px;
+        min-height: 300px;
         box-shadow: none;
     }
 
@@ -7758,7 +7859,7 @@ Dean
 
     #container {
         margin-bottom: 0;
-        margin-top: 57px;
+        margin-top: 57px !important;
     }
 
     #container.container_view .card {
@@ -8060,7 +8161,6 @@ Dean
     font-weight: 500;
     pointer-events: none;
     -ms-user-select: none;
-    -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
@@ -8068,9 +8168,8 @@ Dean
 
 .modal-footer {
     margin: 0;
-    padding: 15px;
+    padding: 0 15px 15px 15px;
     text-align: center;
-    padding-top: 0;
     display: flex;
     align-items: center;
     flex: 0 0 auto;
@@ -8249,6 +8348,12 @@ dialog {
     margin-top: 30px;
 }
 
+.img-cloudy {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    filter: blur(5px);
+}
+
 .landscape-warning-message {
     display: none;
     color: white;
@@ -8286,49 +8391,44 @@ contentContainer 배너 CSS*/
 
 .main-banner {
     width: 100%;
-    height: 350px;
-    display: block;
-    background-size: cover;
-    background-image: url("../image/tempImg/banner-img-5.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    /*background: #a5cc81;*/
-    top: 58px;
-    position: absolute;
-    left: 0;
 }
 
-.main-banner img {
-    width: 100%;
-    height: 400px;
-}
-
-.main-banner-text {
-    margin: 35px 0;
-    text-align: center;
+.main-banner-dummy {
+    height: 270px;
 }
 
 .main-banner-wrapper {
-    background: #ffffffb5;
-    padding: 25px 70px;
     animation: main-banner-text 1s ease-in-out;
     -webkit-animation: main-banner-text 1s ease-in-out;
     display: inline-block;
+    width: 100%;
+    text-align: center;
+    height: 270px;
+    background: -webkit-radial-gradient(#757575, #201d2d) rgba(62, 62, 70, 0.94);
+    background: radial-gradient(#757575, #201d2d) rgba(62, 62, 70, 0.94);
+    position: absolute;
+    left: 0;
+    margin-top: -25px;
+    margin-bottom: 25px;
+    padding: 25px 50px;
 }
 
-.main-banner-text .h2 {
+.main-banner-text {
+    display: inline-block;
+}
+
+.main-banner-wrapper .h1 {
     padding-bottom: 5px;
-    color: black;
+    color: white;
     font-weight: bold;
     display: inline-block;
-    border-bottom: 3px solid black;
     opacity: 1;
     animation: main-banner-text 1s ease-in-out;
     -webkit-animation: main-banner-text 1s ease-in-out;
 }
 
-.main-banner-text .h4 {
-    color: black;
+.main-banner-wrapper .h4 {
+    color: white;
     font-weight: 400;
     opacity: 1;
     animation: main-banner-text 2s ease-in-out;
@@ -8424,7 +8524,7 @@ Dean
 }
 
 .arrow-to-search-wrapper {
-    top: 350px;
+    top: 420px;
 }
 
 @media (max-width: 992px) {
@@ -8451,12 +8551,12 @@ Dean
     border-top: 1px solid black;
 }
 
-.cookie-policy-wrapper .cookie-policy-text{
+.cookie-policy-wrapper .cookie-policy-text {
     font-size: 15px;
     font-weight: 400;
 }
 
-.cookie-policy-wrapper .cookie-policy-btn-wrapper{
+.cookie-policy-wrapper .cookie-policy-btn-wrapper {
     width: 70px;
 }
 
@@ -8475,14 +8575,13 @@ Dean
     border-radius: 40px 40px 0 0;
     border-top: 8px solid rgb(93, 93, 93);
 }
+
 .privacy-banner p {
     margin: 0;
     color: #000;
     text-align: center;
     font-weight: 400;
 }
-
-
 
 
 .card {
@@ -8498,11 +8597,12 @@ Dean
 }
 
 .overflow-hidden {
- overflow: hidden !important;
+    overflow: hidden !important;
 }
 
 .no-data-icon {
-    margin-top: 10%;
+    margin-top: 5%;
+    margin-bottom: 5%;
     color: #cccccc;
     font-weight: bold;
     font-size: 20px;
@@ -8519,10 +8619,139 @@ dean
 ContentViewFullScreen 카로셀 전체화면*/
 .device-ratio .carousel .slide img {
     height: 100vh;
-    width : auto;
+    width: auto;
 }
 
 .img-ratio .carousel .slide img {
     height: auto;
-    width : 100vw;
+    width: 100vw;
+}
+
+
+/*2019-04-10
+dean
+자동 완성 라이브러리 CSS*/
+.react-autosuggest__container {
+    position: relative;
+}
+
+.react-autosuggest__input {
+    width: 240px;
+    height: 30px;
+    padding: 10px 20px;
+    font-family: Helvetica, sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+.react-autosuggest__input--focused {
+    outline: none;
+}
+
+.react-autosuggest__input--open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.react-autosuggest__suggestions-container {
+    position: absolute;
+    display: none;
+}
+
+.react-autosuggest__suggestions-container > ul {
+    position: fixed;
+    z-index: 2;
+    background: white;
+    padding: 0;
+    border: 1px solid #cecece;
+}
+
+
+.react-autosuggest__suggestions-container--open {
+    display: block;
+    top: 50px;
+    border: 1px solid #cecece;
+    background-color: #fff;
+    font-weight: 100;
+    font-size: 16px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    z-index: 2;
+}
+
+.react-autosuggest__suggestions-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    font-size: 14px;
+    min-height: 40px;
+    position: relative;
+    width: 227px;
+    cursor: pointer;
+}
+
+.react-autosuggest__suggestion {
+    cursor: pointer;
+    padding: 10px 20px;
+    text-align: left;
+}
+
+.react-autosuggest__suggestion--highlighted {
+    background-color: #7fc241;
+    color: white;
+}
+
+.react-autosuggest__section-container {
+    border-top: 1px solid #cecece;
+    position: relative;
+}
+
+.react-autosuggest__section-container--first {
+    border-top: 0;
+}
+
+.react-autosuggest__section-title {
+    font-size: 14px;
+    position: absolute;
+    color: #565656;
+    right: 10px;
+    top: 10px;
+    z-index: 1;
+}
+
+.autosuggest-count {
+    color: #484848;
+    font-size: 12px;
+    font-weight: 100;
+}
+
+.react-autosuggest__suggestion--highlighted .autosuggest-count {
+    color: white;
+}
+
+
+/*2019-04-10
+dean
+로그인 콜백 페이지 CSS*/
+.callback-wrapper {
+    position: absolute;
+    display: flex;
+    justifyContent: center;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    z-index: 4;
+    align-items: center;
+}
+
+.callback-wrapper > div {
+    position: relative;
+    left: calc(50% - 28px);
+    color: #7fc241;
 }

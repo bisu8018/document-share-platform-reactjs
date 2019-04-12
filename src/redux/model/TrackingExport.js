@@ -1,5 +1,5 @@
 export default class TrackingExport {
-  downloadUrl;
+  downloadUrl: string;
 
   constructor(data) {
     this.downloadUrl = data && data.downloadUrl ? data.downloadUrl : "";

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Button from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button/index";
 
 import buttonStyle from "assets/jss/material-kit-react/components/buttonStyle.jsx";
 
