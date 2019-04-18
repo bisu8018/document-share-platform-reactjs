@@ -1,13 +1,13 @@
 import React from "react";
 import Spinner from "react-spinkit";
 import { Helmet } from "react-helmet";
-import Web3Apis from "apis/Web3Apis";
 
-import ContentViewFullScreen from "./ContentViewFullScreen";
 import ContentViewRight from "./ContentViewRight";
 import MainRepository from "../../../../redux/MainRepository";
 import Common from "../../../../util/Common";
 import NotFoundPage from "../../../common/NotFoundPage";
+import ContentViewFullScreenContainer
+  from "../../../../container/body/contents/contentsView/ContentViewFullScreenContainer";
 
 
 class ContentView extends React.Component {
@@ -17,12 +17,9 @@ class ContentView extends React.Component {
     errMessage: null,
     documentText: null,
     author: null,
-    determineAuthorToken: -1,
     featuredList: null,
     approved: -1
   };
-
-  web3Apis = new Web3Apis();
 
   getContentInfo = (documentId) => {
     this.setState({ documentTitle: documentId });
@@ -33,9 +30,10 @@ class ContentView extends React.Component {
         featuredList: res.featuredList,
         documentText: res.text,
         author: res.author,
-        determineAuthorToken: -1,
         approved: -1,
-        errMessage : null
+        errMessage: null
+      }, () => {
+        this.setDocumentIsExist();  //문서 로드 후 문서 블록체인 등록 체크
       });
     }, err => {
       this.setState({
@@ -44,17 +42,24 @@ class ContentView extends React.Component {
         errMessage: err,
         documentText: null,
         author: null,
-        determineAuthorToken: -1,
         featuredList: null,
         approved: -1
       });
     });
   };
 
+  setDocumentIsExist = () => {
+    const { getWeb3Apis } = this.props;
+    const { documentData } = this.state;
+    getWeb3Apis.isDocumentExist(documentData.documentId, res => {
+      this.props.setIsDocumentExist(res);
+    });
+  };
+
   getApproved = () => {
-    const { drizzleApis } = this.props;
-    if (drizzleApis.getLoggedInAccount() && this.state.approved < 0) {
-      this.web3Apis.getApproved(drizzleApis.getLoggedInAccount()).then((data) => {
+    const { getDrizzle, getWeb3Apis } = this.props;
+    if (getDrizzle.getLoggedInAccount() && this.state.approved < 0) {
+      getWeb3Apis.getApproved(getDrizzle.getLoggedInAccount()).then((data) => {
         this.setState({ approved: data });
       }).catch((err) => {
         console.log("getApproved Error", err);
@@ -85,7 +90,7 @@ class ContentView extends React.Component {
 
   // 해당 이벤트는 See Also 이동 시에만 발생
   componentDidUpdate = () => {
-    const { documentTitle, errMessage  } = this.state;
+    const { documentTitle, errMessage } = this.state;
     let oldDocumentId = documentTitle;
     let newDocumentId = window.location.pathname.split("/")[2];
     if (newDocumentId !== oldDocumentId && !errMessage) {
@@ -94,13 +99,13 @@ class ContentView extends React.Component {
   };
 
   render() {
-    const { drizzleApis, auth, match, ...rest } = this.props;
+    const { auth, match, ...rest } = this.props;
     const { documentData, documentText, featuredList, author, errMessage } = this.state;
     if (!documentData && !errMessage) {
       return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
     }
     if (!documentData && errMessage) {
-      return  (errMessage && <NotFoundPage errMessage={ errMessage }/>);
+      return (errMessage && <NotFoundPage errMessage={errMessage}/>);
     }
 
     return (
@@ -111,7 +116,8 @@ class ContentView extends React.Component {
           <title>{documentData.seoTitle}</title>
           <meta name="description" content={documentData.desc}/>
           <meta name="thumbnail" content={this.getImgUrl()}/>
-          <link rel="canonical" href={"https://share.decompany.io/" + match.params.identification + "/" + match.params.seoTitle}/>
+          <link rel="canonical"
+                href={"https://share.decompany.io/" + match.params.identification + "/" + match.params.seoTitle}/>
 
           <meta content="2237550809844881" class="fb_og_meta" property="fb:app_id" name="fb_app_id"/>
           <meta content="decompany:document" class="fb_og_meta" property="og:type" name="og_type"/>
@@ -135,8 +141,8 @@ class ContentView extends React.Component {
         </Helmet>
 
         <div className="col-md-12 col-lg-8 view_left">
-          <ContentViewFullScreen documentData={documentData} documentText={documentText} drizzleApis={drizzleApis}
-                                 auth={auth} author={author} />
+          <ContentViewFullScreenContainer documentData={documentData} documentText={documentText}
+                                          auth={auth} author={author}/>
         </div>
 
         <div className="col-md-12 col-lg-4 ">

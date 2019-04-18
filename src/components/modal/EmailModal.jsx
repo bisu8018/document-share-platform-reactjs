@@ -21,7 +21,8 @@ class EmailModal extends React.Component {
     this.state = {
       classicModal: false,
       email: "",
-      emailError: ""
+      emailError: "",
+      policyChecked: false
     };
   }
 
@@ -30,6 +31,30 @@ class EmailModal extends React.Component {
       classicModal: false,
       email: ""
     });
+  };
+
+  //이메일 유효성 체크
+  validateEmail = () => {
+    const { email } = this.state;
+    let checkEmail = Common.checkEmailForm(email);
+    this.setState({
+      emailError:
+        checkEmail ? "" : "Email address does not fit the form ."
+    });
+    return checkEmail;
+  };
+
+  //체크박스 유효성 체크
+  validateCheckBox = () => {
+    const { policyChecked } = this.state;
+    const termsCheckbox = document.getElementById("termsCheckbox").nextElementSibling.firstChild;
+    if(policyChecked) {
+      termsCheckbox.style.border = "1px solid #7fc241"
+    }else{
+      termsCheckbox.style.border = "1px solid #f92121"
+    }
+
+    return policyChecked;
   };
 
   handleClickOpen = (modal) => {
@@ -56,23 +81,17 @@ class EmailModal extends React.Component {
   handleSendBtn = () => {
     const { email } = this.state;
     const { handleTracking } = this.props;
-    if(this.validateEmail()) {
+    if (this.validateEmail() && this.validateCheckBox()) {
       Common.setCookie("tracking_email", email);
-      if(Common.getCookie("tracking_email")) handleTracking();
+      if (Common.getCookie("tracking_email")) handleTracking();
       this.handleClose();
     }
   };
 
-  //이메일 유효성 체크
-  validateEmail = () => {
-    const { email } = this.state;
-    let checkEmail = Common.checkEmailForm(email);
-    this.setState({
-      emailError:
-        checkEmail ? "" : "Email address does not fit the form ."
+  handleCheckbox = (e) => {
+    this.setState({policyChecked : e.target.checked}, () => {
+      this.validateCheckBox();
     });
-    console.log(checkEmail);
-    return checkEmail;
   };
 
   componentWillMount() {
@@ -80,7 +99,7 @@ class EmailModal extends React.Component {
   }
 
   render() {
-    const { classicModal,emailError } = this.state;
+    const { classicModal, emailError } = this.state;
 
     return (
       <span>
@@ -97,18 +116,27 @@ class EmailModal extends React.Component {
                 id="classic-modal-slide-title"
                 disableTypography>
                 <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                <h3>Send Email Address</h3>
+                <h3>Want to read more?</h3>
               </DialogTitle>
 
 
-              <DialogContent id="classic-modal-slide-description">
-                 <div className="dialog-subject">Email</div>
-                <input type="text" placeholder="Title of the uploading document" id="docTitle"
+              <DialogContent id="classic-modal-slide-description" className="overflow-hidden">
+                 <div className="dialog-subject mb-3">Please check sign-up link in your inbox. The author of this content can view the information you have entered.</div>
+                <input type="text" placeholder="Email" autoComplete="off"
                        className={"custom-input " + (emailError.length > 0 ? "custom-input-warning" : "")}
                        onChange={(e) => this.handleEmailChange(e)}/>
                 <span>{emailError}</span>
               </DialogContent>
 
+              <DialogContent id="classic-modal-slide-policy" className="overflow-hidden mb-n3">
+                <input type="checkbox" id="termsCheckbox"  onClick={(e) => this.handleCheckbox(e)}/>
+                <label htmlFor="termsCheckbox">
+                  <span><i className="material-icons">done</i></span>
+                  I agree to submit this information, which will be collected and used according to
+                    <a className="checkbox-policy-link" target="_blank" href="/faq"
+                       title="Read decompany’s privacy policy."> Decompany’s privacy policy.</a>
+                </label>
+              </DialogContent>
 
               <DialogActions className="modal-footer">
                 <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">Cancel</div>

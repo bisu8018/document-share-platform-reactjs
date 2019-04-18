@@ -5,7 +5,6 @@ import Slide from "@material-ui/core/Slide";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Web3Apis from "apis/Web3Apis";
 import Dialog from "@material-ui/core/Dialog";
 import MainRepository from "../../redux/MainRepository";
 
@@ -26,8 +25,6 @@ class Bounty extends React.Component {
     placement: "bottom"
   };
 
-  web3Apis = new Web3Apis();
-
   handleClose = (modal) => {
     const x = [];
     x[modal] = false;
@@ -46,16 +43,16 @@ class Bounty extends React.Component {
   };
 
   handleClickAgree = () => {
-    const { drizzleApis } = this.props;
+    const { getDrizzle } = this.props;
     this.handleClose("classicModal");
-    drizzleApis.bounty();
+    getDrizzle.bounty();
   };
 
   componentDidUpdate = () => {
-    const { drizzleApis } = this.props;
-    let isAuthenticated = drizzleApis.isAuthenticated();
+    const { getDrizzle, getWeb3Apis } = this.props;
+    let isAuthenticated = getDrizzle.isAuthenticated();
     if (isAuthenticated && !this.state.isAuthenticated) {
-      this.web3Apis.getBountyAvailable(drizzleApis.getLoggedInAccount()).then((data) => {
+      getWeb3Apis.getBountyAvailable(getDrizzle.getLoggedInAccount()).then((data) => {
         this.setState({ isAuthenticated: true });
         this.setState({ available: data });
       }).catch((err) => {

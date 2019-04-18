@@ -3,14 +3,13 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "react-spinkit";
 import { Link } from "react-router-dom";
 
-
-import ContentListItem from "./ContentListItem";
 import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../util/Common";
 import ContentTagsContainer from "../../../container/body/contents/ContentTagsContainer";
 import AutoSuggestInputContainer from "../../../container/common/AutoSuggestInputContainer";
+import ContentListItemContainer from "../../../container/body/contents/ContentListItemContainer";
 
-class ContentContainer extends Component {
+class ContentMain extends Component {
   state = {
     resultList: [],
     pageNo: 1,
@@ -120,7 +119,7 @@ class ContentContainer extends Component {
   }
 
   render() {
-    const { match, isEndPage, totalViewCountInfo, selectedTag } = this.props;
+    const { match, isEndPage, selectedTag } = this.props;
     const { resultList } = this.state;
 
     let matchPath = Common.getPath();
@@ -135,7 +134,7 @@ class ContentContainer extends Component {
                 <i className="material-icons">clear</i>
               </div>
               <div className="h1 d-inline-block">Grow your audience.</div>
-              <div className="h4">Upload your slides and share it on high-quality channels.</div>
+              <div className="h4">Upload your slides and share them on high-quality channels.</div>
               <div className="h4 mb-4">Track lead activity and collect contacts.</div>
               <div className="main-upload-btn mb-2" onClick={() => this.handleUploadBtn()}>Upload now</div>
               <Link to="/faq">
@@ -188,8 +187,7 @@ class ContentContainer extends Component {
               hasMore={!isEndPage}
             >
               {resultList.length > 0 && resultList.map((result) => (
-                <ContentListItem key={result.documentId + result.accountId} result={result}
-                                 totalViewCountInfo={totalViewCountInfo} {...this.props} />
+                <ContentListItemContainer key={result.documentId + result.accountId} result={result} />
               ))}
             </InfiniteScroll>
             {this.state.loading &&
@@ -203,4 +201,4 @@ class ContentContainer extends Component {
   }
 }
 
-export default ContentContainer;
+export default ContentMain;

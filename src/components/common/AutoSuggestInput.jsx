@@ -60,6 +60,9 @@ class AutoSuggestInput extends React.Component {
 
   onSuggestionSelected = (event, { suggestion }) => {
     this.props.search(suggestion);
+    this.setState({
+      value: ""
+    });
   };
 
   renderSectionTitle = section => {

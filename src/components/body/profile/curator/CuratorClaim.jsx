@@ -1,15 +1,7 @@
 import React from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
-import withStyles from "@material-ui/core/styles/withStyles";
-import Web3Apis from "apis/Web3Apis";
-
-const style = {
-  claimButton: {
-    marginLeft: "15px",
-    marginTop: "0"
-  }
-};
+import Common from "../../../../util/Common";
 
 class CuratorClaim extends React.Component {
 
@@ -18,13 +10,10 @@ class CuratorClaim extends React.Component {
     stackId: null
   };
 
-
-  web3Apis = new Web3Apis();
-
   _onClickClaim = () => {
-    const { document, drizzleApis } = this.props;
+    const { document, getDrizzle } = this.props;
 
-    const unsubscribe = drizzleApis.subscribe((drizzle, drizzleState) => {
+    const unsubscribe = getDrizzle.subscribe((drizzle, drizzleState) => {
 
       if (!this.state.stackId) return;
 
@@ -47,23 +36,23 @@ class CuratorClaim extends React.Component {
       } else if (state === "error") {
         // error
         this.setState({ stackId: null, determineReward: -1 });
-        drizzleApis.unsubscribe(unsubscribe);
+        getDrizzle.unsubscribe(unsubscribe);
       } else if (state === "success") {
         //success
         this.setState({ stackId: null, determineReward: -1 });
-        drizzleApis.unsubscribe(unsubscribe);
+        getDrizzle.unsubscribe(unsubscribe);
       }
 
     });
 
-    const stackId = drizzleApis.claimCuratorReward(document.documentId);
+    const stackId = getDrizzle.claimReward(document.documentId);
     this.setState({ stackId: stackId });
   };
 
   shouldComponentUpdate = () => {
-    const { document, drizzleApis } = this.props;
-    if (document && drizzleApis.isAuthenticated() && this.state.determineReward < 0) {
-      this.web3Apis.getDetermineCuratorReward(document.documentId, drizzleApis.getLoggedInAccount()).then((data) => {
+    const { document, getWeb3Apis, getDrizzle } = this.props;
+    if (document && getDrizzle.isAuthenticated() && this.state.determineReward < 0) {
+      getWeb3Apis.getDetermineCuratorReward(document.documentId, getDrizzle.getLoggedInAccount()).then((data) => {
         //console.log("getDetermineCuratorReward", document.documentId, data)
         this.setState({ determineReward: data });
       }).catch((err) => {
@@ -74,14 +63,12 @@ class CuratorClaim extends React.Component {
   };
 
   render() {
-    const { drizzleApis, accountId } = this.props;
+    const { getDrizzle, accountId } = this.props;
+    const loggedInAccount = getDrizzle.getLoggedInAccount();
+    let isAuthenticated = getDrizzle.isAuthenticated();
+    if (loggedInAccount !== accountId) return null;
 
-    const loggedInAccount = drizzleApis.getLoggedInAccount();
-    if (loggedInAccount !== accountId) {
-      return null;
-    }
-
-    if (!drizzleApis.isAuthenticated()) {
+    if (!isAuthenticated) {
       return (
         <div className='sweet-loading'>
           <ClipLoader
@@ -91,7 +78,7 @@ class CuratorClaim extends React.Component {
             margin={"2px"}
             radius={2}
             color={"#e91e63"}
-            loading={!drizzleApis.isAuthenticated()}
+            loading={!isAuthenticated}
           />
         </div>
       );
@@ -101,7 +88,7 @@ class CuratorClaim extends React.Component {
 
     if (disabled) return "";
 
-    const determineReward = this.web3Apis.toDollar(this.state.determineReward > 0 ? this.state.determineReward : 0);
+    const determineReward = Common.toDollar(this.state.determineReward > 0 ? this.state.determineReward : 0);
 
     return (
       <div className="info_btn ok-btn" onClick={this._onClickClaim} disabled={disabled}>
@@ -111,4 +98,4 @@ class CuratorClaim extends React.Component {
   }
 }
 
-export default withStyles(style)(CuratorClaim);
+export default CuratorClaim;

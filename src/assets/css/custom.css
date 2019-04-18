@@ -35,10 +35,10 @@ body {
     font-size: 1rem;
     line-height: 1.5;
     text-align: left;
-    background-color: #f9f9f9;
+    background-color: #fcfcfc;
     -ms-text-size-adjust: none;
     -webkit-text-size-adjust: none;
-    color: #3C4858;
+    color: #333;
     font-weight: 300;
 }
 
@@ -3175,9 +3175,19 @@ button.close {
     margin-top: 1rem !important;
 }
 
+.mt-n3,
+.my-n3 {
+    margin-top: -1rem !important;
+}
+
 .mr-3,
 .mx-3 {
     margin-right: 1rem !important;
+}
+
+.mr-n3,
+.mx-n3 {
+    margin-right: -1rem !important;
 }
 
 .mb-3,
@@ -3185,9 +3195,18 @@ button.close {
     margin-bottom: 1rem !important;
 }
 
+.mb-n3,
+.my-n3 {
+    margin-bottom: -1rem !important;
+}
+
 .ml-3,
 .mx-3 {
     margin-left: 1rem !important;
+}
+.ml-n3,
+.mx-n3 {
+    margin-left: -1rem !important;
 }
 
 .m-4 {
@@ -6114,22 +6133,6 @@ dean
     color: #a9ff5a;
 }
 
-.sns-share-icon {
-    cursor: pointer;
-    margin-right: 0.25rem;
-    display: inline-block;
-    position: relative;
-    -ms-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-.sns-share-icon-wrapper {
-    height: 30px;
-    margin-top: 5px;
-}
-
 .link-arrow-btn {
     font-size: 17px;
     color: #d2d2d2;
@@ -6167,7 +6170,7 @@ dean
     position: relative;
     color: #717171;
     transition: 0.2s all ease-in-out;
-    padding-top: 6px;
+    padding-top: 8px;
     padding-left: 17px;
     padding-right: 8px;
     -ms-user-select: none;
@@ -6347,6 +6350,10 @@ dean
 
 .main-banner-close-btn > i {
     font-size: 30px;
+    color: #989898;
+}
+
+.main-banner-close-btn > i:hover {
     color: white;
 }
 
@@ -7319,12 +7326,21 @@ author tap list analytics*/
     z-index: 3;
     float: right;
     border: 1px solid #e0e0e0;
-    background: white;
-    padding: 5px 10px;
+
+
     box-shadow: 4px 2px 6px 0 rgb(212, 212, 212);
 }
 
-.option-table:hover {
+.option-table > div {
+    padding: 5px 10px;
+    background: white;
+}
+
+.option-table > div:not(:last-child) {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.option-table > div:hover {
     background: #7fc241;
     color: white;
 }
@@ -7340,6 +7356,15 @@ author tap list analytics*/
     border-top: 1px solid #999;
     border-bottom: 1px solid #ccc;
     table-layout: fixed;
+}
+
+.tracking_table table > tbody > tr:first-child {
+    background: #676767 !important;
+}
+
+.tracking_table table > tbody > tr:first-child > th {
+    color: white;
+    font-size: 16px;
 }
 
 .tracking_table th {
@@ -7423,6 +7448,8 @@ author tap list analytics*/
         width: 160px;
     }
 }
+
+
 
 
 .tar {
@@ -7544,6 +7571,12 @@ Dean
 
 .view_content .view_content-desc {
     min-height: 20px;
+}
+
+.view-content-desc-warning {
+    text-align: center;
+    font-weight: 500;
+    color: #bbbbbb;
 }
 
 .u__view h2.u_title {
@@ -7876,6 +7909,7 @@ Dean
 }
 
 @media (max-width: 575px) {
+
     .u_center_inner {
         border: none;
         padding: 0;
@@ -8166,6 +8200,17 @@ Dean
     user-select: none;
 }
 
+.checkbox-policy-link {
+    display: contents;
+    font-weight: bold;
+    color: #1e3e17 !important;
+    cursor: pointer;
+}
+
+.checkbox-policy-link:hover {
+   text-decoration: underline !important;
+}
+
 .modal-footer {
     margin: 0;
     padding: 0 15px 15px 15px;
@@ -8202,6 +8247,17 @@ Dean
     position: relative;
     left: -325px;
     top: -224px;
+}
+
+.progress-wrapper {
+    width: 100%;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: black;
+    opacity: 0.3;
+    display: none;
 }
 
 .progress-percent {
@@ -8583,9 +8639,28 @@ Dean
     font-weight: 400;
 }
 
-
 .card {
     font-size: .875rem;
+}
+
+.overflow-hidden {
+    overflow: hidden !important;
+}
+
+.sns-share-icon {
+    cursor: pointer;
+    margin-right: 0.25rem;
+    display: inline-block;
+    position: relative;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.sns-share-icon-wrapper {
+    height: 30px;
+    margin-top: 5px;
 }
 
 .thumb-up-icon {
@@ -8594,10 +8669,6 @@ Dean
     top: 3px;
     position: relative;
     margin-right: 5px;
-}
-
-.overflow-hidden {
-    overflow: hidden !important;
 }
 
 .no-data-icon {
@@ -8754,4 +8825,78 @@ dean
     position: relative;
     left: calc(50% - 28px);
     color: #7fc241;
+}
+
+/*체크박스 CSS
+이용법 :
+<input type="checkbox" v-model="checkbox" id="termsCheckbox"> //실제 체크박스
+<label for="termsCheckbox"><span><i class="material-icons">done</i></span>{{$str('termsLabel')}}</label> //스타일 체크박스
+   */
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"] + label {
+    color: #333;
+    font-size: 13px;
+    align-items: center;
+    display: flex;
+}
+
+input[type="checkbox"]:disabled + label {
+    color: #d0d0d0;
+    font-size: 13px;
+    align-items: center;
+    display: flex;
+}
+
+input[type="checkbox"] + label span {
+    display: inline-block;
+    position: relative;
+    min-width: 20px;
+    min-height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background: white;
+    border: 1px solid #8d8d8d;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+input[type="checkbox"]:checked + label span {
+    border: 1px solid #7fc241;
+    font-size: 13px;
+    color: #7fc241;
+    font-weight: bold;
+}
+
+input[type="checkbox"]:disabled + label span {
+    border: 1px solid #d0d0d0;
+    font-size: 13px;
+    color: #d0d0d0;
+    font-weight: bold;
+}
+
+input[type="checkbox"]:hover:not(:disabled) + label span {
+    border: 1px solid #7fc241;
+}
+
+input[type="checkbox"] + label span i {
+    display: none;
+}
+
+input[type="checkbox"]:checked + label span i {
+    position: absolute;
+    right: 1px;
+    bottom: 1px;
+    padding-top: 1px;
+    padding-left: 2px;
+    font-size: 16px;
+    color: #7fc241;
+    font-weight: bold;
+    display: inline-block;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }

@@ -16,7 +16,7 @@ class ContentViewCarousel extends React.Component {
     slideOptionFlag: false,
     audienceEmail: null,
     emailFlag: false,
-    emailFlagTemp: false,
+    emailFlagTemp: false
   };
 
   handleUrl = () => {
@@ -27,12 +27,12 @@ class ContentViewCarousel extends React.Component {
     let url = window.location.origin + "/" + pageNum[1] + "/" + pageNum[2] + "/";
     let _readPage = readPage + 1;
 
-    let _documentText= "";
-    if(documentText && documentText.length > 0) _documentText= documentText[readPage].substr(0, 10).trim().replace(/([^A-Za-z0-9 ])+/g, "").replace(/([ ])+/g, "-");
-    if(_documentText.length >0) _documentText= "-" + _documentText;
+    let _documentText = "";
+    if (documentText && documentText.length > 0) _documentText = documentText[readPage].substr(0, 10).trim().replace(/([^A-Za-z0-9 ])+/g, "").replace(/([ ])+/g, "-");
+    if (_documentText.length > 0) _documentText = "-" + _documentText;
 
     if (pageNum !== _readPage) {
-      window.history.replaceState({}, _readPage + _documentText , url + (_readPage === 1 ? "" : _readPage + _documentText));
+      window.history.replaceState({}, _readPage + _documentText, url + (_readPage === 1 ? "" : _readPage + _documentText));
       getPageNum(_readPage);  //Parent 인 ContentView 로 pageNum 전달, page 에 따른 문서 설명 전환 용. redux 로 대체 가능
     }
   };
@@ -40,41 +40,53 @@ class ContentViewCarousel extends React.Component {
   // 이메일 강제 입력 on/off
   handleForceTracking = () => {
     const { target } = this.props;
-    if(!target.forceTracking)  this.setState({emailFlagTemp : true});
+    if (!target.forceTracking) this.setState({ emailFlagTemp: true });
   };
 
   // 문서 옵션 useTracking true 일때만
   handleTracking = (page) => {
-    const { target } = this.props;
+    const { target, handleEmailFlag } = this.props;
     const { emailFlagTemp, readPage } = this.state;
 
+    if ((page === null || page === undefined) && target.forceTracking) return this.setState({ emailFlag: false }, ()=>{handleEmailFlag(false)});
     if (page === readPage) return;
 
     this.setState({ readPage: page }, () => {
       this.handleUrl();
     });
 
+    let emailFromAuth = this.props.getMyInfo.email;
+    let emailFromSession = Common.getCookie("tracking_email");
+    let temp = emailFromAuth || emailFromSession || null;
+
     if (target.useTracking) {
-      let emailFromAuth = this.props.getMyInfo.email;
-      let emailFromSession = Common.getCookie("tracking_email");
-      let temp = emailFromAuth || emailFromSession || null;
+      if (target.forceTracking) {
+        this.setState({ emailFlag: false }, () => {
+          handleEmailFlag(false);
 
-      if(target.forceTracking) this.setState({ emailFlag: false });
-
-      this.setState({ audienceEmail: temp  }, () => {
-        TrackingApis.tracking({
-          id: target.documentId,
-          n: page + 1,
-          e: this.state.audienceEmail,
-          ev: "view"
-        }, true);
-
+          if (page > 0 && !temp && !emailFlagTemp) {
+            this.setState({ emailFlag: true }, ()=>{handleEmailFlag(true)});
+          }
+        });
+      } else {
         // email 입력 모달 on/off 함수
-        if (page > 0 && !this.state.audienceEmail && !emailFlagTemp) {
-          this.setState({ emailFlag: true });
-          return false;
+        if (page > 0 && !temp && !emailFlagTemp) {
+          this.setState({ emailFlag: true }, ()=>{handleEmailFlag(true)});
         }
-      });
+      }
+      TrackingApis.tracking({
+        id: target.documentId,
+        n: page + 1,
+        e: temp,
+        ev: "view"
+      }, true);
+    } else {
+      TrackingApis.tracking({
+        id: target.documentId,
+        n: page + 1,
+        e: temp,
+        ev: "view"
+      }, true);
     }
   };
 
@@ -91,7 +103,7 @@ class ContentViewCarousel extends React.Component {
   componentWillMount() {
     const { tracking } = this.props;
     let pageNum = window.location.pathname.split("/")[3];
-    if (tracking) this.handleTracking(pageNum && pageNum !== "0" ? Number(pageNum.substr(0,1)) - 1 : 0);
+    if (tracking) this.handleTracking(pageNum && pageNum !== "0" ? Number(pageNum.substr(0, 1)) - 1 : 0);
   }
 
   componentWillUnmount() {
@@ -114,7 +126,7 @@ class ContentViewCarousel extends React.Component {
 
     const arr = [target.totalPages];
     for (let i = 0; i < target.totalPages; i++) {
-      arr[i] = Common.getThumbnail(target.documentId, 1024,i + 1);
+      arr[i] = Common.getThumbnail(target.documentId, 1024, i + 1);
     }
 
     return (
@@ -139,11 +151,12 @@ class ContentViewCarousel extends React.Component {
             swipeable
             selectedItem={this.state.readPage || 0}
             useKeyboardArrows={true}
-            onChange={this.handleTracking.bind(this.index)}
+            onChange={index => this.handleTracking(index)}
           >
             {arr.length > 0 ? arr.map((addr, idx) => (
               <img key={idx} title={target.title} src={addr} alt={documentText[idx]} data-small="" data-normal=""
-                   data-full="" className={"landscape-show " + (target.forceTracking && emailFlag? "img-cloudy" : "")}/>
+                   data-full=""
+                   className={"landscape-show " + (target.forceTracking && emailFlag ? "img-cloudy" : "")}/>
             )) : "no data"}
           </Carousel>
         </div>

@@ -49,7 +49,8 @@ class GuideModal extends React.PureComponent {
   }
 
   componentDidMount() {
-    if (this.state.guidedValue === false) this.checkGuideModal();
+    let _guidedValue = Common.getCookie("gv");
+    if (!_guidedValue || _guidedValue === "false") this.checkGuideModal();
   }
 
   render() {
@@ -65,7 +66,7 @@ class GuideModal extends React.PureComponent {
           </div>
         </div>
         <div className="start-btn-wrapper">
-          <div className="start-btn" onClick={this.getStarted.bind(this)}>Get Started</div>
+          <div className="start-btn" onClick={() => this.getStarted()}>Get Started</div>
         </div>
       </div>
 

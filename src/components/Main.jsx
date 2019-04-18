@@ -3,7 +3,6 @@ import { Route, Router, Switch } from "react-router-dom";
 import ReactGA from "react-ga";
 
 import history from "apis/history/history";
-import DrizzleApis from "apis/DrizzleApis";
 
 import RouterList from "../util/RouterList";
 import MainRepository from "../redux/MainRepository";
@@ -12,6 +11,7 @@ import CookiePolicyModal from "./modal/CookiePolicyModal";
 import UserInfo from "../redux/model/UserInfo";
 import * as Sentry from "@sentry/browser";
 import HeaderContainer from "../container/header/HeaderContainer";
+import Common from "../util/Common";
 
 if (process.env.NODE_ENV === "production") {
   ReactGA.initialize("UA-129300994-1", {
@@ -26,31 +26,26 @@ if (process.env.NODE_ENV === "production") {
 class Main extends Component {
   state = {
     init: false,
-    loading: true,
     myInfo: new UserInfo(),
-    drizzleState: null,
-    drizzleApis: null
   };
 
+  //초기화
   init = () => {
-    //초기화 진행
     MainRepository.init(() => {
+      this.setTagList();  //태그 리스트 GET
+      this.setMyInfo();   // 내 정보 GET
+      this.setIsMobile();   // 모바일 유무 GET
     });
-
-    const drizzleApis = new DrizzleApis((drizzleApis) => {
-      this.setState({ drizzleApis: drizzleApis });
-    });
-    this.setState({ drizzleApis: drizzleApis });
-    this.setTagList();  //태그 리스트 GET
-    this.setMyInfo();   // 내 정보 GET
   };
 
+  //태그 리스트 GET
   setTagList = () => {
     MainRepository.Document.getTagList(result => {
       this.props.setTagList(result.resultList);
     });
   };
 
+  // 내 정보 GET
   setMyInfo = () => {
     let reduxMyInfo = this.props.getMyInfo;
     if (MainRepository.Account.isAuthenticated() && reduxMyInfo.email.length === 0) {
@@ -62,12 +57,22 @@ class Main extends Component {
     }
   };
 
+  // 모바일 유무 GET
+  setIsMobile = () => {
+    if (document.documentElement.clientWidth < 576) {
+      this.props.setIsMobile(true);
+    } else {
+      this.props.setIsMobile(false);
+    }
+  };
+
   componentWillMount() {
     this.init();
   }
 
-  // [2019-04-10]   센트리 에러 체킹      https://docs.sentry.io/platforms/javascript/react/?_ga=2.47401252.280930552.1554857590-1128220521.1554857590
   componentDidCatch(error, errorInfo) {
+    // [2019-04-10]   센트리 에러 체킹
+    // https://docs.sentry.io/platforms/javascript/react/?_ga=2.47401252.280930552.1554857590-1128220521.1554857590
     if (process.env.NODE_ENV === "production") {
       this.setState({ error });
       console.log("errorInfo", error);
@@ -84,17 +89,20 @@ class Main extends Component {
   }
 
   render() {
-    const { drizzleApis, drizzleState } = this.state;
+    const { getIsMobile } = this.props;
+
     let pathName = window.location.pathname.split("/")[1];
+    let guidedValue = Common.getCookie("gv");
     let pathNameFlag =
       pathName === "latest" ||
       pathName === "featured" ||
       pathName === "popular";
+
     return (
 
       <Router history={history}>
         <div id="container-wrapper">
-          <HeaderContainer drizzleApis={drizzleApis}/>
+          <HeaderContainer/>
 
           <div id="container" data-parallax="true">
             <div className="container">
@@ -107,9 +115,7 @@ class Main extends Component {
                     return (
                       <Route exact={flag} key={result.name} path={result.path}
                              render={(props) =>
-                               <result.component drizzleApis={drizzleApis}
-                                                 drizzleState={drizzleState}
-                                                 {...props} />}
+                               <result.component {...props} />}
                       />
                     );
                   }
@@ -118,7 +124,7 @@ class Main extends Component {
             </div>
           </div>
 
-          {pathNameFlag && <GuideModal/>}
+          {pathNameFlag && getIsMobile === false && (!guidedValue || guidedValue === "false") && <GuideModal/>}
           <CookiePolicyModal/>
 
         </div>

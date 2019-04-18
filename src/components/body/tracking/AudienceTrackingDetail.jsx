@@ -47,6 +47,12 @@ class AudienceTrackingDetail extends React.Component {
     return Common.getThumbnail(location.state.document.documentId, 320, page);
   };
 
+  getSortedTime = (result) => {
+    result.viewTracking.sort((a, b) => a.t - b.t);
+    return Common.timestampToTime(result.viewTracking[0].t) + " ~ " + Common.timestampToTime(result.viewTracking[result.viewTracking.length-1].t)
+
+  };
+
   componentWillMount() {
     this.getTrackingInfo();
   }
@@ -83,7 +89,7 @@ class AudienceTrackingDetail extends React.Component {
                       <div className="tfl_title" onClick={this.handleClick}>
                         <i><img src={require("assets/image/common/i_faq.png")} alt="dropdown icon"/></i>
                         <strong title="">
-                          {Common.timestampToTime(result.viewTracking[0].t) + " ~ " + Common.timestampToTime(result.viewTracking[result.viewTracking.length-1].t) }
+                          {this.getSortedTime(result)}
                         </strong>
                       </div>
                       <div className="tfl_desc ">

@@ -10,21 +10,21 @@ class ContentViewBlockchainButton extends React.Component {
   };
 
   componentDidMount() {
-    const { drizzleApis } = this.props;
-    this.unsubscribe = drizzleApis.subscribe((drizzle, drizzleState) => {
+    const { getDrizzle } = this.props;
+    this.unsubscribe = getDrizzle.subscribe((drizzle, drizzleState) => {
       this.printTxStatus(drizzle, drizzleState);
     });
   }
 
   componentWillUnmount() {
-    const { drizzleApis } = this.props;
-    drizzleApis.unsubscribe(this.unsubscribe);
+    const { getDrizzle } = this.props;
+    getDrizzle.unsubscribe(this.unsubscribe);
   }
 
   handleRegisterDocumentInBlockChain = () => {
-    const { documentData, drizzleApis } = this.props;
+    const { documentData, getDrizzle } = this.props;
     if (!documentData) return;
-    const stackId = drizzleApis.registerDocumentToSmartContract(documentData.documentId);
+    const stackId = getDrizzle.registerDocumentToSmartContract(documentData.documentId);
     this.setState({ stackId: stackId });
   };
 
@@ -44,12 +44,12 @@ class ContentViewBlockchainButton extends React.Component {
 
 
   render() {
-    const { documentData, drizzleApis, dataKey } = this.props;
+    const { documentData, getDrizzle, getIsDocumentExist } = this.props;
     let idFromDoc = documentData.accountId;
     let idFromAuth = MainRepository.Account.getMyInfo();
     let sub = idFromAuth ? idFromAuth.sub : null;
-    let isExistDocument = drizzleApis.isExistDocument(dataKey);
-    if (isExistDocument || idFromDoc !== sub || !drizzleApis.isInitialized()|| !drizzleApis.isAuthenticated()) return null;
+
+    if (getIsDocumentExist || idFromDoc !== sub || !getDrizzle.isInitialized()|| !getDrizzle.isAuthenticated()) return null;
     return (
       <span>
         <Tooltip title="Register this document to blockchain" placement="bottom">

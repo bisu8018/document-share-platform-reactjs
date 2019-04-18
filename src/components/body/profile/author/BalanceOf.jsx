@@ -1,7 +1,7 @@
 import React from "react";
 
 import withStyles from "@material-ui/core/styles/withStyles";
-import Web3Apis from 'apis/Web3Apis';
+import Common from "../../../../util/Common";
 
 const style = {
   balance: {
@@ -28,12 +28,10 @@ const style = {
 
 class BalanceOf extends React.Component {
 
-  web3Apis = new Web3Apis();
-
   render() {
-    const { balance} = this.props;
-    const balanceDollarStr = "$" + this.web3Apis.toDollar(balance).toFixed(2);//'$' + drizzleApis.deckToDollar(balance).toFixed(2);
-    const balanceDeckStr = this.web3Apis.toDeck(balance).toFixed(2) + " DECK";//balance.toFixed(2) + ' DECK';
+    const { balance } = this.props;
+    const balanceDollarStr = "$" + Common.toDollar(balance).toFixed(2);
+    const balanceDeckStr = Common.toDeck(balance).toFixed(2) + " DECK";
 
     return (
       <div className="d-inline">

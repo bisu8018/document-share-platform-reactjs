@@ -7,11 +7,26 @@ import DeckInShort from "../../common/DeckInShort";
 import Common from "../../../util/Common";
 
 class ContentListItem extends React.Component {
-  render() {
-    const { result, drizzleApis } = this.props;
 
-    let badgeReward = drizzleApis.toEther(result.latestPageview);
-    let badgeVote = drizzleApis.toEther(result.latestVoteAmount) || 0;
+  state = {
+    badgeReward: 0
+  };
+
+  getBadgeReward = () => {
+    const { result, getWeb3Apis } = this.props;
+    let badgeReward = Common.toEther(getWeb3Apis.getNDaysRewards(result.documentId,7));
+    this.setState({badgeReward : badgeReward});
+  };
+
+  componentWillMount(): void {
+    this.getBadgeReward();
+  }
+
+  render() {
+    const { result } = this.props;
+    const { badgeReward } = this.state;
+
+    let badgeVote = Common.toEther(result.latestVoteAmount) || 0;
     let badgeView = result.latestPageview || 0;
     let imageUrl = Common.getThumbnail(result.documentId, 320, 1, result.documentName);
     let profileUrl = result.author ? result.author.picture : null;
@@ -19,6 +34,7 @@ class ContentListItem extends React.Component {
 
     return (
       <div className="row u_center_inner" key={result.seoTitle}>
+
 
         <div className="col-sm-3 col-md-3 col-thumb  mb-3">
           <Link to={"/" + identification + "/" + result.seoTitle}>
@@ -28,23 +44,31 @@ class ContentListItem extends React.Component {
           </Link>
         </div>
 
+
         <div className="col-sm-9 col-md-9 col-details_info">
           <dl className="details_info">
+
+
             <dd className="info_title">
               <Link to={"/" + identification + "/" + result.seoTitle}
                     title={result.title}> {result.title ? result.title : result.documentName}</Link>
             </dd>
+
+
             <Link to={"/" + identification} className="info_name"
                   title={identification}>
               {profileUrl ?
-                <img src={profileUrl} alt="profile"/> :
-                <i className="material-icons img-thumbnail">face</i>
+                <img src={profileUrl} alt="profile"/> : <i className="material-icons img-thumbnail">face</i>
               }
-                {identification}
+              {identification}
             </Link>
+
+
             <div className="info_date d-md-inline-block d-none">
               {Common.dateAgo(result.created) === 0 ? "Today" : Common.dateAgo(result.created) + " days ago"}
             </div>
+
+
             <Link to={"/" + identification + "/" + result.seoTitle} className="info_desc" title="description">
               {result.desc &&
               <LinesEllipsis
@@ -56,15 +80,21 @@ class ContentListItem extends React.Component {
               />
               }
             </Link>
+
+
             <dd className="info_detail">
               <span className="txt_view ">{badgeView}</span>
-              <span className="view_date view-reward"><DollarWithDeck deck={badgeReward}
-                                                                      drizzleApis={drizzleApis}/></span>
-              <span className="view_date view-reward"><DeckInShort deck={badgeVote}/></span>
+              <span className="view_date view-reward">
+                <DollarWithDeck deck={badgeReward}/></span>
+              <span className="view_date view-reward">
+                <DeckInShort deck={badgeVote}/>
+              </span>
               <div className="info_date d-inline-block d-md-none">
                 {Common.dateAgo(result.created) === 0 ? "Today" : Common.dateAgo(result.created) + " days ago"}
               </div>
             </dd>
+
+
           </dl>
         </div>
       </div>

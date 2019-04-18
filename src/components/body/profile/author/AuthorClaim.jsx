@@ -1,15 +1,9 @@
 import React from "react";
 import ClipLoader from 'react-spinners/ClipLoader'
 
-import withStyles from "@material-ui/core/styles/withStyles";
-import Web3Apis from 'apis/Web3Apis';
 import Button from "../../../common/HeaderButton";
+import Common from "../../../../util/Common";
 
-const style = {
-  claimButton: {
-    marginLeft: "15px"
-  }
-};
 
 class AuthorClaim extends React.Component {
 
@@ -18,13 +12,10 @@ class AuthorClaim extends React.Component {
     stackId: null
   };
 
-
-  web3Apis = new Web3Apis();
-
   onClickClaim = () => {
-    const {document, drizzleApis} = this.props;
+    const {document, getDrizzle} = this.props;
 
-    const unsubscribe = drizzleApis.subscribe((drizzle, drizzleState) => {
+    const unsubscribe = getDrizzle.subscribe((drizzle, drizzleState) => {
 
       if(!this.state.stackId) return;
 
@@ -43,37 +34,36 @@ class AuthorClaim extends React.Component {
       this.setState({ message: state});
       if(state !== "pending"){
         this.setState({stackId:null, determineReward: -1});
-        drizzleApis.unsubscribe(unsubscribe);
+        getDrizzle.unsubscribe(unsubscribe);
       }
     });
 
-    const stackId = drizzleApis.claimAuthorReward(document.documentId);
+    const stackId = getDrizzle.claimReward(document.documentId);
     this.setState({stackId:stackId});
 
   };
 
-  shouldComponentUpdate() {
-    const {document, drizzleApis} = this.props;
-    if(drizzleApis.isAuthenticated() && this.state.determineReward < 0){
-      this.web3Apis.getDetermineAuthorReward(drizzleApis.getLoggedInAccount(), document.documentId).then((data) => {
-        //console.log("getDetermineAuthorReward", drizzleApis.getLoggedInAccount(), data);
+  shouldComponentUpdate = () => {
+    const {document, getWeb3Apis, getDrizzle} = this.props;
+    if(getDrizzle.isAuthenticated() && this.state.determineReward < 0){
+      getWeb3Apis.getDetermineAuthorReward(getDrizzle.getLoggedInAccount(), document.documentId).then((data) => {
         this.setState({determineReward: data});
       }).catch((err) => {
         console.error(err);
       });
     }
     return true;
-  }
+  };
 
   render() {
-    const {drizzleApis, accountId} = this.props;
+    const {getWeb3Apis, accountId} = this.props;
 
-    const loggedInAccount = drizzleApis.getLoggedInAccount();
+    const loggedInAccount = getWeb3Apis.getLoggedInAccount();
     if (loggedInAccount !== accountId) {
       return null;
     }
 
-    if(!drizzleApis.isAuthenticated()){
+    if(!getWeb3Apis.isAuthenticated()){
 
       return (
         <div className='sweet-loading'>
@@ -84,7 +74,7 @@ class AuthorClaim extends React.Component {
             margin={"2px"}
             radius={2}
             color={'#e91e63'}
-            loading={!drizzleApis.isAuthenticated()}
+            loading={!getWeb3Apis.isAuthenticated()}
           />
         </div>
       )
@@ -95,7 +85,7 @@ class AuthorClaim extends React.Component {
 
     if(disabled) return "";
 
-    const determineReward = this.web3Apis.toDollar(this.state.determineReward>0?this.state.determineReward:0);
+    const determineReward = Common.toDollar(this.state.determineReward>0?this.state.determineReward:0);
 
     return (
       <div>
@@ -105,4 +95,4 @@ class AuthorClaim extends React.Component {
   }
 }
 
-export default withStyles(style)(AuthorClaim);
+export default AuthorClaim;

@@ -1,38 +1,38 @@
-import ContentContainer from "../components/body/contents/ContentContainer";
-import ContentView from "../components/body/contents/contentsView/ContentView";
-import AudienceTracking from "../components/body/tracking/AudienceTracking";
 import AudienceTrackingDetail from "../components/body/tracking/AudienceTrackingDetail";
 import Faq from "../components/body/faq/Faq";
 import NotFoundPage from "../components/common/NotFoundPage";
 import CallbackContainer from "../container/body/callback/CallbackContainer";
 import AuthorContainer from "../container/body/profile/author/AuthorContainer";
+import ContentMainContainer from "../container/body/contents/ContentMainContainer";
+import AudienceTrackingContainer from "../container/body/tracking/AudienceTrackingContainer";
+import ContentViewContainer from "../container/body/contents/contentsView/ContentViewContainer";
 
 export default ({
     routes: [
       {
         path: "/",
         name: "Main",
-        component: ContentContainer
+        component: ContentMainContainer
       },
       {
         path: "/latest",
         name: "Latest",
-        component: ContentContainer,
+        component: ContentMainContainer,
       },
       {
         path: "/latest/:tag",
         name: "LatestTag",
-        component: ContentContainer,
+        component: ContentMainContainer,
       },
       {
         path: "/popular",
         name: "Popular",
-        component: ContentContainer
+        component: ContentMainContainer
       },
       {
         path: "/featured",
         name: "Featured",
-        component: ContentContainer
+        component: ContentMainContainer
       },
       {
         path: "/callback",
@@ -42,7 +42,7 @@ export default ({
       {
         path: "/tracking/:identification/:seoTitle",
         name: "tracking",
-        component: AudienceTracking
+        component: AudienceTrackingContainer
       },
       {
         path: "/trackingDetail/:identification/:seoTitle",
@@ -62,7 +62,7 @@ export default ({
       {
         path: "/:identification/:documentId",
         name: "ContentView",
-        component: ContentView
+        component: ContentViewContainer
       },
       {
         path: "/:identification",

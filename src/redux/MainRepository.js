@@ -50,6 +50,8 @@ export default {
       responseType: "token id_token",
       scope: "openid profile email"
     });
+
+    callback(true);
   },
   InitData: {
     authData: {},
@@ -450,7 +452,7 @@ export default {
       };
       return axios.put(url, params.file, config);
     },
-    sendVoteInfo(ethAccount, curatorId, voteAmount, document, transactionResult, callback, error) {
+    sendVoteInfo(ethAccount: string, curatorId: string, voteAmount: string, document:any, transactionResult:any, callback:any, error:any) {
       console.log("sendVoteInfo", curatorId, voteAmount);
       if (!curatorId || !document || isNaN(voteAmount) || voteAmount <= 0 || !ethAccount) {
         console.error("sendVoteInfo Parameter Invaild", error);
@@ -469,7 +471,7 @@ export default {
         callback(result);
       });
     },
-    async getTrackingInfo(cid, documentId, callback) {
+    async getTrackingInfo(cid: string, documentId: string, callback) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
@@ -485,23 +487,21 @@ export default {
         callback(result);
       });
     },
-    async getTrackingList(documentId, callback) {
+    async getTrackingList(data: any, callback: any) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
         header: {
           "Authorization": `Bearer ${token}`
         },
-        params: {
-          "documentId": documentId
-        }
+        params: data
       };
       //console.log("getTrackingList", data);
       DocService.GET.trackingList(params, (result) => {
         callback(result);
       });
     },
-    async getTrackingExport(documentId, callback) {
+    async getTrackingExport(documentId: string, callback: any) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
@@ -518,7 +518,7 @@ export default {
         callback(trackingExport);
       });
     },
-    async getAnalyticsExport(data, callback) {
+    async getAnalyticsExport(data: any, callback: any) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
@@ -537,7 +537,7 @@ export default {
         callback(analysticsExport);
       });
     },
-    getDocument(documentId, callback, error) {
+    getDocument(documentId: string, callback: any, error: any) {
       DocService.GET.document(documentId, (result) => {
         if (!result.message) {
           let document = new Document(result);
@@ -547,25 +547,25 @@ export default {
         }
       });
     },
-    getTagList(callback, error) {
+    getTagList(callback:any, error:any) {
       DocService.GET.tagList(result => {
         let tagList = new TagList((result));
         callback(tagList);
       });
     },
-    getDocumentList(params, callback, error) {
+    getDocumentList(params:any, callback:any, error:any) {
       DocService.GET.documentList(params, result => {
         let documentList = new DocumentList((result));
         callback(documentList);
       });
     },
-    getDocumentDownloadUrl(params, callback, error) {
+    getDocumentDownloadUrl(params:any, callback:any, error:any) {
       DocService.GET.documentDownloadUrl(params, result => {
         let documentDownload = new DocumentDownload(result);
         callback(documentDownload);
       });
     },
-    getCuratorDocuments(params, callback, error) {
+    getCuratorDocuments(params:any, callback:any, error:any) {
       let key = null;
       if (params.nextPageKey) {
         key = btoa(JSON.stringify(params.nextPageKey));
@@ -581,7 +581,7 @@ export default {
         error(err);
       });
     },
-    getTodayVotedDocumentsByCurator(params, callback, error) {
+    getTodayVotedDocumentsByCurator(params:any, callback:any, error:any) {
       const data = {
         accountId: params.accountId
       };
@@ -589,7 +589,7 @@ export default {
         callback(result);
       });
     },
-    async getAnalyticsList(params, callback) {
+    async getAnalyticsList(params:any, callback:any) {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _params = {
@@ -608,7 +608,7 @@ export default {
         callback(analyticsList);
       });
     },
-    async updateDocument(data, callback) {
+    async updateDocument(data:any, callback:any) {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {

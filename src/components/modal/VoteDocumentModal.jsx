@@ -10,8 +10,9 @@ import Slide from "@material-ui/core/Slide/index";
 
 import CustomInput from "../common/CustomInput.jsx";
 import MainRepository from "../../redux/MainRepository";
-import CuratorDepositOnUserDocument from "../body/profile/curator/CuratorDepositOnUserDocument";
-import CuratorDepositOnDocument from "../body/profile/curator/CuratorDepositOnDocument";
+import Common from "../../util/Common";
+import CuratorUserActiveVoteContainer from "../../container/body/profile/curator/CuratorUserActiveVoteContainer";
+import CuratorActiveVoteContainer from "../../container/body/profile/curator/CuratorActiveVoteContainer";
 
 
 const style = {
@@ -26,7 +27,7 @@ function Transition(props) {
   return <Slide direction="down" {...props} />;
 }
 
-class VoteDocument extends React.Component {
+class VoteDocumentModal extends React.Component {
 
   state = {
     buttonText: "Vote",
@@ -36,7 +37,6 @@ class VoteDocument extends React.Component {
     deposit: 0,
     classicModal: false,
     stackId: null,
-    totalBalanceDataKey: null
   };
 
   onChangeDeposit = (e) => {
@@ -53,10 +53,10 @@ class VoteDocument extends React.Component {
   };
 
   sendVoteInfo = (transactionResult) => {
-    const { documentData, drizzleApis } = this.props;
-    let ethAccount = drizzleApis.getLoggedInAccount();
+    const { documentData, getDrizzle } = this.props;
+    let ethAccount = getDrizzle.getLoggedInAccount();
     let curatorId = MainRepository.Account.getMyEmail();
-    let voteAmount = drizzleApis.fromWei(this.state.deposit);
+    let voteAmount = getDrizzle.fromWei(this.state.deposit);
     MainRepository.Document.sendVoteInfo(ethAccount, curatorId, voteAmount, documentData, transactionResult, () => {
     }, () => {
     });
@@ -73,19 +73,19 @@ class VoteDocument extends React.Component {
 
   handleApprove = () => {
 
-    const { documentData, drizzleApis } = this.props;
+    const { documentData, getDrizzle } = this.props;
     const deposit = this.state.deposit;
 
     if (!documentData) return;
-    if (!drizzleApis.isAuthenticated()) return;
+    if (!getDrizzle.isAuthenticated()) return;
     if (deposit <= 0) {
       console.error("Deposit must be greater than zero.");
       return;
     }
 
-    drizzleApis.subscribe((drizzle, drizzleState) => {
+    getDrizzle.subscribe((drizzle, drizzleState) => {
       if (!this.state.approve.done && this.checkApproveTransaction(this.state.approve.stackId, drizzleState)) {
-        const stackId = drizzleApis.voteOnDocument(documentData.documentId, deposit);
+        const stackId = getDrizzle.voteOnDocument(documentData.documentId, deposit);
         this.setState({ vote: { stackId: stackId } });
       }
 
@@ -96,7 +96,7 @@ class VoteDocument extends React.Component {
 
     });
 
-    const stackId = drizzleApis.approve(deposit);
+    const stackId = getDrizzle.approve(deposit);
     this.setState({ approve: { stackId: stackId } });
 
   };
@@ -171,8 +171,9 @@ class VoteDocument extends React.Component {
   };
 
 
-  handleClickOpen = (modal, drizzleApis) => {
-    if (drizzleApis && !drizzleApis.isAuthenticated()) return null;
+  handleClickOpen = (modal) => {
+    const { getDrizzle } = this.props;
+    if (getDrizzle && !getDrizzle.isAuthenticated()) return null;
 
     const x = [];
     x[modal] = true;
@@ -187,54 +188,40 @@ class VoteDocument extends React.Component {
     this.clearForm();
   };
 
-
-  handleRequestBalance = () => {
-    const { drizzleApis } = this.props;
-    if (this.state.totalBalanceDataKey) return;
-
-    const loggedInAccount = this.props.drizzleApis.getLoggedInAccount();
-    const dataKey = drizzleApis.requestTotalBalance(loggedInAccount);
-    if (dataKey) {
-      this.setState({ totalBalanceDataKey: dataKey });
-      //setInterval(this.printBalance, 3000);
-    }
-  };
-
   handleLogin = () => {
     MainRepository.Account.login();
   };
 
-
   printBalance = () => {
-    const { drizzleApis } = this.props;
-    if (this.state.totalBalanceDataKey) {
-      let balance = drizzleApis.getTotalBalance(this.state.totalBalanceDataKey);
-      return balance;
+    const { getWeb3Apis, getDrizzle } = this.props;
+    let balance;
+    let loggedInAccount = getDrizzle.getLoggedInAccount();
+    if(loggedInAccount) {
+      getWeb3Apis.getBalance(loggedInAccount, res => {
+        balance = res;
+      });
+    }else{
+      balance = 0;
     }
-    return 0;
+    return balance;
   };
-
 
   refresh = () => {
     document.location.reload();
   };
 
-  shouldComponentUpdate = () => {
-    const { drizzleApis } = this.props;
-    if (!drizzleApis) return false;
-    this.handleRequestBalance();
-    return true;
-  };
-
   render() {
-    const { documentData, dataKey, drizzleApis } = this.props;
-    let balanceOf = (this.printBalance() * 1).toFixed(2);
+    const { documentData, getDrizzle, getIsDocumentExist } = this.props;
+    this.printBalance();
+    let balanceOf = 0; //this.printBalance() === 0 ? 0 : this.printBalance().toFixed(2);
     let isLogin = MainRepository.Account.isAuthenticated();
-    if (drizzleApis && (!drizzleApis.isInitialized() || !drizzleApis.isExistDocument(dataKey))) {
+
+    if (getDrizzle && (!getDrizzle.isInitialized() || !getIsDocumentExist)) {
       return (
         <div/>
       );
     }
+
     if (!isLogin) {
       return (
         <Tooltip title="Please, login" placement="bottom">
@@ -247,21 +234,21 @@ class VoteDocument extends React.Component {
 
     return (
       <span>
-        {(!drizzleApis || !drizzleApis.getLoggedInAccount()) &&
+        {(!getDrizzle || !getDrizzle.isAuthenticated()) &&
         <Tooltip title="Please, work with MetaMask" placement="bottom">
           <div className="vote-btn">
             <i className="material-icons">how_to_vote</i>
           </div>
         </Tooltip>
         }
-        {drizzleApis && drizzleApis.isExistDocument(dataKey) &&
+        {getDrizzle && getIsDocumentExist &&
         <Tooltip title="Vote on this document" placement="bottom">
-          <div className="vote-btn" onClick={() => this.handleClickOpen("classicModal", drizzleApis)}>
+          <div className="vote-btn" onClick={() => this.handleClickOpen("classicModal")}>
             <i className="material-icons">how_to_vote</i>
           </div>
         </Tooltip>
         }
-        {drizzleApis && drizzleApis.getLoggedInAccount() &&
+        {getDrizzle && getDrizzle.getLoggedInAccount() &&
         <Dialog
           fullWidth={this.state.fullWidth}
           open={this.state.classicModal}
@@ -284,24 +271,22 @@ class VoteDocument extends React.Component {
             <ul className="voteList">
               <li>
                 <strong>You : </strong>
-                <CuratorDepositOnUserDocument documentData={documentData}
-                                              drizzleApis={drizzleApis}
-                                              deposit={this.state.deposit}
-                                              loggedInAccount={drizzleApis.getLoggedInAccount()}/>
+                <CuratorUserActiveVoteContainer documentData={documentData}
+                                                deposit={this.state.deposit}
+                                                loggedInAccount={getDrizzle.getLoggedInAccount()}/>
               </li>
               <li>
                 <strong>Total : </strong>
-                <CuratorDepositOnDocument documentData={documentData}
-                                          drizzleApis={drizzleApis}
-                                          deposit={this.state.deposit}
-                                          loggedInAccount={drizzleApis.getLoggedInAccount()}/>
+                <CuratorActiveVoteContainer documentData={documentData}
+                                            deposit={this.state.deposit}
+                                            loggedInAccount={getDrizzle.getLoggedInAccount()}/>
               </li>
             </ul>
 
             <h4>2. Amount of available tokens</h4>
             <ul className="voteList">
-              <li><Tooltip title={this.props.drizzleApis.deckToDollar(balanceOf)}
-                           placement="bottom"><span>{balanceOf + " DECK"}</span></Tooltip></li>
+              <li><Tooltip title={Common.deckToDollar(balanceOf).toFixed(2)}
+                           placement="bottom"><span>{balanceOf.toFixed(2) + " DECK"}  ($ {Common.toDollar(balanceOf)})</span></Tooltip></li>
             </ul>
 
             <h4>3. Enter the number of votes to commit</h4>
@@ -340,4 +325,4 @@ class VoteDocument extends React.Component {
   }
 }
 
-export default withStyles(style)(VoteDocument);
+export default withStyles(style)(VoteDocumentModal);

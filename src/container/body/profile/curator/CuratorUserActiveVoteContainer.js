@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
-import ContentContainer from "../../../components/body/contents/ContentContainer";
+import CuratorUserActiveVote from "../../../../components/body/profile/curator/CuratorUserActiveVote";
 
 const mapStateToProps = state => ({
-  getTagList: state.main.tagList
+  getWeb3Apis: state.main.web3Apis
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -12,4 +12,4 @@ const mapDispatchToProps = (dispatch: any) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ContentContainer);
+)(CuratorUserActiveVote);

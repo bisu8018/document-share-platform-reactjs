@@ -5,15 +5,28 @@ import DollarWithDeck from "../../../../common/DollarWithDeck";
 import DeckInShort from "../../../../common/DeckInShort";
 import Common from "../../../../../util/Common";
 import LinesEllipsis from "react-lines-ellipsis";
-import CuratorClaim from "../CuratorClaim";
+import CuratorClaimContainer from "../../../../../container/body/profile/curator/CuratorClaimContainer";
 
 class CuratorTabItem extends React.Component {
+  state = {
+    badgeReward: 0
+  };
+
+  getBadgeReward = () => {
+    const { document, getWeb3Apis } = this.props;
+    let badgeReward = Common.toEther(getWeb3Apis.getNDaysRewards(document.documentId,7));
+    this.setState({badgeReward : badgeReward});
+  };
+
+  componentWillMount(): void {
+    this.getBadgeReward();
+  }
 
   render() {
-    const { document, drizzleApis, accountId } = this.props;
+    const { document, accountId } = this.props;
+    const { badgeReward } = this.state;
 
-    let badgeReward = drizzleApis.toEther(document.confirmAuthorReward);
-    let badgeVote = drizzleApis.toEther(document.latestVoteAmount) || 0;
+    let badgeVote = Common.toEther(document.latestVoteAmount) || 0;
     let badgeView = document.latestPageview || 0;
     let profileUrl = document.author ? document.author.picture : null;
     let identification = document.author ? (document.author.username && document.author.username.length > 0 ? document.author.username : document.author.email) : document.accountId;
@@ -57,14 +70,13 @@ class CuratorTabItem extends React.Component {
             </Link>
             <dd className="info_detail">
               <span className="txt_view ">{badgeView}</span>
-              <span className="view_date view-reward"><DollarWithDeck deck={badgeReward}
-                                                                      drizzleApis={drizzleApis}/></span>
+              <span className="view_date view-reward"><DollarWithDeck deck={badgeReward} /></span>
               <span className="view_date view-reward"><DeckInShort deck={badgeVote}/></span>
             </dd>
           </dl>
         </div>
 
-        <CuratorClaim {...this.props} accountId={accountId} document={document}/>
+        <CuratorClaimContainer {...this.props} accountId={accountId} document={document}/>
 
       </div>
 

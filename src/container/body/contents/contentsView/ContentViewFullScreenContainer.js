@@ -1,10 +1,9 @@
 import { connect } from "react-redux";
-import UploadDocumentModal from "../../components/modal/UploadDocumentModal";
+import ContentViewFullScreen from "../../../../components/body/contents/contentsView/ContentViewFullScreen";
 
 const mapStateToProps = state => ({
-  getTagList: state.main.tagList,
+  getWeb3Apis: state.main.web3Apis,
   getDrizzle: state.main.drizzleApis,
-
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -14,4 +13,4 @@ const mapDispatchToProps = (dispatch: any) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UploadDocumentModal);
+)(ContentViewFullScreen);

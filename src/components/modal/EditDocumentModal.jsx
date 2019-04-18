@@ -261,15 +261,27 @@ class EditDocumentModal extends React.Component {
                 }
                 <span> {tagError}</span>
 
-                  <div className="dialog-subject mb-1 mt-3">Option</div>
-                  <label className="c-pointer col-12 col-sm-6 p-0">
-                  <input type="checkbox" onChange={(e) => this.handleTrackingCheckbox(e)} checked={useTracking}/>
-                  <span className="checkbox-text">Use audience tracking.</span>
-                  </label>
-                <label className="c-pointer col-12 col-sm-6 float-righ p-0">
-                  <input type="checkbox" onChange={(e) => this.handleForceTrackingCheckbox(e)} checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
-                  <span className="checkbox-text">Force the audience to tracking.</span>
-                </label>
+                 <div className="dialog-subject mb-2 mt-3">Option</div>
+                  <div className="row">
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="useTrackingCheckbox" onChange={(e) => this.handleTrackingCheckbox(e)}
+                           checked={useTracking}/>
+
+                    <label htmlFor="useTrackingCheckbox">
+                      <span><i className="material-icons">done</i></span>
+                         Use audience tracking.
+                    </label>
+                  </div>
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="forceTrackingCheckbox"
+                           onChange={(e) => this.handleForceTrackingCheckbox(e)}
+                           checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
+                    <label htmlFor="forceTrackingCheckbox">
+                      <span><i className="material-icons">done</i></span>
+                         Force the audience to tracking.
+                    </label>
+                   </div>
+                 </div>
                   </DialogContent>
 
 

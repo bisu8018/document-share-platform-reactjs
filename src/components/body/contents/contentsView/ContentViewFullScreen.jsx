@@ -12,29 +12,32 @@ import {
 
 import DollarWithDeck from "../../../common/DollarWithDeck";
 import DeckInShort from "../../../common/DeckInShort";
-import ContentViewRegistBlockchainButton from "./ContentViewRegistBlockchainButton";
 // import ContentViewComment from "./ContentViewComment";
 import Common from "../../../../util/Common";
-import VoteDocument from "../../../modal/VoteDocument";
 import Tooltip from "@material-ui/core/Tooltip";
 import CopyModal from "../../../modal/CopyModal";
 import MainRepository from "../../../../redux/MainRepository";
 import EditDocumentModalContainer from "../../../../container/modal/EditDocumentModalContainer";
 import ContentViewCarouselContainer
   from "../../../../container/body/contents/contentsView/ContentViewCarouselContainer";
-import Linkify from 'react-linkify';
+import Linkify from "react-linkify";
+import RegBlockchainBtnContainer from "../../../../container/body/contents/contentsView/RegBlockchainBtnContainer";
+import VoteDocumentModalContainer from "../../../../container/modal/VoteDocumentModalContainer";
 
 class ContentViewFullScreen extends Component {
 
   state = {
     isFull: false,
-    dataKey: null,
     carouselClass: null,
     text: "",
     error: null,
     eventId: null,
+    emailFlag: false,
+    badgeReward: 0,
+    isDocumentExist: null,
   };
 
+  //문서 다운로드
   getContentDownload = (accountId, documentId, documentName) => {
     let params = {
       documentId: documentId
@@ -53,6 +56,14 @@ class ContentViewFullScreen extends Component {
     });
   };
 
+
+  //이메일 입력 여부 Flag
+  handleEmailFlag = (flag) => {
+    this.setState({ emailFlag: flag });
+  };
+
+
+  //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
     if (!this.props.documentData) {
       console.log("getting document meta information!");
@@ -67,6 +78,8 @@ class ContentViewFullScreen extends Component {
     this.getContentDownload(accountId, documentId, documentName);
   };
 
+
+  //전체화면 전환
   goFull = () => {
     let element = document.getElementsByClassName("selected")[0].firstChild;
     let imgWidth = element.clientWidth;
@@ -87,25 +100,19 @@ class ContentViewFullScreen extends Component {
     }
   };
 
-  checkDocumentInBlockChain = () => {
-    const { documentData, drizzleApis } = this.props;
-    if (!drizzleApis.isInitialized() || !drizzleApis.isAuthenticated()) return;
-    if (this.state.dataKey) return;
-    if (!documentData) return;
-
-    try {
-      let dataKey = drizzleApis.requestIsExistDocument(documentData.documentId);
-      this.setState({ dataKey: dataKey });
-      //console.log("checkDocumentInBlockChain dataKey  :::::  ", dataKey);
-    } catch (e) {
-      //console.error("checkDocumentInBlockChain error", e);
-    }
-  };
-
+  //현재 page GET
   getPageNum = (page) => {
     this.setState({ page: page });
   };
 
+  //Web3에서 보상액 GET
+  getReward = () => {
+    const { documentData, getWeb3Apis } = this.props;
+    let badgeReward = Common.toEther(getWeb3Apis.getNDaysRewards(documentData.documentId, 7));
+    this.setState({ badgeReward: badgeReward });
+  };
+
+  //전체화면 전환 컨트롤
   handleFullChange = (_isFull) => {
     const { isFull } = this.state;
     if (isFull !== _isFull) {
@@ -113,16 +120,15 @@ class ContentViewFullScreen extends Component {
     }
   };
 
-  componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
-    this.checkDocumentInBlockChain();
-    return true;
+  componentWillMount(): void {
+    this.getReward();
   }
 
   render() {
-    const { documentData, documentText, drizzleApis, author } = this.props;
-    const { page, isFull, dataKey, carouselClass } = this.state;
-    let badgeReward = drizzleApis.toEther(documentData.latestReward);
-    let badgeVote = drizzleApis.toEther(documentData.latestVoteAmount) || 0;
+    const { documentData, documentText, author } = this.props;
+    const { page, isFull, carouselClass, emailFlag, badgeReward } = this.state;
+
+    let badgeVote = Common.toEther(documentData.latestVoteAmount) || 0;
     let badgeView = documentData.latestPageview || 0;
     let accountId = documentData.accountId || "";
     let url = window.location.href;
@@ -134,30 +140,41 @@ class ContentViewFullScreen extends Component {
       <div className={"u__view " + (isFull && (carouselClass === "deviceRatio" ? "device-ratio" : "img-ratio"))}>
         <div className="view_top">
           <Fullscreen enabled={isFull} onChange={isFull => this.handleFullChange(isFull)}>
+
             <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
-                                          tracking={true}
+                                          tracking={true} handleEmailFlag={this.handleEmailFlag}
                                           getPageNum={(page) => {
                                             this.getPageNum(page);
                                           }}/>
+
             <div className="view_screen">
               <i title="Fullscreen button" className="material-icons" onClick={this.goFull}>fullscreen</i>
             </div>
+
           </Fullscreen>
         </div>
+
+
         <div className="view_content">
           <div className="u_title h4">   {documentData.title ? documentData.title : ""}</div>
+
+
           <div className="col-view">
             <span className="txt_view">{badgeView}</span>
+
             <span className="view_date view-reward">
-                <DollarWithDeck deck={badgeReward} drizzleApis={drizzleApis}/>
+                <DollarWithDeck deck={badgeReward} />
               </span>
+
             <span className="view_date view-reward">
                 <DeckInShort deck={badgeVote}/>
               </span>
+
             <span className="view_date">
                 {Common.timestampToDateTime(documentData.created)}
               </span>
           </div>
+
 
           <div className="row view_btns_inner">
             {accountId === Common.getMySub() && documentData &&
@@ -182,10 +199,10 @@ class ContentViewFullScreen extends Component {
               </Link></Tooltip>
             }
 
-            <ContentViewRegistBlockchainButton documentData={documentData} dataKey={dataKey}
-                                               drizzleApis={drizzleApis}/>
-            <VoteDocument documentData={documentData} dataKey={dataKey} drizzleApis={drizzleApis}/>
+            <RegBlockchainBtnContainer documentData={documentData}/>
+            <VoteDocumentModalContainer documentData={documentData}/>
           </div>
+
 
           <Link to={"/" + identification} className="info_name"
                 title={"Go to profile page of " + identification}>
@@ -196,7 +213,9 @@ class ContentViewFullScreen extends Component {
             {identification}
           </Link>
 
+
           <div className="sns-share-icon-wrapper">
+
 
             <Tooltip title="Share with Facebook" placement="bottom">
               <div className="d-inline-block">
@@ -206,6 +225,7 @@ class ContentViewFullScreen extends Component {
               </div>
             </Tooltip>
 
+
             <Tooltip title="Share with Line" placement="bottom">
               <div className="d-inline-block">
                 <LinkedinShareButton url={url} className="sns-share-icon " title={documentData.title}>
@@ -213,6 +233,7 @@ class ContentViewFullScreen extends Component {
                 </LinkedinShareButton>
               </div>
             </Tooltip>
+
 
             <Tooltip title="Share with Twitter" placement="bottom">
               <div className="d-inline-block">
@@ -227,7 +248,11 @@ class ContentViewFullScreen extends Component {
 
 
           <div className="view_desc">
-            <Linkify properties={{title:"Link to this URL", target:"_blank", style: {color: '#7fc241', fontWeight: '400'}}}>{documentData.desc}</Linkify>
+            <Linkify properties={{
+              title: "Link to this URL",
+              target: "_blank",
+              style: { color: "#7fc241", fontWeight: "400" }
+            }}>{documentData.desc}</Linkify>
             <div className="view_tag">
               <i className="material-icons" title="tag">local_offer</i>
               {documentData.tags ? documentData.tags.map((tag, index) => (
@@ -236,9 +261,18 @@ class ContentViewFullScreen extends Component {
               )) : ""}
             </div>
 
+
             <hr className="mb-4"/>
             <div className="view_content-desc">
-              <Linkify properties={{title:"Link to this URL", target:"_blank", style: {color: '#7fc241', fontWeight: '400'}}}>{documentText[page - 1]}</Linkify>
+              {documentData.forceTracking && emailFlag ?
+                <div className="view-content-desc-warning">If you want to read the document, you need to enter
+                  email.</div> :
+                <Linkify properties={{
+                  title: "Link to this URL",
+                  target: "_blank",
+                  style: { color: "#7fc241", fontWeight: "400" }
+                }}>{documentText[page - 1]}</Linkify>
+              }
             </div>
           </div>
 

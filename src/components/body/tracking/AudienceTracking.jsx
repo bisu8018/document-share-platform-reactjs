@@ -15,7 +15,9 @@ class AudienceTracking extends React.Component {
     filterList: null,
     loading: false,
     tableOptionFlag: false,
-    anonymousFlag: false
+    anonymousFlag: true,
+    includeFlag: true,
+    badgeReward: 0,
   };
 
   constructor() {
@@ -36,14 +38,29 @@ class AudienceTracking extends React.Component {
     this.setState({ filterList: filteredResult });
   };
 
+  getBadgeReward = () => {
+    const { location, getWeb3Apis } = this.props;
+    const documentData = location.state.documentData;
+    let badgeReward = Common.toEther(getWeb3Apis.getNDaysRewards(documentData.documentId,7));
+    this.setState({badgeReward : badgeReward});
+  };
+
   getTrackingList = () => {
     const { location } = this.props;
+    const { anonymousFlag, includeFlag } = this.state;
     const documentData = location.state.documentData;
-    this.setState({ loading: true });
-    MainRepository.Document.getTrackingList(documentData.documentId, (res) => {
-      let resData = res;
-      this.setState({ loading: false });
-      this.setState({ resultList: resData.resultList ? resData.resultList : [] });
+    const params = {
+      documentId: documentData.documentId,
+      anonymous: anonymousFlag ? "false" : "true",
+      include: includeFlag ? "false" : "true"
+    };
+
+    this.setState({ loading: true, resultList: [] }, () => {
+      MainRepository.Document.getTrackingList(params, (res) => {
+        let resData = res;
+        this.setState({ loading: false });
+        this.setState({ resultList: resData.resultList ? resData.resultList : [] });
+      })
     });
   };
 
@@ -69,12 +86,20 @@ class AudienceTracking extends React.Component {
     this.setState({ tableOptionFlag: !this.state.tableOptionFlag });
   };
 
-  handleOptionClickEvent = (e) => {
-    this.setState({ anonymousFlag: !this.state.anonymousFlag });
+  handleHideOption = (e) => {
+    this.setState({ anonymousFlag: !this.state.anonymousFlag }, () => {
+      this.getTrackingList();
+    });
+  };
+
+  handleOnePageOption = (e) => {
+    this.setState({ includeFlag: !this.state.includeFlag }, () => {
+      this.getTrackingList();
+    });
   };
 
   handleLinkClickEvent = (e) => {
-    const { location,  match } = this.props;
+    const { location, match } = this.props;
     const documentData = location.state.documentData;
     const documentText = location.state.documentText;
     let _cid = e.target.parentElement.dataset.cid;
@@ -84,21 +109,22 @@ class AudienceTracking extends React.Component {
     this.props.history.push({
       pathname: "/trackingDetail/" + match.params.identification + "/" + match.params.seoTitle,
       state: { document: documentData, documentText: documentText, cid: _cid, email: _email, time: _time }
-    })
+    });
   };
 
   componentWillMount() {
     this.getTrackingList();
+    this.getBadgeReward();
   }
 
   render() {
-    const { location, drizzleApis, match } = this.props;
-    const { loading, tableOptionFlag, anonymousFlag } = this.state;
+    const { location, match } = this.props;
+    const { loading, tableOptionFlag, anonymousFlag, includeFlag, badgeReward } = this.state;
+
     const rst = !this.state.filterList ? this.state.resultList : this.state.filterList;
     const documentData = location.state.documentData;
     let addr = Common.getThumbnail(documentData.documentId, 320, 1);
-    let badgeReward = drizzleApis.toEther(documentData.confirmAuthorReward);
-    let badgeVote = drizzleApis.toEther(documentData.latestVoteAmount);
+    let badgeVote = Common.toEther(documentData.latestVoteAmount);
     let badgeView = documentData.latestPageview || 0;
 
     return (
@@ -128,16 +154,19 @@ class AudienceTracking extends React.Component {
                   <i className="material-icons">more_vert</i>
                   <div className={"option-table" + (tableOptionFlag ? "" : " d-none")}>
                     <div title={anonymousFlag ? "Show Anonymous" : "Hide Anonymous"}
-                         onClick={this.handleOptionClickEvent.bind(this)}>
+                         onClick={(e) => this.handleHideOption(e)}>
                       {anonymousFlag ? "Show Anonymous" : "Hide Anonymous"}
+                    </div>
+                    <div title={includeFlag ? "Include only one page" : "Exclude only one page"}
+                         onClick={(e) => this.handleOnePageOption(e)}>
+                      {includeFlag ? "Include only one page" : "Exclude only one page"}
                     </div>
                   </div>
                 </div>
 
                 <div className="col-view tracking-item mb-1">
                   <span className="txt_view">{badgeView}</span>
-                  <span className="view_date view-reward"><span><DollarWithDeck deck={badgeReward}
-                                                                                drizzleApis={drizzleApis}/></span></span>
+                  <span className="view_date view-reward"><span><DollarWithDeck deck={badgeReward} /></span></span>
                   <span className="view_date view-reward"><span><DeckInShort deck={badgeVote}/></span></span>
                   <span className="ml-4 info_date"> {Common.timestampToDate(documentData.created)}</span>
                 </div>
@@ -156,7 +185,7 @@ class AudienceTracking extends React.Component {
 
           <div className="row tracking_inner">
             <div className="col-sm-12 col-md-12 tracking_top">
-              <h3 className="u_title d-none d-sm-inline-block col-5 col-lg-9">Visitors</h3>
+              <h3 className="u_title d-none d-sm-inline-block col-5 col-md-7 col-lg-9">Visitors</h3>
 
 
               <div className="option-menu-btn d-inline-block d-sm-none"
@@ -164,14 +193,18 @@ class AudienceTracking extends React.Component {
                 <i className="material-icons">more_vert</i>
                 <div className={"option-table" + (tableOptionFlag ? "" : " d-none")}>
                   <div title={anonymousFlag ? "Show Anonymous" : "Hide Anonymous"}
-                       onClick={this.handleOptionClickEvent.bind(this)}>
+                       onClick={(e) => this.handleHideOption(e)}>
                     {anonymousFlag ? "Show Anonymous" : "Hide Anonymous"}
+                  </div>
+                  <div title={includeFlag ? "Include only one page" : "Exclude only one page"}
+                       onClick={(e) => this.handleOnePageOption(e)}>
+                    {includeFlag ? "Include only one page" : "Exclude only one page"}
                   </div>
                 </div>
               </div>
 
 
-              <div className="tags_menu_search_container p-0 mb-2 col-7 col-lg-3">
+              <div className="tags_menu_search_container p-0 mb-2 col-7 col-md-5 col-lg-3">
                 <input id="searchInput" type="text" autoComplete="off" placeholder="Name Search . . ."
                        onKeyUp={this.handleKeyUp}/>
                 <div className="search-btn">
@@ -188,18 +221,18 @@ class AudienceTracking extends React.Component {
                     <th className="col3">Last Viewed</th>
                   </tr>
 
-                  {rst.length > 0 && rst.map((result, idx) => {
-                      return ((anonymousFlag && result.user) || !anonymousFlag) &&
-                        <tr key={idx} onClick={this.handleLinkClickEvent.bind(this)} data-cid={result.cid}  data-email={result.user ? result.user.e : "Anonymous"} data-time={result.viewTimestamp} className="c-pointer">
-                          <td className="col1">
-                              {result.user ? result.user.e : "Anonymous"}
-                          </td>
-                          <td className="col2">{result.count}</td>
-                          <td
-                            className="col3">{Common.dateAgo(result.viewTimestamp) === 0 ? "Today" : Common.dateAgo(result.viewTimestamp) + " days ago"} </td>
-                        </tr>;
-                    }
-                  )}
+                  {rst.length > 0 && rst.map((result, idx) => (
+                    <tr key={idx} onClick={this.handleLinkClickEvent.bind(this)} data-cid={result.cid}
+                        data-email={result.user ? result.user.e : "Anonymous"} data-time={result.viewTimestamp}
+                        className="c-pointer">
+                      <td className="col1">
+                        {result.user ? result.user.e : "Anonymous"}
+                      </td>
+                      <td className="col2">{result.count}</td>
+                      <td
+                        className="col3">{Common.dateAgo(result.viewTimestamp) === 0 ? "Today" : Common.dateAgo(result.viewTimestamp) + " days ago"} </td>
+                    </tr>
+                  ))}
                   </tbody>
                 </table>
 
