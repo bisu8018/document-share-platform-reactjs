@@ -80,9 +80,9 @@ class UploadDocumentModal extends React.Component {
 
   //업로드 함수
   handleUpload = () => {
-    const { getDrizzle } = this.props;
+    const { getDrizzle, getMyInfo } = this.props;
     const { title, fileInfo, tags, desc, useTracking, forceTracking } = this.state;
-    let ethAccount = getDrizzle.getLoggedInAccount();
+    let ethAccount = getMyInfo.ethAccount;
     let userInfo = MainRepository.Account.getMyInfo();
 
     document.getElementById("progressModal").style.display = "block";   //진행도 모달 열기
@@ -98,7 +98,7 @@ class UploadDocumentModal extends React.Component {
       useTracking: useTracking,
       forceTracking: !useTracking ? false : forceTracking
     }, this.handleProgress, (result) => { //문서 업로드 완료
-      if (getDrizzle && getDrizzle.getLoggedInAccount()) getDrizzle.registerDocumentToSmartContract(result.documentId);
+      if (getDrizzle && ethAccount) getDrizzle.registerDocumentToSmartContract(result.documentId);
 
       document.getElementById("progressModal").style.display = "none"; //진행도 모달 닫기
       document.getElementById("progressWrapper").style.display = "none"; //진행도 모달 wrapper 닫기
@@ -143,7 +143,7 @@ class UploadDocumentModal extends React.Component {
   };
 
   handleClickOpen = (modal) => {
-    const { getDrizzle } = this.props;
+    const { getMyInfo } = this.props;
     if (!MainRepository.Account.isAuthenticated()) {
       return MainRepository.Account.login();
     } else {
@@ -153,8 +153,8 @@ class UploadDocumentModal extends React.Component {
     }
 
     let username = MainRepository.Account.getMyInfo().username;
-    let account = getDrizzle.getLoggedInAccount();
-    let _username = username ? username : account;
+    let ethAccount = getMyInfo.ethAccount;
+    let _username = username ? username : ethAccount;
     this.setState({ username: _username });
   };
 

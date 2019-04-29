@@ -49,7 +49,6 @@ class ContentMain extends Component {
     };
 
     MainRepository.Document.getDocumentList(params, (res) => {
-      // console.log("Fetch Document end", res);
       this.setState({ loading: false });
       const _resultList = res.resultList ? res.resultList : [];
       const pageNo = res.pageNo;
@@ -92,11 +91,11 @@ class ContentMain extends Component {
     this.setState({ selectedTag: tag._id });
   };
 
-  handleClickClose = (e) => {
+  handleClickClose = () => {
     document.getElementById("mainBanner").classList.remove("d-md-block");
   };
 
-  handleCategories = (e) => {
+  handleCategories = () => {
     let path = Common.getPath();
     let sec_path = Common.getTag();
 
@@ -120,7 +119,7 @@ class ContentMain extends Component {
 
   render() {
     const { match, isEndPage, selectedTag } = this.props;
-    const { resultList } = this.state;
+    const { resultList, totalViewCountInfo } = this.state;
 
     let matchPath = Common.getPath();
     let matchTag = Common.getTag();
@@ -186,8 +185,8 @@ class ContentMain extends Component {
               next={this.fetchMoreData}
               hasMore={!isEndPage}
             >
-              {resultList.length > 0 && resultList.map((result) => (
-                <ContentListItemContainer key={result.documentId + result.accountId} result={result} />
+              {resultList.length > 0  && resultList.map((result) => (
+                <ContentListItemContainer key={result.documentId + result.accountId} result={result} totalViewCountInfo = {totalViewCountInfo} />
               ))}
             </InfiniteScroll>
             {this.state.loading &&

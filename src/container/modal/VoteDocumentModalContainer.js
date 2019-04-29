@@ -1,17 +1,20 @@
 import { connect } from "react-redux";
 import VoteDocument from "../../components/modal/VoteDocumentModal";
-
-const mapStateToProps = state => ({
-  getWeb3Apis: state.main.web3Apis,
-  getDrizzle: state.main.drizzleApis,
-  getIsDocumentExist: state.contentView.isDocumentExist,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-
-});
+import { setAlertCode, setDrizzleApis } from "../../redux/reducer/main";
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  state => ({
+    getWeb3Apis: state.main.web3Apis,
+    getDrizzle: state.main.drizzleApis,
+    getMyInfo: state.main.myInfo,
+    getIsDocumentExist: state.contentView.isDocumentExist
+  }),
+  dispatch => ({
+    setDrizzleApis: () => {
+      dispatch(setDrizzleApis());
+    },
+    setAlertCode: (alertCode: number) => {
+      dispatch(setAlertCode(alertCode));
+    },
+  })
 )(VoteDocument);

@@ -34,7 +34,7 @@ class ContentViewFullScreen extends Component {
     eventId: null,
     emailFlag: false,
     badgeReward: 0,
-    isDocumentExist: null,
+    isDocumentExist: null
   };
 
   //문서 다운로드
@@ -69,7 +69,7 @@ class ContentViewFullScreen extends Component {
       console.log("getting document meta information!");
       return;
     }
-    if (!MainRepository.Account.isAuthenticated()) {
+    if (!MainRepository.Account.isAuthenticated() && !Common.getCookie("tracking_email")) {
       MainRepository.Account.login();
     }
     const accountId = this.props.documentData.accountId;
@@ -108,8 +108,10 @@ class ContentViewFullScreen extends Component {
   //Web3에서 보상액 GET
   getReward = () => {
     const { documentData, getWeb3Apis } = this.props;
-    let badgeReward = Common.toEther(getWeb3Apis.getNDaysRewards(documentData.documentId, 7));
-    this.setState({ badgeReward: badgeReward });
+    getWeb3Apis.getNDaysRewards(documentData.documentId, 7).then(res => {
+      let badgeReward = Common.toEther(res);
+      this.setState({ badgeReward: badgeReward });
+    });
   };
 
   //전체화면 전환 컨트롤
@@ -163,7 +165,7 @@ class ContentViewFullScreen extends Component {
             <span className="txt_view">{badgeView}</span>
 
             <span className="view_date view-reward">
-                <DollarWithDeck deck={badgeReward} />
+                <DollarWithDeck deck={badgeReward}/>
               </span>
 
             <span className="view_date view-reward">
@@ -243,13 +245,12 @@ class ContentViewFullScreen extends Component {
                 </TwitterShareButton>
               </div>
             </Tooltip>
-
           </div>
-
 
           <div className="view_desc">
             <Linkify properties={{
               title: "Link to this URL",
+              rel: "nofollow",
               target: "_blank",
               style: { color: "#7fc241", fontWeight: "400" }
             }}>{documentData.desc}</Linkify>
@@ -269,6 +270,7 @@ class ContentViewFullScreen extends Component {
                   email.</div> :
                 <Linkify properties={{
                   title: "Link to this URL",
+                  rel: "nofollow",
                   target: "_blank",
                   style: { color: "#7fc241", fontWeight: "400" }
                 }}>{documentText[page - 1]}</Linkify>

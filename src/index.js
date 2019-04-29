@@ -6,8 +6,8 @@ import "assets/css/custom.css";
 import registerServiceWorker from "./config/registerServiceWorker";
 import App from "./App.jsx";
 
-let store = configureStore(); // 스토어 생성
-let rootElement = document.getElementById('root');
+export let store = configureStore(); // 스토어 생성
+let rootElement = document.getElementById("root");
 
 ReactDOM.render(
   <Provider store={store}>

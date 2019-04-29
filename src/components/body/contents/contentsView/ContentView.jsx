@@ -18,7 +18,6 @@ class ContentView extends React.Component {
     documentText: null,
     author: null,
     featuredList: null,
-    approved: -1
   };
 
   getContentInfo = (documentId) => {
@@ -30,7 +29,6 @@ class ContentView extends React.Component {
         featuredList: res.featuredList,
         documentText: res.text,
         author: res.author,
-        approved: -1,
         errMessage: null
       }, () => {
         this.setDocumentIsExist();  //문서 로드 후 문서 블록체인 등록 체크
@@ -43,7 +41,6 @@ class ContentView extends React.Component {
         documentText: null,
         author: null,
         featuredList: null,
-        approved: -1
       });
     });
   };
@@ -54,17 +51,6 @@ class ContentView extends React.Component {
     getWeb3Apis.isDocumentExist(documentData.documentId, res => {
       this.props.setIsDocumentExist(res);
     });
-  };
-
-  getApproved = () => {
-    const { getDrizzle, getWeb3Apis } = this.props;
-    if (getDrizzle.getLoggedInAccount() && this.state.approved < 0) {
-      getWeb3Apis.getApproved(getDrizzle.getLoggedInAccount()).then((data) => {
-        this.setState({ approved: data });
-      }).catch((err) => {
-        console.log("getApproved Error", err);
-      });
-    }
   };
 
   getDocumentId = () => {
@@ -82,11 +68,6 @@ class ContentView extends React.Component {
       this.getContentInfo(this.getDocumentId());
     }
   }
-
-  shouldComponentUpdate = () => {
-    this.getApproved();
-    return true;
-  };
 
   // 해당 이벤트는 See Also 이동 시에만 발생
   componentDidUpdate = () => {
@@ -119,25 +100,25 @@ class ContentView extends React.Component {
           <link rel="canonical"
                 href={"https://share.decompany.io/" + match.params.identification + "/" + match.params.seoTitle}/>
 
-          <meta content="2237550809844881" class="fb_og_meta" property="fb:app_id" name="fb_app_id"/>
-          <meta content="decompany:document" class="fb_og_meta" property="og:type" name="og_type"/>
-          <meta content={window.location.href} class="fb_og_meta" property="og:url" name="og_url"/>
-          <meta content={this.getImgUrl()} class="fb_og_meta" property="og:image" name="og_image"/>
-          <meta content={documentData.title} class="fb_og_meta" property="og:title" name="og_title"/>
-          <meta content={documentData.desc} class="fb_og_meta" property="og:description" name="og_description"/>
-          <meta content={Common.timestampToDateTime(documentData.created)} class="fb_og_meta"
+          <meta content="2237550809844881" className="fb_og_meta" property="fb:app_id" name="fb_app_id"/>
+          <meta content="decompany:document" className="fb_og_meta" property="og:type" name="og_type"/>
+          <meta content={window.location.href} className="fb_og_meta" property="og:url" name="og_url"/>
+          <meta content={this.getImgUrl()} className="fb_og_meta" property="og:image" name="og_image"/>
+          <meta content={documentData.title} className="fb_og_meta" property="og:title" name="og_title"/>
+          <meta content={documentData.desc} className="fb_og_meta" property="og:description" name="og_description"/>
+          <meta content={Common.timestampToDateTime(documentData.created)} className="fb_og_meta"
                 property="decompany:created_time" name="document_created_time"/>
-          <meta content={documentData.username || documentData.accountId} class="fb_og_meta" property="decompany:author"
+          <meta content={documentData.username || documentData.accountId} className="fb_og_meta" property="decompany:author"
                 name="document_created_time_author"/>
-          <meta content={documentData.viewCount} class="fb_og_meta" property="decompany:view_count"
+          <meta content={documentData.viewCount} className="fb_og_meta" property="decompany:view_count"
                 name="document_view_count"/>
-          <meta content={documentData.totalPages} class="fb_og_meta" property="decompany:total_pages"
+          <meta content={documentData.totalPages} className="fb_og_meta" property="decompany:total_pages"
                 name="document_total_pages"/>
-          <meta content={documentData.latestPageView} class="fb_og_meta" property="decompany:latest_page_view"
+          <meta content={documentData.latestPageView} className="fb_og_meta" property="decompany:latest_page_view"
                 name="document_latest_page_view"/>
-          <meta content={documentData.category} class="fb_og_meta" property="decompany:category"
+          <meta content={documentData.category} className="fb_og_meta" property="decompany:category"
                 name="document_category"/>
-          <meta content={documentData.tags} class="fb_og_meta" property="decompany:tags" name="document_tags"/>
+          <meta content={documentData.tags} className="fb_og_meta" property="decompany:tags" name="document_tags"/>
         </Helmet>
 
         <div className="col-md-12 col-lg-8 view_left">

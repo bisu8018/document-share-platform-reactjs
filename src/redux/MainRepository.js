@@ -3,8 +3,6 @@ import auth0 from "auth0-js";
 import axios from "axios";
 import * as Sentry from "@sentry/browser";
 
-import history from "apis/history/history";
-
 import { AUTH_CONFIG } from "properties/auth.properties";
 import { APP_PROPERTIES } from "properties/app.properties";
 
@@ -22,27 +20,43 @@ import TrackingExport from "./model/TrackingExport";
 import AnalysticsExport from "./model/AnalysticsExport";
 import UserProfile from "./model/UserProfile";
 import DocumentDownload from "./model/DocumentDownload";
+import Common from "../util/Common";
+import CuratorService from "../service/curator/CuratorService";
+import TrackingService from "../service/tracking/TrackingService";
+import CuratorSummary from "./model/CuratorSummary";
 
 let instance: any;
 
 export default {
   init(callback: () => any) {
-    // 자기 참조
-    instance = this;
+    instance = this;    // 자기 참조
 
     //센트리 초기화
     Sentry.init({
       dsn: "https://fdafe95e12a84551a16451289c5d66b5@sentry.io/1428811"
     });
 
+    //Google Analytics 초기화
+    if (process.env.NODE_ENV === "production") {
+      ReactGA.initialize("UA-129300994-1", {
+        debug: false,
+        gaOptions: {
+          env: process.env.NODE_ENV
+        }
+      });
+    }
+
+    //로그인 체크
     if (instance.Account.isAuthenticated()) {
       instance.Account.scheduleRenewal();
     } else {
       instance.Account.clearSession();
     }
 
+    //허브스팟 초기화
     instance.InitData.hsq = window._hsq = window._hsq || [];
 
+    //Auth0 초기화
     instance.InitData.authData = new auth0.WebAuth({
       domain: AUTH_CONFIG.domain,
       clientID: AUTH_CONFIG.clientId,
@@ -58,6 +72,44 @@ export default {
     hsq: []
   },
   Analytics: {
+    async getAnalyticsExport(data: any, callback: any) {
+      const authResult = await instance.Account.renewSessionPromise();
+      const token = authResult.idToken;
+      const params = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        params: {
+          "documentId": data.documentId,
+          "year": data.year,
+          "week": data.week
+        }
+      };
+
+      DocService.GET.analyticsExport(params, (result) => {
+        let analysticsExport = new AnalysticsExport(result);
+        callback(analysticsExport);
+      });
+    },
+    async getAnalyticsList(params: any, callback: any) {
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const _params = {
+        params: {
+          userid: null,
+          week: params.week,
+          year: params.year,
+          documentId: params.documentId
+        },
+        header: {
+          "Authorization": `Bearer ${token}`
+        }
+      };
+      DocService.GET.analyticsList(_params, (result) => {
+        let analyticsList = new AnalyticsList(result);
+        callback(analyticsList);
+      });
+    },
     sendPageView() {
       instance.InitData.hsq.push(["setPath", window.location.pathname + window.location.search]);
       instance.InitData.hsq.push(["trackPageView"]);
@@ -73,16 +125,19 @@ export default {
         instance.InitData.authData.authorize();
       }
     },
-    logout() {
+    logout(callback) {
       this.clearSession();
+      this.clearTrackingCookie();
+
       instance.InitData.authData.logout({
         returnTo: APP_PROPERTIES.domain().mainHost,
         clientID: AUTH_CONFIG.clientId
       });
+      callback();
     },
     sync(callback, error) {
-      const token = sessionStorage.getItem("id_token");
-      const userInfo = sessionStorage.getItem("user_info");
+      const token = localStorage.getItem("id_token");
+      const userInfo = localStorage.getItem("user_info");
       const data = {
         header: {
           "Authorization": `Bearer ${token}`
@@ -97,11 +152,11 @@ export default {
     },
     syncUser() {
       const session = this.getSession();
-      const idToken = sessionStorage.getItem("id_token");
+      const idToken = localStorage.getItem("id_token");
       if (idToken && session) {
         this.sync(res => {
           if (res.success) {
-            sessionStorage.setItem("user_sync", JSON.stringify(res));
+            localStorage.setItem("user_sync", JSON.stringify(res));
           } else {
             console.error("Login failed because user sync failed.");
             this.logout();
@@ -114,18 +169,17 @@ export default {
       }
     },
     isAuthenticated() {
-      const expiresAt = JSON.parse(sessionStorage.getItem("expires_at"));
+      const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
       const isUnExpired = new Date().getTime() < expiresAt;
 
       if (!isUnExpired) {
         //console.error("Session Expired", expiresAt, sessionStorage);
         this.clearSession();
       }
-
       return isUnExpired;
     },
     scheduleRenewal() {
-      let expiresAt = JSON.parse(sessionStorage.getItem("expires_at"));
+      let expiresAt = JSON.parse(localStorage.getItem("expires_at"));
       let timeout = expiresAt - Date.now(); //mms
       if (timeout > 0) {
         (() => {
@@ -175,19 +229,11 @@ export default {
               this.syncUser();
               callback();
             });
-
           } else if (err) {
             this.clearSession();
-            //console.error(err);
           }
         });
       }
-    },
-    handleLogout: () => {
-      console.error("handleLogout()");
-      this.clearSession();
-      // navigate to the home route
-      history.replace("/");
     },
     setMyInfo(authResult, callback) {
       instance.InitData.authData.client.userInfo(authResult.accessToken, (err, user) => {
@@ -202,11 +248,11 @@ export default {
     },
     setSession(authResult, userInfo) {
       let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-      sessionStorage.setItem("access_token", authResult.accessToken);
-      sessionStorage.setItem("id_token", authResult.idToken);
-      sessionStorage.setItem("expires_at", expiresAt);
+      localStorage.setItem("access_token", authResult.accessToken);
+      localStorage.setItem("id_token", authResult.idToken);
+      localStorage.setItem("expires_at", expiresAt);
       if (userInfo) {
-        sessionStorage.setItem("user_info", JSON.stringify(userInfo));
+        localStorage.setItem("user_info", JSON.stringify(userInfo));
       }
     },
     async getAccountInfo(id, callback, error) {
@@ -242,7 +288,7 @@ export default {
       });
     },
     getMyInfo() {
-      let userInfo = JSON.parse(sessionStorage.getItem("user_info"));
+      let userInfo = JSON.parse(localStorage.getItem("user_info"));
       if (!userInfo && this.isAuthenticated()) {
         this.renewSession();
         return {};
@@ -250,7 +296,7 @@ export default {
       return new UserInfo(userInfo);
     },
     getExpireDate() {
-      let expiresAt = JSON.parse(sessionStorage.getItem("expires_at"));
+      let expiresAt = JSON.parse(localStorage.getItem("expires_at"));
       if (!expiresAt && this.isAuthenticated()) {
         this.renewSession();
         return {};
@@ -258,7 +304,7 @@ export default {
       return JSON.stringify(new Date(expiresAt));
     },
     getMyEmail() {
-      let userInfo = JSON.parse(sessionStorage.getItem("user_info"));
+      let userInfo = JSON.parse(localStorage.getItem("user_info"));
 
       if (!userInfo && !this.isAuthenticated()) {
         return "";
@@ -273,10 +319,10 @@ export default {
     getSession() {
       return (
         {
-          accessToken: sessionStorage.getItem("access_token"),
-          idToken: sessionStorage.getItem("id_token"),
-          userInfo: JSON.parse(sessionStorage.getItem("user_info")),
-          expiresAt: JSON.parse(sessionStorage.getItem("expires_at"))
+          accessToken: localStorage.getItem("access_token"),
+          idToken: localStorage.getItem("id_token"),
+          userInfo: JSON.parse(localStorage.getItem("user_info")),
+          expiresAt: JSON.parse(localStorage.getItem("expires_at"))
         });
     },
     async getProfileImageUploadUrl(callback, error) {
@@ -290,9 +336,27 @@ export default {
       AuthService.POST.profileImageUpdate(_data, (result) => {
         let userProfile = new UserProfile(result);
         callback(userProfile);
+      }, err => {
+        error(err);
       });
     },
-    async updateUsername(username, callback) {
+    async syncEthereum(ethAccount: string, callback) {
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const _data = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        data: {
+          "ethAccount": ethAccount
+        }
+      };
+      AuthService.POST.ethereumSync(_data, (res) => {
+        this.renewSession();
+        callback(res);
+      });
+    },
+    async updateUsername(username: string, callback) {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
@@ -303,13 +367,12 @@ export default {
           "username": username
         }
       };
-      AuthService.POST.accountUpdate(_data, (result) => {
+      AuthService.POST.accountUpdate(_data, () => {
         this.renewSession();
         callback();
-      }, err => {
       });
     },
-    async updateProfileImage(url, callback, error) {
+    async updateProfileImage(url: string, callback) {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
@@ -320,10 +383,9 @@ export default {
           "picture": url
         }
       };
-      AuthService.POST.accountUpdate(_data, (result) => {
+      AuthService.POST.accountUpdate(_data, () => {
         this.renewSession();
         callback();
-      }, err => {
       });
     },
     profileImageUpload(params, callback, error) {
@@ -359,10 +421,17 @@ export default {
         );
     },
     clearSession() {
-      sessionStorage.removeItem("access_token");
-      sessionStorage.removeItem("id_token");
-      sessionStorage.removeItem("expires_at");
-      sessionStorage.removeItem("user_info");
+      //Auth0 API
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("id_token");
+      localStorage.removeItem("expires_at");
+      localStorage.removeItem("user_info");
+    },
+    clearTrackingCookie() {
+      //Google Analystics,
+      Common.deleteCookie("tracking_email");
+      Common.deleteCookie("_ga");
+      Common.deleteCookie("_gid");
     }
   },
   Document: {
@@ -412,7 +481,7 @@ export default {
             owner: owner,
             signedUrl: signedUrl,
             callback: progress
-          }).then((_res) => {
+          }).then(() => {
             callback(res);
           });
 
@@ -452,91 +521,6 @@ export default {
       };
       return axios.put(url, params.file, config);
     },
-    sendVoteInfo(ethAccount: string, curatorId: string, voteAmount: string, document:any, transactionResult:any, callback:any, error:any) {
-      console.log("sendVoteInfo", curatorId, voteAmount);
-      if (!curatorId || !document || isNaN(voteAmount) || voteAmount <= 0 || !ethAccount) {
-        console.error("sendVoteInfo Parameter Invaild", error);
-        return;
-      }
-
-      const params = {
-        curatorId: curatorId,
-        voteAmount: voteAmount,
-        documentId: document.documentId,
-        ethAccount: ethAccount,
-        transaction: transactionResult
-      };
-
-      DocService.POST.todayVotedDocumentsByCurator(params, (result) => {
-        callback(result);
-      });
-    },
-    async getTrackingInfo(cid: string, documentId: string, callback) {
-      const authResult = await instance.Account.renewSessionPromise();
-      const token = authResult.idToken;
-      const params = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
-        params: {
-          "cid": cid,
-          "documentId": documentId
-        }
-      };
-      DocService.GET.trackingInfo(params, (result) => {
-        callback(result);
-      });
-    },
-    async getTrackingList(data: any, callback: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      const token = authResult.idToken;
-      const params = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
-        params: data
-      };
-      //console.log("getTrackingList", data);
-      DocService.GET.trackingList(params, (result) => {
-        callback(result);
-      });
-    },
-    async getTrackingExport(documentId: string, callback: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      const token = authResult.idToken;
-      const params = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
-        params: {
-          "documentId": documentId
-        }
-      };
-
-      DocService.GET.trackingExport(params, (result) => {
-        let trackingExport = new TrackingExport(result);
-        callback(trackingExport);
-      });
-    },
-    async getAnalyticsExport(data: any, callback: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      const token = authResult.idToken;
-      const params = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
-        params: {
-          "documentId": data.documentId,
-          "year": data.year,
-          "week": data.week
-        }
-      };
-
-      DocService.GET.analyticsExport(params, (result) => {
-        let analysticsExport = new AnalysticsExport(result);
-        callback(analysticsExport);
-      });
-    },
     getDocument(documentId: string, callback: any, error: any) {
       DocService.GET.document(documentId, (result) => {
         if (!result.message) {
@@ -547,41 +531,25 @@ export default {
         }
       });
     },
-    getTagList(callback:any, error:any) {
+    getTagList(callback: any) {
       DocService.GET.tagList(result => {
         let tagList = new TagList((result));
         callback(tagList);
       });
     },
-    getDocumentList(params:any, callback:any, error:any) {
+    getDocumentList(params: any, callback: any) {
       DocService.GET.documentList(params, result => {
         let documentList = new DocumentList((result));
         callback(documentList);
       });
     },
-    getDocumentDownloadUrl(params:any, callback:any, error:any) {
+    getDocumentDownloadUrl(params: any, callback: any) {
       DocService.GET.documentDownloadUrl(params, result => {
         let documentDownload = new DocumentDownload(result);
         callback(documentDownload);
       });
     },
-    getCuratorDocuments(params:any, callback:any, error:any) {
-      let key = null;
-      if (params.nextPageKey) {
-        key = btoa(JSON.stringify(params.nextPageKey));
-        console.log(params, " base64 encoded to ", key);
-      } else {
-        //console.log("first page");
-      }
-
-      DocService.GET.curatorDocuments(params, (result) => {
-        let curatorDocuments = new CuratorDocuments(result);
-        callback(curatorDocuments);
-      }, (err) => {
-        error(err);
-      });
-    },
-    getTodayVotedDocumentsByCurator(params:any, callback:any, error:any) {
+    getTodayVotedDocumentsByCurator(params: any, callback: any) {
       const data = {
         accountId: params.accountId
       };
@@ -589,26 +557,7 @@ export default {
         callback(result);
       });
     },
-    async getAnalyticsList(params:any, callback:any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
-      const _params = {
-        params: {
-          userid: null,
-          week: params.week,
-          year: params.year,
-          documentId: params.documentId
-        },
-        header: {
-          "Authorization": `Bearer ${token}`
-        }
-      };
-      DocService.GET.analyticsList(_params, (result) => {
-        let analyticsList = new AnalyticsList(result);
-        callback(analyticsList);
-      });
-    },
-    async updateDocument(data:any, callback:any) {
+    async updateDocument(data: any, callback: any) {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
@@ -628,7 +577,93 @@ export default {
         let documentInfo = new DocumentInfo(rst.result);
         callback(documentInfo);
       }, error => {
-        console.log(error);
+        console.error(error);
+      });
+    }
+  },
+  Curator: {
+    async getCuratorDocuments(params: any, callback: any, error: any) {
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const _params = {
+        params: params,
+        header: {
+          "Authorization": `Bearer ${token}`
+        }
+      };
+      CuratorService.GET.curatorDocuments(_params, (result) => {
+        let curatorDocuments = new CuratorDocuments(result);
+        callback(curatorDocuments);
+      }, (err) => {
+        error(err);
+      });
+    },
+    async getCuratorSummary(ethAccount: String, callback: any, error: any) {
+        const authResult = await instance.Account.renewSessionPromise();
+        let token = authResult.idToken;
+        const params = {
+          params: {ethAccount : ethAccount},
+          header: {
+            "Authorization": `Bearer ${token}`
+          }
+        };
+      return new Promise((resolve, reject) => {
+        CuratorService.GET.curatorSummary(params, (res) => {
+          let curatorSummary = new CuratorSummary(res);
+          resolve(curatorSummary);
+        }, (err) => {
+          reject(err);
+        });
+      });
+    }
+  },
+  Tracking: {
+    async getTrackingInfo(data, callback) {
+      const authResult = await instance.Account.renewSessionPromise();
+      const token = authResult.idToken;
+      const params = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        params: {
+          "cid": data.cid,
+          "documentId": data.documentId,
+          "include": data.include
+        }
+      };
+      TrackingService.GET.trackingInfo(params, (result) => {
+        callback(result);
+      });
+    },
+    async getTrackingList(data: any, callback: any) {
+      const authResult = await instance.Account.renewSessionPromise();
+      const token = authResult.idToken;
+      const params = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        params: data
+      };
+      //console.log("getTrackingList", data);
+      TrackingService.GET.trackingList(params, (result) => {
+        callback(result);
+      });
+    },
+    async getTrackingExport(documentId: string, callback: any) {
+      const authResult = await instance.Account.renewSessionPromise();
+      const token = authResult.idToken;
+      const params = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        params: {
+          "documentId": documentId
+        }
+      };
+
+      TrackingService.GET.trackingExport(params, (result) => {
+        let trackingExport = new TrackingExport(result);
+        callback(trackingExport);
       });
     }
   }

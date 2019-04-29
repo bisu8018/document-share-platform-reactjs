@@ -1,10 +1,14 @@
 export default class CuratorDocuments {
-  resultList : [];
-  totalViewCountInfo : number;
+  resultList: [];
+  pageNo: number;
+  totalViewCountInfo: any;
+  count: number;
 
   constructor(data) {
-    this.resultList = data.resultList ? data.resultList :[];
-    this.totalViewCountInfo = data.totalViewCountInfo ? data.totalViewCountInfo : 0;
+    this.resultList = data.resultList ? data.resultList : [];
+    this.count = data.count ? data.count : 0;
+    this.pageNo = data.pageNo ? data.pageNo : 0;
+    this.totalViewCountInfo = data.totalViewCountInfo ? data.totalViewCountInfo : {};
   }
 
 }

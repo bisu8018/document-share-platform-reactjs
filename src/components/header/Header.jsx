@@ -2,15 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import history from "apis/history/history";
 // import Bounty from "./Bounty";
-import Menu from "../common/Menu";
 import MainRepository from "../../redux/MainRepository";
 import Common from "../../util/Common";
 import UploadDocumentModalContainer from "../../container/modal/UploadDocumentModalContainer";
+import MenuContainer from "../../container/header/MenuContainer";
 
 class Header extends React.Component {
   state = {
     accountId: null,
-    prevScrollPos: null,
+    prevScrollPos: null
   };
 
   constructor(props) {
@@ -23,7 +23,7 @@ class Header extends React.Component {
 
   removeClass = () => {
     const navElByClass = document.getElementsByClassName("nav-menu-link");
-    for(let i =0; i < navElByClass.length; ++i){
+    for (let i = 0; i < navElByClass.length; ++i) {
       navElByClass[i].classList.remove("on");
     }
   };
@@ -31,8 +31,8 @@ class Header extends React.Component {
   addClass = () => {
     let pathname = window.location.pathname.split("/")[1];
 
-    if(pathname === "callback"){
-      pathname = "latest"
+    if (pathname === "callback") {
+      pathname = "latest";
     }
 
     if (pathname === "latest" || pathname === "featured" || pathname === "popular") {
@@ -60,7 +60,7 @@ class Header extends React.Component {
     this.setState({ prevScrollPos: currentScrollPos });
   };
 
-  handleNavMenuLink = (e) =>  {
+  handleNavMenuLink = (e) => {
     this.removeClass();
     let path = e.target.innerHTML.toLowerCase();
 
@@ -73,7 +73,7 @@ class Header extends React.Component {
     if (pathname === "/") {
       window.location.pathname += "latest";
     }
-    this.setState({ prevScrollPos: window.pageYOffset});
+    this.setState({ prevScrollPos: window.pageYOffset });
   }
 
   componentDidMount() {
@@ -91,43 +91,60 @@ class Header extends React.Component {
     return (
 
       <header id="header">
-       <nav className="navbar navbar-default navbar-expand-lg fixed-top" id="header__main-nav">
-            <div className="container-fluid">
+        <nav className="navbar navbar-default navbar-expand-lg fixed-top" id="header__main-nav">
+          <div className="container-fluid">
             <div className="col-4 col-lg-4 mt-1">
-              <a className="navbar-brand" href="/latest">
+              <a className="navbar-brand" href={"/latest"}>
                 <img src={require("assets/image/logo.png")} alt="DECOMPANY"/>
               </a>
             </div>
 
             <div className="navbar-menu col-lg-4 d-none d-lg-block">
-              <div className="nav-menu-link" id="latestNavLink" onClick={(e)=> this.handleNavMenuLink(e)}>LATEST</div>
-              <div className="nav-menu-link" id="featuredNavLink" onClick={(e)=> this.handleNavMenuLink(e)}>FEATURED</div>
-              <div className="nav-menu-link" id="popularNavLink" onClick={(e)=> this.handleNavMenuLink(e)}>POPULAR</div>
+              <div className="nav-menu-link" id="latestNavLink" onClick={(e) => this.handleNavMenuLink(e)}>LATEST</div>
+              <div className="nav-menu-link" id="featuredNavLink" onClick={(e) => this.handleNavMenuLink(e)}>FEATURED
+              </div>
+              <div className="nav-menu-link" id="popularNavLink" onClick={(e) => this.handleNavMenuLink(e)}>POPULAR
+              </div>
             </div>
 
             <div className="navbar-menu tar  col-8 col-lg-4">
+
               <UploadDocumentModalContainer {...this.props} />
-              { MainRepository.Account.isAuthenticated() &&
+
+              {MainRepository.Account.isAuthenticated() &&
               <span className="d-none d-sm-inline-block ml-4">
                 {getMyInfo.picture.length > 0 ?
-                <Link
-                  to={"/" + (getMyInfo.username.length && getMyInfo.username.length > 0 ? getMyInfo.username : getMyInfo.email)}>
-                  <img src={getMyInfo.picture} className="avatar" alt="Link to my profile"/>
-                </Link> :
                   <Link
                     to={"/" + (getMyInfo.username.length && getMyInfo.username.length > 0 ? getMyInfo.username : getMyInfo.email)}>
-                    <img src={require("assets/image/common/i_anonymous.png")} className="avatar" alt="Link to my profile"/>
+                    <img src={getMyInfo.picture} className="avatar" alt="Link to my profile"/>
+                  </Link> :
+                  <Link
+                    to={"/" + (getMyInfo.username.length && getMyInfo.username.length > 0 ? getMyInfo.username : getMyInfo.email)}>
+                    <img src={require("assets/image/common/i_anonymous.png")} className="avatar"
+                         alt="Link to my profile"/>
                   </Link>
                 }
                 </span>
               }
-              {!MainRepository.Account.isAuthenticated() &&
-              <div className="d-none d-sm-inline-block login-btn ml-4" onClick={this.handleOpen.bind(this)} title="login">
-                  <i className="material-icons">edit</i>
-                  Login
-                </div>
+
+              {!MainRepository.Account.isAuthenticated() && Common.getCookie("tracking_email") &&
+              <span className="d-none d-sm-inline-block ml-4">
+                  <div className="avatar">
+                    <div className="avatar-guest">
+                      { Common.getCookie("tracking_email").substr(0,1) }
+                    </div>
+                  </div>
+                </span>
               }
-              <Menu {...this.props} />
+
+              {!MainRepository.Account.isAuthenticated() && !Common.getCookie("tracking_email") &&
+              <div className="d-none d-sm-inline-block login-btn ml-4" onClick={this.handleOpen.bind(this)}
+                   title="login">
+                <i className="material-icons">edit</i>
+                Login
+              </div>
+              }
+              <MenuContainer {...this.props} />
             </div>
           </div>
 

@@ -1,5 +1,4 @@
 import { APP_PROPERTIES } from "../properties/app.properties";
-import DrizzleApis from "../apis/DrizzleApis";
 import MainRepository from "../redux/MainRepository";
 import { BigNumber } from "bignumber.js";
 
@@ -7,11 +6,12 @@ const imgDomain = APP_PROPERTIES.domain().image;
 //const apiDomain = APP_PROPERTIES.domain().api;
 
 export default ({
+  // Timestamp GET
   getTimestamp: (date) => {
     // daily YYYY-MM-DD 00:00:00(실행기준에서 전날 일자)
-    let rstDate = Math.floor(date / (60 * 60 * 24 * 1000)) * (60 * 60 * 24 * 1000);
-    return rstDate;
+    return Math.floor(date / (60 * 60 * 24 * 1000)) * (60 * 60 * 24 * 1000);
   },
+  // change Timestamp to Datetime
   timestampToDateTime: (timestamp) => {
     let date = new Date(timestamp);
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -21,45 +21,44 @@ export default ({
     let hour = date.getHours();
     let min = date.getMinutes();
     let sec = date.getSeconds();
-    let time = day + " " + month + " " + year + " " + (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
-
-    return time;
+    return day + " " + month + " " + year + " " + (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
   },
+  // change Timestamp to Date
   timestampToDate: (timestamp) => {
     let date = new Date(timestamp);
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let year = date.getFullYear();
     let month = months[date.getMonth()];
     let day = date.getDate();
-    let _date = month + " " + day + ", " + year;
-
-    return _date;
+    return month + " " + day + ", " + year;
   },
+  // change Timestamp to Time
   timestampToTime: (timestamp) => {
     let date = new Date(timestamp);
     let hour = date.getHours();
     let min = date.getMinutes();
     let sec = date.getSeconds();
-    let time = (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
-
-    return time;
+    return (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
   },
+  // Get Date String
   dateString: (date) => {
-    let dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
       .toISOString()
       .split("T")[0];
-    return dateString;
   },
+  // Get Month String
   monthToString: (month) => {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return months[month - 1];
   },
+  // Get  A particular week Monday
   getMonday: (date) => {
     date = new Date(date);
     let day = date.getDay(),
       diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
     return new Date(date.setDate(diff));
   },
+  // Get The number of weeks in a particular month
   getWeeksCount: (year, month) => {
     const dayThreshold = [5, 1, 5, 6, 5, 6, 5, 5, 6, 5, 6, 5];
     let firstDay = new Date(year, month, 1).getDay();
@@ -67,18 +66,17 @@ export default ({
 
     return baseWeeks + (firstDay >= dayThreshold[month] ? 1 : 0);
   },
+  // Set Date Type
   setDateType: (year, month, date) => {
-    let _date = year + "-" + (month < 10 ? "0" : "") + month + "-" + (date < 10 ? "0" : "") + date;
-    return _date;
+    return year + "-" + (month < 10 ? "0" : "") + month + "-" + (date < 10 ? "0" : "") + date;
   },
+  // Get Date Ago on Number
   dateAgo: (timestamp) => {
     let currentDate = new Date();
     let lastDate = new Date(timestamp);
-    let restDate = Math.floor((currentDate - lastDate) / (60 * 60 * 24 * 1000));
-
-
-    return restDate;
+    return Math.floor((currentDate - lastDate) / (60 * 60 * 24 * 1000));
   },
+  // Scroll to top
   scrollTop: () => {
     window.scrollTo(0, 0);
   },
@@ -100,9 +98,7 @@ export default ({
         _size = "1024";
       }
     }
-    let imageUrl = imgDomain + "/" + documentId + "/" + _size + "/" + pageNo;
-
-    return imageUrl;
+    return imgDomain + "/" + documentId + "/" + _size + "/" + pageNo;
   },
   getText: (documentId, pageNo, callback, error) => {
     let textUrl = imgDomain + "/THUMBNAIL/" + documentId + "/text/" + pageNo;
@@ -143,9 +139,6 @@ export default ({
   loginCheck: () => {
     if (!MainRepository.Account.isAuthenticated()) return MainRepository.Account.login();
   },
-  mmCheck: () => {
-    DrizzleApis.isAuthenticated();
-  },
   getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -165,53 +158,214 @@ export default ({
     let d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+    document.cookie = cname + "=" + cvalue + "; " + expires + "; path=/;";
   },
-  checkEmailForm: (email) => {
+  deleteCookie(name) {
+    if (this.getCookie(name)) document.cookie = name + "=;expires=Thu, 01-Jan-70 00:00:01 GMT";
+  },
+  checkEmailForm: (email: string) => {
     let regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
     return email.match(regExp);
   },
-  toDollar: (deck) => {
+  toDollar: (deck: string) => {
     let c = 0.005;
     let d = new BigNumber("1e+18");
     let bn = new BigNumber(deck);
     let dollar = bn.dividedBy(d).multipliedBy(c);
-    let result = Math.round(dollar.toNumber() * 100) / 100;
-
     //120,000,000,000,000,000,000
-    return result;
+    return Math.round(dollar.toNumber() * 100) / 100;
   },
-  toDeck: (smallDeck) => {
+  toDeck: (smallDeck: string) => {
     let d = new BigNumber("1e+18");
     let bn = new BigNumber(smallDeck);
     let deck = bn.dividedBy(d);
-    let result = Math.round(deck.toNumber() * 100) / 100;
-
     //120,000,000,000,000,000,000
-    return result;
+    return Math.round(deck.toNumber() * 100) / 100;
   },
-  toEther: (str) => {
+  toEther: (str: string) => {
     let d = new BigNumber("1e+18");
     let bn = new BigNumber(str);
     let ether = bn.dividedBy(d);
-    let result = Math.round(ether.toNumber() * 100) / 100;
-    return result;
+    return Math.round(ether.toNumber() * 100) / 100;
   },
-  deckToDollar: (str) => {
+  deckToDollar: (str: string) => {
     if (isNaN(str)) return 0;
     let c = 0.005;
     let bn = new BigNumber(str);
     let dollar = bn.multipliedBy(c);
-    let result = Math.round(dollar.toNumber() * 100) / 100;
-    return result;
+    return Math.round(dollar.toNumber() * 100) / 100;
   },
-  authorCalculateReward: (pv: number, tpv: number, drp: number) => {
-    if (tpv === 0 || pv === 0 || drp === 0) return 0;
-    return (pv * (drp / tpv));
+  authorCalculateReward: (pv: number, tpv: number, pool: number) => {
+    if (tpv === 0 || pv === 0 || pool === 0) return 0;
+    return (pv * (pool / tpv));
   },
   curatorCalculateReward: (pool: number, v: number, tv: number, pv: number, tpvs: number) => {
-    if (pool === 0 || v === 0 || tv === 0|| pv === 0|| tpvs === 0) return 0;
-    return (((pool * (pv ** 2)) / tpvs) * v / tv);
+    if (pool === 0 || v === 0 || tv === 0 || pv === 0 || tpvs === 0) return 0;
+    return (((pool * (Math.pow(pv, 2))) / tpvs) * v / tv);
   },
+  jsonToQueryString: (json) => {
+    return "?" +
+      Object.keys(json).map(function(key) {
+        return encodeURIComponent(key) + "=" +
+          encodeURIComponent(json[key]);
+      }).join("&");
+  },
+  getAuthorNDaysReward(result: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
+    if (!totalViewCountInfo || !result.latestPageviewList || getCreatorDailyRewardPool === 0) return;
+    let y, m, d, pv, tpv, timestamp;
+    let totalReward = 0;
+
+    for (let i = 0; i < result.latestPageviewList.length; ++i) {
+      y = result.latestPageviewList[i].year;
+      m = result.latestPageviewList[i].month;
+      d = result.latestPageviewList[i].dayOfMonth;
+      pv = result.latestPageviewList[i].pv;
+      timestamp = result.latestPageviewList[i].timestamp;
+
+      for (let j = 0; j < totalViewCountInfo.length; ++j) {
+        if (totalViewCountInfo[j]._id.year === y &&
+          totalViewCountInfo[j]._id.month === m &&
+          totalViewCountInfo[j]._id.dayOfMonth === d) {
+          tpv = totalViewCountInfo[j].totalPageview;
+        }
+      }
+      if (this.dateAgo(timestamp) <= day) totalReward += this.authorCalculateReward(pv, tpv, getCreatorDailyRewardPool);
+      if (i === result.latestPageviewList.length - 1) return totalReward;
+    }
+  },
+  getAuthorNDaysTotalReward(documentList: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
+    if (!documentList || getCreatorDailyRewardPool <= 0 || !totalViewCountInfo) return;
+
+    let totalReward = 0;
+    for (let k = 0; k < documentList.length; ++k) {
+      if (!documentList[k].latestPageviewList) return;
+      let y, m, d, pv, tpv, timestamp;
+      let reward = 0;
+
+      for (let i = 0; i < documentList[k].latestPageviewList.length; ++i) {
+        y = documentList[k].latestPageviewList[i].year;
+        m = documentList[k].latestPageviewList[i].month;
+        d = documentList[k].latestPageviewList[i].dayOfMonth;
+        pv = documentList[k].latestPageviewList[i].pv;
+        timestamp = documentList[k].latestPageviewList[i].timestamp;
+
+        for (let j = 0; j < totalViewCountInfo.length; ++j) {
+          if (totalViewCountInfo[j]._id.year === y &&
+            totalViewCountInfo[j]._id.month === m &&
+            totalViewCountInfo[j]._id.dayOfMonth === d) {
+            tpv = totalViewCountInfo[j].totalPageview;
+          }
+        }
+        if (this.dateAgo(timestamp) <= day) reward += this.authorCalculateReward(pv, tpv, getCreatorDailyRewardPool);
+        if (i === documentList[k].latestPageviewList.length - 1) totalReward += reward;
+      }
+      if (k === documentList.length - 1) return totalReward;
+    }
+  },
+  getAuthor7DaysTotalReward(documentList: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any) {
+    if (!documentList || getCreatorDailyRewardPool <= 0 || !totalViewCountInfo) return;
+
+    let totalReward = 0;
+
+    for (let k = 0; k < documentList.length; ++k) {
+      if (documentList[k].latestPageviewList) {
+        let y, m, d, pv, tpv, timestamp;
+        let reward = 0;
+
+        for (let i = 0; i < documentList[k].latestPageviewList.length; ++i) {
+          y = documentList[k].latestPageviewList[i].year;
+          m = documentList[k].latestPageviewList[i].month;
+          d = documentList[k].latestPageviewList[i].dayOfMonth;
+          pv = documentList[k].latestPageviewList[i].pv;
+          timestamp = documentList[k].latestPageviewList[i].timestamp;
+
+          for (let j = 0; j < totalViewCountInfo.length; ++j) {
+            if (totalViewCountInfo[j]._id.year === y &&
+              totalViewCountInfo[j]._id.month === m &&
+              totalViewCountInfo[j]._id.dayOfMonth === d) {
+              tpv = totalViewCountInfo[j].totalPageview;
+            }
+          }
+          if (this.dateAgo(timestamp) <= 7 && this.dateAgo(timestamp) > 0) {
+            reward += this.authorCalculateReward(pv, tpv, getCreatorDailyRewardPool);
+            //console.log(reward);
+          }
+          if (i === documentList[k].latestPageviewList.length - 1) {
+            totalReward += reward;
+          }
+        }
+      }
+    }
+    return totalReward;
+  },
+  // Curator N Days Total Reward
+  getCuratorNDaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
+    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo) return;
+
+    let totalReward = 0;
+    for (let k = 0; k < documentList.length; ++k) {
+      if (!documentList[k].depositList) return;
+
+      let y, m, d, tv, tpvs, v, timestamp;
+      let reward = 0;
+      let pv = documentList[k].latestPageview;
+
+      for (let i = 0; i < documentList[k].depositList.length; ++i) {
+        y = documentList[k].depositList[i].year;
+        m = documentList[k].depositList[i].month;
+        d = documentList[k].depositList[i].dayOfMonth;
+        v = documentList[k].depositList[i].deposit;
+
+        timestamp = documentList[k].depositList[i].timestamp;
+
+        for (let j = 0; j < totalViewCountInfo.length; ++j) {
+          if (totalViewCountInfo[j]._id.year === y &&
+            totalViewCountInfo[j]._id.month === m &&
+            totalViewCountInfo[j]._id.dayOfMonth === d) {
+            tv = totalViewCountInfo[j].totalPageview;
+            tpvs = totalViewCountInfo[j].totalPageviewSquare;
+          }
+        }
+        if (this.dateAgo(timestamp) <= day) reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
+        if (i === documentList[k].depositList.length - 1) totalReward += reward;
+      }
+      if (k === documentList.length - 1) return totalReward;
+    }
+  },
+  // Curator 7 Days Total Reward
+  getCurator7DaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any) {
+    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo) return;
+    let totalReward = 0;
+    for (let k = 0; k < documentList.length; ++k) {
+      if (!documentList[k].depositList) return;
+
+      let y, m, d, tv, tpvs, v, timestamp;
+      let reward = 0;
+      let pv = documentList[k].latestPageview;
+
+      for (let i = 0; i < documentList[k].depositList.length; ++i) {
+        y = documentList[k].depositList[i].year;
+        m = documentList[k].depositList[i].month;
+        d = documentList[k].depositList[i].dayOfMonth;
+        v = documentList[k].depositList[i].deposit;
+
+        timestamp = documentList[k].depositList[i].timestamp;
+
+        for (let j = 0; j < totalViewCountInfo.length; ++j) {
+          if (totalViewCountInfo[j]._id.year === y &&
+            totalViewCountInfo[j]._id.month === m &&
+            totalViewCountInfo[j]._id.dayOfMonth === d) {
+            tv = totalViewCountInfo[j].totalPageview;
+            tpvs = totalViewCountInfo[j].totalPageviewSquare;
+          }
+        }
+        if (this.dateAgo(timestamp) <= 7 && this.dateAgo(timestamp) > 0)  reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
+        if (i === documentList[k].depositList.length - 1) totalReward += reward;
+      }
+      if (k === documentList.length - 1) {
+        return totalReward;
+      }
+    }
+  }
 });

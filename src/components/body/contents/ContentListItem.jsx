@@ -7,26 +7,11 @@ import DeckInShort from "../../common/DeckInShort";
 import Common from "../../../util/Common";
 
 class ContentListItem extends React.Component {
-
-  state = {
-    badgeReward: 0
-  };
-
-  getBadgeReward = () => {
-    const { result, getWeb3Apis } = this.props;
-    let badgeReward = Common.toEther(getWeb3Apis.getNDaysRewards(result.documentId,7));
-    this.setState({badgeReward : badgeReward});
-  };
-
-  componentWillMount(): void {
-    this.getBadgeReward();
-  }
-
   render() {
-    const { result } = this.props;
-    const { badgeReward } = this.state;
+    const { result, getCreatorDailyRewardPool, totalViewCountInfo } = this.props;
 
     let badgeVote = Common.toEther(result.latestVoteAmount) || 0;
+    let badgeReward = Common.toEther(Common.getAuthorNDaysReward(result, getCreatorDailyRewardPool, totalViewCountInfo,7));
     let badgeView = result.latestPageview || 0;
     let imageUrl = Common.getThumbnail(result.documentId, 320, 1, result.documentName);
     let profileUrl = result.author ? result.author.picture : null;
@@ -34,8 +19,6 @@ class ContentListItem extends React.Component {
 
     return (
       <div className="row u_center_inner" key={result.seoTitle}>
-
-
         <div className="col-sm-3 col-md-3 col-thumb  mb-3">
           <Link to={"/" + identification + "/" + result.seoTitle}>
             <div className="thumb_image">
@@ -48,12 +31,10 @@ class ContentListItem extends React.Component {
         <div className="col-sm-9 col-md-9 col-details_info">
           <dl className="details_info">
 
-
             <dd className="info_title">
               <Link to={"/" + identification + "/" + result.seoTitle}
                     title={result.title}> {result.title ? result.title : result.documentName}</Link>
             </dd>
-
 
             <Link to={"/" + identification} className="info_name"
                   title={identification}>
@@ -63,11 +44,9 @@ class ContentListItem extends React.Component {
               {identification}
             </Link>
 
-
             <div className="info_date d-md-inline-block d-none">
               {Common.dateAgo(result.created) === 0 ? "Today" : Common.dateAgo(result.created) + " days ago"}
             </div>
-
 
             <Link to={"/" + identification + "/" + result.seoTitle} className="info_desc" title="description">
               {result.desc &&
@@ -81,7 +60,6 @@ class ContentListItem extends React.Component {
               }
             </Link>
 
-
             <dd className="info_detail">
               <span className="txt_view ">{badgeView}</span>
               <span className="view_date view-reward">
@@ -93,8 +71,6 @@ class ContentListItem extends React.Component {
                 {Common.dateAgo(result.created) === 0 ? "Today" : Common.dateAgo(result.created) + " days ago"}
               </div>
             </dd>
-
-
           </dl>
         </div>
       </div>

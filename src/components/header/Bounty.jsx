@@ -49,10 +49,10 @@ class Bounty extends React.Component {
   };
 
   componentDidUpdate = () => {
-    const { getDrizzle, getWeb3Apis } = this.props;
+    const { getDrizzle, getWeb3Apis, getMyInfo } = this.props;
     let isAuthenticated = getDrizzle.isAuthenticated();
     if (isAuthenticated && !this.state.isAuthenticated) {
-      getWeb3Apis.getBountyAvailable(getDrizzle.getLoggedInAccount()).then((data) => {
+      getWeb3Apis.getBountyAvailable(getMyInfo.ethAccount).then((data) => {
         this.setState({ isAuthenticated: true });
         this.setState({ available: data });
       }).catch((err) => {

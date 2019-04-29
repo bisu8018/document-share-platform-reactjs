@@ -9,6 +9,7 @@ export default class UserInfo {
   provider: string;
   sub: string;
   username: string;
+  ethAccount: string;
 
   constructor(data) {
     this.connected = data && data.connected ? data.connected : 0;
@@ -21,6 +22,7 @@ export default class UserInfo {
     this.provider = data && data.provider ? data.provider :"";
     this.sub = data && data.sub ? data.sub :"";
     this.username = data && data.username ? data.username :"";
+    this.ethAccount = data && data.ethAccount ? data.ethAccount :"";
   }
 
 }

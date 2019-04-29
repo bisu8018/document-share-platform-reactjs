@@ -5,7 +5,6 @@ import Deck from "./contracts-alpha/Deck.json";
 import RewardPool from "./contracts-alpha/RewardPool.json";
 import Curator from "./contracts-alpha/Curator.json";
 import BountyOne from "./contracts-alpha/BountyOne.json";
-import Common from "../util/Common";
 
 let defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c"));
@@ -52,7 +51,7 @@ export default class Web3Apis {
     return web3.utils.fromWei(str, "ether");
   };
 
-  // MM계정 인증
+  // metamask 계정 인증
   getApproved = (address) => {
     return this.Deck.methods.allowance(address, Deck.networks[this.network].address).call({
       from: address
@@ -61,36 +60,37 @@ export default class Web3Apis {
 
   // N일 동안 보상액 GET
   getNDaysRewards = (documentId: string, days: number) => {
-    this.Creator.methods.recentEarnings(this.asciiToHex(documentId), days).call()
-      .then(res => {
-        return res;
-      }).catch(e => {
-      console.error(e);
-      return Promise.reject(e);
+    return new Promise((resolve, reject) => {
+      this.Creator.methods.recentEarnings(this.asciiToHex(documentId), days).call()
+        .then(res => {
+          resolve(res || 0);
+        }).catch(e => {
+        console.error(e);
+        reject(e);
+      });
     });
   };
 
   // Profile 페이지, Author N일 총 보상액 GET
-  getAuthorTotalRewards = (documentList: [], days: number, callback) => {
-    if (documentList.length > 0) {
-      let totalRewards = 0;
-      let getReward = (i) => {
-        this.Creator.methods.recentEarnings(this.asciiToHex(documentList[i].documentId), days).call().then(res => {
-          totalRewards += res || 0;
-          if (i === documentList.length - 1) callback(totalRewards);
-        }).catch(e => {
-          console.error(e);
-          return Promise.reject(e);
-        });
-      };
-      for (let i = 0; i < documentList.length; ++i) {
-        getReward(i);
+  getAuthorTotalRewards = (documentList: [], days: number) => {
+    return new Promise((resolve, reject) => {
+      if (documentList.length > 0) {
+        let getReward = (i) => {
+          this.Creator.methods.recentEarnings(this.asciiToHex(documentList[i].documentId), days).call().then(res => {
+            if (i === documentList.length - 1) resolve(res);
+          }).catch(e => {
+            reject(e);
+          });
+        };
+        for (let i = 0; i < documentList.length; ++i) {
+          getReward(i);
+        }
       }
-    }
+    });
   };
 
   // Profile 페이지, Curator N일 총 보상액 GET
-  getCuratorTotalRewards = (documentList: [], days: number, callback) => {
+  getCuratorTotalRewards = (documentList: [], days: number, callback, error) => {
     if (documentList.length > 0) {
       let totalRewards = 0;
       let getReward = (i) => {
@@ -98,8 +98,7 @@ export default class Web3Apis {
           totalRewards += res || 0;
           if (i === documentList.length - 1) callback(totalRewards);
         }).catch(e => {
-          console.error(e);
-          return Promise.reject(e);
+          return error(e);
         });
       };
 
@@ -110,51 +109,48 @@ export default class Web3Apis {
   };
 
   //특정 유져 잔액 조회
-  getBalance = (address: string, callback) => {
+  getBalance = (address: string, callback, error) => {
     this.Deck.methods.balanceOf(address).call({ from: address })
       .then(res => {
-        callback(Common.toDeck(res));
+        callback(res);
       }).catch(e => {
-      console.error(e);
-      return Promise.reject(e);
+      return error(e);
     });
   };
 
   //Author Reward pool GET
   // percent : 70%   (2019-04-17)
-  getAuthorDailyRewardPool(callback) {
+  getCreatorDailyRewardPool(callback, error) {
     let CreatorPercent = 70;
     let createTime = Date.now();
+
     this.RewardPool.methods.getDailyRewardPool(CreatorPercent, createTime).call().then(res => {
-      callback(res || 0);
+      callback(res);
     }).catch(e => {
-      console.error(e);
-      return Promise.reject(e);
+      return error(e);
     });
   };
 
   //Curator Reward pool GET
   //Reward pool GET
   // percent : 30%   (2019-04-17)
-  getCuratorDailyRewardPool(callback) {
+  getCuratorDailyRewardPool(callback, error) {
     let CuratorPercent = 30;
     let createTime = Date.now();
     this.RewardPool.methods.getDailyRewardPool(CuratorPercent, createTime).call().then(res => {
       callback(res || 0);
     }).catch(e => {
-      console.error(e);
-      return Promise.reject(e);
+      return error(e);
     });
   };
 
   // 문서 블록체인 등록 여부 확인
-  isDocumentExist = (documentId: string, callback) => {
+  isDocumentExist = (documentId: string, callback, error) => {
     this.DocumentRegistry.methods.contains(this.asciiToHex(documentId)).call()
       .then(res => {
         callback(res);
       }).catch(e => {
-      console.error(e);
-      return Promise.reject(e);
+      return error(e);
     });
   };
   //Bounty 가능량 GET
@@ -164,17 +160,22 @@ export default class Web3Apis {
     });
   };
 
-  //확정된 Author 리워드 GET
-  getDetermineAuthorReward = (address: string, documentId: string) => {
-    if (!documentId) {
-      throw new Error("documentId is invaild!!!", documentId);
-    }
-    return this.Creator.methods.determine(this.asciiToHex(documentId)).call({ from: address });
+  //확정된 Creator 리워드 GET
+  getDetermineCreatorReward = (documentId: string, address: string) => {
+    return new Promise((resolve, reject) => {
+      this.Creator.methods.determine(this.asciiToHex(documentId)).call({ from: address }).then(res => {
+        resolve(res);
+      });
+    });
   };
 
   //확정된 Curator 리워드 GET
   getDetermineCuratorReward = (documentId: string, curatorId: string) => {
-    return this.Curator.methods.determine(this.asciiToHex(documentId)).call({ from: curatorId });
+    return new Promise((resolve, reject) => {
+      this.Curator.methods.determine(this.asciiToHex(documentId)).call({ from: curatorId }).then(res => {
+        resolve(res);
+      });
+    });
   };
 
   //특정 문서의 유효한 유져 투표 수 GET
@@ -187,5 +188,13 @@ export default class Web3Apis {
     return this.Curator.methods.getActiveVotes(this.asciiToHex(documentId)).call();
   };
 
+  //투표 전, Allowance 값 GET
+  getAllowance = (address: string) => {
+    return new Promise((resolve, reject) => {
+      this.Deck.methods.allowance(defaultAccountId, address ).call({ from: address }).then(res => {
+        resolve(res);
+      });
+    });
+  };
 
 }

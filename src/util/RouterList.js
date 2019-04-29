@@ -1,11 +1,11 @@
-import AudienceTrackingDetail from "../components/body/tracking/AudienceTrackingDetail";
 import Faq from "../components/body/faq/Faq";
 import NotFoundPage from "../components/common/NotFoundPage";
 import CallbackContainer from "../container/body/callback/CallbackContainer";
-import AuthorContainer from "../container/body/profile/author/AuthorContainer";
+import CreatorContainer from "../container/body/profile/creator/CreatorContainer";
 import ContentMainContainer from "../container/body/contents/ContentMainContainer";
-import AudienceTrackingContainer from "../container/body/tracking/AudienceTrackingContainer";
+import AudienceTrackingContainer from "../container/body/tracking/AudienceTrackingListContainer";
 import ContentViewContainer from "../container/body/contents/contentsView/ContentViewContainer";
+import AudienceTrackingDetailContainer from "../container/body/tracking/AudienceTrackingDetailContainer";
 
 export default ({
     routes: [
@@ -47,7 +47,7 @@ export default ({
       {
         path: "/trackingDetail/:identification/:seoTitle",
         name: "trackingDetail",
-        component: AudienceTrackingDetail
+        component: AudienceTrackingDetailContainer
       },
       {
         path: "/faq",
@@ -66,8 +66,8 @@ export default ({
       },
       {
         path: "/:identification",
-        name: "Author",
-        component: AuthorContainer
+        name: "Creator",
+        component: CreatorContainer
       },
       {
         path: '*',

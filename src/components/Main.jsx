@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { Route, Router, Switch } from "react-router-dom";
-import ReactGA from "react-ga";
-
 import history from "apis/history/history";
 
 import RouterList from "../util/RouterList";
@@ -12,21 +10,12 @@ import UserInfo from "../redux/model/UserInfo";
 import * as Sentry from "@sentry/browser";
 import HeaderContainer from "../container/header/HeaderContainer";
 import Common from "../util/Common";
-
-if (process.env.NODE_ENV === "production") {
-  ReactGA.initialize("UA-129300994-1", {
-    debug: false,
-    gaOptions: {
-      env: process.env.NODE_ENV
-    }
-  });
-  //console.log("google analytics on!!!", process.env)
-}
+import AlertContainer from "../container/common/AlertContainer";
 
 class Main extends Component {
   state = {
     init: false,
-    myInfo: new UserInfo(),
+    myInfo: new UserInfo()
   };
 
   //초기화
@@ -35,23 +24,28 @@ class Main extends Component {
       this.setTagList();  //태그 리스트 GET
       this.setMyInfo();   // 내 정보 GET
       this.setIsMobile();   // 모바일 유무 GET
+      this.setAuthorDailyRewardPool();   // 크리에이터 리워드풀 GET
+      this.setCuratorDailyRewardPool();   // 큐레이터 리워드풀 GET
     });
   };
 
   //태그 리스트 GET
   setTagList = () => {
+    const { setTagList } = this.props;
+
     MainRepository.Document.getTagList(result => {
-      this.props.setTagList(result.resultList);
+      setTagList(result.resultList);
     });
   };
 
   // 내 정보 GET
   setMyInfo = () => {
-    let reduxMyInfo = this.props.getMyInfo;
-    if (MainRepository.Account.isAuthenticated() && reduxMyInfo.email.length === 0) {
+    const { getMyInfo, setMyInfo } = this.props;
+
+    if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
       let myInfo = MainRepository.Account.getMyInfo();
       MainRepository.Account.getAccountInfo(myInfo.sub, result => {
-        this.props.setMyInfo(result);
+        setMyInfo(result);
         this.setState({ init: true, myInfo: result });
       });
     }
@@ -59,11 +53,25 @@ class Main extends Component {
 
   // 모바일 유무 GET
   setIsMobile = () => {
+    const { setIsMobile } = this.props;
+
     if (document.documentElement.clientWidth < 576) {
-      this.props.setIsMobile(true);
+      setIsMobile(true);
     } else {
-      this.props.setIsMobile(false);
+      setIsMobile(false);
     }
+  };
+
+  // 크리에이터 리워드풀 GET
+  setAuthorDailyRewardPool = () => {
+    const { setAuthorDailyRewardPool } = this.props;
+    setAuthorDailyRewardPool(115068493148000000000000);    // web3 speed issue, 리워드풀 하드코딩
+  };
+
+  // 큐레이터 리워드풀 GET
+  setCuratorDailyRewardPool = () => {
+    const { setCuratorDailyRewardPool } = this.props;
+    setCuratorDailyRewardPool(49315068492000000000000);   // web3 speed issue, 리워드풀 하드코딩
   };
 
   componentWillMount() {
@@ -75,7 +83,7 @@ class Main extends Component {
     // https://docs.sentry.io/platforms/javascript/react/?_ga=2.47401252.280930552.1554857590-1128220521.1554857590
     if (process.env.NODE_ENV === "production") {
       this.setState({ error });
-      console.log("errorInfo", error);
+      console.error("errorInfo", error);
       Sentry.withScope(scope => {
         scope.setExtras(errorInfo);
         const eventId = Sentry.captureException(error);
@@ -89,7 +97,7 @@ class Main extends Component {
   }
 
   render() {
-    const { getIsMobile } = this.props;
+    const { getIsMobile, getMyInfo, getAlertCode } = this.props;
 
     let pathName = window.location.pathname.split("/")[1];
     let guidedValue = Common.getCookie("gv");
@@ -97,6 +105,8 @@ class Main extends Component {
       pathName === "latest" ||
       pathName === "featured" ||
       pathName === "popular";
+
+    if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) return <div/>;
 
     return (
 
@@ -109,9 +119,7 @@ class Main extends Component {
               <Switch>
                 {RouterList.routes.map((result, idx) => {
                     let flag = false;
-                    if (idx === 0) {
-                      flag = true;
-                    }
+                    if (idx === 0) flag = true;
                     return (
                       <Route exact={flag} key={result.name} path={result.path}
                              render={(props) =>
@@ -123,6 +131,8 @@ class Main extends Component {
               </Switch>
             </div>
           </div>
+
+          { getAlertCode && <AlertContainer code={getAlertCode}/> }
 
           {pathNameFlag && getIsMobile === false && (!guidedValue || guidedValue === "false") && <GuideModal/>}
           <CookiePolicyModal/>

@@ -17,6 +17,15 @@ export const APP_PROPERTIES = {
       profile: "https://profile.share.decompany.io/",
     }
   },
+  dev:{
+    domain:{
+      mainHost: 'https://www.polarishare.com',
+      upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
+      image: 'https://thumb.share.decompany.io',
+      api: "https://api.share.decompany.io/dev",
+      profile: "https://profile.share.decompany.io/",
+    }
+  },
   production:{
     domain:{
       mainHost: 'https://share.decompany.io',
@@ -25,9 +34,6 @@ export const APP_PROPERTIES = {
       api: "https://api.share.decompany.io/dev",
       profile: "https://profile.share.decompany.io/",
     }
-  },
-  service_endpoint:{
-
   }
 
 };

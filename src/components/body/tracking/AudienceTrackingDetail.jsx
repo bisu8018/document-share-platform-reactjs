@@ -31,11 +31,17 @@ class AudienceTrackingDetail extends React.Component {
   };
 
   getTrackingInfo = () => {
-    const { location } = this.props;
+    const { location, getIncludeOnlyOnePage } = this.props;
     let cid = location.state.cid;
     this.setState({ loading: true });
 
-    MainRepository.Document.getTrackingInfo(cid, location.state.document.documentId, (res) => {
+    const params = {
+      cid : cid,
+      documentId : location.state.document.documentId,
+      include : getIncludeOnlyOnePage
+    };
+
+    MainRepository.Tracking.getTrackingInfo(params, (res) => {
       let resData = res;
       this.setState({ loading: false });
       this.setState({ resultList: resData.resultList ? resData.resultList : [] });

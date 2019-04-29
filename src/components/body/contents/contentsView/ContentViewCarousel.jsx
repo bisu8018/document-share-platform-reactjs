@@ -4,7 +4,7 @@ import { Carousel } from "react-responsive-carousel";
 import TrackingApis from "apis/TrackingApis";
 import Common from "../../../../util/Common";
 import MainRepository from "../../../../redux/MainRepository";
-import EmailModal from "../../../modal/EmailModal";
+import EmailModalContainer from "../../../../container/modal/EmailModalContainer";
 
 class ContentViewCarousel extends React.Component {
 
@@ -44,8 +44,8 @@ class ContentViewCarousel extends React.Component {
   };
 
   // 문서 옵션 useTracking true 일때만
-  handleTracking = (page) => {
-    const { target, handleEmailFlag } = this.props;
+  handleTracking = async (page) => {
+    const { target, handleEmailFlag, getMyInfo } = this.props;
     const { emailFlagTemp, readPage } = this.state;
 
     if ((page === null || page === undefined) && target.forceTracking) return this.setState({ emailFlag: false }, ()=>{handleEmailFlag(false)});
@@ -55,7 +55,7 @@ class ContentViewCarousel extends React.Component {
       this.handleUrl();
     });
 
-    let emailFromAuth = this.props.getMyInfo.email;
+    let emailFromAuth = getMyInfo.email;
     let emailFromSession = Common.getCookie("tracking_email");
     let temp = emailFromAuth || emailFromSession || null;
 
@@ -64,7 +64,7 @@ class ContentViewCarousel extends React.Component {
         this.setState({ emailFlag: false }, () => {
           handleEmailFlag(false);
 
-          if (page > 0 && !temp && !emailFlagTemp) {
+          if (page > 0 && !temp && !emailFlagTemp && !MainRepository.Account.isAuthenticated()) {
             this.setState({ emailFlag: true }, ()=>{handleEmailFlag(true)});
           }
         });
@@ -90,24 +90,11 @@ class ContentViewCarousel extends React.Component {
     }
   };
 
-  // 슬라이드 옵션 창 on/off
-  handleOptionBarClickEvent = (e) => {
-    this.setState({ slideOptionFlag: !this.state.slideOptionFlag });
-  };
-
-  // 자동 슬라이드 설정 on/off
-  handleOptionBtnClickEvent = (e) => {
-    this.setState({ autoSlideFlag: !this.state.autoSlideFlag });
-  };
-
-  componentWillMount() {
-    const { tracking } = this.props;
-    let pageNum = window.location.pathname.split("/")[3];
-    if (tracking) this.handleTracking(pageNum && pageNum !== "0" ? Number(pageNum.substr(0, 1)) - 1 : 0);
-  }
-
-  componentWillUnmount() {
+  handleTrackingLeave = () => {
     const { target } = this.props;
+    const { readPage } = this.state;
+
+    if(!readPage) return false;
     let documentId = target.documentId;
     try {
       TrackingApis.tracking({
@@ -118,6 +105,27 @@ class ContentViewCarousel extends React.Component {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  // 슬라이드 옵션 창 on/off
+  handleOptionBarClickEvent = () => {
+    this.setState({ slideOptionFlag: !this.state.slideOptionFlag });
+  };
+
+  // 자동 슬라이드 설정 on/off
+  handleOptionBtnClickEvent = () => {
+    this.setState({ autoSlideFlag: !this.state.autoSlideFlag });
+  };
+
+  componentWillMount() {
+    const { tracking } = this.props;
+
+    let pageNum = window.location.pathname.split("/")[3];
+    if (tracking) this.handleTracking(pageNum && pageNum > "1" ? Number(pageNum.split("-")[0]) - 1 : 0);
+  }
+
+  componentWillUnmount() {
+    this.handleTrackingLeave();
   }
 
   render() {
@@ -156,7 +164,7 @@ class ContentViewCarousel extends React.Component {
             {arr.length > 0 ? arr.map((addr, idx) => (
               <img key={idx} title={target.title} src={addr} alt={documentText[idx]} data-small="" data-normal=""
                    data-full=""
-                   className={"landscape-show " + (target.forceTracking && emailFlag ? "img-cloudy" : "")}/>
+                   className={"landscape-show " + (target.forceTracking && emailFlag && !MainRepository.Account.isAuthenticated() ? "img-cloudy" : "")}/>
             )) : "no data"}
           </Carousel>
         </div>
@@ -167,7 +175,7 @@ class ContentViewCarousel extends React.Component {
         </div>
 
         {!MainRepository.Account.isAuthenticated() && emailFlag && target.useTracking &&
-        <EmailModal handleTracking={() => this.handleTracking()} forceTracking={() => this.handleForceTracking()}/>
+        <EmailModalContainer handleTracking={() => this.handleTracking()} forceTracking={() => this.handleForceTracking()}/>
         }
       </div>
     );

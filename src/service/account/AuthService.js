@@ -3,6 +3,7 @@ import AxiosService from "../AxiosService";
 let accountSync =  "account/sync";
 let accountGet =  "account/get";
 let accountUpdate =  "account/update";
+let ethereumSync =  "account/ethereumSync";
 let profileImageUpdate =  "account/picture";
 let profileGet = "profile/get";
 
@@ -18,6 +19,14 @@ export default {
     },
     accountUpdate: (data, callback, error) => {
       AxiosService._requestWithHeader(accountUpdate, "POST", data,
+        (data) => {
+          callback(data);
+        }, (err) => {
+          error(err);
+        });
+    },
+    ethereumSync: (data, callback, error) => {
+      AxiosService._requestWithHeader(ethereumSync, "POST", data,
         (data) => {
           callback(data);
         }, (err) => {

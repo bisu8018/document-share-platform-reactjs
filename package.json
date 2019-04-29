@@ -1,6 +1,6 @@
 {
   "name": "decompanyio_front_end",
-  "description": "Decompany.io Project",
+  "description": "Polarishare.com",
   "version": "0.1.0",
   "license": "ISC",
   "private": true,
@@ -43,6 +43,7 @@
     "react-tagsinput": "^3.19.0",
     "redux": "^4.0.1",
     "redux-actions": "^2.6.5",
+    "redux-thunk": "^2.3.0",
     "shortid": "^2.2.14",
     "web3": "^1.0.0-beta.52"
   },
@@ -52,9 +53,10 @@
     "start": "set PORT=8000 && react-scripts start",
     "build": "npm run build-css && react-scripts build",
     "deploy": "npm run deploy:dev",
-    "deploy:dev": "aws s3 sync build/ s3://dev.share.decompany.io",
-    "deploy:production": "aws s3 sync build/ s3://share.decompany.io && npm run invaildate",
-    "invaildate": "aws cloudfront create-invalidation --distribution-id EDFUPNJU9XKGX --paths /*",
+    "deploy:dev": "aws s3 sync build/ s3://share.decompany.io && npm run invaildate:dev",
+    "deploy:production": "aws s3 sync build/ s3://www.polarishare.com && npm run invaildate:production",
+    "invaildate:dev": "aws cloudfront create-invalidation --distribution-id EDFUPNJU9XKGX --paths /*",
+    "invaildate:production": "aws cloudfront create-invalidation --distribution-id E1UYELY2K59G6Q --paths /*",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

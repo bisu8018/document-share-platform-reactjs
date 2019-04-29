@@ -7,6 +7,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Common from "../../util/Common";
+import UserInfo from "../../redux/model/UserInfo";
 
 
 function Transition(props) {
@@ -80,10 +81,12 @@ class EmailModal extends React.Component {
 
   handleSendBtn = () => {
     const { email } = this.state;
-    const { handleTracking } = this.props;
+    const { handleTracking, setMyInfo } = this.props;
+
     if (this.validateEmail() && this.validateCheckBox()) {
       Common.setCookie("tracking_email", email);
       if (Common.getCookie("tracking_email")) handleTracking();
+      setMyInfo(new UserInfo());
       this.handleClose();
     }
   };
@@ -133,14 +136,13 @@ class EmailModal extends React.Component {
                 <label htmlFor="termsCheckbox">
                   <span><i className="material-icons">done</i></span>
                   I agree to submit this information, which will be collected and used according to
-                    <a className="checkbox-policy-link" target="_blank" href="/faq"
+                    <a className="checkbox-policy-link" target="_blank" href={"/legal/policy.html"} rel="noopener noreferrer"
                        title="Read decompany’s privacy policy."> Decompany’s privacy policy.</a>
                 </label>
               </DialogContent>
 
               <DialogActions className="modal-footer">
-                <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">Cancel</div>
-                <div onClick={() => this.handleSendBtn()} className="ok-btn">Send</div>
+                <div onClick={() => this.handleSendBtn()} className="ok-btn">Sign up</div>
               </DialogActions>
             </Dialog>
       </span>

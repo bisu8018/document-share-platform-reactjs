@@ -19,9 +19,7 @@ class AutoSuggestInput extends React.Component {
 
     const regex = new RegExp('^' + escapedValue, 'i');
     let tagList = this.props.getTagList;
-    const suggestions = tagList.filter(data => regex.test(data._id));
-
-    return suggestions;
+    return tagList.filter(data => regex.test(data._id));
   };
 
   onChange = (event, { newValue, method }) => {

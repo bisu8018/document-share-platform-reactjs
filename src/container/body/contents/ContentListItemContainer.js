@@ -1,16 +1,16 @@
 import { connect } from "react-redux";
 import ContentListItem from "../../../components/body/contents/ContentListItem";
-
-const mapStateToProps = state => ({
-  getWeb3Apis: state.main.web3Apis,
-  getDrizzle: state.main.drizzleApis,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-
-});
+import { setAuthorDailyRewardPool } from "../../../redux/reducer/main";
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  state => ({
+    getWeb3Apis: state.main.web3Apis,
+    getDrizzle: state.main.drizzleApis,
+    getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
+  }),
+  dispatch => ({
+    setAuthorDailyRewardPool: (authorRewardPool: any) => {
+      dispatch(setAuthorDailyRewardPool(authorRewardPool));
+    },
+  })
 )(ContentListItem);
