@@ -21,13 +21,12 @@ class CuratorClaim extends React.Component {
   };
 
   handelClickClaim = () => {
-    const { document, getDrizzle } = this.props;
+    const { document, getDrizzle, getMyInfo } = this.props;
     if (document && getDrizzle.isAuthenticated()) {
       this.setState({ btnText: "Pending" }, () => {
-        getDrizzle.claimReward(document.documentId).then((res) => {
-          this.setState({ btnText: "Claim $" }, () => {
-            this.getDetermineCuratorReward();
-          });
+        getDrizzle.curatorClaimReward(document.documentId, getMyInfo.ethAccount).then((res) => {
+          this.setState({ btnText: "Complete" });
+          document.location.reload();
         });
       });
     }
@@ -43,12 +42,10 @@ class CuratorClaim extends React.Component {
     let myEthAccount = getMyInfo.ethAccount;
     let ethAccount = userInfo ? userInfo.ethAccount : "";
     let claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
-    if (myEthAccount !== ethAccount) return <div/>;    // 본인 프로필 맞는지 체크
-    if (!getDrizzle.isAuthenticated()) return <div/>;    // MM 로그인 체크
-    if (claimReward <= 0) return <div/>;    // 클레임 금액 체크
+    if (myEthAccount !== ethAccount || !getDrizzle.isAuthenticated() || claimReward <= 0 || btnText === "Complete" ) return <div/>;
 
     return (
-      <div className="claim-btn" onClick={() => this.handelClickClaim()} title={"Claim $" + claimReward}>
+      <div className={"claim-btn " + (btnText === "Pending" ? "btn-disabled" : "")} onClick={() => this.handelClickClaim()} title={"Claim $" + claimReward}>
         {btnText} {(btnText === "Pending" ? "" : claimReward)}
       </div>
     );

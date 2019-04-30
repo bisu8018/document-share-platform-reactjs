@@ -28,7 +28,7 @@ export default class DrizzleApis {
         //console.log("store",store);
         //console.log("myInfo", myInfo);
 
-        if (this.drizzleState.web3.networkId && this.drizzleState.web3.networkId !== 4)  store.dispatch(setAlertCode(2052));  // Alert Show
+        if (this.drizzleState.web3.networkId && this.drizzleState.web3.networkId !== 4) store.dispatch(setAlertCode(2052));  // Alert Show
         if (this.drizzleState.drizzleStatus.initialized && myInfo.email.length > 0) {    //myInfo - drizzle 이더리움 계정 비교
 
           if (!myInfo.ethAccount) {   // myInfo에 이더리움 계정 없을때
@@ -132,9 +132,9 @@ export default class DrizzleApis {
   // 문서 투표
   voteOnDocument = async (documentId: string, deposit: string) => {
     let ethAccount = this.drizzleState.accounts[0];
-    const contract = this.drizzle.contracts.Curator;
+    const Curator = this.drizzle.contracts.Curator;
     let bigNumberDeposit = this.toBigNumber(deposit);
-    const stackId = contract.methods["addVote"].cacheSend(this.fromAscii(documentId), bigNumberDeposit, { from: ethAccount });
+    const stackId = Curator.methods["addVote"].cacheSend(this.fromAscii(documentId), bigNumberDeposit, { from: ethAccount });
 
     return await this.getTransactionStatus(stackId);
   };
@@ -151,21 +151,34 @@ export default class DrizzleApis {
     }
     let drizzleState = this.drizzle.store.getState();
     let ethAccount = drizzleState.accounts[0];
-    const contract = this.drizzle.contracts.Creator;
+    const Creator = this.drizzle.contracts.Creator;
     // save the `stackId` for later reference
-    const stackId =  contract.methods["register"].cacheSend(this.fromAscii(documentId), {
+    const stackId = Creator.methods["register"].cacheSend(this.fromAscii(documentId), {
       from: ethAccount
     });
     return await this.getTransactionStatus(stackId);
   };
 
   // 문서 Claim
-  claimReward = (documentId: string) => {
+  creatorClaimReward = (documentId: string, ethAccount: string) => {
     return new Promise((resolve) => {
-        const ethAccount = this.drizzleState.accounts[0];
-        const contract = this.drizzle.contracts.RewardPool;
+        const Creator = this.drizzle.contracts.Creator;
+        const RewardPool = this.drizzle.contracts.RewardPool;
         console.log("claimAuthorReward", ethAccount, "Profile account", documentId, this.fromAscii(documentId));
-        const stackId = contract.methods.claim.cacheSend(this.fromAscii(documentId), ethAccount, { from: ethAccount });
+        const stackId = RewardPool.methods["claim"].cacheSend(this.fromAscii(documentId), Creator.address, { from: ethAccount });
+
+        resolve(this.getTransactionStatus(stackId));
+      }
+    );
+  };
+
+  // 문서 Claim
+  curatorClaimReward = (documentId: string, ethAccount: string) => {
+    return new Promise((resolve) => {
+        const Curator = this.drizzle.contracts.Curator;
+        const RewardPool = this.drizzle.contracts.RewardPool;
+        //console.log("claimAuthorReward", ethAccount, "Profile account", documentId, this.fromAscii(documentId));
+        const stackId = RewardPool.methods["claim"].cacheSend(this.fromAscii(documentId), Curator.address, { from: ethAccount });
 
         resolve(this.getTransactionStatus(stackId));
       }

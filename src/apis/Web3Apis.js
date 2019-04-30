@@ -191,7 +191,16 @@ export default class Web3Apis {
   //투표 전, Allowance 값 GET
   getAllowance = (address: string) => {
     return new Promise((resolve, reject) => {
-      this.Deck.methods.allowance(defaultAccountId, address ).call({ from: address }).then(res => {
+      this.Deck.methods.allowance(address, this.RewardPool.address).call({ from: address }).then(res => {
+        resolve(res);
+      });
+    });
+  };
+
+  // 큐레이터 문서 GET
+  getCuratorDocuments = (address: string) => {
+    return new Promise((resolve, reject) => {
+      this.Curator.methods.getDocuments(address).call().then(res => {
         resolve(res);
       });
     });

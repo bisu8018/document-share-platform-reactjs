@@ -38,8 +38,8 @@ class CreatorSummary extends React.Component {
     const { userInfo, getCuratorDailyRewardPool } = this.props;
     MainRepository.Curator.getCuratorSummary(userInfo.ethAccount).then(res => {
       this.setState({
-        curatorEstimatedToday: Common.toDeck(Common.getCuratorNDaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo, 0)),
-        curatorTotalRewards:Common.toDeck(Common.getCurator7DaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo)),
+        curatorEstimatedToday: Common.toDeck(Common.getCuratorNDaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo, 0,res.voteDocList)),
+        curatorTotalRewards: Common.toDeck(Common.getCurator7DaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo,res.voteDocList))
       });
     });
   };
@@ -169,10 +169,12 @@ class CreatorSummary extends React.Component {
               <br/>
               * Estimated earnings for today :
               <span className="color">
-                <DollarWithDeck deck={authorTodayReward}/>
+                <DollarWithDeck deck={ Number(authorTodayReward) + Number(curatorEstimatedToday)}/>
               </span>
               <br/>* Revenue for the last 7 days :
-              <span className="color"> $0.00 </span>
+              <span className="color">
+                <DollarWithDeck deck={ Number(author7DayReward) + Number(curatorTotalRewards)}/>
+              </span>
             </div>
           </div>
         </div>

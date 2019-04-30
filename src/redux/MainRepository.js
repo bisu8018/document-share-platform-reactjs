@@ -24,6 +24,7 @@ import Common from "../util/Common";
 import CuratorService from "../service/curator/CuratorService";
 import TrackingService from "../service/tracking/TrackingService";
 import CuratorSummary from "./model/CuratorSummary";
+import AnalyticsService from "../service/analytics/AnalyticsService";
 
 let instance: any;
 
@@ -105,7 +106,7 @@ export default {
           "Authorization": `Bearer ${token}`
         }
       };
-      DocService.GET.analyticsList(_params, (result) => {
+      AnalyticsService.GET.analyticsList(_params, (result) => {
         let analyticsList = new AnalyticsList(result);
         callback(analyticsList);
       });
