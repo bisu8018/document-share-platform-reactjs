@@ -5,6 +5,8 @@ export default connect(
   state => ({
     getWeb3Apis: state.main.web3Apis,
     getDrizzle: state.main.drizzleApis,
+    getCreatorDailyRewardPool : state.main.authorDailyRewardPool,
+    getMyInfo: state.main.myInfo
   }),
   dispatch => ({})
 )(ContentViewFullScreen);

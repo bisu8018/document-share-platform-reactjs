@@ -1,5 +1,5 @@
 import React from "react";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit'
 import FeaturedList from "../../../common/FeaturedListItem";
 
 class ContentViewRight extends React.Component {
@@ -7,7 +7,7 @@ class ContentViewRight extends React.Component {
   render() {
     const { documentData, featuredList } = this.props;
     if (!documentData) {
-      return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
+      return (<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>);
     } else {
       return (
         <div className="u__right">

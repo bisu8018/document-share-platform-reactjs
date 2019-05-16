@@ -1,4 +1,4 @@
-import AxiosService from "../AxiosService";
+import AxiosService from "./AxiosService";
 
 let getDocumentUrl = "document/info";
 let getDocumentListUrl = "document/list";

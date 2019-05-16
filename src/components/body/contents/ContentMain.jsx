@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit'
 import { Link } from "react-router-dom";
 
 import MainRepository from "../../../redux/MainRepository";
@@ -190,7 +190,7 @@ class ContentMain extends Component {
               ))}
             </InfiniteScroll>
             {this.state.loading &&
-            <div className="spinner"><Spinner name="ball-pulse-sync"/></div>
+            <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>
             }
           </div>
         </div>

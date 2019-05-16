@@ -1,7 +1,6 @@
 import React from "react";
 import AutoSuggest from "react-autosuggest";
 import TagsInput from "react-tagsinput";
-import "react-tagsinput/react-tagsinput.css";
 
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";

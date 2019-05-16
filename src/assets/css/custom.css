@@ -6806,6 +6806,7 @@ Dean*/
 }
 
 .tags_menu li a {
+    text-transform: lowercase;
     width: fit-content;
     padding: 4px 0;
     text-align: left;

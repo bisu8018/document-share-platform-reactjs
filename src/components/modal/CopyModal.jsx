@@ -1,5 +1,4 @@
 import React from "react";
-import "react-tagsinput/react-tagsinput.css";
 
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";

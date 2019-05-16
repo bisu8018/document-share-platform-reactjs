@@ -65,16 +65,17 @@ class ContentViewFullScreen extends Component {
 
   //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
-    if (!this.props.documentData) {
+    const { getMyInfo, documentData  } = this.props;
+    if (!documentData) {
       console.log("getting document meta information!");
       return;
     }
-    if (!MainRepository.Account.isAuthenticated() && !Common.getCookie("tracking_email")) {
+    if (!MainRepository.Account.isAuthenticated() && !getMyInfo.email) {
       MainRepository.Account.login();
     }
-    const accountId = this.props.documentData.accountId;
-    const documentId = this.props.documentData.documentId;
-    const documentName = this.props.documentData.documentName;
+    const accountId = documentData.accountId;
+    const documentId = documentData.documentId;
+    const documentName = documentData.documentName;
     this.getContentDownload(accountId, documentId, documentName);
   };
 
@@ -127,10 +128,11 @@ class ContentViewFullScreen extends Component {
   }
 
   render() {
-    const { documentData, documentText, author } = this.props;
-    const { page, isFull, carouselClass, emailFlag, badgeReward } = this.state;
+    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo } = this.props;
+    const { page, isFull, carouselClass, emailFlag } = this.state;
 
     let badgeVote = Common.toEther(documentData.latestVoteAmount) || 0;
+    let badgeReward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo,7));
     let badgeView = documentData.latestPageview || 0;
     let accountId = documentData.accountId || "";
     let url = window.location.href;

@@ -11,9 +11,7 @@ function makeId() {
   return shortid.generate();
 }
 
-function tracking(params, async, sidClear) {
-  if (process.env.NODE_ENV !== "production") return false;
-
+function setTrackingInfo() {
   let timestamp = Date.now();
   let trackingInfo = null;
 
@@ -42,27 +40,37 @@ function tracking(params, async, sidClear) {
   if (!trackingInfo.cid) {
     console.log("client id invalid on tracking");
   }
-
-  params.sid = trackingInfo.sid; //session id
-  params.cid = trackingInfo.cid; //clinet id
-  params.t = timestamp; //touch time
-
-  let querystring = Common.jsonToQueryString(params);
-  let tracking = apiDomain + trackingUrl + querystring;
-
-  $.ajax({
-    type: "GET",
-    async: async,
-    url: tracking
-  });
-
-  if (sidClear) {
-    trackingInfo.sid = undefined;
-  }
-
-  //touchAt 현재 시간으로 갱신 후 localStorage에 저장
-  trackingInfo.touchAt = timestamp;
   localStorage.setItem("tracking_info", JSON.stringify(trackingInfo));
+  return trackingInfo;
 }
 
-export default { tracking };
+function tracking(params, async, sidClear) {
+  return new Promise((resolve, reject) => {
+    if (process.env.NODE_ENV !== "production") return false;
+
+    let timestamp = Date.now();
+    let trackingInfo = this.setTrackingInfo();
+    params.sid = trackingInfo.sid; //session id
+    params.cid = trackingInfo.cid; //clinet id
+    params.t = timestamp; //touch time
+
+    let querystring = Common.jsonToQueryString(params);
+    let tracking = apiDomain + trackingUrl + querystring;
+
+    $.ajax({
+      type: "GET",
+      async: async,
+      url: tracking
+    }).then(res => {
+      if (sidClear) {
+        trackingInfo.sid = undefined;
+      }
+      //touchAt 현재 시간으로 갱신 후 localStorage에 저장
+      trackingInfo.touchAt = timestamp;
+      localStorage.setItem("tracking_info", JSON.stringify(trackingInfo));
+      resolve(res);
+    });
+  });
+}
+
+export default { tracking, setTrackingInfo };

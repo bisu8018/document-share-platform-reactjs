@@ -1,7 +1,8 @@
-import AxiosService from "../AxiosService";
+import AxiosService from "./AxiosService";
 
 let trackingInfoUrl = "tracking/info";
 let trackingListUrl = "tracking/list";
+let trackingConfirmUrl = "tracking/confirm";
 let getTrackingExportUrl = "tracking/export";
 
 export default {
@@ -29,5 +30,12 @@ export default {
     },
   },
   POST: {
+    trackingConfirm: (data, callback) => {
+      AxiosService._requestWithBody(trackingConfirmUrl, "POST", data,
+        (data) => {
+          callback(data);
+        }, () => {
+        });
+    },
   },
 };

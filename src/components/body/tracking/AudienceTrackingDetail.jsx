@@ -1,12 +1,11 @@
 import React from "react";
-import "react-tabs/style/react-tabs.css";
 import { Link, withRouter } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 
 import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../util/Common";
 import Tooltip from "@material-ui/core/Tooltip";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit';
 
 class AudienceTrackingDetail extends React.Component {
   state = {
@@ -156,7 +155,7 @@ class AudienceTrackingDetail extends React.Component {
                   </ul>
                 ))}
 
-                {loading && <div className="spinner"><Spinner name="ball-pulse-sync"/></div>}
+                {loading && <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}
 
               </div>
             </div>

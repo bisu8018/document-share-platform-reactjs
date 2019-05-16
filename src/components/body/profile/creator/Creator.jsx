@@ -1,11 +1,10 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
 
 import CuratorUploadTab from "../curator/CuratorUploadTab";
 import MainRepository from "../../../../redux/MainRepository";
 import Common from "../../../../util/Common";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit';
 import NotFoundPage from "../../../common/NotFoundPage";
 import CuratorAnalyticsTabContainer from "../../../../container/body/profile/curator/CuratorAnalyticsTabContainer";
 import CreatorSummaryContainer from "../../../../container/body/profile/creator/CreatorSummaryContainer";
@@ -76,7 +75,7 @@ class Creator extends React.Component {
                                   userInfo={userInfo}/>
           }
 
-          {!userInfo && !errMessage && <div className="spinner"><Spinner name="ball-pulse-sync"/></div>}
+          {!userInfo && !errMessage && <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}
 
           {errMessage && <NotFoundPage errMessage={errMessage}/>}
 

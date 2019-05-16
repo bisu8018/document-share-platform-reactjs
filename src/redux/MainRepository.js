@@ -1,13 +1,13 @@
 import ReactGA from "react-ga";
 import auth0 from "auth0-js";
 import axios from "axios";
-import * as Sentry from "@sentry/browser";
+//import * as Sentry from "@sentry/browser";
 
 import { AUTH_CONFIG } from "properties/auth.properties";
 import { APP_PROPERTIES } from "properties/app.properties";
 
-import DocService from "../service/document/DocService";
-import AuthService from "../service/account/AuthService";
+import DocService from "../service/DocService";
+import AuthService from "../service/AuthService";
 
 import DocumentList from "./model/DocumentList";
 import Document from "./model/Document";
@@ -21,10 +21,10 @@ import AnalysticsExport from "./model/AnalysticsExport";
 import UserProfile from "./model/UserProfile";
 import DocumentDownload from "./model/DocumentDownload";
 import Common from "../util/Common";
-import CuratorService from "../service/curator/CuratorService";
-import TrackingService from "../service/tracking/TrackingService";
+import CuratorService from "../service/CuratorService";
+import TrackingService from "../service/TrackingService";
 import CuratorSummary from "./model/CuratorSummary";
-import AnalyticsService from "../service/analytics/AnalyticsService";
+import AnalyticsService from "../service/AnalyticsService";
 
 let instance: any;
 
@@ -33,10 +33,10 @@ export default {
     instance = this;    // 자기 참조
 
     //센트리 초기화
-    Sentry.init({
-      dsn: "https://fdafe95e12a84551a16451289c5d66b5@sentry.io/1428811"
+  /*  Sentry.init({
+      dsn: "https://6dfadc862ca64af08fd6b39ade991deb@sentry.io/1450741"
     });
-
+*/
     //Google Analytics 초기화
     if (process.env.NODE_ENV === "production") {
       ReactGA.initialize("UA-129300994-1", {
@@ -214,7 +214,8 @@ export default {
             });
           } else if (err) {
             console.log(err);
-            reject(err);
+            this.clearSession();
+            window.location.reload();
           }
         });
       });
@@ -430,7 +431,6 @@ export default {
     },
     clearTrackingCookie() {
       //Google Analystics,
-      Common.deleteCookie("tracking_email");
       Common.deleteCookie("_ga");
       Common.deleteCookie("_gid");
     }
@@ -600,14 +600,14 @@ export default {
       });
     },
     async getCuratorSummary(ethAccount: String, callback: any, error: any) {
-        const authResult = await instance.Account.renewSessionPromise();
-        let token = authResult.idToken;
-        const params = {
-          params: {ethAccount : ethAccount},
-          header: {
-            "Authorization": `Bearer ${token}`
-          }
-        };
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const params = {
+        params: { ethAccount: ethAccount },
+        header: {
+          "Authorization": `Bearer ${token}`
+        }
+      };
       return new Promise((resolve, reject) => {
         CuratorService.GET.curatorSummary(params, (res) => {
           let curatorSummary = new CuratorSummary(res);
@@ -619,6 +619,13 @@ export default {
     }
   },
   Tracking: {
+    postTrackingConfirm(data) {
+      return new Promise((resolve) => {
+        TrackingService.POST.trackingConfirm(data, (result) => {
+          resolve(result);
+        });
+      })
+    },
     async getTrackingInfo(data, callback) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;

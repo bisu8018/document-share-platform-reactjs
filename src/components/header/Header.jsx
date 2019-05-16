@@ -71,7 +71,7 @@ class Header extends React.Component {
   componentWillMount() {
     let pathname = window.location.pathname;
     if (pathname === "/") {
-      window.location.pathname += "latest";
+      //window.location.pathname += "latest";
     }
     this.setState({ prevScrollPos: window.pageYOffset });
   }

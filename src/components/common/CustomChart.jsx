@@ -1,5 +1,5 @@
 import React from "react";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit';
 import Chart from "react-google-charts";
 import Common from "../../util/Common";
 
@@ -121,7 +121,7 @@ class CustomChart extends React.Component {
           data={dataArr}
           options={_options}
           width="100%"
-          loader={<Spinner name="ball-pulse-sync"/>}
+          loader={<ThreeBounce name="ball-pulse-sync"/>}
           legendToggle
         />
       </div>

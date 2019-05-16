@@ -1,10 +1,10 @@
 import React from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import TrackingApis from "apis/TrackingApis";
 import Common from "../../../../util/Common";
 import MainRepository from "../../../../redux/MainRepository";
 import EmailModalContainer from "../../../../container/modal/EmailModalContainer";
+import UserInfo from "../../../../redux/model/UserInfo";
 
 class ContentViewCarousel extends React.Component {
 
@@ -45,8 +45,8 @@ class ContentViewCarousel extends React.Component {
 
   // 문서 옵션 useTracking true 일때만
   handleTracking = async (page) => {
-    const { target, handleEmailFlag, getMyInfo } = this.props;
-    const { emailFlagTemp, readPage } = this.state;
+    const { target, handleEmailFlag, getMyInfo, setMyInfo } = this.props;
+    const { emailFlagTemp, readPage, emailFlag } = this.state;
 
     if ((page === null || page === undefined) && target.forceTracking) return this.setState({ emailFlag: false }, ()=>{handleEmailFlag(false)});
     if (page === readPage) return;
@@ -55,38 +55,51 @@ class ContentViewCarousel extends React.Component {
       this.handleUrl();
     });
 
-    let emailFromAuth = getMyInfo.email;
-    let emailFromSession = Common.getCookie("tracking_email");
-    let temp = emailFromAuth || emailFromSession || null;
-
     if (target.useTracking) {
       if (target.forceTracking) {
         this.setState({ emailFlag: false }, () => {
           handleEmailFlag(false);
 
-          if (page > 0 && !temp && !emailFlagTemp && !MainRepository.Account.isAuthenticated()) {
+          if (page > 0 && !getMyInfo.email && !emailFlagTemp && !MainRepository.Account.isAuthenticated()) {
             this.setState({ emailFlag: true }, ()=>{handleEmailFlag(true)});
           }
         });
       } else {
         // email 입력 모달 on/off 함수
-        if (page > 0 && !temp && !emailFlagTemp) {
+        if (page > 0 && !getMyInfo.email && !emailFlagTemp) {
           this.setState({ emailFlag: true }, ()=>{handleEmailFlag(true)});
         }
       }
-      TrackingApis.tracking({
+
+      await TrackingApis.tracking({
         id: target.documentId,
         n: page + 1,
-        e: temp,
         ev: "view"
-      }, true);
+      }, true).then(res => {
+        if(res.user) {
+          if(getMyInfo.email === ""){
+            let userInfo = new UserInfo();
+            userInfo.email = res.user.e;
+            setMyInfo(userInfo);
+          }
+          if(emailFlag) this.setState({emailFlag : false});
+        }
+      });
     } else {
       TrackingApis.tracking({
         id: target.documentId,
         n: page + 1,
-        e: temp,
         ev: "view"
-      }, true);
+      }, true).then(res => {
+        if(res.user) {
+          if(getMyInfo.email === ""){
+            let userInfo = new UserInfo();
+            userInfo.email = res.user.e;
+            setMyInfo(userInfo);
+          }
+          if(emailFlag) this.setState({emailFlag : false});
+        }
+      });
     }
   };
 
@@ -175,7 +188,7 @@ class ContentViewCarousel extends React.Component {
         </div>
 
         {!MainRepository.Account.isAuthenticated() && emailFlag && target.useTracking &&
-        <EmailModalContainer handleTracking={() => this.handleTracking()} forceTracking={() => this.handleForceTracking()}/>
+        <EmailModalContainer handleTracking={() => this.handleTracking()} forceTracking={() => this.handleForceTracking()} documentId={target.documentId}/>
         }
       </div>
     );

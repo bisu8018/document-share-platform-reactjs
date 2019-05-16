@@ -85,13 +85,12 @@ class VoteDocumentModal extends React.Component {
 
     let ethAccount = getMyInfo.ethAccount;
     let allowance = await getWeb3Apis.getAllowance(ethAccount).then((res) => {
-      console.log(res);
       this.setState({ voteStatus: "ALLOWANCE" }, () => {
         this.handleClose("classicModal");
       });
       return res;
     });
-    return deposit <= allowance;
+    return Number(deposit) <= Number(allowance);
   };
 
   // Step 2 : Approve 체크

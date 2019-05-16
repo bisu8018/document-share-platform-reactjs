@@ -61,7 +61,7 @@ class CreatorSummary extends React.Component {
       };
       // 이미지 서버에 업로드
       MainRepository.Account.profileImageUpload(params, () => {
-        let url = APP_PROPERTIES.domain.profile + result.picture;
+        let url = APP_PROPERTIES.domain().profile + result.picture;
         // 유저 정보 업데이트
         MainRepository.Account.updateProfileImage(url, () => {
           this.setState({ profileImage: url });

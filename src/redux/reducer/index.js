@@ -6,5 +6,5 @@ import audienceTracking from './audienceTracking'
 export default combineReducers({
   main,
   contentView,
-  audienceTracking
+  audienceTracking,
 })

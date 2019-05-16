@@ -1,7 +1,7 @@
 import React from "react";
 import MainRepository from "../../../../redux/MainRepository";
 import InfiniteScroll from "react-infinite-scroll-component";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit';
 import CuratorTabItemContainer from "../../../../container/body/profile/curator/CuratorTabItemContainer";
 import NoDataIcon from "../../../common/NoDataIcon";
 
@@ -89,7 +89,7 @@ class CuratorVoteTab extends React.Component {
             dataLength={resultList.length}
             next={this.fetchMoreData}
             hasMore={!isEndPage}
-            loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
+            loader={<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}>
 
 
             {resultList.length > 0 && resultList.map((result, idx) => (

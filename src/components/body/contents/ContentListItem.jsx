@@ -9,7 +9,6 @@ import Common from "../../../util/Common";
 class ContentListItem extends React.Component {
   render() {
     const { result, getCreatorDailyRewardPool, totalViewCountInfo } = this.props;
-
     let badgeVote = Common.toEther(result.latestVoteAmount) || 0;
     let badgeReward = Common.toEther(Common.getAuthorNDaysReward(result, getCreatorDailyRewardPool, totalViewCountInfo,7));
     let badgeView = result.latestPageview || 0;

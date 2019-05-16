@@ -1,6 +1,6 @@
 import { APP_PROPERTIES } from "../properties/app.properties";
 import MainRepository from "../redux/MainRepository";
-import { BigNumber } from "bignumber.js";
+import BigNumber from "bignumber.js/bignumber";
 
 const imgDomain = APP_PROPERTIES.domain().image;
 //const apiDomain = APP_PROPERTIES.domain().api;

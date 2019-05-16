@@ -4,11 +4,12 @@ import List from "@material-ui/core/List/index";
 import Divider from "@material-ui/core/Divider/index";
 import ListItem from "@material-ui/core/ListItem/index";
 import ListItemText from "@material-ui/core/ListItemText/index";
+import { APP_PROPERTIES } from "properties/app.properties";
 import { Link } from "react-router-dom";
 import ListItemIcon from "@material-ui/core/ListItemIcon/index";
 import MainRepository from "../../redux/MainRepository";
 import UploadDocumentModalContainer from "../../container/modal/UploadDocumentModalContainer";
-import Common from "../../util/Common";
+import Common from "../../util/Common"
 import UserInfo from "../../redux/model/UserInfo";
 
 class Menu extends React.Component {
@@ -27,6 +28,7 @@ class Menu extends React.Component {
 
   handleLogout = () => {
     const {setMyInfo} = this.props;
+
     MainRepository.Account.logout(() => {
       setMyInfo(new UserInfo());
     });
@@ -107,12 +109,20 @@ class Menu extends React.Component {
               <UploadDocumentModalContainer {...this.props} type='menu'/>
             </ListItemText>
           </ListItem>
-          <a href="https://share.decompany.io/legal/policy.html">
+          <a href={APP_PROPERTIES.domain().mainHost + "/legal/policy.html"}>
           <ListItem button >
             <ListItemIcon>
               <i className="material-icons">security</i>
             </ListItemIcon>
-            <ListItemText primary="Privacy Policy"/>
+            <ListItemText primary="Policies"/>
+          </ListItem>
+          </a>
+          <a href={APP_PROPERTIES.domain().mainHost + "/legal/privacy.html"}>
+          <ListItem button >
+            <ListItemIcon>
+              <i className="material-icons">security</i>
+            </ListItemIcon>
+            <ListItemText primary="Privacy"/>
           </ListItem>
           </a>
         </Drawer>

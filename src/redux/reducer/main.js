@@ -30,7 +30,7 @@ const initState = {
   drizzleApis: new DrizzleApis(),
   authorDailyRewardPool: 0,
   curatorDailyRewardPool: 0,
-  alertCode: null,
+  alertCode: null
 };
 
 // 리듀서

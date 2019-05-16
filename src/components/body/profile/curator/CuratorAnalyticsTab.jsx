@@ -1,6 +1,5 @@
 import React from "react";
-import "react-tabs/style/react-tabs.css";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit'
 import InfiniteScroll from "react-infinite-scroll-component";
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -191,7 +190,7 @@ class CuratorAnalyticsTab extends React.Component {
           dataLength={resultList.length}
           next={this.fetchMoreData}
           hasMore={!isEndPage}
-          loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
+          loader={<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}>
 
 
           {resultList.length > 0 && resultList.map((result, idx) => (

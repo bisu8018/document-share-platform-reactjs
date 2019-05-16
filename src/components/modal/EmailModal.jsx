@@ -1,5 +1,4 @@
 import React from "react";
-import "react-tagsinput/react-tagsinput.css";
 
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
@@ -7,7 +6,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Common from "../../util/Common";
-import UserInfo from "../../redux/model/UserInfo";
+import MainRepository from "../../redux/MainRepository";
+import TrackingApis from "../../apis/TrackingApis";
 
 
 function Transition(props) {
@@ -79,15 +79,24 @@ class EmailModal extends React.Component {
     });
   };
 
-  handleSendBtn = () => {
+  handleSendBtn = async () => {
     const { email } = this.state;
-    const { handleTracking, setMyInfo } = this.props;
+    const { handleTracking, documentId } = this.props;
 
     if (this.validateEmail() && this.validateCheckBox()) {
-      Common.setCookie("tracking_email", email);
-      if (Common.getCookie("tracking_email")) handleTracking();
-      setMyInfo(new UserInfo());
-      this.handleClose();
+      const trackingInfo = TrackingApis.setTrackingInfo();
+
+      let data = {
+        "cid": trackingInfo.cid,
+        "sid": trackingInfo.sid,
+        "email": email,
+        "documentId": documentId
+      };
+
+      await MainRepository.Tracking.postTrackingConfirm(data).then(() => {
+        handleTracking();
+        this.handleClose();
+      });
     }
   };
 

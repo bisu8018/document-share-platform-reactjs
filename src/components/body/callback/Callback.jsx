@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MainRepository from "../../../redux/MainRepository";
 import history from "apis/history/history";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit';
 
 class Callback extends Component {
   componentWillMount(): void {
@@ -20,7 +20,7 @@ class Callback extends Component {
 
     return (
       <div className="callback-wrapper">
-        <Spinner name="ball-pulse-sync"/>
+        <ThreeBounce name="ball-pulse-sync"/>
       </div>
     );
   }

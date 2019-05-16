@@ -6,6 +6,7 @@ import ContentMainContainer from "../container/body/contents/ContentMainContaine
 import AudienceTrackingContainer from "../container/body/tracking/AudienceTrackingListContainer";
 import ContentViewContainer from "../container/body/contents/contentsView/ContentViewContainer";
 import AudienceTrackingDetailContainer from "../container/body/tracking/AudienceTrackingDetailContainer";
+import Signup from "../components/common/Signup";
 
 export default ({
     routes: [
@@ -53,6 +54,11 @@ export default ({
         path: "/faq",
         name: "faq",
         component: Faq
+      },
+      {
+        path: "/signup",
+        name: "signup",
+        component: Signup
       },
       {
         path: "/NotFoundPage",

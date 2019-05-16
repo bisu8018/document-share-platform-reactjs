@@ -1,12 +1,11 @@
 import React from "react";
-import "react-tabs/style/react-tabs.css";
 import { Link } from "react-router-dom";
 
-import Common from "util/Common";
+import Common from "../../../util/Common";
 import MainRepository from "../../../redux/MainRepository";
 import DollarWithDeck from "../../common/DollarWithDeck";
 import DeckInShort from "../../common/DeckInShort";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit'
 import Tooltip from "@material-ui/core/Tooltip";
 
 class AudienceTrackingList extends React.Component {
@@ -238,7 +237,7 @@ class AudienceTrackingList extends React.Component {
                   </tbody>
                 </table>
 
-                {loading && <div className="spinner"><Spinner name="ball-pulse-sync"/></div>}
+                {loading && <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}
                 {!loading && rst.length === 0 && <div className="no-data">No data</div>}
 
               </div>

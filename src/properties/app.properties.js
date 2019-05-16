@@ -17,16 +17,16 @@ export const APP_PROPERTIES = {
       profile: "https://profile.share.decompany.io/",
     }
   },
-  dev:{
+  production:{
     domain:{
       mainHost: 'https://www.polarishare.com',
       upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
-      image: 'https://thumb.share.decompany.io',
-      api: "https://api.share.decompany.io/dev",
-      profile: "https://profile.share.decompany.io/",
+      image: 'https://res.polarishare.com',
+      api: "https://api.polarishare.com",
+      profile: "https://res.polarishare.com/",
     }
   },
-  production:{
+  dev:{
     domain:{
       mainHost: 'https://share.decompany.io',
       upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',

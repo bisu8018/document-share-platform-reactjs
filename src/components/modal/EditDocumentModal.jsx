@@ -1,7 +1,6 @@
 import React from "react";
 import AutoSuggest from "react-autosuggest";
 import TagsInput from "react-tagsinput";
-import "react-tagsinput/react-tagsinput.css";
 import history from "apis/history/history";
 
 import Slide from "@material-ui/core/Slide";
@@ -131,6 +130,7 @@ class EditDocumentModal extends React.Component {
   // 유저 트래킹 체크박스
   handleTrackingCheckbox= () => {
     const { useTracking } = this.state;
+
     let newValue = !useTracking;
     this.setState({
       useTracking: newValue
@@ -263,20 +263,20 @@ class EditDocumentModal extends React.Component {
 
                  <div className="dialog-subject mb-2 mt-3">Option</div>
                   <div className="row">
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="useTrackingCheckbox" onChange={(e) => this.handleTrackingCheckbox(e)}
+                  <div className="col-12 col-sm-6" >
+                    <input type="checkbox" id="useTrackingCheckboxEdit"  onChange={(e) => this.handleTrackingCheckbox(e)}
                            checked={useTracking}/>
 
-                    <label htmlFor="useTrackingCheckbox">
+                    <label htmlFor="useTrackingCheckboxEdit">
                       <span><i className="material-icons">done</i></span>
                          Use audience tracking.
                     </label>
                   </div>
                   <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="forceTrackingCheckbox"
+                    <input type="checkbox" id="forceTrackingCheckboxEdit"
                            onChange={(e) => this.handleForceTrackingCheckbox(e)}
                            checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
-                    <label htmlFor="forceTrackingCheckbox">
+                    <label htmlFor="forceTrackingCheckboxEdit">
                       <span><i className="material-icons">done</i></span>
                          Force the audience to tracking.
                     </label>

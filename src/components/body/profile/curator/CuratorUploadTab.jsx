@@ -1,12 +1,10 @@
 import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import "react-tabs/style/react-tabs.css";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit';
 
 import MainRepository from "../../../../redux/MainRepository";
 import NoDataIcon from "../../../common/NoDataIcon";
 import CreatorTabItemContainer from "../../../../container/body/profile/creator/CreatorTabItemContainer";
-
 
 class CuratorUploadTab extends React.Component {
   state = {
@@ -90,7 +88,7 @@ class CuratorUploadTab extends React.Component {
             dataLength={resultList.length}
             next={this.fetchMoreData}
             hasMore={!isEndPage}
-            loader={<div className="spinner"><Spinner name="ball-pulse-sync"/></div>}>
+            loader={<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}>
 
 
             {resultList.length > 0 && resultList.map((result, idx) => (

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Router, Switch } from "react-router-dom";
+import { Route, Router, Switch  } from "react-router-dom";
 import history from "apis/history/history";
 
 import RouterList from "../util/RouterList";
@@ -7,10 +7,13 @@ import MainRepository from "../redux/MainRepository";
 import GuideModal from "./modal/GuideModal";
 import CookiePolicyModal from "./modal/CookiePolicyModal";
 import UserInfo from "../redux/model/UserInfo";
-import * as Sentry from "@sentry/browser";
 import HeaderContainer from "../container/header/HeaderContainer";
 import Common from "../util/Common";
 import AlertContainer from "../container/common/AlertContainer";
+
+import "react-tabs/style/react-tabs.css";
+import "react-tagsinput/react-tagsinput.css";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 class Main extends Component {
   state = {
@@ -76,25 +79,22 @@ class Main extends Component {
 
   componentWillMount() {
     this.init();
-  }
-
-  componentDidCatch(error, errorInfo) {
-    // [2019-04-10]   센트리 에러 체킹
-    // https://docs.sentry.io/platforms/javascript/react/?_ga=2.47401252.280930552.1554857590-1128220521.1554857590
-    if (process.env.NODE_ENV === "production") {
-      this.setState({ error });
-      console.error("errorInfo", error);
-      Sentry.withScope(scope => {
-        scope.setExtras(errorInfo);
-        const eventId = Sentry.captureException(error);
-        this.setState({ eventId });
-      });
-    }
-  }
-
-  componentDidMount() {
     history.listen(MainRepository.Analytics.sendPageView);
   }
+
+  /*  componentDidCatch(error, errorInfo) {
+      // [2019-04-10]   센트리 에러 체킹
+      // https://docs.sentry.io/platforms/javascript/react/?_ga=2.47401252.280930552.1554857590-1128220521.1554857590
+      if (process.env.NODE_ENV === "production") {
+        this.setState({ error });
+        console.error("errorInfo", error);
+        Sentry.withScope(scope => {
+          scope.setExtras(errorInfo);
+          const eventId = Sentry.captureException(error);
+          this.setState({ eventId });
+        });
+      }
+    }*/
 
   render() {
     const { getIsMobile, getMyInfo, getAlertCode } = this.props;

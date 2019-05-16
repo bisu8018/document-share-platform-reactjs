@@ -1,5 +1,5 @@
 import React from "react";
-import Spinner from "react-spinkit";
+import { ThreeBounce } from 'better-react-spinkit';
 import { Helmet } from "react-helmet";
 
 import ContentViewRight from "./ContentViewRight";
@@ -14,6 +14,7 @@ class ContentView extends React.Component {
   state = {
     documentTitle: null,
     documentData: null,
+    totalViewCountInfo: null,
     errMessage: null,
     documentText: null,
     author: null,
@@ -26,9 +27,10 @@ class ContentView extends React.Component {
       this.setState({
         documentTitle: res.document.seoTitle,
         documentData: res.document,
+        totalViewCountInfo: res.totalViewCountInfo,
         featuredList: res.featuredList,
         documentText: res.text,
-        author: res.author,
+        author: res.document.author,
         errMessage: null
       }, () => {
         this.setDocumentIsExist();  //문서 로드 후 문서 블록체인 등록 체크
@@ -37,6 +39,7 @@ class ContentView extends React.Component {
       this.setState({
         documentTitle: null,
         documentData: null,
+        totalViewCountInfo: null,
         errMessage: err,
         documentText: null,
         author: null,
@@ -81,14 +84,15 @@ class ContentView extends React.Component {
 
   render() {
     const { auth, match, ...rest } = this.props;
-    const { documentData, documentText, featuredList, author, errMessage } = this.state;
+    const { documentData, documentText, totalViewCountInfo, featuredList, author, errMessage } = this.state;
     if (!documentData && !errMessage) {
-      return (<div className="spinner"><Spinner name="ball-pulse-sync"/></div>);
+      return (<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>);
     }
     if (!documentData && errMessage) {
       return (errMessage && <NotFoundPage errMessage={errMessage}/>);
     }
 
+    console.log(window.location.href)
     return (
 
       <div data-parallax="true" className="container_view row col-re">
@@ -98,7 +102,7 @@ class ContentView extends React.Component {
           <meta name="description" content={documentData.desc}/>
           <meta name="thumbnail" content={this.getImgUrl()}/>
           <link rel="canonical"
-                href={"https://share.decompany.io/" + match.params.identification + "/" + match.params.seoTitle}/>
+                href={window.location.href}/>
 
           <meta content="2237550809844881" className="fb_og_meta" property="fb:app_id" name="fb_app_id"/>
           <meta content="decompany:document" className="fb_og_meta" property="og:type" name="og_type"/>
@@ -122,7 +126,7 @@ class ContentView extends React.Component {
         </Helmet>
 
         <div className="col-md-12 col-lg-8 view_left">
-          <ContentViewFullScreenContainer documentData={documentData} documentText={documentText}
+          <ContentViewFullScreenContainer documentData={documentData} documentText={documentText} totalViewCountInfo={totalViewCountInfo}
                                           auth={auth} author={author}/>
         </div>
 

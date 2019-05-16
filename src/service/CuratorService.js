@@ -1,4 +1,4 @@
-import AxiosService from "../AxiosService";
+import AxiosService from "./AxiosService";
 
 let getCuratorDocumentsUrl = "curator/document/list";
 let getCuratorSummary = "curator/summary";
