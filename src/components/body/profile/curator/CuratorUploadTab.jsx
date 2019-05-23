@@ -80,7 +80,7 @@ class CuratorUploadTab extends React.Component {
 
       <div>
         <div className="document-total-num">
-          Total documents : <span>{resultList.length}</span>
+          Total documents : <span className="font-weight-bold">{resultList.length}</span>
         </div>
         {resultList.length > 0 ?
           <InfiniteScroll

@@ -68,6 +68,7 @@ class CuratorAnalyticsTab extends React.Component {
   // 차트 정보 GET
   getAnalytics = (documentId, dataKey) => {
     const { week, year } = this.state;
+
     MainRepository.Analytics.getAnalyticsList({
         week: week,
         year: year,
@@ -183,7 +184,7 @@ class CuratorAnalyticsTab extends React.Component {
     return (
       <div>
         <div className="document-total-num mb-2">
-          Total documents : <span>{resultList.length}</span>
+          Total documents : <span className="font-weight-bold">{resultList.length}</span>
         </div>
         <InfiniteScroll
           className="overflow-hidden"

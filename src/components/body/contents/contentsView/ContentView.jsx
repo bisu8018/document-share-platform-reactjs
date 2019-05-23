@@ -92,7 +92,6 @@ class ContentView extends React.Component {
       return (errMessage && <NotFoundPage errMessage={errMessage}/>);
     }
 
-    console.log(window.location.href)
     return (
 
       <div data-parallax="true" className="container_view row col-re">

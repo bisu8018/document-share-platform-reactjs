@@ -282,7 +282,6 @@ class UploadDocumentModal extends React.Component {
       <span>
             <div className="upload-btn d-none d-sm-inline-block" id="uploadBtn"
                  onClick={() => this.handleClickOpen("classicModal")}>
-              <i className="material-icons">cloud_upload</i>
               Upload
             </div>
         {type && type === "menu" &&

@@ -196,6 +196,17 @@ export default ({
     let dollar = bn.multipliedBy(c);
     return Math.round(dollar.toNumber() * 100) / 100;
   },
+  deckStr: (deck: number) => {
+    let deck1m = Math.round((deck) / 1000000) > 0 ? Math.floor((deck) / 100000) / 10 : 0;
+    let deck1k = Math.round((deck) / 1000) > 0 ? Math.floor((deck) / 100) / 10 : 0;
+    let deckStr = 0;
+
+    if(deck){
+      deckStr = deck1m > 0 ? deck1m.toFixed(1) + "m" : deck1k > 0 ? deck1k + "k" : deck + "";
+    }
+
+    return deckStr;
+  },
   authorCalculateReward: (pv: number, tpv: number, pool: number) => {
     if (tpv === 0 || pv === 0 || pool === 0) return 0;
     return (pv * (pool / tpv));

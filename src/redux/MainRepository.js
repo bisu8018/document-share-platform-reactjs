@@ -38,8 +38,10 @@ export default {
     });
 */
     //Google Analytics 초기화
+    //UA-129300994-1 : share
+    //UA-140503497-1 : polaris
     if (process.env.NODE_ENV === "production") {
-      ReactGA.initialize("UA-129300994-1", {
+      ReactGA.initialize("UA-140503497-1", {
         debug: false,
         gaOptions: {
           env: process.env.NODE_ENV
@@ -584,15 +586,7 @@ export default {
   },
   Curator: {
     async getCuratorDocuments(params: any, callback: any, error: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
-      const _params = {
-        params: params,
-        header: {
-          "Authorization": `Bearer ${token}`
-        }
-      };
-      CuratorService.GET.curatorDocuments(_params, (result) => {
+      CuratorService.GET.curatorDocuments(params, (result) => {
         let curatorDocuments = new CuratorDocuments(result);
         callback(curatorDocuments);
       }, (err) => {
@@ -600,14 +594,7 @@ export default {
       });
     },
     async getCuratorSummary(ethAccount: String, callback: any, error: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
-      const params = {
-        params: { ethAccount: ethAccount },
-        header: {
-          "Authorization": `Bearer ${token}`
-        }
-      };
+      const params = { ethAccount: ethAccount  };
       return new Promise((resolve, reject) => {
         CuratorService.GET.curatorSummary(params, (res) => {
           let curatorSummary = new CuratorSummary(res);
@@ -636,7 +623,8 @@ export default {
         params: {
           "cid": data.cid,
           "documentId": data.documentId,
-          "include": data.include
+          "include": data.include,
+          "anonymous": data.anonymous
         }
       };
       TrackingService.GET.trackingInfo(params, (result) => {

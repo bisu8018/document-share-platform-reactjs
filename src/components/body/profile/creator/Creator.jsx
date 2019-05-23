@@ -67,7 +67,7 @@ class Creator extends React.Component {
     return (
 
       <div className="row">
-        <div className="col-sm-12 col-lg-10 offset-lg-1 u__center profile-center">
+        <div className="col-12 u__center">
 
           {userInfo &&
           <CreatorSummaryContainer uploadDocumentList={uploadDocumentList.resultList}

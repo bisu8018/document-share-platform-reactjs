@@ -10,10 +10,12 @@ import UserInfo from "../redux/model/UserInfo";
 import HeaderContainer from "../container/header/HeaderContainer";
 import Common from "../util/Common";
 import AlertContainer from "../container/common/AlertContainer";
+import Footer from "./footer/Footer";
 
 import "react-tabs/style/react-tabs.css";
 import "react-tagsinput/react-tagsinput.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 
 class Main extends Component {
   state = {
@@ -131,6 +133,8 @@ class Main extends Component {
               </Switch>
             </div>
           </div>
+
+          <Footer/>
 
           { getAlertCode && <AlertContainer code={getAlertCode}/> }
 

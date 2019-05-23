@@ -35,7 +35,7 @@ class CopyModal extends React.Component {
     const x = [];
     x[modal] = true;
     this.setState(x);
-    this.setState({url : window.location.href});
+    this.setState({ url: window.location.href });
   };
 
   handleClose = (modal) => {
@@ -49,7 +49,7 @@ class CopyModal extends React.Component {
     let copyUrl = document.getElementById("copyInput");
     copyUrl.select();
     document.execCommand("copy");
-    this.setState({copyText : "Done"})
+    this.setState({ copyText: "Done" });
   };
 
   render() {
@@ -58,8 +58,8 @@ class CopyModal extends React.Component {
     return (
       <span>
          <Tooltip title="Clip the URL of this document" placement="bottom">
-                <div className="share-btn" onClick={() => this.handleClickOpen("classicModal")}>
-                  <i className="material-icons">share</i>
+                <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
+                  <i className="material-icons">share</i> Copy Link
                 </div>
               </Tooltip>
 

@@ -212,8 +212,8 @@ class VoteDocumentModal extends React.Component {
     if (!isLogin) {
       return (
         <Tooltip title="Please, login" placement="bottom">
-          <div className="vote-btn" onClick={this.handleLogin.bind(this)}>
-            <i className="material-icons">how_to_vote</i>
+          <div className="viewer-btn" onClick={this.handleLogin.bind(this)}>
+            <i className="material-icons">how_to_vote</i> Vote
           </div>
         </Tooltip>
       );
@@ -223,16 +223,16 @@ class VoteDocumentModal extends React.Component {
       <span>
         {(!getDrizzle || !getDrizzle.isAuthenticated()) &&
         <Tooltip title="Please, work with MetaMask" placement="bottom">
-          <div className="vote-btn">
-            <i className="material-icons">how_to_vote</i>
+          <div className="viewer-btn">
+            <i className="material-icons">how_to_vote</i> Vote
           </div>
         </Tooltip>
         }
 
         {getDrizzle && getIsDocumentExist &&
         <Tooltip title="Vote on this document" placement="bottom">
-          <div className="vote-btn" onClick={() => this.handleClickOpen("classicModal")}>
-            <i className="material-icons">how_to_vote</i>
+          <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
+            <i className="material-icons">how_to_vote</i> Vote
           </div>
         </Tooltip>
         }

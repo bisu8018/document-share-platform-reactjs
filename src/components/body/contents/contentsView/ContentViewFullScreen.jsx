@@ -33,7 +33,7 @@ class ContentViewFullScreen extends Component {
     error: null,
     eventId: null,
     emailFlag: false,
-    badgeReward: 0,
+    reward: 0,
     isDocumentExist: null
   };
 
@@ -110,8 +110,8 @@ class ContentViewFullScreen extends Component {
   getReward = () => {
     const { documentData, getWeb3Apis } = this.props;
     getWeb3Apis.getNDaysRewards(documentData.documentId, 7).then(res => {
-      let badgeReward = Common.toEther(res);
-      this.setState({ badgeReward: badgeReward });
+      let reward = Common.toEther(res);
+      this.setState({ reward: reward });
     });
   };
 
@@ -131,9 +131,9 @@ class ContentViewFullScreen extends Component {
     const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo } = this.props;
     const { page, isFull, carouselClass, emailFlag } = this.state;
 
-    let badgeVote = Common.toEther(documentData.latestVoteAmount) || 0;
-    let badgeReward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo,7));
-    let badgeView = documentData.latestPageview || 0;
+    let vote = Common.toEther(documentData.latestVoteAmount) || 0;
+    let reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo,7));
+    let view = documentData.latestPageview || 0;
     let accountId = documentData.accountId || "";
     let url = window.location.href;
     let profileUrl = author ? author.picture : null;
@@ -154,61 +154,13 @@ class ContentViewFullScreen extends Component {
             <div className="view_screen">
               <i title="Fullscreen button" className="material-icons" onClick={this.goFull}>fullscreen</i>
             </div>
-
           </Fullscreen>
         </div>
 
 
         <div className="view_content">
-          <div className="u_title h4">   {documentData.title ? documentData.title : ""}</div>
-
-
-          <div className="col-view">
-            <span className="txt_view">{badgeView}</span>
-
-            <span className="view_date view-reward">
-                <DollarWithDeck deck={badgeReward}/>
-              </span>
-
-            <span className="view_date view-reward">
-                <DeckInShort deck={badgeVote}/>
-              </span>
-
-            <span className="view_date">
-                {Common.timestampToDateTime(documentData.created)}
-              </span>
-          </div>
-
-
-          <div className="row view_btns_inner">
-            {accountId === Common.getMySub() && documentData &&
-            <EditDocumentModalContainer documentData={documentData}/>
-            }
-
-            <CopyModal/>
-
-            <Tooltip title="Download this document" placement="bottom">
-              <div className="share-btn" onClick={this.handleDownloadContent}>
-                <i className="material-icons">save_alt</i>
-              </div>
-            </Tooltip>
-
-            {accountId === Common.getMySub() &&
-            <Tooltip title="Track activity of your audience." placement="bottom">
-              <Link to={{
-                pathname: "/tracking/" + identification + "/" + documentData.seoTitle,
-                state: { documentData: documentData, documentText: documentText }
-              }}>
-                <div className="statistics-btn"><i className="material-icons">bar_chart</i></div>
-              </Link></Tooltip>
-            }
-
-            <RegBlockchainBtnContainer documentData={documentData}/>
-            <VoteDocumentModalContainer documentData={documentData}/>
-          </div>
-
-
-          <Link to={"/" + identification} className="info_name"
+          <div className="u_title pt-2 pb-2 mt-2 mb-2">   {documentData.title ? documentData.title : ""}</div>
+          <Link to={"/" + identification} className="info_name mb-2"
                 title={"Go to profile page of " + identification}>
             {profileUrl ?
               <img src={profileUrl} alt="profile"/> :
@@ -218,36 +170,45 @@ class ContentViewFullScreen extends Component {
           </Link>
 
 
-          <div className="sns-share-icon-wrapper">
-
-
-            <Tooltip title="Share with Facebook" placement="bottom">
-              <div className="d-inline-block">
-                <FacebookShareButton url={url} className="sns-share-icon">
-                  <FacebookIcon size={28}/>
-                </FacebookShareButton>
-              </div>
-            </Tooltip>
-
-
-            <Tooltip title="Share with Line" placement="bottom">
-              <div className="d-inline-block">
-                <LinkedinShareButton url={url} className="sns-share-icon " title={documentData.title}>
-                  <LinkedinIcon size={28}/>
-                </LinkedinShareButton>
-              </div>
-            </Tooltip>
-
-
-            <Tooltip title="Share with Twitter" placement="bottom">
-              <div className="d-inline-block">
-                <TwitterShareButton url={url} className="sns-share-icon" hashtags={documentData.tags}
-                                    title={documentData.title}>
-                  <TwitterIcon size={28}/>
-                </TwitterShareButton>
-              </div>
-            </Tooltip>
+          <div className="info_date">
+            {Common.timestampToDateTime(documentData.created)}
           </div>
+
+
+          <div className="">
+            <span className="info-detail-reward mr-2" >
+              ${Common.deckToDollar(reward)}
+              <i className="material-icons">arrow_drop_down</i>
+            </span>
+            <span className="info-detail-view mr-3">{view}</span>
+            <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
+
+
+            {accountId === Common.getMySub() && documentData &&  <EditDocumentModalContainer documentData={documentData}/> }
+
+            <CopyModal/>
+
+            <Tooltip title="Download this document" placement="bottom">
+              <div className="viewer-btn" onClick={this.handleDownloadContent}>
+                <i className="material-icons">save_alt</i> Download
+              </div>
+            </Tooltip>
+
+            {accountId === Common.getMySub() &&
+            <Tooltip title="Track activity of your audience." placement="bottom">
+              <Link to={{
+                pathname: "/tracking/" + identification + "/" + documentData.seoTitle,
+                state: { documentData: documentData, documentText: documentText }
+              }}>
+                <div className="viewer-btn"><i className="material-icons">bar_chart</i> Tracking</div>
+              </Link></Tooltip>
+            }
+
+            <RegBlockchainBtnContainer documentData={documentData}/>
+            <VoteDocumentModalContainer documentData={documentData}/>
+          </div>
+
+          <hr className="mt-3 mb-3"/>
 
           <div className="view_desc">
             <Linkify properties={{
@@ -256,17 +217,47 @@ class ContentViewFullScreen extends Component {
               target: "_blank",
               style: { color: "#7fc241", fontWeight: "400" }
             }}>{documentData.desc}</Linkify>
-            <div className="view_tag">
-              <i className="material-icons" title="tag">local_offer</i>
+
+            <div className="view_tag mb-3">
               {documentData.tags ? documentData.tags.map((tag, index) => (
                 <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
                       className="tag"> {tag} </Link>
               )) : ""}
             </div>
 
+            <div className="sns-share-icon-wrapper mb-3">
+              <Tooltip title="Share with Facebook" placement="bottom">
+                <div className="d-inline-block mr-2">
+                  <FacebookShareButton url={url} className="sns-share-icon">
+                    <FacebookIcon size={28}/>
+                  </FacebookShareButton>
+                </div>
+              </Tooltip>
 
-            <hr className="mb-4"/>
-            <div className="view_content-desc">
+
+              <Tooltip title="Share with Line" placement="bottom">
+                <div className="d-inline-block mr-2">
+                  <LinkedinShareButton url={url} className="sns-share-icon " title={documentData.title}>
+                    <LinkedinIcon size={28}/>
+                  </LinkedinShareButton>
+                </div>
+              </Tooltip>
+
+
+              <Tooltip title="Share with Twitter" placement="bottom">
+                <div className="d-inline-block">
+                  <TwitterShareButton url={url} className="sns-share-icon" hashtags={documentData.tags}
+                                      title={documentData.title}>
+                    <TwitterIcon size={28}/>
+                  </TwitterShareButton>
+                </div>
+              </Tooltip>
+            </div>
+
+
+            <hr className="mb-3"/>
+
+            <div className="view_content-desc mb-5">
               {documentData.forceTracking && emailFlag ?
                 <div className="view-content-desc-warning">If you want to read the document, you need to enter
                   email.</div> :
@@ -274,7 +265,7 @@ class ContentViewFullScreen extends Component {
                   title: "Link to this URL",
                   rel: "nofollow",
                   target: "_blank",
-                  style: { color: "#7fc241", fontWeight: "400" }
+                  style: { color: "#0d73f8", fontWeight: "400" }
                 }}>{documentText[page - 1]}</Linkify>
               }
             </div>

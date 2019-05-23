@@ -126,6 +126,7 @@ class CreatorSummary extends React.Component {
 
       <div className="profile_container">
         <div className="row  profile_top">
+          <div className="profile-top-wrapper"/>
           <div className="col-12 col-md-2 ">
             <div className="profile-image" title="Change profile image">
               <img src={profileImage} alt="profile" className="img-fluid"/>
@@ -162,18 +163,18 @@ class CreatorSummary extends React.Component {
             </div>
 
             <div className="profile_info_desc">
-              * Total balance :
+              Total balance :
               <span className="color">
                 <BalanceOfContainer balance={balance}/>
               </span>
               <br/>
-              * Estimated earnings for today :
+              Estimated earnings for today :
               <span className="color">
-                <DollarWithDeck deck={ Number(authorTodayReward) + Number(curatorEstimatedToday)}/>
+                <DollarWithDeck deck={ Number(authorTodayReward || 0) + Number(curatorEstimatedToday || 0)}/>
               </span>
-              <br/>* Revenue for the last 7 days :
+              <br/>Revenue for the last 7 days :
               <span className="color">
-                <DollarWithDeck deck={ Number(author7DayReward) + Number(curatorTotalRewards)}/>
+                <DollarWithDeck deck={ Number(author7DayReward || 0) + Number(curatorTotalRewards || 0)}/>
               </span>
             </div>
           </div>
@@ -184,8 +185,8 @@ class CreatorSummary extends React.Component {
           <div className=" profile_creator col-sm-12 col-md-6">
             <h5>Author rewards</h5>
             <div className="profile_info_desc">
-              * Estimated earnings for today : <span><DollarWithDeck deck={authorTodayReward}/></span>
-              <br/>* Revenue for the last 7 days : <span><DollarWithDeck deck={author7DayReward}/></span>
+              Estimated earnings for today : <span><DollarWithDeck deck={authorTodayReward}/></span>
+              <br/>Revenue for the last 7 days : <span><DollarWithDeck deck={author7DayReward}/></span>
             </div>
           </div>
 
@@ -193,9 +194,9 @@ class CreatorSummary extends React.Component {
           <div className=" profile_creator col-sm-12 col-md-6">
             <h5>Curator rewards</h5>
             <div className="profile_info_desc">
-              * Estimated earnings for today : <span><DollarWithDeck deck={curatorEstimatedToday}/></span>
+              Estimated earnings for today : <span><DollarWithDeck deck={curatorEstimatedToday}/></span>
 
-              <br/>* Revenue for the last 7 days : <span><DollarWithDeck deck={curatorTotalRewards}/></span>
+              <br/>Revenue for the last 7 days : <span><DollarWithDeck deck={curatorTotalRewards}/></span>
             </div>
           </div>
         </div>

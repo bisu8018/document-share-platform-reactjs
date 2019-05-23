@@ -1,0 +1,9 @@
+Sitemap: https://share.decompany.io/sitemap.xml
+User-agent: *
+Disallow: /~/
+Disallow: /latest/*/
+Disallow: /featured/*/
+Disallow: /popular/*/
+Disallow: /faq/
+Disallow: /legal/policy.html
+Disallow: /tracking/*/

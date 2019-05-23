@@ -1,0 +1,143 @@
+import React, { Component } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { ThreeBounce } from "better-react-spinkit";
+import MainRepository from "../../../redux/MainRepository";
+import Common from "../../../util/Common";
+import ContentTagsContainer from "../../../container/body/contents/ContentTagsContainer";
+import ContentListItemContainer from "../../../container/body/contents/ContentListItemContainer";
+
+class ContentList extends Component {
+  state = {
+    resultList: [],
+    pageNo: 1,
+    isEndPage: false,
+    tag: null,
+    totalViewCountInfo: null,
+    path: null,
+    loading: false,
+    tagSearchFlag: false
+  };
+
+  constructor(props) {
+    super(props);
+    this.handleCategories = this.handleCategories.bind(this);
+  }
+
+  fetchMoreData = () => {
+    const { pageNo, tag, path, resultList } = this.state;
+
+    let _pageNo = (resultList.length === 0 ? 1 : pageNo + 1);
+    this.setState({ loading: true }, () => {
+      this.fetchDocuments({
+        pageNo: _pageNo,
+        tag: tag,
+        path: path
+      });
+    });
+  };
+
+  fetchDocuments = (args) => {
+    const { path, resultList, tagSearchFlag } = this.state;
+    const params = {
+      pageNo: args.pageNo,
+      tag: args.tag,
+      path: args.path ? args.path : path
+    };
+
+    MainRepository.Document.getDocumentList(params, (res) => {
+      this.setState({ loading: false });
+      const _resultList = res.resultList ? res.resultList : [];
+      const pageNo = res.pageNo;
+
+      if (_resultList.length > 0) {
+        if (resultList.length > 0 && !tagSearchFlag) {
+          this.setState({ resultList: resultList.concat(_resultList), pageNo: pageNo });
+        } else {
+          this.setState({ resultList: _resultList, pageNo: pageNo, tagSearchFlag: false });
+        }
+      } else {
+        this.setState({ isEndPage: true });
+      }
+
+      if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) {
+        this.setState({ totalViewCountInfo: res.totalViewCountInfo });
+      }
+    }, () => {
+      this.setState({ loading: false });
+    });
+  };
+
+  setFetch = () => {
+    this.setState({
+      resultList: [],
+      pageNo: 1,
+      isEndPage: false,
+      tag: Common.getTag(),
+      path: Common.getPath(),
+      tagSearchFlag: true
+    }, () => {
+      this.fetchDocuments({
+        tag: Common.getTag(),
+        path: Common.getPath()
+      });
+    });
+  };
+
+  handleCategories = () => {
+    let path = Common.getPath();
+    let sec_path = Common.getTag();
+
+    this.props.history.push("/" + path + "/" + sec_path);
+  };
+
+  handleUploadBtn = () => {
+    document.getElementById("uploadBtn").click();
+  };
+
+  componentDidUpdate = () => {
+    let pathArr = window.location.pathname.split("/");
+    if (pathArr.length > 2 && decodeURI(pathArr[2]) !== this.state.tag) {
+      this.setFetch();
+    }
+  };
+
+  componentWillMount() {
+    this.setFetch();
+  }
+
+  render() {
+    const { match, isEndPage } = this.props;
+    const { resultList, totalViewCountInfo } = this.state;
+
+    return (
+      <div className="row">
+        <div className="col-lg-3 ">
+          <ContentTagsContainer path={match.path} url={match.url} {...this.props}/>
+        </div>
+
+        <div className="col-sm-12 col-lg-9 u__center-container">
+          <div className="u__center">
+
+            <InfiniteScroll
+              className="overflow-hidden"
+              dataLength={resultList.length}
+              next={this.fetchMoreData}
+              hasMore={!isEndPage}
+            >
+              {resultList.length > 0 && resultList.map((result) => (
+                <ContentListItemContainer key={result.documentId + result.accountId} result={result}
+                                          totalViewCountInfo={totalViewCountInfo}/>
+              ))}
+            </InfiniteScroll>
+            {this.state.loading &&
+            <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>
+            }
+          </div>
+        </div>
+
+      </div>
+    );
+  }
+}
+
+export default ContentList;

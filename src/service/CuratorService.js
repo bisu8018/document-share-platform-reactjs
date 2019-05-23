@@ -6,7 +6,7 @@ let getCuratorSummary = "curator/summary";
 export default {
   GET: {
     curatorDocuments: (data, callback, error) => {
-      AxiosService._requestGetWithHeader(getCuratorDocumentsUrl, "GET", data,
+      AxiosService._requestWithUrlPram(getCuratorDocumentsUrl, "GET", data,
         (data) => {
           callback(data);
         }, (err) => {
@@ -14,7 +14,7 @@ export default {
         });
     },
     curatorSummary: (data, callback, error) => {
-      AxiosService._requestGetWithHeader(getCuratorSummary, "GET", data,
+      AxiosService._requestWithUrlPram(getCuratorSummary, "GET", data,
         (data) => {
           callback(data);
         }, (err) => {

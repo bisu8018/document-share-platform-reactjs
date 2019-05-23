@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 54.1 (76490) - https://sketchapp.com -->
+    <title>99ED9392-7736-46DA-9A3F-27A36B69F559</title>
+    <desc>Created with sketchtool.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ic/small/view">
+            <g id="Group" transform="translate(3.000000, 6.000000)">
+                <path d="M9,0 C11.8405334,0 14.6810668,1.79302891 17.5216003,5.37908673 L17.5215995,5.37908731 C17.809761,5.74287948 17.809761,6.25712207 17.5215995,6.62091423 C14.6810663,10.2069714 11.8405332,12 9,12 C6.15946658,12 3.31893317,10.2069711 0.478399748,6.62091327 L0.478400478,6.62091269 C0.190238972,6.25712052 0.190238983,5.74287793 0.478400505,5.37908577 C3.31893367,1.79302859 6.15946683,0 9,0 Z" id="Rectangle" fill="#666666"></path>
+                <circle id="Oval-Copy" fill="#FFFFFF" cx="9" cy="6" r="4.5"></circle>
+                <circle id="Oval" fill="#666666" cx="9" cy="6" r="2.7"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

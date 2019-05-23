@@ -11,7 +11,7 @@ class Callback extends Component {
       let myInfo = MainRepository.Account.getMyInfo();
       MainRepository.Account.getAccountInfo(myInfo.sub, result => {
         this.props.setMyInfo(result);
-        history.push("/latest");
+        history.push("/");
       });
     });
   }

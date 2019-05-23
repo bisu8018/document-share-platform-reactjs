@@ -217,8 +217,8 @@ class EditDocumentModal extends React.Component {
     return (
       <span>
         <Tooltip title="Settings of this document" placement="bottom">
-          <div className="statistics-btn pt-1" onClick={() => this.handleClickOpen("classicModal")}>
-            <i className="material-icons">settings</i>
+          <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
+            <i className="material-icons">settings</i> Settings
           </div>
         </Tooltip>
         {type && type === "menu" &&

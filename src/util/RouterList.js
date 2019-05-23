@@ -7,6 +7,7 @@ import AudienceTrackingContainer from "../container/body/tracking/AudienceTracki
 import ContentViewContainer from "../container/body/contents/contentsView/ContentViewContainer";
 import AudienceTrackingDetailContainer from "../container/body/tracking/AudienceTrackingDetailContainer";
 import Signup from "../components/common/Signup";
+import ContentListContainer from "../container/body/contents/ContentListContainer";
 
 export default ({
     routes: [
@@ -18,22 +19,22 @@ export default ({
       {
         path: "/latest",
         name: "Latest",
-        component: ContentMainContainer,
+        component: ContentListContainer,
       },
       {
         path: "/latest/:tag",
         name: "LatestTag",
-        component: ContentMainContainer,
+        component: ContentListContainer,
       },
       {
         path: "/popular",
         name: "Popular",
-        component: ContentMainContainer
+        component: ContentListContainer
       },
       {
         path: "/featured",
         name: "Featured",
-        component: ContentMainContainer
+        component: ContentListContainer
       },
       {
         path: "/callback",
