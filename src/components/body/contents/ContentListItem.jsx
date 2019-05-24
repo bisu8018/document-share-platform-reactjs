@@ -24,7 +24,7 @@ class ContentListItem extends React.Component {
 
     return (
       <div className="row u_center_inner" key={result.seoTitle}>
-        <div className="col-thumb">
+        <div className="col-thumb-list">
           <Link to={"/" + identification + "/" + result.seoTitle}>
             <div className="thumb_image">
               <img src={imageUrl} alt={result.title} className="img-fluid"/>
@@ -33,11 +33,11 @@ class ContentListItem extends React.Component {
         </div>
 
         <div className="col-details_info details_info">
-          <div className="mb-2 detail-title">
+          <div className="mb-3 mb-sm-2 detail-title">
             <Link to={"/" + identification + "/" + result.seoTitle}
                   title={result.title}> {result.title ? result.title : result.documentName}</Link>
           </div>
-          <div>
+          <div className="mb-3 mb-sm-2">
             <Link to={"/" + identification} className="info_name mb-2"
                   title={identification}>
               {profileUrl ?

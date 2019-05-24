@@ -11,7 +11,7 @@ class ContentViewRight extends React.Component {
     } else {
       return (
         <div className="u__right">
-          <h4>See also</h4>
+          <div>See also</div>
           <hr/>
           {featuredList.length > 0 && featuredList.map((result, idx) => (
             <FeaturedList resultItem={result} key={idx}/>

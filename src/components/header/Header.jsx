@@ -8,20 +8,20 @@ import UploadDocumentModalContainer from "../../container/modal/UploadDocumentMo
 import MenuContainer from "../../container/header/MenuContainer";
 import AutoSuggestInputContainer from "../../container/common/AutoSuggestInputContainer";
 import ProfileCardContainer from "../../container/common/ProfileCardContainer";
+import AdsContainer from "../../container/ads/AdsContainer";
 
 class Header extends React.Component {
-  state = {
-    accountId: null,
-    prevScrollPos: null,
-    searchBar: false,
-    profileCardShow: false,
-    selectedTag: null,
-    selectedCategory: "/latest"
-  };
 
   constructor(props) {
     super(props);
     this.state = {
+      accountId: null,
+      prevScrollPos: null,
+      searchBar: false,
+      profileCardShow: false,
+      selectedTag: null,
+      selectedCategory: "/latest",
+      adShow: true,
       mobileOpen: false
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
@@ -133,6 +133,10 @@ class Header extends React.Component {
     e.target.classList.add("on");
   };
 
+  handleClose = () => {
+    this.setState({adShow : false});
+  };
+
   componentWillMount() {
     this.setState({ prevScrollPos: window.pageYOffset });
     this.clickEventListener();
@@ -148,13 +152,17 @@ class Header extends React.Component {
   }
 
   render() {
-    const { prevScrollPos, searchBar, profileCardShow } = this.state;
+    const { prevScrollPos, searchBar, profileCardShow, adShow } = this.state;
     const { getMyInfo } = this.props;
+
+    let pathname = history.location.pathname.split("/")[1];
 
     return (
 
       <header id="header">
-        <nav className=" navbar navbar-default navbar-expand-lg fixed-top" id="header__main-nav">
+        {adShow && !pathname && (window.pageYOffset <= "55") && <AdsContainer close={()=>this.handleClose()}/>}
+        <nav className={"navbar navbar-default navbar-expand-lg fixed-top " + (adShow && !pathname && (window.pageYOffset <= "55") ? "ad-effective" : "")}
+             id="header__main-nav">
           <div className="container-fluid container">
             <div className="col-4 col-lg-3 mt-1">
               <a className="navbar-brand" href={"/"}>
@@ -182,7 +190,7 @@ class Header extends React.Component {
                 <div className="header-search-wrapper" id="headerAutoSuggest">
                   <AutoSuggestInputContainer search={this.onSuggestionSelected} type={"tag"}/>
                   <select className="header-select-custom" onChange={(value) => this.handleCategories(value)}
-                          >
+                  >
                     <option value="/latest">LATEST</option>
                     <option value="/featured">FEATURED</option>
                     <option value="/popular">POPULAR</option>

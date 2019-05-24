@@ -8,6 +8,7 @@ export default connect(
     getDrizzle: state.main.drizzleApis,
     getShowAnonymous: state.audienceTracking.showAnonymous,
     getIncludeOnlyOnePage: state.audienceTracking.includeOnlyOnePage,
+    getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
   }),
   dispatch => ({
     setShowAnonymous: (showAnonymous: boolean, callback) => {

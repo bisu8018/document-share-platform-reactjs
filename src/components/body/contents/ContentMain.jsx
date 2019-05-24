@@ -91,7 +91,7 @@ class ContentMain extends Component {
 
         <div className="main-banner-dummy"/>
 
-        <div className="col-12 u__center-container">
+        <div className="col-12 content-main-container">
           <div className="u__center">
             {category.map((arr, idx) => (
               <div className="main-category" key={idx}>

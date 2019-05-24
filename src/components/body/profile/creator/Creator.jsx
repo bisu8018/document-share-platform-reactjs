@@ -66,7 +66,7 @@ class Creator extends React.Component {
     let param = this.getParam();
     return (
 
-      <div className="row">
+      <div className="row mb-5">
         <div className="col-12 u__center">
 
           {userInfo &&

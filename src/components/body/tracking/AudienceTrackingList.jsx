@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 
 import Common from "../../../util/Common";
 import MainRepository from "../../../redux/MainRepository";
-import DollarWithDeck from "../../common/DollarWithDeck";
-import DeckInShort from "../../common/DeckInShort";
 import { ThreeBounce } from 'better-react-spinkit'
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -15,7 +13,6 @@ class AudienceTrackingList extends React.Component {
     loading: false,
     tableOptionFlag: false,
     includeFlag: true,
-    badgeReward: 0
   };
 
   constructor() {
@@ -34,15 +31,6 @@ class AudienceTrackingList extends React.Component {
       });
     }
     this.setState({ filterList: filteredResult });
-  };
-
-  getBadgeReward = () => {
-    const { location, getWeb3Apis } = this.props;
-    const documentData = location.state.documentData;
-    getWeb3Apis.getNDaysRewards(documentData.documentId, 7).then(res => {
-      let badgeReward = Common.toEther(res);
-      this.setState({ badgeReward: badgeReward });
-    });
   };
 
   getTrackingList = () => {
@@ -115,28 +103,28 @@ class AudienceTrackingList extends React.Component {
 
   componentWillMount() {
     this.getTrackingList();
-    this.getBadgeReward();
   }
 
   render() {
-    const { location, match, getShowAnonymous, getIncludeOnlyOnePage } = this.props;
-    const { loading, tableOptionFlag, badgeReward } = this.state;
+    const { location, match, getShowAnonymous, getIncludeOnlyOnePage, getCreatorDailyRewardPool, totalViewCountInfo } = this.props;
+    const { loading, tableOptionFlag } = this.state;
 
     const rst = !this.state.filterList ? this.state.resultList : this.state.filterList;
     const documentData = location.state.documentData;
     let addr = Common.getThumbnail(documentData.documentId, 320, 1);
-    let badgeVote = Common.toEther(documentData.latestVoteAmount);
-    let badgeView = documentData.latestPageview || 0;
+    let reward = Common.toEther(Common.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7));
+    let vote = Common.toEther(documentData.latestVoteAmount);
+    let view = documentData.latestPageview || 0;
 
     return (
 
       <div className="row">
-        <div className="col-sm-12 col-lg-10  offset-lg-1 u__center profile-center">
+        <div className="u__center profile-center">
 
           <div className="row">
-            <div className="col-sm-3 col-md-3 col-thumb p-0 p-sm-3">
+            <div className="col-sm-3 col-md-3 col-thumb p-0 p-sm-3 mr-0 mr-sm-2">
               <Link to={"/" + match.params.identification + "/" + documentData.seoTitle}>
-                <div className="thumb_image">
+                <div className="tab-thumbnail">
                   <img src={addr}
                        alt={documentData.title ? documentData.title : documentData.documentName}
                        className="img-fluid"/>
@@ -165,15 +153,18 @@ class AudienceTrackingList extends React.Component {
                   </div>
                 </div>
 
-                <div className="col-view tracking-item mb-1">
-                  <span className="txt_view">{badgeView}</span>
-                  <span className="view_date view-reward"><span><DollarWithDeck deck={badgeReward}/></span></span>
-                  <span className="view_date view-reward"><span><DeckInShort deck={badgeVote}/></span></span>
+                <div className="col-view tracking-item mb-1  mt-1">
+                 <span className="info-detail-reward mr-2">
+                    ${Common.deckToDollar(reward)}
+                   <i className="material-icons">arrow_drop_down</i>
+                  </span>
+                  <span className="info-detail-view mr-3">{view}</span>
+                  <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
                   <span className="ml-4 info_date"> {Common.timestampToDate(documentData.created)}</span>
                 </div>
                 {location &&
                 <Tooltip title="Export tracking data as Excel file." placement="bottom">
-                  <div className="export-btn-big" onClick={() => this.handleExport()}>
+                  <div className="viewer-btn" onClick={() => this.handleExport()}>
                     <i className="material-icons">save</i>
                     Export
                   </div>
@@ -184,9 +175,9 @@ class AudienceTrackingList extends React.Component {
           </div>
 
 
-          <div className="row tracking_inner">
-            <div className="col-sm-12 col-md-12 tracking_top">
-              <h3 className="u_title d-none d-sm-inline-block col-5 col-md-7 col-lg-9">Visitors</h3>
+          <div className="tracking_inner">
+            <div className="col-sm-12 col-md-12 row tracking_top">
+              <div className="pl-0 tracking-list-title d-none d-sm-inline-block col-5 col-md-7 col-lg-9">Visitors</div>
 
 
               <div className="option-menu-btn d-inline-block d-sm-none"
@@ -205,7 +196,7 @@ class AudienceTrackingList extends React.Component {
               </div>
 
 
-              <div className="tags_menu_search_container p-0 mb-2 col-7 col-md-5 col-lg-3">
+              <div className="tags_menu_search_container p-0 col-7 col-md-5 col-lg-3">
                 <input id="searchInput" type="text" autoComplete="off" placeholder="Name Search . . ."
                        onKeyUp={this.handleKeyUp}/>
                 <div className="search-btn">

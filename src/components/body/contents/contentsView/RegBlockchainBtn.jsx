@@ -45,10 +45,10 @@ class ContentViewBlockchainButton extends React.Component {
     return (
       <span>
         <Tooltip title={msg} placement="bottom">
-          <div className={"register-btn " + (msg === "Pending" ? "btn-disabled" : "")}
+          <div className={"viewer-btn " + (msg === "Pending" ? "btn-disabled" : "")}
                disabled={msg === "Pending"}
                onClick={() => this.handleRegisterDocumentInBlockChain()}>
-            <i className="material-icons">add_box</i>
+            <i className="material-icons">add_box</i> Register
           </div>
         </Tooltip>
       </span>

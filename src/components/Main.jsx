@@ -4,18 +4,15 @@ import history from "apis/history/history";
 
 import RouterList from "../util/RouterList";
 import MainRepository from "../redux/MainRepository";
-import GuideModal from "./modal/GuideModal";
 import CookiePolicyModal from "./modal/CookiePolicyModal";
 import UserInfo from "../redux/model/UserInfo";
 import HeaderContainer from "../container/header/HeaderContainer";
-import Common from "../util/Common";
 import AlertContainer from "../container/common/AlertContainer";
 import Footer from "./footer/Footer";
 
 import "react-tabs/style/react-tabs.css";
 import "react-tagsinput/react-tagsinput.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-
 
 class Main extends Component {
   state = {
@@ -99,14 +96,7 @@ class Main extends Component {
     }*/
 
   render() {
-    const { getIsMobile, getMyInfo, getAlertCode } = this.props;
-
-    let pathName = window.location.pathname.split("/")[1];
-    let guidedValue = Common.getCookie("gv");
-    let pathNameFlag =
-      pathName === "latest" ||
-      pathName === "featured" ||
-      pathName === "popular";
+    const { getMyInfo, getAlertCode } = this.props;
 
     if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) return <div/>;
 
@@ -137,8 +127,6 @@ class Main extends Component {
           <Footer/>
 
           { getAlertCode && <AlertContainer code={getAlertCode}/> }
-
-          {pathNameFlag && getIsMobile === false && (!guidedValue || guidedValue === "false") && <GuideModal/>}
           <CookiePolicyModal/>
 
         </div>

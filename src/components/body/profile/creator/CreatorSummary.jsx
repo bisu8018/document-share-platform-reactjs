@@ -127,7 +127,7 @@ class CreatorSummary extends React.Component {
       <div className="profile_container">
         <div className="row  profile_top">
           <div className="profile-top-wrapper"/>
-          <div className="col-12 col-md-2 ">
+          <div className="pl-0 col-12 col-sm-2 col-lg-1 ">
             <div className="profile-image" title="Change profile image">
               <img src={profileImage} alt="profile" className="img-fluid"/>
               {this.getMyinfo().email === userInfo.email &&
@@ -141,7 +141,7 @@ class CreatorSummary extends React.Component {
           </div>
 
 
-          <div className="col-12 col-md-10 ">
+          <div className="col-12 col-sm-10 col-lg-11 ">
             <div className="profile_info_name">
               {!userNameEdit &&
               <span>
@@ -182,7 +182,7 @@ class CreatorSummary extends React.Component {
 
 
         <div className="row">
-          <div className=" profile_creator col-sm-12 col-md-6">
+          <div className=" profile-creator col-sm-12 col-md-6">
             <h5>Author rewards</h5>
             <div className="profile_info_desc">
               Estimated earnings for today : <span><DollarWithDeck deck={authorTodayReward}/></span>
@@ -191,7 +191,7 @@ class CreatorSummary extends React.Component {
           </div>
 
 
-          <div className=" profile_creator col-sm-12 col-md-6">
+          <div className=" profile-curator col-sm-12 col-md-6">
             <h5>Curator rewards</h5>
             <div className="profile_info_desc">
               Estimated earnings for today : <span><DollarWithDeck deck={curatorEstimatedToday}/></span>

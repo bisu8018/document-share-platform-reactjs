@@ -25,7 +25,7 @@ class DocumentCard extends React.Component {
 
     return (
       <div>
-        <div className={"main-category-card " + (idx < 3 && "mr-3")}>
+        <div className={"main-category-card " + (idx < 3 && "mr-0 mr-sm-3")}>
           <Link to={"/" + identification + "/" + documentData.seoTitle}>
             <div className="main-category-card-img-wrapper">
               <img src={imgUrl} alt={documentData.title} className="main-category-card-img"/>

@@ -73,19 +73,17 @@ class AudienceTrackingDetail extends React.Component {
 
     return (
 
-      <div className="row">
-        <div className="col-sm-12 col-lg-10 offset-lg-1 u__center profile-center tracking-detail-container">
-
-          <div className="back-btn " onClick={history.goBack}>
-            <i className="material-icons ml-2">keyboard_backspace</i>
-            Back to visitor list
-          </div>
+        <div className="u__center tracking-detail-container">
 
           <div className="row tracking_inner">
             <div className="col-sm-12 col-md-12 tracking_top">
-              <div className="u_title h3 d-inline-block mr-5">
+              <div className="tracking-detail-title h3 d-inline-block mr-5">
                 <span className="mr-3">{email}</span>
                 <span className="tracking-time d-block d-sm-inline-block">{time}</span>
+                <div className="back-btn " onClick={history.goBack}>
+                  <i className="material-icons ml-2">keyboard_backspace</i>
+                  Back to visitor list
+                </div>
               </div>
 
               <div className="tracking_fulldown_list">
@@ -130,20 +128,19 @@ class AudienceTrackingDetail extends React.Component {
                                 {_result.ev !== "leave" &&
                                 <div className="d-flex w-100">
                                   {documentText &&
+                                  <Link
+                                    to={"/" + match.params.identification + "/" + match.params.seoTitle + "/" + _result.n}
+                                    title={"Link to " + _result.n + " page" }>
                                   <LinesEllipsis
-                                    text={documentText[_result.n - 1]}
+                                    text={<span className="tracking-detail-text">{documentText[_result.n - 1]}</span>}
                                     maxLine='1'
                                     ellipsis="..."
                                     trimRight
                                     basedOn='letters'
                                     className="d-none d-sm-block w-100"
                                   />
-                                  }
-                                  <Link
-                                    to={"/" + match.params.identification + "/" + match.params.seoTitle + "/" + _result.n}
-                                    title={"link to " + _result.n + " page" }>
-                                    <i className="material-icons link-arrow-btn">reply</i>
                                   </Link>
+                                  }
                                 </div>
                                 }
 
@@ -162,7 +159,6 @@ class AudienceTrackingDetail extends React.Component {
             </div>
           </div>
         </div>
-      </div>
 
     );
   }

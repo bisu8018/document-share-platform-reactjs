@@ -65,7 +65,7 @@ class ContentViewFullScreen extends Component {
 
   //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
-    const { getMyInfo, documentData  } = this.props;
+    const { getMyInfo, documentData } = this.props;
     if (!documentData) {
       console.log("getting document meta information!");
       return;
@@ -132,7 +132,7 @@ class ContentViewFullScreen extends Component {
     const { page, isFull, carouselClass, emailFlag } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0;
-    let reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo,7));
+    let reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7));
     let view = documentData.latestPageview || 0;
     let accountId = documentData.accountId || "";
     let url = window.location.href;
@@ -160,31 +160,35 @@ class ContentViewFullScreen extends Component {
 
         <div className="view_content">
           <div className="u_title pt-2 pb-2 mt-2 mb-2">   {documentData.title ? documentData.title : ""}</div>
-          <Link to={"/" + identification} className="info_name mb-2"
-                title={"Go to profile page of " + identification}>
-            {profileUrl ?
-              <img src={profileUrl} alt="profile"/> :
-              <i className="material-icons img-thumbnail">face</i>
-            }
-            {identification}
-          </Link>
 
 
-          <div className="info_date">
-            {Common.timestampToDateTime(documentData.created)}
+          <div>
+            <Link to={"/" + identification} className="info_name mb-2"
+                  title={"Go to profile page of " + identification}>
+              {profileUrl ?
+                <img src={profileUrl} alt="profile"/> :
+                <i className="material-icons img-thumbnail">face</i>
+              }
+              {identification}
+            </Link>
+
+            <div className="info_date">
+              {Common.timestampToDateTime(documentData.created)}
+            </div>
           </div>
 
 
-          <div className="">
-            <span className="info-detail-reward mr-2" >
+          <div className="mb-3 d-inline-block">
+            <span className="info-detail-reward mr-2">
               ${Common.deckToDollar(reward)}
               <i className="material-icons">arrow_drop_down</i>
             </span>
             <span className="info-detail-view mr-3">{view}</span>
             <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
-
-
-            {accountId === Common.getMySub() && documentData &&  <EditDocumentModalContainer documentData={documentData}/> }
+          </div>
+          <div className="d-inline-block mb-3">
+            {accountId === Common.getMySub() && documentData &&
+            <EditDocumentModalContainer documentData={documentData}/>}
 
             <CopyModal/>
 
@@ -198,7 +202,7 @@ class ContentViewFullScreen extends Component {
             <Tooltip title="Track activity of your audience." placement="bottom">
               <Link to={{
                 pathname: "/tracking/" + identification + "/" + documentData.seoTitle,
-                state: { documentData: documentData, documentText: documentText }
+                state: { documentData: documentData, documentText: documentText, totalViewCountInfo: totalViewCountInfo }
               }}>
                 <div className="viewer-btn"><i className="material-icons">bar_chart</i> Tracking</div>
               </Link></Tooltip>
@@ -208,7 +212,7 @@ class ContentViewFullScreen extends Component {
             <VoteDocumentModalContainer documentData={documentData}/>
           </div>
 
-          <hr className="mt-3 mb-3"/>
+          <hr className="mt-2 mb-3"/>
 
           <div className="view_desc">
             <Linkify properties={{

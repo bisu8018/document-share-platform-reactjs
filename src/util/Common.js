@@ -318,7 +318,7 @@ export default ({
     if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !voteDocList) return;
     let totalReward = 0;
     for (let k = 0; k < documentList.length; ++k) {
-      if (!documentList[k].depositList) return;
+      if (!documentList[k].depositList || !documentList[k].latestPageview || !documentList[k].latestVoteAmount ) return;
 
       let y, m, d, tv, tpvs, v, timestamp;
       let reward = 0;
@@ -351,7 +351,7 @@ export default ({
     if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !voteDocList) return;
     let totalReward = 0;
     for (let k = 0; k < documentList.length; ++k) {
-      if (!documentList[k].depositList) return;
+      if (!documentList[k].depositList || !documentList[k].latestPageview || !documentList[k].latestVoteAmount ) return;
 
       let y, m, d, tv, tpvs, v, timestamp;
       let reward = 0;

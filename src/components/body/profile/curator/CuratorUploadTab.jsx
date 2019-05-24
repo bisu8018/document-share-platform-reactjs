@@ -89,8 +89,6 @@ class CuratorUploadTab extends React.Component {
             next={this.fetchMoreData}
             hasMore={!isEndPage}
             loader={<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}>
-
-
             {resultList.length > 0 && resultList.map((result, idx) => (
               <CreatorTabItemContainer document={result} userInfo={userInfo} key={idx} totalViewCountInfo={totalViewCountInfo}/>
             ))}

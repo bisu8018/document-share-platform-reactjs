@@ -234,7 +234,7 @@ class CuratorAnalyticsTab extends React.Component {
                 {idx === spreadItem && analyticsList && analyticsList.resultList.length > 0 &&
                 <span>
                     <Tooltip title="Export tracking data as Excel file." placement="bottom">
-                      <div className="export-btn-big float-right"
+                      <div className="viewer-btn float-right"
                            onClick={() => this.handleExport(result.seoTitle)}>
                         <i className="material-icons">save</i>
                         Export

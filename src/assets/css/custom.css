@@ -6007,25 +6007,29 @@ dean
 .chart-date-btn {
     display: inline-block;
     border: 1px solid #aaaaaa;
-    border-radius: 3px;
+    border-radius: 2px;
     float: right;
+    height: 25px;
 }
 
 .chart-date-btn > div:first-child {
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
 }
 
 .chart-date-btn > div:last-child {
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
     border: none;
 }
 
 .chart-date-btn > div {
     display: inline-block;
-    padding: 5px 8px;
-    font-size: 14px;
+    width: 25px;
+    position: relative;
+    top: -3px;
+    height: 23px;
+    font-size: 13px;
     text-align: center;
     border-right: 1px solid #aaaaaa;
     font-weight: 400;
@@ -6038,36 +6042,6 @@ dean
 .chart-date-btn .clicked {
     background: #3681fe;
     color: white;
-}
-
-
-.export-btn-big {
-    cursor: pointer;
-    display: inline-block;
-    padding: 7px 15px 7px 35px;
-    font-weight: 500;
-    position: relative;
-    border-radius: 3px;
-    font-size: 13px;
-    -webkit-transition: 0.2s all ease-in-out;
-    transition: 0.2s all ease-in-out;
-    color: #fff;
-    background: #349023;
-    -ms-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-.export-btn-big > i {
-    font-size: 18px;
-    position: absolute;
-    left: 11px;
-}
-
-.export-btn-big:hover {
-    background: #40af2b;
-    transition: 0.2s all ease-in-out;
 }
 
 .my-account-btn {
@@ -6086,7 +6060,7 @@ dean
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
     display: flex;
-    justify-content:center;
+    justify-content: center;
 }
 
 .my-account-btn:hover {
@@ -6109,7 +6083,7 @@ dean
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
     display: flex;
-    justify-content:center
+    justify-content: center
 }
 
 .profile-card-logout-btn:hover {
@@ -6145,10 +6119,12 @@ dean
     background: white;
     color: #3681fe;
     font-weight: bold;
-    padding: 13px 75px;
+    width: 235px;
+    padding-top: 12px;
+    height: 50px;
     transition: 0.2s all ease-in-out;
     z-index: 1;
-    position: relative;  ;
+    position: relative;;
 }
 
 .main-upload-btn:hover {
@@ -6162,7 +6138,9 @@ dean
     border-radius: 4px;
     border: 1px solid white;
     color: white;
-    padding: 13px 75px;
+    width: 235px;
+    padding-top: 11px;
+    height: 50px;
     transition: 0.2s all ease-in-out;
     z-index: 1;
     position: relative;
@@ -6186,23 +6164,25 @@ dean
 }
 
 .info-btn {
-    color: white;
+    color: #666666;
     cursor: pointer;
-    background: dimgrey;
-    padding: 2px 8px;
-    border-radius: 3px;
-    font-weight: bold;
+    background: white;
+    padding: 1px 4px;
+    border-radius: 26px;
+    border: 1px solid #666666;
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
-    font-size: 12px;
+    font-size: 10px;
     -ms-user-select: none;
-    -khtml-user-select: none;
+    font-weight: 100;
     -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
 }
 
 .info-btn:hover {
     color: white;
+    border-color: #3681fe;
     background: #3681fe;
 }
 
@@ -6211,9 +6191,6 @@ dean
     position: relative;
     color: #717171;
     transition: 0.2s all ease-in-out;
-    padding-top: 8px;
-    padding-left: 17px;
-    padding-right: 8px;
     -ms-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
@@ -6222,7 +6199,7 @@ dean
 
 .search-btn:hover,
 .header-search-btn-active:hover,
-.header-search-btn:hover{
+.header-search-btn:hover {
     color: #3681fe;
 }
 
@@ -6317,25 +6294,26 @@ dean
 }
 
 .claim-btn {
-    background: #3681fe;
-    display: inline-block;
-    color: white;
     cursor: pointer;
-    border-radius: 3px;
-    padding: 6px 20px;
+    background: white;
+    display: inline-block;
+    position: relative;
+    font-weight: 300;
+    font-size: 12px;
+    color: #4d4d4d;
+    border: 1px solid #b3b3b3;
+    border-radius: 2px;
+    width: 140px;
+    height: 30px;
+    -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
-    box-shadow: 1px 2px 5px 1px rgba(117, 117, 117, 0.65);
-    font-size: 15px;
-    font-weight: 400;
-    -ms-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
+    padding-top: 6px;
+    text-align: center;
 }
 
 .claim-btn:hover {
-    background: #81ca3f;
-    box-shadow: 1px 3px 6px 1px rgb(100, 154, 51);
+    color: #3681fe;
+    border-color: #3681fe;
 }
 
 .claim-btn-wrapper:hover {
@@ -6436,19 +6414,19 @@ dean
 }
 
 .back-btn {
+    float: right;
     cursor: pointer;
     position: relative;
     font-weight: 400;
-    color: #3681fe;
+    color: #4d4d4d;
     font-size: 14px;
-    text-transform: uppercase;
-    vertical-align: center;
 }
 
 .back-btn i {
-    top: 6px;
+    top: 4px;
     position: relative;
-    margin-right: 10px;
+    margin-right: 5px;
+    font-size: 18px;
 }
 
 .export-btn-disabled {
@@ -6483,6 +6461,7 @@ dean
     position: relative;
     font-weight: 300;
     font-size: 12px;
+    background: white;
     color: #4d4d4d;
     border: 1px solid #b3b3b3;
     border-radius: 2px;
@@ -6724,8 +6703,12 @@ Dean*/
     overflow-x: hidden;
 }
 
-
 .col-thumb {
+    max-width: 150px;
+    flex: auto;
+}
+
+.col-thumb-list {
     max-width: 235px;
     flex: auto;
 }
@@ -6780,7 +6763,6 @@ Dean*/
 
 .tags_menu_search_container {
     background: white;
-    border: 1px solid #cecece;
     display: flex;
     position: relative;
 }
@@ -6788,11 +6770,13 @@ Dean*/
 .tags_menu_search_container input {
     font-size: 15px;
     padding-left: 15px;
-    height: 40px;
+    padding-bottom: 10px;
+    height: 25px;
     background: none;
     color: #666666;
     border: none;
     width: 85%;
+    border-bottom: 1px solid #666666;
 }
 
 
@@ -6824,6 +6808,11 @@ Dean*/
 
 .u__center-container {
     border-left: 1px solid #b3b3b3;
+    padding-left: 25px;
+    padding-bottom: 140px;
+}
+
+.content-main-container {;
     padding-left: 25px;
     padding-bottom: 140px;
 }
@@ -6860,7 +6849,7 @@ Dean*/
 }
 
 .select-custom select,
-.header-select-custom select{
+.header-select-custom select {
     border: none;
     box-shadow: none;
     background: transparent;
@@ -6869,11 +6858,12 @@ Dean*/
 }
 
 .select-custom select:focus,
-.header-select-custom select:focus{
+.header-select-custom select:focus {
     outline: none;
 }
 
 .u_title {
+    width: 100%;
     margin: 0;
     font-size: 16px;
     font-weight: bold;
@@ -6883,6 +6873,25 @@ Dean*/
     letter-spacing: -0.2px;
     color: #4d4d4d;
     vertical-align: middle;
+}
+
+.tracking-detail-title {
+    width: 100%;
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.38;
+    letter-spacing: -0.2px;
+    color: #4d4d4d;
+    vertical-align: middle;
+}
+
+.tracking-detail-text:hover {
+    color: #3d5afe;
+    transition: 0.2s all ease-in-out;
+    font-weight: bold;
 }
 
 .u_cate {
@@ -6923,6 +6932,16 @@ Dean*/
 .thumb_image {
     width: 235px;
     height: 133px;
+    overflow: hidden;
+    text-align: center;
+    background: #dadada;
+    border: 1px solid #d0d0d0;
+}
+
+
+.tab-thumbnail {
+    width: 163px;
+    height: 92px;
     overflow: hidden;
     text-align: center;
     background: #dadada;
@@ -7055,6 +7074,7 @@ Dean*/
     font-size: 14px;
     color: #666666;
 }
+
 .info-detail-vote:before {
     content: '';
     display: inline-block;
@@ -7097,7 +7117,6 @@ Dean*/
 }
 
 
-
 @media (max-width: 1400px) {
     .d-none-max {
         display: none
@@ -7126,6 +7145,63 @@ Dean*/
 }
 
 @media (max-width: 575px) {
+
+    .menu-wrapper{
+        opacity: 1 !important;
+        background: white !important;
+    }
+
+    .menu-content-item {
+        text-align: left !important;
+        color: #4d4d4d !important;
+        font-size: 22px !important;
+        font-weight: 500 !important;
+        font-style: normal !important;
+        font-stretch: normal !important;
+        line-height: 2.09 !important;
+        letter-spacing: -0.1px !important;
+    }
+
+    .menu-content-item-sub {
+        text-align: left !important;
+        margin-left: 42px !important;
+        font-family: Poppins, sans-serif !important;
+        font-size: 16px !important;
+        font-weight: 300 !important;
+        font-style: normal !important;
+        font-stretch: normal !important;
+        line-height: 2.25 !important;
+        letter-spacing: -0.2px !important;
+        color: #666666 !important;
+    }
+
+    .menu-close-btn {
+        color: #999999;
+        width: 16px;
+        height: 16px;
+        opacity: 0.7;
+    }
+
+    .menu-content-item {
+        text-align: left;
+        padding-left: 40px;
+    }
+
+    .u_center_inner {
+        border: none;
+        padding: 0;
+        margin: 20px 0;
+    }
+
+    .u_center_inner .col-thumb {
+        padding: 0;
+    }
+
+    .u__center {
+        padding: 0;
+        margin-top: -18px;
+    }
+
     .select-custom {
         margin-left: 20px;
     }
@@ -7137,6 +7213,23 @@ Dean*/
 
     .scroll-top-btn > i {
         font-size: 35px;
+    }
+
+    .u__center-container{
+        padding: 0;
+    }
+
+    .col-thumb-list {
+        max-width: 100% !important;
+        margin-bottom: 20px;
+    }
+
+    .info_detail {
+        position: relative !important;
+    }
+
+    .document-total-num {
+        margin-bottom: 0 !important;
     }
 
     .col-thumb,
@@ -7157,7 +7250,8 @@ Dean*/
         margin: 0 auto;
     }
 
-    .thumb_image {
+    .thumb_image,
+    .tab-thumbnail {
         height: auto;
         width: 100%;
         min-height: 160px;
@@ -7167,6 +7261,27 @@ Dean*/
 
     .profile_info_name {
         text-align: center;
+    }
+
+    .details_info-padding {
+        margin-left: -1rem !important;
+    }
+
+    .document-total-num {
+        margin-left: 1rem;
+    }
+
+    .profile-curator,
+    .profile-creator{
+        padding: 15px !important;
+    }
+
+    .profile_top .profile-image .img-fluid {
+        margin-top: 10px;
+    }
+
+    .profile-top-wrapper {
+        height: 125% !important;
     }
 }
 
@@ -7252,11 +7367,16 @@ Dean*/
 }
 
 
-.profile_creator {
-    padding: 15px;
+.profile-creator {
+    padding: 15px 15px 15px 0;
 }
 
-.profile_creator h5 {
+.profile-curator {
+    padding: 15px 0 15px 15px;
+}
+
+.profile-creator h5,
+.profile-curator h5 {
     margin-top: 0;
     font-weight: bold;
     color: #4d4d4d;
@@ -7495,11 +7615,10 @@ author tap list analytics*/
     }
 }
 
-
 .tracking_inner {
-    margin-top: 20px;
+    margin-top: 50px;
+    margin-bottom: 100px;
 }
-
 
 .tracking_top {
     overflow: hidden;
@@ -7515,19 +7634,12 @@ author tap list analytics*/
     right: 5px;
     z-index: 3;
     float: right;
-    border: 1px solid #e0e0e0;
-
-
-    box-shadow: 4px 2px 6px 0 rgb(212, 212, 212);
+    border: 1px solid #666666;
 }
 
 .option-table > div {
     padding: 5px 10px;
     background: white;
-}
-
-.option-table > div:not(:last-child) {
-    border-bottom: 1px solid #e0e0e0;
 }
 
 .option-table > div:hover {
@@ -7549,18 +7661,18 @@ author tap list analytics*/
 }
 
 .tracking_table table > tbody > tr:first-child {
-    background: #676767 !important;
+    background: #e6e6e6 !important;
 }
 
 .tracking_table table > tbody > tr:first-child > th {
-    color: white;
-    font-size: 16px;
+    color: #4d4d4d;
+    font-size: 14px;
 }
 
 .tracking_table th {
-    height: 50px;
-    padding: 0 20px;
-    font-weight: 500;
+    height: 30px;
+    padding: 0 15px;
+    font-weight: 400;
     font-size: 15px;
     color: #666666;
     line-height: 1.3;
@@ -7568,11 +7680,11 @@ author tap list analytics*/
 }
 
 .tracking_table td {
-    padding: 10px 20px;
+    padding: 10px 15px;
     border-top: 1px solid #e4e4e4;
     font-weight: 300;
     font-size: 14px;
-    color: #666;
+    color: #4d4d4d;
 }
 
 .tracking_table .col2,
@@ -7778,7 +7890,7 @@ Dean
     width: 18px;
     height: 12px;
     margin-right: 5px;
-    background-image: url(../image/tempImg/i_hit.png);
+    background-image: url(../image/common/i_hit.svg);
     vertical-align: middle;
 }
 
@@ -7941,11 +8053,15 @@ Dean
     background-color: #fff;
 }
 
-.u__right h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-weight: 500;
-    color: #666666;
+.u__right {
+    font-size: 18px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.22;
+    letter-spacing: -0.2px;
+    color: #4d4d4d;
+    margin-bottom: 0;
 }
 
 .see-also-container {
@@ -7955,6 +8071,7 @@ Dean
     padding: 10px 0;
     display: inline-table;
     width: 100%;
+    position: relative;
 }
 
 .see-also-thumbnail {
@@ -7973,23 +8090,30 @@ Dean
 }
 
 .see-also-content {
-    float: right;
-    overflow: hidden;
-    position: relative;
-    width: calc(100% - 120px);
+    position: absolute;
+    bottom: 10px;
+    left: 121px;
 }
 
 .see-also-title {
-    color: #666666;
-    font-size: .95rem;
-    line-height: normal;
-    font-weight: 400;
+    font-size: 16px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.38;
+    letter-spacing: -0.2px;
+    color: #4d4d4d;;
+    display: inline-block;
 }
 
 .see-also-author {
-    color: #6f6a64;
-    font-size: 10.5px;
-    margin-top: 5px;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #4d4d4d;
 }
 
 .col-re {
@@ -8075,24 +8199,6 @@ Dean
     }
 }
 
-@media (max-width: 575px) {
-
-    .u_center_inner {
-        border: none;
-        padding: 0;
-        margin: 20px 0;
-    }
-
-    .u_center_inner .col-thumb {
-        padding: 0;
-    }
-
-    .u__center {
-        padding: 0;
-    }
-}
-
-
 .deck {
     display: inline-block;
     margin-left: 10px;
@@ -8119,9 +8225,9 @@ Dean
 }
 
 .tracking_fulldown_list {
-    border-top: 1px solid #999;
-    margin-top: 15px;
-    padding-bottom: 15px;
+    border-top: 1px solid #b3b3b3;
+    margin-top: 7px;
+    padding-bottom: 5px;
 }
 
 .tracking_fulldown_list ul {
@@ -8137,29 +8243,26 @@ Dean
 .tracking_fulldown_list .tfl_title {
     display: block;
     position: relative;
-    padding: 15px 20px;
-    padding-left: 35px;
-    font-weight: 400;
-    font-size: 15px;
+    padding: 10px 30px;
+    font-weight: 300;
+    font-size: 14px;
     cursor: pointer;
-    color: #666666;
+    color: #4d4d4d;
 }
 
 .tracking_fulldown_list .tfl_title i {
     position: absolute;
-    left: 20px;
-    top: 13px;
+    left: 10px;
+    top: 8px;
     margin-right: 10px;
     -webkit-transform: rotate(0deg);
-    -ms-transform: rotate(0deg);
     -m-transform: rotate(0deg);
     transform: rotate(0deg);
     -webkit-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
     box-sizing: border-box;
     text-align: center;
-    line-height: 1.5
+    line-height: 1.5;
 }
 
 .tracking_fulldown_list .tfl_title i img {
@@ -8174,8 +8277,7 @@ Dean
 }
 
 .tracking_fulldown_list .tfl_desc dl {
-    margin-bottom: 0;
-    padding: 15px 20px 0;
+    padding: 5px 20px 0;
     margin-bottom: 30px;
 }
 
@@ -8192,48 +8294,36 @@ Dean
 
 .tracking_fulldown_list .tfl_desc dd {
     position: relative;
-    padding-left: 100px;
+    padding-left: 69px;
     margin-bottom: 1rem;
 }
 
 .tracking_fulldown_list .tfl_desc dd .time {
     position: absolute;
-    top: 0;
+    top: -1px;
     left: 0;
-    font-weight: 400;
-    font-size: 15px;
-    color: #7b9268;
-    letter-spacing: 0
+    font-weight: 300;
+    font-size: 13px;
+    color: #999999;
+    letter-spacing: 0;
+    line-height: 2.62;
 }
 
-.tracking_fulldown_list .tfl_desc dd .time:after {
-    content: '';
-    position: absolute;
-    top: 5px;
-    right: -24px;
-    width: 11px;
-    height: 11px;
-    background-color: #fff;
-    border: 2px solid #7b9268;
-    box-sizing: border-box;
-    border-radius: 50px;
-}
 
 .tracking_fulldown_list .tfl_desc dd .btn {
     display: inline-block;
     max-width: 18px;
     width: 18px;
     height: 18px;
-    margin: 0 0 0 10px;
-    margin-left: 10px;
+    margin: 0 10px 0 10px;
     padding: 0;
     line-height: 18px;
     border-radius: 50px;
 }
 
 .tracking_fulldown_list .tfl_desc dd div {
-    font-size: 14px;
-    line-height: 1.6
+    font-size: 13px;
+    line-height: 2.43;
 }
 
 .tracking_fulldown_list .tfl_title.on i {
@@ -8310,7 +8400,8 @@ Dean
 
 
 @media (max-width: 767px) {
-    .thumb_image {
+    .thumb_image,
+    .tab-thumbnail {
         padding-top: 0;
     }
 
@@ -8486,12 +8577,12 @@ Dean
 }
 
 .custom-input {
-    background-image: linear-gradient(to top, #80c242 2px, rgba(156, 39, 176, 0) 2px),
+    background-image: linear-gradient(to top, #3681fe 2px, rgba(156, 39, 176, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .custom-input:focus {
-    background-image: linear-gradient(to top, #80c242 2px, rgba(156, 39, 176, 0) 2px),
+    background-image: linear-gradient(to top, #3681fe 2px, rgba(156, 39, 176, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
     background-size: 100% 100%, 100% 100%;
     transition-duration: 0.3s;
@@ -8500,7 +8591,7 @@ Dean
 
 .custom-input::placeholder {
     font-size: 14px;
-    color: #b3b3b3;
+    color: #a5a5a5;
 }
 
 .custom-input-file {
@@ -8534,7 +8625,7 @@ Dean
 
 .custom-input-file::placeholder {
     font-size: 14px;
-    color: #b3b3b3;
+    color: #a5a5a5;
 }
 
 .custom-input-warning,
@@ -8661,90 +8752,93 @@ contentContainer 배너 CSS*/
     position: relative;
 }
 
-@media (max-width: 576px) {
+.copyright {
+    font-size: 12px;
+    font-weight: 300;
+    color: #ffffff;
+    margin-top: 5px;
+}
+
+.footer-copyright {
+    display: none;
+    font-size: 12px;
+    font-weight: 300;
+}
+
+@media (max-width: 850px) {
     .main-banner-subject {
-        font-size: 1.8rem !important;
+        font-size: 26px !important;
     }
 
     .main-banner-content {
-        font-size: 1rem !important;
+        font-size: 16px !important;
+    }
+
+    .content-main-container {
+        padding-left: 12px;
+        padding-right: 12px;
+        padding-bottom: 0;
+    }
+
+    footer .footer-nav-divider:after {
+        opacity: 0;
+    }
+
+    .footer-logo {
+        display: none !important;
+    }
+
+    .footer-legal,
+    .footer-copyright,
+    .footer-sns {
+        justify-content: center;
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+
+    .footer-copyright {
+        margin-top: 25px;
+    }
+
+    .footer-sns {
+        margin-top: 15px;
+    }
+
+    .footer-copyright {
+        display: block;
+        text-align: center;
     }
 }
 
+@media (max-width: 480px) {
+    .content-main-container {
+        margin-top: 25px;
+    }
 
-/*2019-03-18
-Dean
-가이드 페이지*/
-.guide-page-wrapper {
-    width: 100%;
-    position: fixed;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: #000000b3;
-    z-index: 3;
-    overflow: hidden;
-}
+    .main-category-card-wrapper {
+        width: 300px;
+    }
 
-.guide-upload-text {
-    width: 170px;
-    height: 200px;
-    position: absolute;
-    top: 108px;
-    right: 263px;
-    color: white;
-    font-size: 20px;
-    font-weight: 400;
-}
+    .main-banner-subject {
+        font-size: 23px !important;
+    }
 
-.arrow-image {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 120px;
-    height: 100px;
-}
+    .main-upload-btn,
+    .main-learn-more-btn {
+        width: 200px;
+        padding-top: 7px;
+        height: 40px;
+    }
 
-.arrow-to-upload {
-    background-image: url('../image/tempImg/arrow-img-4.png');
-    top: 50px;
-    right: 150px;
-    transform: rotate(180deg);
-    position: absolute;
-}
+    .main-banner-content {
+        font-size: 14px !important;
+    }
 
-.guide-search-tag-text {
-    width: 250px;
-    height: 99px;
-    color: white;
-    font-size: 20px;
-    font-weight: 400;
-    position: absolute;
-    right: -269px;
-    top: 55px;
-}
-
-.arrow-to-search-tag {
-    background-image: url('../image/tempImg/arrow-img-5.png');
-    position: relative;
-    float: right;
-}
-
-.arrow-to-search-wrapper {
-    top: 420px;
-}
-
-@media (max-width: 992px) {
-    .arrow-to-search-wrapper {
-        right: 155px;
+    .main-category-see-all {
+        margin-right: 0 !important;
     }
 }
 
-.start-btn-wrapper {
-    left: calc(50% - 55px);
-    top: 70%;
-    position: relative;
-}
 
 /*2019-03-26
 Dean
@@ -9094,7 +9188,7 @@ Footer
 
 footer {
     background-image: linear-gradient(to right, #5494ff, #307eff);
-    height: 130px;
+    min-height: 130px;
     color: white;
     width: 100%;
 }
@@ -9117,6 +9211,9 @@ footer .footer-nav-divider:after {
     vertical-align: middle;
 }
 
+.footer-logo {
+    display: inline-block;
+}
 
 
 /*
@@ -9142,7 +9239,7 @@ Main Category CSS
     top: 5px;
 }
 
-.main-category-see-all:hover{
+.main-category-see-all:hover {
     color: #3681fe !important;
 }
 
@@ -9183,6 +9280,7 @@ Main Category CSS
     border-radius: 2px 2px 0 0;
     border-bottom: 1px solid #cccccc;
 }
+
 .main-category-card-img {
     border-radius: 2px 2px 0 0;
     max-width: 100%;
@@ -9200,7 +9298,7 @@ Main Category CSS
     color: #4d4d4d;
 }
 
-.main-category-card-title>a:hover {
+.main-category-card-title > a:hover {
     color: #0d73f8;
 }
 
@@ -9245,7 +9343,7 @@ Main Category CSS
 }
 
 .main-category-card-name:hover {
-    color:#0d73f8;
+    color: #0d73f8;
 }
 
 .main-category-card-date {
@@ -9286,6 +9384,7 @@ Main Category CSS
     color: #666666;
     margin-right: 5px;
 }
+
 .main-category-card-vote:before {
     content: '';
     display: inline-block;
@@ -9331,14 +9430,6 @@ Main Category CSS
     padding: 10px 15px;
 }
 
-.copyright {
-    font-size: 12px;
-    font-weight: 300;
-    color: #ffffff;
-    margin-top: 5px;
-}
-
-
 
 /*
 프로필 카드 CSS
@@ -9363,13 +9454,13 @@ Main Category CSS
     border: 1px solid #cccccc;
 }
 
-.profile-card-username{
+.profile-card-username {
     color: #4d4d4d;
     font-size: 14px;
     font-weight: 400;
 }
 
-.profile-card-total-balance{
+.profile-card-total-balance {
     color: #4d4d4d;
     font-size: 14px;
     font-weight: 400;
@@ -9387,7 +9478,6 @@ Main Category CSS
     font-weight: bold;
     line-height: 20px;
 }
-
 
 
 /*
@@ -9424,7 +9514,7 @@ Main Category CSS
 }
 
 .menu-content-item:hover,
-.menu-content-item-sub:hover{
+.menu-content-item-sub:hover {
     color: #0d73f8;
 }
 
@@ -9440,7 +9530,6 @@ Main Category CSS
     text-align: center;
     color: #b3b3b3;
 }
-
 
 
 /*
@@ -9466,4 +9555,57 @@ react tabs CSS
     border-bottom: 3px solid #3681fe !important;
     color: #4d4d4d !important;
     font-weight: bold !important;
+}
+
+
+.tracking-list-title {
+    font-size: 18px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.22;
+    letter-spacing: -0.2px;
+    color: #4d4d4d;;
+    display: inline-block;
+}
+
+/*
+Ads CSS
+2019-05-24 Dean
+*/
+
+.demo-ads-wrapper {
+    width: 100%;
+    height: 55px;
+    font-size: 16px;
+    color: white;
+    background: #212734;
+    text-align: center;
+}
+
+.demo-ads-watch {
+    cursor: pointer;
+}
+
+.ad-effective {
+    top: 55px !important;
+}
+
+.ad-close-btn {
+    position: absolute;
+    right: 10px;
+    top: 14px;
+    border: 0;
+    font-size: 25px;
+    cursor: pointer;
+    color: #999999;
+    opacity: 0.7;
+}
+
+.ad-close-btn:hover {
+    opacity: 1;
+}
+
+.ad-demo-img {
+    margin-left: -35px;
 }
