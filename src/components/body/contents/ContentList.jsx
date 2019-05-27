@@ -83,6 +83,18 @@ class ContentList extends Component {
     });
   };
 
+  //태그 리스트 GET
+  setTagList = () => {
+    const { setTagList, getTagList } = this.props;
+
+    let path = Common.getPath();
+    if(getTagList.path !== path){
+      MainRepository.Document.getTagList(path,result => {
+        setTagList(result.resultList);
+      });
+    }
+  };
+
   handleCategories = () => {
     let path = Common.getPath();
     let sec_path = Common.getTag();
@@ -103,6 +115,7 @@ class ContentList extends Component {
 
   componentWillMount() {
     this.setFetch();
+    this.setTagList();
   }
 
   render() {
@@ -116,7 +129,7 @@ class ContentList extends Component {
         </div>
 
         <div className="col-sm-12 col-lg-9 u__center-container">
-          <div className="u__center">
+          <div className="u__center mt-5">
 
             <InfiniteScroll
               className="overflow-hidden"

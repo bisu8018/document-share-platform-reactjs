@@ -10,7 +10,9 @@ class Footer extends React.Component {
       <footer id="footer">
         <div className="container p-4 row">
           <div className="footer-logo col-sm-3">
-            <img src={require("assets/image/logo-mono.svg")} alt="POLARIS SHARE"/>
+            <a href={"/"} title="Link to main page">
+              <img src={require("assets/image/logo-mono.svg")} alt="POLARIS SHARE"/>
+            </a>
             <div className="copyright">
               Copyrightⓒ 2019 POLARIS SHARE
             </div>
@@ -21,10 +23,10 @@ class Footer extends React.Component {
               <div className="footer-nav footer-nav-divider mb-2">FAQ</div>
             </Link>
             <div className="footer-nav footer-nav-divider mb-2">User Guide</div>
-            <a href={APP_PROPERTIES.domain().mainHost + "/legal/policy.html"}>
+            <a href={APP_PROPERTIES.domain().mainHost + "/legal/policy.html"} target="_blank" rel="noopener noreferrer">
               <div className="footer-nav footer-nav-divider  mb-2">Policies</div>
             </a>
-            <a href={APP_PROPERTIES.domain().mainHost + "/legal/privacy.html"}>
+            <a href={APP_PROPERTIES.domain().mainHost + "/legal/privacy.html"} target="_blank" rel="noopener noreferrer">
               <div className="footer-nav">Privacy</div>
             </a>
           </div>

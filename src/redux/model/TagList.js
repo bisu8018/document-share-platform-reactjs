@@ -1,5 +1,6 @@
 export default class TagList {
   resultList: [];
+  path: null;
 
   constructor(data) {
     this.resultList = data.resultList ? data.resultList.sort(compare) : [
@@ -10,6 +11,7 @@ export default class TagList {
       "Recruiting & HR", "Retail", "Sales", "Science", "Self Improvement", "Services", "Small Business & Entrepreneurship", "Social Media",
       "Software", "Spiritual", "Sports", "Technology", "Templates", "Travel"
     ];
+    this.path = data.path ? data.path : "latest";
   }
 
 }

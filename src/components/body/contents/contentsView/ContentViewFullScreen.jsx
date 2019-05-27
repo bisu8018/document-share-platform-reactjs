@@ -9,9 +9,6 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from "react-share";
-
-import DollarWithDeck from "../../../common/DollarWithDeck";
-import DeckInShort from "../../../common/DeckInShort";
 // import ContentViewComment from "./ContentViewComment";
 import Common from "../../../../util/Common";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -192,17 +189,23 @@ class ContentViewFullScreen extends Component {
 
             <CopyModal/>
 
+            {documentData.isDownload &&
             <Tooltip title="Download this document" placement="bottom">
               <div className="viewer-btn" onClick={this.handleDownloadContent}>
                 <i className="material-icons">save_alt</i> Download
               </div>
             </Tooltip>
+            }
 
             {accountId === Common.getMySub() &&
             <Tooltip title="Track activity of your audience." placement="bottom">
               <Link to={{
                 pathname: "/tracking/" + identification + "/" + documentData.seoTitle,
-                state: { documentData: documentData, documentText: documentText, totalViewCountInfo: totalViewCountInfo }
+                state: {
+                  documentData: documentData,
+                  documentText: documentText,
+                  totalViewCountInfo: totalViewCountInfo
+                }
               }}>
                 <div className="viewer-btn"><i className="material-icons">bar_chart</i> Tracking</div>
               </Link></Tooltip>

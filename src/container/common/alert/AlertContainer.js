@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
-import Alert from "../../components/common/Alert";
-import { setAlertCode } from "../../redux/reducer/main";
+import Alert from "../../../components/common/alert/Alert";
+import { setAlertCode } from "../../../redux/reducer/main";
 
 export default connect(
   state => ({

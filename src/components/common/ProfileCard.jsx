@@ -62,7 +62,7 @@ class ProfileCard extends React.Component {
           <Link to={"/" + (getMyInfo.username.length && getMyInfo.username.length > 0 ? getMyInfo.username : getMyInfo.email)}>
             <div className="my-account-btn mb-2">My account</div>
           </Link>
-          <div className="profile-card-logout-btn">Sign out</div>
+          <div className="profile-card-logout-btn" onClick={() => this.handleLogout()}>Sign out</div>
         </div>
 
       </div>

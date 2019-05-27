@@ -28,6 +28,7 @@ class EditDocumentModal extends React.Component {
       tagError: "",
       useTracking: false,
       forceTracking: false,
+      allowDownload: false,
       registerOnChain: false,
       classicModal: false,
       username: null,
@@ -48,6 +49,7 @@ class EditDocumentModal extends React.Component {
       tagError: "",
       useTracking: false,
       forceTracking: false,
+      allowDownload: false,
       classicModal: false,
       username: null,
       desc: ""
@@ -64,7 +66,7 @@ class EditDocumentModal extends React.Component {
 
   handleConfirm = () => {
     const { documentData } = this.props;
-    const { title, desc, tags, useTracking, forceTracking } = this.state;
+    const { title, desc, tags, useTracking, forceTracking, allowDownload } = this.state;
     const data = {
       documentId: documentData.documentId,
       desc: desc,
@@ -72,6 +74,7 @@ class EditDocumentModal extends React.Component {
       tags: tags,
       useTracking: useTracking,
       forceTracking: !useTracking ? false : forceTracking,
+      isDownload: allowDownload
     };
     MainRepository.Document.updateDocument(data, (result) => {
       history.push("/" + Common.getPath() + "/" + result.seoTitle);
@@ -101,6 +104,7 @@ class EditDocumentModal extends React.Component {
     this.setState({ tags: documentData.tags });
     this.setState({ useTracking: documentData.useTracking || false });
     this.setState({ forceTracking: documentData.forceTracking || false });
+    this.setState({ allowDownload: documentData.isDownload || false });
   };
 
   handleClose = (modal) => {
@@ -128,17 +132,17 @@ class EditDocumentModal extends React.Component {
   };
 
   // 유저 트래킹 체크박스
-  handleTrackingCheckbox= () => {
+  handleTrackingCheckbox = () => {
     const { useTracking } = this.state;
 
     let newValue = !useTracking;
     this.setState({
       useTracking: newValue
     }, () => {
-      if(!useTracking) {
+      if (!useTracking) {
         this.setState({
           forceTracking: false
-        })
+        });
       }
     });
   };
@@ -149,6 +153,15 @@ class EditDocumentModal extends React.Component {
     let newValue = !forceTracking;
     this.setState({
       forceTracking: newValue
+    });
+  };
+
+  // 다운로드 허용 체크박스
+  handleAllowDownloadCheckbox = () => {
+    const { allowDownload } = this.state;
+    let newValue = !allowDownload;
+    this.setState({
+      allowDownload: newValue
     });
   };
 
@@ -211,7 +224,7 @@ class EditDocumentModal extends React.Component {
   };
 
   render() {
-    const { classicModal, title, desc, tags, useTracking, forceTracking, titleError, tagError } = this.state;
+    const { classicModal, title, allowDownload, desc, tags, useTracking, forceTracking, titleError, tagError } = this.state;
     const { type } = this.props;
 
     return (
@@ -263,8 +276,8 @@ class EditDocumentModal extends React.Component {
 
                  <div className="dialog-subject mb-2 mt-3">Option</div>
                   <div className="row">
-                  <div className="col-12 col-sm-6" >
-                    <input type="checkbox" id="useTrackingCheckboxEdit"  onChange={(e) => this.handleTrackingCheckbox(e)}
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="useTrackingCheckboxEdit" onChange={(e) => this.handleTrackingCheckbox(e)}
                            checked={useTracking}/>
 
                     <label htmlFor="useTrackingCheckboxEdit">
@@ -279,6 +292,14 @@ class EditDocumentModal extends React.Component {
                     <label htmlFor="forceTrackingCheckboxEdit">
                       <span><i className="material-icons">done</i></span>
                          Force the audience to tracking.
+                    </label>
+                   </div>
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="allowDownloadEdit" checked={allowDownload}
+                           onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
+                    <label htmlFor="allowDownloadEdit">
+                      <span><i className="material-icons">done</i></span>
+                         Allow download document.
                     </label>
                    </div>
                  </div>

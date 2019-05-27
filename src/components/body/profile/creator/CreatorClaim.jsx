@@ -21,7 +21,8 @@ class CreatorClaim extends React.Component {
   };
 
   handelClickClaim = () => {
-    const { document, getDrizzle, getMyInfo } = this.props;
+    const { document, getDrizzle, getMyInfo, setAlertCode } = this.props;
+    const { btnText } = this.state;
     if (!getMyInfo.ethAccount) {
       this.setState({ msg: "Please log in to the Meta Mask." });
       return;
@@ -32,11 +33,17 @@ class CreatorClaim extends React.Component {
     }
 
     if (document && getDrizzle.isAuthenticated()) {
+
       this.setState({ btnText: "Pending" }, () => {
         getDrizzle.creatorClaimReward(document.documentId, getMyInfo.ethAccount).then((res) => {
-          this.setState({ btnText: "Complete" });
-          document.location.reload();
+          this.setState({ btnText: "Complete" });;
         });
+        if(btnText === "Complete") window.location.reload();//this.setState({ voteStatus: "COMPLETE" });
+        else  {
+          this.setState({ voteStatus: "Claim $" });
+          setAlertCode(2035);
+        }
+
       });
     }
   };
@@ -51,8 +58,9 @@ class CreatorClaim extends React.Component {
 
     let myEthAccount = getMyInfo.ethAccount;
     let ethAccount = userInfo ? userInfo.ethAccount : "";
+    let drizzleAccount = getDrizzle ? getDrizzle.getLoggedInAccount() : "";
     let claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
-    if (myEthAccount !== ethAccount || !getDrizzle.isAuthenticated() || claimReward <= 0 || btnText === "Complete" ) return <div/>;
+    if (myEthAccount !== ethAccount || !getDrizzle.isAuthenticated() || ethAccount !== drizzleAccount || claimReward <= 0 || btnText === "Complete" ) return <div/>;
 
     return (
       <div className={"claim-btn " + (btnText === "Pending" ? "btn-disabled" : "")} onClick={() => this.handelClickClaim()} title={"Claim $" + claimReward}>

@@ -17,8 +17,8 @@ export default {
         }, () => {
         });
     },
-    tagList: (callback) => {
-      AxiosService._requestPlain( tagListUrl, "GET",
+    tagList: (data,callback) => {
+      AxiosService._requestWithUrlPram( tagListUrl, "GET", data,
         (data) => {
           callback(data);
         }, () => {

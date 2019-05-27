@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 class DocumentCard extends React.Component {
 
   showRewardInfo = (id) => {
-    if(document.getElementById(id)) document.getElementById(id).style.display='block'
+    if (document.getElementById(id)) document.getElementById(id).style.display = "block";
   };
 
   hideRewardInfo = (id) => {
-    if(document.getElementById(id)) document.getElementById(id).style.display='none'
+    if (document.getElementById(id)) document.getElementById(id).style.display = "none";
   };
 
   render() {
@@ -25,7 +25,7 @@ class DocumentCard extends React.Component {
 
     return (
       <div>
-        <div className={"main-category-card " + (idx < 3 && "mr-0 mr-sm-3")}>
+        <div className={"main-category-card mb-3 " + (idx < 3 && "mr-3")}>
           <Link to={"/" + identification + "/" + documentData.seoTitle}>
             <div className="main-category-card-img-wrapper">
               <img src={imgUrl} alt={documentData.title} className="main-category-card-img"/>
@@ -46,7 +46,8 @@ class DocumentCard extends React.Component {
                 className="main-category-card-date"> {Common.dateAgo(documentData.created) === 0 ? "Today" : Common.dateAgo(documentData.created) + " days ago"}</span>
             </Link>
             <div className="main-category-card-count">
-              <span className="main-category-card-reward" onMouseOver={() => this.showRewardInfo(path+idx)} onMouseOut={() => this.hideRewardInfo(path+idx)}>
+              <span className="main-category-card-reward" onMouseOver={() => this.showRewardInfo(path + idx)}
+                    onMouseOut={() => this.hideRewardInfo(path + idx)}>
                 ${Common.deckToDollar(reward)}
                 <i className="material-icons">arrow_drop_down</i>
               </span>
@@ -54,13 +55,13 @@ class DocumentCard extends React.Component {
               <span className="main-category-card-view float-right">{view}</span>
             </div>
           </div>
-        </div>
 
-        {reward > 0 &&
-        <div className="main-category-card-reward-info" id={path + idx}>
-          Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
+          {reward > 0 &&
+          <div className="main-category-card-reward-info" id={path + idx}>
+            Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
+          </div>
+          }
         </div>
-        }
 
       </div>
 

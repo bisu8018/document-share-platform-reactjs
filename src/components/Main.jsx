@@ -7,12 +7,12 @@ import MainRepository from "../redux/MainRepository";
 import CookiePolicyModal from "./modal/CookiePolicyModal";
 import UserInfo from "../redux/model/UserInfo";
 import HeaderContainer from "../container/header/HeaderContainer";
-import AlertContainer from "../container/common/AlertContainer";
 import Footer from "./footer/Footer";
 
 import "react-tabs/style/react-tabs.css";
 import "react-tagsinput/react-tagsinput.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import AlertListContainer from "../container/common/alert/AlertListContainer";
 
 class Main extends Component {
   state = {
@@ -35,7 +35,7 @@ class Main extends Component {
   setTagList = () => {
     const { setTagList } = this.props;
 
-    MainRepository.Document.getTagList(result => {
+    MainRepository.Document.getTagList("latest",result => {
       setTagList(result.resultList);
     });
   };
@@ -96,7 +96,7 @@ class Main extends Component {
     }*/
 
   render() {
-    const { getMyInfo, getAlertCode } = this.props;
+    const { getMyInfo } = this.props;
 
     if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) return <div/>;
 
@@ -126,7 +126,7 @@ class Main extends Component {
 
           <Footer/>
 
-          { getAlertCode && <AlertContainer code={getAlertCode}/> }
+          <AlertListContainer/>
           <CookiePolicyModal/>
 
         </div>

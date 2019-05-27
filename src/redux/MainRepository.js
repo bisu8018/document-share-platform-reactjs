@@ -447,6 +447,8 @@ export default {
       let title = args.title;
       let desc = args.desc;
       let useTracking = args.useTracking;
+      let forceTracking = args.forceTracking;
+      let isDownload = args.isDownload;
       let token = authResult.idToken;
 
       const data = {
@@ -459,7 +461,9 @@ export default {
           title: title,
           desc: desc,
           tags: tags,
-          useTracking: useTracking
+          useTracking: useTracking,
+          forceTracking: forceTracking,
+          isDownload: isDownload,
         },
         header: {
           "Authorization": `Bearer ${token}`
@@ -534,8 +538,11 @@ export default {
         }
       });
     },
-    getTagList(callback: any) {
-      DocService.GET.tagList(result => {
+    getTagList(path:String, callback: any) {
+      let params = {
+        t : path
+      };
+      DocService.GET.tagList(params,result => {
         let tagList = new TagList((result));
         callback(tagList);
       });
@@ -570,7 +577,8 @@ export default {
           title: data.title,
           tags: data.tags,
           useTracking: data.useTracking,
-          forceTracking: data.forceTracking
+          forceTracking: data.forceTracking,
+          isDownload: data.isDownload,
         },
         header: {
           "Authorization": `Bearer ${token}`

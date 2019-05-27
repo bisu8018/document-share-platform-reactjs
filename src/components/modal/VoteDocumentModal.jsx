@@ -95,7 +95,7 @@ class VoteDocumentModal extends React.Component {
 
   // Step 2 : Approve 체크
   handleApprove = async () => {
-    const { getDrizzle } = this.props;
+    const { getDrizzle, setAlertCode } = this.props;
     const { deposit } = this.state;
 
     let approved =  await getDrizzle.approve(String(deposit)).then((res) => {
@@ -103,12 +103,15 @@ class VoteDocumentModal extends React.Component {
       return res;
     });
     if(approved === "success")  return approved;
-    else  this.setState({ voteStatus: "INIT" });
+    else  {
+      this.setState({ voteStatus: "INIT" });
+      setAlertCode(2033);
+    }
   };
 
   // Step 3 : Vote 진행
   handleVote = async () => {
-    const { documentData, getDrizzle } = this.props;
+    const { documentData, getDrizzle, setAlertCode } = this.props;
     const { deposit } = this.state;
 
     let voted = await getDrizzle.voteOnDocument(documentData.documentId, (String(deposit))).then((res) => {
@@ -117,7 +120,10 @@ class VoteDocumentModal extends React.Component {
     });
 
     if(voted === "success") document.location.reload();//this.setState({ voteStatus: "COMPLETE" });
-    else  this.setState({ voteStatus: "INIT" });
+    else  {
+      this.setState({ voteStatus: "INIT" });
+      setAlertCode(2034);
+    }
   };
 
   //투표 프로세스 진행

@@ -165,7 +165,7 @@ class Header extends React.Component {
              id="header__main-nav">
           <div className="container-fluid container">
             <div className="col-4 col-lg-3 mt-1">
-              <a className="navbar-brand" href={"/"}>
+              <a className="navbar-brand" href={"/"} title="Link to main page">
                 <img src={require("assets/image/logo.svg")} alt="POLARIS SHARE"/>
               </a>
             </div>

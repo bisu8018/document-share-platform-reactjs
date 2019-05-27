@@ -35,6 +35,7 @@ class UploadDocumentModal extends React.Component {
       fileInfoError: "",
       useTracking: false,
       forceTracking: false,
+      allowDownload: false,
       classicModal: false,
       username: null,
       desc: ""
@@ -68,6 +69,7 @@ class UploadDocumentModal extends React.Component {
       useTracking: false,
       forceTracking: false,
       classicModal: false,
+      allowDownload: false,
       username: null,
       desc: ""
     });
@@ -80,7 +82,7 @@ class UploadDocumentModal extends React.Component {
   //업로드 함수
   handleUpload = () => {
     const { getDrizzle, getMyInfo } = this.props;
-    const { title, fileInfo, tags, desc, useTracking, forceTracking } = this.state;
+    const { title, fileInfo, tags, desc, useTracking, forceTracking, allowDownload } = this.state;
     let ethAccount = getMyInfo.ethAccount;
     let userInfo = MainRepository.Account.getMyInfo();
 
@@ -95,7 +97,8 @@ class UploadDocumentModal extends React.Component {
       desc: desc,
       tags: tags,
       useTracking: useTracking,
-      forceTracking: !useTracking ? false : forceTracking
+      forceTracking: !useTracking ? false : forceTracking,
+      isDownload: allowDownload
     }, this.handleProgress, (result) => { //문서 업로드 완료
       if (getDrizzle && ethAccount) getDrizzle.registerDocumentToSmartContract(result.documentId);
 
@@ -202,6 +205,15 @@ class UploadDocumentModal extends React.Component {
     let newValue = !forceTracking;
     this.setState({
       forceTracking: newValue
+    });
+  };
+
+  // 강제 트래킹 체크박스
+  handleAllowDownloadCheckbox = () => {
+    const { allowDownload } = this.state;
+    let newValue = !allowDownload;
+    this.setState({
+      allowDownload: newValue
     });
   };
 
@@ -350,6 +362,14 @@ class UploadDocumentModal extends React.Component {
                     <label htmlFor="forceTrackingCheckbox">
                       <span><i className="material-icons">done</i></span>
                          Force the audience to tracking.
+                    </label>
+                   </div>
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="allowDownload"
+                           onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
+                    <label htmlFor="allowDownload">
+                      <span><i className="material-icons">done</i></span>
+                         Allow download document.
                     </label>
                    </div>
                  </div>

@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import CreatorClaim from "../../../../components/body/profile/creator/CreatorClaim";
+import { setAlertCode } from "../../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -7,5 +8,9 @@ export default connect(
     getDrizzle: state.main.drizzleApis,
     getMyInfo: state.main.myInfo,
   }),
-  dispatch => ({})
+  dispatch => ({
+    setAlertCode: (alertCode: number) => {
+      dispatch(setAlertCode(alertCode));
+    },
+  })
 )(CreatorClaim);

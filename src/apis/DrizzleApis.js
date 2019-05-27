@@ -28,7 +28,9 @@ export default class DrizzleApis {
         //console.log("store",store);
         //console.log("myInfo", myInfo);
 
-        if (this.drizzleState.web3.networkId && this.drizzleState.web3.networkId !== 4) store.dispatch(setAlertCode(2052));  // Alert Show
+        if (this.drizzleState.web3.networkId && this.drizzleState.web3.networkId !== 4) {
+          store.dispatch(setAlertCode(2052));
+        }  // Alert Show
         if (this.drizzleState.drizzleStatus.initialized && myInfo.email.length > 0) {    //myInfo - drizzle 이더리움 계정 비교
 
           if (!myInfo.ethAccount) {   // myInfo에 이더리움 계정 없을때
@@ -37,6 +39,8 @@ export default class DrizzleApis {
               store.dispatch(setMyInfo(myInfo));  // redux data SET
             });
           } else if (myInfo.ethAccount && myInfo.ethAccount !== ethAccount) {   // myInfo - drizzle 이더리움 계정 다를때
+            /*console.log("1",myInfo.ethAccount);
+            console.log("2",ethAccount);*/
             store.dispatch(setAlertCode(2051));  // Alert Show
           }
         }
@@ -164,7 +168,7 @@ export default class DrizzleApis {
     return new Promise((resolve) => {
         const Creator = this.drizzle.contracts.Creator;
         const RewardPool = this.drizzle.contracts.RewardPool;
-        console.log("claimAuthorReward", ethAccount, "Profile account", documentId, this.fromAscii(documentId));
+       // console.log("claimAuthorReward", ethAccount, "Profile account", documentId, this.fromAscii(documentId));
         const stackId = RewardPool.methods["claim"].cacheSend(this.fromAscii(documentId), Creator.address, { from: ethAccount });
 
         resolve(this.getTransactionStatus(stackId));

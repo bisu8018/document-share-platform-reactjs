@@ -119,7 +119,7 @@ class AudienceTrackingList extends React.Component {
     return (
 
       <div className="row">
-        <div className="u__center profile-center">
+        <div className="u__center">
 
           <div className="row">
             <div className="col-sm-3 col-md-3 col-thumb p-0 p-sm-3 mr-0 mr-sm-2">
