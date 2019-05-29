@@ -1,4 +1,4 @@
-Sitemap: https://share.decompany.io/sitemap.xml
+Sitemap: https://www.polarishare.com/sitemap.xml
 User-agent: *
 Disallow: /~/
 Disallow: /latest/*/

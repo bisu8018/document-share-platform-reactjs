@@ -98,6 +98,12 @@ class ContentView extends React.Component {
         <Helmet>
           <meta charSet="utf-8"/>
           <title>{documentData.seoTitle}</title>
+
+          <meta property="og:locale" content="en_US"/>
+          <meta property="og:type" content="website"/>
+          <meta property="og:title" content={documentData.title}/>
+          <meta property="og:url" content={window.location.href}/>
+
           <meta name="description" content={documentData.desc}/>
           <meta name="thumbnail" content={this.getImgUrl()}/>
           <link rel="canonical"

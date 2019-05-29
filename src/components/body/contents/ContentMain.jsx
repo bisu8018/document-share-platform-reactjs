@@ -48,6 +48,12 @@ class ContentMain extends Component {
       "Grow Your Audience"
     ];
 
+    const buttonText = [
+      "Join Now",
+      "Sign Up",
+      "Upload now"
+    ];
+
     const content = [
       "Polaris Share values ​​the content you share.\nShare your content and get a transparent monetary reward.\n Join now as a creator ",
       "Meet advanced content produced by creator. \n Just vote for your favorite document and you'll be rewarded.\n Sign up now ",
@@ -78,10 +84,11 @@ class ContentMain extends Component {
                     <span key={idx}>{line}<br/></span>)
                   )}
                 </div>
-                <div className="main-upload-btn mr-2 ml-2 mb-3" onClick={() => this.handleUploadBtn()}>Upload now</div>
+                <div className="main-upload-btn mr-2 ml-2 mb-3" onClick={() => this.handleUploadBtn()}>{buttonText[idx]}</div>
                 <Link to="/faq">
                   <div className="main-learn-more-btn ml-2 mr-2">Learn more</div>
                 </Link>
+                <div className={"main-banner-img-wrapper main-banner-img" + (idx + 1)}/>
                 <img src={require("assets/image/banner/img-banner-0" + (idx + 1) + ".png")} alt=""/>
               </div>
             ))}

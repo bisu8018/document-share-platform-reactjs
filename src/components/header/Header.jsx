@@ -85,6 +85,12 @@ class Header extends React.Component {
           this.profileCardHide();
         }
 
+        // 프로필 카드 프로필 버튼
+        const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
+        if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) {
+          this.profileCardHide();
+        }
+
         // 검색 input
         const headerAutoSuggest = document.getElementById("headerAutoSuggest");
         if (headerAutoSuggest && !headerAutoSuggest.contains(targetElement)) {
@@ -122,7 +128,13 @@ class Header extends React.Component {
   };
 
   handleCategories = (data) => {
-    this.setState({ selectedCategory: data.target.value });
+    let category = data.target.value;
+    let main = category.split("/")[1];
+    MainRepository.Document.getTagList(main,result => {
+      this.setState({ selectedCategory: category }, () => {
+        this.props.setCurrentTagList(result.resultList);
+      });
+    });
   };
 
   handleNavMenuLink = (e) => {
@@ -188,7 +200,7 @@ class Header extends React.Component {
                 </div>
                 :
                 <div className="header-search-wrapper" id="headerAutoSuggest">
-                  <AutoSuggestInputContainer search={this.onSuggestionSelected} type={"tag"}/>
+                  <AutoSuggestInputContainer search={this.onSuggestionSelected} type={"currentTag"}/>
                   <select className="header-select-custom" onChange={(value) => this.handleCategories(value)}
                   >
                     <option value="/latest">LATEST</option>
@@ -207,6 +219,9 @@ class Header extends React.Component {
 
 
             <div className="navbar-menu tar  col-8 col-lg-3">
+              {/*<div className="d-inline-block d-sm-none" onClick={() => this.closeSearchBar()}>
+                <i className="material-icons">search</i>
+              </div>*/}
 
               <UploadDocumentModalContainer {...this.props} />
 

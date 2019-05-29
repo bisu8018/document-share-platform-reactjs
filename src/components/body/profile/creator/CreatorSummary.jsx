@@ -17,7 +17,7 @@ class CreatorSummary extends React.Component {
   };
 
   // 내 정보 GET
-  getMyinfo = () => {
+  getMyInfo = () => {
     return MainRepository.Account.getMyInfo();
   };
 
@@ -37,6 +37,7 @@ class CreatorSummary extends React.Component {
   getCuratorRewards = () => {
     const { userInfo, getCuratorDailyRewardPool } = this.props;
     MainRepository.Curator.getCuratorSummary(userInfo.ethAccount).then(res => {
+
       this.setState({
         curatorEstimatedToday: Common.toDeck(Common.getCuratorNDaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo, 0,res.voteDocList)),
         curatorTotalRewards: Common.toDeck(Common.getCurator7DaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo,res.voteDocList))
@@ -130,12 +131,12 @@ class CreatorSummary extends React.Component {
           <div className="pl-0 col-12 col-sm-2 col-lg-1 ">
             <div className="profile-image" title="Change profile image">
               <img src={profileImage} alt="profile" className="img-fluid"/>
-              {this.getMyinfo().email === userInfo.email &&
+              {this.getMyInfo().email === userInfo.email &&
               <div className="profile-image-edit" onClick={this.handleFileUpload}><i className="material-icons">edit</i>
               </div>
               }
             </div>
-            {this.getMyinfo().email === userInfo.email &&
+            {this.getMyInfo().email === userInfo.email &&
             <input type="file" id="imgFile" accept="image/*" onChange={(e) => this.handleFileChange(e.target.files)}/>
             }
           </div>
@@ -146,7 +147,7 @@ class CreatorSummary extends React.Component {
               {!userNameEdit &&
               <span>
                 <strong>{userName || userInfo.email}</strong>
-                {this.getMyinfo().email === userInfo.email &&
+                {this.getMyInfo().email === userInfo.email &&
                 <span className="username-edit-btn" onClick={() => this.handleClickEvent()} title="Edit user name">
                   <i className="material-icons ml-2">edit</i>
                 </span>

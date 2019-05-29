@@ -124,12 +124,12 @@ class ContentList extends Component {
 
     return (
       <div className="row">
-        <div className="col-lg-3 ">
+        <div className="col-lg-3  overflow-hidden">
           <ContentTagsContainer path={match.path} url={match.url} {...this.props}/>
         </div>
 
         <div className="col-sm-12 col-lg-9 u__center-container">
-          <div className="u__center mt-5">
+          <div className="u__center content-list-wrapper">
 
             <InfiniteScroll
               className="overflow-hidden"

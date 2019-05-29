@@ -6,6 +6,16 @@ import CuratorClaimContainer from "../../../../container/body/profile/curator/Cu
 
 class CuratorTabItem extends React.Component {
 
+  // 리워드 정보 표시
+  showRewardInfo = (id) => {
+    if (document.getElementById(id)) document.getElementById(id).style.display = "block";
+  };
+
+  // 리워드 정보 숨김
+  hideRewardInfo = (id) => {
+    if (document.getElementById(id)) document.getElementById(id).style.display = "none";
+  };
+
   render() {
     const { document, getCreatorDailyRewardPool, totalViewCountInfo } = this.props;
 
@@ -18,7 +28,6 @@ class CuratorTabItem extends React.Component {
     return (
 
       <div className="row u_center_inner">
-
         <div className="pl-0 col-3 col-md-4 col-thumb">
           <Link to={"/" + identification + "/" + document.seoTitle}>
             <div className="tab-thumbnail">
@@ -28,16 +37,28 @@ class CuratorTabItem extends React.Component {
           </Link>
         </div>
 
+
         <div className="col-sm-9 col-md-9 col-details_info">
           <div className="details_info">
             <Link to={"/" + identification + "/" + document.seoTitle}>
               <div className="info_title">  {document.title ? document.title : document.documentName} </div>
             </Link>
+
             <div className="d-inline-block">
-              <span className="info-detail-reward mr-2">
+              <span className="info-detail-reward mr-2"
+                    onMouseOver={() => this.showRewardInfo(document.seoTitle + "rewardVote")}
+                    onMouseOut={() => this.hideRewardInfo(document.seoTitle + "rewardVote")}>
                 ${Common.deckToDollar(reward)}
                 <i className="material-icons">arrow_drop_down</i>
               </span>
+
+              {reward > 0 &&
+              <div className="info-detail-reward-info" id={document.seoTitle + "rewardVote"}>
+                Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
+              </div>
+              }
+
+
               <span className="info-detail-view mr-3">{view}</span>
               <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
               <div className="info_date">
@@ -45,6 +66,9 @@ class CuratorTabItem extends React.Component {
               </div>
             </div>
           </div>
+
+
+
           <div className="float-right claim-btn-wrapper">
             <CuratorClaimContainer {...this.props} document={document}/>
           </div>

@@ -5,10 +5,12 @@ import Common from "../../../util/Common";
 
 class ContentListItem extends React.Component {
 
+  // 리워드 정보 표시
   showRewardInfo = (id) => {
     if (document.getElementById(id)) document.getElementById(id).style.display = "block";
   };
 
+  // 리워드 정보 숨김
   hideRewardInfo = (id) => {
     if (document.getElementById(id)) document.getElementById(id).style.display = "none";
   };
@@ -38,7 +40,7 @@ class ContentListItem extends React.Component {
                   title={result.title}> {result.title ? result.title : result.documentName}</Link>
           </div>
           <div className="mb-3 mb-sm-2">
-            <Link to={"/" + identification} className="info_name mb-2"
+            <Link to={"/" + identification} className="info_name"
                   title={identification}>
               {profileUrl ?
                 <img src={profileUrl} alt="profile"/> : <i className="material-icons img-thumbnail">face</i>

@@ -6,6 +6,16 @@ import CreatorClaimContainer from "../../../../container/body/profile/creator/Cr
 
 class CreatorTabItem extends React.Component {
 
+  // 리워드 정보 표시
+  showRewardInfo = (id) => {
+    if (document.getElementById(id)) document.getElementById(id).style.display = "block";
+  };
+
+  // 리워드 정보 숨김
+  hideRewardInfo = (id) => {
+    if (document.getElementById(id)) document.getElementById(id).style.display = "none";
+  };
+
   render() {
     const { document, getCreatorDailyRewardPool, totalViewCountInfo } = this.props;
 
@@ -32,11 +42,23 @@ class CreatorTabItem extends React.Component {
             <Link to={"/" + identification + "/" + document.seoTitle}>
               <div className="info_title">  {document.title ? document.title : document.documentName} </div>
             </Link>
-            <div className="d-inline-block">
-              <span className="info-detail-reward mr-2">
+
+
+            <div className="d-inline-block position-relative">
+              <span className="info-detail-reward mr-2"
+                    onMouseOver={() => this.showRewardInfo(document.seoTitle + "rewardUpload")}
+                    onMouseOut={() => this.hideRewardInfo(document.seoTitle + "rewardUpload")}>
                 ${Common.deckToDollar(reward)}
                 <i className="material-icons">arrow_drop_down</i>
               </span>
+
+              {reward > 0 &&
+              <div className="info-detail-reward-info" id={document.seoTitle + "rewardUpload"}>
+                Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
+              </div>
+              }
+
+
               <span className="info-detail-view mr-3">{view}</span>
               <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
               <div className="info_date">
@@ -44,6 +66,8 @@ class CreatorTabItem extends React.Component {
               </div>
             </div>
           </div>
+
+
           <div className="float-right claim-btn-wrapper">
             <CreatorClaimContainer {...this.props} document={document}/>
           </div>

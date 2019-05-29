@@ -33,11 +33,14 @@ class ActiveVote extends React.Component {
 
   render() {
     const activeVote = this.state.curatorRewardOnUserDocument;
-    const textDeck = Common.toDeck(activeVote ? activeVote : 0).toFixed(2) + " DECK";
-    const textDollar = "$ " + Common.toDollar(activeVote).toFixed(1);
+    const textDeck = Common.toDeck(activeVote ? activeVote : 0).toFixed(2);
+    const textDollar = Common.toDollar(activeVote).toFixed(1);
 
     return (
-        <span >{textDeck} ({textDollar})</span>
+      <span>
+        <span className="color-main-color font-weight-bold">{textDeck}</span> DECK
+        ($ <span className="color-main-color">{textDollar}</span>)
+        </span>
     );
   }
 }

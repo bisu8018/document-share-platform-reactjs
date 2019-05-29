@@ -6,8 +6,11 @@ import ContentMainContainer from "../container/body/contents/ContentMainContaine
 import AudienceTrackingContainer from "../container/body/tracking/AudienceTrackingListContainer";
 import ContentViewContainer from "../container/body/contents/contentsView/ContentViewContainer";
 import AudienceTrackingDetailContainer from "../container/body/tracking/AudienceTrackingDetailContainer";
-import Signup from "../components/common/Signup";
+import Signup from "../components/etc/Signup";
 import ContentListContainer from "../container/body/contents/ContentListContainer";
+import Policies from "../components/body/faq/Policies";
+import emailVerifyContainer from "../container/etc/emailVerifyContainer";
+import Privacy from "../components/body/faq/Privacy";
 
 export default ({
     routes: [
@@ -57,12 +60,27 @@ export default ({
         component: Faq
       },
       {
+        path: "/policies",
+        name: "policies",
+        component: Policies
+      },
+      {
+        path: "/privacy",
+        name: "privacy",
+        component: Privacy
+      },
+      {
+        path: "/emailverify",
+        name: "emailVerify",
+        component: emailVerifyContainer
+      },
+      {
         path: "/signup",
         name: "signup",
         component: Signup
       },
       {
-        path: "/NotFoundPage",
+        path: "/notfoundpage",
         name: "NotFoundPage",
         component: NotFoundPage
       },

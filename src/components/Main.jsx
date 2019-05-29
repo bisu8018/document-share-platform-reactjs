@@ -33,10 +33,11 @@ class Main extends Component {
 
   //태그 리스트 GET
   setTagList = () => {
-    const { setTagList } = this.props;
+    const { setTagList, setCurrentTagList } = this.props;
 
     MainRepository.Document.getTagList("latest",result => {
       setTagList(result.resultList);
+      setCurrentTagList(result.resultList);
     });
   };
 

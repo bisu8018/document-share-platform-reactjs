@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { APP_PROPERTIES } from "properties/app.properties";
+import Common from "../../util/Common";
 
 class Footer extends React.Component {
 
@@ -11,24 +11,26 @@ class Footer extends React.Component {
         <div className="container p-4 row">
           <div className="footer-logo col-sm-3">
             <a href={"/"} title="Link to main page">
-              <img src={require("assets/image/logo-mono.svg")} alt="POLARIS SHARE"/>
+              <img className="footer-logo-img" src={require("assets/image/logo-mono.png")} alt="POLARIS SHARE"/>
             </a>
             <div className="copyright">
               Copyrightⓒ 2019 POLARIS SHARE
             </div>
           </div>
           <div className="footer-legal col-sm-6 row">
-            <div className="footer-nav footer-nav-divider mb-2">About US</div>
+            <a href="/about.html" title="Link to about us page">
+              <div className="footer-nav footer-nav-divider mb-2">About US</div>
+            </a>
             <Link to="/faq">
-              <div className="footer-nav footer-nav-divider mb-2">FAQ</div>
+              <div className="footer-nav footer-nav-divider mb-2" onClick={() => Common.scrollTop()}>FAQ</div>
             </Link>
             <div className="footer-nav footer-nav-divider mb-2">User Guide</div>
-            <a href={APP_PROPERTIES.domain().mainHost + "/legal/policy.html"} target="_blank" rel="noopener noreferrer">
-              <div className="footer-nav footer-nav-divider  mb-2">Policies</div>
-            </a>
-            <a href={APP_PROPERTIES.domain().mainHost + "/legal/privacy.html"} target="_blank" rel="noopener noreferrer">
-              <div className="footer-nav">Privacy</div>
-            </a>
+            <Link to="policies">
+              <div className="footer-nav footer-nav-divider  mb-2" onClick={() => Common.scrollTop()}>Policies</div>
+            </Link>
+            <Link to="privacy">
+              <div className="footer-nav" onClick={() => Common.scrollTop()}>Privacy</div>
+            </Link>
           </div>
           <div className="footer-sns col-sm-3 row">
             <div className="m-auto">

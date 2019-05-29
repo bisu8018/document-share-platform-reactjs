@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import {
-  setAuthorDailyRewardPool, setCuratorDailyRewardPool,
+  setAuthorDailyRewardPool, setCuratorDailyRewardPool, setCurrentTagList,
   setInitComplete,
   setIsMobile,
   setMyInfo,
@@ -13,7 +13,8 @@ export default connect(
   state => ({
     getInitComplete: state.main.initComplete,
     getMyInfo: state.main.myInfo,
-    getTagList: state.main.myInfo,
+    getTagList: state.main.tagList,
+    getCurrentTagList: state.main.currentTagList,
     getIsMobile: state.main.isMobile,
     getWeb3Apis: state.main.web3Apis,
     getDrizzle: state.main.drizzleApis,
@@ -24,6 +25,7 @@ export default connect(
     setInitComplete: (initComplete: boolean) => dispatch(setInitComplete(initComplete)),
     setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo)),
     setTagList: (tagList: []) => dispatch(setTagList(tagList)),
+    setCurrentTagList: (currentTagList: []) => dispatch(setCurrentTagList(currentTagList)),
     setIsMobile: (isMobile: boolean) => dispatch(setIsMobile(isMobile)),
     setWeb3Apis: (web3apis: any) => dispatch(setWeb3Apis(web3apis)),
     setAuthorDailyRewardPool: (authorRewardPool: any) => dispatch(setAuthorDailyRewardPool(authorRewardPool)),

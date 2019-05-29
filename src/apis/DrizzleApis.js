@@ -12,7 +12,12 @@ import { setAlertCode, setMyInfo } from "../redux/reducer/main";
 const defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
 
 export default class DrizzleApis {
-  options = { contracts: [DocumentReg, Deck, BountyOne, Curator, Creator, RewardPool] };    // 드리즐 컨트랙 설정
+  options = {
+    contracts: [DocumentReg, Deck, BountyOne, Curator, Creator, RewardPool],  // 드리즐 컨트랙 설정,
+    polls: {
+      accounts: 10000,
+    },
+  };
   drizzleStore = generateStore(this.options);   // 드리즐 스토어 셋팅
 
   constructor() {
@@ -113,7 +118,9 @@ export default class DrizzleApis {
         transactions = this.drizzleState.transactions;
         transactionStack = this.drizzleState.transactionStack;
 
-        if (Object.keys(transactions).length >= stackId + 1) status = transactions[transactionStack[stackId]].status;
+        if (Object.keys(transactions).length === stackId + 1) status = transactions[transactionStack[stackId]].status;
+        else if(Object.keys(transactions).length === stackId + 2 ) status = "error";
+
         if (status === "success" || status === "error") {
           clearInterval(this.txInterval);
           resolve(status);

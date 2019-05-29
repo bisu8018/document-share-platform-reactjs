@@ -11,11 +11,8 @@ export function getContentDownload(accountId, documentId) {
   return new Promise((resolve, reject) => {
     const url = apiDomain + getDocumentDownloadUrl + accountId + "/" + documentId;
     axios.get(url, null).then((res) => {
-      console.log(res.data);
       const downloadUrl = res.data.downloadUrl;
       const filename = res.data.document.documentName;
-      console.log(downloadUrl, filename);
-
       const config = {
         responseType: 'arraybuffer', // important
         headers: {

@@ -46,7 +46,7 @@ function setTrackingInfo() {
 
 function tracking(params, async, sidClear) {
   return new Promise((resolve, reject) => {
-    if (process.env.NODE_ENV !== "production") return false;
+    if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "dev" ) return false;
 
     let timestamp = Date.now();
     let trackingInfo = this.setTrackingInfo();

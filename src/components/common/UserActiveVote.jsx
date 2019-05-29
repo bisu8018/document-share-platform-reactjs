@@ -36,11 +36,14 @@ class UserActiveVote extends React.Component {
 
   render() {
     const userActiveVote = this.state.userActiveVote;
-    const textDeck = Common.toEther(userActiveVote ? userActiveVote : 0).toFixed(2) + " DECK";
-    const textDollar = "$ " + Common.toDollar(userActiveVote).toFixed(1);
+    const textDeck = Common.toEther(userActiveVote ? userActiveVote : 0).toFixed(2);
+    const textDollar = Common.toDollar(userActiveVote).toFixed(1);
 
     return (
-      <span>{textDeck} ({textDollar})</span>
+      <span>
+        <span className="color-main-color font-weight-bold">{textDeck}</span> DECK
+        ($ <span className="color-main-color">{textDollar}</span>)
+        </span>
     );
   }
 }

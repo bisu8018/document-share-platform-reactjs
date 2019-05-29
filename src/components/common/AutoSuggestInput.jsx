@@ -11,14 +11,14 @@ class AutoSuggestInput extends React.Component {
     };
   }
   getSuggestions = value => {
+    const { type, getTagList, getCurrentTagList } = this.props;
+
     const escapedValue = Common.escapeRegexCharacters(value.trim());
 
-    if (escapedValue === '') {
-      return [];
-    }
+    if (escapedValue === '') return [];
 
     const regex = new RegExp('^' + escapedValue, 'i');
-    let tagList = this.props.getTagList;
+    let tagList = type === "currentTag" ? getCurrentTagList : getTagList;
     return tagList.filter(data => regex.test(data._id));
   };
 
@@ -29,18 +29,10 @@ class AutoSuggestInput extends React.Component {
   };
 
   getSuggestionValue = suggestion => {
-    const { type } = this.props;
-    if(type === "tag") {
-      return suggestion._id;
-    }
     return suggestion._id;
   };
 
   renderSuggestion = suggestion => {
-    const { type } = this.props;
-    if(type === "tag") {
-      return suggestion._id;
-    }
     return suggestion._id;
   };
 
@@ -86,7 +78,7 @@ class AutoSuggestInput extends React.Component {
     const { value, suggestions } = this.state;
     let _placeholder = "";
 
-    if(type === "tag") {
+    if(type === "tag" || type === "currentTag") {
       _placeholder = "Tag Search . . .";
 
     }else if(type === "name") {

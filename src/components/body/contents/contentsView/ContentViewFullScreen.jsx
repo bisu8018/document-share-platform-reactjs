@@ -76,6 +76,15 @@ class ContentViewFullScreen extends Component {
     this.getContentDownload(accountId, documentId, documentName);
   };
 
+  // 리워드 정보 표시
+  showRewardInfo = (id) => {
+    if (document.getElementById(id)) document.getElementById(id).style.display = "block";
+  };
+
+  // 리워드 정보 숨김
+  hideRewardInfo = (id) => {
+    if (document.getElementById(id)) document.getElementById(id).style.display = "none";
+  };
 
   //전체화면 전환
   goFull = () => {
@@ -175,14 +184,27 @@ class ContentViewFullScreen extends Component {
           </div>
 
 
-          <div className="mb-3 d-inline-block">
-            <span className="info-detail-reward mr-2">
+          <div className="mb-3 d-inline-block position-relative">
+
+            <span className="info-detail-reward mr-2"
+                  onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
+                  onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
               ${Common.deckToDollar(reward)}
               <i className="material-icons">arrow_drop_down</i>
             </span>
+
+            {reward > 0 &&
+            <div className="info-detail-reward-info" id={documentData.seoTitle + "reward"}>
+              Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
+            </div>
+            }
+
             <span className="info-detail-view mr-3">{view}</span>
             <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
           </div>
+
+
+
           <div className="d-inline-block mb-3">
             {accountId === Common.getMySub() && documentData &&
             <EditDocumentModalContainer documentData={documentData}/>}

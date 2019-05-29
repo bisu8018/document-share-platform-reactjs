@@ -559,6 +559,10 @@ mark,
     padding-left: 0;
 }
 
+.color-main-color {
+    color: #3d5afe;
+}
+
 .col-1,
 .col-2,
 .col-3,
@@ -5255,6 +5259,10 @@ form {
     top: -3px;
 }
 
+.navbar .navbar-brand > img{
+    width: 217px;
+}
+
 .navbar.navbar-transparent {
     background-color: transparent !important;
     box-shadow: none;
@@ -6120,7 +6128,7 @@ dean
     color: #3681fe;
     font-weight: bold;
     width: 235px;
-    padding-top: 12px;
+    padding-top: 13px;
     height: 50px;
     transition: 0.2s all ease-in-out;
     z-index: 1;
@@ -6526,19 +6534,6 @@ Dean*/
     border-color: #0d73f8;
 }
 
-@media (max-width: 575px) {
-    .avatar {
-        top: 0;
-    }
-
-    .claim-btn-wrapper {
-        position: absolute;
-        top: -70px;
-        right: 10px;
-        opacity: 0.7;
-    }
-}
-
 .avatar:after {
     background: none !important;
 }
@@ -6585,6 +6580,9 @@ Dean*/
     display: flex;
 }
 
+.alert-success {
+    background-color: #4caf50;
+}
 .alert-warning {
     background-color: #ffa000;
 }
@@ -6720,6 +6718,7 @@ Dean*/
 #container {
     margin-top: 60px;
     overflow-x: hidden;
+    min-height: 80vh;
 }
 
 .col-thumb {
@@ -6829,6 +6828,10 @@ Dean*/
     border-left: 1px solid #b3b3b3;
     padding-left: 25px;
     padding-bottom: 140px;
+}
+
+.content-list-wrapper {
+ margin-top: 32px;
 }
 
 .content-main-container {;
@@ -7163,6 +7166,75 @@ Dean*/
 }
 
 @media (max-width: 575px) {
+
+    .navbar .navbar-brand > img{
+        width: 173px !important;
+    }
+
+    .menu-btn {
+        top: 3px !important;
+    }
+    .tracking_fulldown_list .tfl_desc {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .tracking_fulldown_list .tfl_desc dl:before {
+        left: 94px;
+    }
+
+    .tracking_fulldown_list .tfl_desc dd .time:after {
+        right: -22px;
+    }
+
+    .tracking_fulldown_list .tfl_desc dd {
+        padding-left: 95px;
+    }
+
+    .tracking_detail_title {
+        font-size: 16px;
+    }
+
+    .tracking-wrapper {
+        margin-right: 15px !important;
+    }
+
+    .details_info {
+        padding-right: 0;
+    }
+
+    .info_btn {
+        top: -8px;
+    }
+
+    .profile_top .col-sm-3 {
+        flex: 0 0 40%;
+        max-width: 40%;
+    }
+
+    .profile_top .col-sm-9 {
+        flex: 0 0 60%;
+        max-width: 60%;
+    }
+
+    .profile_info_name strong {
+        font-size: 17px;
+    }
+
+    .profile_info_desc p {
+        font-size: 14px;
+    }
+
+    .avatar {
+        top: 0;
+    }
+
+    .claim-btn-wrapper {
+        position: absolute;
+        top: -70px;
+        right: 10px;
+        opacity: 0.7;
+    }
 
     .menu-wrapper{
         opacity: 1 !important;
@@ -7588,38 +7660,6 @@ author tap list analytics*/
     }
 }
 
-@media (max-width: 575px) {
-    .tracking-wrapper {
-        margin-right: 15px !important;
-    }
-
-    .details_info {
-        padding-right: 0;
-    }
-
-    .info_btn {
-        top: -8px;
-    }
-
-    .profile_top .col-sm-3 {
-        flex: 0 0 40%;
-        max-width: 40%;
-    }
-
-    .profile_top .col-sm-9 {
-        flex: 0 0 60%;
-        max-width: 60%;
-    }
-
-    .profile_info_name strong {
-        font-size: 17px;
-    }
-
-    .profile_info_desc p {
-        font-size: 14px;
-    }
-}
-
 @media (max-width: 374px) {
 
     .profile_top .col-sm-3 {
@@ -7792,7 +7832,7 @@ author tap list analytics*/
 
 .u__view {
     max-width: 1400px;
-    padding: 20px 30px;
+    padding: 20px 30px 20px 0;
     background-color: #fff;
     border-right: 1px solid #b3b3b3;
 }
@@ -8430,29 +8470,6 @@ Dean
     }
 }
 
-@media (max-width: 575px) {
-    .tracking_fulldown_list .tfl_desc {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .tracking_fulldown_list .tfl_desc dl:before {
-        left: 94px;
-    }
-
-    .tracking_fulldown_list .tfl_desc dd .time:after {
-        right: -22px;
-    }
-
-    .tracking_fulldown_list .tfl_desc dd {
-        padding-left: 95px;
-    }
-
-    .tracking_detail_title {
-        font-size: 16px;
-    }
-}
-
 @media (max-width: 375px) {
     .tracking_detail_title {
         padding-top: 0;
@@ -8771,6 +8788,29 @@ contentContainer 배너 CSS*/
     z-index: 1;
     position: relative;
 }
+
+.main-banner-img-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center top;
+    background-size: cover;
+}
+
+.main-banner-img1 {
+    background-image: url("../image/banner/img-banner-01.png");
+}
+
+.main-banner-img2 {
+    background-image: url("../image/banner/img-banner-02.png");
+}
+
+.main-banner-img3 {
+    background-image: url("../image/banner/img-banner-03.png");
+}
+
 
 .copyright {
     font-size: 12px;
@@ -9190,10 +9230,30 @@ Vote 모달 CSS
 
 .voteList > li {
     list-style-type: none;
+    font-size: 14px;
+}
+
+.voteList > li > strong {
+    color: #4d4d4d;
+}
+
+.voteList > li > * {
+    font-size: 14px;
+}
+
+.vote-modal-title {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.vote-modal-subject {
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .noteTxtF {
     color: #f92121;
+    font-size: 14px;
 }
 
 
@@ -9229,6 +9289,10 @@ footer .footer-nav-divider:after {
 
 .footer-logo {
     display: inline-block;
+}
+
+.footer-logo-img {
+    width: 170px;
 }
 
 
@@ -9559,9 +9623,26 @@ react tabs CSS
     bottom: 0 !important;
     position: relative !important;
     list-style: none !important;
-    padding: 0 5px !important;
-    margin-right: 35px !important;
+    padding: 0 35px 0 0 !important;
     cursor: pointer !important;
+}
+
+.react-tabs__tab:focus {
+    background: #fff !important;
+    border-bottom: 3px solid #3681fe !important;
+    color: #4d4d4d !important;
+    font-weight: bold !important;
+    box-shadow: none !important;
+}
+
+.react-tabs__tab:focus:after {
+    position: relative !important;
+}
+
+.react-tabs__tab:hover {
+    background: #fff !important;
+    color: #4d4d4d !important;
+    font-weight: bold !important;
 }
 
 .react-tabs__tab--selected {
@@ -9622,4 +9703,42 @@ Ads CSS
 
 .ad-demo-img {
     margin-left: -35px;
+}
+
+
+
+/*
+legal CSS
+2019-05-24 Dean
+*/
+.legal-subject {
+    font-size: 24px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+}
+
+.legal-subject-sub {
+    font-size: 20px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+}
+
+.legal-content > a {
+    color: #3681fe;
+}
+
+.legal-content > a:hover {
+    font-weight: 500;
+}
+
+.legal-content {
+    font-size: 16px;
 }

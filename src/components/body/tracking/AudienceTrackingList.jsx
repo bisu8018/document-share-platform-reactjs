@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import Common from "../../../util/Common";
 import MainRepository from "../../../redux/MainRepository";
-import { ThreeBounce } from 'better-react-spinkit'
+import { ThreeBounce } from "better-react-spinkit";
 import Tooltip from "@material-ui/core/Tooltip";
 
 class AudienceTrackingList extends React.Component {
@@ -12,7 +12,7 @@ class AudienceTrackingList extends React.Component {
     filterList: null,
     loading: false,
     tableOptionFlag: false,
-    includeFlag: true,
+    includeFlag: true
   };
 
   constructor() {
@@ -20,6 +20,8 @@ class AudienceTrackingList extends React.Component {
     this.handleKeyUp = this.keyUpHandler.bind(this);
   }
 
+
+  // 검색 박스 keyup 관리
   keyUpHandler = () => {
     let searchValue = document.getElementById("searchInput").value;
     let filteredResult = null;
@@ -33,6 +35,8 @@ class AudienceTrackingList extends React.Component {
     this.setState({ filterList: filteredResult });
   };
 
+
+  // 트랙킹 리스트 GET
   getTrackingList = () => {
     const { location, getShowAnonymous, getIncludeOnlyOnePage } = this.props;
     const documentData = location.state.documentData;
@@ -51,6 +55,17 @@ class AudienceTrackingList extends React.Component {
     });
   };
 
+  // 리워드 정보 표시
+  showRewardInfo = (id) => {
+    if (document.getElementById(id)) document.getElementById(id).style.display = "block";
+  };
+
+  // 리워드 정보 숨김
+  hideRewardInfo = (id) => {
+    if (document.getElementById(id)) document.getElementById(id).style.display = "none";
+  };
+
+  // 파일 export
   handleExport = () => {
     const { location } = this.props;
     const documentData = location.state.documentData;
@@ -69,10 +84,12 @@ class AudienceTrackingList extends React.Component {
     });
   };
 
+  // 옵션 버튼 관리
   handleOptionButtonClickEvent = () => {
     this.setState({ tableOptionFlag: !this.state.tableOptionFlag });
   };
 
+  // 옵션 버튼 숨김
   handleHideOption = () => {
     const { setShowAnonymous, getShowAnonymous } = this.props;
     setShowAnonymous(!getShowAnonymous, () => {
@@ -80,13 +97,15 @@ class AudienceTrackingList extends React.Component {
     });
   };
 
+  // 1 페이지 보기/숨김 옵션 관리
   handleOnePageOption = () => {
-    const { setIncludeOnlyOnePage,  getIncludeOnlyOnePage} = this.props;
+    const { setIncludeOnlyOnePage, getIncludeOnlyOnePage } = this.props;
     setIncludeOnlyOnePage(!getIncludeOnlyOnePage, () => {
       this.getTrackingList();
     });
   };
 
+  // 특정 링크 클릭 이벤트 관리
   handleLinkClickEvent = (e) => {
     const { location, match } = this.props;
     const documentData = location.state.documentData;
@@ -106,13 +125,14 @@ class AudienceTrackingList extends React.Component {
   }
 
   render() {
-    const { location, match, getShowAnonymous, getIncludeOnlyOnePage, getCreatorDailyRewardPool, totalViewCountInfo } = this.props;
+    const { location, match, getShowAnonymous, getIncludeOnlyOnePage, getCreatorDailyRewardPool } = this.props;
     const { loading, tableOptionFlag } = this.state;
 
     const rst = !this.state.filterList ? this.state.resultList : this.state.filterList;
     const documentData = location.state.documentData;
+    const totalViewCountInfo = location.state.totalViewCountInfo;
     let addr = Common.getThumbnail(documentData.documentId, 320, 1);
-    let reward = Common.toEther(Common.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7));
+    let reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7));
     let vote = Common.toEther(documentData.latestVoteAmount);
     let view = documentData.latestPageview || 0;
 
@@ -153,11 +173,21 @@ class AudienceTrackingList extends React.Component {
                   </div>
                 </div>
 
-                <div className="col-view tracking-item mb-1  mt-1">
-                 <span className="info-detail-reward mr-2">
+
+                <div className="col-view tracking-item mb-1  mt-1 position-relative">
+                 <span className="info-detail-reward mr-2"
+                       onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
+                       onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
                     ${Common.deckToDollar(reward)}
                    <i className="material-icons">arrow_drop_down</i>
                   </span>
+
+                  {reward > 0 &&
+                  <div className="info-detail-reward-info" id={documentData.seoTitle + "reward"}>
+                    Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
+                  </div>
+                  }
+
                   <span className="info-detail-view mr-3">{view}</span>
                   <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
                   <span className="ml-4 info_date"> {Common.timestampToDate(documentData.created)}</span>

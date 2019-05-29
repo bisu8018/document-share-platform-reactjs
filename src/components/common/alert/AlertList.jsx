@@ -77,16 +77,13 @@ class AlertList extends React.Component {
     }
   };
 
-  componentDidUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
-
-  }
-
   render() {
     const { container } = this.state;
     const { getAlertCode } = this.props;
 this.handelRender();
     return (
-      <div className="alert-list-wrapper">{getAlertCode}
+      <div className="alert-list-wrapper">
+        <span className="d-none">{getAlertCode}</span>
         {container.map((arr, idx) => (
           <span key={idx}>
             {arr.html}

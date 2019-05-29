@@ -19,9 +19,11 @@ const style = {
   }
 };
 
+
 function Transition(props) {
   return <Slide direction="down" {...props} />;
 }
+
 
 class VoteDocumentModal extends React.Component {
 
@@ -36,6 +38,7 @@ class VoteDocumentModal extends React.Component {
     msg: "Vote on this document"
   };
 
+
   // Deck 예금 값 입력 캐치
   onChangeDeposit = e => {
     this.setState({ deposit: e.target.value }, () => {
@@ -43,20 +46,25 @@ class VoteDocumentModal extends React.Component {
     });
   };
 
+
   //예금 값 유효성 체크
   validateDeposit = () => {
-    const { deposit } = this.state;
-    this.setState({
-      deckError:
-        deposit > 0 ? "" : "Deposit must be greater than zero ."
+    const { deposit, balance } = this.state;
+    return new Promise((resolve) => {
+      let errMsg = "";
+      if (deposit <= 0) errMsg = "Deposit must be greater than zero .";
+      else if (deposit > Number(Common.toDeck(balance).toFixed(2))) errMsg = "Deposit must be less than balance .";
+
+      this.setState({ deckError: errMsg }, () => {
+        resolve(errMsg);
+      });
     });
-    return deposit;
   };
+
 
   //모달 종료시, 값 clear
   clearVoteInfo = () => {
     const { voteStatus } = this.state;
-
     if (voteStatus !== "INIT" && voteStatus !== "COMPLETE") return;
 
     this.setState({
@@ -71,12 +79,16 @@ class VoteDocumentModal extends React.Component {
     document.getElementById("deposit").value = null;
   };
 
+
   // 투표 Confirm 버튼 클릭
-  onClickVote = () => {
+  onClickVote = async () => {
     const { voteStatus, balance } = this.state;
-    if(voteStatus !== 'INIT' || balance <= 0) return;
-    if (this.validateDeposit()) this.handleProcess();
+    if (voteStatus !== "INIT" || balance <= 0) return;
+    let v = await this.validateDeposit();
+
+    if (v === "") this.handleProcess();
   };
+
 
   // Step 1 : Allowance GET
   handleAllowance = async () => {
@@ -93,25 +105,24 @@ class VoteDocumentModal extends React.Component {
     return Number(deposit) <= Number(allowance);
   };
 
+
   // Step 2 : Approve 체크
   handleApprove = async () => {
-    const { getDrizzle, setAlertCode } = this.props;
+    const { getDrizzle } = this.props;
     const { deposit } = this.state;
 
-    let approved =  await getDrizzle.approve(String(deposit)).then((res) => {
+    let approved = await getDrizzle.approve(String(deposit)).then((res) => {
       this.setState({ voteStatus: "APPROVE" });
       return res;
     });
-    if(approved === "success")  return approved;
-    else  {
-      this.setState({ voteStatus: "INIT" });
-      setAlertCode(2033);
-    }
+    if (approved === "success") return approved;
+    else  this.handleFailed();
   };
+
 
   // Step 3 : Vote 진행
   handleVote = async () => {
-    const { documentData, getDrizzle, setAlertCode } = this.props;
+    const { documentData, getDrizzle } = this.props;
     const { deposit } = this.state;
 
     let voted = await getDrizzle.voteOnDocument(documentData.documentId, (String(deposit))).then((res) => {
@@ -119,12 +130,10 @@ class VoteDocumentModal extends React.Component {
       return res;
     });
 
-    if(voted === "success") document.location.reload();//this.setState({ voteStatus: "COMPLETE" });
-    else  {
-      this.setState({ voteStatus: "INIT" });
-      setAlertCode(2034);
-    }
+    if (voted === "success") document.location.reload();//this.setState({ voteStatus: "COMPLETE" });
+    else  this.handleFailed();
   };
+
 
   //투표 프로세스 진행
   handleProcess = async () => {
@@ -140,6 +149,16 @@ class VoteDocumentModal extends React.Component {
       if (approve === "success") this.handleVote();
 
     } else this.handleVote();   // 3단계 : Vote 진행
+  };
+
+
+  handleFailed = () => {
+    const { setAlertCode } = this.props;
+
+    this.setState({ voteStatus: "INIT", deposit: 0 }, () => {
+      document.getElementById("deposit").value = null;
+    });
+    setAlertCode(2034);
   };
 
   //모달 오픈
@@ -170,10 +189,18 @@ class VoteDocumentModal extends React.Component {
     this.setState(x);
   };
 
+
+  // 키 다운 관리
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) this.onClickVote();
+  };
+
+
   // 로그인
   handleLogin = () => {
     MainRepository.Account.login();
   };
+
 
   // 밸런스 정보 GET
   handleBalance = () => {
@@ -186,15 +213,17 @@ class VoteDocumentModal extends React.Component {
     }
   };
 
+
   componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
     const { getWeb3Apis, getMyInfo } = this.props;
     const { balance } = this.state;
     let address = getMyInfo.ethAccount;
-    if(!address || balance > 0) return false;
+    if (!address || balance > 0) return false;
     getWeb3Apis.getBalance(getMyInfo.ethAccount, res => {
-      this.setState({balance : res})
+      this.setState({ balance: res });
     });
   }
+
 
   render() {
     const { documentData, getDrizzle, getIsDocumentExist, getMyInfo } = this.props;
@@ -210,7 +239,7 @@ class VoteDocumentModal extends React.Component {
     if (voteStatus === "INIT" || voteStatus === "COMPLETE") {
       btnText = "Confirm";
       statusFlag = false;
-    } else{
+    } else {
       btnText = "Pending";
       statusFlag = true;
     }
@@ -257,12 +286,12 @@ class VoteDocumentModal extends React.Component {
             id="classic-modal-slide-title"
             disableTypography>
             <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-            <h3>Vote on document</h3>
+            <div className="vote-modal-title">Vote on document</div>
           </DialogTitle>
 
 
           <DialogContent id="classic-modal-slide-description">
-            <h4>1. Total amount of tokens voted</h4>
+            <div className="vote-modal-subject">1. Total amount of tokens voted</div>
             <ul className="voteList">
               <li>
                 <strong>You : </strong>
@@ -278,25 +307,34 @@ class VoteDocumentModal extends React.Component {
               </li>
             </ul>
 
-            <h4>2. Amount of available tokens</h4>
+
+            <div className="vote-modal-subject">2. Amount of available tokens</div>
             <ul className="voteList">
-              <li>{Common.toDeck(balance).toFixed(2) + " DECK"} ($ {Common.toDollar(balance)})</li>
+              <li>
+                <span className="color-main-color font-weight-bold">{Common.toDeck(balance).toFixed(2)}</span> DECK
+                ($ <span className="color-main-color"> {Common.toDollar(balance)} </span>)
+              </li>
             </ul>
 
-            <h4>3. Enter the number of votes to commit</h4>
+
+            <div className="vote-modal-subject">3. Enter the number of votes to commit</div>
             <div className="deckInput">
               <input type="number" placeholder="DECK" autoComplete="off" id="deposit"
                      className={"custom-input " + (deckError.length > 0 ? "custom-input-warning" : "")}
-                     onChange={(e) => this.onChangeDeposit(e)}/>
+                     onChange={(e) => this.onChangeDeposit(e)}
+                     onKeyDown={(e) => this.handleKeyDown(e)}/>
+              <span>{deckError}</span>
             </div>
-            <span>{deckError}</span>
+
             <p className="noteTxt mt-2">Note: The token used for voting can be withdrawn after 3 days.</p>
           </DialogContent>
 
 
           <DialogActions className="modal-footer">
             <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">Cancel</div>
-            <div onClick={() => this.onClickVote()} className={"ok-btn " + (statusFlag || balance <= 0 ? "btn-disabled" : "")} >{btnText}</div>
+            <div onClick={() => this.onClickVote()}
+                 className={"ok-btn " + (statusFlag || balance <= 0 ? "btn-disabled" : "")}>{btnText}</div>
+            <div className="d-none">{voteStatus}</div>
           </DialogActions>
 
           <div className="progress-modal" id="progressModal">

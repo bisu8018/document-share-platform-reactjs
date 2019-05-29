@@ -6,11 +6,11 @@ class Menu extends React.Component {
   };
 
   menuShow = () => {
-    this.setState({menuShow : true});
+    this.setState({ menuShow: true });
   };
 
   menuHide = () => {
-    this.setState({menuShow : false});
+    this.setState({ menuShow: false });
   };
 
   render() {
@@ -23,7 +23,9 @@ class Menu extends React.Component {
         <div className="menu-wrapper">
           <i className="material-icons menu-close-btn" onClick={() => this.menuHide()}>clear</i>
           <div className="menu-content-list">
-            <div className="menu-content-item">About Us</div>
+            <a href="/about.html" title="Link to about us page">
+              <div className="menu-content-item">About Us</div>
+            </a>
             <div className="menu-content-item">User Guide</div>
             <div className="menu-content-item">FAQ</div>
             <div className="menu-content-item">Connect With Us</div>

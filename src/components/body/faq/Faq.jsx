@@ -1,7 +1,7 @@
 import React from "react";
 
 
-class Faq extends React.Component {
+class Faq extends React.PureComponent {
 
 
   render() {
