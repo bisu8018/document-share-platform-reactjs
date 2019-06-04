@@ -5,7 +5,7 @@ let getDocumentListUrl = "document/list";
 let voteDocumentUrl = "document/vote";
 let documentDownloadUrl = "document/download";
 let registerDocumentInfoUrl = "document/regist";
-let updateDocument = "document/update";
+let updateDocumentUrl = "document/update";
 let tagListUrl = "tags";
 
 export default {
@@ -32,7 +32,7 @@ export default {
           error(err);
         });
     },
-    documentDownloadUrl: (data, callback, error) => {
+    documentDownload: (data, callback, error) => {
       AxiosService._requestWithUrlPram(documentDownloadUrl, "GET", data,
         (data) => {
           callback(data);
@@ -59,7 +59,7 @@ export default {
         });
     },
     updateDocument: (data, callback, error) => {
-      AxiosService._requestWithHeaderBody(updateDocument, "POST", data,
+      AxiosService._requestWithHeaderBody(updateDocumentUrl, "POST", data,
         (data) => {
           callback(data);
         }, (err) => {

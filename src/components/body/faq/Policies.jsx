@@ -10,8 +10,8 @@ class Policies extends React.PureComponent {
 
       <div className="row mb-5">
 
-        <div className="col-sm-12 col-lg-10 offset-lg-1  u__center">
-          <div className="legal-subject mt-5 text-center">PRIVACY POLICY</div>
+        <div className="col-sm-12 col-lg-10 offset-lg-1  u__center-faq">
+          <div className="legal-subject mt-3 mt-sm-5 text-center">PRIVACY POLICY</div>
 
           <div className="legal-content mt-4">
             At DECOMPANY Corporation, doing business as Polaris Share ("Polaris Share"), we strive to protect the

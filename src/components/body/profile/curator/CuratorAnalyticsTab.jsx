@@ -199,7 +199,7 @@ class CuratorAnalyticsTab extends React.Component {
 
               <div className="d-none d-sm-inline-block col-sm-2">
                 <Link to={"/" + identification + "/" + result.seoTitle}>
-                  <div className="analytics-thumb-image">
+                  <div className="analytics-thumb-image" onClick={() => Common.scrollTop()}>
                     <img src={Common.getThumbnail(result.documentId, 320, 1, result.documentName)}
                          alt={result.title ? result.title : result.documentName} className="img-fluid"/>
                   </div>
@@ -208,7 +208,7 @@ class CuratorAnalyticsTab extends React.Component {
 
               <div className="col-10 col-sm-7 mb-4">
                 <Link to={"/" + identification + "/" + result.seoTitle}>
-                  <div className="analytics-info-title">  {result.title ? result.title : result.documentName} </div>
+                  <div className="analytics-info-title" onClick={() => Common.scrollTop()}>  {result.title ? result.title : result.documentName} </div>
                 </Link>
               </div>
 
@@ -218,7 +218,7 @@ class CuratorAnalyticsTab extends React.Component {
 
               <div className="col-2 col-sm-1 analytics-btn-div" onClick={this.handleClick.bind(this)}
                    title="See analytics of this document" data-key={idx} data-id={result.documentId}>
-                <i><img src={require("assets/image/common/i_faq_reverse.png")} alt="dropdown icon"/></i>
+                <i><img src={require("assets/image/icon/i_faq_reverse.png")} alt="dropdown icon"/></i>
               </div>
 
               <div className="col-12 ">

@@ -26,11 +26,14 @@ class EditDocumentModal extends React.Component {
       titleError: "",
       tags: [],
       tagError: "",
-      useTracking: false,
-      forceTracking: false,
-      allowDownload: false,
-      registerOnChain: false,
-      classicModal: false,
+      useTracking: false,   // 트래킹 사용 유무
+      forceTracking: false,   // 트래킹 강제 사용 유무
+      allowDownload: false,   // 다운로드 허용
+      classicModal: false,    // 모달 종료
+      by: false,   //CC License by 사용유무
+      nc: false,   //CC License nc 사용유무
+      nd: false,   //CC License nd 사용유무
+      sa: false,   //CC License sa 사용유무
       username: null,
       desc: ""
     };
@@ -47,15 +50,49 @@ class EditDocumentModal extends React.Component {
       titleError: "",
       tags: [],
       tagError: "",
-      useTracking: false,
-      forceTracking: false,
-      allowDownload: false,
-      classicModal: false,
+      useTracking: false,   // 트래킹 사용 유무
+      forceTracking: false,   // 트래킹 강제 사용 유무
+      allowDownload: false,   // 다운로드 허용
+      classicModal: false,    // 모달 종료
+      by: false,   //CC License by 사용유무
+      nc: false,   //CC License nc 사용유무
+      nd: false,   //CC License nd 사용유무
+      sa: false,   //CC License sa 사용유무
       username: null,
       desc: ""
     });
   };
 
+
+  // CC 값 GET
+  getCcValue = () => {
+    const { by, nd, nc, sa } = this.state;
+
+    if (!by) return null;
+
+    if (!nc && !nd && !sa) return "by";
+    else if (nc && !nd && !sa) return "by-nc";
+    else if (!nc && nd && !sa) return "by-nd";
+    else if (!nc && !nd && sa) return "by-sa";
+    else if (nc && !nd && sa) return "by-nc-sa";
+    else if (nc && nd && !sa) return "by-nc-nd";
+  };
+
+
+  // CC 상세값 GET
+  getCcDetailValue = (cc) => {
+    console.log(cc);
+    if (cc === "by") this.setState({ by: true });
+    else if (cc === "by-nc") this.setState({ by: true, nc: true });
+    else if (cc === "by-nd") this.setState({ by: true, nd: true });
+    else if (cc === "by-sa") this.setState({ by: true, sa: true });
+    else if (cc === "by-nc-sa") this.setState({ by: true, nc: true, sa: true });
+    else if (cc === "by-nc-nd") this.setState({ by: true, nc: true, nd: true });
+
+  };
+
+
+  // 확인 버튼 관리
   handleConfirmBtn = () => {
     // input 값 유효성 검사
     if (!this.validateTitle() || !this.validateTag()) {
@@ -64,6 +101,8 @@ class EditDocumentModal extends React.Component {
     this.handleConfirm();
   };
 
+
+  // 확인 관리
   handleConfirm = () => {
     const { documentData } = this.props;
     const { title, desc, tags, useTracking, forceTracking, allowDownload } = this.state;
@@ -74,7 +113,8 @@ class EditDocumentModal extends React.Component {
       tags: tags,
       useTracking: useTracking,
       forceTracking: !useTracking ? false : forceTracking,
-      isDownload: allowDownload
+      isDownload: allowDownload,
+      cc: this.getCcValue()
     };
     MainRepository.Document.updateDocument(data, (result) => {
       history.push("/" + Common.getPath() + "/" + result.seoTitle);
@@ -85,6 +125,8 @@ class EditDocumentModal extends React.Component {
     });
   };
 
+
+  // 모달 오픈 관리
   handleClickOpen = (modal) => {
     const { documentData } = this.props;
     if (!MainRepository.Account.isAuthenticated()) {
@@ -94,6 +136,8 @@ class EditDocumentModal extends React.Component {
       x[modal] = true;
       this.setState(x);
     }
+
+    this.getCcDetailValue(documentData.cc);
 
     let username = MainRepository.Account.getMyInfo().username;
     let email = MainRepository.Account.getMyInfo().email;
@@ -107,6 +151,8 @@ class EditDocumentModal extends React.Component {
     this.setState({ allowDownload: documentData.isDownload || false });
   };
 
+
+  // 종료 관리
   handleClose = (modal) => {
     const x = [];
     x[modal] = false;
@@ -115,21 +161,28 @@ class EditDocumentModal extends React.Component {
     this.clearState();
   };
 
+
+  // 제목 변경 관리
   handleTitleChange = e => {
     this.setState({ title: e.target.value }, () => {
       this.validateTitle();
     });
   };
 
+
+  //태그 변경 관리
   handleTagChange = (tags) => {
     this.setState({ tags: tags }, () => {
       this.validateTag();
     });
   };
 
+
+  // 설명 변경 관리
   handleDescChange = (e) => {
     this.setState({ desc: e.target.value });
   };
+
 
   // 유저 트래킹 체크박스
   handleTrackingCheckbox = () => {
@@ -147,6 +200,7 @@ class EditDocumentModal extends React.Component {
     });
   };
 
+
   // 강제 트래킹 체크박스
   handleForceTrackingCheckbox = () => {
     const { forceTracking } = this.state;
@@ -156,6 +210,7 @@ class EditDocumentModal extends React.Component {
     });
   };
 
+
   // 다운로드 허용 체크박스
   handleAllowDownloadCheckbox = () => {
     const { allowDownload } = this.state;
@@ -164,6 +219,47 @@ class EditDocumentModal extends React.Component {
       allowDownload: newValue
     });
   };
+
+
+  // CC License by 체크박스
+  handleCcByCheckbox = () => {
+    const { by } = this.state;
+    let newValue = !by;
+    this.setState({
+      by: newValue
+    });
+  };
+
+
+  // CC License nc 체크박스
+  handleCcNcCheckbox = () => {
+    const { nc } = this.state;
+    let newValue = !nc;
+    this.setState({
+      nc: newValue
+    });
+  };
+
+
+  // CC License nd 체크박스
+  handleCcNdCheckbox = () => {
+    const { nd } = this.state;
+    let newValue = !nd;
+    this.setState({
+      nd: newValue
+    });
+  };
+
+
+  // CC License nc 체크박스
+  handleCcSaCheckbox = () => {
+    const { sa } = this.state;
+    let newValue = !sa;
+    this.setState({
+      sa: newValue
+    });
+  };
+
 
   //제목 유효성 체크
   validateTitle = () => {
@@ -175,6 +271,7 @@ class EditDocumentModal extends React.Component {
     return title.length > 0;
   };
 
+
   //태그 유효성 체크
   validateTag = () => {
     const { tags } = this.state;
@@ -184,6 +281,7 @@ class EditDocumentModal extends React.Component {
     });
     return tags.length > 0;
   };
+
 
   // 자동완성 및 태그 관련 라이브러리 함수
   autocompleteRenderInput = ({ addTag, ...props }) => {
@@ -224,7 +322,7 @@ class EditDocumentModal extends React.Component {
   };
 
   render() {
-    const { classicModal, title, allowDownload, desc, tags, useTracking, forceTracking, titleError, tagError } = this.state;
+    const { classicModal, title, allowDownload, desc, tags, useTracking, forceTracking, titleError, tagError, by, nc, nd, sa } = this.state;
     const { type } = this.props;
 
     return (
@@ -303,6 +401,46 @@ class EditDocumentModal extends React.Component {
                     </label>
                    </div>
                  </div>
+
+
+                <div className="dialog-subject mb-2 mt-3">CC License</div>
+                <div className="row">
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="ccByCheckboxEdit" onChange={(e) => this.handleCcByCheckbox(e)}
+                           checked={by}/>
+                    <label htmlFor="ccByCheckboxEdit">
+                      <span><i className="material-icons">done</i></span>
+                      Attribution
+                    </label>
+                  </div>
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="ccNcCheckboxEdit" onChange={(e) => this.handleCcNcCheckbox(e)}
+                           checked={nc}/>
+                    <label htmlFor="ccNcCheckboxEdit">
+                      <span><i className="material-icons">done</i></span>
+                     Noncommercial
+                    </label>
+                  </div>
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="ccNdCheckboxEdit" onChange={(e) => this.handleCcNdCheckbox(e)}
+                           checked={nd}/>
+                    <label htmlFor="ccNdCheckboxEdit">
+                      <span><i className="material-icons">done</i></span>
+                        No Derivative Works
+                    </label>
+                  </div>
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="ccSaCheckboxEdit" onChange={(e) => this.handleCcSaCheckbox(e)}
+                           checked={sa}/>
+                    <label htmlFor="ccSaCheckboxEdit">
+                      <span><i className="material-icons">done</i></span>
+                         Share Alike
+                    </label>
+                  </div>
+                 </div>
+
+
+
                   </DialogContent>
 
 

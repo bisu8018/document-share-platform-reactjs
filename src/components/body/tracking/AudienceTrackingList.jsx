@@ -144,7 +144,7 @@ class AudienceTrackingList extends React.Component {
           <div className="row">
             <div className="col-sm-3 col-md-3 col-thumb p-0 p-sm-3 mr-0 mr-sm-2">
               <Link to={"/" + match.params.identification + "/" + documentData.seoTitle}>
-                <div className="tab-thumbnail">
+                <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
                   <img src={addr}
                        alt={documentData.title ? documentData.title : documentData.documentName}
                        className="img-fluid"/>
@@ -154,7 +154,7 @@ class AudienceTrackingList extends React.Component {
 
             <div className="col-sm-9 col-md-9 col-details_info p-sm-3 ">
               <dl className="details_info">
-                <Link to={"/" + match.params.identification + "/" + documentData.seoTitle} className="info_title mb-2">
+                <Link to={"/" + match.params.identification + "/" + documentData.seoTitle} className="info_title mb-2" onClick={() => Common.scrollTop()}>
                   {documentData.title}
                 </Link>
 

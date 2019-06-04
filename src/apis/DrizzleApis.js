@@ -36,7 +36,7 @@ export default class DrizzleApis {
         if (this.drizzleState.web3.networkId && this.drizzleState.web3.networkId !== 4) {
           store.dispatch(setAlertCode(2052));
         }  // Alert Show
-        if (this.drizzleState.drizzleStatus.initialized && myInfo.email.length > 0) {    //myInfo - drizzle 이더리움 계정 비교
+        if (this.drizzleState.drizzleStatus.initialized && MainRepository.Account.isAuthenticated() && myInfo.email.length > 0) {    //myInfo - drizzle 이더리움 계정 비교
 
           if (!myInfo.ethAccount) {   // myInfo에 이더리움 계정 없을때
             MainRepository.Account.syncEthereum(ethAccount, () => {
@@ -111,7 +111,7 @@ export default class DrizzleApis {
 
   //트랜잭션 상태값 수신
   getTransactionStatus = (stackId) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let status, transactions, transactionStack;
       // 1초마다 트랜잭션 확인
       this.txInterval = setInterval(() => {

@@ -25,6 +25,10 @@ class Alert extends React.PureComponent {
       //클라이언트 단 상태코드
       //=============================================
       // 시스템 메세지 2000~
+      case 2001 :
+        status = "error";
+        msg = "A network error has occurred.";   // 네트워크 에러
+        break;
 
       // 이메일 메세지 2031~
       case 2021 :
@@ -46,6 +50,7 @@ class Alert extends React.PureComponent {
         status = "warning";
         msg = "Invalid verification code.";   // 잘못된 검증 코드
         break;
+
 
       // 블록체인 메세지 2031~
       case 2031 :
@@ -73,6 +78,7 @@ class Alert extends React.PureComponent {
         msg = "Claim transaction failed.";   // 클레임 트랜잭션 실패
         break;
 
+
       //지갑 메세지 2050~
       case 2051 :
         status = "warning";
@@ -85,6 +91,7 @@ class Alert extends React.PureComponent {
         msg = "Connect with the correct network.";  // 잘못된 이더리움 네트워크 접속
         sub = "Please set the MetaMask network to: Rinkeby";
         break;
+
 
 
       //=============================================

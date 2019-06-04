@@ -91,7 +91,7 @@ class AudienceTrackingDetail extends React.Component {
                   <ul key={idx}>
                     <li>
                       <div className="tfl_title" onClick={this.handleClick}>
-                        <i><img src={require("assets/image/common/i_faq.png")} alt="dropdown icon"/></i>
+                        <i><img src={require("assets/image/icon/i_faq.png")} alt="dropdown icon"/></i>
                         <strong title="">
                           {this.getSortedTime(result)}
                         </strong>
@@ -129,6 +129,7 @@ class AudienceTrackingDetail extends React.Component {
                                 <div className="d-flex w-100">
                                   {documentText &&
                                   <Link
+                                    onClick={() => Common.scrollTop()}
                                     to={"/" + match.params.identification + "/" + match.params.seoTitle + "/" + _result.n}
                                     title={"Link to " + _result.n + " page" }>
                                   <LinesEllipsis

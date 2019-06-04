@@ -34,6 +34,7 @@ class ContentViewFullScreen extends Component {
     isDocumentExist: null
   };
 
+
   //문서 다운로드
   getContentDownload = (accountId, documentId, documentName) => {
     let params = {
@@ -51,6 +52,65 @@ class ContentViewFullScreen extends Component {
       window.URL.revokeObjectURL(a.href);
       document.body.removeChild(a);
     });
+  };
+
+
+  // 리워드 정보 표시
+  showRewardInfo = (id) => {
+    if (document.getElementById(id)) document.getElementById(id).style.display = "block";
+  };
+
+
+  // 리워드 정보 숨김
+  hideRewardInfo = (id) => {
+    if (document.getElementById(id)) document.getElementById(id).style.display = "none";
+  };
+
+
+  //전체화면 전환
+  goFull = () => {
+    let element = document.getElementsByClassName("selected")[0].firstChild;
+    let imgWidth = element.clientWidth;
+    let imgHeight = element.clientHeight;
+    let deviceRatio = window.innerWidth / window.innerHeight;
+    let imgRatio = imgWidth / imgHeight;
+
+    if (this.state.isFull) {
+      this.setState({ isFull: false });
+    } else {
+      this.setState({ isFull: true }, () => {
+        if (deviceRatio > imgRatio) {
+          this.setState({ carouselClass: "deviceRatio" });
+        } else {
+          this.setState({ carouselClass: "imgRatio" });
+        }
+      });
+    }
+  };
+
+
+  //현재 page GET
+  getPageNum = (page) => {
+    this.setState({ page: page });
+  };
+
+
+  //Web3에서 보상액 GET
+  getReward = () => {
+    const { documentData, getWeb3Apis } = this.props;
+    getWeb3Apis.getNDaysRewards(documentData.documentId, 7).then(res => {
+      let reward = Common.toEther(res);
+      this.setState({ reward: reward });
+    });
+  };
+
+
+  //전체화면 전환 컨트롤
+  handleFullChange = (_isFull) => {
+    const { isFull } = this.state;
+    if (isFull !== _isFull) {
+      this.goFull();
+    }
   };
 
 
@@ -76,65 +136,13 @@ class ContentViewFullScreen extends Component {
     this.getContentDownload(accountId, documentId, documentName);
   };
 
-  // 리워드 정보 표시
-  showRewardInfo = (id) => {
-    if (document.getElementById(id)) document.getElementById(id).style.display = "block";
-  };
-
-  // 리워드 정보 숨김
-  hideRewardInfo = (id) => {
-    if (document.getElementById(id)) document.getElementById(id).style.display = "none";
-  };
-
-  //전체화면 전환
-  goFull = () => {
-    let element = document.getElementsByClassName("selected")[0].firstChild;
-    let imgWidth = element.clientWidth;
-    let imgHeight = element.clientHeight;
-    let deviceRatio = window.innerWidth / window.innerHeight;
-    let imgRatio = imgWidth / imgHeight;
-
-    if (this.state.isFull) {
-      this.setState({ isFull: false });
-    } else {
-      this.setState({ isFull: true }, () => {
-        if (deviceRatio > imgRatio) {
-          this.setState({ carouselClass: "deviceRatio" });
-        } else {
-          this.setState({ carouselClass: "imgRatio" });
-        }
-      });
-    }
-  };
-
-  //현재 page GET
-  getPageNum = (page) => {
-    this.setState({ page: page });
-  };
-
-  //Web3에서 보상액 GET
-  getReward = () => {
-    const { documentData, getWeb3Apis } = this.props;
-    getWeb3Apis.getNDaysRewards(documentData.documentId, 7).then(res => {
-      let reward = Common.toEther(res);
-      this.setState({ reward: reward });
-    });
-  };
-
-  //전체화면 전환 컨트롤
-  handleFullChange = (_isFull) => {
-    const { isFull } = this.state;
-    if (isFull !== _isFull) {
-      this.goFull();
-    }
-  };
 
   componentWillMount(): void {
     this.getReward();
   }
 
   render() {
-    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo } = this.props;
+    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
     const { page, isFull, carouselClass, emailFlag } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0;
@@ -163,17 +171,29 @@ class ContentViewFullScreen extends Component {
           </Fullscreen>
         </div>
 
+        {documentData.cc &&
+        <div className="cc-container">
+          <div className={"cc-wrapper"}>
+            <Tooltip title="This work is licensed under a Creative Commons Attribution 2.0 Generic License."
+                     placement="bottom">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/">
+                <img alt="Creative Commons License" className={"cc-img"}
+                     src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + documentData.cc + ".svg")}/>
+              </a>
+            </Tooltip>
+          </div>
+        </div>
+        }
 
         <div className="view_content">
           <div className="u_title pt-2 pb-2 mt-2 mb-2">   {documentData.title ? documentData.title : ""}</div>
-
 
           <div>
             <Link to={"/" + identification} className="info_name mb-2"
                   title={"Go to profile page of " + identification}>
               {profileUrl ?
-                <img src={profileUrl} alt="profile"/> :
-                <i className="material-icons img-thumbnail">face</i>
+                <img src={profileUrl} alt="profile" onClick={() => Common.scrollTop()}/> :
+                <i className="material-icons img-thumbnail" onClick={() => Common.scrollTop()}>face</i>
               }
               {identification}
             </Link>
@@ -204,7 +224,6 @@ class ContentViewFullScreen extends Component {
           </div>
 
 
-
           <div className="d-inline-block mb-3">
             {accountId === Common.getMySub() && documentData &&
             <EditDocumentModalContainer documentData={documentData}/>}
@@ -229,7 +248,9 @@ class ContentViewFullScreen extends Component {
                   totalViewCountInfo: totalViewCountInfo
                 }
               }}>
-                <div className="viewer-btn"><i className="material-icons">bar_chart</i> Tracking</div>
+                <div className="viewer-btn" onClick={() => Common.scrollTop()}><i
+                  className="material-icons">bar_chart</i> Tracking
+                </div>
               </Link></Tooltip>
             }
 
@@ -250,6 +271,7 @@ class ContentViewFullScreen extends Component {
             <div className="view_tag mb-3">
               {documentData.tags ? documentData.tags.map((tag, index) => (
                 <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
+                      onClick={() => Common.scrollTop()}
                       className="tag"> {tag} </Link>
               )) : ""}
             </div>
@@ -303,10 +325,12 @@ class ContentViewFullScreen extends Component {
           {/*<ContentViewComment/>*/}
 
         </div>
+        ;
 
 
       </div>
-    );
+    )
+      ;
   }
 }
 

@@ -1,6 +1,8 @@
 import axios from "axios";
 import { APP_PROPERTIES } from "../properties/app.properties";
 import * as qs from "qs";
+import { store } from "../index";
+import { setAlertCode } from "../redux/reducer/main";
 
 export default {
   getRootUrlWithApi: function() {
@@ -39,8 +41,8 @@ export default {
           success(response.data);
           //성공 alert
         } else {
+          store.dispatch(setAlertCode(2001));  // Alert Show
           failure(response.data.message);
-          //실패 alert
         }
       })
       .catch((error) => {

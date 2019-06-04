@@ -1,7 +1,6 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
-import CuratorUploadTab from "../curator/CuratorUploadTab";
 import MainRepository from "../../../../redux/MainRepository";
 import Common from "../../../../util/Common";
 import { ThreeBounce } from 'better-react-spinkit';
@@ -9,6 +8,7 @@ import NotFoundPage from "../../../common/NotFoundPage";
 import CuratorAnalyticsTabContainer from "../../../../container/body/profile/curator/CuratorAnalyticsTabContainer";
 import CreatorSummaryContainer from "../../../../container/body/profile/creator/CreatorSummaryContainer";
 import CuratorVoteTabContainer from "../../../../container/body/profile/curator/CuratorVoteTabContainer";
+import CuratorUploadTabContainer from "../../../../container/body/profile/curator/CuratorUploadTabContainer";
 
 
 class Creator extends React.Component {
@@ -89,7 +89,7 @@ class Creator extends React.Component {
             </TabList>
 
             <TabPanel>
-              <CuratorUploadTab
+              <CuratorUploadTabContainer
                 userInfo={userInfo}
                 getDocumentList={this.getUploadDocumentList.bind(this)}
               />

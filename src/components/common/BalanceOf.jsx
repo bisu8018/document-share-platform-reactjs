@@ -12,7 +12,7 @@ class BalanceOf extends React.Component {
     return (
       <div className="d-inline">
         <span className="balance-of-dollar"> {balanceDollarStr} </span>
-        <span className="balance-of-dollar"> ({balanceDeckStr}) </span>
+        <span className="balance-of-deck"> ({balanceDeckStr}) </span>
       </div>
     );
   }

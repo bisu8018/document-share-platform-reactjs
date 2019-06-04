@@ -25,10 +25,10 @@ class Footer extends React.Component {
               <div className="footer-nav footer-nav-divider mb-2" onClick={() => Common.scrollTop()}>FAQ</div>
             </Link>
             <div className="footer-nav footer-nav-divider mb-2">User Guide</div>
-            <Link to="policies">
+            <Link to="/policies">
               <div className="footer-nav footer-nav-divider  mb-2" onClick={() => Common.scrollTop()}>Policies</div>
             </Link>
-            <Link to="privacy">
+            <Link to="/privacy">
               <div className="footer-nav" onClick={() => Common.scrollTop()}>Privacy</div>
             </Link>
           </div>

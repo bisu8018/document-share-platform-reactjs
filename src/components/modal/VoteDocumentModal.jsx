@@ -111,12 +111,11 @@ class VoteDocumentModal extends React.Component {
     const { getDrizzle } = this.props;
     const { deposit } = this.state;
 
-    let approved = await getDrizzle.approve(String(deposit)).then((res) => {
+    await getDrizzle.approve(String(deposit)).then((res) => {
       this.setState({ voteStatus: "APPROVE" });
-      return res;
+      if (res === "success") return res;
+      else  this.handleFailed();
     });
-    if (approved === "success") return approved;
-    else  this.handleFailed();
   };
 
 
@@ -125,13 +124,11 @@ class VoteDocumentModal extends React.Component {
     const { documentData, getDrizzle } = this.props;
     const { deposit } = this.state;
 
-    let voted = await getDrizzle.voteOnDocument(documentData.documentId, (String(deposit))).then((res) => {
+    await getDrizzle.voteOnDocument(documentData.documentId, (String(deposit))).then((res) => {
       this.setState({ voteStatus: "VOTE" });
-      return res;
+      if (res === "success") document.location.reload();//this.setState({ voteStatus: "COMPLETE" });
+      else  this.handleFailed();
     });
-
-    if (voted === "success") document.location.reload();//this.setState({ voteStatus: "COMPLETE" });
-    else  this.handleFailed();
   };
 
 
@@ -336,13 +333,6 @@ class VoteDocumentModal extends React.Component {
                  className={"ok-btn " + (statusFlag || balance <= 0 ? "btn-disabled" : "")}>{btnText}</div>
             <div className="d-none">{voteStatus}</div>
           </DialogActions>
-
-          <div className="progress-modal" id="progressModal">
-            <div className="progress-modal-second">
-              <span className="progress-percent">{this.state.percentage}%</span>
-              <img src={require("assets/image/common/g_progress_circle.gif")} alt="progress circle"/>
-            </div>
-          </div>
         </Dialog>
         }
       </span>

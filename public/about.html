@@ -40,7 +40,7 @@
               alert("Verification email has been successfully sent to your email address.");
               document.getElementById(id).value = "Enter your email address";
             } else {
-              if(response.message === "invalid email") alert("Email address in invalid format");
+              if (response.message === "invalid email") alert("Email address in invalid format");
               else alert("E-mail address is already exist.");
             }
           },
@@ -101,7 +101,7 @@
                     <li class="about-04">
 							<span>
 								<strong>Audience Tracking</strong>
-								B2B marketers can improve marketing activities by securing an audience interested in their documents.
+							B2B marketers can improve their marketing activities by securing an audience that shows interest in the documents.
 							</span>
                     </li>
                 </ul>
@@ -168,7 +168,7 @@
             <div class="box">
                 <h2>Don't worry about what to upload</h2>
                 <p class="img upload-knowledge-img">
-                    <img src="about/img/upload.png"  alt="Any document is okay!" class="upload-img">
+                    <img src="about/img/upload.png" alt="Any document is okay!" class="upload-img">
                     <img src="about/img/m-upload.png" alt="Any document is okay!" class="mobile upload-img">
                 </p>
                 <h3>Any content can be knowledge.</h3>
@@ -238,16 +238,17 @@
         <!-- email -->
         <div class="email">
             <div class="box">
-                <h3>Be our VIP Creator. Various benefits are waiting for you!</h3>
+                <h3>Be a VIP Creator, Please sounds a little weak!</h3>
                 <fieldset id="email">
                     <legend>Enter your email address</legend>
                     <p><span class="title">For more information</span>
-                        <span class="input-area">
+                        <label class="input-area" for="emailThird">
                             <input type="email"
                                    id="emailThird"
                                    value="Enter your email address">
                             <button onclick="postEmail(3)">Submit</button>
-                        </span>
+                        </label>
+
                     </p>
                 </fieldset>
             </div>

@@ -8,6 +8,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../redux/MainRepository";
+import { Circle } from "better-react-spinkit";
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -32,16 +33,22 @@ class UploadDocumentModal extends React.Component {
         title: null,
         filename: null
       },
-      fileInfoError: "",
-      useTracking: false,
-      forceTracking: false,
-      allowDownload: false,
-      classicModal: false,
+      fileInfoError: "",  // 파일 에러 정보
+      useTracking: false,   // 트래킹 사용 유무
+      forceTracking: false,   // 트래킹 강제 사용 유무
+      allowDownload: false,   // 다운로드 허용
+      classicModal: false,    // 모달 종료
+      by: false,   //CC License by 사용유무
+      nc: false,   //CC License nc 사용유무
+      nd: false,   //CC License nd 사용유무
+      sa: false,   //CC License sa 사용유무
       username: null,
       desc: ""
     };
   }
 
+
+  // input form 초기화
   clearForm = () => {
     document.getElementById("docTitle").value = null;
     document.getElementById("docDesc").value = "";
@@ -50,6 +57,7 @@ class UploadDocumentModal extends React.Component {
   };
 
 
+  // 모달 state 값 초기화
   clearState = () => {
     this.setState({
       percentage: 0,
@@ -65,19 +73,40 @@ class UploadDocumentModal extends React.Component {
         title: null,
         filename: null
       },
-      fileInfoError: "",
-      useTracking: false,
-      forceTracking: false,
-      classicModal: false,
-      allowDownload: false,
+      fileInfoError: "",  // 파일 에러 정보
+      useTracking: false,   // 트래킹 사용 유무
+      forceTracking: false,   // 트래킹 강제 사용 유무
+      allowDownload: false,   // 다운로드 허용
+      classicModal: false,    // 모달 종료
+      by: false,   //CC License by 사용유무
+      nc: false,   //CC License nc 사용유무
+      nd: false,   //CC License nd 사용유무
+      sa: false,   //CC License sa 사용유무
       username: null,
       desc: ""
     });
   };
 
+
+  // CC 값 GET
+  getCcValue = () => {
+    const { by, nd, nc, sa } = this.state;
+
+    if (!by) return null;
+
+    if (!nc && !nd && !sa) return "by";
+    else if (nc && !nd && !sa) return "by-nc";
+    else if (!nc && nd && !sa) return "by-nd";
+    else if (!nc && !nd && sa) return "by-sa";
+    else if (nc && !nd && sa) return "by-nc-sa";
+    else if (nc && nd && !sa) return "by-nc-nd";
+  };
+
+  // 파일 업로드 관리
   handleFileUpload = () => {
     document.getElementById("docFile").click();
   };
+
 
   //업로드 함수
   handleUpload = () => {
@@ -98,7 +127,8 @@ class UploadDocumentModal extends React.Component {
       tags: tags,
       useTracking: useTracking,
       forceTracking: !useTracking ? false : forceTracking,
-      isDownload: allowDownload
+      isDownload: allowDownload,
+      cc: this.getCcValue()
     }, this.handleProgress, (result) => { //문서 업로드 완료
       if (getDrizzle && ethAccount) getDrizzle.registerDocumentToSmartContract(result.documentId);
 
@@ -109,6 +139,8 @@ class UploadDocumentModal extends React.Component {
     });
   };
 
+
+  // 업로드 버튼 관리
   handleUploadBtn = () => {
     // input 값 유효성 검사
     if (!this.validateTitle() || !this.validateFile() || !this.validateTag()) {
@@ -117,6 +149,7 @@ class UploadDocumentModal extends React.Component {
     this.handleUpload();
   };
 
+
   // 파일 업로드 로딩 바 핸들 함수
   handleProgress = (e) => {
     let percent = Math.round((e.loaded / e.total) * 100);
@@ -124,6 +157,7 @@ class UploadDocumentModal extends React.Component {
       this.setState({ percentage: percent });
     }
   };
+
 
   //file input 등록/변경 시
   handleFileChange = (e) => {
@@ -144,6 +178,8 @@ class UploadDocumentModal extends React.Component {
     });
   };
 
+
+  // 모달 open 관리
   handleClickOpen = (modal) => {
     const { getMyInfo } = this.props;
     if (!MainRepository.Account.isAuthenticated()) {
@@ -160,6 +196,8 @@ class UploadDocumentModal extends React.Component {
     this.setState({ username: _username });
   };
 
+
+  // 모달 종료 관리
   handleClose = (modal) => {
     const x = [];
     x[modal] = false;
@@ -168,21 +206,28 @@ class UploadDocumentModal extends React.Component {
     this.clearState();
   };
 
+
+  // 제목 변경 관리
   handleTitleChange = e => {
     this.setState({ title: e.target.value }, () => {
       this.validateTitle();
     });
   };
 
+
+  // 태그 변경 관리
   handleTagChange = (tags) => {
     this.setState({ tags: tags }, () => {
       this.validateTag();
     });
   };
 
+
+  // 설명 수정 관리
   handleDescChange = (e) => {
     this.setState({ desc: e.target.value });
   };
+
 
   // 유저 트래킹 체크박스
   handleTrackingCheckbox = () => {
@@ -199,6 +244,7 @@ class UploadDocumentModal extends React.Component {
     });
   };
 
+
   // 강제 트래킹 체크박스
   handleForceTrackingCheckbox = () => {
     const { forceTracking } = this.state;
@@ -208,6 +254,7 @@ class UploadDocumentModal extends React.Component {
     });
   };
 
+
   // 강제 트래킹 체크박스
   handleAllowDownloadCheckbox = () => {
     const { allowDownload } = this.state;
@@ -216,6 +263,47 @@ class UploadDocumentModal extends React.Component {
       allowDownload: newValue
     });
   };
+
+
+  // CC License by 체크박스
+  handleCcByCheckbox = () => {
+    const { by } = this.state;
+    let newValue = !by;
+    this.setState({
+      by: newValue
+    });
+  };
+
+
+  // CC License nc 체크박스
+  handleCcNcCheckbox = () => {
+    const { nc } = this.state;
+    let newValue = !nc;
+    this.setState({
+      nc: newValue
+    });
+  };
+
+
+  // CC License nd 체크박스
+  handleCcNdCheckbox = () => {
+    const { nd } = this.state;
+    let newValue = !nd;
+    this.setState({
+      nd: newValue
+    });
+  };
+
+
+  // CC License nc 체크박스
+  handleCcSaCheckbox = () => {
+    const { sa } = this.state;
+    let newValue = !sa;
+    this.setState({
+      sa: newValue
+    });
+  };
+
 
   //제목 유효성 체크
   validateTitle = () => {
@@ -287,18 +375,23 @@ class UploadDocumentModal extends React.Component {
   };
 
   render() {
-    const { classicModal, fileInfo, tags, percentage, titleError, fileInfoError, tagError, useTracking, forceTracking } = this.state;
+    const { classicModal, fileInfo, tags, percentage, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa } = this.state;
     const { type } = this.props;
 
     return (
       <span>
-            <div className="upload-btn d-none d-sm-inline-block" id="uploadBtn"
+            <div className="upload-btn d-none d-sm-inline-block"
                  onClick={() => this.handleClickOpen("classicModal")}>
               Upload
             </div>
+            <div className="mobile-upload-btn d-sm-none d-inline-block"
+                 onClick={() => this.handleClickOpen("classicModal")}/>
+
+
         {type && type === "menu" &&
         <span className="d-inline-block d-sm-none" onClick={() => this.handleClickOpen("classicModal")}>Upload</span>
         }
+
 
         <Dialog
           fullWidth={true}
@@ -324,11 +417,13 @@ class UploadDocumentModal extends React.Component {
                        onChange={(e) => this.handleTitleChange(e)}/>
                 <span>{titleError}</span>
 
+
                 <div className="dialog-subject mt-3 mb-2">Description</div>
                 <textarea id="docDesc"
                           placeholder="Description of the uploading document"
                           className="custom-textarea"
                           onChange={(e) => this.handleDescChange(e)}/>
+
 
                 <div className="dialog-subject mt-3">File</div>
                 <input type="text" value={fileInfo.filename || ""} readOnly
@@ -338,11 +433,13 @@ class UploadDocumentModal extends React.Component {
                 <span>{fileInfoError}</span>
                 <input type="file" id="docFile" onChange={(e) => this.handleFileChange(e.target.files)}/>
 
+
                 <div className="dialog-subject mt-3 mb-1">Tag</div>
                 <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
                            className={"react-tagsinput " + (tagError.length > 0 ? "tag-input-warning" : "")}
                            value={tags} onChange={this.handleTagChange} validate={false} onlyUnique/>
                            <span>{tagError}</span>
+
 
                 <div className="dialog-subject mb-2 mt-3">Option</div>
                 <div className="row">
@@ -373,6 +470,48 @@ class UploadDocumentModal extends React.Component {
                     </label>
                    </div>
                  </div>
+
+
+                <div className="dialog-subject mb-2 mt-3">CC License</div>
+                <div className="row">
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="ccByCheckbox" onChange={(e) => this.handleCcByCheckbox(e)}
+                           checked={by}/>
+                    <label htmlFor="ccByCheckbox">
+                      <span><i className="material-icons">done</i></span>
+                      Attribution
+                    </label>
+                  </div>
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="ccNcCheckbox" onChange={(e) => this.handleCcNcCheckbox(e)}
+                           checked={nc}/>
+                    <label htmlFor="ccNcCheckbox">
+                      <span><i className="material-icons">done</i></span>
+                     Noncommercial
+                    </label>
+                  </div>
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="ccNdCheckbox" onChange={(e) => this.handleCcNdCheckbox(e)}
+                           checked={nd}/>
+                    <label htmlFor="ccNdCheckbox">
+                      <span><i className="material-icons">done</i></span>
+                        No Derivative Works
+                    </label>
+                  </div>
+                  <div className="col-12 col-sm-6">
+                    <input type="checkbox" id="ccSaCheckbox" onChange={(e) => this.handleCcSaCheckbox(e)}
+                           checked={sa}/>
+                    <label htmlFor="ccSaCheckbox">
+                      <span><i className="material-icons">done</i></span>
+                         Share Alike
+                    </label>
+                  </div>
+                 </div>
+
+
+
+
+
               </DialogContent>
 
 
@@ -386,7 +525,7 @@ class UploadDocumentModal extends React.Component {
               <div className="progress-modal" id="progressModal">
                 <div className="progress-modal-second">
                   <div className="progress-percent">{percentage}%</div>
-                  <img src={require("assets/image/common/g_progress_circle.gif")} alt="progress circle"/>
+                  <Circle size={100} color={"#3681fe"}/>
                 </div>
               </div>
             </Dialog>

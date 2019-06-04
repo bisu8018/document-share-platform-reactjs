@@ -40,7 +40,7 @@ export default {
     //Google Analytics 초기화
     //UA-129300994-1 : share
     //UA-140503497-1 : polaris
-    let gaId = process.env.NODE_ENV === "production" ? "UA-140503497-1" : "UA-129300994-1";
+    let gaId = process.env.NODE_ENV === "production" ? "UA-129300994-1" : "UA-129300994-1";
     if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "dev") {
       ReactGA.initialize(gaId, {
         debug: false,
@@ -356,7 +356,7 @@ export default {
           "ethAccount": ethAccount
         }
       };
-      AuthService.POST.ethereumSync(_data, (res) => {
+      AuthService.POST.ethereumSync(_data, (res, error) => {
         this.renewSession();
         callback(res);
       });
@@ -431,12 +431,33 @@ export default {
       localStorage.removeItem("id_token");
       localStorage.removeItem("expires_at");
       localStorage.removeItem("user_info");
+
+      //Tracking API
+      localStorage.removeItem("tracking_info");
     },
     clearTrackingCookie() {
       //Google Analystics,
       Common.deleteCookie("_ga");
       Common.deleteCookie("_gid");
-    }
+    },
+    async getDocuments(data: any, callback: any) {
+      const authResult = await instance.Account.renewSessionPromise();
+      const token = authResult.idToken;
+      const params = {
+        header: {
+          "Authorization": `Bearer ${token}`
+        },
+        params: {
+          "pageSize": data.pageSize,
+          "pageNo": data.pageNo,
+        }
+      };
+
+      AuthService.GET.documents(params, result => {
+        let documentList = new DocumentList((result));
+        callback(documentList);
+      });
+    },
   },
   Document: {
     async registerDocument(args, progress, callback) {
@@ -450,6 +471,7 @@ export default {
       let useTracking = args.useTracking;
       let forceTracking = args.forceTracking;
       let isDownload = args.isDownload;
+      let cc = args.cc;
       let token = authResult.idToken;
 
       const data = {
@@ -465,6 +487,7 @@ export default {
           useTracking: useTracking,
           forceTracking: forceTracking,
           isDownload: isDownload,
+          cc: cc,
         },
         header: {
           "Authorization": `Bearer ${token}`
@@ -580,6 +603,7 @@ export default {
           useTracking: data.useTracking,
           forceTracking: data.forceTracking,
           isDownload: data.isDownload,
+          cc: data.cc
         },
         header: {
           "Authorization": `Bearer ${token}`

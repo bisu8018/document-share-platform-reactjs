@@ -11,7 +11,7 @@ class FeaturedList extends React.Component {
         <div className="see-also-container">
 
           <Link to={ "/" + identification + "/" + resultItem.seoTitle}>
-            <div className="see-also-thumbnail">
+            <div className="see-also-thumbnail" onClick={Common.scrollTop()}>
               <img src={ Common.getThumbnail(resultItem.documentId,320,  1, resultItem.documentName) }
                    alt={ resultItem.documentName ? resultItem.documentName : resultItem.documentId }/>
             </div>
@@ -19,7 +19,7 @@ class FeaturedList extends React.Component {
           </Link>
 
           <div className="see-also-content">
-            <Link to={"/" + identification} className="info_name see-also-author" >
+            <Link to={"/" + identification} className="info_name see-also-author" onClick={Common.scrollTop()}>
               {identification}
             </Link>
           </div>

@@ -22,7 +22,6 @@ class CreatorClaim extends React.Component {
 
   handelClickClaim = () => {
     const { document, getDrizzle, getMyInfo, setAlertCode } = this.props;
-    const { btnText } = this.state;
     if (!getMyInfo.ethAccount) {
       this.setState({ msg: "Please log in to the Meta Mask." });
       return;
@@ -36,14 +35,9 @@ class CreatorClaim extends React.Component {
 
       this.setState({ btnText: "Pending" }, () => {
         getDrizzle.creatorClaimReward(document.documentId, getMyInfo.ethAccount).then((res) => {
-          this.setState({ btnText: "Complete" });;
+          if(res === "success") this.setState({ btnText: "Complete" },()=>{window.location.reload()});
+          else this.setState({ voteStatus: "Claim $" }, () => {setAlertCode(2035)});
         });
-        if(btnText === "Complete") window.location.reload();//this.setState({ voteStatus: "COMPLETE" });
-        else  {
-          this.setState({ voteStatus: "Claim $" });
-          setAlertCode(2035);
-        }
-
       });
     }
   };

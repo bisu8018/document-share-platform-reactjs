@@ -1,16 +1,17 @@
 import AxiosService from "./AxiosService";
 
-let accountSync =  "account/sync";
-let accountGet =  "account/get";
-let accountUpdate =  "account/update";
-let ethereumSync =  "account/ethereumSync";
-let profileImageUpdate =  "account/picture";
-let profileGet = "profile/get";
+let accountSyncUrl =  "account/sync";
+let documentsUrl =  "account/documents";
+let accountGetUrl =  "account/get";
+let accountUpdateUrl =  "account/update";
+let ethereumSyncUrl =  "account/ethereumSync";
+let profileImageUpdateUrl =  "account/picture";
+let profileGetUrl = "profile/get";
 
 export default {
   POST: {
     sync: (data, callback, error) => {
-      AxiosService._requestWithHeader(accountSync, "POST", data,
+      AxiosService._requestWithHeader(accountSyncUrl, "POST", data,
         (data) => {
           callback(data);
         }, (err) => {
@@ -18,7 +19,7 @@ export default {
         });
     },
     accountUpdate: (data, callback, error) => {
-      AxiosService._requestWithHeader(accountUpdate, "POST", data,
+      AxiosService._requestWithHeader(accountUpdateUrl, "POST", data,
         (data) => {
           callback(data);
         }, (err) => {
@@ -26,7 +27,7 @@ export default {
         });
     },
     ethereumSync: (data, callback, error) => {
-      AxiosService._requestWithHeader(ethereumSync, "POST", data,
+      AxiosService._requestWithHeader(ethereumSyncUrl, "POST", data,
         (data) => {
           callback(data);
         }, (err) => {
@@ -34,7 +35,7 @@ export default {
         });
     },
     profileImageUpdate: (data, callback, error) => {
-      AxiosService._requestWithHeader(profileImageUpdate, "POST", data,
+      AxiosService._requestWithHeader(profileImageUpdateUrl, "POST", data,
         (data) => {
           callback(data);
         }, (err) => {
@@ -43,8 +44,16 @@ export default {
     },
   },
   GET: {
+    documents: (data, callback, error) => {
+      AxiosService._requestGetWithHeader(documentsUrl, "GET", data,
+        (data) => {
+          callback(data);
+        }, (err) => {
+          error(err);
+        });
+    },
     accountInfo: (data, callback, error) => {
-      AxiosService._requestGetWithHeader(accountGet, "GET", data,
+      AxiosService._requestGetWithHeader(accountGetUrl, "GET", data,
         (data) => {
           callback(data);
         }, (err) => {
@@ -52,7 +61,7 @@ export default {
         });
     },
     profileGet: (data, callback, error) => {
-      AxiosService._requestWithUrlPram(profileGet, "GET", data,
+      AxiosService._requestWithUrlPram(profileGetUrl, "GET", data,
         (data) => {
           callback(data);
         }, (err) => {

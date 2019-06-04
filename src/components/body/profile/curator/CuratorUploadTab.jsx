@@ -5,6 +5,7 @@ import { ThreeBounce } from 'better-react-spinkit';
 import MainRepository from "../../../../redux/MainRepository";
 import NoDataIcon from "../../../common/NoDataIcon";
 import CreatorTabItemContainer from "../../../../container/body/profile/creator/CreatorTabItemContainer";
+import Common from "../../../../util/Common";
 
 class CuratorUploadTab extends React.Component {
   state = {
@@ -15,6 +16,14 @@ class CuratorUploadTab extends React.Component {
     totalViewCountInfo: null,
   };
 
+
+  //URL 파라미터 유저 identificatin GET
+  getParam = () => {
+    let pathArr = window.location.pathname.split("/");
+    return decodeURI(pathArr[1]);
+  };
+
+  // 무한 스크롤 데이터 추가 GET
   fetchMoreData = () => {
     const { pageNo } = this.state;
     if (this.state.moreDataFlag) {
@@ -24,9 +33,10 @@ class CuratorUploadTab extends React.Component {
     }
   };
 
+
+  // 데이터 GET
   fetchDocuments = (params) => {
-    const { userInfo, getDocumentList } = this.props;
-    const { resultList } = this.state;
+    const { userInfo, getMyInfo } = this.props;
     let pageNo = (!params || isNaN(params.pageNo)) ? 1 : Number(params.pageNo);
     let _params = {};
 
@@ -37,35 +47,48 @@ class CuratorUploadTab extends React.Component {
     };
     else _params = { pageNo: pageNo, email: userInfo.email, pageSize: 10000 };
 
-    MainRepository.Document.getDocumentList(_params, (res) => {
-      if (res && res.resultList) {
-        if (resultList.length > 0) {
-          this.setState({
-            resultList: resultList.concat(res.resultList),
-            pageNo: res.pageNo
-          });
-        } else {
-          this.setState({
-            resultList: res.resultList,
-            pageNo: res.pageNo
-          }, () => {
-            // 2019-04-16, 임시 사용, AuthorSummary 데이터 전달 위한 Event
-            getDocumentList(res);
-          });
-        }
-
-        this.setState({ moreDataFlag: true });
-
-        if (res.count === 0 || res.resultList.length < 10) {
-          this.setState({ isEndPage: true });
-        }
-
-        if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) {
-          this.setState({ totalViewCountInfo: res.totalViewCountInfo });
-        }
-      }
-    });
+    let param = this.getParam();
+    if(param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()){
+      MainRepository.Account.getDocuments(_params, (res) => { this.handleData(res)})
+    }else {
+      MainRepository.Document.getDocumentList(_params, (res) => { this.handleData(res)})
+    }
   };
+
+
+  // GET 데이터 관리
+  handleData = (res) => {
+    const { getDocumentList } = this.props;
+    const { resultList } = this.state;
+
+    if (res && res.resultList) {
+      if (resultList.length > 0) {
+        this.setState({
+          resultList: resultList.concat(res.resultList),
+          pageNo: res.pageNo
+        });
+      } else {
+        this.setState({
+          resultList: res.resultList,
+          pageNo: res.pageNo
+        }, () => {
+          // 2019-04-16, 임시 사용, AuthorSummary 데이터 전달 위한 Event
+          getDocumentList(res);
+        });
+      }
+
+      this.setState({ moreDataFlag: true });
+
+      if (res.count === 0 || res.resultList.length < 10) {
+        this.setState({ isEndPage: true });
+      }
+
+      if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) {
+        this.setState({ totalViewCountInfo: res.totalViewCountInfo });
+      }
+    }
+  };
+
 
   componentWillMount() {
     this.fetchDocuments();

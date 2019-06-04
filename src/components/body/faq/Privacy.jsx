@@ -10,9 +10,9 @@ class Privacy extends React.PureComponent {
 
       <div className="row mb-5">
 
-        <div className="col-sm-12 col-lg-10 offset-lg-1  u__center">
+        <div className="col-sm-12 col-lg-10 offset-lg-1  u__center-faq">
 
-          <div className="legal-subject mt-5 text-center">PRIVACY</div>
+          <div className="legal-subject mt-3 mt-sm-5 text-center">PRIVACY</div>
 
           <div className="legal-content mt-4">
             DECOMPANY Inc. (hereinafter “Company”) always makes its best efforts to protect the personal information of its

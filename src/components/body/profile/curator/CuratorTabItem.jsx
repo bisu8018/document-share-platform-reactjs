@@ -30,9 +30,9 @@ class CuratorTabItem extends React.Component {
       <div className="row u_center_inner">
         <div className="pl-0 col-3 col-md-4 col-thumb">
           <Link to={"/" + identification + "/" + document.seoTitle}>
-            <div className="tab-thumbnail">
+            <div className="tab-thumbnail" onClick={Common.scrollTop()}>
               <img src={Common.getThumbnail(document.documentId, 320, 1, document.documentName)}
-                   alt={document.title ? document.title : document.documentName}/>
+                   alt={document.title ? document.title : document.documentName} className="img-fluid"/>
             </div>
           </Link>
         </div>
@@ -41,7 +41,7 @@ class CuratorTabItem extends React.Component {
         <div className="col-sm-9 col-md-9 col-details_info">
           <div className="details_info">
             <Link to={"/" + identification + "/" + document.seoTitle}>
-              <div className="info_title">  {document.title ? document.title : document.documentName} </div>
+              <div className="info_title" onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
             </Link>
 
             <div className="d-inline-block">

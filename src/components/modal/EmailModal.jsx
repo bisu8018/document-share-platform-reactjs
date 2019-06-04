@@ -58,6 +58,10 @@ class EmailModal extends React.Component {
     return policyChecked;
   };
 
+  setSessionInfo = (data) => {
+    sessionStorage.setItem("u_e_i",data.email[0]);
+  };
+
   handleClickOpen = (modal) => {
     const x = [];
     x[modal] = true;
@@ -92,7 +96,7 @@ class EmailModal extends React.Component {
         "email": email,
         "documentId": documentId
       };
-
+      this.setSessionInfo(data);
       await MainRepository.Tracking.postTrackingConfirm(data).then(() => {
         handleTracking();
         this.handleClose();

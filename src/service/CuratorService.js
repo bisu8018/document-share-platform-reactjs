@@ -1,7 +1,7 @@
 import AxiosService from "./AxiosService";
 
 let getCuratorDocumentsUrl = "curator/document/list";
-let getCuratorSummary = "curator/summary";
+let getCuratorSummaryUrl = "curator/summary";
 
 export default {
   GET: {
@@ -14,7 +14,7 @@ export default {
         });
     },
     curatorSummary: (data, callback, error) => {
-      AxiosService._requestWithUrlPram(getCuratorSummary, "GET", data,
+      AxiosService._requestWithUrlPram(getCuratorSummaryUrl, "GET", data,
         (data) => {
           callback(data);
         }, (err) => {

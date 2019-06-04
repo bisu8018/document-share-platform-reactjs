@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import Common from "../../../../util/Common";
 import CreatorClaimContainer from "../../../../container/body/profile/creator/CreatorClaimContainer";
+import { FadingCircle } from "better-react-spinkit";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class CreatorTabItem extends React.Component {
 
@@ -29,18 +31,26 @@ class CreatorTabItem extends React.Component {
       <div className="row u_center_inner">
 
         <div className="pl-0 col-3 col-md-4 col-thumb">
-          <Link to={"/" + identification + "/" + document.seoTitle}>
-            <div className="tab-thumbnail">
+          <Link to={"/" + identification + "/" + document.seoTitle} >
+            <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
               <img src={Common.getThumbnail(document.documentId, 320, 1, document.documentName)}
-                   alt={document.title ? document.title : document.documentName} className="img-fluid"/>
+                   alt={document.title ? document.title : document.documentName}
+                   className={"img-fluid " +  (document.state && document.state === "NOT_CONVERT" ? "not-convert-background" : "")}/>
+              {document.state && document.state === "NOT_CONVERT" &&
+              <div className="not-convert">
+                <Tooltip title="Converting document..." placement="bottom">
+                  <FadingCircle size={40} color={"#3d5afe"}/>
+                </Tooltip>
+              </div>
+              }
             </div>
           </Link>
         </div>
 
         <div className="col-9 col-md-8 col-details_info">
           <div className="details_info details_info-padding">
-            <Link to={"/" + identification + "/" + document.seoTitle}>
-              <div className="info_title">  {document.title ? document.title : document.documentName} </div>
+            <Link to={"/" + identification + "/" + document.seoTitle} >
+              <div className="info_title" onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
             </Link>
 
 

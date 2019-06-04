@@ -19,6 +19,25 @@ class ContentViewCarousel extends React.Component {
     emailFlagTemp: false
   };
 
+
+// 로그인 시, cid ~ email 싱크 작업
+  postTrackingConfirm = (pageNum) => {
+    const { target, getMyInfo } = this.props;
+    const trackingInfo = TrackingApis.setTrackingInfo();
+
+    let data = {
+      "cid": trackingInfo.cid,
+      "sid": trackingInfo.sid,
+      "email": getMyInfo.email,
+      "documentId": target.documentId
+    };
+
+    MainRepository.Tracking.postTrackingConfirm(data).then(() => {
+      this.handleTracking(pageNum);
+    });
+  };
+
+
   handleUrl = () => {
     const { readPage } = this.state;
     const { documentText, getPageNum } = this.props;
@@ -37,38 +56,64 @@ class ContentViewCarousel extends React.Component {
     }
   };
 
+
   // 이메일 강제 입력 on/off
   handleForceTracking = () => {
     const { target } = this.props;
     if (!target.forceTracking) this.setState({ emailFlagTemp: true });
   };
 
+
+  // 이메일 플래그 관리
+  handleFlag = async (page) => {
+    const { handleEmailFlag, getMyInfo } = this.props;
+    const { emailFlagTemp } = this.state;
+
+    return new Promise((resolve, reject) => {
+      this.setState({ emailFlag: false }, () => {
+        handleEmailFlag(false);
+
+        // email 입력 모달 on/off 함수
+        if (page > 0 && !getMyInfo.email && !emailFlagTemp) {
+          this.setState({ emailFlag: true }, () => {
+            handleEmailFlag(true);
+            resolve(false);
+          });
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  };
+
+
   // 문서 옵션 useTracking true 일때만
   handleTracking = async (page) => {
     const { target, handleEmailFlag, getMyInfo, setMyInfo } = this.props;
     const { emailFlagTemp, readPage, emailFlag } = this.state;
 
-    if ((page === null || page === undefined) && target.forceTracking) return this.setState({ emailFlag: false }, ()=>{handleEmailFlag(false)});
+    if ((page === null || page === undefined) && target.forceTracking) {
+      return this.setState({ emailFlag: false }, () => {
+        handleEmailFlag(false);
+      });
+    }
     if (page === readPage) return;
 
     this.setState({ readPage: page }, () => {
       this.handleUrl();
     });
 
+    // 트래킹 사용
     if (target.useTracking) {
-      if (target.forceTracking) {
-        this.setState({ emailFlag: false }, () => {
-          handleEmailFlag(false);
 
-          if (page > 0 && !getMyInfo.email && !emailFlagTemp && !MainRepository.Account.isAuthenticated()) {
-            this.setState({ emailFlag: true }, ()=>{handleEmailFlag(true)});
-          }
+      // 강제 트래킹
+      if (target.forceTracking) {
+        let ft = await this.handleFlag(page);
+        if (!ft) return false;
+      } else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp) {
+        this.setState({ emailFlag: true }, () => {
+          handleEmailFlag(true);
         });
-      } else {
-        // email 입력 모달 on/off 함수
-        if (page > 0 && !getMyInfo.email && !emailFlagTemp) {
-          this.setState({ emailFlag: true }, ()=>{handleEmailFlag(true)});
-        }
       }
 
       await TrackingApis.tracking({
@@ -76,38 +121,33 @@ class ContentViewCarousel extends React.Component {
         n: page + 1,
         ev: "view"
       }, true).then(res => {
-        if(res.user) {
-          if(getMyInfo.email === ""){
+        // 비로그인 상태에서 email로 로그인 시, 트래킹 위한 redux 저장
+        if (res.user) {
+          if (getMyInfo.email === "") {
             let userInfo = new UserInfo();
             userInfo.email = res.user.e;
             setMyInfo(userInfo);
           }
-          if(emailFlag) this.setState({emailFlag : false});
+          if (emailFlag) this.setState({ emailFlag: false });
         }
       });
     } else {
+      // 오직 뷰 카운트만을 위한 트랙킹 기능
       TrackingApis.tracking({
         id: target.documentId,
         n: page + 1,
-        ev: "view"
-      }, true).then(res => {
-        if(res.user) {
-          if(getMyInfo.email === ""){
-            let userInfo = new UserInfo();
-            userInfo.email = res.user.e;
-            setMyInfo(userInfo);
-          }
-          if(emailFlag) this.setState({emailFlag : false});
-        }
-      });
+        ev: "none"
+      }, true);
     }
   };
 
+
+  // 떠남 상태 관리
   handleTrackingLeave = () => {
     const { target } = this.props;
     const { readPage } = this.state;
 
-    if(!readPage) return false;
+    if (!readPage) return false;
     let documentId = target.documentId;
     try {
       TrackingApis.tracking({
@@ -120,26 +160,32 @@ class ContentViewCarousel extends React.Component {
     }
   };
 
+
   // 슬라이드 옵션 창 on/off
   handleOptionBarClickEvent = () => {
     this.setState({ slideOptionFlag: !this.state.slideOptionFlag });
   };
+
 
   // 자동 슬라이드 설정 on/off
   handleOptionBtnClickEvent = () => {
     this.setState({ autoSlideFlag: !this.state.autoSlideFlag });
   };
 
-  componentWillMount() {
-    const { tracking } = this.props;
 
+  componentWillMount() {
     let pageNum = window.location.pathname.split("/")[3];
-    if (tracking) this.handleTracking(pageNum && pageNum > "1" ? Number(pageNum.split("-")[0]) - 1 : 0);
+    pageNum = pageNum && pageNum > "1" ? Number(pageNum.split("-")[0]) - 1 : 0;
+
+    if (MainRepository.Account.isAuthenticated()) this.postTrackingConfirm(pageNum);
+    else this.handleTracking(pageNum);
   }
+
 
   componentWillUnmount() {
     this.handleTrackingLeave();
   }
+
 
   render() {
     const { target, documentText } = this.props;
@@ -188,7 +234,8 @@ class ContentViewCarousel extends React.Component {
         </div>
 
         {!MainRepository.Account.isAuthenticated() && emailFlag && target.useTracking &&
-        <EmailModalContainer handleTracking={() => this.handleTracking()} forceTracking={() => this.handleForceTracking()} documentId={target.documentId}/>
+        <EmailModalContainer handleTracking={() => this.handleTracking()}
+                             forceTracking={() => this.handleForceTracking()} documentId={target.documentId}/>
         }
       </div>
     );

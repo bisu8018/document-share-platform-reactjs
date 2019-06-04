@@ -20,7 +20,7 @@ export const APP_PROPERTIES = {
       profile: "https://profile.share.decompany.io/",
     }
   },
-  production:{
+  dev:{
     domain:{
       mainHost: 'https://www.polarishare.com',
       upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
@@ -30,7 +30,7 @@ export const APP_PROPERTIES = {
       profile: "https://res.polarishare.com/",
     }
   },
-  dev:{
+  production:{
     domain:{
       mainHost: 'https://share.decompany.io',
       upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',

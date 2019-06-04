@@ -516,6 +516,20 @@ mark,
     width: inherit;
 }
 
+.not-convert {
+    left: calc(50% - 15px);
+    width: auto;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+}
+
+.not-convert-background {
+    opacity: 0.3;
+}
+
 .img-thumbnail {
     background-color: #fafafa;
     border: 1px solid #dee2e6;
@@ -5259,8 +5273,9 @@ form {
     top: -3px;
 }
 
-.navbar .navbar-brand > img{
+.navbar .navbar-brand > img {
     width: 217px;
+    margin-left: -10px;
 }
 
 .navbar.navbar-transparent {
@@ -5924,6 +5939,45 @@ b {
     list-style: none;
 }
 
+
+.menu-login-btn {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    align-items: center;
+    cursor: pointer;
+    width: calc(100% - 80px);
+    height: 50px;
+    border-radius: 4px;
+    background-color: #3681fe;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.4px;
+    color: #ffffff;
+    justify-content: center;
+    margin: auto;
+}
+
+.menu-logout-btn {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    align-items: center;
+    cursor: pointer;
+    width: calc(100% - 80px);
+    height: 50px;
+    border-radius: 4px;
+    border: solid 1px #999999;
+    background-color: white;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.4px;
+    color: #808080;
+    justify-content: center;
+    margin: auto;
+}
+
+
 .start-btn {
     cursor: pointer;
     font-size: 16px;
@@ -5945,10 +5999,7 @@ b {
 
 .login-btn {
     cursor: pointer;
-    display: inline-block;
     padding: 5px 15px;
-    top: -5px;
-    margin-right: 20px;
     font-size: 14px;
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
@@ -6267,16 +6318,19 @@ dean
 }
 
 .menu-btn {
-    font-size: 24px;
+    width: 27px;
+    height: 27px;
+    margin: 0 0 0 6px;
+    background-image: url(../image/icon/i_hamberger.svg);
     cursor: pointer;
-    top: 8px;
-    position: relative;
-    transition: 0.2s all ease-in-out;
-    color: #5a5a5a;
 }
 
-.menu-btn:hover {
-    color: #3681fe;
+.mobile-upload-btn {
+    width: 27px;
+    height: 27px;
+    margin: 0 6px;
+    background-image: url(../image/icon/i_upload.svg);
+    cursor: pointer;
 }
 
 .cookie-btn {
@@ -6320,10 +6374,6 @@ dean
 .claim-btn:hover {
     color: #3681fe;
     border-color: #3681fe;
-}
-
-.claim-btn-wrapper:hover {
-    opacity: 1;
 }
 
 .ok-btn {
@@ -6539,17 +6589,22 @@ Dean*/
 }
 
 .avatar-menu {
-    width: 39px;
-    height: 39px;
-    border: 1px solid #666666;
-    border-radius: 20px;
-    text-transform: uppercase;
-    font-weight: 500 !important;
+    border-radius: 25px;
     cursor: pointer;
-    font-size: 20px !important;
-    padding-top: 3px !important;
-    padding-left: 11px;
-    top: 5px;
+    position: relative !important;
+    margin-right: 10px;
+    width: 45px;
+    height: 45px;
+    border: 1px solid #cccccc;
+    transition: 0.2s all ease-in-out;
+}
+
+.avatar-name-menu {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.38;
+    letter-spacing: -0.2px;
+    color: #4d4d4d;
 }
 
 
@@ -6563,7 +6618,7 @@ Dean*/
     width: 310px;
 }
 
-.alert-wrapper{
+.alert-wrapper {
     margin-bottom: 16px;
     max-height: 150px;
     width: 100%;
@@ -6583,6 +6638,7 @@ Dean*/
 .alert-success {
     background-color: #4caf50;
 }
+
 .alert-warning {
     background-color: #ffa000;
 }
@@ -6618,6 +6674,11 @@ Dean*/
     font-size: 13px;
 }
 
+
+.header-bar {
+    display: flex;
+    justify-content: flex-end;
+}
 
 
 .navbar-menu {
@@ -6718,7 +6779,7 @@ Dean*/
 #container {
     margin-top: 60px;
     overflow-x: hidden;
-    min-height: 80vh;
+    min-height: calc(80vh + 4px);
 }
 
 .col-thumb {
@@ -6744,7 +6805,7 @@ Dean*/
 
 /*u__left*/
 .u__left {
-    padding: 20px 30px;
+    padding: 20px 30px 20px 0;
     background-color: #fff;
     min-width: 295px;
 }
@@ -6824,6 +6885,13 @@ Dean*/
     margin-top: 10px;
 }
 
+.u__center-faq {
+    max-width: 1400px;
+    min-height: 100vh;
+    background-color: #fff;
+    margin-top: 10px;
+}
+
 .u__center-container {
     border-left: 1px solid #b3b3b3;
     padding-left: 25px;
@@ -6831,7 +6899,7 @@ Dean*/
 }
 
 .content-list-wrapper {
- margin-top: 32px;
+    margin-top: 32px;
 }
 
 .content-main-container {;
@@ -6844,18 +6912,13 @@ Dean*/
 }
 
 .header-select-custom {
-    float: left;
     border: none;
     color: #4d4d4d;
     background: none;
     height: 42px;
-    padding-left: 15px;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    position: absolute;
-    top: -7px;
-    left: 0;
 }
 
 .select-custom {
@@ -6985,7 +7048,10 @@ Dean*/
     line-height: 1.38;
     letter-spacing: -0.2px;
     color: #4d4d4d;
+}
 
+.detail-title > a:hover {
+    color: #3d5afe !important;
 }
 
 .info_name {
@@ -7085,7 +7151,7 @@ Dean*/
     height: 19px;
     margin-right: 5px;
     top: -4px;
-    background-image: url(../image/common/i_hit.svg);
+    background-image: url(../image/icon/i_hit.svg);
     vertical-align: middle;
 }
 
@@ -7104,7 +7170,7 @@ Dean*/
     position: relative;
     height: 19px;
     top: -4px;
-    background-image: url(../image/common/i_thumb.svg);
+    background-image: url(../image/icon/i_thumb.svg);
     vertical-align: middle;
 }
 
@@ -7144,6 +7210,7 @@ Dean*/
     }
 }
 
+
 @media (max-width: 1080px) {
     .tags-menu-search-container-width {
         width: 80%;
@@ -7157,6 +7224,12 @@ Dean*/
 
 }
 
+@media (max-width: 993px) {
+    .main-category-card-wrapper {
+        justify-content: center;
+    }
+}
+
 @media (max-width: 767px) {
     .u__left {
         border: none;
@@ -7166,14 +7239,18 @@ Dean*/
 }
 
 @media (max-width: 575px) {
+    .cc-container {
+        margin-bottom: 25px !important;
+    }
 
-    .navbar .navbar-brand > img{
+    .navbar .navbar-brand > img {
         width: 173px !important;
     }
 
     .menu-btn {
         top: 3px !important;
     }
+
     .tracking_fulldown_list .tfl_desc {
         padding-left: 0;
         padding-right: 0;
@@ -7233,10 +7310,9 @@ Dean*/
         position: absolute;
         top: -70px;
         right: 10px;
-        opacity: 0.7;
     }
 
-    .menu-wrapper{
+    .menu-wrapper {
         opacity: 1 !important;
         background: white !important;
     }
@@ -7245,21 +7321,15 @@ Dean*/
         text-align: left !important;
         color: #4d4d4d !important;
         font-size: 22px !important;
-        font-weight: 500 !important;
-        font-style: normal !important;
-        font-stretch: normal !important;
         line-height: 2.09 !important;
         letter-spacing: -0.1px !important;
     }
 
     .menu-content-item-sub {
         text-align: left !important;
-        margin-left: 42px !important;
         font-family: Poppins, sans-serif !important;
         font-size: 16px !important;
         font-weight: 300 !important;
-        font-style: normal !important;
-        font-stretch: normal !important;
         line-height: 2.25 !important;
         letter-spacing: -0.2px !important;
         color: #666666 !important;
@@ -7270,11 +7340,6 @@ Dean*/
         width: 16px;
         height: 16px;
         opacity: 0.7;
-    }
-
-    .menu-content-item {
-        text-align: left;
-        padding-left: 40px;
     }
 
     .u_center_inner {
@@ -7305,7 +7370,7 @@ Dean*/
         font-size: 35px;
     }
 
-    .u__center-container{
+    .u__center-container {
         padding: 0;
     }
 
@@ -7362,7 +7427,7 @@ Dean*/
     }
 
     .profile-curator,
-    .profile-creator{
+    .profile-creator {
         padding: 15px !important;
     }
 
@@ -7948,7 +8013,7 @@ Dean
     width: 18px;
     height: 12px;
     margin-right: 5px;
-    background-image: url(../image/common/i_hit.svg);
+    background-image: url(../image/icon/i_hit.svg);
     vertical-align: middle;
 }
 
@@ -8498,7 +8563,7 @@ Dean
 .checkbox-policy-link {
     display: contents;
     font-weight: bold;
-    color: #1e3e17 !important;
+    color: #3681fe  !important;
     cursor: pointer;
 }
 
@@ -8519,17 +8584,16 @@ Dean
 
 .progress-modal {
     position: fixed;
-    left: calc(50% - 75px);
-    top: calc(50% - 75px);
-    padding: 20px;
-    width: 150px;
-    height: 150px;
+    left: calc(50% - 50px);
+    top: calc(50% - 50px);
+    width: 100px;
+    height: 100px;
     display: none;
     pointer-events: none;
 }
 
 .progress-modal-second {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.17);
+    background: white;
     border-radius: 100px;
     display: block;
     position: relative;
@@ -8557,10 +8621,10 @@ Dean
 
 .progress-percent {
     color: #656565;
-    font-size: 24px;
+    font-size: 20px;
     position: absolute;
     z-index: 4;
-    top: 58px;
+    top: 35px;
     text-align: center;
     width: 100%;
     font-weight: 500;
@@ -9004,6 +9068,7 @@ ContentViewFullScreen 카로셀
 
 .carousel .control-dots {
     margin: 30px 0 !important;
+    padding: 0 !important;
 }
 
 .carousel.carousel-slider .control-arrow {
@@ -9014,12 +9079,26 @@ ContentViewFullScreen 카로셀
 /*2019-04-10
 dean
 자동 완성 라이브러리 CSS*/
+.react-tagsinput-input {
+    border-radius: 2px !important;
+    border: 1px solid #ccc !important;
+    color: #26518a !important;
+    background: white !important;
+}
+
+.react-tagsinput-input:hover {
+    border: 1px solid #3681fe !important;
+}
+
 .react-autosuggest__container {
     position: relative;
 }
 
+.mobile-header-search-bar-wrapper .react-autosuggest__container {
+    width: 50%;
+}
+
 .react-autosuggest__input {
-    width: 245px;
     height: 30px;
     padding: 10px 20px;
     font-family: Helvetica, sans-serif;
@@ -9027,7 +9106,6 @@ dean
     font-size: 16px;
     border: none;
     position: relative;
-    left: 45px;
 }
 
 .react-autosuggest__input--focused {
@@ -9042,6 +9120,7 @@ dean
 .react-autosuggest__suggestions-container {
     position: absolute;
     display: none;
+    border: 1px solid #cecece;
 }
 
 .react-autosuggest__suggestions-container > ul {
@@ -9053,23 +9132,17 @@ dean
 }
 
 .header-search-wrapper .react-autosuggest__suggestions-container--open {
-    left: 125px;
     top: 45px;
 }
 
 .react-autosuggest__suggestions-container--open {
     display: block;
-    top: 50px;
-    border: 1px solid #cecece;
-    background-color: #fff;
-    font-weight: 100;
-    font-size: 16px;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
+    top: 25px;
     z-index: 2;
 }
 
 .react-autosuggest__suggestions-list {
+    background: white;
     margin: 0;
     padding: 0;
     list-style-type: none;
@@ -9126,7 +9199,7 @@ dean
 .callback-wrapper {
     position: absolute;
     display: flex;
-    justifyContent: center;
+    justify-content: center;
     height: 100vh;
     width: 100vw;
     top: 0;
@@ -9138,10 +9211,10 @@ dean
     align-items: center;
 }
 
-.callback-wrapper > div {
-    position: relative;
-    left: calc(50% - 28px);
-    color: #3681fe;
+.callback-wrapper > span > div {
+    background-color: #3681fe !important;
+    width: 20px !important;
+    height: 20px !important;
 }
 
 /*체크박스 CSS
@@ -9450,7 +9523,7 @@ Main Category CSS
     height: 19px;
     margin-right: 5px;
     top: -4px;
-    background-image: url(../image/common/i_hit.svg);
+    background-image: url(../image/icon/i_hit.svg);
     vertical-align: middle;
 }
 
@@ -9471,7 +9544,7 @@ Main Category CSS
     height: 19px;
     margin-right: 5px;
     top: -4px;
-    background-image: url(../image/common/i_thumb.svg);
+    background-image: url(../image/icon/i_thumb.svg);
     vertical-align: middle;
 }
 
@@ -9551,9 +9624,20 @@ Main Category CSS
     color: #0d73f8;
 }
 
+.balance-of-deck {
+    font-size: 13px;
+    font-weight: 300;
+    color: #0d73f8;
+}
+
 .color .balance-of-dollar {
     font-size: 14px;
     font-weight: bold;
+    line-height: 20px;
+}
+.color .balance-of-deck {
+    font-size: 12px;
+    font-weight: 300;
     line-height: 20px;
 }
 
@@ -9564,6 +9648,7 @@ Main Category CSS
 */
 
 .menu-wrapper {
+    padding: 40px;
     width: 100%;
     height: 100%;
     background: black;
@@ -9574,8 +9659,8 @@ Main Category CSS
 }
 
 .menu-content-list {
-    top: 10%;
     position: relative;
+    margin-top: 15%;
 }
 
 .menu-content-item {
@@ -9623,7 +9708,8 @@ react tabs CSS
     bottom: 0 !important;
     position: relative !important;
     list-style: none !important;
-    padding: 0 35px 0 0 !important;
+    padding: 0 20px 0 0 !important;
+    margin-right: 10px !important;
     cursor: pointer !important;
 }
 
@@ -9641,8 +9727,7 @@ react tabs CSS
 
 .react-tabs__tab:hover {
     background: #fff !important;
-    color: #4d4d4d !important;
-    font-weight: bold !important;
+    color: #3681fe  !important;
 }
 
 .react-tabs__tab--selected {
@@ -9670,9 +9755,13 @@ Ads CSS
 */
 
 .demo-ads-wrapper {
+    position: absolute;
+    left: 0;
+    bottom: 60px;
     width: 100%;
     height: 55px;
     font-size: 16px;
+    overflow-y: hidden;
     color: white;
     background: #212734;
     text-align: center;
@@ -9684,6 +9773,11 @@ Ads CSS
 
 .ad-effective {
     top: 55px !important;
+}
+
+.ad-dummy {
+    width: 100%;
+    height: 55px;
 }
 
 .ad-close-btn {
@@ -9705,6 +9799,33 @@ Ads CSS
     margin-left: -35px;
 }
 
+.header-search-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+
+.mobile-header-search-btn-wrapper {
+    z-index: 1;
+}
+
+.mobile-header-search-btn {
+    cursor: pointer;
+    width: 27px;
+    height: 27px;
+    margin: 0 6px;
+    background-image: url(../image/icon/i_search.svg);
+}
+
+.mobile-header-search-bar-wrapper {
+    background: white;
+    position: absolute;
+    left: 0;
+    height: 60px;
+    top: 47px;
+    width: 100%;
+}
 
 
 /*
@@ -9741,4 +9862,25 @@ legal CSS
 
 .legal-content {
     font-size: 16px;
+}
+
+
+
+/*
+cc license CSS
+2019-05-24 Dean
+*/
+.cc-img {
+    width: 90px;;
+}
+
+.cc-wrapper {
+    position: absolute;
+    top: 6px;
+    right: 0;
+}
+
+.cc-container {
+    position: relative;
+    margin-bottom: 32px
 }

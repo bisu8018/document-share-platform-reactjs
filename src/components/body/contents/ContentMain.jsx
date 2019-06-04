@@ -4,6 +4,7 @@ import { Carousel } from "react-responsive-carousel";
 
 import MainRepository from "../../../redux/MainRepository";
 import DocumentCardContainer from "../../../container/common/DocumentCardContainer";
+import Common from "../../../util/Common";
 
 class ContentMain extends Component {
   state = {
@@ -13,6 +14,8 @@ class ContentMain extends Component {
 
   };
 
+
+// 문서 목록 GET
   getDocuments = (path) => {
     const params = {
       path: path
@@ -25,11 +28,21 @@ class ContentMain extends Component {
     });
   };
 
+
+  // 사이트 path 체크
   getList = (path) => {
     const { latestDocuments, featuredDocuments, popularDocuments } = this.state;
     return path === "latest" ? latestDocuments : path === "featured" ? featuredDocuments : popularDocuments;
   };
 
+
+  // 로그인
+  handleLogin = () => {
+    MainRepository.Account.login();
+  };
+
+
+  // 업로드 버튼
   handleUploadBtn = () => {
     document.getElementById("uploadBtn").click();
   };
@@ -42,27 +55,34 @@ class ContentMain extends Component {
 
   render() {
 
+    //배너 제목
     const subject = [
       "Realization of Value via Sharing",
       "Content Free",
       "Grow Your Audience"
     ];
 
+    //배너 버튼 텍스트
     const buttonText = [
       "Join Now",
       "Sign Up",
       "Upload now"
     ];
 
+    // 배너 내용
     const content = [
       "Polaris Share values ​​the content you share.\nShare your content and get a transparent monetary reward.\n Join now as a creator ",
       "Meet advanced content produced by creator. \n Just vote for your favorite document and you'll be rewarded.\n Sign up now ",
       "Upload your slides and share them on high-quality channels.\n Track lead activity and collect contacts.\n"
     ];
 
+
+    // path 카테고리
     const category = [
       "latest", "featured", "popular"
     ];
+
+    let countCards = (window.innerWidth > 1293 || window.innerWidth < 993) ? 4 : 6;
 
     return (
       <div className="row">
@@ -73,7 +93,7 @@ class ContentMain extends Component {
             showThumbs={false}
             howThumbs={false}
             showStatus={false}
-            swipeable
+            swipeable={false}
             interval={5000}
           >
             {subject.map((arr, idx) => (
@@ -84,9 +104,14 @@ class ContentMain extends Component {
                     <span key={idx}>{line}<br/></span>)
                   )}
                 </div>
-                <div className="main-upload-btn mr-2 ml-2 mb-3" onClick={() => this.handleUploadBtn()}>{buttonText[idx]}</div>
+                {idx === 3 ?
+                  <div className="main-upload-btn mr-2 ml-2 mb-3"
+                       onClick={() => this.handleUploadBtn()}>{buttonText[3]}</div> :
+                  <div className="main-upload-btn mr-2 ml-2 mb-3"
+                       onClick={() => this.handleLogin()}>{buttonText[idx]}</div>
+                }
                 <Link to="/faq">
-                  <div className="main-learn-more-btn ml-2 mr-2">Learn more</div>
+                  <div className="main-learn-more-btn ml-2 mr-2" onClick={() => Common.scrollTop()}>Learn more</div>
                 </Link>
                 <div className={"main-banner-img-wrapper main-banner-img" + (idx + 1)}/>
                 <img src={require("assets/image/banner/img-banner-0" + (idx + 1) + ".png")} alt=""/>
@@ -106,15 +131,15 @@ class ContentMain extends Component {
                 <div className="mb-3">
                   <span className="main-category-name">{arr}</span>
                   <Link to={"/" + arr}>
-                    <span className="main-category-see-all">See All
+                    <span className="main-category-see-all" onClick={() => Common.scrollTop()}>See All
                       <i className="material-icons">keyboard_arrow_right</i></span>
                   </Link>
                 </div>
 
                 <div className="row main-category-card-wrapper">
                   {this.getList(arr) && this.getList(arr).resultList.map((res, idx) => {
-                    return (idx < 4 &&
-                      <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res} totalViewCountInfo={this.getList(arr).totalViewCountInfo}/>
+                    return (idx < countCards &&
+                      <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res} countCards={countCards} totalViewCountInfo={this.getList(arr).totalViewCountInfo}/>
                     );
                   })}
                 </div>
