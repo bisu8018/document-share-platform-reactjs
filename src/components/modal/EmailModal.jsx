@@ -96,8 +96,9 @@ class EmailModal extends React.Component {
         "email": email,
         "documentId": documentId
       };
-      this.setSessionInfo(data);
+
       await MainRepository.Tracking.postTrackingConfirm(data).then(() => {
+        this.setSessionInfo(data);
         handleTracking();
         this.handleClose();
       });

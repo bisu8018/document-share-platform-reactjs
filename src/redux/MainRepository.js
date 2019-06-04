@@ -434,6 +434,7 @@ export default {
 
       //Tracking API
       localStorage.removeItem("tracking_info");
+      sessionStorage.removeItem("u_e_i");
     },
     clearTrackingCookie() {
       //Google Analystics,

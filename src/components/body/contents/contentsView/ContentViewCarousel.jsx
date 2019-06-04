@@ -70,11 +70,13 @@ class ContentViewCarousel extends React.Component {
     const { emailFlagTemp } = this.state;
 
     return new Promise((resolve, reject) => {
+      let ss = sessionStorage.getItem("u_e_i");
+
       this.setState({ emailFlag: false }, () => {
         handleEmailFlag(false);
 
         // email 입력 모달 on/off 함수
-        if (page > 0 && !getMyInfo.email && !emailFlagTemp) {
+        if (page > 0 && !getMyInfo.email && !emailFlagTemp && !ss) {
           this.setState({ emailFlag: true }, () => {
             handleEmailFlag(true);
             resolve(false);
@@ -105,12 +107,15 @@ class ContentViewCarousel extends React.Component {
 
     // 트래킹 사용
     if (target.useTracking) {
+      let ss = sessionStorage.getItem("u_e_i");   // 비로그인, 이메일 모달 이용 시
 
       // 강제 트래킹
       if (target.forceTracking) {
         let ft = await this.handleFlag(page);
+
+
         if (!ft) return false;
-      } else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp) {
+      } else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp && !ss) {
         this.setState({ emailFlag: true }, () => {
           handleEmailFlag(true);
         });
