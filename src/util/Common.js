@@ -40,6 +40,14 @@ export default ({
     let sec = date.getSeconds();
     return (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
   },
+  // change Timestamp to Time
+  timestampToTimeNotGmt: (timestamp) => {
+    let date = new Date(timestamp);
+    let hour = date.getHours()-9;
+    let min = date.getMinutes();
+    let sec = date.getSeconds();
+    return (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
+  },
   // Get Date String
   dateString: (date) => {
     return new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
@@ -75,6 +83,30 @@ export default ({
     let currentDate = new Date();
     let lastDate = new Date(timestamp);
     return Math.floor((currentDate - lastDate) / (60 * 60 * 24 * 1000));
+  },
+  // Get Date Time Ago on Number
+  dateTimeAgo: (timestamp) => {
+    let currentDate = new Date();
+    let lastDate = new Date(timestamp);
+    let y = Math.floor((currentDate - lastDate) / (60 * 60 * 24 * 365 * 1000));
+    let d = Math.floor((currentDate - lastDate) / (60 * 60 * 24 * 1000));
+    let h = Math.floor((currentDate - lastDate) / (60 * 60 * 1000));
+    let m = Math.floor((currentDate - lastDate) / (60 * 1000));
+    let s = Math.floor((currentDate - lastDate) / (1000));
+
+    if (y !== 0) return y + " year" + (y > 1 ? "s" : "") + " ago";
+    else {
+      if (d !== 0) return d + " day" + (d > 1 ? "s" : "") + " ago";
+      else {
+        if (h !== 0) return h + " hour" + (h > 1 ? "s" : "") + " ago";
+        else {
+          if (m !== 0) return m + " minute" + (m > 1 ? "s" : "") + " ago";
+          else {
+            return s + " second" + (s > 1 ? "s" : "") + " ago";
+          }
+        }
+      }
+    }
   },
   // Scroll to top
   scrollTop: () => {
@@ -169,7 +201,7 @@ export default ({
     return email.match(regExp);
   },
   toDollar: (deck: string) => {
-    let c = 0.001;
+    let c = 0.005;
     let d = new BigNumber("1e+18");
     let bn = new BigNumber(deck);
     let dollar = bn.dividedBy(d).multipliedBy(c);
@@ -191,7 +223,7 @@ export default ({
   },
   deckToDollar: (str: string) => {
     if (isNaN(str)) return 0;
-    let c = 0.001;
+    let c = 0.005;
     let bn = new BigNumber(str);
     let dollar = bn.multipliedBy(c);
     return Math.round(dollar.toNumber() * 100) / 100;
@@ -321,6 +353,7 @@ export default ({
     for (let k = 0; k < documentList.length; ++k) {
 
       if (documentList[k].depositList && documentList[k].latestPageview && documentList[k].latestVoteAmount) {
+
         let y, m, d, tpvs, v, timestamp;
         let reward = 0;
         let pv = documentList[k].latestPageview;
@@ -342,7 +375,6 @@ export default ({
             }
           }
           if (this.dateAgo(timestamp) <= day) {
-
             reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
           }
           if (i === documentList[k].depositList.length - 1) totalReward += reward;

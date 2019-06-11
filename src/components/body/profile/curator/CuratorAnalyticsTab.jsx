@@ -62,7 +62,12 @@ class CuratorAnalyticsTab extends React.Component {
           this.setState({ isEndPage: true });
         }
       }
-    });
+    }, err => {
+      console.error("Creator analytics info GET ERROR", err);
+      setTimeout(() => {
+        this.fetchDocuments(params);
+      },3000);
+    })
   };
 
   // 차트 정보 GET
@@ -213,7 +218,7 @@ class CuratorAnalyticsTab extends React.Component {
               </div>
 
               <div className="d-none d-sm-inline-block col-sm-2 analytics-info-date">
-                {Common.dateAgo(result.created) === 0 ? "Today" : Common.timestampToDate(result.created)}
+                {Common.dateTimeAgo(result.created)}
               </div>
 
               <div className="col-2 col-sm-1 analytics-btn-div" onClick={this.handleClick.bind(this)}

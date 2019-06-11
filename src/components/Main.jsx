@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Router, Switch  } from "react-router-dom";
+import { Route, Router, Switch } from "react-router-dom";
 import history from "apis/history/history";
 
 import RouterList from "../util/RouterList";
@@ -35,7 +35,7 @@ class Main extends Component {
   setTagList = () => {
     const { setTagList, setCurrentTagList } = this.props;
 
-    MainRepository.Document.getTagList("latest",result => {
+    MainRepository.Document.getTagList("latest", result => {
       setTagList(result.resultList);
       setCurrentTagList(result.resultList);
     });
@@ -47,9 +47,12 @@ class Main extends Component {
 
     if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
       let myInfo = MainRepository.Account.getMyInfo();
+
       MainRepository.Account.getAccountInfo(myInfo.sub, result => {
-        setMyInfo(result);
-        this.setState({ init: true, myInfo: result });
+        let res = new UserInfo(result);
+        if (!result.picture) res.picture = localStorage.getItem("user_info").picture;
+        setMyInfo(res);
+        this.setState({ init: true, myInfo: res });
       });
     }
   };
@@ -107,7 +110,10 @@ class Main extends Component {
         <div id="container-wrapper">
           <HeaderContainer/>
 
+
+
           <div id="container" data-parallax="true">
+            <CookiePolicyModal/>
             <div className="container">
               <Switch>
                 {RouterList.routes.map((result, idx) => {
@@ -128,7 +134,6 @@ class Main extends Component {
           <Footer/>
 
           <AlertListContainer/>
-          <CookiePolicyModal/>
 
         </div>
       </Router>

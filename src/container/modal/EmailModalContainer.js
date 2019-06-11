@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import EmailModal from "../../components/modal/EmailModal";
 import { setMyInfo } from "../../redux/reducer/main";
+import { setTempEmail } from "../../redux/reducer/emailModal";
 
 export default connect(
   state => ({
@@ -9,6 +10,9 @@ export default connect(
   dispatch => ({
     setMyInfo: (myInfo:any) => {
       dispatch(setMyInfo(myInfo));
+    },
+    setTempEmail: (tempEmail:any) => {
+      dispatch(setTempEmail(tempEmail));
     },
   })
 )(EmailModal);

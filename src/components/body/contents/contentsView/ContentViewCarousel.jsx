@@ -16,7 +16,8 @@ class ContentViewCarousel extends React.Component {
     slideOptionFlag: false,
     audienceEmail: null,
     emailFlag: false,
-    emailFlagTemp: false
+    emailFlagTemp: false,
+    pageChangedFlag: 0
   };
 
 
@@ -37,6 +38,12 @@ class ContentViewCarousel extends React.Component {
     });
   };
 
+  getPageNum = () => {
+    let pageNum = window.location.pathname.split("/")[3];
+    pageNum = pageNum && pageNum > "1" ? Number(pageNum.split("-")[0]) - 1 : 0;
+    return pageNum;
+  };
+
 
   handleUrl = () => {
     const { readPage } = this.state;
@@ -47,7 +54,7 @@ class ContentViewCarousel extends React.Component {
     let _readPage = readPage + 1;
 
     let _documentText = "";
-    if (documentText && documentText.length > 0) _documentText = documentText[readPage].substr(0, 10).trim().replace(/([^A-Za-z0-9 ])+/g, "").replace(/([ ])+/g, "-");
+    if (documentText && documentText.length > 0 && documentText[readPage]) _documentText = documentText[readPage].substr(0, 10).trim().replace(/([^A-Za-z0-9 ])+/g, "").replace(/([ ])+/g, "-");
     if (_documentText.length > 0) _documentText = "-" + _documentText;
 
     if (pageNum !== _readPage) {
@@ -66,11 +73,11 @@ class ContentViewCarousel extends React.Component {
 
   // 이메일 플래그 관리
   handleFlag = async (page) => {
-    const { handleEmailFlag, getMyInfo } = this.props;
+    const { handleEmailFlag, getMyInfo, getTempEmail } = this.props;
     const { emailFlagTemp } = this.state;
 
     return new Promise((resolve, reject) => {
-      let ss = sessionStorage.getItem("u_e_i");
+      let ss = getTempEmail;
 
       this.setState({ emailFlag: false }, () => {
         handleEmailFlag(false);
@@ -91,7 +98,7 @@ class ContentViewCarousel extends React.Component {
 
   // 문서 옵션 useTracking true 일때만
   handleTracking = async (page) => {
-    const { target, handleEmailFlag, getMyInfo, setMyInfo } = this.props;
+    const { target, handleEmailFlag, getMyInfo, setMyInfo, getTempEmail } = this.props;
     const { emailFlagTemp, readPage, emailFlag } = this.state;
 
     if ((page === null || page === undefined) && target.forceTracking) {
@@ -107,15 +114,13 @@ class ContentViewCarousel extends React.Component {
 
     // 트래킹 사용
     if (target.useTracking) {
-      let ss = sessionStorage.getItem("u_e_i");   // 비로그인, 이메일 모달 이용 시
-
       // 강제 트래킹
       if (target.forceTracking) {
         let ft = await this.handleFlag(page);
 
 
         if (!ft) return false;
-      } else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp && !ss) {
+      } else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp && !getTempEmail) {
         this.setState({ emailFlag: true }, () => {
           handleEmailFlag(true);
         });
@@ -177,10 +182,19 @@ class ContentViewCarousel extends React.Component {
     this.setState({ autoSlideFlag: !this.state.autoSlideFlag });
   };
 
+  // see also 통한 페이지 전환 시, readPage 값 0으로 초기화
+  handlePageChanged = () => {
+    const {pageChangedFlag} = this.state;
+    const {catchPageChanged} = this.props;
+
+    if(pageChangedFlag !== catchPageChanged) {
+      this.setState({readPage : 0, pageChangedFlag : catchPageChanged })
+    }
+  };
+
 
   componentWillMount() {
-    let pageNum = window.location.pathname.split("/")[3];
-    pageNum = pageNum && pageNum > "1" ? Number(pageNum.split("-")[0]) - 1 : 0;
+    let pageNum = this.getPageNum();
 
     if (MainRepository.Account.isAuthenticated()) this.postTrackingConfirm(pageNum);
     else this.handleTracking(pageNum);
@@ -191,6 +205,10 @@ class ContentViewCarousel extends React.Component {
     this.handleTrackingLeave();
   }
 
+
+  componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+    this.handlePageChanged();
+  }
 
   render() {
     const { target, documentText } = this.props;

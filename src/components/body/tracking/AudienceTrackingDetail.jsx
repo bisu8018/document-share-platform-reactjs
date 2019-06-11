@@ -5,7 +5,7 @@ import LinesEllipsis from "react-lines-ellipsis";
 import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../util/Common";
 import Tooltip from "@material-ui/core/Tooltip";
-import { ThreeBounce } from 'better-react-spinkit';
+import { ThreeBounce } from "better-react-spinkit";
 
 class AudienceTrackingDetail extends React.Component {
   state = {
@@ -29,23 +29,47 @@ class AudienceTrackingDetail extends React.Component {
     }
   };
 
+
+  // 잘못된 접근, 404 페이지 이동
+  wrongAccess = () => {
+    const { setAlertCode } = this.props;
+    this.props.history.push({
+      pathname: "/404",
+      state: { errMessage: "Please access with the correct path." }
+    });
+    setAlertCode(2002);
+  };
+
+
+  // 트랙킹 정보 GET
   getTrackingInfo = () => {
     const { location, getIncludeOnlyOnePage, getShowAnonymous } = this.props;
-    let cid = location.state.cid;
-    this.setState({ loading: true });
 
-    const params = {
-      cid : cid,
-      documentId : location.state.document.documentId,
-      include : getIncludeOnlyOnePage,
-      anonymous : getShowAnonymous
-    };
+    let cid = null;
+    if (location.state && location.state.cid) cid = location.state.cid;
 
-    MainRepository.Tracking.getTrackingInfo(params, (res) => {
-      let resData = res;
-      this.setState({ loading: false });
-      this.setState({ resultList: resData.resultList ? resData.resultList : [] });
-    });
+    if (!cid) this.wrongAccess();
+    else {
+      this.setState({ loading: true });
+
+      const params = {
+        cid: cid,
+        documentId: location.state.document.documentId,
+        include: getIncludeOnlyOnePage,
+        anonymous: getShowAnonymous
+      };
+
+      MainRepository.Tracking.getTrackingInfo(params, (res) => {
+        let resData = res;
+        this.setState({ loading: false });
+        this.setState({ resultList: resData.resultList ? resData.resultList : [] });
+      }, err => {
+        console.error(err);
+        setTimeout(() => {
+          this.getTrackingInfo();
+        }, 3000);
+      });
+    }
   };
 
   getImgUrl = (page) => {
@@ -55,8 +79,15 @@ class AudienceTrackingDetail extends React.Component {
 
   getSortedTime = (result) => {
     result.viewTracking.sort((a, b) => a.t - b.t);
-    return Common.timestampToTime(result.viewTracking[0].t) + " ~ " + Common.timestampToTime(result.viewTracking[result.viewTracking.length-1].t)
+    return Common.timestampToTime(result.viewTracking[0].t) + " ~ " + Common.timestampToTime(result.viewTracking[result.viewTracking.length - 1].t);
+  };
 
+  getStayingTime = (result) => {
+    result.viewTracking.sort((a, b) => a.t - b.t);
+    let nextDt = result.viewTracking[result.viewTracking.length - 1].t;
+    let prevDt = result.viewTracking[0].t;
+
+    return Common.timestampToTimeNotGmt(nextDt - prevDt);
   };
 
   componentWillMount() {
@@ -67,71 +98,76 @@ class AudienceTrackingDetail extends React.Component {
     const { history, match, location } = this.props;
     const { loading, resultList } = this.state;
 
+    if (!location.state || !location.state.cid) return false;
+
     const documentText = location.state.documentText;
     let email = location.state.email;
     let time = Common.timestampToDate(Number(location.state.time));
 
     return (
 
-        <div className="u__center tracking-detail-container">
+      <div className="u__center tracking-detail-container">
 
-          <div className="row tracking_inner">
-            <div className="col-sm-12 col-md-12 tracking_top">
-              <div className="tracking-detail-title h3 d-inline-block mr-5">
-                <span className="mr-3">{email}</span>
-                <span className="tracking-time d-block d-sm-inline-block">{time}</span>
-                <div className="back-btn " onClick={history.goBack}>
-                  <i className="material-icons ml-2">keyboard_backspace</i>
-                  Back to visitor list
-                </div>
+        <div className="row tracking_inner">
+          <div className="col-sm-12 col-md-12 tracking_top">
+            <div className="tracking-detail-title h3 d-inline-block mr-5">
+              <span className="mr-3">{email}</span>
+              <span className="tracking-time d-block d-sm-inline-block">{time}</span>
+              <div className="back-btn " onClick={history.goBack}>
+                <i className="material-icons ml-2">keyboard_backspace</i>
+                Back to visitor list
               </div>
+            </div>
 
-              <div className="tracking_fulldown_list">
-                {resultList.length > 0 && resultList.map((result, idx) => (
-                  <ul key={idx}>
-                    <li>
-                      <div className="tfl_title" onClick={this.handleClick}>
-                        <i><img src={require("assets/image/icon/i_faq.png")} alt="dropdown icon"/></i>
-                        <strong title="">
-                          {this.getSortedTime(result)}
-                        </strong>
+            <div className="tracking_fulldown_list">
+              {resultList.length > 0 && resultList.map((result, idx) => (
+                <ul key={idx}>
+                  <li>
+                    <div className="tfl_title" onClick={this.handleClick}>
+                      <i><img src={require("assets/image/icon/i_faq.png")} alt="dropdown icon"/></i>
+                      <div className="font-weight-bold">
+                        {this.getStayingTime(result)}
+                        <span className="ml-2 font-weight-normal">
+                        ({this.getSortedTime(result)})
+                        </span>
                       </div>
-                      <div className="tfl_desc ">
-                        <dl>
-                          {result.viewTracking.sort((a, b) => a.t - b.t).map((_result, idx) => (
-                            <dd key={idx}>
-                              <div className="d-flex">
+                    </div>
+                    <div className="tfl_desc ">
+                      <dl>
+                        {result.viewTracking.sort((a, b) => a.t - b.t).map((_result, idx) => (
+                          <dd key={idx}>
+                            <div className="d-flex">
                                 <span className="time"
                                       title={Common.timestampToTime(_result.t)}> {Common.timestampToTime(_result.t)} </span>
 
-                                {_result.ev === "leave" &&
-                                <div className="d-inline-block mr-3">
+                              {_result.ev === "leave" &&
+                              <div className="d-inline-block mr-3">
                                   <span
                                     className="tracking-status">{_result.ev}</span>
-                                </div>
-                                }
-                                {_result.ev !== "leave" &&
-                                <div className="d-inline-block mr-3">
-                                  <Tooltip
-                                    title={
-                                      <img src={this.getImgUrl(_result.n)} alt="thumbnail" className="w-100"/>
-                                    }
-                                    disableFocusListener
-                                    disableTouchListener
-                                    className="tooltip-style"
-                                    placement="bottom">
-                                    <span className="info-btn"> {_result.n}</span>
-                                  </Tooltip>
-                                </div>
-                                }
+                              </div>
+                              }
+                              {_result.ev !== "leave" &&
+                              <div className="d-inline-block mr-3">
+                                <Tooltip
+                                  title={
+                                    <img src={this.getImgUrl(_result.n)} alt="thumbnail" className="w-100"/>
+                                  }
+                                  disableFocusListener
+                                  disableTouchListener
+                                  className="tooltip-style"
+                                  placement="bottom">
+                                  <div className="info-btn"> {_result.n}</div>
+                                </Tooltip>
+                              </div>
+                              }
 
-                                {_result.ev !== "leave" &&
-                                <div className="d-flex w-100">
-                                  {documentText &&
-                                  <Link
-                                    onClick={() => Common.scrollTop()}
-                                    to={"/" + match.params.identification + "/" + match.params.seoTitle + "/" + _result.n}
-                                    title={"Link to " + _result.n + " page" }>
+                              {_result.ev !== "leave" &&
+                              <div className="d-flex w-100">
+                                {documentText &&
+                                <Link
+                                  onClick={() => Common.scrollTop()}
+                                  to={"/" + match.params.identification + "/" + match.params.seoTitle + "/" + _result.n}
+                                  title={"Link to " + _result.n + " page"}>
                                   <LinesEllipsis
                                     text={<span className="tracking-detail-text">{documentText[_result.n - 1]}</span>}
                                     maxLine='1'
@@ -140,26 +176,26 @@ class AudienceTrackingDetail extends React.Component {
                                     basedOn='letters'
                                     className="d-none d-sm-block w-100"
                                   />
-                                  </Link>
-                                  }
-                                </div>
+                                </Link>
                                 }
-
                               </div>
-                            </dd>
-                          ))}
-                        </dl>
-                      </div>
-                    </li>
-                  </ul>
-                ))}
+                              }
 
-                {loading && <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}
+                            </div>
+                          </dd>
+                        ))}
+                      </dl>
+                    </div>
+                  </li>
+                </ul>
+              ))}
 
-              </div>
+              {loading && <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}
+
             </div>
           </div>
         </div>
+      </div>
 
     );
   }

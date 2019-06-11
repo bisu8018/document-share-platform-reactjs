@@ -25,6 +25,11 @@ class ContentMain extends Component {
       if (path === "latest") this.setState({ latestDocuments: res });
       else if (path === "featured") this.setState({ featuredDocuments: res });
       else if (path === "popular") this.setState({ popularDocuments: res });
+    }, err => {
+      console.error(err);
+      setTimeout(() => {
+        this.getDocuments(path);
+      },3000)
     });
   };
 
@@ -47,6 +52,13 @@ class ContentMain extends Component {
     document.getElementById("uploadBtn").click();
   };
 
+
+  // see more 트리거 버튼
+  handelTrigger = (arr) => {
+    document.getElementById(arr + "NavLink").click();
+  };
+
+
   componentWillMount() {
     this.getDocuments("latest");
     this.getDocuments("featured");
@@ -54,6 +66,7 @@ class ContentMain extends Component {
   }
 
   render() {
+    const { getIsMobile } = this.props;
 
     //배너 제목
     const subject = [
@@ -93,7 +106,7 @@ class ContentMain extends Component {
             showThumbs={false}
             howThumbs={false}
             showStatus={false}
-            swipeable={false}
+            swipeable={!!getIsMobile}
             interval={5000}
           >
             {subject.map((arr, idx) => (
@@ -101,7 +114,7 @@ class ContentMain extends Component {
                 <div className="main-banner-subject d-inline-block">{arr}</div>
                 <div className="main-banner-content mb-4">
                   {content[idx].split("\n").map((line, idx) => (
-                    <span key={idx}>{line}<br/></span>)
+                    <div key={idx}>{line}</div>)
                   )}
                 </div>
                 {idx === 3 ?
@@ -114,7 +127,7 @@ class ContentMain extends Component {
                   <div className="main-learn-more-btn ml-2 mr-2" onClick={() => Common.scrollTop()}>Learn more</div>
                 </Link>
                 <div className={"main-banner-img-wrapper main-banner-img" + (idx + 1)}/>
-                <img src={require("assets/image/banner/img-banner-0" + (idx + 1) + ".png")} alt=""/>
+                <img src="" data-src={require("assets/image/banner/img-banner-0" + (idx + 1) + ".png")} alt=""/>
               </div>
             ))}
           </Carousel>
@@ -130,16 +143,16 @@ class ContentMain extends Component {
 
                 <div className="mb-3">
                   <span className="main-category-name">{arr}</span>
-                  <Link to={"/" + arr}>
-                    <span className="main-category-see-all" onClick={() => Common.scrollTop()}>See All
+                  <span className="main-category-see-all" onClick={() => this.handelTrigger(arr)}>See All
                       <i className="material-icons">keyboard_arrow_right</i></span>
-                  </Link>
+
                 </div>
 
                 <div className="row main-category-card-wrapper">
                   {this.getList(arr) && this.getList(arr).resultList.map((res, idx) => {
                     return (idx < countCards &&
-                      <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res} countCards={countCards} totalViewCountInfo={this.getList(arr).totalViewCountInfo}/>
+                      <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res} countCards={countCards}
+                                             totalViewCountInfo={this.getList(arr).totalViewCountInfo}/>
                     );
                   })}
                 </div>

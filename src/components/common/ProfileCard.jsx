@@ -25,11 +25,16 @@ class ProfileCard extends React.Component {
 
 
   handleLogout = () => {
-    const {setMyInfo} = this.props;
+    const { setMyInfo } = this.props;
 
-    MainRepository.Account.logout(() => {
-      setMyInfo(new UserInfo());
-    });
+    if (MainRepository.Account.isAuthenticated()) {
+      MainRepository.Account.logout(() => {
+        setMyInfo(new UserInfo());
+      });
+    } else {
+      window.location.reload();
+    }
+
   };
 
 
@@ -39,7 +44,7 @@ class ProfileCard extends React.Component {
 
 
   render() {
-    const { getMyInfo } = this.props;
+    const { getMyInfo, getTempEmail } = this.props;
     const { balance } = this.state;
 
     let identification = (getMyInfo.username.length && getMyInfo.username.length > 0 ? getMyInfo.username : getMyInfo.email);
@@ -47,12 +52,21 @@ class ProfileCard extends React.Component {
     return (
       <div className="profile-card tac" id="profileCard">
         <div className="mt-4 mb-4">
-          {getMyInfo.picture.length > 0 ?
-            <img src={getMyInfo.picture} className="profile-card-avatar" alt="profile"/> :
-            <img src={require("assets/image/icon/i_anonymous.png")} className="profile-card-avatar" alt="profile"/>
+
+
+          {MainRepository.Account.isAuthenticated() ?
+            getMyInfo.picture.length > 0 ?
+              <img src={getMyInfo.picture} className="profile-card-avatar" alt="profile"/> :
+              <img src={require("assets/image/icon/i_anonymous.png")} className="profile-card-avatar" alt="profile"/>
+
+            :
+
+              <div className="profile-card-avatar-init">{getTempEmail[0]}</div>
           }
+
+
           <div className="profile-card-username mt-2">
-            {identification}
+            {MainRepository.Account.isAuthenticated() ? identification : getTempEmail}
           </div>
         </div>
 
@@ -64,9 +78,14 @@ class ProfileCard extends React.Component {
         </div>
 
         <div>
-          <Link to={"/" + identification}>
-            <div className="my-account-btn mb-2" id="profileCardMyAccountBtn" onClick={() => Common.scrollTop()}>My account</div>
-          </Link>
+          {MainRepository.Account.isAuthenticated() ?
+            <Link to={"/" + identification}>
+              <div className="my-account-btn mb-2" id="profileCardMyAccountBtn" onClick={() => Common.scrollTop()}>My
+                account
+              </div>
+            </Link> :
+            <div className="my-account-btn mb-2" onClick={() => MainRepository.Account.login()}> Login </div>
+          }
           <div className="profile-card-logout-btn" onClick={() => this.handleLogout()}>Sign out</div>
         </div>
 

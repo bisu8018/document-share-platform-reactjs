@@ -32,6 +32,10 @@ class Creator extends React.Component {
       this.setState({ userInfo: result, errMessage: null });
     }, err => {
       this.setState({ userInfo: null, errMessage: err });
+      console.error(err);
+      setTimeout(() => {
+        this.getProfileInfo(params);
+      },3000);
     });
   };
 

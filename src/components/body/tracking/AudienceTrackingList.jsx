@@ -12,7 +12,8 @@ class AudienceTrackingList extends React.Component {
     filterList: null,
     loading: false,
     tableOptionFlag: false,
-    includeFlag: true
+    includeFlag: true,
+    ratio: null,
   };
 
   constructor() {
@@ -36,23 +37,44 @@ class AudienceTrackingList extends React.Component {
   };
 
 
+  // 잘못된 접근, 404 페이지 이동
+  wrongAccess = () => {
+    const { setAlertCode } = this.props;
+    this.props.history.push({
+      pathname: "/404",
+      state: { errMessage: "Please access with the correct path." }
+    });
+    setAlertCode(2002);
+  };
+
+
   // 트랙킹 리스트 GET
   getTrackingList = () => {
     const { location, getShowAnonymous, getIncludeOnlyOnePage } = this.props;
-    const documentData = location.state.documentData;
-    const params = {
-      documentId: documentData.documentId,
-      anonymous: getShowAnonymous ? "true" : "false",
-      include: getIncludeOnlyOnePage ? "true" : "false"
-    };
+    let documentData = null;
+    if(location.state && location.state.documentData) documentData = location.state.documentData;
 
-    this.setState({ loading: true, resultList: [] }, () => {
-      MainRepository.Tracking.getTrackingList(params, (res) => {
-        let resData = res;
-        this.setState({ loading: false });
-        this.setState({ resultList: resData.resultList ? resData.resultList : [] });
+    if(!documentData) this.wrongAccess();
+    else {
+      const params = {
+        documentId: documentData.documentId,
+        anonymous: getShowAnonymous ? "true" : "false",
+        include: getIncludeOnlyOnePage ? "true" : "false"
+      };
+
+      this.setState({ loading: true, resultList: [] }, () => {
+        MainRepository.Tracking.getTrackingList(params, (res) => {
+          let resData = res;
+          this.setState({ loading: false });
+          this.setState({ resultList: resData.resultList ? resData.resultList : [] });
+        }, err => {
+          console.error(err);
+          setTimeout(() => {
+            this.getTrackingList();
+          },3000);
+        });
       });
-    });
+    }
   };
 
   // 리워드 정보 표시
@@ -64,6 +86,23 @@ class AudienceTrackingList extends React.Component {
   hideRewardInfo = (id) => {
     if (document.getElementById(id)) document.getElementById(id).style.display = "none";
   };
+
+
+  // 이미지 정보 GET
+  getImgInfo = () => {
+    const { location } = this.props;
+    const documentData = location.state.documentData;
+    let imgUrl = Common.getThumbnail(documentData.documentId, 320, 1, documentData.documentName);
+    let img = new Image();
+
+    img.src = imgUrl;
+    img.onload = () => {
+      let height = img.height;
+      let width = img.width;
+      this.setState({ratio : (width/height) });
+    };
+  };
+
 
   // 파일 export
   handleExport = () => {
@@ -122,11 +161,14 @@ class AudienceTrackingList extends React.Component {
 
   componentWillMount() {
     this.getTrackingList();
+    this.getImgInfo();
   }
 
   render() {
     const { location, match, getShowAnonymous, getIncludeOnlyOnePage, getCreatorDailyRewardPool } = this.props;
-    const { loading, tableOptionFlag } = this.state;
+    const { loading, tableOptionFlag, ratio } = this.state;
+
+    if(!location.state || !location.state.documentData) return false;
 
     const rst = !this.state.filterList ? this.state.resultList : this.state.filterList;
     const documentData = location.state.documentData;
@@ -147,7 +189,7 @@ class AudienceTrackingList extends React.Component {
                 <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
                   <img src={addr}
                        alt={documentData.title ? documentData.title : documentData.documentName}
-                       className="img-fluid"/>
+                       className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
                 </div>
               </Link>
             </div>
@@ -179,7 +221,7 @@ class AudienceTrackingList extends React.Component {
                        onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
                        onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
                     ${Common.deckToDollar(reward)}
-                   <i className="material-icons">arrow_drop_down</i>
+                   <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")} alt="arrow button"/>
                   </span>
 
                   {reward > 0 &&
@@ -251,8 +293,9 @@ class AudienceTrackingList extends React.Component {
                         {result.user ? result.user.e : "Anonymous"}
                       </td>
                       <td className="col2">{result.count}</td>
-                      <td
-                        className="col3">{Common.dateAgo(result.viewTimestamp) === 0 ? "Today" : Common.dateAgo(result.viewTimestamp) + " days ago"} </td>
+                      <td className="col3">
+                        {Common.dateTimeAgo(result.viewTimestamp)}
+                      </td>
                     </tr>
                   ))}
                   </tbody>

@@ -24,7 +24,8 @@ class Footer extends React.Component {
             <Link to="/faq">
               <div className="footer-nav footer-nav-divider mb-2" onClick={() => Common.scrollTop()}>FAQ</div>
             </Link>
-            <div className="footer-nav footer-nav-divider mb-2">User Guide</div>
+            <div className="footer-nav footer-nav-divider footer-nav-divider-ug mb-2">User Guide</div>
+            <div className="footer-br"/>
             <Link to="/policies">
               <div className="footer-nav footer-nav-divider  mb-2" onClick={() => Common.scrollTop()}>Policies</div>
             </Link>

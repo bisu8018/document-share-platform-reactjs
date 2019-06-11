@@ -49,9 +49,23 @@ class CuratorUploadTab extends React.Component {
 
     let param = this.getParam();
     if(param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()){
-      MainRepository.Account.getDocuments(_params, (res) => { this.handleData(res)})
+      MainRepository.Account.getDocuments(_params, (res) => {
+        this.handleData(res)
+      }, err => {
+        console.error(err);
+        setTimeout(() => {
+          this.fetchDocuments(params);
+        },3000);
+      })
     }else {
-      MainRepository.Document.getDocumentList(_params, (res) => { this.handleData(res)})
+      MainRepository.Document.getDocumentList(_params, (res) => {
+        this.handleData(res)
+      }, err => {
+        console.error("Curator upload document GET ERROR", err);
+        setTimeout(() => {
+          this.fetchDocuments(params);
+        },3000);
+      })
     }
   };
 

@@ -30,6 +30,11 @@ class Alert extends React.PureComponent {
         msg = "A network error has occurred.";   // 네트워크 에러
         break;
 
+      case 2002 :
+        status = "error";
+        msg = "Bad access.";   // 잘못된 접근경로
+        break;
+
       // 이메일 메세지 2031~
       case 2021 :
         status = "success";

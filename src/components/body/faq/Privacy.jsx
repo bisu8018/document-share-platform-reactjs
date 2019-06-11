@@ -10,6 +10,13 @@ class Privacy extends React.PureComponent {
 
       <div className="row mb-5">
 
+
+
+
+
+
+
+
         <div className="col-sm-12 col-lg-10 offset-lg-1  u__center-faq">
 
           <div className="legal-subject mt-3 mt-sm-5 text-center">PRIVACY</div>
@@ -361,7 +368,7 @@ class Privacy extends React.PureComponent {
             <br/>
             ▶ Data Protection Officer (DPO):
             <br/>
-            - Email address: connect@decompany.io
+            - Email address: <a className="ml-1" href="mailto: connect@decompany.io">connect@decompany.io</a>
             <br/>
             Please do not hesitate to contact us should you have any concerns or questions regarding privacy issues. The
             Company

@@ -27,6 +27,12 @@ let  ReduxTypes ={
   SET_SHOW_ANONYMOUS : "audienceTracking/SET_SHOW_ANONYMOUS",
   SET_INCLUDE_PAGE_ONLY_ONE : "audienceTracking/SET_INCLUDE_PAGE_ONLY_ONE",
 
+
+  //======================================
+  //            EmailModal
+  // =====================================
+  SET_TEMP_EMAIL : "emailModal/SET_TEMP_EMAIL",
+
 };
 
 export default ReduxTypes

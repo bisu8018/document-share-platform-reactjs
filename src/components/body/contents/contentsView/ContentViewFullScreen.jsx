@@ -2,12 +2,9 @@ import React, { Component } from "react";
 import Fullscreen from "react-full-screen";
 import { Link } from "react-router-dom";
 import {
-  FacebookIcon,
   FacebookShareButton,
-  LinkedinIcon,
   LinkedinShareButton,
   TwitterShareButton,
-  TwitterIcon
 } from "react-share";
 // import ContentViewComment from "./ContentViewComment";
 import Common from "../../../../util/Common";
@@ -142,7 +139,7 @@ class ContentViewFullScreen extends Component {
   }
 
   render() {
-    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
+    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, catchPageChanged } = this.props;
     const { page, isFull, carouselClass, emailFlag } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0;
@@ -160,7 +157,7 @@ class ContentViewFullScreen extends Component {
           <Fullscreen enabled={isFull} onChange={isFull => this.handleFullChange(isFull)}>
 
             <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
-                                          tracking={true} handleEmailFlag={this.handleEmailFlag}
+                                          tracking={true} handleEmailFlag={this.handleEmailFlag} catchPageChanged={catchPageChanged}
                                           getPageNum={(page) => {
                                             this.getPageNum(page);
                                           }}/>
@@ -210,11 +207,11 @@ class ContentViewFullScreen extends Component {
                   onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
                   onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
               ${Common.deckToDollar(reward)}
-              <i className="material-icons">arrow_drop_down</i>
+              <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")} alt="arrow button"/>
             </span>
 
             {reward > 0 &&
-            <div className="info-detail-reward-info" id={documentData.seoTitle + "reward"}>
+            <div className="info-detail-reward-info info-fullscreen" id={documentData.seoTitle + "reward"}>
               Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
             </div>
             }
@@ -258,7 +255,7 @@ class ContentViewFullScreen extends Component {
             <VoteDocumentModalContainer documentData={documentData}/>
           </div>
 
-          <hr className="mt-2 mb-3"/>
+          <div className="hr mb-2"/>
 
           <div className="view_desc">
             <Linkify properties={{
@@ -277,36 +274,34 @@ class ContentViewFullScreen extends Component {
             </div>
 
             <div className="sns-share-icon-wrapper mb-3">
-              <Tooltip title="Share with Facebook" placement="bottom">
-                <div className="d-inline-block mr-2">
-                  <FacebookShareButton url={url} className="sns-share-icon">
-                    <FacebookIcon size={28}/>
-                  </FacebookShareButton>
-                </div>
-              </Tooltip>
-
-
               <Tooltip title="Share with Line" placement="bottom">
-                <div className="d-inline-block mr-2">
+                <div className="d-inline-block mr-3">
                   <LinkedinShareButton url={url} className="sns-share-icon " title={documentData.title}>
-                    <LinkedinIcon size={28}/>
+                    <img src={require("assets/image/sns/ic-sns-linkedin-color.png")} alt="linkedin sns icon"/>
                   </LinkedinShareButton>
                 </div>
               </Tooltip>
 
+              <Tooltip title="Share with Facebook" placement="bottom">
+                <div className="d-inline-block mr-3">
+                  <FacebookShareButton url={url} className="sns-share-icon">
+                    <img src={require("assets/image/sns/ic-sns-facebook-color.png")} alt="facebook sns icon"/>
+                  </FacebookShareButton>
+                </div>
+              </Tooltip>
 
               <Tooltip title="Share with Twitter" placement="bottom">
                 <div className="d-inline-block">
                   <TwitterShareButton url={url} className="sns-share-icon" hashtags={documentData.tags}
                                       title={documentData.title}>
-                    <TwitterIcon size={28}/>
+                    <img src={require("assets/image/sns/ic-sns-twitter-color.png")} alt="twitter sns icon"/>
                   </TwitterShareButton>
                 </div>
               </Tooltip>
             </div>
 
 
-            <hr className="mb-3"/>
+            <div className="hr mb-3"/>
 
             <div className="view_content-desc mb-5">
               {documentData.forceTracking && emailFlag ?
@@ -325,7 +320,7 @@ class ContentViewFullScreen extends Component {
           {/*<ContentViewComment/>*/}
 
         </div>
-        ;
+
 
 
       </div>

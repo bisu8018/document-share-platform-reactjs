@@ -84,7 +84,14 @@ class Header extends React.Component {
 
         // 검색 input
         const headerAutoSuggest = document.getElementById("headerAutoSuggest");
-        if (headerAutoSuggest && !headerAutoSuggest.contains(targetElement)) {
+        if (headerAutoSuggest &&
+          !headerAutoSuggest.contains(targetElement) &&
+          "headerAutoSuggest" !== targetElement.id &&
+          "headerSearchIcon" !== targetElement.id &&
+          "headerSearchSelectBar" !== targetElement.id &&
+          targetElement.classList[0] !== "react-autosuggest__input" &&
+          targetElement.classList[0] !== "react-autosuggest__suggestion"
+        ) {
           this.closeSearchBar();
         }
 
@@ -134,7 +141,7 @@ class Header extends React.Component {
 
 
   handleClose = () => {
-    this.setState({adShow : false});
+    this.setState({ adShow: false });
   };
 
 
@@ -157,7 +164,7 @@ class Header extends React.Component {
 
   render() {
     const { prevScrollPos, searchBar, profileCardShow, adShow } = this.state;
-    const { getMyInfo } = this.props;
+    const { getMyInfo, getTempEmail, getIsMobile } = this.props;
     let pathname = history.location.pathname.split("/")[1];
 
     return (
@@ -167,11 +174,12 @@ class Header extends React.Component {
         <div className="ad-dummy"/>
         }
 
-        <nav className={"navbar navbar-default navbar-expand-lg fixed-top " + (adShow && !pathname && (window.pageYOffset <= "55") ? "ad-effective" : "")}
-             id="header__main-nav">
+        <nav
+          className={"navbar navbar-default navbar-expand-lg fixed-top " + (adShow && !pathname && (window.pageYOffset <= "55") ? "ad-effective" : "")}
+          id="header__main-nav">
           <div className="container-fluid container">
             {adShow && !pathname && (window.pageYOffset <= "55") &&
-            <AdsContainer close={()=>this.handleClose()}/>
+            <AdsContainer close={() => this.handleClose()}/>
             }
             <div className="col-4 col-md-3 mt-1">
               <a className="navbar-brand" href={"/"} title="Link to main page">
@@ -180,10 +188,9 @@ class Header extends React.Component {
             </div>
 
 
-
             <div className="navbar-menu col-md-6 d-none d-md-block">
               {!searchBar ?
-                <div className="d-inline-block">
+                <div className="nav-menu-link-wrapper">
                   <div className="nav-menu-link" id="latestNavLink"
                        onClick={(e) => this.handleNavMenuLink(e)}>LATEST
                   </div>
@@ -193,16 +200,14 @@ class Header extends React.Component {
                   <div className="nav-menu-link" id="popularNavLink"
                        onClick={(e) => this.handleNavMenuLink(e)}>POPULAR
                   </div>
-                  <div className="header-search-btn" onClick={() => this.showSearchBar()}>
-                    <i className="material-icons">search</i>
+                  <div className="mobile-header-search-btn-wrapper">
+                    <div className="web-header-search-btn" onClick={() => this.showSearchBar()}/>
                   </div>
                 </div>
                 :
-                <SearchBarContainer closeSearchBar={() => this.closeSearchBar() }/>
+                <SearchBarContainer closeSearchBar={() => this.closeSearchBar()}/>
               }
             </div>
-
-
 
 
             <div className="header-bar   col-8 col-md-3">
@@ -210,13 +215,23 @@ class Header extends React.Component {
 
               <UploadDocumentModalContainer {...this.props} />
 
-              {MainRepository.Account.isAuthenticated() &&
+
+              {(MainRepository.Account.isAuthenticated() || getTempEmail) &&
               <span className="d-none d-sm-inline-block ml-4" onClick={() => this.profileCardShow()}>
-                {getMyInfo.picture.length > 0 ?
-                  <img src={getMyInfo.picture} className="avatar" alt="Link to my profile"/> :
-                  <img src={require("assets/image/icon/i_anonymous.png")} className="avatar"
-                       alt="Link to my profile"/>
+
+                {MainRepository.Account.isAuthenticated() ?
+                  getMyInfo.picture.length > 0 ?
+                    <img src={getMyInfo.picture} className="avatar" alt="Link to my profile"/> :
+                    <img src={require("assets/image/icon/i_anonymous.png")} className="avatar"
+                         alt="Link to my profile"/>
+
+                  :
+
+                  <div className="avatar-init-menu">
+                    <div className="avatar-name-init-menu">{getTempEmail[0]}</div>
+                  </div>
                 }
+
 
                 {profileCardShow && <ProfileCardContainer/>}
 
@@ -224,29 +239,37 @@ class Header extends React.Component {
               }
 
 
-              {!MainRepository.Account.isAuthenticated() &&
+              {!MainRepository.Account.isAuthenticated() && !getTempEmail &&
               <div className="d-none d-sm-inline-block login-btn ml-2" onClick={() => this.handleLogin()}
                    title="login">
                 Login
               </div>
               }
+
+
               <MenuContainer {...this.props} />
+
             </div>
 
+
             {searchBar &&
-              <div className="mobile-header-search-bar-wrapper d-flex d-sm-none">
-                <SearchBarContainer closeSearchBar={() => this.closeSearchBar()}/>
-              </div>
+            <div className="mobile-header-search-bar-wrapper d-flex d-sm-none">
+              <SearchBarContainer closeSearchBar={() => this.closeSearchBar()}/>
+            </div>
             }
+
 
           </div>
         </nav>
 
-
+        {searchBar && getIsMobile &&
+        <div className="header-search-blur-wrapper"/>
+        }
 
         {prevScrollPos > 100 &&
-        <div className="scroll-top-btn" onClick={() => Common.scrollTop()}><i
-          className="material-icons">keyboard_arrow_up</i></div>
+        <div className="scroll-top-btn" onClick={() => Common.scrollTop()}>
+          <img src={require("assets/image/icon/i_backtotop.svg")} alt="back to top"/>
+        </div>
         }
       </header>
 

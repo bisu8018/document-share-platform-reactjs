@@ -7,6 +7,7 @@ export default connect(
     getWeb3Apis: state.main.web3Apis,
     getDrizzle: state.main.drizzleApis,
     getMyInfo: state.main.myInfo,
+    getIsMobile: state.main.isMobile
   }),
   dispatch => ({
     setAlertCode: (alertCode: number) => {

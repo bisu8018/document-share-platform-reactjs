@@ -33,10 +33,10 @@ export default {
     instance = this;    // 자기 참조
 
     //센트리 초기화
-  /*  Sentry.init({
-      dsn: "https://6dfadc862ca64af08fd6b39ade991deb@sentry.io/1450741"
-    });
-*/
+    /*  Sentry.init({
+        dsn: "https://6dfadc862ca64af08fd6b39ade991deb@sentry.io/1450741"
+      });
+  */
     //Google Analytics 초기화
     //UA-129300994-1 : share
     //UA-140503497-1 : polaris
@@ -434,14 +434,13 @@ export default {
 
       //Tracking API
       localStorage.removeItem("tracking_info");
-      sessionStorage.removeItem("u_e_i");
     },
     clearTrackingCookie() {
       //Google Analystics,
       Common.deleteCookie("_ga");
       Common.deleteCookie("_gid");
     },
-    async getDocuments(data: any, callback: any) {
+    async getDocuments(data: any, callback: any, error: any) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
@@ -450,15 +449,17 @@ export default {
         },
         params: {
           "pageSize": data.pageSize,
-          "pageNo": data.pageNo,
+          "pageNo": data.pageNo
         }
       };
 
       AuthService.GET.documents(params, result => {
         let documentList = new DocumentList((result));
         callback(documentList);
+      }, err => {
+        error(err);
       });
-    },
+    }
   },
   Document: {
     async registerDocument(args, progress, callback) {
@@ -488,7 +489,7 @@ export default {
           useTracking: useTracking,
           forceTracking: forceTracking,
           isDownload: isDownload,
-          cc: cc,
+          cc: cc
         },
         header: {
           "Authorization": `Bearer ${token}`
@@ -563,23 +564,25 @@ export default {
         }
       });
     },
-    getTagList(path:String, callback: any) {
+    getTagList(path: String, callback: any) {
       let params = {
-        t : path
+        t: path
       };
-      DocService.GET.tagList(params,result => {
+      DocService.GET.tagList(params, result => {
         let tagList = new TagList((result));
         callback(tagList);
       });
     },
-    getDocumentList(params: any, callback: any) {
+    getDocumentList(params: any, callback: any, error: any) {
       DocService.GET.documentList(params, result => {
         let documentList = new DocumentList((result));
         callback(documentList);
+      }, err => {
+        error(err);
       });
     },
     getDocumentDownloadUrl(params: any, callback: any) {
-      DocService.GET.documentDownloadUrl(params, result => {
+      DocService.GET.documentDownload(params, result => {
         let documentDownload = new DocumentDownload(result);
         callback(documentDownload);
       });
@@ -628,7 +631,7 @@ export default {
       });
     },
     async getCuratorSummary(ethAccount: String, callback: any, error: any) {
-      const params = { ethAccount: ethAccount  };
+      const params = { ethAccount: ethAccount };
       return new Promise((resolve, reject) => {
         CuratorService.GET.curatorSummary(params, (res) => {
           let curatorSummary = new CuratorSummary(res);
@@ -645,9 +648,9 @@ export default {
         TrackingService.POST.trackingConfirm(data, (result) => {
           resolve(result);
         });
-      })
+      });
     },
-    async getTrackingInfo(data, callback) {
+    async getTrackingInfo(data: any, callback: any, error: any) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
@@ -663,9 +666,11 @@ export default {
       };
       TrackingService.GET.trackingInfo(params, (result) => {
         callback(result);
+      }, err => {
+        error(err);
       });
     },
-    async getTrackingList(data: any, callback: any) {
+    async getTrackingList(data: any, callback: any, error: any) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
@@ -677,6 +682,8 @@ export default {
       //console.log("getTrackingList", data);
       TrackingService.GET.trackingList(params, (result) => {
         callback(result);
+      }, err => {
+        error(err);
       });
     },
     async getTrackingExport(documentId: string, callback: any) {

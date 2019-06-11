@@ -39,8 +39,8 @@ class CreatorSummary extends React.Component {
     MainRepository.Curator.getCuratorSummary(userInfo.ethAccount).then(res => {
 
       this.setState({
-        curatorEstimatedToday: Common.toDeck(Common.getCuratorNDaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo, 0,res.voteDocList)),
-        curatorTotalRewards: Common.toDeck(Common.getCurator7DaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo,res.voteDocList))
+        curatorEstimatedToday: Common.toDeck(Common.getCuratorNDaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo, 0, res.voteDocList)),
+        curatorTotalRewards: Common.toDeck(Common.getCurator7DaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo, res.voteDocList))
       });
     });
   };
@@ -145,21 +145,20 @@ class CreatorSummary extends React.Component {
           <div className="col-12 col-sm-10 col-lg-11 ">
             <div className="profile_info_name">
               {!userNameEdit &&
-              <span>
+              <span className="d-flex">
                 <strong>{userName || userInfo.email}</strong>
                 {this.getMyInfo().email === userInfo.email &&
-                <span className="username-edit-btn" onClick={() => this.handleClickEvent()} title="Edit user name">
-                  <i className="material-icons ml-2">edit</i>
-                </span>
+                <div className="username-edit-btn ml-2" onClick={() => this.handleClickEvent()} title="Edit user name">
+                  Edit</div>
                 }
               </span>}
 
               {userNameEdit &&
-              <span>
+              <span className="d-flex">
                 <input type="text" id="userNameEditInput" placeholder="User Name . . ." value={this.state.userName}
                        className="username-edit-input mr-2" onChange={(e) => this.handleChangeUsername(e)}/>
-                <div onClick={() => this.handleEditBtn()} className="ok-btn d-inline-block">Edit</div>
-                <div onClick={() => this.handleCancelEvent()} className="cancel-btn d-inline-block">Cancel</div>
+                <div onClick={() => this.handleEditBtn()} className="username-edit-btn mr-2">Done</div>
+                <div onClick={() => this.handleCancelEvent()} className="username-cancel-btn">Cancel</div>
               </span>}
             </div>
 
@@ -171,11 +170,11 @@ class CreatorSummary extends React.Component {
               <br/>
               Estimated earnings for today :
               <span className="color">
-                <DollarWithDeck deck={ Number(authorTodayReward || 0) + Number(curatorEstimatedToday || 0)}/>
+                <DollarWithDeck deck={Number(authorTodayReward || 0) + Number(curatorEstimatedToday || 0)}/>
               </span>
               <br/>Revenue for the last 7 days :
               <span className="color">
-                <DollarWithDeck deck={ Number(author7DayReward || 0) + Number(curatorTotalRewards || 0)}/>
+                <DollarWithDeck deck={Number(author7DayReward || 0) + Number(curatorTotalRewards || 0)}/>
               </span>
             </div>
           </div>

@@ -17,8 +17,10 @@ class SearchBar extends React.Component {
 
   onSuggestionSelected = (tag) => {
     const { selectedCategory } = this.state;
+    const { closeSearchBar } = this.props;
     this.setState({ selectedTag: tag._id }, () => {
       history.push((selectedCategory || "/latest") + "/" + tag._id);
+      closeSearchBar();
     });
   };
 
@@ -44,17 +46,19 @@ class SearchBar extends React.Component {
     return (
 
       <div className="header-search-wrapper" id="headerAutoSuggest">
-        <select className="header-select-custom" onChange={(value) => this.handleCategories(value)}>
+        <select className="header-select-custom" id="headerSearchSelectBar" onChange={(value) => this.handleCategories(value)}>
           <option value="/latest">LATEST</option>
           <option value="/featured">FEATURED</option>
           <option value="/popular">POPULAR</option>
         </select>
 
-        <AutoSuggestInputContainer search={this.onSuggestionSelected} type={"currentTag"}/>
+
+        <AutoSuggestInputContainer search={this.onSuggestionSelected}  type={"currentTag"}/>
 
         <Link to={this.getCollectPath() + "/" + (selectedTag ? selectedTag : "")} className="mobile-header-search-btn-wrapper">
-          <div className="mobile-header-search-btn mb-2" onClick={() => this.props.closeSearchBar()}/>
+          <div className="mobile-header-search-btn mb-2" id="headerSearchIcon" onClick={() => this.props.closeSearchBar()}/>
         </Link>
+
       </div>
 
     );

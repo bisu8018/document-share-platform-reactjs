@@ -62,8 +62,12 @@ class ContentList extends Component {
       if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) {
         this.setState({ totalViewCountInfo: res.totalViewCountInfo });
       }
-    }, () => {
+    }, (err) => {
       this.setState({ loading: false });
+      console.error(err);
+      setTimeout(() => {
+        this.fetchDocuments(args);
+      },3000);
     });
   };
 
@@ -119,7 +123,7 @@ class ContentList extends Component {
   }
 
   render() {
-    const { match, isEndPage } = this.props;
+    const { match, isEndPage, getIsMobile } = this.props;
     const { resultList, totalViewCountInfo } = this.state;
 
     return (
@@ -129,10 +133,13 @@ class ContentList extends Component {
         </div>
 
         <div className="col-sm-12 col-lg-9 u__center-container">
-          <div className="u__center content-list-wrapper">
+
+          <div className="d-block d-sm-none content-list-path">{Common.getPath()}</div>
+
+          <div className="mt-0 mt-sm-4 pt-0 pt-sm-2 u__center content-list-wrapper">
 
             <InfiniteScroll
-              className="overflow-hidden"
+              className={getIsMobile && "overflow-initial"}
               dataLength={resultList.length}
               next={this.fetchMoreData}
               hasMore={!isEndPage}

@@ -19,6 +19,7 @@ class ContentView extends React.Component {
     documentText: null,
     author: null,
     featuredList: null,
+    catchPageChanged : 0    // feature list 통한 페이지 전환 시, 체크 위한 랜덤 값
   };
 
   getContentInfo = (documentId) => {
@@ -31,7 +32,8 @@ class ContentView extends React.Component {
         featuredList: res.featuredList,
         documentText: res.text,
         author: res.document.author,
-        errMessage: null
+        errMessage: null,
+        catchPageChanged : Math.floor(Math.random() * 1000) +1
       }, () => {
         this.setDocumentIsExist();  //문서 로드 후 문서 블록체인 등록 체크
       });
@@ -44,7 +46,12 @@ class ContentView extends React.Component {
         documentText: null,
         author: null,
         featuredList: null,
+        catchPageChanged : 0    // feature list 통한 페이지 전환 시, 체크 위한 랜덤 값
       });
+      console.error(err);
+      setTimeout(() => {
+        this.getContentInfo(documentId);
+      },3000)
     });
   };
 
@@ -84,7 +91,7 @@ class ContentView extends React.Component {
 
   render() {
     const { auth, match, ...rest } = this.props;
-    const { documentData, documentText, totalViewCountInfo, featuredList, author, errMessage } = this.state;
+    const { documentData, documentText, totalViewCountInfo, featuredList, author, errMessage, catchPageChanged } = this.state;
     if (!documentData && !errMessage) {
       return (<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>);
     }
@@ -132,7 +139,7 @@ class ContentView extends React.Component {
 
         <div className="col-md-12 col-lg-8 view_left">
           <ContentViewFullScreenContainer documentData={documentData} documentText={documentText} totalViewCountInfo={totalViewCountInfo}
-                                          auth={auth} author={author}/>
+                                          auth={auth} author={author} catchPageChanged={catchPageChanged}/>
         </div>
 
         <div className="col-md-12 col-lg-4 ">

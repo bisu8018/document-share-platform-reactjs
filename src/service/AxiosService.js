@@ -67,6 +67,7 @@ export default {
         }
 
         console.log(error);
+        failure(error);
 
       }).then(() => {});
   },

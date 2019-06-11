@@ -12,13 +12,13 @@ import MainRepository from "../../redux/MainRepository";
 import Common from "../../util/Common";
 import CuratorUserActiveVoteContainer from "../../container/common/UserActiveVoteContainer";
 import CuratorActiveVoteContainer from "../../container/common/ActiveVoteContainer";
+import ApproveModal from "./ApproveModal";
 
 const style = {
   modalCloseButton: {
     float: "right"
   }
 };
-
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -27,15 +27,24 @@ function Transition(props) {
 
 class VoteDocumentModal extends React.Component {
 
-  state = {
-    voteStatus: "INIT",   //  INIT(initialize) -> ALLOWANCE -> APPROVE -> VOTE -> COMPLETE
-    approve: { done: false, voteOpening: false, receipt: null },
-    vote: { stackId: -1, done: false, complete: false, receipt: null },
-    deposit: 0,
-    balance: 0,
-    classicModal: false,
-    deckError: "",
-    msg: "Vote on this document"
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      voteStatus: "INIT",   //  INIT(initialize) -> ALLOWANCE -> APPROVE -> VOTE -> COMPLETE
+      approve: null,    // 승인 모달 출력 유무
+      deposit: 0,
+      balance: 0,
+      classicModal: false,
+      deckError: "",
+      msg: "Vote on this document"
+    };
+  }
+
+
+  // 승인 모달 approve 클릭 시
+  okApprove = () => {
+    if (this.state.approve !== true) this.setState({ approve: true });
   };
 
 
@@ -69,7 +78,7 @@ class VoteDocumentModal extends React.Component {
 
     this.setState({
       voteStatus: "INIT",
-      approve: { stackId: -1, done: false, voteOpening: false, receipt: null },
+      approve: null,
       vote: { stackId: -1, done: false, complete: false, receipt: null },
       deposit: 0,
       balance: 0,
@@ -90,10 +99,10 @@ class VoteDocumentModal extends React.Component {
   };
 
 
-  // Step 1 : Allowance GET
+  // [Step 1] : Allowance GET
   handleAllowance = async () => {
     const { getWeb3Apis, getMyInfo } = this.props;
-    const { deposit } = this.state;
+    const { deposit, approve } = this.state;
 
     let ethAccount = getMyInfo.ethAccount;
     let allowance = await getWeb3Apis.getAllowance(ethAccount).then((res) => {
@@ -102,11 +111,28 @@ class VoteDocumentModal extends React.Component {
       });
       return res;
     });
-    return Number(deposit) <= Number(allowance);
+
+    return new Promise((resolve, reject) => {
+      if (Number(deposit) > Number(allowance) && approve === null) {
+        // 승인 모달 출력
+        this.setState({ approve: false }, () => {
+          this.setInterval = setInterval(() => {
+
+            // 승인 모달 승인/취소 대기
+            if (this.state.approve === null || this.state.approve === true) {
+              clearInterval(this.setInterval);
+              resolve(false);
+            }
+          }, 500);
+        });
+      } else {
+        resolve(Number(deposit) <= Number(allowance));
+      }
+    });
   };
 
 
-  // Step 2 : Approve 체크
+  // [Step 2] : Approve 체크
   handleApprove = async () => {
     const { getDrizzle } = this.props;
     const { deposit } = this.state;
@@ -114,12 +140,12 @@ class VoteDocumentModal extends React.Component {
     await getDrizzle.approve(String(deposit)).then((res) => {
       this.setState({ voteStatus: "APPROVE" });
       if (res === "success") return res;
-      else  this.handleFailed();
+      else this.handleFailed();
     });
   };
 
 
-  // Step 3 : Vote 진행
+  // [Step 3] : Vote 진행
   handleVote = async () => {
     const { documentData, getDrizzle } = this.props;
     const { deposit } = this.state;
@@ -127,7 +153,7 @@ class VoteDocumentModal extends React.Component {
     await getDrizzle.voteOnDocument(documentData.documentId, (String(deposit))).then((res) => {
       this.setState({ voteStatus: "VOTE" });
       if (res === "success") document.location.reload();//this.setState({ voteStatus: "COMPLETE" });
-      else  this.handleFailed();
+      else this.handleFailed();
     });
   };
 
@@ -141,11 +167,11 @@ class VoteDocumentModal extends React.Component {
 
     allowance = await this.handleAllowance();    // 1단계 : Allowance GET 및 검증 (투표액 > 허용액 : 2단계로, 투표액 <= 허용액 : 3단계로)
 
-    if (!allowance) {
+    if (allowance === false) {
       approve = await this.handleApprove();    // 2단계 : Approve 진행
       if (approve === "success") this.handleVote();
 
-    } else this.handleVote();   // 3단계 : Vote 진행
+    } else if (allowance === true) this.handleVote();   // 3단계 : Vote 진행
   };
 
 
@@ -224,7 +250,7 @@ class VoteDocumentModal extends React.Component {
 
   render() {
     const { documentData, getDrizzle, getIsDocumentExist, getMyInfo } = this.props;
-    const { deckError, balance, voteStatus } = this.state;
+    const { deckError, balance, voteStatus, approve } = this.state;
 
     this.handleBalance();
     let isLogin = MainRepository.Account.isAuthenticated();
@@ -334,6 +360,10 @@ class VoteDocumentModal extends React.Component {
             <div className="d-none">{voteStatus}</div>
           </DialogActions>
         </Dialog>
+        }
+
+        {approve === false &&
+        <ApproveModal ok={() => this.okApprove()} cancel={() => this.handleClose()}/>
         }
       </span>
     );

@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import AudienceTrackingList from "../../../components/body/tracking/AudienceTrackingList";
 import { setShowAnonymous, setIncludeOnlyOnePage } from "../../../redux/reducer/audienceTracking";
+import { setAlertCode } from "../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -20,6 +21,9 @@ export default connect(
       dispatch(setIncludeOnlyOnePage(includeOnlyOnePage, () => {
         callback();
       }));
+    },
+    setAlertCode: (alertCode: number) => {
+      dispatch(setAlertCode(alertCode));
     },
   }),
 )(AudienceTrackingList);

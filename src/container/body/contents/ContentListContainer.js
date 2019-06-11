@@ -9,6 +9,7 @@ export default connect(
     getWeb3Apis: state.main.web3Apis,
     getDrizzle: state.main.drizzleApis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
+    getIsMobile: state.main.isMobile,
   }),
   dispatch => ({
     setTagList: (tagList: []) => dispatch(setTagList(tagList))

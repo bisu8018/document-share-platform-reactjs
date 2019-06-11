@@ -43,7 +43,7 @@ class CuratorClaim extends React.Component {
   }
 
   render() {
-    const { getDrizzle, userInfo, getMyInfo } = this.props;
+    const { getDrizzle, userInfo, getMyInfo, getIsMobile } = this.props;
     const { determineReward, btnText } = this.state;
     let myEthAccount = getMyInfo.ethAccount;
     let ethAccount = userInfo ? userInfo.ethAccount : "";
@@ -52,7 +52,7 @@ class CuratorClaim extends React.Component {
     if (myEthAccount !== ethAccount || !getDrizzle.isAuthenticated() || ethAccount !== drizzleAccount || claimReward <= 0 || btnText === "Complete") return <div/>;
 
     return (
-      <div className={"claim-btn " + (btnText === "Pending" ? "btn-disabled" : "")}
+      <div className={"claim-btn " + (btnText === "Pending" ? "btn-disabled" : "") + (getIsMobile && " w-100")}
            onClick={() => this.handelClickClaim()} title={"Claim $" + claimReward}>
         {btnText} {(btnText === "Pending" ? "" : claimReward)}
       </div>

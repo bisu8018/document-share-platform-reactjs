@@ -80,7 +80,7 @@ export default ({
         component: Signup
       },
       {
-        path: "/notfoundpage",
+        path: "/404",
         name: "NotFoundPage",
         component: NotFoundPage
       },

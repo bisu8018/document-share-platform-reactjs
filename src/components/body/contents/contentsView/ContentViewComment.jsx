@@ -1,6 +1,5 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import CustomInput from "../../../common/CustomInput";
 
 const style = {};
 
@@ -16,15 +15,7 @@ class ContentViewComment extends React.Component {
     return (
       <div className="row">
         <div className="col-10">
-          <CustomInput
-            labelText="Add your comments..."
-            id="comment"
-            formControlProps={{
-              fullWidth: true
-            }}
-            inputProps={{
-              type: "commentText"
-            }}/>
+          <input type="text" id="comment" />
         </div>
         <div className="col-2">
           <div className="claim-btn" onClick={() => this.addComment()}>ADD</div>

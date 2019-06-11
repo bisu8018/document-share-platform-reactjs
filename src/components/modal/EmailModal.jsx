@@ -59,7 +59,8 @@ class EmailModal extends React.Component {
   };
 
   setSessionInfo = (data) => {
-    sessionStorage.setItem("u_e_i",data.email[0]);
+    const {setTempEmail} = this.props;
+    setTempEmail(data.email);
   };
 
   handleClickOpen = (modal) => {
