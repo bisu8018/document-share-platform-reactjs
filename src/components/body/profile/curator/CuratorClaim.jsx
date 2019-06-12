@@ -52,7 +52,7 @@ class CuratorClaim extends React.Component {
     if (myEthAccount !== ethAccount || !getDrizzle.isAuthenticated() || ethAccount !== drizzleAccount || claimReward <= 0 || btnText === "Complete") return <div/>;
 
     return (
-      <div className={"claim-btn " + (btnText === "Pending" ? "btn-disabled" : "") + (getIsMobile && " w-100")}
+      <div className={"claim-btn " + (btnText === "Pending" ? "btn-disabled" : "") + (getIsMobile ? " w-100" : "")}
            onClick={() => this.handelClickClaim()} title={"Claim $" + claimReward}>
         {btnText} {(btnText === "Pending" ? "" : claimReward)}
       </div>

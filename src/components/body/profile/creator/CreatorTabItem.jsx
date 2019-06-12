@@ -40,6 +40,12 @@ class CreatorTabItem extends React.Component {
     };
   };
 
+
+  //이미지 GET 에러 합수
+  onImgError = () => {
+
+  };
+
   componentWillMount(): void {
     this.getImgInfo();
   }
@@ -56,13 +62,18 @@ class CreatorTabItem extends React.Component {
     return (
 
       <div className="pl-3 pl-sm-0 pr-3 pr-sm-0 row u_center_inner">
-
         <div className="pl-0 col-3 col-md-4 col-thumb">
+
+
+
           <Link to={"/" + identification + "/" + document.seoTitle} >
+
             <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
-              <img src={Common.getThumbnail(document.documentId, (getIsMobile ? 640 : 320), 1, document.documentName)}
+              <img src={Common.getThumbnail(document.documentId, "thumb", 1, document.documentName)}
+                   onError={(e) => {e.target.src = (Common.getThumbnail(document.documentId, (getIsMobile ? 640 : 320), 1, document.documentName))}}
                    alt={document.title ? document.title : document.documentName}
                    className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") +  (document.state && document.state === "NOT_CONVERT" ? "not-convert-background" : "")}/>
+
               {document.state && document.state === "NOT_CONVERT" &&
               <div className="not-convert">
                 <Tooltip title="Converting document..." placement="bottom">
@@ -71,7 +82,11 @@ class CreatorTabItem extends React.Component {
               </div>
               }
             </div>
+
           </Link>
+
+
+
         </div>
 
 

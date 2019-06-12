@@ -139,7 +139,7 @@ class ContentList extends Component {
           <div className="mt-0 mt-sm-4 pt-0 pt-sm-2 u__center content-list-wrapper">
 
             <InfiniteScroll
-              className={getIsMobile && "overflow-initial"}
+              className={getIsMobile ? "overflow-initial" : ""}
               dataLength={resultList.length}
               next={this.fetchMoreData}
               hasMore={!isEndPage}

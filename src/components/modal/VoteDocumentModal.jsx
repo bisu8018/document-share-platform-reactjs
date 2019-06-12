@@ -254,7 +254,6 @@ class VoteDocumentModal extends React.Component {
 
     this.handleBalance();
     let isLogin = MainRepository.Account.isAuthenticated();
-
     if (getDrizzle && (!getDrizzle.isInitialized() || !getIsDocumentExist)) return <div/>;
 
     let btnText, statusFlag;

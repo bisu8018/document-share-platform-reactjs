@@ -52,7 +52,7 @@ class Menu extends React.Component {
         {menuShow &&
         <div className="menu-wrapper">
           <div className="container">
-          <img className="menu-close-btn" onClick={() => this.menuHide()} src={require("assets/image/icon/i_close_menu" + (getIsMobile && "_mobile") + ".svg")} alt="menu close button"/>
+          <img className="menu-close-btn" onClick={() => this.menuHide()} src={require("assets/image/icon/i_close_menu" + (getIsMobile? "_mobile" : "") + ".svg")} alt="menu close button"/>
           </div>
 
           {(MainRepository.Account.isAuthenticated() || getTempEmail) &&

@@ -10,7 +10,7 @@ class DollarWithDeck extends React.Component {
     let dollarStr = Common.deckToDollar(deck);
 
     return (
-      <Tooltip title={"Creator payout $" + dollarStr + " (" + deckStr + ") \n in 7 days"} placement="bottom">
+      <Tooltip title={"Creator payout $" + dollarStr + " (" + deckStr + ")"} placement="bottom">
         <span>
           $ {dollarStr}
         </span>

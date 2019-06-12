@@ -560,7 +560,7 @@ mark,
 }
 
 .not-convert-background {
-    opacity: 0.3;
+    opacity: 0;
 }
 
 .img-thumbnail {
@@ -1723,7 +1723,7 @@ mark,
 
 @media (min-width: 576px) {
     .details_info {
-        padding-left: 15px;
+        padding-left: 35px;
     }
 
     .navbar-expand-sm {
@@ -6456,13 +6456,12 @@ dean
     border-top: none;
     background: none;
     font-size: 16px;
-    padding: 2px 0;
     position: relative;
     line-height: 1.38;
     letter-spacing: -0.2px;
     color: #4d4d4d;
     width: 170px;
-    height: 25px;
+    height: 21px;
 }
 
 .username-edit-input:hover,
@@ -6927,14 +6926,16 @@ Dean*/
 
 .tags_menu_search_container input {
     font-size: 15px;
-    padding-left: 15px;
-    padding-bottom: 10px;
+    padding-left: 8px;
+    padding-bottom: 6px;
     height: 25px;
     background: none;
     color: #666666;
     border: none;
     width: 85%;
+    max-width: 150px;
     border-bottom: 1px solid #666666;
+    margin-left: auto;
 }
 
 
@@ -7122,6 +7123,11 @@ Dean*/
 
 .details_info {
     position: relative;
+}
+
+.reward-arrow {
+    margin-left: 7px;
+    margin-bottom: 3px;
 }
 
 .details_info-padding {
@@ -7352,6 +7358,9 @@ Dean*/
 }
 
 @media (max-width: 575px) {
+    .tags_menu_search_container input {
+        margin-left: 0;
+    }
     .main-category-card-img-landscape {
         width: 100%;
         height: auto !important;
@@ -7852,6 +7861,59 @@ author tap list analytics*/
     }
 }
 
+
+
+
+
+/*Dean
+2019-06-12
+퍼센트 그래프 CSS*/
+.circular-chart-wrapper {
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 9px;
+}
+
+.circular-chart {
+    display: inline-block;
+    height: auto;
+    border-radius: 50%;
+    -webkit-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    fill: #f4f4f4;
+}
+
+.circle {
+    stroke: #3681fe;
+    stroke-width: 15;
+    animation: progress 1s ease-out forwards;
+}
+
+.circle-sub {
+    fill: white;
+}
+
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
+}
+
+
+
+/*Dean
+2019-06-12
+트랙킹 리스트 페이지 CSS*/
+.open-rate {
+    display: inline-block;
+    position: absolute;
+    min-width: 40px;
+    left: 0;
+    text-align: right;
+}
+
 .tracking_inner {
     margin-top: 50px;
     margin-bottom: 100px;
@@ -7953,9 +8015,11 @@ author tap list analytics*/
         word-break: break-all;
     }
 
-    .tracking_table .col2,
+    .tracking_table .col2{
+        width: 20%;
+    }
     .tracking_table .col3 {
-        width: 30%;
+        width: 40%;
     }
 
     .tracking_table th,
@@ -7974,11 +8038,11 @@ author tap list analytics*/
     }
 
     .tracking_table .col2 {
-        width: 18%;
+        width: 12%;
     }
 
     .tracking_table .col3 {
-        width: 29%;
+        width: 35%;
     }
 
     .tracking_top .form-inline {
@@ -9411,8 +9475,8 @@ dean
     position: absolute;
     display: flex;
     justify-content: center;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     top: 0;
     bottom: 0;
     left: 0;
@@ -9623,7 +9687,7 @@ Main Category CSS
     border-radius: 4px;
     border: 1px solid #cccccc;
     position: relative;
-    overflow: hidden;
+    overflow: initial;
 }
 
 .main-category-card:hover {
@@ -9638,6 +9702,7 @@ Main Category CSS
     width: auto;
     position: relative;
     height: 168px;
+    border-radius: 4px;
     overflow: hidden;
     border-bottom: 1px solid #cccccc;
 }
@@ -10101,21 +10166,5 @@ cc license CSS
 */
 .cc-img {
     width: 90px;;
-}
-
-.cc-wrapper {
-    position: absolute;
-    top: 6px;
-    right: 0;
-}
-
-.cc-container {
-    position: relative;
-    margin-bottom: 32px
-}
-
-
-.reward-arrow {
-    margin-left: 7px;
-    margin-bottom: 3px;
+    float: right;
 }

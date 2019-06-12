@@ -492,7 +492,7 @@ class UploadDocumentModal extends React.Component {
                   </div>
                   <div className="col-12 col-sm-6">
                     <input type="checkbox" id="ccNdCheckbox" onChange={(e) => this.handleCcNdCheckbox(e)}
-                           checked={nd}/>
+                           checked={sa ? false : nd} disabled={sa}/>
                     <label htmlFor="ccNdCheckbox">
                       <span><i className="material-icons">done</i></span>
                         No Derivative Works
@@ -500,7 +500,7 @@ class UploadDocumentModal extends React.Component {
                   </div>
                   <div className="col-12 col-sm-6">
                     <input type="checkbox" id="ccSaCheckbox" onChange={(e) => this.handleCcSaCheckbox(e)}
-                           checked={sa}/>
+                           checked={nd ? false : sa} disabled={nd}/>
                     <label htmlFor="ccSaCheckbox">
                       <span><i className="material-icons">done</i></span>
                          Share Alike

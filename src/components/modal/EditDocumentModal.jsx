@@ -423,7 +423,7 @@ class EditDocumentModal extends React.Component {
                   </div>
                   <div className="col-12 col-sm-6">
                     <input type="checkbox" id="ccNdCheckboxEdit" onChange={(e) => this.handleCcNdCheckbox(e)}
-                           checked={nd}/>
+                           checked={sa ? false : nd} disabled={sa}/>
                     <label htmlFor="ccNdCheckboxEdit">
                       <span><i className="material-icons">done</i></span>
                         No Derivative Works
@@ -431,7 +431,7 @@ class EditDocumentModal extends React.Component {
                   </div>
                   <div className="col-12 col-sm-6">
                     <input type="checkbox" id="ccSaCheckboxEdit" onChange={(e) => this.handleCcSaCheckbox(e)}
-                           checked={sa}/>
+                           checked={nd ? false : sa} disabled={nd}/>
                     <label htmlFor="ccSaCheckboxEdit">
                       <span><i className="material-icons">done</i></span>
                          Share Alike

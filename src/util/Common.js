@@ -245,7 +245,7 @@ export default ({
   },
   curatorCalculateReward: (pool: number, v: number, tv: number, pv: number, tpvs: number) => {
     if (pool === 0 || v === 0 || tv === 0 || pv === 0 || tpvs === 0) return 0;
-    return (((pool * (Math.pow(pv, 2))) / tpvs) * v / tv);
+    return (pool * (Math.pow(pv, 2)/ tpvs)) * (v / tv);
   },
   jsonToQueryString: (json) => {
     return "?" +
@@ -277,6 +277,7 @@ export default ({
       if (i === result.latestPageviewList.length - 1) return totalReward;
     }
   },
+  // Creator N Days Total Reward
   getAuthorNDaysTotalReward(documentList: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
 
     if (!documentList || getCreatorDailyRewardPool <= 0 || !totalViewCountInfo) return;
@@ -354,9 +355,8 @@ export default ({
 
       if (documentList[k].depositList && documentList[k].latestPageview && documentList[k].latestVoteAmount) {
 
-        let y, m, d, tpvs, v, timestamp;
+        let pv, y, m, d, tpvs, v, timestamp;
         let reward = 0;
-        let pv = documentList[k].latestPageview;
         let tv = documentList[k].latestVoteAmount || 0;
 
         for (let i = 0; i < documentList[k].depositList.length; ++i) {
@@ -364,8 +364,10 @@ export default ({
           m = documentList[k].depositList[i].month;
           d = documentList[k].depositList[i].dayOfMonth;
           v = documentList[k].depositList[i].deposit;
-
           timestamp = documentList[k].depositList[i].timestamp;
+
+          pv = documentList[k].latestPageviewList[i].pv;
+
 
           for (let j = 0; j < totalViewCountInfo.length; ++j) {
             if (totalViewCountInfo[j]._id.year === y &&
@@ -392,9 +394,8 @@ export default ({
     for (let k = 0; k < documentList.length; ++k) {
       if (documentList[k].depositList && documentList[k].latestPageview && documentList[k].latestVoteAmount) {
 
-        let y, m, d, tpvs, v, timestamp;
+        let pv, y, m, d, tpvs, v, timestamp;
         let reward = 0;
-        let pv = documentList[k].latestPageview;
         let tv = documentList[k].latestVoteAmount;
 
         for (let i = 0; i < documentList[k].depositList.length; ++i) {
@@ -402,8 +403,9 @@ export default ({
           m = documentList[k].depositList[i].month;
           d = documentList[k].depositList[i].dayOfMonth;
           v = documentList[k].depositList[i].deposit;
-
           timestamp = documentList[k].depositList[i].timestamp;
+
+          pv = documentList[k].latestPageviewList[i].pv;
 
           for (let j = 0; j < totalViewCountInfo.length; ++j) {
             if (totalViewCountInfo[j]._id.year === y &&

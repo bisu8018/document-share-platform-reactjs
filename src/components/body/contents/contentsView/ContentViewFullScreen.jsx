@@ -168,20 +168,6 @@ class ContentViewFullScreen extends Component {
           </Fullscreen>
         </div>
 
-        {documentData.cc &&
-        <div className="cc-container">
-          <div className={"cc-wrapper"}>
-            <Tooltip title="This work is licensed under a Creative Commons Attribution 2.0 Generic License."
-                     placement="bottom">
-              <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/">
-                <img alt="Creative Commons License" className={"cc-img"}
-                     src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + documentData.cc + ".svg")}/>
-              </a>
-            </Tooltip>
-          </div>
-        </div>
-        }
-
         <div className="view_content">
           <div className="u_title pt-2 pb-2 mt-2 mb-2">   {documentData.title ? documentData.title : ""}</div>
 
@@ -298,6 +284,17 @@ class ContentViewFullScreen extends Component {
                   </TwitterShareButton>
                 </div>
               </Tooltip>
+
+
+              {documentData.cc &&
+                  <Tooltip title="This work is licensed under a Creative Commons Attribution 2.0 Generic License."
+                           placement="bottom">
+                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/">
+                      <img alt="Creative Commons License" className="cc-img"
+                           src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + documentData.cc + ".svg")}/>
+                    </a>
+                  </Tooltip>
+              }
             </div>
 
 
