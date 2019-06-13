@@ -2206,6 +2206,10 @@ button.close {
     display: table-row !important;
 }
 
+.d-table-row-group {
+    display: table-row-group !important;
+}
+
 .d-table-cell {
     display: table-cell !important;
 }
@@ -3090,6 +3094,14 @@ button.close {
     right: 0;
     left: 0;
     z-index: 4;
+}
+
+.right-0 {
+    right: 0;
+}
+
+.left-0 {
+    left: 0;
 }
 
 .jc-r {
@@ -6361,9 +6373,10 @@ dean
 }
 
 .btn-disabled {
-    border-color: #9e9e9e !important;
-    color: #9e9e9e !important;
+    border-color:#d2d2d2 !important;
+    color: #d2d2d2 !important;
     cursor: default !important;
+    pointer-events: none;
 }
 
 .btn-disabled:hover {
@@ -6567,6 +6580,42 @@ dean
 .viewer-btn:hover {
     color: #3681fe;
     border-color: #3681fe;
+}
+
+
+.chart-btn-wrapper {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+}
+
+.chart-btn {
+    cursor: pointer;
+    display: flex;;
+    background: white;
+    color: #4d4d4d;
+    border: 1px solid #b3b3b3;
+    border-radius: 2px;
+    width: 45px;
+    height: 25px;
+    -webkit-transition: 0.2s all ease-in-out;
+    transition: 0.2s all ease-in-out;
+    text-align: center;
+    padding-left: 2px;
+    padding-top: 1px;
+}
+
+.chart-btn:hover {
+    color: #3681fe;
+    border-color: #3681fe;
+}
+
+.chart-btn > i {
+    font-size: 20px;
+}
+
+.chart-btn > i:last-child {
+    margin-top: 1px !important;
 }
 
 .register-btn {
@@ -7358,6 +7407,26 @@ Dean*/
 }
 
 @media (max-width: 575px) {
+    .tracking_table .col1 {
+        width: 42%;
+        word-break: break-all;
+    }
+
+    .tracking_table .col2{
+        width: 16%;
+    }
+    .tracking_table .col3 {
+        width: 27%;
+    }
+    .tracking_table .col4 {
+        width: 15%;
+    }
+
+    .tracking_table th,
+    .tracking_table td {
+        padding: 7px 10px;
+    }
+
     .tags_menu_search_container input {
         margin-left: 0;
     }
@@ -7725,6 +7794,10 @@ Dean*/
     color: #3681fe;
 }
 
+
+
+
+
 /*2019-03-21
 Dean
 author tap list analytics*/
@@ -7871,8 +7944,7 @@ author tap list analytics*/
 .circular-chart-wrapper {
     display: inline-block;
     position: absolute;
-    left: 0;
-    top: 9px;
+    right: 73px;
 }
 
 .circular-chart {
@@ -7882,7 +7954,7 @@ author tap list analytics*/
     -webkit-transform: rotate(-90deg);
     -ms-transform: rotate(-90deg);
     transform: rotate(-90deg);
-    fill: #f4f4f4;
+    fill: #e6e6e6;
 }
 
 .circle {
@@ -7901,6 +7973,24 @@ author tap list analytics*/
     }
 }
 
+
+/*Dean
+2019-06-13
+Duration CSS*/
+.duration-wrapper {
+    position: relative;
+}
+
+.duration {
+    font-weight: 500;
+    color: #868686;
+    position: absolute;
+    display: inline-block;
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+    right: 120px;
+    top: 5px;
+}
 
 
 /*Dean
@@ -7950,33 +8040,17 @@ author tap list analytics*/
     color: white;
 }
 
-.tracking_table table {
+.tracking_table {
     width: 100%;
-    border-top: 1px solid #999;
     border-bottom: 1px solid #ccc;
-    table-layout: fixed;
 }
 
-.tracking_table table > tbody > tr:first-child {
-    background: #e6e6e6 !important;
+.tracking-table-tr:hover {
+    background: #f3f3f3;
 }
 
-.tracking_table table > tbody > tr:first-child > th {
-    color: #4d4d4d;
-    font-size: 14px;
-}
 
-.tracking_table th {
-    height: 30px;
-    padding: 0 15px;
-    font-weight: 400;
-    font-size: 15px;
-    color: #666666;
-    line-height: 1.3;
-    vertical-align: middle;
-}
-
-.tracking_table td {
+.tracking-table-td {
     padding: 10px 15px;
     border-top: 1px solid #e4e4e4;
     font-weight: 300;
@@ -7984,22 +8058,12 @@ author tap list analytics*/
     color: #4d4d4d;
 }
 
-.tracking_table .col2,
-.tracking_table .col3 {
-    text-align: center;
+.tracking-table-td:first-child {
+    padding-left: 0;
 }
 
-.tracking_table td a {
-    display: inline-block;
-    color: #666666;
-}
-
-.tracking_table td a:hover {
-    color: #3681fe;
-}
-
-.tracking_table tr:hover {
-    background-color: #f7f7f7;
+.tracking-table-td:last-child {
+    padding-right: 0;
 }
 
 .no-data {
@@ -8009,42 +8073,7 @@ author tap list analytics*/
     cursor: context-menu;
 }
 
-@media (max-width: 640px) {
-    .tracking_table .col1 {
-        width: 40%;
-        word-break: break-all;
-    }
-
-    .tracking_table .col2{
-        width: 20%;
-    }
-    .tracking_table .col3 {
-        width: 40%;
-    }
-
-    .tracking_table th,
-    .tracking_table td {
-        padding: 7px 10px;
-    }
-}
-
 @media (max-width: 420px) {
-    .tracking_table th {
-        font-size: 14px;
-    }
-
-    .tracking_table td {
-        font-size: 13px;
-    }
-
-    .tracking_table .col2 {
-        width: 12%;
-    }
-
-    .tracking_table .col3 {
-        width: 35%;
-    }
-
     .tracking_top .form-inline {
         width: 160px;
     }
@@ -9605,6 +9634,8 @@ Vote 모달 CSS
 }
 
 
+
+
 /*
 Footer
 2019-05-22 Dean
@@ -9642,6 +9673,9 @@ footer .footer-nav-divider:after {
 .footer-logo-img {
     width: 170px;
 }
+
+
+
 
 
 /*
@@ -9856,6 +9890,9 @@ Main Category CSS
 }
 
 
+
+
+
 /*
 프로필 카드 CSS
 2019-05-23 Dean
@@ -9917,6 +9954,9 @@ Main Category CSS
 }
 
 
+
+
+
 /*
 메뉴 CSS
 2019-05-23 Dean
@@ -9968,6 +10008,9 @@ Main Category CSS
     text-align: center;
     color: #b3b3b3;
 }
+
+
+
 
 
 /*
@@ -10024,6 +10067,11 @@ react tabs CSS
     color: #4d4d4d;;
     display: inline-block;
 }
+
+
+
+
+
 
 /*
 Ads CSS
@@ -10121,6 +10169,8 @@ Ads CSS
     top: 60px;
     width: 100%;
 }
+
+
 
 
 /*

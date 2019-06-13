@@ -10,6 +10,7 @@ export default connect(
     getShowAnonymous: state.audienceTracking.showAnonymous,
     getIncludeOnlyOnePage: state.audienceTracking.includeOnlyOnePage,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
+    getIsMobile: state.main.isMobile
   }),
   dispatch => ({
     setShowAnonymous: (showAnonymous: boolean, callback) => {

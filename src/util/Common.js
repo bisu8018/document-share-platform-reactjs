@@ -11,6 +11,22 @@ export default ({
     // daily YYYY-MM-DD 00:00:00(실행기준에서 전날 일자)
     return Math.floor(date / (60 * 60 * 24 * 1000)) * (60 * 60 * 24 * 1000);
   },
+  // change timestamp to duration
+  timestampToDuration: (timestamp) => {
+    let date = new Date(timestamp);
+
+    let h = date.getHours()-9;
+    h = h > 0 ? (h + " hour" + (h === 1 ? "" : "s")) + "  " : "";
+
+    let m = date.getMinutes();
+    m = m > 0 ? (m + " min" + (m === 1 ? "" : "s")) + "  " : "";
+
+    let s = date.getSeconds();
+    s =  s > 0 ? (s + " sec" + (s === 1 ? "" : "s")) + "  " : "";
+
+    if(h === "" && m === "" && s === "") return "";
+    else return "Duration: " + h + m + s;
+  },
   // change Timestamp to Datetime
   timestampToDateTime: (timestamp) => {
     let date = new Date(timestamp);
@@ -41,9 +57,9 @@ export default ({
     return (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
   },
   // change Timestamp to Time
-  timestampToTimeNotGmt: (timestamp) => {
+  timestampToTimeNotGmt: (timestamp) =>{
     let date = new Date(timestamp);
-    let hour = date.getHours()-9;
+    let hour = date.getHours() - 9;
     let min = date.getMinutes();
     let sec = date.getSeconds();
     return (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
@@ -85,7 +101,7 @@ export default ({
     return Math.floor((currentDate - lastDate) / (60 * 60 * 24 * 1000));
   },
   // Get Date Time Ago on Number
-  dateTimeAgo: (timestamp) => {
+  dateTimeAgo: (timestamp, isMobile) => {
     let currentDate = new Date();
     let lastDate = new Date(timestamp);
     let y = Math.floor((currentDate - lastDate) / (60 * 60 * 24 * 365 * 1000));
@@ -94,15 +110,15 @@ export default ({
     let m = Math.floor((currentDate - lastDate) / (60 * 1000));
     let s = Math.floor((currentDate - lastDate) / (1000));
 
-    if (y !== 0) return y + " year" + (y > 1 ? "s" : "") + " ago";
+    if (y !== 0) return y + (isMobile ? "y" : " year") + (y > 1 && !isMobile ? "s" : "") + " ago";
     else {
-      if (d !== 0) return d + " day" + (d > 1 ? "s" : "") + " ago";
+      if (d !== 0) return d + (isMobile ? "d" : " day") + (d > 1 && !isMobile ? "s" : "") + " ago";
       else {
-        if (h !== 0) return h + " hour" + (h > 1 ? "s" : "") + " ago";
+        if (h !== 0) return h + (isMobile ? "h" : " hour") + (h > 1 && !isMobile ? "s" : "") + " ago";
         else {
-          if (m !== 0) return m + " minute" + (m > 1 ? "s" : "") + " ago";
+          if (m !== 0) return m + (isMobile ? "m" : " minute") + (m > 1 && !isMobile ? "s" : "") + " ago";
           else {
-            return s + " second" + (s > 1 ? "s" : "") + " ago";
+            return s + (isMobile ? "s" : " second") + (s > 1 && !isMobile ? "s" : "") + " ago";
           }
         }
       }
@@ -245,7 +261,7 @@ export default ({
   },
   curatorCalculateReward: (pool: number, v: number, tv: number, pv: number, tpvs: number) => {
     if (pool === 0 || v === 0 || tv === 0 || pv === 0 || tpvs === 0) return 0;
-    return (pool * (Math.pow(pv, 2)/ tpvs)) * (v / tv);
+    return (pool * (Math.pow(pv, 2) / tpvs)) * (v / tv);
   },
   jsonToQueryString: (json) => {
     return "?" +
@@ -347,17 +363,16 @@ export default ({
     return totalReward;
   },
   // Curator N Days Total Reward
-  getCuratorNDaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, day: number, voteDocList: any) {
-    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !voteDocList) return;
+  getCuratorNDaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
+    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo) return;
 
     let totalReward = 0;
     for (let k = 0; k < documentList.length; ++k) {
 
       if (documentList[k].depositList && documentList[k].latestPageview && documentList[k].latestVoteAmount) {
 
-        let pv, y, m, d, tpvs, v, timestamp;
+        let tv, pv, y, m, d, tpvs, v, timestamp;
         let reward = 0;
-        let tv = documentList[k].latestVoteAmount || 0;
 
         for (let i = 0; i < documentList[k].depositList.length; ++i) {
           y = documentList[k].depositList[i].year;
@@ -367,7 +382,7 @@ export default ({
           timestamp = documentList[k].depositList[i].timestamp;
 
           pv = documentList[k].latestPageviewList[i].pv;
-
+          tv = documentList[k].totalDepositDailyList[i] || 0;
 
           for (let j = 0; j < totalViewCountInfo.length; ++j) {
             if (totalViewCountInfo[j]._id.year === y &&
@@ -387,16 +402,15 @@ export default ({
     }
   },
   // Curator 7 Days Total Reward
-  getCurator7DaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, voteDocList: any) {
-    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !voteDocList) return;
+  getCurator7DaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any) {
+    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo) return;
     let totalReward = 0;
 
     for (let k = 0; k < documentList.length; ++k) {
       if (documentList[k].depositList && documentList[k].latestPageview && documentList[k].latestVoteAmount) {
 
-        let pv, y, m, d, tpvs, v, timestamp;
+        let tv, pv, y, m, d, tpvs, v, timestamp;
         let reward = 0;
-        let tv = documentList[k].latestVoteAmount;
 
         for (let i = 0; i < documentList[k].depositList.length; ++i) {
           y = documentList[k].depositList[i].year;
@@ -406,6 +420,7 @@ export default ({
           timestamp = documentList[k].depositList[i].timestamp;
 
           pv = documentList[k].latestPageviewList[i].pv;
+          tv = documentList[k].totalDepositDailyList[i] || 0;
 
           for (let j = 0; j < totalViewCountInfo.length; ++j) {
             if (totalViewCountInfo[j]._id.year === y &&

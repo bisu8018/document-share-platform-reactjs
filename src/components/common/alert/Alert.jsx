@@ -35,6 +35,11 @@ class Alert extends React.PureComponent {
         msg = "Bad access.";   // 잘못된 접근경로
         break;
 
+      case 2003 :
+        status = "warning";
+        msg = "Requires login.";   // 로그인 필요
+        break;
+
       // 이메일 메세지 2031~
       case 2021 :
         status = "success";

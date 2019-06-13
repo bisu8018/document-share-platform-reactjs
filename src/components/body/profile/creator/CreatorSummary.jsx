@@ -11,9 +11,6 @@ class CreatorSummary extends React.Component {
     profileImage: "",
     userName: "",
     userNameEdit: false,
-    uploadDocumentList: [],
-    curatorEstimatedToday: 0,
-    curatorTotalRewards: 0
   };
 
   // 내 정보 GET
@@ -30,18 +27,6 @@ class CreatorSummary extends React.Component {
 
     getWeb3Apis.getBalance(userInfo.ethAccount, res => {
       this.setState({ balance: res });
-    });
-  };
-
-  // Curator 오늘 리워드 예측
-  getCuratorRewards = () => {
-    const { userInfo, getCuratorDailyRewardPool } = this.props;
-    MainRepository.Curator.getCuratorSummary(userInfo.ethAccount).then(res => {
-
-      this.setState({
-        curatorEstimatedToday: Common.toDeck(Common.getCuratorNDaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo, 0, res.voteDocList)),
-        curatorTotalRewards: Common.toDeck(Common.getCurator7DaysTotalReward(res.resultList, getCuratorDailyRewardPool, res.totalViewCountInfo, res.voteDocList))
-      });
     });
   };
 
@@ -112,16 +97,16 @@ class CreatorSummary extends React.Component {
 
     this.setState({ userName: userInfo.username });
     this.setState({ profileImage: userInfo.picture });
-
-    this.getCuratorRewards();
   }
 
   render() {
-    const { userInfo, getCreatorDailyRewardPool, uploadTotalViewCountInfo, uploadDocumentList } = this.props;
-    const { balance, curatorTotalRewards, curatorEstimatedToday, userNameEdit, userName, profileImage } = this.state;
+    const { userInfo, getCreatorDailyRewardPool, getCuratorDailyRewardPool, uploadTotalViewCountInfo, uploadDocumentList, voteDocumentList, voteTotalViewCountInfo } = this.props;
+    const { balance,  userNameEdit, userName, profileImage } = this.state;
 
     let author7DayReward = Common.toDeck(Common.getAuthor7DaysTotalReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo));
     let authorTodayReward = Common.toDeck(Common.getAuthorNDaysTotalReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo, 0));
+    let curatorEstimatedToday =  Common.toDeck(Common.getCuratorNDaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, 0));
+    let curatorTotalRewards=  Common.toDeck(Common.getCurator7DaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo));
 
     return (
 

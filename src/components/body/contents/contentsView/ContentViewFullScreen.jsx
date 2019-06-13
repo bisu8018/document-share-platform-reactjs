@@ -119,13 +119,13 @@ class ContentViewFullScreen extends Component {
 
   //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
-    const { getMyInfo, documentData } = this.props;
+    const { getMyInfo, documentData, setAlertCode } = this.props;
     if (!documentData) {
       console.log("getting document meta information!");
       return;
     }
     if (!MainRepository.Account.isAuthenticated() && !getMyInfo.email) {
-      MainRepository.Account.login();
+      return setAlertCode(2003);
     }
     const accountId = documentData.accountId;
     const documentId = documentData.documentId;
@@ -231,8 +231,8 @@ class ContentViewFullScreen extends Component {
                   totalViewCountInfo: totalViewCountInfo
                 }
               }}>
-                <div className="viewer-btn" onClick={() => Common.scrollTop()}><i
-                  className="material-icons">bar_chart</i> Tracking
+                <div className="viewer-btn" onClick={() => Common.scrollTop()}>
+                  <i className="material-icons">bar_chart</i> Tracking
                 </div>
               </Link></Tooltip>
             }
@@ -289,7 +289,8 @@ class ContentViewFullScreen extends Component {
               {documentData.cc &&
                   <Tooltip title="This work is licensed under a Creative Commons Attribution 2.0 Generic License."
                            placement="bottom">
-                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/">
+                    {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/" target="_blank">
                       <img alt="Creative Commons License" className="cc-img"
                            src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + documentData.cc + ".svg")}/>
                     </a>

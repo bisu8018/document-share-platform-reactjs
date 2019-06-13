@@ -3,7 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
 import MainRepository from "../../../../redux/MainRepository";
 import Common from "../../../../util/Common";
-import { ThreeBounce } from 'better-react-spinkit';
+import { ThreeBounce } from "better-react-spinkit";
 import NotFoundPage from "../../../common/NotFoundPage";
 import CuratorAnalyticsTabContainer from "../../../../container/body/profile/curator/CuratorAnalyticsTabContainer";
 import CreatorSummaryContainer from "../../../../container/body/profile/creator/CreatorSummaryContainer";
@@ -35,7 +35,7 @@ class Creator extends React.Component {
       console.error(err);
       setTimeout(() => {
         this.getProfileInfo(params);
-      },3000);
+      }, 3000);
     });
   };
 
@@ -65,7 +65,7 @@ class Creator extends React.Component {
 
   render() {
     const { getMyInfo } = this.props;
-    const { userInfo, errMessage, uploadDocumentList } = this.state;
+    const { userInfo, errMessage, uploadDocumentList, voteDocumentList } = this.state;
 
     let param = this.getParam();
     return (
@@ -74,9 +74,12 @@ class Creator extends React.Component {
         <div className="col-12 u__center">
 
           {userInfo &&
-          <CreatorSummaryContainer uploadDocumentList={uploadDocumentList.resultList}
-                                  uploadTotalViewCountInfo={uploadDocumentList.totalViewCountInfo}
-                                  userInfo={userInfo}/>
+          <CreatorSummaryContainer
+            uploadDocumentList={uploadDocumentList.resultList}
+            uploadTotalViewCountInfo={uploadDocumentList.totalViewCountInfo}
+            voteDocumentList={voteDocumentList.resultList}
+            voteTotalViewCountInfo={voteDocumentList.totalViewCountInfo}
+            userInfo={userInfo}/>
           }
 
           {!userInfo && !errMessage && <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}
