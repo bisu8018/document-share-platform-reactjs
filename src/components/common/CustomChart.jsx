@@ -1,5 +1,5 @@
 import React from "react";
-import { ThreeBounce } from 'better-react-spinkit';
+import { ThreeBounce } from "better-react-spinkit";
 import Chart from "react-google-charts";
 import Common from "../../util/Common";
 
@@ -8,6 +8,11 @@ import Common from "../../util/Common";
 
 class CustomChart extends React.Component {
   state = {
+    dataArr: [],
+    chartType: {
+      analyticsChartType: "AreaChart",
+      trackingChartType: "Bar",
+    },
     options: {
       analyticsOption: {
         title: "",
@@ -15,11 +20,29 @@ class CustomChart extends React.Component {
         hAxis: { title: "" },
         legend: { position: "top", maxLines: 3 }
       },
-      dataArr: []
+      trackingOption: {
+        title: "TOTAL TIME SPENT PER PAGE",
+        vAxis: { title: "" },
+        hAxis: { title: "" },
+      },
+    },
+    columns: {
+      analyticsColumns: [
+        {type: "number", label: "Date"},
+        {type: "number", label: "Visit Count"}
+      ],
+      trackingColumns : [
+        {type: "number",  label: "Page"},
+        {type: "date",  label: "Time Spend"},
+      ]
     }
   };
 
-  //props 데이터, 차트 데이터화 작업
+
+  /*======================================
+  ============== ANALYTICS =============
+  ======================================*/
+
   getAnalyticsData = () => {
     const { chartData, week, year } = this.props;
     let dataArr = [];
@@ -42,9 +65,8 @@ class CustomChart extends React.Component {
           dateTmp.setDate(dateTmp.getDate() - (i === 0 ? 0 : 1));
           dummyValue = Common.dateString(dateTmp);
         } else {
-          if (i === 0) {
-            dummyValue = Common.dateString(mondayFromWeekStart) + " ~ " + Common.dateString(new Date());
-          } else {
+          if (i === 0) dummyValue = Common.dateString(mondayFromWeekStart) + " ~ " + Common.dateString(new Date());
+          else {
             mondayFromWeekStart.setDate(mondayFromWeekStart.getDate() - 7);
             mondayFromWeekEnd.setDate(mondayFromWeekEnd.getDate() - 1);
             dummyValue = Common.dateString(mondayFromWeekStart) + " ~ " + Common.dateString(mondayFromWeekEnd);
@@ -68,9 +90,7 @@ class CustomChart extends React.Component {
         chartData.resultList.map((rst) => {
           let rstDate = rst.year + "-" + (rst.month < 10 ? "0" : "") + rst.month + "-" + (rst.dayOfMonth < 10 ? "0" : "") + rst.dayOfMonth;
           for (let i = 0; i < dataArr.length; ++i) {
-            if (dataArr[i][0] === rstDate) {
-              return dataArr[i][1] = rst.count;
-            }
+            if (dataArr[i][0] === rstDate) return dataArr[i][1] = rst.count;
           }
           return true;
         });
@@ -83,43 +103,89 @@ class CustomChart extends React.Component {
     return this.setState({ dataArr: dataArr.reverse() });
   };
 
+
+  /*======================================
+   ============== ANALYTICS =============
+   ======================================*/
+
+  getTrackingData = () => {
+    const { chartData } = this.props;
+    let dataArr = [["Page", "Time Spend"]];
+
+    for (let [key, value] of Object.entries(chartData)) {
+      console.log(typeof value);
+      console.log(Common.timestampToTimeNotGmt(value));
+      let tmpArr = [key, value];
+      dataArr.push(tmpArr);
+      //console.log(`${key}: ${value}`);
+    }
+
+    return this.setState({ dataArr: dataArr });
+  };
+
+
   componentWillMount(): void {
     const { subject } = this.props;
     switch (subject) {
+      // Profile - Analytics
       case "analytics" :
         this.getAnalyticsData();
         break;
-      case "etc":   //추후 차트 추가 시 작성
+
+      // Tracking
+      case "tracking" :
+        this.getTrackingData();
         break;
+
+
+      case "etc":
+        break;
+
+
       default :
         break;
     }
-
   }
 
   render() {
-    const { options, dataArr } = this.state;
+    const { options, columns, dataArr, chartType } = this.state;
     const { subject } = this.props;
 
     let _options = {};
+    let _columns = {};
+    let _chartType = {};
 
     switch (subject) {
+      // Profile - Analytics
       case "analytics" :
         _options = options.analyticsOption;
+        _columns = columns.analyticsColumns;
+        _chartType = chartType.analyticsChartType;
         break;
+
+      // Tracking
+      case "tracking" :
+        _options = options.trackingOption;
+        _columns = columns.trackingColumns;
+        _chartType = chartType.trackingChartType;
+        break;
+
       case "etc":   //추후 차트 추가 시 작성
         break;
+
       default :
         break;
     }
 
+
     return (
-      <div className="position-relative">
+      <div className="position-relative w-100">
         <Chart
           className="mt-5 mb-2"
-          chartType="AreaChart"
+          chartType={_chartType}
           data={dataArr}
           options={_options}
+          columns={_columns}
           width="100%"
           loader={<ThreeBounce name="ball-pulse-sync"/>}
           legendToggle
