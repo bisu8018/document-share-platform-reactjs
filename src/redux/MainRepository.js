@@ -40,7 +40,7 @@ export default {
     //Google Analytics 초기화
     //UA-129300994-1 : share
     //UA-140503497-1 : polaris
-    let gaId = process.env.NODE_ENV === "production" ? "UA-140503497-1" : "UA-129300994-1";
+    let gaId = process.env.NODE_ENV === "production" ? "UA-129300994-1" : "UA-129300994-1";
     if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "dev") {
       ReactGA.initialize(gaId, {
         debug: false,

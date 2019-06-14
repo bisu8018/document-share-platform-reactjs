@@ -351,7 +351,7 @@ class AudienceTrackingList extends React.Component {
 
           <div className="tracking_inner">
             <div className="col-sm-12 col-md-12 row tracking_top">
-              <div className="pl-0 tracking-list-title d-none d-sm-inline-block col-5 col-md-7 col-lg-9 mb-4">Visitors
+              <div className="pl-0 tracking-list-title d-none d-sm-inline-block col-5 col-md-7 col-lg-9 mb-3">Visitors
               </div>
 
               <div className="option-menu-btn d-inline-block d-sm-none"

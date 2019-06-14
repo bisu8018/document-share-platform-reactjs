@@ -2,7 +2,7 @@ export default class CuratorDocuments {
   resultList: [];
   pageNo: number;
   totalViewCountInfo: any;
-  totalDepositDailyList: any;
+  latestRewardVoteList: any;
   count: number;
 
   constructor(data) {
@@ -10,7 +10,7 @@ export default class CuratorDocuments {
     this.count = data.count ? data.count : 0;
     this.pageNo = data.pageNo ? data.pageNo : 0;
     this.totalViewCountInfo = data.totalViewCountInfo ? data.totalViewCountInfo : {};
-    this.totalDepositDailyList = data.totalDepositDailyList ? data.totalDepositDailyList : {};
+    this.latestRewardVoteList = data.latestRewardVoteList ? data.latestRewardVoteList : {};
   }
 
 }

@@ -16,13 +16,7 @@ class Bounty extends React.Component {
   state = {
     available: 0,
     isAuthenticated: false,
-    fullWidth: true,
     classicModal: false,
-    openLeft: false,
-    openTop: false,
-    openBottom: false,
-    openRight: false,
-    placement: "bottom"
   };
 
   handleClose = (modal) => {
@@ -50,6 +44,7 @@ class Bounty extends React.Component {
 
   componentDidUpdate = () => {
     const { getDrizzle, getWeb3Apis, getMyInfo } = this.props;
+    if(!getDrizzle || !getWeb3Apis || !getMyInfo) return false;
     let isAuthenticated = getDrizzle.isAuthenticated();
     if (isAuthenticated && !this.state.isAuthenticated) {
       getWeb3Apis.getBountyAvailable(getMyInfo.ethAccount).then((data) => {

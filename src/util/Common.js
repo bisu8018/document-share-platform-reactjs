@@ -15,16 +15,16 @@ export default ({
   timestampToDuration: (timestamp) => {
     let date = new Date(timestamp);
 
-    let h = date.getHours()-9;
+    let h = date.getHours() - 9;
     h = h > 0 ? (h + " hour" + (h === 1 ? "" : "s")) + "  " : "";
 
     let m = date.getMinutes();
     m = m > 0 ? (m + " min" + (m === 1 ? "" : "s")) + "  " : "";
 
     let s = date.getSeconds();
-    s =  s > 0 ? (s + " sec" + (s === 1 ? "" : "s")) + "  " : "";
+    s = s > 0 ? (s + " sec" + (s === 1 ? "" : "s")) + "  " : "";
 
-    if(h === "" && m === "" && s === "") return "";
+    if (h === "" && m === "" && s === "") return "";
     else return "Duration: " + h + m + s;
   },
   // change Timestamp to Datetime
@@ -57,7 +57,7 @@ export default ({
     return (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
   },
   // change Timestamp to Time
-  timestampToTimeNotGmt: (timestamp) =>{
+  timestampToTimeNotGmt: (timestamp) => {
     let date = new Date(timestamp);
     let hour = date.getHours() - 9;
     let min = date.getMinutes();
@@ -216,6 +216,11 @@ export default ({
 
     return email.match(regExp);
   },
+  checkUsernameForm: (name: string) => {
+    let regExp = /^[a-z0-9+]*$/;
+
+    return name.match(regExp);
+  },
   toDollar: (deck: string) => {
     let c = 0.005;
     let d = new BigNumber("1e+18");
@@ -295,30 +300,33 @@ export default ({
   },
   // Creator N Days Total Reward
   getAuthorNDaysTotalReward(documentList: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
-
     if (!documentList || getCreatorDailyRewardPool <= 0 || !totalViewCountInfo) return;
     let totalReward = 0;
+
     for (let k = 0; k < documentList.length; ++k) {
-      if (documentList[k].latestPageviewList) {
+      let dk = documentList[k];
+      if (dk.latestPageviewList) {
         let y, m, d, pv, tpv, timestamp;
         let reward = 0;
 
-        for (let i = 0; i < documentList[k].latestPageviewList.length; ++i) {
-          y = documentList[k].latestPageviewList[i].year;
-          m = documentList[k].latestPageviewList[i].month;
-          d = documentList[k].latestPageviewList[i].dayOfMonth;
-          pv = documentList[k].latestPageviewList[i].pv;
-          timestamp = documentList[k].latestPageviewList[i].timestamp;
+        for (let i = 0; i < dk.latestPageviewList.length; ++i) {
+          let di =  dk.latestPageviewList[i];
+          y = di.year;
+          m = di.month;
+          d = di.dayOfMonth;
+          pv = di.pv;
+          timestamp = di.timestamp;
 
           for (let j = 0; j < totalViewCountInfo.length; ++j) {
-            if (totalViewCountInfo[j]._id.year === y &&
-              totalViewCountInfo[j]._id.month === m &&
-              totalViewCountInfo[j]._id.dayOfMonth === d) {
-              tpv = totalViewCountInfo[j].totalPageview;
+            let tj = totalViewCountInfo[j];
+            if (tj._id.year === y &&
+              tj._id.month === m &&
+              tj._id.dayOfMonth === d) {
+              tpv = tj.totalPageview;
             }
           }
           if (this.dateAgo(timestamp) <= day) reward += this.authorCalculateReward(pv, tpv, getCreatorDailyRewardPool);
-          if (i === documentList[k].latestPageviewList.length - 1) totalReward += reward;
+          if (i === dk.latestPageviewList.length - 1) totalReward += reward;
         }
       }
       if (k === documentList.length - 1) {
@@ -332,29 +340,31 @@ export default ({
     let totalReward = 0;
 
     for (let k = 0; k < documentList.length; ++k) {
-      if (documentList[k].latestPageviewList) {
+      let dk = documentList[k];
+      if (dk.latestPageviewList) {
         let y, m, d, pv, tpv, timestamp;
         let reward = 0;
 
-        for (let i = 0; i < documentList[k].latestPageviewList.length; ++i) {
-          y = documentList[k].latestPageviewList[i].year;
-          m = documentList[k].latestPageviewList[i].month;
-          d = documentList[k].latestPageviewList[i].dayOfMonth;
-          pv = documentList[k].latestPageviewList[i].pv;
-          timestamp = documentList[k].latestPageviewList[i].timestamp;
+        for (let i = 0; i < dk.latestPageviewList.length; ++i) {
+          let di = dk.latestPageviewList[i];
+          y = di.year;
+          m = di.month;
+          d = di.dayOfMonth;
+          pv = di.pv;
+          timestamp = di.timestamp;
 
           for (let j = 0; j < totalViewCountInfo.length; ++j) {
-            if (totalViewCountInfo[j]._id.year === y &&
-              totalViewCountInfo[j]._id.month === m &&
-              totalViewCountInfo[j]._id.dayOfMonth === d) {
-              tpv = totalViewCountInfo[j].totalPageview;
+            let tj = totalViewCountInfo[j];
+            if (tj._id.year === y &&
+              tj._id.month === m &&
+              tj._id.dayOfMonth === d) {
+              tpv = tj.totalPageview;
             }
           }
           if (this.dateAgo(timestamp) <= 7 && this.dateAgo(timestamp) > 0) {
             reward += this.authorCalculateReward(pv, tpv, getCreatorDailyRewardPool);
-            //console.log(reward);
           }
-          if (i === documentList[k].latestPageviewList.length - 1) {
+          if (i === dk.latestPageviewList.length - 1) {
             totalReward += reward;
           }
         }
@@ -362,80 +372,100 @@ export default ({
     }
     return totalReward;
   },
+
+
   // Curator N Days Total Reward
-  getCuratorNDaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
-    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo) return;
-
+  getCuratorNDaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, day: number, latestRewardVoteList: any) {
+    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
     let totalReward = 0;
+
     for (let k = 0; k < documentList.length; ++k) {
+      const dk = documentList[k];
 
-      if (documentList[k].depositList && documentList[k].latestPageview && documentList[k].latestVoteAmount) {
+      if (dk.depositList && dk.latestPageviewList) {
+        let y, m, d, tpvs, v, timestamp, reward = 0, tv = 0, pv = 0;
 
-        let tv, pv, y, m, d, tpvs, v, timestamp;
-        let reward = 0;
-
-        for (let i = 0; i < documentList[k].depositList.length; ++i) {
-          y = documentList[k].depositList[i].year;
-          m = documentList[k].depositList[i].month;
-          d = documentList[k].depositList[i].dayOfMonth;
-          v = documentList[k].depositList[i].deposit;
-          timestamp = documentList[k].depositList[i].timestamp;
-
-          pv = documentList[k].latestPageviewList[i].pv;
-          tv = documentList[k].totalDepositDailyList[i] || 0;
-
-          for (let j = 0; j < totalViewCountInfo.length; ++j) {
-            if (totalViewCountInfo[j]._id.year === y &&
-              totalViewCountInfo[j]._id.month === m &&
-              totalViewCountInfo[j]._id.dayOfMonth === d) {
-              tpvs = totalViewCountInfo[j].totalPageviewSquare;
+        for (let i = 0; i < latestRewardVoteList.length; ++i) {
+          if (dk._id === latestRewardVoteList[i]._id) {
+            for (let j = 0; j < latestRewardVoteList[i].latestDepositDailyList.length; ++j) {
+              tv += latestRewardVoteList[i].latestDepositDailyList[j].deposit || 0;
             }
           }
-          if (this.dateAgo(timestamp) <= day) {
-            reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
-          }
-          if (i === documentList[k].depositList.length - 1) totalReward += reward;
         }
-        if (k === documentList.length - 1) return totalReward;
 
+
+        for (let i = 0; i < dk.depositList.length; ++i) {
+          const di = dk.depositList[i];
+          y = di.year;
+          m = di.month;
+          d = di.dayOfMonth;
+          v = di.deposit;
+          timestamp = di.created;
+
+          for (let j = 0; j < dk.latestPageviewList.length; ++j) {
+            const dj = dk.latestPageviewList[j];
+            if (dj.year === y && dj.month === m && dj.dayOfMonth === d) pv += dj.pv;
+          }
+
+          for (let j = 0; j < totalViewCountInfo.length; ++j) {
+            const tj = totalViewCountInfo[j];
+            if (tj._id.year === y && tj._id.month === m && tj._id.dayOfMonth === d) tpvs = tj.totalPageviewSquare;
+          }
+          if (this.dateAgo(timestamp) <= day) reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
+          if (i === dk.depositList.length - 1) totalReward += reward;
+        }
+
+
+        if (k === documentList.length - 1) return totalReward;
       }
     }
   },
+
+
   // Curator 7 Days Total Reward
-  getCurator7DaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any) {
-    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo) return;
+  getCurator7DaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, latestRewardVoteList: any) {
+    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
     let totalReward = 0;
 
     for (let k = 0; k < documentList.length; ++k) {
-      if (documentList[k].depositList && documentList[k].latestPageview && documentList[k].latestVoteAmount) {
+      const dk = documentList[k];
 
-        let tv, pv, y, m, d, tpvs, v, timestamp;
-        let reward = 0;
+      if (dk.depositList && dk.latestPageviewList) {
+        let y, m, d, tpvs, v, timestamp, reward = 0, tv = 0, pv = 0;
 
-        for (let i = 0; i < documentList[k].depositList.length; ++i) {
-          y = documentList[k].depositList[i].year;
-          m = documentList[k].depositList[i].month;
-          d = documentList[k].depositList[i].dayOfMonth;
-          v = documentList[k].depositList[i].deposit;
-          timestamp = documentList[k].depositList[i].timestamp;
+        for (let i = 0; i < latestRewardVoteList.length; ++i) {
+          if (dk._id === latestRewardVoteList[i]._id) {
+            for (let j = 0; j < latestRewardVoteList[i].latestDepositDailyList.length; ++j) {
+              tv += latestRewardVoteList[i].latestDepositDailyList[j].deposit || 0;
+            }
+          }
+        }
 
-          pv = documentList[k].latestPageviewList[i].pv;
-          tv = documentList[k].totalDepositDailyList[i] || 0;
+
+        for (let i = 0; i < dk.depositList.length; ++i) {
+          const di = dk.depositList[i];
+          y = di.year;
+          m = di.month;
+          d = di.dayOfMonth;
+          timestamp = di.created;
+          v = dk.deposit;
+
+          for (let j = 0; j < dk.latestPageviewList.length; ++j) {
+            const dj = dk.latestPageviewList[j];
+            if (dj.year === y && dj.month === m && dj.dayOfMonth === d) pv += dj.pv;
+          }
 
           for (let j = 0; j < totalViewCountInfo.length; ++j) {
-            if (totalViewCountInfo[j]._id.year === y &&
-              totalViewCountInfo[j]._id.month === m &&
-              totalViewCountInfo[j]._id.dayOfMonth === d) {
-              tpvs = totalViewCountInfo[j].totalPageviewSquare;
-            }
+            const tj = totalViewCountInfo[j];
+            if (tj._id.year === y && tj._id.month === m && tj._id.dayOfMonth === d) tpvs = tj.totalPageviewSquare;
           }
 
           if (this.dateAgo(timestamp) <= 7 && this.dateAgo(timestamp) > 0) reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
-          if (i === documentList[k].depositList.length - 1) totalReward += reward;
+          if (i === dk.depositList.length - 1) totalReward += reward;
         }
-        if (k === documentList.length - 1) {
-          return totalReward;
-        }
+
+
+        if (k === documentList.length - 1) return totalReward;
       }
     }
   }

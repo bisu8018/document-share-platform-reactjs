@@ -49,17 +49,17 @@ class EmailModal extends React.Component {
   validateCheckBox = () => {
     const { policyChecked } = this.state;
     const termsCheckbox = document.getElementById("termsCheckbox").nextElementSibling.firstChild;
-    if(policyChecked) {
-      termsCheckbox.style.border = "1px solid #7fc241"
-    }else{
-      termsCheckbox.style.border = "1px solid #f92121"
+    if (policyChecked) {
+      termsCheckbox.style.border = "1px solid #7fc241";
+    } else {
+      termsCheckbox.style.border = "1px solid #f92121";
     }
 
     return policyChecked;
   };
 
   setSessionInfo = (data) => {
-    const {setTempEmail} = this.props;
+    const { setTempEmail } = this.props;
     setTempEmail(data.email);
   };
 
@@ -107,7 +107,7 @@ class EmailModal extends React.Component {
   };
 
   handleCheckbox = (e) => {
-    this.setState({policyChecked : e.target.checked}, () => {
+    this.setState({ policyChecked: e.target.checked }, () => {
       this.validateCheckBox();
     });
   };
@@ -147,11 +147,12 @@ class EmailModal extends React.Component {
               </DialogContent>
 
               <DialogContent id="classic-modal-slide-policy" className="overflow-hidden mb-n3">
-                <input type="checkbox" id="termsCheckbox"  onClick={(e) => this.handleCheckbox(e)}/>
+                <input type="checkbox" id="termsCheckbox" onClick={(e) => this.handleCheckbox(e)}/>
                 <label htmlFor="termsCheckbox">
                   <span><i className="material-icons">done</i></span>
                   I agree to submit this information, which will be collected and used according to
-                    <a className="checkbox-policy-link" target="_blank" href={"/legal/policy.html"} rel="noopener noreferrer"
+                    <a className="checkbox-policy-link" target="_blank" href={"/legal/policy.html"}
+                       rel="noopener noreferrer"
                        title="Read decompany’s privacy policy."> Decompany’s privacy policy.</a>
                 </label>
               </DialogContent>

@@ -29,7 +29,7 @@ class ContentMain extends Component {
       console.error(err);
       setTimeout(() => {
         this.getDocuments(path);
-      },3000)
+      }, 3000);
     });
   };
 
@@ -95,7 +95,7 @@ class ContentMain extends Component {
       "latest", "featured", "popular"
     ];
 
-    let countCards = (window.innerWidth > 1293 || window.innerWidth < 993) ? 4 : 6;
+    let countCards = (window.innerWidth > 1293 || window.innerWidth < 993) ? 4 : 4;   // 모바일 체크 실시간 작업 전까진 6대신 4로 유지
 
     return (
       <div className="row">
@@ -111,22 +111,29 @@ class ContentMain extends Component {
           >
             {subject.map((arr, idx) => (
               <div className="main-banner-text" key={idx}>
-                <div className="main-banner-subject d-inline-block">{arr}</div>
-                <div className="main-banner-content mb-4">
-                  {content[idx].split("\n").map((line, idx) => (
-                    <div key={idx}>{line}</div>)
-                  )}
+
+                <div className="main-banner-wrapper">
+                  <div>
+                    <div className="main-banner-subject d-inline-block">{arr}</div>
+                    <div className="main-banner-content mb-4">
+                      {content[idx].split("\n").map((line, idx) => (
+                        <div key={idx}>{line}</div>)
+                      )}
+                    </div>
+                    {idx === 3 ?
+                      <div className="main-upload-btn mr-2 ml-2 mb-3"
+                           onClick={() => this.handleUploadBtn()}>{buttonText[3]}</div> :
+                      <div className="main-upload-btn mr-2 ml-2 mb-3"
+                           onClick={() => this.handleLogin()}>{buttonText[idx]}</div>
+                    }
+                    <Link to="/faq">
+                      <div className="main-learn-more-btn ml-2 mr-2" onClick={() => Common.scrollTop()}>Learn more</div>
+                    </Link>
+                  </div>
                 </div>
-                {idx === 3 ?
-                  <div className="main-upload-btn mr-2 ml-2 mb-3"
-                       onClick={() => this.handleUploadBtn()}>{buttonText[3]}</div> :
-                  <div className="main-upload-btn mr-2 ml-2 mb-3"
-                       onClick={() => this.handleLogin()}>{buttonText[idx]}</div>
-                }
-                <Link to="/faq">
-                  <div className="main-learn-more-btn ml-2 mr-2" onClick={() => Common.scrollTop()}>Learn more</div>
-                </Link>
+
                 <div className={"main-banner-img-wrapper main-banner-img" + (idx + 1)}/>
+
                 <img src="" data-src={require("assets/image/banner/img-banner-0" + (idx + 1) + ".png")} alt=""/>
               </div>
             ))}

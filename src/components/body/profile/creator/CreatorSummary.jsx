@@ -11,12 +11,36 @@ class CreatorSummary extends React.Component {
     profileImage: "",
     userName: "",
     userNameEdit: false,
+    errMsg: ""
   };
+
+
+  //유저 네임 유효성 체크
+  userNameValidate = (name) => {
+    if (!name || name.length < 1) {
+      this.setState({ errMsg: "Please input the user name." });
+      return false;
+    }
+    if (!Common.checkUsernameForm(name)) {
+      this.setState({ errMsg: "Only allow english and numeric." });
+      return false;
+    }
+    if (name.length < 4 || name.length > 20) {
+      this.setState({ errMsg: "Enter 4 to 20 digits with a mix of letters and numbers." });
+      return false;
+    }
+    if (this.state.errMsg !== "") this.setState({ errMsg: "" }, () => {
+      return true;
+    });
+
+  };
+
 
   // 내 정보 GET
   getMyInfo = () => {
     return MainRepository.Account.getMyInfo();
   };
+
 
   // 잔액 조회
   getBalance = () => {
@@ -30,10 +54,12 @@ class CreatorSummary extends React.Component {
     });
   };
 
+
   // file upload
   handleFileUpload = () => {
     document.getElementById("imgFile").click();
   };
+
 
   //file input 등록/변경 시, url get
   handleFileChange = (e) => {
@@ -59,6 +85,7 @@ class CreatorSummary extends React.Component {
     });
   };
 
+
   //username 수정 시
   handleClickEvent = () => {
     this.setState({ userNameEdit: true }, () => {
@@ -66,31 +93,40 @@ class CreatorSummary extends React.Component {
     });
   };
 
+
   //username 수정 취소 시
   handleCancelEvent = () => {
     const { userInfo } = this.props;
-    this.setState({ userName: userInfo.username });
-    this.setState({ userNameEdit: false });
+    this.setState({ userName: userInfo.username, userNameEdit: false, errMsg: "" });
   };
+
 
   //수정 버튼 핸들
   handleEditBtn = () => {
-    let userNameValue = document.getElementById("userNameEditInput").value;
-    MainRepository.Account.updateUsername(userNameValue, () => {
-      this.setState({ userNameEdit: false });
-      this.setState({ userName: userNameValue });
-    });
+    let name = document.getElementById("userNameEditInput").value;
+    if (this.userNameValidate(name) && this.state.errMsg === "") {
+      let userNameValue = document.getElementById("userNameEditInput").value;
+      MainRepository.Account.updateUsername(userNameValue, () => {
+        this.setState({ userNameEdit: false });
+        this.setState({ userName: userNameValue });
+      });
+    }
   };
+
 
   //유져네임 수정 상태 핸들
   handleChangeUsername = (e) => {
-    this.setState({ userName: e.target.value });
+    let name = e.target.value;
+    this.userNameValidate(name);
+    this.setState({ userName: name });
   };
+
 
   shouldComponentUpdate = () => {
     this.getBalance();    // 잔액 조회
     return true;
   };
+
 
   componentWillMount(): void {
     const { userInfo } = this.props;
@@ -100,13 +136,13 @@ class CreatorSummary extends React.Component {
   }
 
   render() {
-    const { userInfo, getCreatorDailyRewardPool, getCuratorDailyRewardPool, uploadTotalViewCountInfo, uploadDocumentList, voteDocumentList, voteTotalViewCountInfo } = this.props;
-    const { balance,  userNameEdit, userName, profileImage } = this.state;
+    const { userInfo, getCreatorDailyRewardPool, getCuratorDailyRewardPool, uploadTotalViewCountInfo, uploadDocumentList, voteDocumentList, voteTotalViewCountInfo, latestRewardVoteList } = this.props;
+    const { balance, userNameEdit, userName, profileImage, errMsg } = this.state;
 
     let author7DayReward = Common.toDeck(Common.getAuthor7DaysTotalReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo));
     let authorTodayReward = Common.toDeck(Common.getAuthorNDaysTotalReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo, 0));
-    let curatorEstimatedToday =  Common.toDeck(Common.getCuratorNDaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, 0));
-    let curatorTotalRewards=  Common.toDeck(Common.getCurator7DaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo));
+    let curatorEstimatedToday = Common.toDeck(Common.getCuratorNDaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, 0, latestRewardVoteList));
+    let curatorTotalRewards = Common.toDeck(Common.getCurator7DaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, latestRewardVoteList));
 
     return (
 
@@ -141,10 +177,13 @@ class CreatorSummary extends React.Component {
               {userNameEdit &&
               <span className="d-flex">
                 <input type="text" id="userNameEditInput" placeholder="User Name . . ." value={this.state.userName}
-                       className="username-edit-input mr-2" onChange={(e) => this.handleChangeUsername(e)}/>
+                       className={"username-edit-input mr-2 " + (errMsg.length > 0 ? "username-edit-input-warning" : "")}
+                       onChange={(e) => this.handleChangeUsername(e)} spellCheck= "false" maxLength="20"/>
                 <div onClick={() => this.handleEditBtn()} className="username-edit-btn mr-2">Done</div>
                 <div onClick={() => this.handleCancelEvent()} className="username-cancel-btn">Cancel</div>
-              </span>}
+                {errMsg.length > 0 && <div className="username-edit-input-warning-msg">{errMsg}</div>}
+              </span>
+              }
             </div>
 
             <div className="profile_info_desc">

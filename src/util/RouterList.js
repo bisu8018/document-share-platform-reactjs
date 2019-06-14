@@ -11,6 +11,8 @@ import ContentListContainer from "../container/body/contents/ContentListContaine
 import Policies from "../components/body/faq/Policies";
 import emailVerifyContainer from "../container/etc/emailVerifyContainer";
 import Privacy from "../components/body/faq/Privacy";
+import About from "../components/body/faq/About";
+import Guide from "../components/body/faq/Guide";
 
 export default ({
     routes: [
@@ -68,6 +70,16 @@ export default ({
         path: "/privacy",
         name: "privacy",
         component: Privacy
+      },
+      {
+        path: "/about",
+        name: "about",
+        component: About
+      },
+      {
+        path: "/guide",
+        name: "guide",
+        component: Guide
       },
       {
         path: "/emailverify",

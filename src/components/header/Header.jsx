@@ -1,6 +1,5 @@
 import React from "react";
 import history from "apis/history/history";
-// import Bounty from "./Bounty";
 import MainRepository from "../../redux/MainRepository";
 import Common from "../../util/Common";
 import UploadDocumentModalContainer from "../../container/modal/UploadDocumentModalContainer";
@@ -8,6 +7,7 @@ import MenuContainer from "../../container/header/MenuContainer";
 import ProfileCardContainer from "../../container/common/ProfileCardContainer";
 import AdsContainer from "../../container/ads/AdsContainer";
 import SearchBarContainer from "../../container/header/SearchBarContainer";
+import Bounty from "./Bounty";
 
 class Header extends React.Component {
 
@@ -212,7 +212,7 @@ class Header extends React.Component {
 
             <div className="header-bar   col-8 col-md-3">
               <div className="mobile-header-search-btn d-inline-block d-sm-none" onClick={() => this.showSearchBar()}/>
-
+              {/*<Bounty/>*/}
               <UploadDocumentModalContainer {...this.props} />
 
 

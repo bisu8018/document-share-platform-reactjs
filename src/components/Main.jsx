@@ -13,6 +13,7 @@ import "react-tabs/style/react-tabs.css";
 import "react-tagsinput/react-tagsinput.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import AlertListContainer from "../container/common/alert/AlertListContainer";
+import DollarPolicyModal from "./modal/DollarPolicyModal";
 
 class Main extends Component {
   state = {
@@ -114,6 +115,7 @@ class Main extends Component {
 
           <div id="container" data-parallax="true">
             <CookiePolicyModal/>
+            <DollarPolicyModal/>
             <div className="container">
               <Switch>
                 {RouterList.routes.map((result, idx) => {

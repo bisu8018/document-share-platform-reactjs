@@ -79,6 +79,7 @@ class Creator extends React.Component {
             uploadTotalViewCountInfo={uploadDocumentList.totalViewCountInfo}
             voteDocumentList={voteDocumentList.resultList}
             voteTotalViewCountInfo={voteDocumentList.totalViewCountInfo}
+            latestRewardVoteList={voteDocumentList.latestRewardVoteList}
             userInfo={userInfo}/>
           }
 

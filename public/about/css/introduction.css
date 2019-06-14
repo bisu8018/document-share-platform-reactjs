@@ -1,7 +1,7 @@
 @charset "utf-8";
 html,body {min-width:320px;}
 body {margin:0; padding:0; font-size:16px; color:#4d4d4d;}
-* {margin:0; padding:0; font-family:'Roboto', sans-serif; word-break:keep-all}
+* {margin:0; padding:0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;  word-break:keep-all}
 fieldset {border:none}
 legend {display:none;}
 dt,dd,li {list-style:none;}
@@ -15,7 +15,7 @@ h2 {font-family:'Poppins', sans-serif}
 fieldset#email {margin:24px 0 0;}
 fieldset#email p {font-size:24px; line-height:54px; color:#fff;}
 fieldset#email p span {position:relative; top:2px;}
-fieldset#email input[type=email] {width:308px; height:54px; margin: 0 34px; text-align:center; font-size:18px;  background:none; border:none; border-bottom:1px solid #fff; color:#fff; outline:0}
+fieldset#email input[type=email] {width:308px; height:54px; margin: 0 34px; text-align:center; font-size:22px;  background:none; border:none; border-bottom:1px solid #fff; color:#fff; outline:0}
 fieldset#email button {width:180px; height:54px; border-radius:6px;  width:147px; font-size:20px; font-weight:bold; color:#2a6fea; background-color:#fff59c; border:none}
 
 #wrapper {}
@@ -25,25 +25,25 @@ header {height:698px; background:url(../img/invalid-name.png) no-repeat, linear-
 header h1 {position:absolute; top:31px; width:210px; height:31px; text-indent: -999em; background: url(../img/bi.png) no-repeat; background-size:210px 31px;}
 header h1 a {display:inline-block; width:210px; height:31px;}
 header div.box {text-align:center;}
-header h2 {padding:93px 0 0; font-size:50px; font-weight:600; font-style:normal; line-height: 1.24;  letter-spacing:-0.2px;  text-align:center;  color:#fff;}
+header h2 {padding:139px 0 0; font-size:50px; font-weight:600; font-style:normal; line-height: 1.24;  letter-spacing:-0.2px;  text-align:center;  color:#fff;}
 header a.home {margin:45px 0 17px; background-color:#fff; color: #2b86fb;}
 header p.txt {font-size:20px; font-weight:bold; color:#fff;}
 header p.txt em {font-weight:100;}
 header h3 {margin:77px 0 24px; font-size:26px; color: #fff59c;}
 header fieldset#email {margin:0}
 
-.about h2, .reasons h2, .reasons h2, .step h2, .upload h2, .process h2, .roadmap h2 {padding-top:72px; font-size:42px; color:#4d4d4d; text-align:center;}
+.about h2, .reasons h2, .reasons h2, .step h2, .upload h2, .process h2, .roadmap h2 {padding-top:98px; font-size:42px; color:#4d4d4d; text-align:center;}
 
 .about {clear:both; padding-bottom:22px;}
 .about h2 {padding-bottom:25px;}
 .about h3 {font-size:25px; color:#2e3191;}
 .about ul {margin:64px 0 0;}
 .about li {float:left; width:50%; height:136px; margin:0 0 54px;}
-.about li span {display: inline-block; padding:0 0 0 151px;}
-.about li strong {display:block; padding:24px 0 8px; font-size:24px; }
-.about li em {display:block; font-size:16px; color:#3681fe}
+.about li span {display: inline-block; padding:0 0 0 151px;	font-family: "HelveticaNeue-Light", sans-serif; line-height: 16px}
+.about li strong {display:block; padding:54px 0 8px; font-size:24px;font-family: "HelveticaNeue-Medium", sans-serif}
+.about li em {display:block; font-size:16px; color:#3681fe; font-family: "HelveticaNeue-regular", sans-serif}
 .about li.about-01 {background:url(../img/about-01.png) no-repeat;}
-.about li.about-02 {background:url(../img/about-02.png) no-repeat;}
+.about li.about-02 {background:url(../img/about-02.png) no-repeat; background-position: 0 7px;}
 .about li.about-03 {background:url(../img/about-03.png) no-repeat;}
 .about li.about-04 {background:url(../img/about-04.png) no-repeat;}
 .about li.about-01, .about li.about-02, .about li.about-03, .about li.about-04 {background-size:136px 136px;}
@@ -72,7 +72,7 @@ header fieldset#email {margin:0}
 .upload {background-image: linear-gradient(to bottom, #d8f8ee, #9ac6ff);}
 .upload h2, .upload h3 {color:#2e3191;}
 .upload h2 {padding-bottom:119px;}
-.upload h3 {padding:49px 0 98px; font-size:42px; text-align:center;}
+.upload h3 {padding:49px 0 98px; font-size:42px; text-align:center;font-family: "Poppins", sans-serif}
 .upload img.mobile {display:none;}
 .upload-img {width: 100%; margin: auto;}
 .upload-knowledge-img {display: grid;}
@@ -82,6 +82,10 @@ header fieldset#email {margin:0}
 .process ul {padding:48px 0 0;}
 .process li {display:inline-block; width:26%; margin:0 3%; text-align:center; vertical-align:top; font-size:16px;}
 .process li strong {display:block; padding:0 0 12px; font-size:24px;}
+.process .box > p {display: flex; justify-content: center}
+.process .box > p > img:first-child {width: 100%; max-width:1051px; max-height:466px}
+.process .box > p > img:last-child {display: none}
+.process .box > ul {text-align: center}
 
 .roadmap {height:720px; background:url(../img/roadmap-bg.png) center 281px no-repeat;}
 .roadmap .box {}
@@ -90,10 +94,10 @@ header fieldset#email {margin:0}
 .roadmap dt {font-weight:bold;}
 .roadmap dt strong {display:block; margin:0 0 12px; font-size:26px; color:#1175f8}
 .roadmap dd {margin:10px 0 0; line-height:1.38}
-.roadmap dl.roadmap-01 {top:-94px; padding:0 0 48px; margin:0 -4px 0 0;}
-.roadmap dl.roadmap-02 {top:162px; padding:50px 0 0;}
-.roadmap dl.roadmap-03 {top: -115px; padding: 0 0 70px;}
-.roadmap dl.roadmap-04 {top: 97px; padding:186px 0 0; margin:0 0 0 -40px; background:url(../img/roadmap_bg02.png) center top no-repeat;background-size:57px 92px;}
+.roadmap dl.roadmap-01 {top:-117px; padding:0 0 48px; margin:0 -4px 0 0;}
+.roadmap dl.roadmap-02 {top:136px; padding:50px 0 0;}
+.roadmap dl.roadmap-03 {top: -139px; padding: 0 0 70px;}
+.roadmap dl.roadmap-04 {top: 71px; left: -1px;padding:186px 0 0; margin:0 0 0 -40px; background:url(../img/roadmap_bg02.png) center top no-repeat;background-size:57px 92px;}
 .roadmap dl.roadmap-01, .roadmap dl.roadmap-03 {background-position:center bottom;}
 .roadmap dl.roadmap-02, .roadmap dl.roadmap-04 {background-position:center top}
 
@@ -105,37 +109,39 @@ div.banner {height:124px; font-size:42px; font-weight:bold; line-height:124px; c
 footer {padding:36px 0 31px; color:#2b86fb; text-align:center}
 footer h1 {display:inline-block; width:210px; height:31px; vertical-align: top; text-indent: -999em; background: url(../img/footer_bi.png) no-repeat; background-size:210px 31px;}
 footer p.txt {display:inline-block; margin:3px 0 0 23px; font-weight:bold}
-footer p.txt em, footer p.txt span {display:inline-block; vertical-align: top; text-align: left; font-weight:100;; font-size:19px;}
+footer p.txt em, footer p.txt span {display:inline-block; vertical-align: top; text-align: left; font-weight:100; font-size:19px;}
 footer p.txt em {font-size:23px;}
 footer p.txt strong {font-size:23px; letter-spacing:1.4px}
 footer a.home {margin:0 0 0 25px; color:#2b86fb; border:1px solid #2b86fb}
 footer copyright {clear:both;display:block; margin:22px 0 0;text-align:center;}
 
+.alpha > em {font-family: “HelveticaNeue-Light”, sans-serif;}
 
 @media screen and (min-width:320px) and (max-width:767px) {
 	fieldset#email {padding:0 10px 40px;}
 	fieldset#email p {color:#3681fe; font-size:16px;}
 	fieldset#email p span.input-area {display:block; position:relative; padding:0 146px 0 0;}
 	fieldset#email p input[type=email] {width:100%; height:48px; margin:0; font-size:13px;  background:none; border:none; border-bottom:1px solid #3681fe;  color:#3681fe; outline:0}
-	fieldset#email p button {position:absolute; right:0; bottom:0; width:136px; height:54px; line-height:54px; background:none; font-size:18px; color:#2b86fb; border:1px solid #2b86fb}
+	fieldset#email p button {position:absolute; right:0; bottom:0; width:136px; height:48px; line-height:48px; background:none; font-size:18px; color:#2b86fb; border:1px solid #2b86fb}
 
 	#wrapper {min-width:320px; overflow:hidden}
 	header, #container, footer {}
 	div.box {width:100%; font-size:12px}
 	header {height:auto;}
 	header h1 {top:30px; left:19px; width:168px; height:25px; background-size:168px 25px} 
-	header h2 {padding:140px 0 0;font-size:28px;}
+	header h2 {padding:140px 0 0;font-size:28px;line-height: 40px}
 	header h3 {margin:40px 0 0; font-size:16px; color:#2e3191;}
 	.visual {padding:0 40px;}
 	header fieldset#email {padding:0 10px 40px; background:#f5f5f5;}
-	header a.home {width:100%; margin-top:87px;}
+	header a.home {width:100%; margin-top:54px;}
 	header p.txt {padding-bottom:60px;font-size:14px;}
 
 	
 	.about h2, .reasons h2, .reasons h2, .step h2, .upload h2, .process h2, .roadmap h2 {padding-top:40px; font-size:24px;}	
 	
 	.about {}
-	.about h3 {padding:0 11px; font-size:14px; color:#2e3191;}
+	.about h3 {padding:0 11px; font-size:14px; color:#2e3191; width: 70%; margin: auto;}
+	.about h3 > br {display: none;}
 	.about ul {margin: 26px 0 0;padding: 0 11px;padding: 0 11px;}
 	.about li, .step li, .process li {width:100%; margin:0}
 	.about li {float:none}
@@ -156,7 +162,7 @@ footer copyright {clear:both;display:block; margin:22px 0 0;text-align:center;}
 	.step li {padding:64px 0 0; font-size:16px}
 	.step li.step-01, .step li.step-02 {background-size:auto 60px;}
 	.step li.step-01 {border-right:none;}
-	.step li span.title {margin:0 auto 22px; width:72px; height:38px; line-height:38px; font-size:15px;}
+	.step li span.title {margin:0 auto 22px; width:72px; height:30px; line-height:30px; font-size:15px;}
 	.step fieldset#email {margin:20px 0 0}
 	.step fieldset#email p input[type=email] {width:100%;}
 
@@ -171,8 +177,10 @@ footer copyright {clear:both;display:block; margin:22px 0 0;text-align:center;}
 	.process h2 {padding-bottom:32px;}
 	.process p {padding:0 10px}
 	.process ul {padding:32px 10px 0;}
-	.process li {margin:0; padding:0 0 26px; font-size:14px;} 
-	.process li strong {padding:0 0 5px;font-size:16px;}
+	.process li {margin:0; padding:0 0 26px; font-size:14px;font-family: "HelveticaNeue-Lighit", sans-serif}
+	.process li strong {padding:0 0 5px;font-size:16px;font-family: "HelveticaNeue-Medium", sans-serif}
+	.process .box > p > img:first-child {display: none}
+	.process .box > p > img:last-child {display: block; width: 100%}
 	
 	div.banner {max-height:56px; line-height:26px; padding:37px 10px; font-size:20px;}
 
@@ -198,7 +206,7 @@ footer copyright {clear:both;display:block; margin:22px 0 0;text-align:center;}
 	.roadmap .box {}
 	.roadmap div.box div {position:relative; height:447px;background: url(../img/m-roadmap-bg.png) center 42px no-repeat;}
 	.roadmap dl {position:absolute;padding:0;width:40%;}
-	.roadmap dl.roadmap-01, .roadmap dl.roadmap-03 {left:50%;margin: 0 0 0 -9px;background-position:left top;text-align:left;padding:0 0 0 30px;background-size:15px 15px;}
+	.roadmap dl.roadmap-01, .roadmap dl.roadmap-03 {left:50%;margin: 0 0 0 -8px;background-position:left top;text-align:left;padding:0 0 0 30px;background-size:15px 15px;}
 	.roadmap dl.roadmap-02, .roadmap dl.roadmap-04 {left:auto;right: 50%; margin:0 -7px 0 0;background-position:right top;text-align:right;padding:0 30px 0 0;/* border:1px solid red; */}
 	.roadmap dl.roadmap-01 {top: 44px;}
 	.roadmap dl.roadmap-02 {top: 166px;background-size:15px 15px;}

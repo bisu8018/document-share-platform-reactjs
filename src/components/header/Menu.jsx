@@ -52,7 +52,9 @@ class Menu extends React.Component {
         {menuShow &&
         <div className="menu-wrapper">
           <div className="container">
-          <img className="menu-close-btn" onClick={() => this.menuHide()} src={require("assets/image/icon/i_close_menu" + (getIsMobile? "_mobile" : "") + ".svg")} alt="menu close button"/>
+            <img className="menu-close-btn" onClick={() => this.menuHide()}
+                 src={require("assets/image/icon/i_close_menu" + (getIsMobile ? "_mobile" : "") + ".svg")}
+                 alt="menu close button"/>
           </div>
 
           {(MainRepository.Account.isAuthenticated() || getTempEmail) &&
@@ -63,9 +65,9 @@ class Menu extends React.Component {
               <Link to={"/" + identification}
                     onClick={() => this.menuClick()}>
                 {getMyInfo.picture.length > 0 ?
-                <img src={getMyInfo.picture} className="avatar-menu" alt="Link to my profile"/> :
-                <img src={require("assets/image/icon/i_anonymous.png")} className="avatar"
-                     alt="Link to my profile"/>}
+                  <img src={getMyInfo.picture} className="avatar-menu" alt="Link to my profile"/> :
+                  <img src={require("assets/image/icon/i_anonymous.png")} className="avatar"
+                       alt="Link to my profile"/>}
                 <span className="avatar-name-menu">{identification}</span>
               </Link>
               :
@@ -79,10 +81,12 @@ class Menu extends React.Component {
 
 
           <div className="menu-content-list">
-            <a href="/about.html" title="Link to about us page">
-              <div className="menu-content-item">About Us</div>
-            </a>
-            <div className="menu-content-item">User Guide</div>
+            <Link to="/about">
+              <div className="menu-content-item" onClick={() => this.menuClick()}>About Us</div>
+            </Link>
+            <Link to="/guide">
+              <div className="menu-content-item" onClick={() => this.menuClick()}>User Guide</div>
+            </Link>
             <Link to="/faq">
               <div className="menu-content-item" onClick={() => this.menuClick()}>FAQ</div>
             </Link>
@@ -99,7 +103,8 @@ class Menu extends React.Component {
             <div className="menu-login-btn d-flex d-sm-none" onClick={() => this.handleLogin()}>Login</div> :
             <div className="menu-logout-btn d-flex d-sm-none" onClick={() => this.handleLogout()}>Sign out</div>
           }
-          {getTempEmail &&  <div className="menu-logout-btn d-flex d-sm-none" onClick={() => this.handleLogout()}>Sign out</div>}
+          {getTempEmail &&
+          <div className="menu-logout-btn d-flex d-sm-none" onClick={() => this.handleLogout()}>Sign out</div>}
         </div>
         }
 

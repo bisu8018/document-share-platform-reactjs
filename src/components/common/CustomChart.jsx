@@ -22,8 +22,8 @@ class CustomChart extends React.Component {
       },
       trackingOption: {
         title: "TOTAL TIME SPENT PER PAGE",
-        vAxis: { title: "" },
-        hAxis: { title: "" },
+        vAxis: { format: 'number' },
+        hAxis: { format: 'number' },
       },
     },
     columns: {
@@ -33,7 +33,7 @@ class CustomChart extends React.Component {
       ],
       trackingColumns : [
         {type: "number",  label: "Page"},
-        {type: "date",  label: "Time Spend"},
+        {type: "date",  label: "Time Spend Minutes"},
       ]
     }
   };
@@ -110,12 +110,10 @@ class CustomChart extends React.Component {
 
   getTrackingData = () => {
     const { chartData } = this.props;
-    let dataArr = [["Page", "Time Spend"]];
+    let dataArr = [["Page", "Time Spend Minutes"]];
 
     for (let [key, value] of Object.entries(chartData)) {
-      console.log(typeof value);
-      console.log(Common.timestampToTimeNotGmt(value));
-      let tmpArr = [key, value];
+      let tmpArr = [key, value/1000/60];
       dataArr.push(tmpArr);
       //console.log(`${key}: ${value}`);
     }
