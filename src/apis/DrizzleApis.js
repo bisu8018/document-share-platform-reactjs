@@ -1,19 +1,30 @@
 import { Drizzle, generateStore } from "drizzle";
-import DocumentReg from "apis/contracts-alpha/DocumentRegistry.json";
+import { store } from "../index";
+import MainRepository from "../redux/MainRepository";
+import { setAlertCode, setMyInfo } from "../redux/reducer/main";
+
+/*알파용 컨트랙*/
+/*import DocumentRegistry from "apis/contracts-alpha/DocumentRegistry.json";
 import Deck from "apis/contracts-alpha/Deck.json";
 import BountyOne from "apis/contracts-alpha/BountyOne.json";
 import Curator from "apis/contracts-alpha/Curator.json";
 import Creator from "apis/contracts-alpha/Creator.json";
-import RewardPool from "apis/contracts-alpha/RewardPool.json";
-import { store } from "../index";
-import MainRepository from "../redux/MainRepository";
-import { setAlertCode, setMyInfo } from "../redux/reducer/main";
+import RewardPool from "apis/contracts-alpha/RewardPool.json";*/
+
+/*개발계용 컨트랙*/
+import DocumentRegistry from "apis/contracts-dev/DocumentRegistry.json";
+import Deck from "apis/contracts-dev/Deck.json";
+import BountyOne from "apis/contracts-dev/BountyOne.json";
+import Curator from "apis/contracts-dev/Curator.json";
+import Creator from "apis/contracts-dev/Creator.json";
+import RewardPool from "apis/contracts-dev/RewardPool.json";
+
 
 const defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
 
 export default class DrizzleApis {
   options = {
-    contracts: [DocumentReg, Deck, BountyOne, Curator, Creator, RewardPool],  // 드리즐 컨트랙 설정,
+    contracts: [DocumentRegistry, Deck, BountyOne, Curator, Creator, RewardPool],  // 드리즐 컨트랙 설정,
     polls: {
       accounts: 10000,
     },

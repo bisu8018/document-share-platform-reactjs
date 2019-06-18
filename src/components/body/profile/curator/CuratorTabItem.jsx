@@ -10,7 +10,7 @@ class CuratorTabItem extends React.Component {
     super(props);
 
     this.state = {
-      ratio: null,
+      ratio: null
     };
   }
 
@@ -34,7 +34,7 @@ class CuratorTabItem extends React.Component {
     img.onload = () => {
       let height = img.height;
       let width = img.width;
-      this.setState({ratio : (width/height) });
+      this.setState({ ratio: (width / height) });
     };
   };
 
@@ -45,7 +45,7 @@ class CuratorTabItem extends React.Component {
 
   render() {
     const { document, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
-    const { ratio} = this.state;
+    const { ratio } = this.state;
 
     let reward = Common.toEther(Common.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7));
     let vote = Common.toEther(document.latestVoteAmount) || 0;
@@ -56,7 +56,8 @@ class CuratorTabItem extends React.Component {
 
       <div className="pl-3 pl-sm-0 pr-3 pr-sm-0 row u_center_inner">
 
-        <div className="pl-0 col-3 col-md-4 col-thumb">
+
+        <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
           <Link to={"/" + identification + "/" + document.seoTitle}>
             <div className="tab-thumbnail" onClick={Common.scrollTop()}>
               <img src={Common.getThumbnail(document.documentId, (getIsMobile ? 640 : 320), 1, document.documentName)}
@@ -67,31 +68,36 @@ class CuratorTabItem extends React.Component {
         </div>
 
 
-        <div className="col-9 col-md-9 col-details_info">
-          <div className="details_info details_info-padding">
+        <div className="col-12 col-sm-9 col-lg-10 p-0">
+          <div className="details_info-padding">
             <Link to={"/" + identification + "/" + document.seoTitle}>
-              <div className="info_title mb-2" onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
+              <div className="info_title mb-2"
+                   onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
             </Link>
 
-            <Link to={"/" + identification + "/" + document.seoTitle} className="info_desc" title="description" onClick={() => Common.scrollTop()}>
-              {document.desc &&
-              <LinesEllipsis
-                text={document.desc}
-                maxLine={2}
-                ellipsis='...'
-                trimRight
-                basedOn='words'
-              />
-              }
-            </Link>
 
+            <div className="details-info-desc-wrapper">
+              <Link to={"/" + identification + "/" + document.seoTitle} className="info_desc"
+                    onClick={() => Common.scrollTop()}>
+                {document.desc &&
+                <LinesEllipsis
+                  text={document.desc}
+                  maxLine={2}
+                  ellipsis='...'
+                  trimRight
+                  basedOn='words'
+                />
+                }
+              </Link>
+            </div>
 
             <div className="tab-item-info-wrapper">
               <span className="info-detail-reward mr-2"
                     onMouseOver={() => this.showRewardInfo(document.seoTitle + "rewardVote")}
                     onMouseOut={() => this.hideRewardInfo(document.seoTitle + "rewardVote")}>
                 ${Common.deckToDollar(reward)}
-                <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")} alt="arrow button"/>
+                <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")}
+                     alt="arrow button"/>
               </span>
 
               {reward > 0 &&

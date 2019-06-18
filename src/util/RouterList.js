@@ -6,13 +6,14 @@ import ContentMainContainer from "../container/body/contents/ContentMainContaine
 import AudienceTrackingContainer from "../container/body/tracking/AudienceTrackingListContainer";
 import ContentViewContainer from "../container/body/contents/contentsView/ContentViewContainer";
 import AudienceTrackingDetailContainer from "../container/body/tracking/AudienceTrackingDetailContainer";
-import Signup from "../components/etc/Signup";
+import Signup from "../components/common/etc/Signup";
 import ContentListContainer from "../container/body/contents/ContentListContainer";
 import Policies from "../components/body/faq/Policies";
 import emailVerifyContainer from "../container/etc/emailVerifyContainer";
 import Privacy from "../components/body/faq/Privacy";
 import About from "../components/body/faq/About";
 import Guide from "../components/body/faq/Guide";
+import Terms from "../components/body/faq/Terms";
 
 export default ({
     routes: [
@@ -80,6 +81,11 @@ export default ({
         path: "/guide",
         name: "guide",
         component: Guide
+      },
+      {
+        path: "/terms",
+        name: "terms",
+        component: Terms
       },
       {
         path: "/emailverify",

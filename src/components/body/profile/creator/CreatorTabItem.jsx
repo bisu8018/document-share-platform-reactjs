@@ -12,7 +12,7 @@ class CreatorTabItem extends React.Component {
     super(props);
 
     this.state = {
-      ratio: null,
+      ratio: null
     };
   }
 
@@ -36,7 +36,7 @@ class CreatorTabItem extends React.Component {
     img.onload = () => {
       let height = img.height;
       let width = img.width;
-      this.setState({ratio : (width/height) });
+      this.setState({ ratio: (width / height) });
     };
   };
 
@@ -52,7 +52,7 @@ class CreatorTabItem extends React.Component {
 
   render() {
     const { document, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
-    const { ratio} = this.state;
+    const { ratio } = this.state;
 
     let reward = Common.toEther(Common.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7));
     let vote = Common.toEther(document.latestVoteAmount) || 0;
@@ -62,17 +62,17 @@ class CreatorTabItem extends React.Component {
     return (
 
       <div className="pl-3 pl-sm-0 pr-3 pr-sm-0 row u_center_inner">
-        <div className="pl-0 col-3 col-md-4 col-thumb">
 
 
-
-          <Link to={"/" + identification + "/" + document.seoTitle} >
-
+        <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
+          <Link to={"/" + identification + "/" + document.seoTitle}>
             <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
               <img src={Common.getThumbnail(document.documentId, "thumb", 1, document.documentName)}
-                   onError={(e) => {e.target.src = (Common.getThumbnail(document.documentId, (getIsMobile ? 640 : 320), 1, document.documentName))}}
+                   onError={(e) => {
+                     e.target.src = (Common.getThumbnail(document.documentId, (getIsMobile ? 640 : 320), 1, document.documentName));
+                   }}
                    alt={document.title ? document.title : document.documentName}
-                   className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") +  (document.state && document.state === "NOT_CONVERT" ? "not-convert-background" : "")}/>
+                   className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (document.state && document.state === "NOT_CONVERT" ? "not-convert-background" : "")}/>
 
               {document.state && document.state === "NOT_CONVERT" &&
               <div className="not-convert">
@@ -82,44 +82,39 @@ class CreatorTabItem extends React.Component {
               </div>
               }
             </div>
-
           </Link>
-
-
-
         </div>
 
 
-
-
-        <div className="col-9 col-md-8 col-details_info">
-          <div className="details_info details_info-padding">
-            <Link to={"/" + identification + "/" + document.seoTitle} >
-              <div className="info_title mb-2" onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
+        <div className="col-12 col-sm-9 col-lg-10 p-0">
+          <div className="details_info-padding">
+            <Link to={"/" + identification + "/" + document.seoTitle}>
+              <div className="info_title mb-2"
+                   onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
             </Link>
 
-
-            <Link to={"/" + identification + "/" + document.seoTitle} className="info_desc" title="description" onClick={() => Common.scrollTop()}>
-              {document.desc &&
-              <LinesEllipsis
-                text={document.desc}
-                maxLine={2}
-                ellipsis='...'
-                trimRight
-                basedOn='words'
-              />
-              }
-            </Link>
-
-
-
+            <div className="details-info-desc-wrapper">
+              <Link to={"/" + identification + "/" + document.seoTitle} className="info_desc" title="description"
+                    onClick={() => Common.scrollTop()}>
+                {document.desc &&
+                <LinesEllipsis
+                  text={document.desc}
+                  maxLine={2}
+                  ellipsis='...'
+                  trimRight
+                  basedOn='words'
+                />
+                }
+              </Link>
+            </div>
 
             <div className="tab-item-info-wrapper ">
               <span className="info-detail-reward mr-2"
                     onMouseOver={() => this.showRewardInfo(document.seoTitle + "rewardUpload")}
                     onMouseOut={() => this.hideRewardInfo(document.seoTitle + "rewardUpload")}>
                 ${Common.deckToDollar(reward)}
-                <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")} alt="arrow button"/>
+                <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")}
+                     alt="arrow button"/>
               </span>
 
               {reward > 0 &&
@@ -131,7 +126,6 @@ class CreatorTabItem extends React.Component {
 
               <span className="info-detail-view mr-3">{view}</span>
               <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
-
 
 
               <div className="info-date">

@@ -1,9 +1,9 @@
 import React from "react";
-import BalanceOfContainer from "../../container/common/BalanceOfContainer";
+import BalanceOfContainer from "../../../container/common/BalanceOfContainer";
 import { Link } from "react-router-dom";
-import MainRepository from "../../redux/MainRepository";
-import UserInfo from "../../redux/model/UserInfo";
-import Common from "../../util/Common";
+import MainRepository from "../../../redux/MainRepository";
+import UserInfo from "../../../redux/model/UserInfo";
+import Common from "../../../util/Common";
 
 class ProfileCard extends React.Component {
   state = {

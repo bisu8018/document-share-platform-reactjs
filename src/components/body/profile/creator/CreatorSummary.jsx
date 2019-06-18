@@ -1,6 +1,6 @@
 import React from "react";
 import { APP_PROPERTIES } from "properties/app.properties";
-import DollarWithDeck from "../../../common/DollarWithDeck";
+import DollarWithDeck from "../../../common/amount/DollarWithDeck";
 import MainRepository from "../../../../redux/MainRepository";
 import Common from "../../../../util/Common";
 import BalanceOfContainer from "../../../../container/common/BalanceOfContainer";
@@ -47,7 +47,7 @@ class CreatorSummary extends React.Component {
     const { getWeb3Apis, userInfo } = this.props;
     const { balance } = this.state;
     let address = userInfo.ethAccount;
-    if (!address || balance > 0) return false;
+    if (!address || balance >= 0) return false;
 
     getWeb3Apis.getBalance(userInfo.ethAccount, res => {
       this.setState({ balance: res });
@@ -169,7 +169,7 @@ class CreatorSummary extends React.Component {
               <span className="d-flex">
                 <strong>{userName || userInfo.email}</strong>
                 {this.getMyInfo().email === userInfo.email &&
-                <div className="username-edit-btn ml-2" onClick={() => this.handleClickEvent()} title="Edit user name">
+                <div className="username-edit-btn ml-2" onClick={() => this.handleClickEvent()} >
                   Edit</div>
                 }
               </span>}

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { setAlertCode } from "../../redux/reducer/main";
-import emailVerify from "../../components/etc/emailVerify";
+import EmailVerify from "../../components/common/etc/EmailVerify";
 
 export default connect(
   state => ({
@@ -11,4 +11,4 @@ export default connect(
       dispatch(setAlertCode(alertCode));
     },
   })
-)(emailVerify);
+)(EmailVerify);

@@ -64,7 +64,7 @@ class Bounty extends React.Component {
     if (this.state.available > 0) {
       return (
         <span>
-             <div className="bounty-btn" onClick={() => this.handleClickOpen("classicModal")} title="Get Free Deck">
+             <div className="bounty-btn" onClick={() => this.handleClickOpen("classicModal")}>
                  GET<br/>FREE DECK !!
             </div>
 

@@ -16,6 +16,12 @@ let  ReduxTypes ={
 
 
   //======================================
+  //            Header
+  // =====================================
+  SET_DROPDOWN_SHOW : "header/SET_DROPDOWN_SHOW",
+
+
+  //======================================
   //            ContentView
   // =====================================
   SET_IS_DOCUMENT_EXIST : "contentView/SET_IS_DOCUMENT_EXIST",

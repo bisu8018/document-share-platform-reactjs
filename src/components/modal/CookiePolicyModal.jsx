@@ -48,7 +48,7 @@ class CookiePolicyModal extends React.PureComponent {
             We use cookies to provide and improve our services. By using our site, you consent to our Cookies Policy.
           </div>
 
-          <div className="cookie-btn" onClick={this.getStarted.bind(this)} title="Accept cookies policy">Accept</div>
+          <div className="cookie-btn" onClick={this.getStarted.bind(this)}>Accept</div>
 
         </div>
         <div className="privacy-banner-dummy"/>

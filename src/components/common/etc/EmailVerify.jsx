@@ -6,7 +6,7 @@ import { ThreeBounce } from "better-react-spinkit";
 
 let url = "email/verifyemail/";
 
-class emailVerify extends React.Component {
+class EmailVerify extends React.Component {
 
   getRootUrlWithApi = function() {
     return APP_PROPERTIES.domain().email + "/api/";
@@ -51,4 +51,4 @@ class emailVerify extends React.Component {
   }
 }
 
-export default emailVerify;
+export default EmailVerify;

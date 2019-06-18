@@ -181,7 +181,7 @@ class ContentViewFullScreen extends Component {
               {identification}
             </Link>
 
-            <div className="info_date">
+            <div className="info-date-view">
               {Common.timestampToDateTime(documentData.created)}
             </div>
           </div>
@@ -248,7 +248,7 @@ class ContentViewFullScreen extends Component {
               title: "Link to this URL",
               rel: "nofollow",
               target: "_blank",
-              style: { color: "#7fc241", fontWeight: "400" }
+              style: { color: "#3681fe", fontWeight: "400" }
             }}>{documentData.desc}</Linkify>
 
             <div className="view_tag mb-3">
@@ -290,7 +290,7 @@ class ContentViewFullScreen extends Component {
                   <Tooltip title="This work is licensed under a Creative Commons Attribution 2.0 Generic License."
                            placement="bottom">
                     {/* eslint-disable-next-line react/jsx-no-target-blank */}
-                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/" target="_blank">
+                    <a rel="license" className="float-right" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/" target="_blank">
                       <img alt="Creative Commons License" className="cc-img"
                            src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + documentData.cc + ".svg")}/>
                     </a>

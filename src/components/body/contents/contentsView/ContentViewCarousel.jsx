@@ -107,7 +107,6 @@ class ContentViewCarousel extends React.Component {
       });
     }
     if (page === readPage) return;
-
     this.setState({ readPage: page }, () => {
       this.handleUrl();
     });
@@ -117,10 +116,8 @@ class ContentViewCarousel extends React.Component {
       // 강제 트래킹
       if (target.forceTracking) {
         let ft = await this.handleFlag(page);
-
-
         if (!ft) return false;
-      } else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp && !getTempEmail) {
+      } else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp && !getTempEmail) {;
         this.setState({ emailFlag: true }, () => {
           handleEmailFlag(true);
         });
@@ -188,7 +185,7 @@ class ContentViewCarousel extends React.Component {
     const {catchPageChanged} = this.props;
 
     if(pageChangedFlag !== catchPageChanged) {
-      this.setState({readPage : 0, pageChangedFlag : catchPageChanged })
+      this.setState({readPage : null, pageChangedFlag : catchPageChanged })
     }
   };
 
@@ -216,15 +213,14 @@ class ContentViewCarousel extends React.Component {
 
     const arr = [target.totalPages];
     for (let i = 0; i < target.totalPages; i++) {
-      arr[i] = Common.getThumbnail(target.documentId, 1024, i + 1);
+      arr[i] = Common.getThumbnail(target.documentId, 2048, i + 1);
     }
 
     return (
       <div className="card card-raised">
         <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel" data-interval="3000">
           <div className="screen-option-bar">
-            <i className="material-icons" onClick={this.handleOptionBarClickEvent.bind(this)}
-               title="Slide option button">more_vert</i>
+            <i className="material-icons" onClick={this.handleOptionBarClickEvent.bind(this)}>more_vert</i>
             <div className={"screen-option" + (this.state.slideOptionFlag ? "" : " d-none")}>
               <div title={this.state.autoSlideFlag ? "Switch to Manual Slide Mode" : "Switch to Auto Slide Mode"}
                    onClick={this.handleOptionBtnClickEvent.bind(this)}>

@@ -1676,11 +1676,6 @@ mark,
     padding-left: 0;
 }
 
-.navbar-nav .dropdown-menu {
-    position: static;
-    float: none;
-}
-
 .navbar-text {
     display: inline-block;
     padding-top: 0.5rem;
@@ -1735,15 +1730,6 @@ mark,
         flex-direction: row;
     }
 
-    .navbar-expand-sm .navbar-nav .dropdown-menu {
-        position: absolute;
-    }
-
-    .navbar-expand-sm .navbar-nav .dropdown-menu-right {
-        right: 0;
-        left: auto;
-    }
-
     .navbar-expand-sm .navbar-nav .nav-link {
         padding-right: 0.5rem;
         padding-left: 0.5rem;
@@ -1761,11 +1747,6 @@ mark,
 
     .navbar-expand-sm .navbar-toggler {
         display: none;
-    }
-
-    .navbar-expand-sm .dropup .dropdown-menu {
-        top: auto;
-        bottom: 100%;
     }
 }
 
@@ -1787,15 +1768,6 @@ mark,
         flex-direction: row;
     }
 
-    .navbar-expand-md .navbar-nav .dropdown-menu {
-        position: absolute;
-    }
-
-    .navbar-expand-md .navbar-nav .dropdown-menu-right {
-        right: 0;
-        left: auto;
-    }
-
     .navbar-expand-md .navbar-nav .nav-link {
         padding-right: 0.5rem;
         padding-left: 0.5rem;
@@ -1814,11 +1786,6 @@ mark,
     .navbar-expand-md .navbar-toggler {
         display: none;
     }
-
-    .navbar-expand-md .dropup .dropdown-menu {
-        top: auto;
-        bottom: 100%;
-    }
 }
 
 @media (min-width: 992px) {
@@ -1829,15 +1796,6 @@ mark,
 
     .navbar-expand-lg .navbar-nav {
         flex-direction: row;
-    }
-
-    .navbar-expand-lg .navbar-nav .dropdown-menu {
-        position: absolute;
-    }
-
-    .navbar-expand-lg .navbar-nav .dropdown-menu-right {
-        right: 0;
-        left: auto;
     }
 
     .navbar-expand-lg .navbar-nav .nav-link {
@@ -1857,11 +1815,6 @@ mark,
 
     .navbar-expand-lg .navbar-toggler {
         display: none;
-    }
-
-    .navbar-expand-lg .dropup .dropdown-menu {
-        top: auto;
-        bottom: 100%;
     }
 }
 
@@ -1883,15 +1836,6 @@ mark,
         flex-direction: row;
     }
 
-    .navbar-expand-xl .navbar-nav .dropdown-menu {
-        position: absolute;
-    }
-
-    .navbar-expand-xl .navbar-nav .dropdown-menu-right {
-        right: 0;
-        left: auto;
-    }
-
     .navbar-expand-xl .navbar-nav .nav-link {
         padding-right: 0.5rem;
         padding-left: 0.5rem;
@@ -1910,11 +1854,6 @@ mark,
     .navbar-expand-xl .navbar-toggler {
         display: none;
     }
-
-    .navbar-expand-xl .dropup .dropdown-menu {
-        top: auto;
-        bottom: 100%;
-    }
 }
 
 .navbar-expand {
@@ -1930,15 +1869,6 @@ mark,
 
 .navbar-expand .navbar-nav {
     flex-direction: row;
-}
-
-.navbar-expand .navbar-nav .dropdown-menu {
-    position: absolute;
-}
-
-.navbar-expand .navbar-nav .dropdown-menu-right {
-    right: 0;
-    left: auto;
 }
 
 .navbar-expand .navbar-nav .nav-link {
@@ -1958,11 +1888,6 @@ mark,
 
 .navbar-expand .navbar-toggler {
     display: none;
-}
-
-.navbar-expand .dropup .dropdown-menu {
-    top: auto;
-    bottom: 100%;
 }
 
 .breadcrumb {
@@ -5193,13 +5118,6 @@ form {
     border-bottom: 1px solid #b3b3b3;
 }
 
-.navbar .dropdown-item:hover,
-.navbar .dropdown-item:focus {
-    box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 255, 255, 0.4);
-    background-color: #fff;
-    color: #555;
-}
-
 .navbar .navbar-toggler .navbar-toggler-icon {
     background-color: #555;
 }
@@ -5249,10 +5167,6 @@ form {
 .navbar .navbar-nav .nav-item .nav-link.profile-photo .profile-photo-small {
     height: 40px;
     width: 40px;
-}
-
-.navbar .navbar-nav .dropdown-menu-right {
-    transform-origin: 100% 0;
 }
 
 .navbar .navbar-nav .nav-item.active .nav-link,
@@ -5583,12 +5497,6 @@ b {
         z-index: 1;
     }
 
-    .navbar-collapse .dropdown-toggle:after {
-        position: absolute;
-        right: 16px;
-        margin-top: 8px;
-    }
-
     .navbar-collapse .navbar-nav {
         position: relative;
         z-index: 3;
@@ -5622,37 +5530,6 @@ b {
 
     .navbar-collapse .navbar-nav .nav-item:last-child:after {
         display: none;
-    }
-
-    .navbar .dropdown.show .dropdown-menu {
-        display: block;
-    }
-
-    .navbar .dropdown .dropdown-menu {
-        display: none;
-    }
-
-    .navbar .dropdown-menu .dropdown-item {
-        margin-left: 1.5rem;
-        margin-right: 1.5rem;
-    }
-
-    .navbar .dropdown.show .dropdown-menu,
-    .navbar .dropdown .dropdown-menu {
-        background-color: transparent;
-        border: 0;
-        padding-bottom: 15px;
-        transition: none;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        transform: none !important;
-        width: auto;
-        margin-bottom: 15px;
-        padding-top: 0;
-        height: 300px;
-        animation: none;
-        opacity: 1;
-        overflow-y: scroll;
     }
 
     .navbar.navbar-transparent .navbar-toggler .navbar-toggler-icon {
@@ -6057,7 +5934,7 @@ b {
 
 .tracking_inner .option-menu-btn {
     right: 10px;
-    top: 5px;
+    top: 0 !important;
 }
 
 .tracking-time {
@@ -6069,7 +5946,7 @@ b {
     cursor: pointer;
     position: absolute;
     right: -16px;
-    top: 0;
+    top: 10px;
     transition: 0.2s all ease-in-out;
     -webkit-transition: 0.2s all ease-in-out;
 }
@@ -6085,7 +5962,7 @@ b {
     right: 40px;
     bottom: 30px;
     cursor: pointer;
-    z-index: 1;
+    z-index: 2;
 }
 
 /*2019-03-29
@@ -6554,7 +6431,7 @@ dean
     right: 16px;
 }
 
-.back-btn {
+.back-btn-wrapper {
     float: right;
     cursor: pointer;
     position: relative;
@@ -6563,11 +6440,10 @@ dean
     font-size: 14px;
 }
 
-.back-btn i {
-    top: 4px;
+.back-btn-wrapper > img {
+    top: -1px;
     position: relative;
     margin-right: 5px;
-    font-size: 18px;
 }
 
 .export-btn-disabled {
@@ -6947,11 +6823,6 @@ Dean*/
     min-height: calc(80vh + 4px);
 }
 
-.col-thumb {
-    max-width: 150px;
-    flex: auto;
-}
-
 .col-thumb-list {
     max-width: 235px;
     flex: auto;
@@ -7007,8 +6878,8 @@ Dean*/
 
 .tags_menu_search_container {
     background: white;
-    display: flex;
     position: relative;
+    text-align: right;
 }
 
 .tags_menu_search_container input {
@@ -7018,11 +6889,9 @@ Dean*/
     height: 25px;
     background: none;
     color: #666666;
+    max-width: 155px;
     border: none;
-    width: 85%;
-    max-width: 150px;
     border-bottom: 1px solid #666666;
-    margin-left: auto;
 }
 
 
@@ -7080,42 +6949,6 @@ Dean*/
 
 .u__center .u__center_mobile {
     display: flex;
-}
-
-.header-select-custom {
-    border: none;
-    color: #4d4d4d;
-    background: none;
-    height: 42px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.select-custom {
-    float: left;
-    border: 1px solid #cecece;
-    width: 85%;
-    color: #4d4d4d;
-    background: white;
-    height: 42px;
-    padding-left: 15px;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-.select-custom select,
-.header-select-custom select {
-    border: none;
-    box-shadow: none;
-    background: transparent;
-    background-image: none;
-    -webkit-appearance: none;
-}
-
-.select-custom select:focus,
-.header-select-custom select:focus {
-    outline: none;
 }
 
 .u_title {
@@ -7200,16 +7033,12 @@ Dean*/
 
 
 .tab-thumbnail {
-    width: 163px;
-    height: 92px;
+    max-width: 163px;
+    max-height: 92px;
     overflow: hidden;
     text-align: center;
-    background: #dadada;
-    border: 1px solid #d0d0d0;
-}
-
-.details_info {
-    position: relative;
+    background: #fdfdfd;
+    border: 1px solid #e2e2e2;
 }
 
 .reward-arrow {
@@ -7217,8 +7046,10 @@ Dean*/
     margin-bottom: 3px;
 }
 
-.details_info-padding {
-    height: 100%;
+.details-info-desc-wrapper {
+    height: 35px;
+    overflow: hidden;
+    margin-bottom: 5px;
 }
 
 
@@ -7306,7 +7137,17 @@ Dean*/
     font-size: 14px;
     color: #b3b3b3;
     position: relative;
-    top: 9px;
+    top: 0;
+    height: 25px;
+    display: inline-block;
+    float: right;
+}
+
+.info-date-view {
+    font-size: 14px;
+    color: #b3b3b3;
+    position: relative;
+    top: 5px;
     height: 25px;
     display: inline-block;
     float: right;
@@ -7319,12 +7160,6 @@ Dean*/
     height: 25px;
     display: inline-block;
 }
-
-.info_detail {
-    bottom: 0;
-    position: absolute;
-}
-
 
 .info-detail-view {
     cursor: pointer;
@@ -7398,8 +7233,6 @@ Dean*/
 }
 
 .tab-item-info-wrapper {
-    position: absolute;
-    bottom: 0;
     width: 100%;
 }
 
@@ -7417,7 +7250,7 @@ Dean*/
     }
 }
 
-@media (max-width: 993px) {
+@media (max-width: 991px) {
     .main-category-card-wrapper {
         justify-content: center;
     }
@@ -7475,13 +7308,22 @@ Dean*/
         width: 15%;
     }
 
+    .tracking-list-search-selected-wrapper {
+        float: initial !important;
+        right: auto !important;
+    }
+
     .tracking_table th,
     .tracking_table td {
         padding: 7px 10px;
     }
 
     .tags_menu_search_container input {
-        margin-left: 0;
+        margin-left: 0 !important;
+    }
+
+    .tags_menu_search_container .react-autosuggest__container {
+        margin-left: 0 !important;
     }
 
     .main-category-card-img-landscape {
@@ -7509,6 +7351,11 @@ Dean*/
         right: 18px;
         float: inherit;
         top: 0 !important;
+    }
+
+    .info-date-view {
+        right: 10px;
+        top: 2px !important;
     }
 
     .cc-container {
@@ -7629,15 +7476,10 @@ Dean*/
         margin-bottom: 20px;
     }
 
-    .info_detail {
-        position: relative !important;
-    }
-
     .document-total-num {
         margin-bottom: 0 !important;
     }
 
-    .col-thumb,
     .col-details_info {
         max-width: 100%;
     }
@@ -7659,16 +7501,13 @@ Dean*/
     .tab-thumbnail {
         height: auto;
         width: 100%;
+        max-width: none;
+        max-height: none;
         min-height: 160px;
     }
 
     .profile_info_name {
         text-align: center;
-    }
-
-    .details_info-padding {
-        margin-left: -1rem !important;
-        margin-right: -1rem !important;
     }
 
     .document-total-num {
@@ -8048,6 +7887,33 @@ Duration CSS*/
 /*Dean
 2019-06-12
 트랙킹 리스트 페이지 CSS*/
+.tracking-list-search-selected-wrapper {
+    position: relative;
+    width: fit-content;
+    width: -moz-fit-content;
+    float: right;
+    right: 27px;
+}
+
+.tracking-list-search-selected-wrapper > i {
+    font-size: 20px;
+    position: absolute;
+    top: 3px;
+    right: -30px;
+    cursor: pointer;
+}
+
+.tracking-list-search-selected-wrapper > i:hover {
+    color: red;
+}
+
+.tracking-list-search-selected {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4d4d4d;
+}
+
 .open-rate {
     display: inline-block;
     position: absolute;
@@ -8095,32 +7961,29 @@ Duration CSS*/
 .tracking_table {
     width: 100%;
     border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
 }
 
 #trackingTableTr0 > div {
     border: none !important;
 }
 
+.tracking_table > div:first-child {
+    background: #e6e6e6;
+}
+
 .tracking-table-tr:hover {
     background: #f3f3f3;
 }
 
-
 .tracking-table-td {
     padding: 10px 15px;
     border-top: 1px solid #e4e4e4;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 14px;
     color: #4d4d4d;
 }
 
-.tracking-table-td:first-child {
-    padding-left: 0;
-}
-
-.tracking-table-td:last-child {
-    padding-right: 0;
-}
 
 .no-data {
     font-weight: bold;
@@ -8519,7 +8382,7 @@ Dean
     }
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 991px) {
 
     .navbar-expand-lg > .container,
     .navbar-expand-lg > .container-fluid {
@@ -8582,10 +8445,6 @@ Dean
 
     .u__view .view_date:before {
         margin: 0 5px;
-    }
-
-    .details_info dd {
-        white-space: normal;
     }
 
     #container {
@@ -9051,11 +8910,6 @@ dialog {
     margin-top: 30px;
 }
 
-.setting-img {
-    margin-left: -20px;
-    margin-top: -2px;
-}
-
 .img-cloudy {
     -webkit-filter: blur(5px);
     -moz-filter: blur(5px);
@@ -9505,6 +9359,10 @@ dean
     position: relative;
 }
 
+.tags_menu_search_container .react-autosuggest__container {
+    margin-left: auto;
+}
+
 .mobile-header-search-bar-wrapper .react-autosuggest__container {
     width: 50%;
 }
@@ -9835,6 +9693,7 @@ Main Category CSS
 
 .main-category-card:hover {
     border-color: #86b9fa;
+    box-shadow: 0 0 0 1px #86b9fa;
 }
 
 .main-category-card-content {
@@ -9991,6 +9850,7 @@ Main Category CSS
     position: absolute;
     min-height: 40px;
     top: 325px;
+    left: 0;
     background: #0d73f8;
     z-index: 1;
     width: 300px;
@@ -10312,7 +10172,6 @@ cc license CSS
 */
 .cc-img {
     width: 90px;;
-    float: right;
 }
 
 
@@ -10320,28 +10179,38 @@ cc license CSS
 About us page CSS
 2019-06-14 Dean
 */
-.about-container {
-    margin: 0 -100%;
+
+.about-section-1-wrapper {
+    padding-top: 105px;
+    padding-bottom: 20px;
+}
+
+.about-section-3-wrapper {
+    padding: 70px 0 90px 0;
+}
+
+.about-section-wrapper {
+    padding: 70px 0;
 }
 
 .about-section-1 {
     background-image: linear-gradient(to right, #5494ff, #307eff);
-    width: 100%;
-    padding-top: 105px;
+    position: absolute;
+    top: 0;
+    left: -50%;
+    height: 100%;
+    width: 200%;
 }
 
-.about-section-2,
-.about-section-4 {
-    width: 100%;
-    padding: 70px 0;
-    background-color: white;
-}
 
 .about-section-3,
 .about-section-5 {
-    width: 100%;
-    padding: 70px 0 120px 0;
-    background-color: #f5f5f5;
+    background: #f5f5f5;
+    position: absolute;
+    top: 0;
+    left: -50%;
+    height: 100%;
+    width: 200%;
 }
 
 
@@ -10356,7 +10225,11 @@ About us page CSS
 }
 
 .about-main-img {
-    margin-right: -33px;
+    text-align: center;
+}
+
+.about-main-img > img {
+    width: inherit !important;
 }
 
 .about-main-content {
@@ -10429,4 +10302,185 @@ About us page CSS
     line-height: 1.38;
     letter-spacing: -0.2px;
     color: #4d4d4d;
+}
+
+.about-text-align {
+    text-align: left;
+}
+
+@media all and (max-width: 767px) {
+    .about-section-3 .main-category-card {
+        text-align: center;
+    }
+
+    .about-section-wrapper {
+        padding: 35px 0;
+    }
+
+    .about-section-1-wrapper {
+        padding-top: 20px;
+        padding-bottom: 0;
+    }
+
+    .about-main-title {
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: -0.1px;
+        margin-bottom: 17px;
+        text-align: center;
+    }
+
+    .about-main-content {
+        font-size: 16px;
+        font-weight: 300;
+        letter-spacing: normal;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .about-section-1-wrapper .main-learn-more-btn {
+        width: 100% !important;
+        max-width: 300px;
+    }
+
+    .about-text-align {
+        text-align: center;
+    }
+
+    .about-sub-title {
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: normal;
+        margin-bottom: 30px;
+    }
+
+    .about-sub-content {
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 1.38;
+        letter-spacing: -0.2px;
+    }
+
+    .about-section-3-wrapper {
+        padding: 35px 0 90px 0;
+    }
+
+    .about-vision-title {
+        margin-top: 15px;
+        margin-bottom: 10px;
+    }
+
+    .about-vision-content {
+        margin-bottom: 30px;
+    }
+}
+
+
+/*
+User guide page CSS
+2019-06-17 Dean
+*/
+
+.guide-sample-1 {
+    max-width: 339px;
+    width: 100%;
+}
+
+
+/*
+User guide page CSS
+2019-06-17 Dean
+*/
+
+.guide-sample-1 {
+    max-width: 339px;
+    width: 100%;
+}
+
+
+/*
+Dropdown CSS
+2019-06-18 Dean
+*/
+
+.dropdown-wrapper {
+    cursor: pointer;
+}
+
+.dropdown-wrapper:hover > div {
+    color: #3681fe;
+}
+
+.dropdown-list-wrapper {
+    position: absolute;
+    left: -15%;
+    background: white;
+    width: inherit;
+    text-align: left;
+    min-width: 110px;
+    border: solid 1px #979797;
+    cursor: pointer;
+}
+
+.dropdown-list {
+    height: 35px;
+    font-weight: 400;
+    font-size: 14px;
+    padding: 0 12px;
+    color: #4d4d4d;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-list:hover {
+    background: #3681fe;
+    color: white;
+}
+
+.dropdown-selected {
+    border: none;
+    color: #4d4d4d;
+    background: none;
+    height: 42px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.header-select-custom {
+    border: none;
+    color: #4d4d4d;
+    background: none;
+    height: 42px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.select-custom {
+    float: left;
+    border: 1px solid #cecece;
+    width: 85%;
+    color: #4d4d4d;
+    background: white;
+    height: 42px;
+    padding-left: 15px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.select-custom select,
+.header-select-custom select {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+}
+
+.select-custom select:focus,
+.header-select-custom select:focus {
+    outline: none;
 }

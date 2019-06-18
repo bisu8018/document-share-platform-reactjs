@@ -6,12 +6,14 @@ import MainRepository from "../../../redux/MainRepository";
 import { ThreeBounce } from "better-react-spinkit";
 import Tooltip from "@material-ui/core/Tooltip";
 import CustomChart from "../../common/CustomChart";
+import AutoSuggestInputContainer from "../../../container/common/AutoSuggestInputContainer";
 
 class AudienceTrackingList extends React.Component {
   state = {
     resultList: [],
     chartResultList: null,
     filterList: null,
+    selectedSearch: null,
     loading: false,
     chartLoading: false,
     tableOptionFlag: false,
@@ -20,24 +22,23 @@ class AudienceTrackingList extends React.Component {
     selectedTr: null    // 차트 show / hide
   };
 
-  constructor() {
-    super();
-    this.handleKeyUp = this.keyUpHandler.bind(this);
-  }
+
+  // 검색 박스 관리
+  selectedSearch = (value) => {
+    let result = this.state.resultList;
 
 
-  // 검색 박스 keyup 관리
-  keyUpHandler = () => {
-    let searchValue = document.getElementById("searchInput").value;
-    let filteredResult = null;
-    if (searchValue) {
-      let result = this.state.resultList;
-      filteredResult = result.filter(el => {
-        if (el.user) return el.user.e.indexOf(searchValue) !== -1;
+    let filteredResult = result.filter(el => {
+      if (value.user) {
+
+        if (el.user) return el.user.e.indexOf(value.user.e) !== -1;
         return false;
-      });
-    }
-    this.setState({ filterList: filteredResult });
+
+      } else return !el.user;
+    });
+
+
+    this.setState({ filterList: filteredResult, selectedSearch: value.user ? value.user.e : null });
   };
 
 
@@ -169,6 +170,12 @@ class AudienceTrackingList extends React.Component {
   };
 
 
+  // 검색 초기화
+  handleClearSearch = () => {
+    this.setState({filterList:null, selectedSearch:null})
+  };
+
+
   // 스크롤 아웃 관리 메소드
   handleClick = (e) => {
     const { selectedTr } = this.state;
@@ -263,7 +270,7 @@ class AudienceTrackingList extends React.Component {
 
   render() {
     const { location, match, getShowAnonymous, getIncludeOnlyOnePage, getCreatorDailyRewardPool, getIsMobile } = this.props;
-    const { loading, tableOptionFlag, ratio, selectedTr, chartResultList } = this.state;
+    const { loading, tableOptionFlag, ratio, selectedTr, chartResultList, selectedSearch } = this.state;
 
     if (!location.state || !location.state.documentData) return false;
 
@@ -282,7 +289,7 @@ class AudienceTrackingList extends React.Component {
           <div className="row">
 
 
-            <div className="col-sm-3 col-md-3 col-thumb mt-2">
+            <div className="col-12 col-sm-3 col-lg-2 col-thumb mt-2">
               <Link to={"/" + match.params.identification + "/" + documentData.seoTitle}>
                 <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
                   <img src={addr}
@@ -293,7 +300,7 @@ class AudienceTrackingList extends React.Component {
             </div>
 
 
-            <div className="col-sm-9 col-md-9 col-details_info p-sm-2 ">
+            <div className="col-12 col-sm-9 col-lg-10 col-details_info p-sm-2 ">
               <dl className="details_info">
                 <Link to={"/" + match.params.identification + "/" + documentData.seoTitle} className="info_title mb-2"
                       onClick={() => Common.scrollTop()}>
@@ -370,19 +377,43 @@ class AudienceTrackingList extends React.Component {
               </div>
 
 
-              <div className="tags_menu_search_container p-0 col-7 col-md-5 col-lg-3">
-                <input id="searchInput" type="text" autoComplete="off" placeholder="Name Search . . ."
-                       onKeyUp={this.handleKeyUp}/>
-                <div className="search-btn">
-                  <i className="material-icons">search</i>
-                </div>
+              <div className=" p-0 col-8 col-md-5 col-lg-3">
+                {!this.state.filterList ?
+                  <div className="tags_menu_search_container row">
+                    <AutoSuggestInputContainer search={this.selectedSearch} type={"name"}
+                                               getNameList={this.state.resultList}/>
+                    <div className="search-btn">
+                      <i className="material-icons">search</i>
+                    </div>
+                  </div> :
+                  <div className="tracking-list-search-selected-wrapper">
+                  <div className="tracking-list-search-selected">
+                    {selectedSearch || "Anonymous"}
+                  </div>
+                    <i className="material-icons" onClick={() => {this.handleClearSearch()}} >close</i>
+                  </div>
+                }
               </div>
 
 
               <div className="tracking_table">
 
+                <div className="tracking-table-tr row">
+                  <div className="col-4 tracking-table-td">Name</div>
+
+                  <div className="col-3 col-sm-2 tracking-table-td tac">Views</div>
+
+
+                  <div className="col-3 tracking-table-td tar">Last Viewed</div>
+
+
+                  <div className="col-2 col-sm-3 tracking-table-td "/>
+
+
+                </div>
+
                 {rst.length > 0 && rst.map((result, idx) => (
-                  <span  key={idx}>
+                  <span key={idx}>
                     <div onClick={this.handleLinkClickEvent.bind(this)}
                          id={"trackingTableTr" + idx}
                          data-cid={result.cid}
@@ -405,7 +436,7 @@ class AudienceTrackingList extends React.Component {
                       </div>
 
 
-                      <div className="col-3 tracking-table-td">
+                      <div className="col-3 tracking-table-td tar">
                         {Common.dateTimeAgo(result.viewTimestamp, getIsMobile)}
                       </div>
 

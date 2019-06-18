@@ -1,5 +1,5 @@
 import React from "react";
-import Common from "../../util/Common";
+import Common from "../../../util/Common";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 

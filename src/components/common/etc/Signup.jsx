@@ -1,5 +1,5 @@
 import React from "react";
-import MainRepository from "../../redux/MainRepository";
+import MainRepository from "../../../redux/MainRepository";
 
 class Signup extends React.Component {
   componentWillMount(): void {

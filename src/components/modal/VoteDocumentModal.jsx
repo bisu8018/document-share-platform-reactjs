@@ -34,7 +34,7 @@ class VoteDocumentModal extends React.Component {
       voteStatus: "INIT",   //  INIT(initialize) -> ALLOWANCE -> APPROVE -> VOTE -> COMPLETE
       approve: null,    // 승인 모달 출력 유무
       deposit: 0,
-      balance: 0,
+      balance: -1,
       classicModal: false,
       deckError: "",
       msg: "Vote on this document"
@@ -81,7 +81,7 @@ class VoteDocumentModal extends React.Component {
       approve: null,
       vote: { stackId: -1, done: false, complete: false, receipt: null },
       deposit: 0,
-      balance: 0,
+      balance: -1,
       classicModal: false,
       deckError: ""
     });
@@ -227,8 +227,16 @@ class VoteDocumentModal extends React.Component {
 
   // 밸런스 정보 GET
   handleBalance = () => {
-    const { getWeb3Apis, getMyInfo } = this.props;
+    const { getWeb3Apis, getDrizzle, getMyInfo, getIsDocumentExist } = this.props;
+    const { balance } = this.state;
+
+    let address = getMyInfo.ethAccount;
+
+    if (getDrizzle && (!getDrizzle.isInitialized() || !getIsDocumentExist)) return false;
+    if (!address || balance >= 0) return false;
+
     let ethAccount = getMyInfo.ethAccount;
+
     if (ethAccount) {
       getWeb3Apis.getBalance(ethAccount, res => {
         return res;
@@ -241,12 +249,11 @@ class VoteDocumentModal extends React.Component {
     const { getWeb3Apis, getMyInfo } = this.props;
     const { balance } = this.state;
     let address = getMyInfo.ethAccount;
-    if (!address || balance > 0) return false;
+    if (!address || balance >= 0) return false;
     getWeb3Apis.getBalance(getMyInfo.ethAccount, res => {
       this.setState({ balance: res });
     });
   }
-
 
   render() {
     const { documentData, getDrizzle, getIsDocumentExist, getMyInfo } = this.props;

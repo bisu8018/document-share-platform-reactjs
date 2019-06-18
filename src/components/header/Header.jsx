@@ -7,7 +7,8 @@ import MenuContainer from "../../container/header/MenuContainer";
 import ProfileCardContainer from "../../container/common/ProfileCardContainer";
 import AdsContainer from "../../container/ads/AdsContainer";
 import SearchBarContainer from "../../container/header/SearchBarContainer";
-import Bounty from "./Bounty";
+
+//import Bounty from "./Bounty";
 
 class Header extends React.Component {
 
@@ -66,7 +67,10 @@ class Header extends React.Component {
   };
 
 
+  // 클릭 이벤트 리스터
   clickEventListener = () => {
+    const {setDropdownShow} = this.props;
+
     document.addEventListener("click", (e) => {
         let targetElement = e.target; // clicked element
 
@@ -74,6 +78,12 @@ class Header extends React.Component {
         const profileCard = document.getElementById("profileCard");
         if (profileCard && !profileCard.contains(targetElement)) {
           this.profileCardHide();
+        }
+
+        // 헤더 검색 카테고리 드롭다운
+        const dropdownList = document.getElementById("dropdownList");
+        if (dropdownList && !dropdownList.contains(targetElement)) {
+          setDropdownShow(false);
         }
 
         // 프로필 카드 프로필 버튼
@@ -100,11 +110,13 @@ class Header extends React.Component {
   };
 
 
+  // 프로필 카드 보임
   profileCardShow = () => {
     this.setState({ profileCardShow: true });
   };
 
 
+  // 프로필 카드 숨김
   profileCardHide = () => {
     this.setState({ profileCardShow: false });
   };
@@ -158,7 +170,8 @@ class Header extends React.Component {
 
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("scroll", () =>{});
+    window.removeEventListener("click", () =>{});
   }
 
 
@@ -166,11 +179,12 @@ class Header extends React.Component {
     const { prevScrollPos, searchBar, profileCardShow, adShow } = this.state;
     const { getMyInfo, getTempEmail, getIsMobile } = this.props;
     let pathname = history.location.pathname.split("/")[1];
+    ;
 
     return (
 
       <header id="header">
-        {adShow && !pathname && (window.pageYOffset <= "35") &&
+        {adShow && !pathname && (window.pageYOffset === 0) &&
         <div className="ad-dummy"/>
         }
 
@@ -182,7 +196,7 @@ class Header extends React.Component {
             <AdsContainer close={() => this.handleClose()}/>
             }
             <div className="col-4 col-md-3 mt-1">
-              <a className="navbar-brand" href={"/"} title="Link to main page">
+              <a className="navbar-brand" href={"/"}>
                 <img src={require("assets/image/logo.svg")} alt="POLARIS SHARE"/>
               </a>
             </div>
@@ -205,7 +219,7 @@ class Header extends React.Component {
                   </div>
                 </div>
                 :
-                <SearchBarContainer closeSearchBar={() => this.closeSearchBar()}/>
+                <SearchBarContainer closeSearchBar={() => this.closeSearchBar()} />
               }
             </div>
 
@@ -240,8 +254,7 @@ class Header extends React.Component {
 
 
               {!MainRepository.Account.isAuthenticated() && !getTempEmail &&
-              <div className="d-none d-sm-inline-block login-btn ml-2" onClick={() => this.handleLogin()}
-                   title="login">
+              <div className="d-none d-sm-inline-block login-btn ml-2" onClick={() => this.handleLogin()}>
                 Login
               </div>
               }

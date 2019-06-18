@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import ActiveVote from "../../components/common/ActiveVote";
+import ActiveVote from "../../components/common/amount/ActiveVote";
 
 export default connect(
   state => ({

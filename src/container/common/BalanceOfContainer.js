@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import BalanceOf from "../../components/common/BalanceOf";
+import BalanceOf from "../../components/common/amount/BalanceOf";
 
 export default connect(
   state => ({

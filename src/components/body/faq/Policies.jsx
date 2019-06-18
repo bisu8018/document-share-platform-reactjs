@@ -22,9 +22,9 @@ class Policies extends React.PureComponent {
             following
             websites:
             <br/><br/>
-            <a className="legal-a-tag" href="https://www.decompany.io">https://www.decompany.io</a>
+            <a href="https://www.decompany.io">https://www.decompany.io</a>
             <br/>
-            <a href="https://polarishare.com">https://www.polarishare.com</a>
+            <a href="https://www.polarishare.com">https://www.polarishare.com</a>
             <br/><br/>
             Polaris Share provides a link to this privacy statement on all pages requesting or controlling personal
             information

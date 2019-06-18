@@ -27,6 +27,22 @@ export default ({
     if (h === "" && m === "" && s === "") return "";
     else return "Duration: " + h + m + s;
   },
+  // change timestamp to duration
+  timestampToDurationJustTime: (timestamp) => {
+    let date = new Date(timestamp);
+
+    let h = date.getHours() - 9;
+    h = h > 0 ? (h + "h ") : "";
+
+    let m = date.getMinutes();
+    m = m > 0 ? (m + "m ") : "";
+
+    let s = date.getSeconds();
+    s = s > 0 ? (s + "s ") : "";
+
+    if (h === "" && m === "" && s === "") return "0s ";
+    else return h + m + s;
+  },
   // change Timestamp to Datetime
   timestampToDateTime: (timestamp) => {
     let date = new Date(timestamp);
@@ -222,6 +238,7 @@ export default ({
     return name.match(regExp);
   },
   toDollar: (deck: string) => {
+    if(isNaN(deck) || !deck) return 0;
     let c = 0.005;
     let d = new BigNumber("1e+18");
     let bn = new BigNumber(deck);
@@ -230,6 +247,7 @@ export default ({
     return Math.round(dollar.toNumber() * 100) / 100;
   },
   toDeck: (smallDeck: string) => {
+    if(isNaN(smallDeck) || !smallDeck) return 0;
     let d = new BigNumber("1e+18");
     let bn = new BigNumber(smallDeck);
     let deck = bn.dividedBy(d);
@@ -237,13 +255,14 @@ export default ({
     return Math.round(deck.toNumber() * 100) / 100;
   },
   toEther: (str: string) => {
+    if(isNaN(str) ||!str) return 0;
     let d = new BigNumber("1e+18");
     let bn = new BigNumber(str);
     let ether = bn.dividedBy(d);
     return Math.round(ether.toNumber() * 100) / 100;
   },
   deckToDollar: (str: string) => {
-    if (isNaN(str)) return 0;
+    if (isNaN(str) || !str) return 0;
     let c = 0.005;
     let bn = new BigNumber(str);
     let dollar = bn.multipliedBy(c);

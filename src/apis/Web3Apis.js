@@ -1,10 +1,20 @@
 import Web3 from "web3";
-import Creator from "./contracts-alpha/Creator.json";
-import DocumentRegistry from "./contracts-alpha/DocumentRegistry.json";
-import Deck from "./contracts-alpha/Deck.json";
-import RewardPool from "./contracts-alpha/RewardPool.json";
-import Curator from "./contracts-alpha/Curator.json";
-import BountyOne from "./contracts-alpha/BountyOne.json";
+
+/*알파용 컨트랙*/
+/*import DocumentRegistry from "apis/contracts-alpha/DocumentRegistry.json";
+import Deck from "apis/contracts-alpha/Deck.json";
+import BountyOne from "apis/contracts-alpha/BountyOne.json";
+import Curator from "apis/contracts-alpha/Curator.json";
+import Creator from "apis/contracts-alpha/Creator.json";
+import RewardPool from "apis/contracts-alpha/RewardPool.json";*/
+
+/*개발계용 컨트랙*/
+import DocumentRegistry from "apis/contracts-dev/DocumentRegistry.json";
+import Deck from "apis/contracts-dev/Deck.json";
+import BountyOne from "apis/contracts-dev/BountyOne.json";
+import Curator from "apis/contracts-dev/Curator.json";
+import Creator from "apis/contracts-dev/Creator.json";
+import RewardPool from "apis/contracts-dev/RewardPool.json";
 
 let defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c"));

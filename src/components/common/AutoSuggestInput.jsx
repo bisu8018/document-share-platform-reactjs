@@ -3,24 +3,47 @@ import Autosuggest from "react-autosuggest";
 import Common from "../../util/Common";
 
 class AutoSuggestInput extends React.Component {
+
   constructor() {
     super();
     this.state = {
-      value: '',
-      suggestions: [],
+      value: "",
+      suggestions: []
     };
   }
+
+
+  // 자동 완성 리스트 설정
   getSuggestions = value => {
-    const { type, getTagList, getCurrentTagList } = this.props;
+    const { type, getTagList, getCurrentTagList, getNameList } = this.props;
 
     const escapedValue = Common.escapeRegexCharacters(value.trim());
 
-    if (escapedValue === '') return [];
+    if (escapedValue === "") return [];
 
-    const regex = new RegExp('^' + escapedValue, 'i');
-    let tagList = type === "currentTag" ? getCurrentTagList : getTagList;
-    return tagList.filter(data => regex.test(data._id));
+    const regex = new RegExp("^" + escapedValue, "i");
+
+    switch (type) {
+      case "tag":
+        return getTagList.filter(data => regex.test(data._id));
+
+      case "currentTag":
+        return getCurrentTagList.filter(data => regex.test(data._id));
+
+      case "name":
+        let tempArr =
+          getNameList.filter((data, i) =>
+            getNameList.findIndex((data2, j) =>
+              (data.user ? data.user.e : "Anonymous") === (data2.user ? data2.user.e : "Anonymous")
+            ) === i
+          );
+        return tempArr.filter(data => regex.test(data.user ? data.user.e : "Anonymous"));
+
+      default:
+        break;
+    }
   };
+
 
   onChange = (event, { newValue, method }) => {
     this.setState({
@@ -28,13 +51,42 @@ class AutoSuggestInput extends React.Component {
     });
   };
 
+
+  // 보여줄 값 GET
   getSuggestionValue = suggestion => {
-    return suggestion._id;
+    const { type } = this.props;
+
+    switch (type) {
+      case "tag":
+      case "currentTag":
+        return suggestion._id;
+
+      case "name":
+        return suggestion.user ? suggestion.user.e : "Anonymous";
+
+      default:
+        break;
+    }
   };
 
+
+  //표시할 값 SET
   renderSuggestion = suggestion => {
-    return suggestion._id;
+    const { type } = this.props;
+
+    switch (type) {
+      case "tag":
+      case "currentTag":
+        return suggestion._id;
+
+      case "name":
+        return suggestion.user ? suggestion.user.e : "Anonymous";
+
+      default:
+        break;
+    }
   };
+
 
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
@@ -42,11 +94,13 @@ class AutoSuggestInput extends React.Component {
     });
   };
 
+
   onSuggestionsClearRequested = () => {
     this.setState({
       suggestions: []
     });
   };
+
 
   onSuggestionSelected = (event, { suggestion }) => {
     this.props.search(suggestion);
@@ -55,11 +109,13 @@ class AutoSuggestInput extends React.Component {
     });
   };
 
+
   renderSectionTitle = section => {
     return (
       <strong className="autosuggest-count">{section.value}</strong>
     );
   };
+
 
   getSectionSuggestions = section => {
     let arr = new Array(0);
@@ -67,26 +123,44 @@ class AutoSuggestInput extends React.Component {
     return arr;
   };
 
+
+  // placeholder 설정
+  getPlaceholder = () => {
+    const { type } = this.props;
+
+    let _placeholder;
+
+    switch (type) {
+      case "tag":
+      case "currentTag":
+        _placeholder = "Tag Search . . .";
+        break;
+
+      case "name":
+        _placeholder = "Name Search . . .";
+        break;
+
+      default:
+        _placeholder = "";
+        break;
+    }
+
+    return _placeholder;
+  };
+
+
   componentWillMount(): void {
-    if(this.props.bindValue){
-      this.setState({value : this.props.bindValue});
+    if (this.props.bindValue) {
+      this.setState({ value: this.props.bindValue });
     }
   }
 
+
   render() {
-    const { type } = this.props;
     const { value, suggestions } = this.state;
-    let _placeholder = "";
-
-    if(type === "tag" || type === "currentTag") {
-      _placeholder = "Tag Search . . .";
-
-    }else if(type === "name") {
-      _placeholder = "name Search . . .";
-    }
 
     const inputProps = {
-      placeholder: _placeholder,
+      placeholder: this.getPlaceholder(),
       value,
       onChange: this.onChange
     };

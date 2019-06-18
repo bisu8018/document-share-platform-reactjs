@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import ProfileCard from "../../components/common/ProfileCard";
+import ProfileCard from "../../components/common/card/ProfileCard";
 import { setMyInfo } from "../../redux/reducer/main";
 import { setTempEmail } from "../../redux/reducer/emailModal";
 

@@ -81,7 +81,7 @@ class ContentListItem extends React.Component {
             </div>
           </div>
 
-
+          <div className="details-info-desc-wrapper">
           <Link to={"/" + identification + "/" + result.seoTitle} className="info_desc" title={result.desc} onClick={() => Common.scrollTop()}>
             {result.desc &&
             <LinesEllipsis
@@ -93,9 +93,9 @@ class ContentListItem extends React.Component {
             />
             }
           </Link>
+          </div>
 
-
-          <div className="info_detail mt-2">
+          <div className="mt-2">
             <span className="info-detail-reward mr-3"
                   onMouseOver={() => this.showRewardInfo(result.seoTitle + "reward")}
                   onMouseOut={() => this.hideRewardInfo(result.seoTitle + "reward")}>

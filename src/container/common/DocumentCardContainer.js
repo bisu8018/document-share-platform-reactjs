@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import DocumentCard from "../../components/common/DocumentCard";
+import DocumentCard from "../../components/common/card/DocumentCard";
 
 export default connect(
   state => ({

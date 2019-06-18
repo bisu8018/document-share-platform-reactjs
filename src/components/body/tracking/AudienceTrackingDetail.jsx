@@ -79,7 +79,7 @@ class AudienceTrackingDetail extends React.Component {
 
   getSortedTime = (result) => {
     result.viewTracking.sort((a, b) => a.t - b.t);
-    return Common.timestampToTime(result.viewTracking[0].t) + " ~ " + Common.timestampToTime(result.viewTracking[result.viewTracking.length - 1].t);
+    return Common.timestampToTime(result.viewTracking[0].t);
   };
 
   getStayingTime = (result) => {
@@ -87,7 +87,7 @@ class AudienceTrackingDetail extends React.Component {
     let nextDt = result.viewTracking[result.viewTracking.length - 1].t;
     let prevDt = result.viewTracking[0].t;
 
-    return Common.timestampToTimeNotGmt(nextDt - prevDt);
+    return Common.timestampToDurationJustTime(nextDt - prevDt);
   };
 
   componentWillMount() {
@@ -113,8 +113,8 @@ class AudienceTrackingDetail extends React.Component {
             <div className="tracking-detail-title h3 d-inline-block mr-5">
               <span className="mr-3">{email}</span>
               <span className="tracking-time d-block d-sm-inline-block">{time}</span>
-              <div className="back-btn " onClick={history.goBack}>
-                <i className="material-icons ml-2">keyboard_backspace</i>
+              <div className="back-btn-wrapper" onClick={history.goBack}>
+                <img src={require("assets/image/icon/i_arrow_back.png")} alt="back"/>
                 Back to visitor list
               </div>
             </div>
@@ -126,9 +126,9 @@ class AudienceTrackingDetail extends React.Component {
                     <div className="tfl_title" onClick={this.handleClick}>
                       <i><img src={require("assets/image/icon/i_faq.png")} alt="dropdown icon"/></i>
                       <div className="font-weight-bold">
-                        {this.getStayingTime(result)}
+                        {this.getSortedTime(result)}
                         <span className="ml-2 font-weight-normal">
-                        ({this.getSortedTime(result)})
+                        ( {this.getStayingTime(result)})
                         </span>
                       </div>
                     </div>

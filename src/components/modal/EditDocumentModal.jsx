@@ -328,8 +328,8 @@ class EditDocumentModal extends React.Component {
     return (
       <span>
         <Tooltip title="Settings of this document" placement="bottom">
-          <div className="viewer-btn p-0" onClick={() => this.handleClickOpen("classicModal")}>
-            <img className="setting-img" src={require("assets/image/icon/i_settings.png")} alt="setting"/> Settings
+          <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
+            <i className="material-icons">settings</i> Settings
           </div>
         </Tooltip>
         {type && type === "menu" &&
