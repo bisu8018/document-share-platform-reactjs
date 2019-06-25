@@ -32,7 +32,7 @@ class CreatorSummary extends React.Component {
     if (this.state.errMsg !== "") this.setState({ errMsg: "" }, () => {
       return true;
     });
-
+    return true;
   };
 
 

@@ -211,7 +211,7 @@ class ContentViewFullScreen extends Component {
             {accountId === Common.getMySub() && documentData &&
             <EditDocumentModalContainer documentData={documentData}/>}
 
-            <CopyModal/>
+            <CopyModal documentData={documentData}/>
 
             {documentData.isDownload &&
             <Tooltip title="Download this document" placement="bottom">

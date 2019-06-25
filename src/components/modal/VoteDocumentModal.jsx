@@ -137,10 +137,12 @@ class VoteDocumentModal extends React.Component {
     const { getDrizzle } = this.props;
     const { deposit } = this.state;
 
-    await getDrizzle.approve(String(deposit)).then((res) => {
-      this.setState({ voteStatus: "APPROVE" });
-      if (res === "success") return res;
-      else this.handleFailed();
+    return new Promise((resolve, reject) => {
+      getDrizzle.approve(String(deposit)).then((res) => {
+        this.setState({ voteStatus: "APPROVE" });
+        if (res === "success") resolve(res);
+        else this.handleFailed();
+      });
     });
   };
 

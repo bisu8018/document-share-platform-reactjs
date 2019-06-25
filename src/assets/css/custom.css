@@ -9281,6 +9281,14 @@ dean
 ContentViewFullScreen 카로셀
 
 전체화면*/
+.carousel .slide {
+    background: black;
+}
+
+.carousel .slide img {
+    vertical-align: middle;
+}
+
 .device-ratio .carousel .slide img {
     height: 100vh;
     width: auto;

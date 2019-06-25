@@ -53,7 +53,7 @@
     "start": "set PORT=8000 && react-scripts start",
     "build": "npm run build-css && react-scripts build",
     "deploy": "npm run deploy:dev",
-    "deploy:dev": "aws s3 sync build/ s3://share.decompany.io --cache-control max-age=60 && npm run invaildate:dev",
+    "deploy:dev": "aws s3 sync build/ s3://share.decompany.io --cache-control max-age=60 --acl public-read && npm run invaildate:dev",
     "deploy:production": "aws s3 sync build/ s3://www.polarishare.com --cache-control max-age=60 && npm run invaildate:production",
     "invaildate:dev": "aws cloudfront create-invalidation --distribution-id EDFUPNJU9XKGX --paths /*",
     "invaildate:production": "aws cloudfront create-invalidation --distribution-id E1UYELY2K59G6Q --paths /*",
