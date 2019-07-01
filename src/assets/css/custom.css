@@ -7278,6 +7278,13 @@ Dean*/
 }
 
 @media (max-width: 575px) {
+    .MuiDialog-paper-5 {
+        margin: 0 !important;
+        max-height: 100% !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+    }
+
     .dialog-title {
         font-size: 20px !important;
     }
@@ -8047,7 +8054,7 @@ Dean
 .u__view .view_screen {
     position: relative;
     bottom: 37px;
-    right: 11px;
+    right: 14px;
     z-index: 2;
     float: right;
 }
@@ -8060,7 +8067,7 @@ Dean
 .u__view .screen-option-bar {
     position: absolute;
     top: 10px;
-    right: 11px;
+    right: 14px;
     z-index: 3;
     float: right;
 }
@@ -9481,7 +9488,7 @@ dean
 dean
 로그인 콜백 페이지 CSS*/
 .callback-wrapper {
-    position: absolute;
+    position: fixed;
     display: flex;
     justify-content: center;
     height: 100%;
@@ -9490,7 +9497,7 @@ dean
     bottom: 0;
     left: 0;
     right: 0;
-    background: white;
+    background: #fff;
     z-index: 4;
     align-items: center;
 }

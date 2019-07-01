@@ -67,7 +67,7 @@ class AudienceTrackingDetail extends React.Component {
         console.error(err);
         setTimeout(() => {
           this.getTrackingInfo();
-        }, 3000);
+        }, 8000);
       });
     }
   };

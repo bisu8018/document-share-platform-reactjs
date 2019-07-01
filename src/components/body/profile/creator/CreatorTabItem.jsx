@@ -41,11 +41,6 @@ class CreatorTabItem extends React.Component {
   };
 
 
-  //이미지 GET 에러 합수
-  onImgError = () => {
-
-  };
-
   componentWillMount(): void {
     this.getImgInfo();
   }

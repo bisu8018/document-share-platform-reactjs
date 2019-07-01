@@ -35,7 +35,7 @@ class Creator extends React.Component {
       console.error(err);
       setTimeout(() => {
         this.getProfileInfo(params);
-      }, 3000);
+      }, 8000);
     });
   };
 

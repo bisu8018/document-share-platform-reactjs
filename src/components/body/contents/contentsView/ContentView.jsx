@@ -51,7 +51,7 @@ class ContentView extends React.Component {
       console.error(err);
       setTimeout(() => {
         this.getContentInfo(documentId);
-      },3000)
+      },8000)
     });
   };
 

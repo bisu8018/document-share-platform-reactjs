@@ -65,9 +65,10 @@ class ContentList extends Component {
     }, (err) => {
       this.setState({ loading: false });
       console.error(err);
-      setTimeout(() => {
+      this.setTimeout = setTimeout(() => {
         this.fetchDocuments(args);
-      },3000);
+        clearTimeout(this.setTimeout);
+      },8000);
     });
   };
 

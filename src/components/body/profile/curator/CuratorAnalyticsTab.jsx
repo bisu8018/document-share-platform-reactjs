@@ -66,7 +66,7 @@ class CuratorAnalyticsTab extends React.Component {
       console.error("Creator analytics info GET ERROR", err);
       setTimeout(() => {
         this.fetchDocuments(params);
-      },3000);
+      },8000);
     })
   };
 

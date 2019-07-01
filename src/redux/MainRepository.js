@@ -25,6 +25,7 @@ import CuratorService from "../service/CuratorService";
 import TrackingService from "../service/TrackingService";
 import CuratorSummary from "./model/CuratorSummary";
 import AnalyticsService from "../service/AnalyticsService";
+import TagService from "../service/TagService";
 
 let instance: any;
 
@@ -90,9 +91,9 @@ export default {
         }
       };
 
-      DocService.GET.analyticsExport(params, (result) => {
-        let analysticsExport = new AnalysticsExport(result);
-        callback(analysticsExport);
+      AnalyticsService.GET.analyticsExport(params, (result) => {
+        let analyticsExport = new AnalysticsExport(result);
+        callback(analyticsExport);
       });
     },
     async getAnalyticsList(params: any, callback: any) {
@@ -398,22 +399,8 @@ export default {
         console.error("file object is null", params);
         return;
       }
-      const urlSplits = params.signedUrl.split("?");
 
-      let url = urlSplits[0];
-      let search = urlSplits[1];
-      let query = JSON.parse("{\"" + search.replace(/&/g, "\",\"").replace(/=/g, "\":\"") + "\"}", function(key, value) {
-        return key === "" ? value : decodeURIComponent(value);
-      });
-
-      const config = {
-        headers: {
-          "content-type": params.file.type,
-          "Signature": query.Signature,
-          "x-amz-acl": "authenticated-read"
-        }
-      };
-      axios.put(url, params.file, config)
+      axios.put(params.signedUrl, params.file)
         .then(
           response => {
             callback(response);
@@ -531,20 +518,8 @@ export default {
         console.error("file object is null", params);
         return;
       }
-      const urlSplits = params.signedUrl.split("?");
-
-      let url = urlSplits[0];
-      let search = urlSplits[1];
-      let query = JSON.parse("{\"" + search.replace(/&/g, "\",\"").replace(/=/g, "\":\"") + "\"}", function(key, value) {
-        return key === "" ? value : decodeURIComponent(value);
-      });
 
       const config = {
-        headers: {
-          "content-type": "application/octet-stream",
-          "Signature": query.Signature,
-          "x-amz-acl": "authenticated-read"
-        },
         onUploadProgress: (e) => {
           if (e.load !== null && params.callback !== null) {
             //console.log("onUploadProgress : " + e.loaded + "/" + e.total);
@@ -552,7 +527,7 @@ export default {
           }
         }
       };
-      return axios.put(url, params.file, config);
+      return axios.put(params.signedUrl, params.file, config);
     },
     getDocument(documentId: string, callback: any, error: any) {
       DocService.GET.document(documentId, (result) => {
@@ -564,13 +539,15 @@ export default {
         }
       });
     },
-    getTagList(path: String, callback: any) {
+    getTagList(path: String, callback: any, error:any) {
       let params = {
         t: path
       };
-      DocService.GET.tagList(params, result => {
+      TagService.GET.tagList(params, result => {
         let tagList = new TagList((result));
         callback(tagList);
+      }, err => {
+        error(err);
       });
     },
     getDocumentList(params: any, callback: any, error: any) {
@@ -703,5 +680,5 @@ export default {
         callback(trackingExport);
       });
     }
-  }
+  },
 };

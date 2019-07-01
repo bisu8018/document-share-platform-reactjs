@@ -69,7 +69,7 @@ class CuratorVoteTab extends React.Component {
       console.error("Error CuratorDocumentList", err)
       setTimeout(() => {
         this.fetchDocuments(params);
-      },3000);
+      },8000);
     });
   };
 

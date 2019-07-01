@@ -6,19 +6,11 @@ let voteDocumentUrl = "document/vote";
 let documentDownloadUrl = "document/download";
 let registerDocumentInfoUrl = "document/regist";
 let updateDocumentUrl = "document/update";
-let tagListUrl = "tags";
 
 export default {
   GET: {
     document: (data, callback) => {
       AxiosService._requestWithUrlPram( getDocumentUrl + "/" + data, "GET", null,
-        (data) => {
-          callback(data);
-        }, () => {
-        });
-    },
-    tagList: (data,callback) => {
-      AxiosService._requestWithUrlPram( tagListUrl, "GET", data,
         (data) => {
           callback(data);
         }, () => {

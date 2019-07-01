@@ -39,6 +39,8 @@ class Main extends Component {
     MainRepository.Document.getTagList("latest", result => {
       setTagList(result.resultList);
       setCurrentTagList(result.resultList);
+    }, err => {
+      console.error(err);
     });
   };
 
@@ -54,6 +56,8 @@ class Main extends Component {
         if (!result.picture) res.picture = localStorage.getItem("user_info").picture;
         setMyInfo(res);
         this.setState({ init: true, myInfo: res });
+      }, err => {
+        console.error(err);
       });
     }
   };

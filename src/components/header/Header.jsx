@@ -179,7 +179,6 @@ class Header extends React.Component {
     const { prevScrollPos, searchBar, profileCardShow, adShow } = this.state;
     const { getMyInfo, getTempEmail, getIsMobile } = this.props;
     let pathname = history.location.pathname.split("/")[1];
-    ;
 
     return (
 

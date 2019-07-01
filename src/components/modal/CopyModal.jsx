@@ -32,10 +32,11 @@ class CopyModal extends React.Component {
   };
 
   handleClickOpen = (modal) => {
+    const {documentData} = this.props;
     const x = [];
     x[modal] = true;
     this.setState(x);
-    this.setState({ url: window.location.href });
+    this.setState({ url: documentData.shortUrl || window.location.href });
   };
 
   handleClose = (modal) => {

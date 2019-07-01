@@ -101,7 +101,7 @@ class AudienceTrackingList extends React.Component {
           console.error(err);
           setTimeout(() => {
             this.getTrackingList();
-          }, 3000);
+          }, 8000);
         });
       });
     }
@@ -132,7 +132,7 @@ class AudienceTrackingList extends React.Component {
         console.error(err);
         setTimeout(() => {
           this.getTrackingInfo();
-        }, 3000);
+        }, 8000);
       });
     }
   };

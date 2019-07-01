@@ -55,7 +55,7 @@ class CuratorUploadTab extends React.Component {
         console.error(err);
         setTimeout(() => {
           this.fetchDocuments(params);
-        },3000);
+        },8000);
       })
     }else {
       MainRepository.Document.getDocumentList(_params, (res) => {
@@ -64,7 +64,7 @@ class CuratorUploadTab extends React.Component {
         console.error("Curator upload document GET ERROR", err);
         setTimeout(() => {
           this.fetchDocuments(params);
-        },3000);
+        },8000);
       })
     }
   };

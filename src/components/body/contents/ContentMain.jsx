@@ -27,9 +27,9 @@ class ContentMain extends Component {
       else if (path === "popular") this.setState({ popularDocuments: res });
     }, err => {
       console.error(err);
-      setTimeout(() => {
+      this.setTimeout = setTimeout(() => {
         this.getDocuments(path);
-      }, 3000);
+      },8000);
     });
   };
 
