@@ -80,8 +80,8 @@ class ProfileCard extends React.Component {
         <div>
           {MainRepository.Account.isAuthenticated() ?
             <Link to={"/" + identification}>
-              <div className="my-account-btn mb-2" id="profileCardMyAccountBtn" onClick={() => Common.scrollTop()}>My
-                account
+              <div className="my-account-btn mb-2" id="profileCardMyAccountBtn" onClick={() => Common.scrollTop()}>
+                My page
               </div>
             </Link> :
             <div className="my-account-btn mb-2" onClick={() => MainRepository.Account.login()}> Login </div>

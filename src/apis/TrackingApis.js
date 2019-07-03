@@ -21,6 +21,8 @@ function setTrackingInfo() {
     console.error(e);
   }
 
+  console.log(trackingInfo);
+
   if (!trackingInfo) {
     trackingInfo = {
       sid: makeId(),

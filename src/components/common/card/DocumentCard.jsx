@@ -8,7 +8,7 @@ class DocumentCard extends React.Component {
     super(props);
 
     this.state = {
-      ratio: null,
+      ratio: null
     };
   }
 
@@ -34,7 +34,7 @@ class DocumentCard extends React.Component {
     img.onload = () => {
       let height = img.height;
       let width = img.width;
-      this.setState({ratio : (width/height) });
+      this.setState({ ratio: (width / height) });
     };
   };
 
@@ -44,7 +44,7 @@ class DocumentCard extends React.Component {
 
   render() {
     const { idx, path, documentData, getCreatorDailyRewardPool, totalViewCountInfo, countCards } = this.props;
-    const { ratio} = this.state;
+    const { ratio } = this.state;
 
     let author = documentData.author;
     let identification = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId;
@@ -56,7 +56,8 @@ class DocumentCard extends React.Component {
 
     return (
       <div>
-        <div className={"main-category-card mb-3 " + (idx < (countCards - 1) && " mr-0 mr-sm-3 ") + (idx === (countCards - 1) && " mr-0 mr-sm-3 mr-lg-0")}>
+        <div
+          className={"main-category-card mb-3 " + (idx < (countCards - 1) && " mr-0 mr-sm-3 ") + (idx === (countCards - 1) && " mr-0 mr-sm-3 mr-lg-0")}>
           <Link to={"/" + identification + "/" + documentData.seoTitle}>
             <div className="main-category-card-img-wrapper" onClick={() => Common.scrollTop()}>
               <img src={imgUrl} alt={documentData.title}
@@ -87,20 +88,33 @@ class DocumentCard extends React.Component {
               </span>
             </Link>
             <div className="main-category-card-count">
-              <span className="main-category-card-reward" onMouseOver={() => this.showRewardInfo(path + idx)}
+              <span className={"main-category-card-reward " + (documentData.isRegistry ? "" : "color-not-registered")}
+                    onMouseOver={() => this.showRewardInfo(path + idx)}
                     onMouseOut={() => this.hideRewardInfo(path + idx)}>
                 ${Common.deckToDollar(reward)}
-                <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")} alt="arrow button"/>
+                <img className="reward-arrow"
+                     src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
+                     alt="arrow button"/>
               </span>
               <span className="main-category-card-vote float-right">{Common.deckStr(vote)}</span>
               <span className="main-category-card-view float-right">{view}</span>
             </div>
           </div>
 
-          {reward > 0 &&
-          <div className="main-category-card-reward-info" id={path + idx}>
-            Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
-          </div>
+          {reward > 0 && (
+            documentData.isRegistry ?
+              <div className={"main-category-card-reward-info"} id={path + idx}>
+                Creator payout
+                <span className="font-weight-bold ml-1">{(!reward ? 0 : reward)} DECK</span> in 7 days
+              </div>
+              :
+              <div className={"main-category-card-reward-info reward-info-not-registered"} id={path + idx}>
+                <div className="reward-info-not-registered-syntax">NOT REGISTERED ON BLOCKCHAIN</div>
+                Creator will be paid
+                <span className="font-weight-bold ml-1">{(!reward ? 0 : reward)} DECK</span>
+              </div>
+          )
+
           }
         </div>
 

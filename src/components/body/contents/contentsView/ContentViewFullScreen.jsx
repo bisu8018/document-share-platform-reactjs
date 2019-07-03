@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {
   FacebookShareButton,
   LinkedinShareButton,
-  TwitterShareButton,
+  TwitterShareButton
 } from "react-share";
 // import ContentViewComment from "./ContentViewComment";
 import Common from "../../../../util/Common";
@@ -17,6 +17,7 @@ import ContentViewCarouselContainer
 import Linkify from "react-linkify";
 import RegBlockchainBtnContainer from "../../../../container/body/contents/contentsView/RegBlockchainBtnContainer";
 import VoteDocumentModalContainer from "../../../../container/modal/VoteDocumentModalContainer";
+import PayoutCard from "../../../common/card/PayoutCard";
 
 class ContentViewFullScreen extends Component {
 
@@ -157,7 +158,8 @@ class ContentViewFullScreen extends Component {
           <Fullscreen enabled={isFull} onChange={isFull => this.handleFullChange(isFull)}>
 
             <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
-                                          tracking={true} handleEmailFlag={this.handleEmailFlag} catchPageChanged={catchPageChanged}
+                                          tracking={true} handleEmailFlag={this.handleEmailFlag}
+                                          catchPageChanged={catchPageChanged}
                                           getPageNum={(page) => {
                                             this.getPageNum(page);
                                           }}/>
@@ -172,7 +174,7 @@ class ContentViewFullScreen extends Component {
           <div className="u_title pt-2 pb-2 mt-2 mb-2">   {documentData.title ? documentData.title : ""}</div>
 
           <div>
-            <Link to={"/" + identification} className="info_name mb-2"
+            <Link to={"/" + identification} className="info_name"
                   title={"Go to profile page of " + identification}>
               {profileUrl ?
                 <img src={profileUrl} alt="profile" onClick={() => Common.scrollTop()}/> :
@@ -189,17 +191,17 @@ class ContentViewFullScreen extends Component {
 
           <div className="mb-3 d-inline-block position-relative">
 
-            <span className="info-detail-reward mr-2"
+            <span className={"info-detail-reward mr-2 " + (documentData.isRegistry ? "" : "color-not-registered")}
                   onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
                   onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
               ${Common.deckToDollar(reward)}
-              <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")} alt="arrow button"/>
+              <img className="reward-arrow"
+                   src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
+                   alt="arrow button"/>
             </span>
 
             {reward > 0 &&
-            <div className="info-detail-reward-info info-fullscreen" id={documentData.seoTitle + "reward"}>
-              Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
-            </div>
+            <PayoutCard reward={reward} data={documentData}/>
             }
 
             <span className="info-detail-view mr-3">{view}</span>
@@ -287,14 +289,15 @@ class ContentViewFullScreen extends Component {
 
 
               {documentData.cc &&
-                  <Tooltip title="This work is licensed under a Creative Commons Attribution 2.0 Generic License."
-                           placement="bottom">
-                    {/* eslint-disable-next-line react/jsx-no-target-blank */}
-                    <a rel="license" className="float-right" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/" target="_blank">
-                      <img alt="Creative Commons License" className="cc-img"
-                           src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + documentData.cc + ".svg")}/>
-                    </a>
-                  </Tooltip>
+              <Tooltip title="This work is licensed under a Creative Commons Attribution 2.0 Generic License."
+                       placement="bottom">
+                {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                <a rel="license" className="float-right" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/"
+                   target="_blank">
+                  <img alt="Creative Commons License" className="cc-img"
+                       src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + documentData.cc + ".svg")}/>
+                </a>
+              </Tooltip>
               }
             </div>
 
@@ -318,7 +321,6 @@ class ContentViewFullScreen extends Component {
           {/*<ContentViewComment/>*/}
 
         </div>
-
 
 
       </div>

@@ -18,18 +18,14 @@ class About extends React.PureComponent {
 
           <div className="col-12 col-md-6 order-last order-md-first">
             <div className="about-main-title ">
-              Sharing knowledge
-              in new ways
+              Sharing knowledge in new ways
             </div>
             <div className="about-main-content ">
-              Polaris Share is a system that shares knowledge
-              and is compensated by user's vote.
+              Polaris Share is a system that shares knowledge and is compensated by user's vote.
             </div>
             <div className="about-text-align">
               <Link to="/faq">
-                <div className="main-learn-more-btn tac" onClick={() => Common.scrollTop()} title="Link to FAQ">Learn
-                  more
-                </div>
+                <div className="main-learn-more-btn tac" onClick={() => Common.scrollTop()} title="Link to FAQ">Learn more</div>
               </Link>
             </div>
           </div>
@@ -159,8 +155,7 @@ class About extends React.PureComponent {
                 Value of knowledge
               </div>
               <div className="about-vision-content">
-                Polaris Share returns the value of knowledge stored in documents and network to Knowledge Creators and
-                other users.
+                Polaris Share returns the value of knowledge stored in documents and network to Knowledge Creators and other users.
               </div>
             </div>
             <div className="col-12 col-md-4 tac">
@@ -170,8 +165,7 @@ class About extends React.PureComponent {
                 No transaction fees
               </div>
               <div className="about-vision-content">
-                Knowledge Creators get rewards from sharing or selling documents on Polaris Share with no or with low
-                transaction fees
+                Knowledge Creators get rewards from sharing or selling documents on Polaris Share with no or with low transaction fees
               </div>
             </div>
             <div className="col-12 col-md-4 tac">

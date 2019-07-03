@@ -10,8 +10,8 @@ class ContentMain extends Component {
   state = {
     latestDocuments: null,
     featuredDocuments: null,
-    popularDocuments: null
-
+    popularDocuments: null,
+    latestListMany: 4
   };
 
 
@@ -59,14 +59,35 @@ class ContentMain extends Component {
   };
 
 
+  // 스크롤 이벤트 리스너
+  handleResize = (e) => {
+    let countCards = (window.innerWidth > 1293 || window.innerWidth < 993) ? 4 : 6;
+    this.setState({latestListMany : countCards});
+  };
+
+
+  componentDidMount(): void {
+    window.addEventListener("resize", this.handleResize);
+  }
+
+
   componentWillMount() {
     this.getDocuments("latest");
     this.getDocuments("featured");
     this.getDocuments("popular");
+    this.handleResize();
   }
+
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", () => {
+    });
+  }
+
 
   render() {
     const { getIsMobile } = this.props;
+    const { latestListMany } = this.state;
 
     //배너 제목
     const subject = [
@@ -94,8 +115,6 @@ class ContentMain extends Component {
     const category = [
       "latest", "featured", "popular"
     ];
-
-    let countCards = (window.innerWidth > 1293 || window.innerWidth < 993) ? 4 : 4;   // 모바일 체크 실시간 작업 전까진 6대신 4로 유지
 
     return (
       <div className="row">
@@ -157,8 +176,8 @@ class ContentMain extends Component {
 
                 <div className="row main-category-card-wrapper">
                   {this.getList(arr) && this.getList(arr).resultList.map((res, idx) => {
-                    return (idx < countCards &&
-                      <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res} countCards={countCards}
+                    return (idx < latestListMany &&
+                      <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res} countCards={latestListMany}
                                              totalViewCountInfo={this.getList(arr).totalViewCountInfo}/>
                     );
                   })}

@@ -18,6 +18,7 @@ export const APP_PROPERTIES = {
       api: "https://api.share.decompany.io/rest",
       email: "https://api.share.decompany.io/ve",
       profile: "https://profile.share.decompany.io/",
+      embed: "https://embed.share.decompany.io/"
     }
   },
   dev:{
@@ -28,6 +29,7 @@ export const APP_PROPERTIES = {
       api: "https://api.polarishare.com/rest",
       email: "https://api.polarishare.com/ve",
       profile: "https://res.polarishare.com/",
+      embed: "https://embed.polarishare.com/",
     }
   },
   production:{
@@ -38,6 +40,7 @@ export const APP_PROPERTIES = {
       api: "https://api.share.decompany.io/rest",
       email: "https://api.share.decompany.io/ve",
       profile: "https://profile.share.decompany.io/",
+      embed: "https://embed.share.decompany.io/",
     }
   }
 

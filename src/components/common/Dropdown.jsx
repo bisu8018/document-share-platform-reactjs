@@ -51,7 +51,7 @@ class Dropdown extends React.Component {
              onMouseLeave={() => this.arrowUnHover()} onClick={() => this.handleClick()}>
           <div className="dropdown-selected mr-4">{selected}</div>
           {mouseOver ?
-            <img src={require("assets/image/icon/i-arrow-down-blue.svg")} alt="dropdown"/> :
+            <img src={require("assets/image/icon/i_arrow_down_blue.svg")} alt="dropdown"/> :
             <img src={require("assets/image/icon/i-arrow-down.svg")} alt="dropdown"/>
           }
         </div>

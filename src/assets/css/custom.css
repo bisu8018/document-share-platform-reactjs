@@ -550,17 +550,27 @@ mark,
 }
 
 .not-convert {
-    left: calc(50% - 15px);
     width: auto;
     height: 100%;
-    position: absolute;
-    top: 0;
     display: flex;
     align-items: center;
+    justify-content: center;
+}
+
+.not-convert-container {
+    width: 162px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .not-convert-background {
     opacity: 0;
+}
+
+.not-convert-wrapper {
+    pointer-events: none;
 }
 
 .img-thumbnail {
@@ -608,6 +618,10 @@ mark,
 
 .color-main-color {
     color: #3d5afe;
+}
+
+.color-not-registered {
+    color: #888888 !important;
 }
 
 .col-1,
@@ -6563,6 +6577,23 @@ dean
     top: 3px;
 }
 
+.share-btn {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: bold;
+    color: #666666;
+    position: absolute;
+    cursor: pointer;
+    top: 3px;
+}
+
+.share-btn-wrapper {
+    display: inline-block;
+    position: relative;
+    width: 16px;
+    height: 16px;
+}
+
 /*아바타 CSS
 Dean*/
 
@@ -7035,6 +7066,7 @@ Dean*/
 .tab-thumbnail {
     max-width: 163px;
     max-height: 92px;
+    min-height: 90px;
     overflow: hidden;
     text-align: center;
     background: #fdfdfd;
@@ -7074,7 +7106,7 @@ Dean*/
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
-    color: #666666;
+    color: #4d4d4d;
     display: inline-block;
 }
 
@@ -7147,10 +7179,10 @@ Dean*/
     font-size: 14px;
     color: #b3b3b3;
     position: relative;
-    top: 5px;
+    top: 0;
     height: 25px;
     display: inline-block;
-    float: right;
+    margin-left: 8px;
 }
 
 .info-date {
@@ -7161,8 +7193,11 @@ Dean*/
     display: inline-block;
 }
 
+.info-date-profile {
+    margin-left: 15px;
+}
+
 .info-detail-view {
-    cursor: pointer;
     display: inline-block;
     font-size: 14px;
     color: #666666;
@@ -7182,7 +7217,6 @@ Dean*/
 
 .info-detail-vote {
     display: inline-block;
-    cursor: pointer;
     font-size: 14px;
     color: #666666;
 }
@@ -7218,7 +7252,7 @@ Dean*/
     display: none;
     position: absolute;
     min-height: 40px;
-    bottom: -40px;
+    bottom: -30px;
     background: #0d73f8;
     z-index: 1;
     width: 300px;
@@ -7228,7 +7262,8 @@ Dean*/
     padding: 10px 15px;
 }
 
-.info-detail-reward-info.info-fullscreen {
+.info-detail-reward-info.info-fullscreen,
+.tracking-item .info-detail-reward-info{
     bottom: -48px !important;
 }
 
@@ -7278,6 +7313,11 @@ Dean*/
 }
 
 @media (max-width: 575px) {
+
+    .not-convert-container {
+        width: 100%;
+    }
+
     .MuiDialog-paper-5 {
         margin: 0 !important;
         max-height: 100% !important;
@@ -7361,8 +7401,13 @@ Dean*/
     }
 
     .info-date-view {
-        right: 10px;
+        float: right;
         top: 2px !important;
+    }
+
+    .info-date-profile {
+        float: right;
+        margin-top: 2px;
     }
 
     .cc-container {
@@ -8208,7 +8253,7 @@ Dean
 }
 
 .u__view .info_name {
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .u__view .view_tag {
@@ -8254,7 +8299,7 @@ Dean
 .view_desc {
     margin-top: 20px;
     margin-bottom: 20px;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.5;
     min-height: 70px;
     white-space: pre-wrap;
@@ -9875,11 +9920,33 @@ Main Category CSS
     padding: 10px 15px;
 }
 
+.reward-info-not-registered {
+    background: #888888 !important;
+}
 
-/*
-프로필 카드 CSS
-2019-05-23 Dean
-*/
+.info-detail-reward-info.reward-info-not-registered {
+    bottom: -75px !important;
+}
+
+.view_content .info-detail-reward-info {
+    bottom: -45px !important;
+}
+
+.content-list-wrapper .reward-info-not-registered {
+    bottom: -50px !important;
+}
+
+.reward-info-not-registered-syntax {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+
+    /*
+    프로필 카드 CSS
+    2019-05-23 Dean
+    */
 
 .profile-card {
     width: 245px;

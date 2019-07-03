@@ -40,9 +40,9 @@ export default class DrizzleApis {
         let myInfo = store.getState().main.myInfo;    // redux store GET
         let ethAccount = this.drizzleState.accounts[0];
 
-        //console.log("drizzleState",this.drizzleState);
-        //console.log("store",store);
-        //console.log("myInfo", myInfo);
+        /*console.log("drizzleState",this.drizzleState);
+        console.log("store",store);
+        console.log("myInfo", myInfo);*/
 
         if (this.drizzleState.web3.networkId && this.drizzleState.web3.networkId !== 4) {
           store.dispatch(setAlertCode(2052));
@@ -156,9 +156,9 @@ export default class DrizzleApis {
     let ethAccount = this.drizzleState.accounts[0];
     const Curator = this.drizzle.contracts.Curator;
     let bigNumberDeposit = this.toBigNumber(deposit);
-    const stackId = Curator.methods["addVote"].cacheSend(this.fromAscii(documentId), bigNumberDeposit, { from: ethAccount });
-
-    return await this.getTransactionStatus(stackId);
+    //const stackId = Curator.methods["addVote"].cacheSend(this.fromAscii(documentId), bigNumberDeposit, { from: ethAccount });
+    console.log(123);
+    return await this.getTransactionStatus(Curator.methods["addVote"].cacheSend(this.fromAscii(documentId), bigNumberDeposit, { from: ethAccount }));
   };
 
   // 블록체인에 문서 등록

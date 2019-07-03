@@ -21,6 +21,7 @@ class Main extends Component {
     myInfo: new UserInfo()
   };
 
+
   //초기화
   init = () => {
     MainRepository.init(() => {
@@ -31,6 +32,7 @@ class Main extends Component {
       this.setCuratorDailyRewardPool();   // 큐레이터 리워드풀 GET
     });
   };
+
 
   //태그 리스트 GET
   setTagList = () => {
@@ -43,6 +45,7 @@ class Main extends Component {
       console.error(err);
     });
   };
+
 
   // 내 정보 GET
   setMyInfo = () => {
@@ -62,6 +65,7 @@ class Main extends Component {
     }
   };
 
+
   // 모바일 유무 GET
   setIsMobile = () => {
     const { setIsMobile } = this.props;
@@ -73,17 +77,20 @@ class Main extends Component {
     }
   };
 
+
   // 크리에이터 리워드풀 GET
   setAuthorDailyRewardPool = () => {
     const { setAuthorDailyRewardPool } = this.props;
     setAuthorDailyRewardPool(115068493148000000000000);    // web3 speed issue, 리워드풀 하드코딩
   };
 
+
   // 큐레이터 리워드풀 GET
   setCuratorDailyRewardPool = () => {
     const { setCuratorDailyRewardPool } = this.props;
     setCuratorDailyRewardPool(49315068492000000000000);   // web3 speed issue, 리워드풀 하드코딩
   };
+
 
   componentWillMount() {
     this.init();

@@ -67,48 +67,57 @@ class Header extends React.Component {
   };
 
 
-  // 클릭 이벤트 리스터
+  // 화면 크기 이벤트 리스너
+  handleResize= (e) => {
+    const { setIsMobile } = this.props;
+    if (e.currentTarget.innerWidth < 576) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  };
+
+
+  // 클릭 이벤트 리스너
   clickEventListener = () => {
-    const {setDropdownShow} = this.props;
-
+    const { setDropdownShow } = this.props;
     document.addEventListener("click", (e) => {
-        let targetElement = e.target; // clicked element
+    let targetElement = e.target; // clicked element
 
-        // 프로필 카드
-        const profileCard = document.getElementById("profileCard");
-        if (profileCard && !profileCard.contains(targetElement)) {
-          this.profileCardHide();
-        }
+    // 프로필 카드
+    const profileCard = document.getElementById("profileCard");
+    if (profileCard && !profileCard.contains(targetElement)) {
+      this.profileCardHide();
+    }
 
-        // 헤더 검색 카테고리 드롭다운
-        const dropdownList = document.getElementById("dropdownList");
-        if (dropdownList && !dropdownList.contains(targetElement)) {
-          setDropdownShow(false);
-        }
+    // 헤더 검색 카테고리 드롭다운
+    const dropdownList = document.getElementById("dropdownList");
+    if (dropdownList && !dropdownList.contains(targetElement)) {
+      setDropdownShow(false);
+    }
 
-        // 프로필 카드 프로필 버튼
-        const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
-        if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) {
-          this.profileCardHide();
-        }
+    // 프로필 카드 프로필 버튼
+    const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
+    if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) {
+      this.profileCardHide();
+    }
 
-        // 검색 input
-        const headerAutoSuggest = document.getElementById("headerAutoSuggest");
-        if (headerAutoSuggest &&
-          !headerAutoSuggest.contains(targetElement) &&
-          "headerAutoSuggest" !== targetElement.id &&
-          "headerSearchIcon" !== targetElement.id &&
-          "headerSearchSelectBar" !== targetElement.id &&
-          targetElement.classList[0] !== "react-autosuggest__input" &&
-          targetElement.classList[0] !== "react-autosuggest__suggestion"
-        ) {
-          this.closeSearchBar();
-        }
+    // 검색 input
+    const headerAutoSuggest = document.getElementById("headerAutoSuggest");
+    if (headerAutoSuggest &&
+      !headerAutoSuggest.contains(targetElement) &&
+      "headerAutoSuggest" !== targetElement.id &&
+      "headerSearchIcon" !== targetElement.id &&
+      "headerSearchSelectBar" !== targetElement.id &&
+      targetElement.classList[0] !== "react-autosuggest__input" &&
+      targetElement.classList[0] !== "react-autosuggest__suggestion"
+    ) {
+      this.closeSearchBar();
+    }
 
       }
     );
   };
-
 
   // 프로필 카드 보임
   profileCardShow = () => {
@@ -165,13 +174,18 @@ class Header extends React.Component {
 
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener("resize", this.handleResize);
     this.addClass();
   }
 
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", () =>{});
-    window.removeEventListener("click", () =>{});
+    window.removeEventListener("scroll", () => {
+    });
+    window.removeEventListener("click", () => {
+    });
+    window.removeEventListener("resize", () => {
+    });
   }
 
 
@@ -218,7 +232,7 @@ class Header extends React.Component {
                   </div>
                 </div>
                 :
-                <SearchBarContainer closeSearchBar={() => this.closeSearchBar()} />
+                <SearchBarContainer closeSearchBar={() => this.closeSearchBar()}/>
               }
             </div>
 

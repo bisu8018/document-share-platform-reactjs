@@ -2,13 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 import Common from "../../../util/Common";
+import PayoutCard from "../../common/card/PayoutCard";
 
 class ContentListItem extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      ratio: null,
+      ratio: null
     };
   }
 
@@ -33,7 +34,7 @@ class ContentListItem extends React.Component {
     img.onload = () => {
       let height = img.height;
       let width = img.width;
-      this.setState({ratio : (width/height) });
+      this.setState({ ratio: (width / height) });
     };
   };
 
@@ -44,7 +45,7 @@ class ContentListItem extends React.Component {
 
   render() {
     const { result, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
-    const { ratio} = this.state;
+    const { ratio } = this.state;
 
     let vote = Common.toEther(result.latestVoteAmount) || 0;
     let reward = Common.toEther(Common.getAuthorNDaysReward(result, getCreatorDailyRewardPool, totalViewCountInfo, 7));
@@ -58,7 +59,8 @@ class ContentListItem extends React.Component {
         <div className="col-thumb-list">
           <Link to={"/" + identification + "/" + result.seoTitle}>
             <div className="thumb_image" onClick={() => Common.scrollTop()}>
-              <img src={imageUrl} alt={result.title} className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
+              <img src={imageUrl} alt={result.title}
+                   className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
             </div>
           </Link>
         </div>
@@ -72,7 +74,8 @@ class ContentListItem extends React.Component {
             <Link to={"/" + identification} className="info_name"
                   title={identification}>
               {profileUrl ?
-                <img src={profileUrl} alt="profile" onClick={() => Common.scrollTop()}/> : <i className="material-icons img-thumbnail" onClick={() => this.menuClick()}>face</i>
+                <img src={profileUrl} alt="profile" onClick={() => Common.scrollTop()}/> :
+                <i className="material-icons img-thumbnail" onClick={() => this.menuClick()}>face</i>
               }
               {identification}
             </Link>
@@ -82,34 +85,35 @@ class ContentListItem extends React.Component {
           </div>
 
           <div className="details-info-desc-wrapper">
-          <Link to={"/" + identification + "/" + result.seoTitle} className="info_desc" title={result.desc} onClick={() => Common.scrollTop()}>
-            {result.desc &&
-            <LinesEllipsis
-              text={result.desc}
-              maxLine={2}
-              ellipsis='...'
-              trimRight
-              basedOn='words'
-            />
-            }
-          </Link>
+            <Link to={"/" + identification + "/" + result.seoTitle} className="info_desc" title={result.desc}
+                  onClick={() => Common.scrollTop()}>
+              {result.desc &&
+              <LinesEllipsis
+                text={result.desc}
+                maxLine={2}
+                ellipsis='...'
+                trimRight
+                basedOn='words'
+              />
+              }
+            </Link>
           </div>
 
           <div className="mt-2">
-            <span className="info-detail-reward mr-3"
+            <span className={"info-detail-reward mr-3 " + (result.isRegistry ? "" : "color-not-registered")}
                   onMouseOver={() => this.showRewardInfo(result.seoTitle + "reward")}
                   onMouseOut={() => this.hideRewardInfo(result.seoTitle + "reward")}>
               ${Common.deckToDollar(reward)}
-              <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")} alt="arrow button"/>
+              <img className="reward-arrow"
+                   src={require("assets/image/icon/i_arrow_down_" + (result.isRegistry ? "blue" : "grey") + ".svg")}
+                   alt="arrow button"/>
             </span>
             <span className="info-detail-view mr-3">{view}</span>
             <span className="info-detail-vote mr-3">{Common.deckStr(vote)}</span>
           </div>
 
           {reward > 0 &&
-          <div className="info-detail-reward-info" id={result.seoTitle + "reward"}>
-            Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
-          </div>
+          <PayoutCard reward={reward} data={result}/>
           }
 
         </div>

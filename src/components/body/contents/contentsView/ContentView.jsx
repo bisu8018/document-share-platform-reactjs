@@ -1,6 +1,7 @@
 import React from "react";
 import { ThreeBounce } from 'better-react-spinkit';
 import { Helmet } from "react-helmet";
+import { APP_PROPERTIES } from "properties/app.properties";
 
 import ContentViewRight from "./ContentViewRight";
 import MainRepository from "../../../../redux/MainRepository";
@@ -35,6 +36,7 @@ class ContentView extends React.Component {
         errMessage: null,
         catchPageChanged : Math.floor(Math.random() * 1000) +1
       }, () => {
+        this.checkUrl(res);
         this.setDocumentIsExist();  //문서 로드 후 문서 블록체인 등록 체크
       });
     }, err => {
@@ -63,7 +65,7 @@ class ContentView extends React.Component {
     });
   };
 
-  getDocumentId = () => {
+  getSeoTitle = () => {
     const { match } = this.props;
     return match.params.documentId;
   };
@@ -73,21 +75,28 @@ class ContentView extends React.Component {
     return Common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName);
   };
 
-  componentWillMount() {
-    if (!this.state.documentData) {
-      this.getContentInfo(this.getDocumentId());
+  checkUrl = (res) => {
+    if(this.getSeoTitle() !== res.document.seoTitle){
+      window.history.replaceState({}, res.document.seoTitle, APP_PROPERTIES.domain().mainHost + "/" + res.document.author.username + "/" + res.document.seoTitle);
     }
+  };
+
+
+  componentWillMount() {
+    if (!this.state.documentData) this.getContentInfo(this.getSeoTitle());
   }
+
 
   // 해당 이벤트는 See Also 이동 시에만 발생
   componentDidUpdate = () => {
     const { documentTitle, errMessage } = this.state;
-    let oldDocumentId = documentTitle;
-    let newDocumentId = window.location.pathname.split("/")[2];
-    if (newDocumentId !== oldDocumentId && !errMessage) {
-      this.getContentInfo(newDocumentId);
+    let titleFromServer = documentTitle;
+    let titleFromUrl = window.location.pathname.split("/")[2];
+    if (titleFromUrl !== titleFromServer && !errMessage) {
+      this.getContentInfo(titleFromUrl);
     }
   };
+
 
   render() {
     const { auth, match, ...rest } = this.props;
@@ -104,7 +113,7 @@ class ContentView extends React.Component {
       <div data-parallax="true" className="container_view row col-re">
         <Helmet>
           <meta charSet="utf-8"/>
-          <title>{documentData.seoTitle}</title>
+          <title>{documentData.title}</title>
 
           <meta property="og:locale" content="en_US"/>
           <meta property="og:type" content="website"/>

@@ -6,6 +6,8 @@ import CreatorClaimContainer from "../../../../container/body/profile/creator/Cr
 import { FadingCircle } from "better-react-spinkit";
 import Tooltip from "@material-ui/core/Tooltip";
 import LinesEllipsis from "react-lines-ellipsis";
+import CopyModal from "../../../modal/CopyModal";
+import PayoutCard from "../../../common/card/PayoutCard";
 
 class CreatorTabItem extends React.Component {
   constructor(props) {
@@ -60,20 +62,20 @@ class CreatorTabItem extends React.Component {
 
 
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
-          <Link to={"/" + identification + "/" + document.seoTitle}>
+          <Link to={"/" + identification + "/" + document.seoTitle}
+                className={(document.state && document.state === "NOT_CONVERT" ? " not-convert-wrapper" : "")}>
             <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
               <img src={Common.getThumbnail(document.documentId, "thumb", 1, document.documentName)}
-                   onError={(e) => {
-                     e.target.src = (Common.getThumbnail(document.documentId, (getIsMobile ? 640 : 320), 1, document.documentName));
-                   }}
                    alt={document.title ? document.title : document.documentName}
-                   className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (document.state && document.state === "NOT_CONVERT" ? "not-convert-background" : "")}/>
+                   className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (document.state && document.state === "NOT_CONVERT" ? " not-convert-background" : "")}/>
 
               {document.state && document.state === "NOT_CONVERT" &&
-              <div className="not-convert">
-                <Tooltip title="Converting document..." placement="bottom">
-                  <FadingCircle size={40} color={"#3d5afe"}/>
-                </Tooltip>
+              <div className="not-convert-container">
+                <div className="not-convert">
+                  <Tooltip title="Converting document..." placement="bottom">
+                    <FadingCircle size={40} color={"#3d5afe"}/>
+                  </Tooltip>
+                </div>
               </div>
               }
             </div>
@@ -83,13 +85,16 @@ class CreatorTabItem extends React.Component {
 
         <div className="col-12 col-sm-9 col-lg-10 p-0">
           <div className="details_info-padding">
-            <Link to={"/" + identification + "/" + document.seoTitle}>
+            <Link to={"/" + identification + "/" + document.seoTitle}
+                  className={(document.state && document.state === "NOT_CONVERT" ? " not-convert-wrapper" : "")}>
               <div className="info_title mb-2"
                    onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
             </Link>
 
             <div className="details-info-desc-wrapper">
-              <Link to={"/" + identification + "/" + document.seoTitle} className="info_desc" title="description"
+              <Link to={"/" + identification + "/" + document.seoTitle}
+                    className={"info_desc " + (document.state && document.state === "NOT_CONVERT" ? " not-convert-wrapper" : "")}
+                    title="description"
                     onClick={() => Common.scrollTop()}>
                 {document.desc &&
                 <LinesEllipsis
@@ -104,26 +109,26 @@ class CreatorTabItem extends React.Component {
             </div>
 
             <div className="tab-item-info-wrapper ">
-              <span className="info-detail-reward mr-2"
-                    onMouseOver={() => this.showRewardInfo(document.seoTitle + "rewardUpload")}
-                    onMouseOut={() => this.hideRewardInfo(document.seoTitle + "rewardUpload")}>
+              <span className={"info-detail-reward mr-3 " + (document.isRegistry ? "" : "color-not-registered")}
+                    onMouseOver={() => this.showRewardInfo(document.seoTitle + "reward")}
+                    onMouseOut={() => this.hideRewardInfo(document.seoTitle + "reward")}>
                 ${Common.deckToDollar(reward)}
-                <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")}
+                <img className="reward-arrow"
+                     src={require("assets/image/icon/i_arrow_down_" + (document.isRegistry ? "blue" : "grey") + ".svg")}
                      alt="arrow button"/>
               </span>
 
               {reward > 0 &&
-              <div className="info-detail-reward-info" id={document.seoTitle + "rewardUpload"}>
-                Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
-              </div>
+              <PayoutCard reward={reward} data={document}/>
               }
 
 
               <span className="info-detail-view mr-3">{view}</span>
-              <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
-
-
-              <div className="info-date">
+              <span className="info-detail-vote mr-3">{Common.deckStr(vote)}</span>
+              {document.state !== "NOT_CONVERT" &&
+              <CopyModal documentData={document} type="onlyIcon"/>
+              }
+              <div className="info-date info-date-profile">
                 {Common.dateTimeAgo(document.created)}
               </div>
 

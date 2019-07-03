@@ -7,6 +7,7 @@ import { ThreeBounce } from "better-react-spinkit";
 import Tooltip from "@material-ui/core/Tooltip";
 import CustomChart from "../../common/CustomChart";
 import AutoSuggestInputContainer from "../../../container/common/AutoSuggestInputContainer";
+import PayoutCard from "../../common/card/PayoutCard";
 
 class AudienceTrackingList extends React.Component {
   state = {
@@ -325,18 +326,17 @@ class AudienceTrackingList extends React.Component {
 
 
                 <div className="col-view tracking-item mb-1  mt-1 position-relative">
-                 <span className="info-detail-reward mr-2"
+                 <span className={"info-detail-reward mr-2 " + (documentData.isRegistry ? "" : "color-not-registered") }
                        onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
                        onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
                     ${Common.deckToDollar(reward)}
-                   <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")}
+                   <img className="reward-arrow"
+                        src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
                         alt="arrow button"/>
                   </span>
 
                   {reward > 0 &&
-                  <div className="info-detail-reward-info" id={documentData.seoTitle + "reward"}>
-                    Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
-                  </div>
+                  <PayoutCard reward={reward} data={documentData}/>
                   }
 
                   <span className="info-detail-view mr-3">{view}</span>
