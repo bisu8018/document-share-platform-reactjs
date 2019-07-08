@@ -1,5 +1,5 @@
 import React from "react";
-import Common from "../../../util/Common";
+import Common from "../../../config/common";
 
 class UserActiveVote extends React.Component {
 

@@ -4,6 +4,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { ThreeBounce } from 'better-react-spinkit';
 import CuratorTabItemContainer from "../../../../container/body/profile/curator/CuratorTabItemContainer";
 import NoDataIcon from "../../../common/NoDataIcon";
+import { psString } from "../../../../config/localization";
 
 class CuratorVoteTab extends React.Component {
 
@@ -84,7 +85,7 @@ class CuratorVoteTab extends React.Component {
     return (
       <div>
         <div className="document-total-num">
-          Total documents : <span className="font-weight-bold">{resultList.length}</span>
+          {psString("Total documents :")} <span className="font-weight-bold">{resultList.length}</span>
         </div>
         {resultList.length > 0 ?
           <InfiniteScroll

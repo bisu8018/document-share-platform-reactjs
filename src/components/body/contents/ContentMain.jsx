@@ -4,7 +4,8 @@ import { Carousel } from "react-responsive-carousel";
 
 import MainRepository from "../../../redux/MainRepository";
 import DocumentCardContainer from "../../../container/common/DocumentCardContainer";
-import Common from "../../../util/Common";
+import Common from "../../../config/common";
+import { psString } from "../../../config/localization";
 
 class ContentMain extends Component {
   state = {
@@ -91,29 +92,29 @@ class ContentMain extends Component {
 
     //배너 제목
     const subject = [
-      "Realization of Value via Sharing",
-      "Content Free",
-      "Grow Your Audience"
+      psString("main-banner-subj-1"),
+      psString("main-banner-subj-2"),
+      psString("main-banner-subj-3")
     ];
 
     //배너 버튼 텍스트
     const buttonText = [
-      "Join Now",
-      "Sign Up",
-      "Upload now"
+      psString("Join Now"),
+      psString("Sign up"),
+      psString("Upload now")
     ];
 
     // 배너 내용
     const content = [
-      "Polaris Share values ​​the content you share.\nShare your content and get a transparent monetary reward.\n Join now as a creator ",
-      "Meet advanced content produced by creator. \n Just vote for your favorite document and you'll be rewarded.\n Sign up now ",
-      "Upload your slides and share them on high-quality channels.\n Track lead activity and collect contacts.\n"
+      psString("main-banner-explain-1"),
+      psString("main-banner-explain-2"),
+      psString("main-banner-explain-3")
     ];
 
 
     // path 카테고리
     const category = [
-      "latest", "featured", "popular"
+      psString("latest"), psString("featured"), psString("popular")
     ];
 
     return (
@@ -146,7 +147,7 @@ class ContentMain extends Component {
                            onClick={() => this.handleLogin()}>{buttonText[idx]}</div>
                     }
                     <Link to="/faq">
-                      <div className="main-learn-more-btn ml-2 mr-2" onClick={() => Common.scrollTop()}>Learn more</div>
+                      <div className="main-learn-more-btn ml-2 mr-2" onClick={() => Common.scrollTop()}>{psString("Learn more")}</div>
                     </Link>
                   </div>
                 </div>
@@ -169,7 +170,7 @@ class ContentMain extends Component {
 
                 <div className="mb-3">
                   <span className="main-category-name">{arr}</span>
-                  <span className="main-category-see-all" onClick={() => this.handelTrigger(arr)}>See All
+                  <span className="main-category-see-all" onClick={() => this.handelTrigger(arr)}>{psString("See All")}
                       <i className="material-icons">keyboard_arrow_right</i></span>
 
                 </div>

@@ -5,6 +5,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import Tooltip from "@material-ui/core/Tooltip";
+import { psString } from "../../config/localization";
 
 
 function Transition(props) {
@@ -20,7 +21,7 @@ class CopyModal extends React.Component {
     this.state = {
       classicModal: false,
       url: "",
-      copyText: "Copy"
+      copyText: psString("Copy")
     };
   }
 
@@ -30,7 +31,7 @@ class CopyModal extends React.Component {
     this.setState({
       classicModal: false,
       url: "",
-      copyText: "Copy"
+      copyText: psString("Copy")
     });
   };
 
@@ -59,7 +60,7 @@ class CopyModal extends React.Component {
     let copyUrl = document.getElementById("copyInput");
     copyUrl.select();
     document.execCommand("copy");
-    this.setState({ copyText: "Done" });
+    this.setState({ copyText: psString("Done")});
   };
 
 
@@ -69,10 +70,10 @@ class CopyModal extends React.Component {
 
     return (
       <span>
-         <Tooltip title="Clip the URL of this document" placement="bottom">
+         <Tooltip title={psString("Clip the URL of this document")} placement="bottom">
            {type !== "onlyIcon" ?
              <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
-               <i className="material-icons">share</i> Copy Link
+               <i className="material-icons">share</i> {psString("Copy Link")}
              </div>
              :
              <div className="share-btn-wrapper">
@@ -94,7 +95,7 @@ class CopyModal extends React.Component {
                 id="classic-modal-slide-title"
                 disableTypography>
                 <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                <h3>Copy URL</h3>
+                <h3>{psString("Copy URL")}</h3>
               </DialogTitle>
 
 

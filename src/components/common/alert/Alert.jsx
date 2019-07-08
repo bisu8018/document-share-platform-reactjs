@@ -1,4 +1,5 @@
 import React from "react";
+import { psString } from "../../../config/localization";
 
 class Alert extends React.PureComponent {
 
@@ -27,79 +28,79 @@ class Alert extends React.PureComponent {
       // 시스템 메세지 2000~
       case 2001 :
         status = "error";
-        msg = "A network error has occurred.";   // 네트워크 에러
+        msg = psString("alert-2001");   // 네트워크 에러
         break;
 
       case 2002 :
         status = "error";
-        msg = "Bad access.";   // 잘못된 접근경로
+        msg = psString("alert-2002");   // 잘못된 접근경로
         break;
 
       case 2003 :
         status = "warning";
-        msg = "Requires login.";   // 로그인 필요
+        msg = psString("alert-2003");   // 로그인 필요
         break;
 
       // 이메일 메세지 2031~
       case 2021 :
         status = "success";
-        msg = "Success e-mail authentication.";   // 이메일 검증 성공
+        msg = psString("alert-2021");   // 이메일 검증 성공
         break;
 
       case 2022 :
         status = "error";
-        msg = "Failed e-mail authentication.";   // 이메일 검증 실패
+        msg = psString("alert-2022");   // 이메일 검증 실패
         break;
 
       case 2023 :
         status = "warning";
-        msg = "Already verified.";   // 이메일 이미 검증
+        msg = psString("alert-2023");   // 이메일 이미 검증
         break;
 
       case 2024 :
         status = "warning";
-        msg = "Invalid verification code.";   // 잘못된 검증 코드
+        msg = psString("alert-2024");   // 잘못된 검증 코드
         break;
 
 
       // 블록체인 메세지 2031~
       case 2031 :
         status = "warning";
-        msg = "Enter less than the number of votes available.";   // 투표가능액 초과
+        msg = psString("alert-2031");   // 투표가능액 초과
         break;
 
       case 2032 :
         status = "error";
-        msg = "Transaction failed.";   // 트랜잭션 실패
+        msg = psString("alert-2032");   // 트랜잭션 실패
         break;
 
       case 2033 :
         status = "error";
-        msg = "Approve transaction failed.";   // 승인 트랜잭션 실패
+        msg = psString("alert-2033");   // 승인 트랜잭션 실패
         break;
 
       case 2034 :
         status = "error";
-        msg = "Vote transaction failed.";   // 투표 트랜잭션 실패
+        msg = psString("alert-2034");   // 투표 트랜잭션 실패
         break;
 
       case 2035 :
         status = "error";
-        msg = "Claim transaction failed.";   // 클레임 트랜잭션 실패
+        msg = psString("alert-2035");   // 클레임 트랜잭션 실패
         break;
 
 
       //지갑 메세지 2050~
       case 2051 :
         status = "warning";
-        msg = "Log in with the correct account.";   // 잘못된 메타마스크
-        sub = "The Metamask account is different from the registered account. You must be signed in with the correct Metamask account to claim and receive payouts.";
+        msg = psString("alert-2051");   // 잘못된 메타마스크
+        sub = psString("alert-2051-sub");
         break;
 
       case 2052 :
         status = "warning";
-        msg = "Connect with the correct network.";  // 잘못된 이더리움 네트워크 접속
-        sub = "Please set the MetaMask network to: Rinkeby";
+        msg = psString("alert-2052");  // 잘못된 이더리움 네트워크 접속
+        sub = psString("alert-2052-sub");
         break;
 
 

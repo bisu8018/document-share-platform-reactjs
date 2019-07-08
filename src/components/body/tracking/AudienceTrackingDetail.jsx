@@ -3,7 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 
 import MainRepository from "../../../redux/MainRepository";
-import Common from "../../../util/Common";
+import Common from "../../../config/common";
 import Tooltip from "@material-ui/core/Tooltip";
 import { ThreeBounce } from "better-react-spinkit";
 

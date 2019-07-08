@@ -10,7 +10,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../redux/MainRepository";
 import Tooltip from "@material-ui/core/Tooltip";
-import Common from "../../util/Common";
+import Common from "../../config/common";
+import { psString } from "../../config/localization";
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -266,7 +267,7 @@ class EditDocumentModal extends React.Component {
     const { title } = this.state;
     this.setState({
       titleError:
-        title.length > 0 ? "" : "Title must be longer than 1 character ."
+        title.length > 0 ? "" : psString("edit-doc-error-1")
     });
     return title.length > 0;
   };
@@ -277,7 +278,7 @@ class EditDocumentModal extends React.Component {
     const { tags } = this.state;
     this.setState({
       tagError:
-        tags.length > 0 ? "" : "Tag must be at least 1 tag ."
+        tags.length > 0 ? "" : psString("edit-doc-error-2")
     });
     return tags.length > 0;
   };
@@ -327,13 +328,13 @@ class EditDocumentModal extends React.Component {
 
     return (
       <span>
-        <Tooltip title="Settings of this document" placement="bottom">
+        <Tooltip title={psString("Settings of this document")} placement="bottom">
           <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
-            <i className="material-icons">settings</i> Settings
+            <i className="material-icons">settings</i> {psString("Settings")}
           </div>
         </Tooltip>
         {type && type === "menu" &&
-        <span className="d-inline-block d-sm-none" onClick={() => this.handleClickOpen("classicModal")}>Upload</span>
+        <span className="d-inline-block d-sm-none" onClick={() => this.handleClickOpen("classicModal")}>{psString("Upload")}</span>
         }
 
         <Dialog
@@ -348,23 +349,23 @@ class EditDocumentModal extends React.Component {
                 id="classic-modal-slide-title"
                 disableTypography>
                 <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                <h3>Edit uploaded document</h3>
+                <h3>{psString("edit-doc-subj")}</h3>
               </DialogTitle>
 
 
               <DialogContent id="classic-modal-slide-description">
-                <div className="dialog-subject">Title</div>
-                <input type="text" placeholder="Title of the uploading document" id="docTitle"
+                <div className="dialog-subject">{psString("Title")}</div>
+                <input type="text" placeholder={psString("title-placeholder")} id="docTitle"
                        className={"custom-input " + (titleError.length > 0 ? "custom-input-warning" : "")}
                        value={title}
                        onChange={(e) => this.handleTitleChange(e)}/>
                 <span>{titleError}</span>
 
-                <div className="dialog-subject mt-3 mb-2">Description</div>
-                <textarea id="docDesc" value={desc} placeholder="Description of the uploading document"
+                <div className="dialog-subject mt-3 mb-2">{psString("Description")}</div>
+                <textarea id="docDesc" value={desc} placeholder={psString("description-placeholder")}
                           onChange={(e) => this.handleDescChange(e)} className="custom-textarea"/>
 
-                <div className="dialog-subject mt-3">Tag</div>
+                <div className="dialog-subject mt-3">{psString("Tag")}</div>
                 {tags &&
                 <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
                            className={"react-tagsinput " + (tagError.length > 0 ? "tag-input-warning" : "")}
@@ -372,7 +373,7 @@ class EditDocumentModal extends React.Component {
                 }
                 <span> {tagError}</span>
 
-                 <div className="dialog-subject mb-2 mt-3">Option</div>
+                 <div className="dialog-subject mb-2 mt-3">{psString("Option")}</div>
                   <div className="row">
                   <div className="col-12 col-sm-6">
                     <input type="checkbox" id="useTrackingCheckboxEdit" onChange={(e) => this.handleTrackingCheckbox(e)}
@@ -380,7 +381,7 @@ class EditDocumentModal extends React.Component {
 
                     <label htmlFor="useTrackingCheckboxEdit">
                       <span><i className="material-icons">done</i></span>
-                         Use audience tracking.
+                        {psString("doc-option-1")}
                     </label>
                   </div>
                   <div className="col-12 col-sm-6">
@@ -389,7 +390,7 @@ class EditDocumentModal extends React.Component {
                            checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
                     <label htmlFor="forceTrackingCheckboxEdit">
                       <span><i className="material-icons">done</i></span>
-                         Force the audience to tracking.
+                      {psString("doc-option-2")}
                     </label>
                    </div>
                   <div className="col-12 col-sm-6">
@@ -397,13 +398,13 @@ class EditDocumentModal extends React.Component {
                            onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
                     <label htmlFor="allowDownloadEdit">
                       <span><i className="material-icons">done</i></span>
-                         Allow download document.
+                      {psString("doc-option-3")}
                     </label>
                    </div>
                  </div>
 
 
-                <div className="dialog-subject mb-2 mt-3">CC License</div>
+                <div className="dialog-subject mb-2 mt-3">{psString("CC License")}</div>
                 <div className="row">
                   <div className="col-12 col-sm-6">
                     <input type="checkbox" id="ccByCheckboxEdit" onChange={(e) => this.handleCcByCheckbox(e)}
@@ -445,8 +446,8 @@ class EditDocumentModal extends React.Component {
 
 
                   <DialogActions className="modal-footer">
-                  <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">Cancel</div>
-                  <div onClick={() => this.handleConfirmBtn()} className="ok-btn">Confirm</div>
+                  <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">{psString("Cancel")}</div>
+                  <div onClick={() => this.handleConfirmBtn()} className="ok-btn">{psString("Confirm")}</div>
                   </DialogActions>
                   </Dialog>
                   </span>

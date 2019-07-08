@@ -5,7 +5,8 @@ import { ThreeBounce } from 'better-react-spinkit';
 import MainRepository from "../../../../redux/MainRepository";
 import NoDataIcon from "../../../common/NoDataIcon";
 import CreatorTabItemContainer from "../../../../container/body/profile/creator/CreatorTabItemContainer";
-import Common from "../../../../util/Common";
+import Common from "../../../../config/common";
+import { psString } from "../../../../config/localization";
 
 class CuratorUploadTab extends React.Component {
   state = {
@@ -117,7 +118,7 @@ class CuratorUploadTab extends React.Component {
 
       <div>
         <div className="document-total-num">
-          Total documents : <span className="font-weight-bold">{resultList.length}</span>
+          {psString("Total documents :")} <span className="font-weight-bold">{resultList.length}</span>
         </div>
         {resultList.length > 0 ?
           <InfiniteScroll

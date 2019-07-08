@@ -156,8 +156,6 @@ export default class DrizzleApis {
     let ethAccount = this.drizzleState.accounts[0];
     const Curator = this.drizzle.contracts.Curator;
     let bigNumberDeposit = this.toBigNumber(deposit);
-    //const stackId = Curator.methods["addVote"].cacheSend(this.fromAscii(documentId), bigNumberDeposit, { from: ethAccount });
-    console.log(123);
     return await this.getTransactionStatus(Curator.methods["addVote"].cacheSend(this.fromAscii(documentId), bigNumberDeposit, { from: ethAccount }));
   };
 

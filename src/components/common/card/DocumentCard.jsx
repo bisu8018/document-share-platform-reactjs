@@ -1,5 +1,5 @@
 import React from "react";
-import Common from "../../../util/Common";
+import Common from "../../../config/common";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 
@@ -110,7 +110,7 @@ class DocumentCard extends React.Component {
               :
               <div className={"main-category-card-reward-info reward-info-not-registered"} id={path + idx}>
                 <div className="reward-info-not-registered-syntax">NOT REGISTERED ON BLOCKCHAIN</div>
-                Creator will be paid
+                Creator can be paid
                 <span className="font-weight-bold ml-1">{(!reward ? 0 : reward)} DECK</span>
               </div>
           )

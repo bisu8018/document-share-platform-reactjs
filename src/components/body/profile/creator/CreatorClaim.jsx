@@ -1,5 +1,5 @@
 import React from "react";
-import Common from "../../../../util/Common";
+import Common from "../../../../config/common";
 
 class CreatorClaim extends React.Component {
   state = {

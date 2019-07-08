@@ -1,7 +1,7 @@
 {
-  "name": "decompanyio_front_end",
+  "name": "polarishare_front_end",
   "description": "www.polarishare.com",
-  "version": "0.1.0",
+  "version": "1.0.3",
   "license": "ISC",
   "private": true,
   "main": "index.js",
@@ -25,7 +25,6 @@
     "react": "^16.8.6",
     "react-autosuggest": "^9.4.3",
     "react-dom": "^16.8.6",
-    "react-drag-drawer": "^3.3.1",
     "react-full-screen": "^0.2.4",
     "react-ga": "^2.6.0",
     "react-google-charts": "^3.0.12",

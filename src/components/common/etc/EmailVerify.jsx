@@ -23,8 +23,8 @@ class EmailVerify extends React.Component {
       .then((response) => {
         if (response.data.success && response.data.success === true) setAlertCode(2021);
         else {
-          if(response.data.message === "already verified") setAlertCode(2023);
-          else if(response.data.message === "No Verify Request") setAlertCode(2024);
+          //if(response.data.message === "already verified") setAlertCode(2023);
+          //else if(response.data.message === "No Verify Request") setAlertCode(2024);
         }
       })
       .catch((error) => {

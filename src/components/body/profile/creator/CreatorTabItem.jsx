@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Common from "../../../../util/Common";
+import Common from "../../../../config/common";
 import CreatorClaimContainer from "../../../../container/body/profile/creator/CreatorClaimContainer";
 import { FadingCircle } from "better-react-spinkit";
 import Tooltip from "@material-ui/core/Tooltip";

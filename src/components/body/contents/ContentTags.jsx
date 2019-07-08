@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import Common from "../../../util/Common";
+import Common from "../../../config/common";
 
 class ContentTags extends React.Component {
 

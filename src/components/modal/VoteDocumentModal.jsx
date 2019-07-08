@@ -9,10 +9,11 @@ import Tooltip from "@material-ui/core/Tooltip/index";
 import Slide from "@material-ui/core/Slide/index";
 
 import MainRepository from "../../redux/MainRepository";
-import Common from "../../util/Common";
+import Common from "../../config/common";
 import CuratorUserActiveVoteContainer from "../../container/common/UserActiveVoteContainer";
 import CuratorActiveVoteContainer from "../../container/common/ActiveVoteContainer";
 import ApproveModal from "./ApproveModal";
+import { psString } from "../../config/localization";
 
 const style = {
   modalCloseButton: {
@@ -37,7 +38,7 @@ class VoteDocumentModal extends React.Component {
       balance: -1,
       classicModal: false,
       deckError: "",
-      msg: "Vote on this document"
+      msg: psString("Vote on this document")
     };
   }
 
@@ -61,8 +62,8 @@ class VoteDocumentModal extends React.Component {
     const { deposit, balance } = this.state;
     return new Promise((resolve) => {
       let errMsg = "";
-      if (deposit <= 0) errMsg = "Deposit must be greater than zero .";
-      else if (deposit > Number(Common.toDeck(balance).toFixed(2))) errMsg = "Deposit must be less than balance .";
+      if (deposit <= 0) errMsg = psString("Deposit must be greater than zero .");
+      else if (deposit > Number(Common.toDeck(balance).toFixed(2))) errMsg = psString("Deposit must be less than balance .");
 
       this.setState({ deckError: errMsg }, () => {
         resolve(errMsg);
@@ -195,15 +196,16 @@ class VoteDocumentModal extends React.Component {
       return;
     }
     if (getMyInfo.ethAccount !== getDrizzle.getLoggedInAccount()) {
-      this.setState({ msg: "Please log in with the correct account." });
+      this.setState({ msg: psString("b-error-1") });
       return;
     }
 
-    this.setState({ msg: "Vote on this document" }, () => {
+    this.setState({ msg: psString("Vote on this document") }, () => {
       const x = [];
       x[modal] = true;
       this.setState(x);
     });
+
   };
 
   // 모달 종료
@@ -268,18 +270,18 @@ class VoteDocumentModal extends React.Component {
     let btnText, statusFlag;
 
     if (voteStatus === "INIT" || voteStatus === "COMPLETE") {
-      btnText = "Confirm";
+      btnText = psString("Confirm");
       statusFlag = false;
     } else {
-      btnText = "Pending";
+      btnText = psString("Pending");
       statusFlag = true;
     }
 
     if (!isLogin) {
       return (
-        <Tooltip title="Please, login" placement="bottom">
+        <Tooltip title={psString("Please, login")} placement="bottom">
           <div className="viewer-btn" onClick={this.handleLogin.bind(this)}>
-            <i className="material-icons">how_to_vote</i> Vote
+            <i className="material-icons">how_to_vote</i> {psString("Vote")}
           </div>
         </Tooltip>
       );
@@ -288,17 +290,17 @@ class VoteDocumentModal extends React.Component {
     return (
       <span>
         {(!getDrizzle || !getDrizzle.isAuthenticated()) &&
-        <Tooltip title="Please, work with MetaMask" placement="bottom">
+        <Tooltip title={psString("Please, work with MetaMask")} placement="bottom">
           <div className="viewer-btn">
-            <i className="material-icons">how_to_vote</i> Vote
+            <i className="material-icons">how_to_vote</i> {psString("Vote")}
           </div>
         </Tooltip>
         }
 
         {getDrizzle && getIsDocumentExist &&
-        <Tooltip title="Vote on this document" placement="bottom">
+        <Tooltip title={psString("Vote on this document")} placement="bottom">
           <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
-            <i className="material-icons">how_to_vote</i> Vote
+            <i className="material-icons">how_to_vote</i> {psString("Vote")}
           </div>
         </Tooltip>
         }
@@ -317,12 +319,12 @@ class VoteDocumentModal extends React.Component {
             id="classic-modal-slide-title"
             disableTypography>
             <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-            <div className="vote-modal-title">Vote on document</div>
+            <div className="vote-modal-title">{psString("Vote on document")}</div>
           </DialogTitle>
 
 
           <DialogContent id="classic-modal-slide-description">
-            <div className="vote-modal-subject">1. Total amount of tokens voted</div>
+            <div className="vote-modal-subject">{psString("vote-modal-subj-1")}</div>
             <ul className="voteList">
               <li>
                 <strong>You : </strong>
@@ -339,7 +341,7 @@ class VoteDocumentModal extends React.Component {
             </ul>
 
 
-            <div className="vote-modal-subject">2. Amount of available tokens</div>
+            <div className="vote-modal-subject">{psString("vote-modal-subj-2")}</div>
             <ul className="voteList">
               <li>
                 <span className="color-main-color font-weight-bold">{Common.toDeck(balance).toFixed(2)}</span> DECK
@@ -348,7 +350,7 @@ class VoteDocumentModal extends React.Component {
             </ul>
 
 
-            <div className="vote-modal-subject">3. Enter the number of votes to commit</div>
+            <div className="vote-modal-subject">{psString("vote-modal-subj-3")}</div>
             <div className="deckInput">
               <input type="number" placeholder="DECK" autoComplete="off" id="deposit"
                      className={"custom-input " + (deckError.length > 0 ? "custom-input-warning" : "")}
@@ -357,12 +359,12 @@ class VoteDocumentModal extends React.Component {
               <span>{deckError}</span>
             </div>
 
-            <p className="noteTxt mt-2">Note: The token used for voting can be withdrawn after 3 days.</p>
+            <p className="noteTxt mt-2">{psString("vote-modal-note")}</p>
           </DialogContent>
 
 
           <DialogActions className="modal-footer">
-            <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">Cancel</div>
+            <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">{psString("Cancel")}</div>
             <div onClick={() => this.onClickVote()}
                  className={"ok-btn " + (statusFlag || balance <= 0 ? "btn-disabled" : "")}>{btnText}</div>
             <div className="d-none">{voteStatus}</div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { psString } from "../../../config/localization";
 
 
 class Faq extends React.PureComponent {
@@ -15,92 +16,82 @@ class Faq extends React.PureComponent {
 
           <div className="legal-content mt-4">
 
-            <div className="font-weight-bold mt-5 mb-2">What is Polaris Share?</div>
-            Polaris Share is a platform that uses a number of unutilized documents and knowledge to discover future
-            customers and build a network of experts to create new business opportunities.
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-1")}</div>
+            {psString("faq-answer-1")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-2">How does Polaris Share work?</div>
-            Documents shared by creators are curated by the collective intelligence of the expert group. To make these
-            activities happen spontaneously, Polaris Share is blockchain-based reward system.
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-2")}</div>
+            {psString("faq-answer-2")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-2">Does it cost to vote?</div>
-            No. It is free to vote. The tokens used in voting will be returned with the rewards at the end of the voting
-            period. You might even get paid for it.
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-3")}</div>
+            {psString("faq-answer-3")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-2">Can I get digital tokens on Polaris Share? How?</div>
-            Creator: Creators can receive a certain amount of compensation as a token based on the number of page views.
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-4")}</div>
+            {psString("faq-answer-4a")}
             <br/>
-            Curator: Curators can earn tokens according to the number of page views when voting on a high quality
-            document and at the end of the voting period, you can get rewards.
+            {psString("faq-answer-4b")}
             <br/>
-            You will be able to purchase tokens through the Cryptocurrency exchange later.
-            <br/>
-
-            <div className="font-weight-bold mt-5 mb-2">How can I create an account?</div>
-            You can simply use your social network accounts such as Google or LinkedIn.
-            <br/>
-            If you want to get Creator rewards or vote, connect the Etherium account to your account via the metamask.
+            {psString("faq-answer-4c")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-2">What information do I need to provide in order to create an
-              account?
-            </div>
-            Total balance: Total token retention.
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-5")}</div>
+            {psString("faq-answer-5a")}
             <br/>
-            Estimated earnings for today: Estimated revenue for the day (Total or Each reward for Creators and Curators)
-            <br/>
-            Revenue for the last 7 days: Estimated revenue for the last 7 days (Total or Each reward for Creators and
-            Curators)
+            {psString("faq-answer-5b")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-2">How do I see my recent rewards?</div>
-            Go to your profile page, then you can see your wallet and reward information.
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-6")}</div>
+            {psString("faq-answer-6a")}
+            <br/>
+            {psString("faq-answer-6b")}
+            <br/>
+            {psString("faq-answer-6c")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-2">What is shown in my profile?</div>
-            Your profile name and image.
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-7")}</div>
+            {psString("faq-answer-7")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-2">What can users post to Polaris Share?</div>
-            ppt/pptx and pdf
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-8")}</div>
+            {psString("faq-answer-8")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-3">How often can I post?</div>
-            There is no limit for posting, but we are planning to set a limit of 1 document per a week.
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-9")}</div>
+            {psString("faq-answer-9")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-3">Can I delete my posting?</div>
-            You can request it to Customer Service. We are planning to update document management system later.
+            <div className="font-weight-bold mt-5 mb-3">{psString("faq-question-10")}</div>
+            {psString("faq-answer-10")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-3">How many new tokens are generated by the blockchain?</div>
-            The total amount of tokens is fixed to the quantity defined in the white paper.
+            <div className="font-weight-bold mt-5 mb-3">{psString("faq-question-11")}</div>
+            {psString("faq-answer-11")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-3">What is a reward pool?</div>
-            Every day a fixed amount of Deck tokens are allocated to the network reward fund, commonly called the
-            "reward pool." Tokens are distributed to creators and curators for posting and voting on document.
+            <div className="font-weight-bold mt-5 mb-3">{psString("faq-question-12")}</div>
+            {psString("faq-answer-12")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-3">How is the reward pool divided between creators and curators?
-            </div>
-            Tokens are distributed according to the number of page views. 70% is awarded as a reward for creators and
-            30% is awarded to curators.
+            <div className="font-weight-bold mt-5 mb-3">{psString("faq-question-13")}</div>
+            {psString("faq-answer-13")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-3">What is Deck?</div>
-            Deck is an ERC-20 token used in Polaris Share that can withdraw to an exchange.
+            <div className="font-weight-bold mt-5 mb-3">{psString("faq-question-14")}</div>
+            {psString("faq-answer-14")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-3">Does creator get rewards in real time?</div>
-            Creators get paid between AM 0:00 and AM 0:10 every day. (GMT+0)
+            <div className="font-weight-bold mt-5 mb-3">{psString("faq-question-15")}</div>
+            {psString("faq-answer-15")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-2">When does curator get reward?</div>
-            Curators get paid with tokens used for voting in 3 weeks+2 days from a voting day.
+            <div className="font-weight-bold mt-5 mb-3">{psString("faq-question-16")}</div>
+            {psString("faq-answer-16")}
+            <br/>
+
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-17")}</div>
+            {psString("faq-answer-17")}
             <br/>
 
           </div>

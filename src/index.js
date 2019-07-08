@@ -7,6 +7,7 @@ import registerServiceWorker from "./config/registerServiceWorker";
 import App from "./App.jsx";
 
 export let store = configureStore(); // 스토어 생성
+
 let rootElement = document.getElementById("root");
 
 ReactDOM.render(

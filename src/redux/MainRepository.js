@@ -20,7 +20,7 @@ import TrackingExport from "./model/TrackingExport";
 import AnalysticsExport from "./model/AnalysticsExport";
 import UserProfile from "./model/UserProfile";
 import DocumentDownload from "./model/DocumentDownload";
-import Common from "../util/Common";
+import Common from "../config/common";
 import CuratorService from "../service/CuratorService";
 import TrackingService from "../service/TrackingService";
 import CuratorSummary from "./model/CuratorSummary";
@@ -277,6 +277,7 @@ export default {
         let userInfo = new UserInfo(result.user);
         callback(userInfo);
       }), err => {
+        this.logout();
         error(err);
       });
     },

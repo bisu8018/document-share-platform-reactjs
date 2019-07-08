@@ -1,5 +1,6 @@
 import React from "react";
-import Common from "../../util/Common";
+import Common from "../../config/common";
+import { psString } from "../../config/localization";
 
 class CookiePolicyModal extends React.PureComponent {
   state = {
@@ -44,9 +45,7 @@ class CookiePolicyModal extends React.PureComponent {
       <div className="privacy-banner">
 
         <div className="privacy-banner-wrapper container">
-          <div className="privacy-banner-text">
-            We use cookies to provide and improve our services. By using our site, you consent to our Cookies Policy.
-          </div>
+          <div className="privacy-banner-text">{psString("cookie-policy-content")}</div>
 
           <div className="cookie-btn" onClick={this.getStarted.bind(this)}>Accept</div>
 

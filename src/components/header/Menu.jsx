@@ -2,7 +2,7 @@ import React from "react";
 import MainRepository from "../../redux/MainRepository";
 import UserInfo from "../../redux/model/UserInfo";
 import { Link } from "react-router-dom";
-import Common from "../../util/Common";
+import Common from "../../config/common";
 
 class Menu extends React.Component {
   state = {

@@ -1,0 +1,812 @@
+import common from "./common";
+
+const strings = new Map([
+
+  // main
+  ["main-banner-subj-1", {
+    KOR: "공유를 통한 가치 현실화",
+    ENG: "Realization of Value via Sharing"
+  }],
+  ["main-banner-subj-2", {
+    KOR: "콘텐트 무료이용",
+    ENG: "Content Free"
+  }],
+  ["main-banner-subj-3", {
+    KOR: "공유를 통한 가치 현실화",
+    ENG: "Grow Your Audience"
+  }],
+  ["Join Now", {
+    KOR: "지금 가입하세요",
+    ENG: "Join Now"
+  }],
+  ["Sign up", {
+    KOR: "등록",
+    ENG: "Sign up"
+  }],
+  ["Upload now", {
+    KOR: "지금 업로드하세요",
+    ENG: "Upload now"
+  }],
+  ["main-banner-explain-1", {
+    KOR: "최신, 추천, 인기 문서를 둘러보세요. \n관심 분야의 문서를 보고 싶다면 태그 검색도 해보세요.",
+    ENG: "Polaris Share values ​​the content you share.\nShare your content and get a transparent monetary reward.\n Join now as a creator"
+  }],
+  ["main-banner-explain-2", {
+    KOR: "구글 또는 링크드인 계정이 있다면, 몇 번의 클릭만으로 쉽게 가입할 수 있습니다. \n 로그인하면 다양한 문서를 무료로 다운로드할 수 있습니다.",
+    ENG: "Meet advanced content produced by creator. \n Just vote for your favorite document and you'll be rewarded.\n Sign up now "
+  }],
+  ["main-banner-explain-3", {
+    KOR: "귀하의 슬라이드를 업로드하고 이를 외부 채널에도 공유하십시요. \n 잠재 고객들을 추적하고 연락처를 수집할 수 있습니다. ",
+    ENG: "Upload your slides and share them on high-quality channels.\n Track lead activity and collect contacts.\n"
+  }],
+  ["Learn more", {
+    KOR: "상세보기",
+    ENG: "Learn more"
+  }],
+  ["See All", {
+    KOR: "더보기",
+    ENG: "See All"
+  }],
+  ["latest", {
+    KOR: "최신",
+    ENG: "latest"
+  }],
+  ["featured", {
+    KOR: "추천",
+    ENG: "featured"
+  }],
+  ["popular", {
+    KOR: "인기",
+    ENG: "popular"
+  }],
+
+
+  // viewer page
+  ["vp-email-warning", {
+    KOR: "해당 문서를 읽기 위해서는 이메일 입력이 필요합니다.",
+    ENG: "If you want to read the document, you need to enter email."
+  }],
+  ["Link to this URL", {
+    KOR: "해당 링크로 이동",
+    ENG: "Link to this URL"
+  }],
+  ["Share with Linkedin", {
+    KOR: "링크드인 공유하기",
+    ENG: "Share with Linkedin"
+  }],
+  ["Share with Facebook", {
+    KOR: "페이스북 공유하기",
+    ENG: "Share with Facebook"
+  }],
+  ["Share with Twitter", {
+    KOR: "트위터 공유하기",
+    ENG: "Share with Twitter"
+  }],
+
+
+  // blockchain
+  ["b-explain-1", {
+    KOR: "블록체인에 문서 등록하기",
+    ENG: "Register this document to blockchain."
+  }],
+  ["b-error-1", {
+    KOR: "메타마스크 로그인 부탁드립니다.",
+    ENG: "Please log in to the Meta Mask."
+  }],
+  ["b-error-2", {
+    KOR: "올바른 지갑 계정으로 로그인 부탁드립니다.",
+    ENG: "Please login with the correct wallet account."
+  }],
+  ["b-success-1", {
+    KOR: "등록 성공",
+    ENG: "Successfully registered "
+  }],
+  ["pending", {
+    KOR: "팬딩중",
+    ENG: "Pending"
+  }],
+
+  // About us
+  ["about-main-subj", {
+    KOR: "지식노동자들을 위한 전혀 새로운 일하는 방법",
+    ENG: "Sharing knowledge in new ways"
+  }],
+  ["about-main-explain", {
+    KOR: "Polaris Share 에서 문서를 공유하여 잠재 고객을 발굴하고, 공유한 문서의 유효뷰수에 따라서 보상도 받으세요.",
+    ENG: "Polaris Share is a system that shares knowledge and is compensated by user's vote."
+  }],
+  ["about-first-section-subj", {
+    KOR: "왜 Polaris Share를 사용해야 하는가?",
+    ENG: "Why Polaris Share?"
+  }],
+  ["about-first-section-explain", {
+    KOR: "우리는 수년간 전세계 고객들을 대상으로 Polaris Office 를 서비스하면서 수많은 문서와 지식들이 활용되지 못하고 있음을 발견했습니다. 이 문제를 해결하기 위해서 우리는 Polaris Share를 만들 것입니다. Polaris Share는 지식 생산자와 소비자를 연결하여 탈중앙화된 인센티브 기반의 지식 거래 시스템을 구축합니다. 우리는 회사에서 전문가를 고용하지 않고도 전세계에서 가장 필요한 기술을 가진 사람과 일할 수 있는 환경을 제공하고, 동시에 개인이 특정 회사에 고용되지 않고도 원하는만큼 일하고 정당한 보수를 받을 수 있는 일하는 환경을 만들어 나가고자 합니다. ",
+    ENG: "Polaris Share connects knowledge creators and seekers to build a decentralized and incentive-based knowledge trading system. We create an environment that allows companies to work with people with most required skills from all around the world without hiring them, and at the same time, helps individuals work when and where they want and receive decent rewards without being hired by a certain company. We have realized that a wealth of knowledge and a good number of Knowledge Creators are not fully tapped. In order to solve this problem, we plan to create a Decentralized and Incentive-based knowledge trading system “Polaris Share.”"
+  }],
+  ["Service", {
+    KOR: "서비스",
+    ENG: "Service"
+  }],
+  ["about-second-section-explain", {
+    KOR: "Polaris Share 는 단순한 문서 공유 서비스를 넘어서서 전문가들에 의한 큐레이션과 거래 시스템을 제공합니다. 서비스 내의 다양한 기여 활동에 대해서 적절한 보상을 지급함으로써 자발적인 참여를 유도하여 탈중앙화된 지속 가능한 시스템을 구축했습니다. 이와 같은 지식 거래 생태계에서 지식 생산자는 자유롭게 일하고 적절한 대가를 받을 수 있으며, 지식 소비자는 양질의 지식을 저렴한 비용으로 소비할 수 있습니다.",
+    ENG: "Polaris Share service is a decentralized and incentivized knowledge trading system that connects a knowledge creator and an audience. This project goes beyond a simple document sharing service by grading the value of the knowledge and trading them so that the knowledge creators can get the compensation and the audience can get higher quality knowledge at a low cost."
+  }],
+  ["Vision", {
+    KOR: "비전",
+    ENG: "Vision"
+  }],
+  ["about-third-section-explain", {
+    KOR: "탈중앙화되고 인센티브가 주어지는 전문가 지식 거래 시스템",
+    ENG: "Decentralized and Incentivized Professional Knowledge Trading System"
+  }],
+  ["about-third-section-chap-subj-1", {
+    KOR: "지식의 가치",
+    ENG: "Value of knowledge"
+  }],
+  ["about-third-section-chap-explain-1", {
+    KOR: "Polaris Share 는 문서 및 네트워크에 저장된 지식의 가치를 지식의 생산자와 우리 생태계를 유지하는 활동에 기여한 사용자들에게 돌려드립니다.",
+    ENG: "Polaris Share returns the value of knowledge stored in documents and network to Knowledge Creators and other users."
+  }],
+  ["about-third-section-chap-subj-2", {
+    KOR: "무료 또는 저렴한 수수료",
+    ENG: "No transaction fees"
+  }],
+  ["about-third-section-chap-explain-2", {
+    KOR: "지식 생산자는 Polaris Share 에서 문서를 공유하거나 판매함으로써 무료 또는 매우 적은 수수료만으로 수익을 얻을 수 있습니다. ",
+    ENG: "Knowledge Creators get rewards from sharing or selling documents on Polaris Share with no or with low transaction fees"
+  }],
+  ["about-third-section-chap-subj-3", {
+    KOR: "양질의 컨텐츠",
+    ENG: "Content shared"
+  }],
+  ["about-third-section-chap-explain-3", {
+    KOR: "일반 대중들은 지식 생산자들에 의해서 공유된 양질의 다양한 컨텐츠를 소비하고 활용할 수 있습니다. ",
+    ENG: "Audiences will benefit from more and better content shared by Knowledge creators."
+  }],
+  ["Polaris Share Team", {
+    KOR: "Polaris Share 팀",
+    ENG: "Polaris Share Team"
+  }],
+
+  // FAQ
+  ["faq-question-1", {
+    KOR: "Polaris Share란 무엇인가요?",
+    ENG: "What is Polaris Share?"
+  }],
+  ["faq-answer-1", {
+    KOR: "Polaris Share는 활용되지 않고 저장되어 있는 수만은 문서와 지식들을 활용하여, 미래의 고객을 발굴하고, 전문가 네트워크를 구축하여 새로운 비즈니스 기회 창출에 기여하는 플랫폼입니다.",
+    ENG: "Polaris Share is a platform that uses a number of unutilized documents and knowledge to discover future customers and build a network of experts to create new business opportunities."
+  }],
+  ["faq-question-2", {
+    KOR: "Polaris Share 는 어떻게 동작하나요?",
+    ENG: "How does Polaris Share work?"
+  }],
+  ["faq-answer-2", {
+    KOR: "수많은 저자들에 의해서 공유된 문서들은 전문가 그룹의 집단 지성에 의해 큐레이션됩니다. 이런 활동이 자발적으로 일어나게 하기 위해서 블록체인 기술을 활용합니다.",
+    ENG: "Documents shared by creators are curated by the collective intelligence of the expert group. To make these activities happen spontaneously, Polaris Share is blockchain-based reward system."
+  }],
+  ["faq-question-3", {
+    KOR: "게시물에 대해 투표하는 데 비용이 들지 않나요?",
+    ENG: "Does it cost to vote?"
+  }],
+  ["faq-answer-3", {
+    KOR: "투표 활동에는 비용이 들지 않습니다. 투표에 사용한 토큰은 투표 기간이 끝나면 보상과 함께 돌려받습니다. (다만, 블록체인에 투표 기록을 저장하는 경우 가스비가 발생할 수 있습니다)",
+    ENG: "No. It is free to vote. The tokens used in voting will be returned with the rewards at the end of the voting period. You might even get paid for it."
+  }],
+  ["faq-question-4", {
+    KOR: "Polaris Share 에서 토큰을 받을 수 있는 방법이 있나요?",
+    ENG: "Can I get digital tokens on Polaris Share? How?"
+  }],
+  ["faq-answer-4a", {
+    KOR: "Creator : 매일 페이지뷰 수에 따라서 일정량의 보상을 토큰으로 지급받습니다.",
+    ENG: "Creator: Creators can receive a certain amount of compensation as a token based on the number of page views."
+  }],
+  ["faq-answer-4b", {
+    KOR: "Curator : 토큰을 사용하여 양질의 문서에 투표하면 해당 문서의 페이지뷰 수에 따라서 토큰으로 보상이 지급되며, 투표 기간이 끝나면 보상과 투표한 토큰을 함께 지급받습니다. ",
+    ENG: "Curator: Curators can earn tokens according to the number of page views when voting on a high quality document and at the end of the voting period, you can get rewards."
+  }],
+  ["faq-answer-4c", {
+    KOR: "이 외에도 추후 암호화폐 거래소를 통해서 토큰을 구매할 수 있을 예정입니다.",
+    ENG: "You will be able to purchase tokens through the Cryptocurrency exchange later."
+  }],
+  ["faq-question-5", {
+    KOR: "계정은 어떻게 만드나요?",
+    ENG: "How can I create an account?"
+  }],
+  ["faq-answer-5a", {
+    KOR: "구글이나 링크드인 등의 소셜 계정으로 로그인하여 계정을 생성하실 수 있습니다. ",
+    ENG: "You can simply use your social network accounts such as Google or LinkedIn."
+  }],
+  ["faq-answer-5b", {
+    KOR: "Creator 보상을 받거나 투표를 하거나 투표를 받으려면 메타마스크를 통해서 사용자 계정에 이더리움 계정을 연결하면 됩니다.",
+    ENG: "If you want to get Creator rewards or vote, connect the Etherium account to your account via the metamask."
+  }],
+  ["faq-question-6", {
+    KOR: "내 계정 메뉴에서 사용할 수 있는 정보는 무엇입니까?",
+    ENG: "What information do I need to provide in order to create an account?"
+  }],
+  ["faq-answer-6a", {
+    KOR: "Total balance : 토큰 총 보유량",
+    ENG: "Total balance: Total token retention."
+  }],
+  ["faq-answer-6b", {
+    KOR: "Estimated earnings for today : 오늘 하루 동안 예상 수익 (전체 또는 각각의 Creator, Curator 보상금) ",
+    ENG: "Estimated earnings for today: Estimated revenue for the day (Total or Each reward for Creators and Curators)"
+  }],
+  ["faq-answer-6c", {
+    KOR: "Revenue for the last 7 days : 최근 7일간의 예상 수익 (전체 또는 각각의 Creator, Curator 보상금)",
+    ENG: "Revenue for the last 7 days: Estimated revenue for the last 7 days (Total or Each reward for Creators and Curators)"
+  }],
+  ["faq-question-7", {
+    KOR: "최근 보상을 보려면 어떻게 해야 합니까?",
+    ENG: "How do I see my recent rewards?"
+  }],
+  ["faq-answer-7", {
+    KOR: "내 이름을 클릭하여 프로필 페이지로 이동하여 지갑 및 보상 정보를 확인할 수 있습니다.",
+    ENG: "Go to your profile page, then you can see your wallet and reward information."
+  }],
+  ["faq-question-8", {
+    KOR: "내 프로필에 무엇이 표시되나요?",
+    ENG: "What is shown in my profile?"
+  }],
+  ["faq-answer-8", {
+    KOR: "프로필 사진과 사용자 이름이 표시됩니다.",
+    ENG: "Your profile name and image."
+  }],
+  ["faq-question-9", {
+    KOR: "Polaris Share 에 게시 할 수 있는 항목은 무엇인가요?",
+    ENG: "What can users post to Polaris Share?"
+  }],
+  ["faq-answer-9", {
+    KOR: "ppt/pptx 그리고 pdf 를 지원합니다.",
+    ENG: "ppt/pptx and pdf"
+  }],
+  ["faq-question-10", {
+    KOR: "얼마나 자주 게시 할 수 있습니까?",
+    ENG: "How often can I post?"
+  }],
+  ["faq-answer-10", {
+    KOR: "현재는 제한이 없지만 향후 1주일에 문서 1개로 제한할 계획입니다. 일정량의 토큰을 예치하면 더 많은 문서를 등록할 수 있습니다. ",
+    ENG: "There is no limit for posting, but we are planning to set a limit of 1 document per a week."
+  }],
+  ["faq-question-11", {
+    KOR: "내가 게시 한 것을 삭제할 수 있습니까?",
+    ENG: "Can I delete my posting?"
+  }],
+  ["faq-answer-11", {
+    KOR: "현재는 고객지원을 요청해서 삭제할 수 있습니다. 추후 문서 관리 기능을 업데이트할 계획입니다.",
+    ENG: "You can request it to Customer Service. We are planning to update document management system later."
+  }],
+  ["faq-question-12", {
+    KOR: "블럭 체인에 의해 생성되는 새로운 토큰은 몇 개입니까?",
+    ENG: "How many new tokens are generated by the blockchain?"
+  }],
+  ["faq-answer-12", {
+    KOR: "토큰의 전체 통화량은 백서에 정의한 수량으로 고정되어 있습니다. ",
+    ENG: "The total amount of tokens is fixed to the quantity defined in the white paper."
+  }],
+  ["faq-question-13", {
+    KOR: "보상 풀이 무엇입니까?",
+    ENG: "What is a reward pool?"
+  }],
+  ["faq-answer-13", {
+    KOR: "매일 백서에 정의된 양의 보상 토큰이 자동으로 편성되는데 이를 reward pool이라고 합니다. 이 토큰들은 creator나 curator 등의 기여도에 따라서 매일 배분됩니다. ",
+    ENG: "Every day a fixed amount of Deck tokens are allocated to the network reward fund, commonly called the reward pool. Tokens are distributed to creators and curators for posting and voting on document."
+  }],
+  ["faq-question-14", {
+    KOR: "보상금은 저자와 큐레이터간에 어떻게 나누어 집니까?",
+    ENG: "How is the reward pool divided between creators and curators?"
+  }],
+  ["faq-answer-14", {
+    KOR: "문서 별로 매일 발생한 페이지뷰에 따라서 보상 토큰이 배분되며, 이를 백서에서 정의한 비율로 creator와 curator들이 나누어 가지는데, curator 보상은 투표량에 비례해서 배분합니다. ",
+    ENG: "Tokens are distributed according to the number of page views. 70% is awarded as a reward for creators and 30% is awarded to curators."
+  }],
+  ["faq-question-15", {
+    KOR: "Deck은 무엇입니까?",
+    ENG: "What is Deck?"
+  }],
+  ["faq-answer-15", {
+    KOR: "Polaris Share에서 사용할 수 있는 디지털 화폐로서 이더리움 네트워크와 여러 거래소에서 거래할 수 있는 ERC20 규격의 암호화폐입니다. ",
+    ENG: "Deck is an ERC-20 token used in Polaris Share that can withdraw to an exchange."
+  }],
+  ["faq-question-16", {
+    KOR: "크레이터는 실시간으로 보상을 받나요?",
+    ENG: "Does creator get rewards in real time?"
+  }],
+  ["faq-answer-16", {
+    KOR: "Creator 보상은 매일 0시~0시10분 GMT+0 사이에 정산됩니다. ",
+    ENG: "Creators get paid between AM 0:00 and AM 0:10 every day. (GMT+0)"
+  }],
+  ["faq-question-17", {
+    KOR: "큐레이터는 언제 보상을 받을 수 있나요?",
+    ENG: "When does curator get reward?"
+  }],
+  ["faq-answer-17", {
+    KOR: "Curator 보상은 투표일로 부터 1주+2일 후에 투표에 사용한 토큰과 함께 지급받을 수 있습니다. ",
+    ENG: "Curators get paid with tokens used for voting in 3 weeks+2 days from a voting day."
+  }],
+
+  // user profile
+  ["profile-error-1", {
+    KOR: "유져네임을 입력해 주십시오.",
+    ENG: "Please input the user name."
+  }],
+  ["profile-error-2", {
+    KOR: "오직 영문과 숫자만 허용됩니다.",
+    ENG: "Only allow english and numeric."
+  }],
+  ["profile-error-3", {
+    KOR: "4~20자 이내의 영문과 숫자가 섞어 입력해 주십시오.",
+    ENG: "Enter 4 to 20 digits with a mix of letters and numbers."
+  }],
+  ["Edit", {
+    KOR: "수정",
+    ENG: "Edit"
+  }],
+  ["Total balance :", {
+    KOR: "총 잔액 : ",
+    ENG: "Total balance :"
+  }],
+  ["Estimated earnings for today :", {
+    KOR: "오늘 예상 수익 : ",
+    ENG: "Estimated earnings for today :"
+  }],
+  ["Revenue for the last 7 days :", {
+    KOR: "지난 7일 간 수입 : ",
+    ENG: "Revenue for the last 7 days :"
+  }],
+  ["Author rewards", {
+    KOR: "작성자 보상",
+    ENG: "Author rewards"
+  }],
+  ["Curator rewards", {
+    KOR: "큐레이터 보상",
+    ENG: "Curator rewards"
+  }],
+  ["Uploaded", {
+    KOR: "업로드",
+    ENG: "Uploaded"
+  }],
+  ["Voted", {
+    KOR: "투표",
+    ENG: "Voted"
+  }],
+  ["Vote", {
+    KOR: "투표",
+    ENG: "Vote"
+  }],
+  ["Analytics", {
+    KOR: "애널리틱스",
+    ENG: "Analytics"
+  }],
+  ["Total documents :", {
+    KOR: "총 문서량 :",
+    ENG: "Total documents :"
+  }],
+
+  // Alert
+  ["alert-2001", {
+    KOR: "네트워크 오류가 발생했습니다.",
+    ENG: "A network error has occurred."
+  }],
+  ["alert-2002", {
+    KOR: "잘못된 접근입니다.",
+    ENG: "Bad access."
+  }],
+  ["alert-2003", {
+    KOR: "로그인이 필요합니다.",
+    ENG: "Requires login."
+  }],
+  ["alert-2021", {
+    KOR: "이메일 검증 성공",
+    ENG: "Success e-mail verification."
+  }],
+  ["alert-2022", {
+    KOR: "이메일 검증 실패",
+    ENG: "Failed e-mail verification."
+  }],
+  ["alert-2023", {
+    KOR: "이미 인증되었습니다.",
+    ENG: "Already verified."
+  }],
+  ["alert-2024", {
+    KOR: "유효하지 않은 인증코드 입니다.",
+    ENG: "Invalid verification code."
+  }],
+  ["alert-2031", {
+    KOR: "투표 가능한 보유금액보다 적은 값을 입력하세요",
+    ENG: "Enter less than the number of votes available."
+  }],
+  ["alert-2032", {
+    KOR: "요청 실패.",
+    ENG: "Transaction failed."
+  }],
+  ["alert-2033", {
+    KOR: "승인 요청 실패.",
+    ENG: "Approve transaction failed."
+  }],
+  ["alert-2034", {
+    KOR: "투표 요청 실패",
+    ENG: "Vote transaction failed."
+  }],
+  ["alert-2035", {
+    KOR: "인출 요청 실패",
+    ENG: "Claim transaction failed."
+  }],
+  ["alert-2051", {
+    KOR: "올바른 계정으로 로그인해주세요",
+    ENG: "Log in with the correct account."
+  }],
+  ["alert-2051-sub", {
+    KOR: "메타마스크 계정이 등록된 계정과 다릅니다. 암호화폐를 사용하거나 인출하기 위해서는 올바른 메타마스크 계정으로 로그인해야 합니다.",
+    ENG: "The Metamask account is different from the registered account. You must be signed in with the correct Metamask account to claim and receive payouts."
+  }],
+  ["alert-2052", {
+    KOR: "이더리움 네트워크가 다릅니다.",
+    ENG: "Connect with the correct network."
+  }],
+  ["alert-2052-sub", {
+    KOR: "메타마스크에서 Rinkeby 네트워크로 설정해주세요.",
+    ENG: "Please set the MetaMask network to: Rinkeby"
+  }],
+
+  // Common
+  ["Cancel", {
+    KOR: "취소",
+    ENG: "Cancel"
+  }],
+  ["Settings", {
+    KOR: "설정",
+    ENG: "Settings"
+  }],
+  ["Upload", {
+    KOR: "업로드",
+    ENG: "Upload"
+  }],
+  ["Title", {
+    KOR: "제목",
+    ENG: "Title"
+  }],
+  ["Description", {
+    KOR: "설명",
+    ENG: "Description"
+  }],
+  ["File", {
+    KOR: "파일",
+    ENG: "File"
+  }],
+  ["Tag", {
+    KOR: "태그",
+    ENG: "Tag"
+  }],
+  ["Option", {
+    KOR: "옵션",
+    ENG: "Option"
+  }],
+  ["Done", {
+    KOR: "완료",
+    ENG: "Done"
+  }],
+  ["Copy", {
+    KOR: "복사",
+    ENG: "Copy"
+  }],
+  ["title-placeholder", {
+    KOR: "업로드 문서 제목",
+    ENG: "Title of the uploading document"
+  }],
+  ["description-placeholder", {
+    KOR: "업로드 문서 설명",
+    ENG: "Description of the uploading document"
+  }],
+  ["file-placeholder", {
+    KOR: "문서를 업로드 하려면 클릭하세요",
+    ENG: "Click here to upload document"
+  }],
+
+  // Approve Modal
+  ["Approve DECK", {
+    KOR: "Deck 승인",
+    ENG: "Approve DECK"
+  }],
+  ["approve-explain-1", {
+    KOR: "DECK을 사용하여 투표하려면, Polaris Share 컨트랙트가 당신을 대신해서 DECK을 전송할 수 있도록 최초 한 번 승인해야 합니다. 승인이 완료되기 전까지는 귀하는 문서에 투표할 수 없습니다.",
+    ENG: "To vote on a document using DECK, you must first approve the Polaris Share Contracts to move DECK on your behalf. You will not be able to vote on documents until approval has completed."
+  }],
+  ["approve-explain-2", {
+    KOR: "\"Approve\"를 클릭하고 나면, 투표를 완료하기 위해서 트랜잭션에 사인하라는 요청이 한 번 더 표시될 것입니다. ",
+    ENG: "After clicking \"Approve\", you will be asked to sign a transaction, followed by second transaction to complete your requested voting."
+  }],
+  ["Approve", {
+    KOR: "승인",
+    ENG: "Approve"
+  }],
+  ["Confirm", {
+    KOR: "확인",
+    ENG: "Confirm"
+  }],
+
+  // Cookie Policy Modal
+  ["cookie-policy-content", {
+    KOR: "우리는 유저들에게 서비스를 제공하고 이를 개선하기 위해서 쿠키를 사용합니다. 우리 사이트를 사용함으로써 귀하는 쿠키 정책에 동의하게됩니다.",
+    ENG: "We use cookies to provide and improve our services. By using our site, you consent to our Cookies Policy."
+  }],
+
+  // Dollor Learn More Modal
+  ["dollar-learn-more-subj", {
+    KOR: "DECK 테스트 토큰에 대한 중요 공지",
+    ENG: "Important notice about DECK test token."
+  }],
+  ["dollar-learn-more-explain-1", {
+    KOR: "Polaris Share 알파 버전에서는 DECK 토큰을 테스트하여 응용 프로그램에서 올바르게 작동하는지 확인합니다.",
+    ENG: "We will test DECK token in the Polaris Share alpha version to make sure it works correctly in the application."
+  }],
+  ["dollar-learn-more-explain-2", {
+    KOR: "무료 DECK 테스트 토큰으로 Polaris Share 서비스를 자유롭게 경험해보십시오. 테스트 기간이 끝나면 DECK 테스트 토큰도 만료됩니다.",
+    ENG: "Feel free to experience the Polaris Share service with a free DECK test token. At the end of the test period, the DECK test token also expires."
+  }],
+  ["dollar-learn-more-explain-3", {
+    KOR: "테스트에 적극적으로 참여하는 사용자는 상용 버전의 Polaris Share를 열 때 적절한 보상을 제공할 예정입니다.",
+    ENG: "Users who actively participate in the test provide appropriate compensation when opening the commercial version of Polaris Share."
+  }],
+  ["Got it", {
+    KOR: "알겠습니다",
+    ENG: "Got it"
+  }],
+
+  // Edit Document Modal
+  ["edit-doc-error-1", {
+    KOR: "제목은 한 글자 보다 길어야 합니다.",
+    ENG: "Title must be longer than 1 character ."
+  }],
+  ["edit-doc-error-2", {
+    KOR: "적어도 1개의 태그를 입력해야 합니다.",
+    ENG: "Tag must be at least 1 tag ."
+  }],
+  ["edit-doc-subj", {
+    KOR: "업로드 문서 수정",
+    ENG: "Edit uploaded document"
+  }],
+  ["doc-option-1", {
+    KOR: "문서 열람 시 이메일 입력 팝업 표시",
+    ENG: "Use audience tracking."
+  }],
+  ["doc-option-2", {
+    KOR: "문서 열람 시 이메일 입력 강제",
+    ENG: "Force the audience to tracking."
+  }],
+  ["doc-option-3", {
+    KOR: "문서 내려받기 허용",
+    ENG: "Allow download document."
+  }],
+  ["CC License", {
+    KOR: "CC 인증",
+    ENG: "CC License"
+  }],
+  ["Settings of this document", {
+    KOR: "문서 설정하기",
+    ENG: "Settings of this document"
+  }],
+
+  // RegBlockchain Button
+  ["Register", {
+    KOR: "등록",
+    ENG: "Register"
+  }],
+
+  // Email modal
+  ["email-modal-subj", {
+    KOR: "더 읽고 싶나요?",
+    ENG: "Want to read more?"
+  }],
+  ["email-modal-explain-1", {
+    KOR: "아래 이메일 주소를 제출하고 메일 수신함에서 가입 링크를 확인하여 가입 절차를 진행하십시요. 귀하가 아래 입력창에 입력한 정보는 이 컨텐츠의 저자가 열람할 수 있습니다.",
+    ENG: "Please check sign-up link in your inbox. The author of this content can view the information you have entered."
+  }],
+  ["email-modal-explain-2", {
+    KOR: "이 정보를 제출하는데 동의합니다. 제출된 데이터는 폴라리스 쉐어의 개인정보 처리 정책에 따라서 수집되고 활용됩니다.",
+    ENG: "I agree to submit this information, which will be collected and used according to"
+  }],
+  ["email-modal-explain-3", {
+    KOR: " 폴라리스 쉐어의 개인정보 처리 정책 ",
+    ENG: "Polaris Share’s privacy policy."
+  }],
+  ["email-modal-error-1", {
+    KOR: "이메일 양식에 맞지 않습니다.",
+    ENG: "Email address does not fit the form ."
+  }],
+
+  // Upload Document Modal
+  ["upload-doc-subj", {
+    KOR: "문서 업로드",
+    ENG: "Upload document"
+  }],
+
+  // Vote Document Modal
+  ["Vote on this document", {
+    KOR: "이 문서에 투표하기",
+    ENG: "Vote on this document"
+  }],
+  ["Vote on document", {
+    KOR: "문서에 투표하기",
+    ENG: "Vote on document"
+  }],
+  ["Deposit must be greater than zero .", {
+    KOR: "예치금은 0보다 큰 값이어야 합니다.",
+    ENG: "Deposit must be greater than zero ."
+  }],
+  ["Deposit must be less than balance .", {
+    KOR: "예치금은 잔고보다 작은 값이어야 합니다.",
+    ENG: "Deposit must be less than balance ."
+  }],
+  ["vote-modal-subj-1", {
+    KOR: "1. 투표된 총 토큰량",
+    ENG: "1. Total amount of tokens voted"
+  }],
+  ["vote-modal-subj-2", {
+    KOR: "2. 사용 가능한 토큰량",
+    ENG: "2. Amount of available tokens"
+  }],
+  ["vote-modal-subj-3", {
+    KOR: "3. 투표로 예치할 토큰량을 입력하세요",
+    ENG: "3. Enter the number of votes to commit"
+  }],
+  ["vote-modal-note", {
+    KOR: "알림: 투표에 사용된 토큰은 8일 후에 인출할 수 있습니다.",
+    ENG: "Note: The token used for voting can be withdrawn after 3 days."
+  }],
+  ["Please, login", {
+    KOR: "로그인 부탁드립니다",
+    ENG: "Please, login"
+  }],
+  ["Please, work with MetaMask", {
+    KOR: "메타마스트 사용 부탁드립니다",
+    ENG: "Please, work with MetaMask"
+  }],
+
+  // Copy modal
+  ["Copy Link", {
+    KOR: "링크 복사",
+    ENG: "Copy Link"
+  }],
+  ["Copy URL", {
+    KOR: "URL 복사",
+    ENG: "Copy URL"
+  }],
+  ["Clip the URL of this document", {
+    KOR: "문서 URL 복사하기",
+    ENG: "Clip the URL of this document"
+  }],
+
+  // Download
+  ["Download", {
+    KOR: "다운로드",
+    ENG: "Download"
+  }],
+  ["Download this document", {
+    KOR: "문서 다운로드하기",
+    ENG: "Download this document"
+  }],
+  ["Tracking", {
+    KOR: "트랙킹",
+    ENG: "Tracking"
+  }],
+  ["Track activity of your audience.", {
+    KOR: "유저 활동 추적하기",
+    ENG: "Track activity of your audience."
+  }],
+
+  // Header
+  ["LATEST", {
+    KOR: "최신",
+    ENG: "LATEST"
+  }],
+  ["FEATURED", {
+    KOR: "추천",
+    ENG: "FEATURED"
+  }],
+  ["POPULAR", {
+    KOR: "인기",
+    ENG: "POPULAR"
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+]);
+
+export let Lang = {
+  EN: "EN",
+  KO: "KO"
+};
+
+
+function checkLocale(): Lang {
+  let cookieLang = common.getCookie("language");
+
+  // 쿠키 값이 있을 때
+  if (cookieLang !== "") {
+    switch (cookieLang) {
+      case "en":
+        return Lang.EN;
+
+      case "ko":
+      default:
+        return Lang.KO;
+    }
+  }
+
+  // 없을 때
+  let userLang = navigator.language;
+
+  switch (userLang.toLowerCase()) {
+    case "en":
+    case "en-us":
+      common.setCookie("language", "en", 30);
+      return Lang.EN;
+
+    case "ko-kr":
+    case "ko":
+    default:
+      common.setCookie("language", "ko", 30);
+      return Lang.KO;
+
+  }
+}
+
+//let currentLang: Lang = Lang.EN;
+let currentLang: Lang = checkLocale();
+
+
+export function psGetLang(): Lang {
+  return currentLang;
+}
+
+export function psSetLang(lang: Lang) {
+  currentLang = lang;
+
+  common.deleteCookie("language");
+
+  switch (lang) {
+    case Lang.EN:
+      common.setCookie("language", "en", 30);
+      window.location.reload();
+      break;
+
+    case Lang.KO:
+    default:
+      common.setCookie("language", "ko", 30);
+      window.location.reload();
+      break;
+  }
+}
+
+
+export function psString(key: string): string {
+  const string = strings.get(key);
+  if (string !== undefined && string !== null) {
+    switch (currentLang) {
+      case Lang.EN:
+        if (string.ENG === "") return string.KOR;
+        return string.ENG;
+
+      case Lang.KO:
+      default :
+        return string.KOR;
+    }
+  } else {
+    return "." + key;
+  }
+}

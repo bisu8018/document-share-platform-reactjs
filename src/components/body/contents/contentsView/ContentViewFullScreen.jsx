@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { APP_PROPERTIES } from "properties/app.properties";
 import Fullscreen from "react-full-screen";
 import { Link } from "react-router-dom";
 import {
@@ -7,7 +8,7 @@ import {
   TwitterShareButton
 } from "react-share";
 // import ContentViewComment from "./ContentViewComment";
-import Common from "../../../../util/Common";
+import Common from "../../../../config/common";
 import Tooltip from "@material-ui/core/Tooltip";
 import CopyModal from "../../../modal/CopyModal";
 import MainRepository from "../../../../redux/MainRepository";
@@ -18,6 +19,7 @@ import Linkify from "react-linkify";
 import RegBlockchainBtnContainer from "../../../../container/body/contents/contentsView/RegBlockchainBtnContainer";
 import VoteDocumentModalContainer from "../../../../container/modal/VoteDocumentModalContainer";
 import PayoutCard from "../../../common/card/PayoutCard";
+import { psString } from "../../../../config/localization";
 
 class ContentViewFullScreen extends Component {
 
@@ -147,9 +149,9 @@ class ContentViewFullScreen extends Component {
     let reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7));
     let view = documentData.latestPageview || 0;
     let accountId = documentData.accountId || "";
-    let url = window.location.href;
     let profileUrl = author ? author.picture : null;
     let identification = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId;
+    let ogUrl = APP_PROPERTIES.domain().embed + documentData.seoTitle;
 
     return (
 
@@ -216,15 +218,15 @@ class ContentViewFullScreen extends Component {
             <CopyModal documentData={documentData}/>
 
             {documentData.isDownload &&
-            <Tooltip title="Download this document" placement="bottom">
+            <Tooltip title={psString("Download this document")} placement="bottom">
               <div className="viewer-btn" onClick={this.handleDownloadContent}>
-                <i className="material-icons">save_alt</i> Download
+                <i className="material-icons">save_alt</i> {psString("Download")}
               </div>
             </Tooltip>
             }
 
             {accountId === Common.getMySub() &&
-            <Tooltip title="Track activity of your audience." placement="bottom">
+            <Tooltip title={psString("Track activity of your audience.")} placement="bottom">
               <Link to={{
                 pathname: "/tracking/" + identification + "/" + documentData.seoTitle,
                 state: {
@@ -234,7 +236,7 @@ class ContentViewFullScreen extends Component {
                 }
               }}>
                 <div className="viewer-btn" onClick={() => Common.scrollTop()}>
-                  <i className="material-icons">bar_chart</i> Tracking
+                  <i className="material-icons">bar_chart</i> {psString("Tracking")}
                 </div>
               </Link></Tooltip>
             }
@@ -247,7 +249,7 @@ class ContentViewFullScreen extends Component {
 
           <div className="view_desc">
             <Linkify properties={{
-              title: "Link to this URL",
+              title: psString("Link to this URL"),
               rel: "nofollow",
               target: "_blank",
               style: { color: "#3681fe", fontWeight: "400" }
@@ -262,25 +264,25 @@ class ContentViewFullScreen extends Component {
             </div>
 
             <div className="sns-share-icon-wrapper mb-3">
-              <Tooltip title="Share with Line" placement="bottom">
+              <Tooltip title={psString("Share with Linkedin")} placement="bottom">
                 <div className="d-inline-block mr-3">
-                  <LinkedinShareButton url={url} className="sns-share-icon " title={documentData.title}>
+                  <LinkedinShareButton url={ogUrl} className="sns-share-icon " title={documentData.title}>
                     <img src={require("assets/image/sns/ic-sns-linkedin-color.png")} alt="linkedin sns icon"/>
                   </LinkedinShareButton>
                 </div>
               </Tooltip>
 
-              <Tooltip title="Share with Facebook" placement="bottom">
+              <Tooltip title={psString("Share with Facebook")} placement="bottom">
                 <div className="d-inline-block mr-3">
-                  <FacebookShareButton url={url} className="sns-share-icon">
+                  <FacebookShareButton url={ogUrl} className="sns-share-icon">
                     <img src={require("assets/image/sns/ic-sns-facebook-color.png")} alt="facebook sns icon"/>
                   </FacebookShareButton>
                 </div>
               </Tooltip>
 
-              <Tooltip title="Share with Twitter" placement="bottom">
+              <Tooltip title={psString("Share with Twitter")} placement="bottom">
                 <div className="d-inline-block">
-                  <TwitterShareButton url={url} className="sns-share-icon" hashtags={documentData.tags}
+                  <TwitterShareButton url={ogUrl} className="sns-share-icon" hashtags={documentData.tags}
                                       title={documentData.title}>
                     <img src={require("assets/image/sns/ic-sns-twitter-color.png")} alt="twitter sns icon"/>
                   </TwitterShareButton>
@@ -292,8 +294,8 @@ class ContentViewFullScreen extends Component {
               <Tooltip title="This work is licensed under a Creative Commons Attribution 2.0 Generic License."
                        placement="bottom">
                 {/* eslint-disable-next-line react/jsx-no-target-blank */}
-                <a rel="license" className="float-right" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/"
-                   target="_blank">
+                <a className="float-right" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/"
+                   target="_blank" rel="license noopener noreferrer">
                   <img alt="Creative Commons License" className="cc-img"
                        src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + documentData.cc + ".svg")}/>
                 </a>
@@ -306,10 +308,9 @@ class ContentViewFullScreen extends Component {
 
             <div className="view_content-desc mb-5">
               {documentData.forceTracking && emailFlag ?
-                <div className="view-content-desc-warning">If you want to read the document, you need to enter
-                  email.</div> :
+                <div className="view-content-desc-warning">{psString("vp-email-warning")}</div> :
                 <Linkify properties={{
-                  title: "Link to this URL",
+                  title: psString("Link to this URL"),
                   rel: "nofollow",
                   target: "_blank",
                   style: { color: "#0d73f8", fontWeight: "400" }

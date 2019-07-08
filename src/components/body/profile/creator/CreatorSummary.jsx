@@ -2,8 +2,9 @@ import React from "react";
 import { APP_PROPERTIES } from "properties/app.properties";
 import DollarWithDeck from "../../../common/amount/DollarWithDeck";
 import MainRepository from "../../../../redux/MainRepository";
-import Common from "../../../../util/Common";
+import Common from "../../../../config/common";
 import BalanceOfContainer from "../../../../container/common/BalanceOfContainer";
+import { psString } from "../../../../config/localization";
 
 class CreatorSummary extends React.Component {
   state = {
@@ -18,15 +19,15 @@ class CreatorSummary extends React.Component {
   //유저 네임 유효성 체크
   userNameValidate = (name) => {
     if (!name || name.length < 1) {
-      this.setState({ errMsg: "Please input the user name." });
+      this.setState({ errMsg: psString("profile-error-1") });
       return false;
     }
     if (!Common.checkUsernameForm(name)) {
-      this.setState({ errMsg: "Only allow english and numeric." });
+      this.setState({ errMsg: psString("profile-error-2") });
       return false;
     }
     if (name.length < 4 || name.length > 20) {
-      this.setState({ errMsg: "Enter 4 to 20 digits with a mix of letters and numbers." });
+      this.setState({ errMsg: psString("profile-error-3") });
       return false;
     }
     if (this.state.errMsg !== "") this.setState({ errMsg: "" }, () => {
@@ -170,7 +171,7 @@ class CreatorSummary extends React.Component {
                 <strong>{userName || userInfo.email}</strong>
                 {this.getMyInfo().email === userInfo.email &&
                 <div className="username-edit-btn ml-2" onClick={() => this.handleClickEvent()} >
-                  Edit</div>
+                  {psString("Edit")}</div>
                 }
               </span>}
 
@@ -187,16 +188,17 @@ class CreatorSummary extends React.Component {
             </div>
 
             <div className="profile_info_desc">
-              Total balance :
+              {psString("Total balance :")}
               <span className="color">
                 <BalanceOfContainer balance={balance}/>
               </span>
               <br/>
-              Estimated earnings for today :
+              {psString("Estimated earnings for today :")}
               <span className="color">
                 <DollarWithDeck deck={Number(authorTodayReward || 0) + Number(curatorEstimatedToday || 0)}/>
               </span>
-              <br/>Revenue for the last 7 days :
+              <br/>
+              {psString("Revenue for the last 7 days :")}
               <span className="color">
                 <DollarWithDeck deck={Number(author7DayReward || 0) + Number(curatorTotalRewards || 0)}/>
               </span>
@@ -207,20 +209,25 @@ class CreatorSummary extends React.Component {
 
         <div className="row">
           <div className=" profile-creator col-sm-12 col-md-6">
-            <h5>Author rewards</h5>
+            <h5>{psString("Author rewards")}</h5>
             <div className="profile_info_desc">
-              Estimated earnings for today : <span><DollarWithDeck deck={authorTodayReward}/></span>
-              <br/>Revenue for the last 7 days : <span><DollarWithDeck deck={author7DayReward}/></span>
+              {psString("Estimated earnings for today :")}
+              <span><DollarWithDeck deck={authorTodayReward}/></span>
+              <br/>
+              {psString("Revenue for the last 7 days :")}
+              <span><DollarWithDeck deck={author7DayReward}/></span>
             </div>
           </div>
 
 
           <div className=" profile-curator col-sm-12 col-md-6">
-            <h5>Curator rewards</h5>
+            <h5>{psString("Curator rewards")}</h5>
             <div className="profile_info_desc">
-              Estimated earnings for today : <span><DollarWithDeck deck={curatorEstimatedToday}/></span>
-
-              <br/>Revenue for the last 7 days : <span><DollarWithDeck deck={curatorTotalRewards}/></span>
+              {psString("Estimated earnings for today :")}
+              <span><DollarWithDeck deck={curatorEstimatedToday}/></span>
+              <br/>
+              {psString("Revenue for the last 7 days :")}
+              <span><DollarWithDeck deck={curatorTotalRewards}/></span>
             </div>
           </div>
         </div>

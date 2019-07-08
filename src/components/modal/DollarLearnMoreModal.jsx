@@ -5,6 +5,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import { psString } from "../../config/localization";
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -66,22 +67,22 @@ class DollarLearnMoreModal extends React.PureComponent {
                 id="classic-modal-slide-title"
                 disableTypography>
                 <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                    <div className="dialog-title">Important notice about DECK test token.</div>
+                    <div className="dialog-title">{psString('dollar-learn-more-subj')}</div>
               </DialogTitle>
 
 
               <DialogContent id="classic-modal-slide-description" className="overflow-hidden">
                  <div className="dialog-desc">
-                   We will test DECK token in the Polaris Share alpha version to make sure it works correctly in the application.
+                   {psString('dollar-learn-more-explain-1')}
                    <br/><br/>
-                   Feel free to experience the Polaris Share service with a free DECK test token. At the end of the test period, the DECK test token also expires.
+                   {psString('dollar-learn-more-explain-2')}
                    <br/><br/>
-                   Users who actively participate in the test provide appropriate compensation when opening the commercial version of Polaris Share.
+                   {psString('dollar-learn-more-explain-3')}
                  </div>
               </DialogContent>
 
               <DialogActions className="modal-footer">
-                <div onClick={() => this.getStarted()} className="ok-btn">Got it</div>
+                <div onClick={() => this.getStarted()} className="ok-btn">{psString('Got it')}</div>
               </DialogActions>
             </Dialog>
       </span>

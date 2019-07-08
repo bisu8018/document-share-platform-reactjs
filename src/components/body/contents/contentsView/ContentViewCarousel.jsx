@@ -1,7 +1,7 @@
 import React from "react";
 import { Carousel } from "react-responsive-carousel";
 import TrackingApis from "apis/TrackingApis";
-import Common from "../../../../util/Common";
+import Common from "../../../../config/common";
 import MainRepository from "../../../../redux/MainRepository";
 import EmailModalContainer from "../../../../container/modal/EmailModalContainer";
 import UserInfo from "../../../../redux/model/UserInfo";

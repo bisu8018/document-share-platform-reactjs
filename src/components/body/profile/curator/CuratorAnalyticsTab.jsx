@@ -5,9 +5,10 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 import MainRepository from "../../../../redux/MainRepository";
 import { Link } from "react-router-dom";
-import Common from "../../../../util/Common";
+import Common from "../../../../config/common";
 import CustomChart from "../../../common/CustomChart";
 import NoDataIcon from "../../../common/NoDataIcon";
+import { psString } from "../../../../config/localization";
 
 class CuratorAnalyticsTab extends React.Component {
   state = {
@@ -189,7 +190,7 @@ class CuratorAnalyticsTab extends React.Component {
     return (
       <div>
         <div className="document-total-num mb-2">
-          Total documents : <span className="font-weight-bold">{resultList.length}</span>
+          {psString("Total documents :")} <span className="font-weight-bold">{resultList.length}</span>
         </div>
         <InfiniteScroll
           className="overflow-hidden"

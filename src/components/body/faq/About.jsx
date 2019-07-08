@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Common from "../../../util/Common";
+import Common from "../../../config/common";
+import { psString } from "../../../config/localization";
 
 
 class About extends React.PureComponent {
@@ -18,14 +19,14 @@ class About extends React.PureComponent {
 
           <div className="col-12 col-md-6 order-last order-md-first">
             <div className="about-main-title ">
-              Sharing knowledge in new ways
+              {psString("about-main-subj")}
             </div>
             <div className="about-main-content ">
-              Polaris Share is a system that shares knowledge and is compensated by user's vote.
+              {psString("about-main-explain")}
             </div>
             <div className="about-text-align">
               <Link to="/faq">
-                <div className="main-learn-more-btn tac" onClick={() => Common.scrollTop()} title="Link to FAQ">Learn more</div>
+                <div className="main-learn-more-btn tac" onClick={() => Common.scrollTop()} title="Link to FAQ">{psString("Learn more")}</div>
               </Link>
             </div>
           </div>
@@ -38,16 +39,10 @@ class About extends React.PureComponent {
         <div className=" row about-section-wrapper">
           <div className="col-12">
             <div className="about-sub-title ">
-              Why Polaris Share?
+              {psString("about-first-section-subj")}
             </div>
             <div className="about-sub-content ">
-              Polaris Share connects knowledge creators and seekers to build a decentralized and incentive-based
-              knowledge trading system.
-              We create an environment that allows companies to work with people with most required skills from all
-              around the world without hiring them, and at the same time, helps individuals work when and where they
-              want and receive decent rewards without being hired by a certain company. We have realized that a wealth
-              of knowledge and a good number of Knowledge Creators are not fully tapped. In order to solve this
-              problem, we plan to create a Decentralized and Incentive-based knowledge trading system “Polaris Share.”
+              {psString("about-first-section-explain")}
             </div>
           </div>
         </div>
@@ -57,13 +52,10 @@ class About extends React.PureComponent {
           <div className="about-section-3"/>
           <div className="col-12 col-md-6">
             <div className="about-sub-title ">
-              Service
+              {psString("Service")}
             </div>
             <div className="about-sub-content ">
-              Polaris Share service is a decentralized and incentivized knowledge trading system that connects a
-              knowledge creator and an audience. This project goes beyond a simple document sharing service by grading
-              the value of the knowledge and trading them so that the knowledge creators can get the compensation and
-              the audience can get higher quality knowledge at a low cost.
+              {psString("about-second-section-explain")}
             </div>
           </div>
           <div className="col-12 col-md-6 p-0">
@@ -140,10 +132,10 @@ class About extends React.PureComponent {
         <div className="col-12 row about-section-wrapper">
           <div className="col-12 mb-4 mb-md-5">
             <div className="about-sub-title ">
-              Vision
+              {psString("Vision")}
             </div>
             <div className="about-sub-content ">
-              Decentralized and Incentivized Professional Knowledge Trading System
+              {psString("about-third-section-explain")}
             </div>
           </div>
 
@@ -152,30 +144,30 @@ class About extends React.PureComponent {
               <img src={require("assets/image/common/about-vision-img-01.svg")}
                    alt="Value of knowledge"/>
               <div className="about-vision-title">
-                Value of knowledge
+                {psString("about-third-section-chap-subj-1")}
               </div>
               <div className="about-vision-content">
-                Polaris Share returns the value of knowledge stored in documents and network to Knowledge Creators and other users.
+                {psString("about-third-section-chap-explain-1")}
               </div>
             </div>
             <div className="col-12 col-md-4 tac">
               <img src={require("assets/image/common/about-vision-img-02.svg")}
                    alt="No transaction fees"/>
               <div className="about-vision-title">
-                No transaction fees
+                {psString("about-third-section-chap-subj-2")}
               </div>
               <div className="about-vision-content">
-                Knowledge Creators get rewards from sharing or selling documents on Polaris Share with no or with low transaction fees
+                {psString("about-third-section-chap-explain-2")}
               </div>
             </div>
             <div className="col-12 col-md-4 tac">
               <img src={require("assets/image/common/about-vision-img-03.svg")}
                    alt="Content shared"/>
               <div className="about-vision-title">
-                Content shared
+                {psString("about-third-section-chap-subj-3")}
               </div>
               <div className="about-vision-content">
-                Audiences will benefit from more and better content shared by Knowledge creators.
+                {psString("about-third-section-chap-explain-3")}
               </div>
             </div>
           </div>
@@ -184,7 +176,7 @@ class About extends React.PureComponent {
 
         <div className="col-12 row about-section-wrapper">
           <div className="about-section-5"/>
-          <div className="about-sub-title col-12 ">Polaris Share Team</div>
+          <div className="about-sub-title col-12 ">  {psString("Polaris Share Team")}</div>
 
 
           <div className="row col-12 ">

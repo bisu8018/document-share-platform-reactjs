@@ -1,7 +1,7 @@
 import React from "react";
 import { ThreeBounce } from "better-react-spinkit";
 import Chart from "react-google-charts";
-import Common from "../../util/Common";
+import Common from "../../config/common";
 
 //https://www.npmjs.com/package/react-google-charts#quick-start
 //구글 리액트 차트 라이브러리

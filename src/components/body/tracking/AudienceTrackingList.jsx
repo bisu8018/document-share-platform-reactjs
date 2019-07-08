@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Common from "../../../util/Common";
+import Common from "../../../config/common";
 import MainRepository from "../../../redux/MainRepository";
 import { ThreeBounce } from "better-react-spinkit";
 import Tooltip from "@material-ui/core/Tooltip";

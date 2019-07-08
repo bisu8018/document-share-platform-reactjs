@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
-import Common from "../../../util/Common";
+import Common from "../../../config/common";
 import PayoutCard from "../../common/card/PayoutCard";
 
 class ContentListItem extends React.Component {

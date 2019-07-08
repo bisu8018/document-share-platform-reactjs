@@ -1,4 +1,4 @@
-import Common from "../../util/Common";
+import Common from "../../config/common";
 
 export default class DocumentInfo {
   accountId: string;

@@ -5,7 +5,7 @@ import { APP_PROPERTIES } from "properties/app.properties";
 
 import ContentViewRight from "./ContentViewRight";
 import MainRepository from "../../../../redux/MainRepository";
-import Common from "../../../../util/Common";
+import Common from "../../../../config/common";
 import NotFoundPage from "../../../common/NotFoundPage";
 import ContentViewFullScreenContainer
   from "../../../../container/body/contents/contentsView/ContentViewFullScreenContainer";

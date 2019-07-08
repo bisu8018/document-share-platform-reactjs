@@ -5,6 +5,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import { psString } from "../../config/localization";
 
 
 function Transition(props) {
@@ -61,25 +62,25 @@ class ApproveModal extends React.Component {
               <DialogTitle
                 id="classic-modal-slide-title"
                 disableTypography>
-                <h3>Approve DECK</h3>
+                <h3>{psString("Approve DECK")}</h3>
               </DialogTitle>
 
 
               <DialogContent id="classic-modal-slide-description" className="overflow-hidden">
                  <div className="dialog-desc mb-3">
-                  To vote on a document using DECK, you must first approve the Polaris Share Contracts to move DECK on your behalf. You will not be able to vote on documents until approval has completed.
+                  {psString("approve-explain-1")}
                  </div>
               </DialogContent>
 
              <DialogContent className="overflow-hidden">
                  <div className="dialog-desc mb-3">
-                 After clicking "Approve", you will be asked to sign a transaction, followed by second transaction to complete your requested voting.
+                   {psString("approve-explain-2")}
                  </div>
               </DialogContent>
 
               <DialogActions className="modal-footer">
-                <div onClick={() => this.handleClose()} className="cancel-btn">Cancel</div>
-                <div onClick={() => this.handleApprove()} className="ok-btn">Approve</div>
+                <div onClick={() => this.handleClose()} className="cancel-btn">{psString("Cancel")}</div>
+                <div onClick={() => this.handleApprove()} className="ok-btn"> {psString("Approve")}</div>
               </DialogActions>
             </Dialog>
       </span>

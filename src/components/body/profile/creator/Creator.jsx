@@ -2,13 +2,14 @@ import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
 import MainRepository from "../../../../redux/MainRepository";
-import Common from "../../../../util/Common";
+import Common from "../../../../config/common";
 import { ThreeBounce } from "better-react-spinkit";
 import NotFoundPage from "../../../common/NotFoundPage";
 import CuratorAnalyticsTabContainer from "../../../../container/body/profile/curator/CuratorAnalyticsTabContainer";
 import CreatorSummaryContainer from "../../../../container/body/profile/creator/CreatorSummaryContainer";
 import CuratorVoteTabContainer from "../../../../container/body/profile/curator/CuratorVoteTabContainer";
 import CuratorUploadTabContainer from "../../../../container/body/profile/curator/CuratorUploadTabContainer";
+import { psString } from "../../../../config/localization";
 
 
 class Creator extends React.Component {
@@ -90,10 +91,10 @@ class Creator extends React.Component {
           {userInfo &&
           <Tabs forceRenderTabPanel={true}>
             <TabList>
-              <Tab>Uploaded</Tab>
-              <Tab>Voted</Tab>
+              <Tab>{psString("Uploaded")}</Tab>
+              <Tab>{psString("Voted")}</Tab>
               {(param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) &&
-              <Tab>Analytics</Tab>}
+              <Tab>{psString("Analytics")}</Tab>}
             </TabList>
 
             <TabPanel>

@@ -3,7 +3,7 @@ import BalanceOfContainer from "../../../container/common/BalanceOfContainer";
 import { Link } from "react-router-dom";
 import MainRepository from "../../../redux/MainRepository";
 import UserInfo from "../../../redux/model/UserInfo";
-import Common from "../../../util/Common";
+import Common from "../../../config/common";
 
 class ProfileCard extends React.Component {
   state = {

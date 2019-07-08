@@ -1,12 +1,13 @@
 import React from "react";
 import history from "apis/history/history";
 import MainRepository from "../../redux/MainRepository";
-import Common from "../../util/Common";
+import Common from "../../config/common";
 import UploadDocumentModalContainer from "../../container/modal/UploadDocumentModalContainer";
 import MenuContainer from "../../container/header/MenuContainer";
 import ProfileCardContainer from "../../container/common/ProfileCardContainer";
 import AdsContainer from "../../container/ads/AdsContainer";
 import SearchBarContainer from "../../container/header/SearchBarContainer";
+import { psString } from "../../config/localization";
 
 //import Bounty from "./Bounty";
 
@@ -155,6 +156,10 @@ class Header extends React.Component {
     this.removeClass();
     let path = e.target.innerHTML.toLowerCase();
 
+    if(path === "최신") path = "latest";
+    else if(path === "추천") path = "featured";
+    else if(path === "인기") path = "popular";
+
     history.push("/" + path + "/" + Common.getTag());
     e.target.classList.add("on");
     Common.scrollTop();
@@ -219,13 +224,13 @@ class Header extends React.Component {
               {!searchBar ?
                 <div className="nav-menu-link-wrapper">
                   <div className="nav-menu-link" id="latestNavLink"
-                       onClick={(e) => this.handleNavMenuLink(e)}>LATEST
+                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("LATEST")}
                   </div>
                   <div className="nav-menu-link" id="featuredNavLink"
-                       onClick={(e) => this.handleNavMenuLink(e)}>FEATURED
+                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("FEATURED")}
                   </div>
                   <div className="nav-menu-link" id="popularNavLink"
-                       onClick={(e) => this.handleNavMenuLink(e)}>POPULAR
+                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("POPULAR")}
                   </div>
                   <div className="mobile-header-search-btn-wrapper">
                     <div className="web-header-search-btn" onClick={() => this.showSearchBar()}/>

@@ -1,5 +1,5 @@
 import React from "react";
-import Common from "../../util/Common";
+import Common from "../../config/common";
 import DollarLearnMoreModal from "./DollarLearnMoreModal";
 
 class DollarPolicyModal extends React.PureComponent {

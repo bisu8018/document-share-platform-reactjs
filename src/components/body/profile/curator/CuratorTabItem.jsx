@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Common from "../../../../util/Common";
+import Common from "../../../../config/common";
 import CuratorClaimContainer from "../../../../container/body/profile/curator/CuratorClaimContainer";
 import LinesEllipsis from "react-lines-ellipsis";
 

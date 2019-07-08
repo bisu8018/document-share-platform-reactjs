@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import history from "apis/history/history";
 
-import RouterList from "../util/RouterList";
+import RouterList from "../config/routerList";
 import MainRepository from "../redux/MainRepository";
 import CookiePolicyModal from "./modal/CookiePolicyModal";
 import UserInfo from "../redux/model/UserInfo";

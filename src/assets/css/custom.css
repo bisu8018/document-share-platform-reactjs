@@ -6072,8 +6072,6 @@ dean
     cursor: pointer;
     padding: 5px 15px;
     font-size: 14px;
-    -webkit-transition: 0.2s all ease-in-out;
-    transition: 0.2s all ease-in-out;
     color: #0d73f8;
     background: white;
     border: solid 1px #0d73f8;
@@ -6498,9 +6496,7 @@ dean
     border-radius: 2px;
     width: 90px;
     height: 25px;
-    -webkit-transition: 0.2s all ease-in-out;
-    transition: 0.2s all ease-in-out;
-    padding-top: 2px;
+    padding-top: 3px;
     padding-left: 15px;
     text-align: center;
 }
@@ -6574,7 +6570,7 @@ dean
     font-size: 14px;
     position: absolute;
     left: 5px;
-    top: 3px;
+    top: 4px;
 }
 
 .share-btn {
@@ -6605,7 +6601,6 @@ Dean*/
     width: 33px;
     height: 33px;
     border: 1px solid #989898;
-    transition: 0.2s all ease-in-out;
 }
 
 .avatar:hover {
@@ -7117,6 +7112,10 @@ Dean*/
     border-radius: 50%;
     margin-right: .4rem;
     border: 1px solid #CCCCCC;
+}
+
+.info_name > img:hover {
+    border-color: #3d5afe;
 }
 
 .info_name i {
@@ -8280,9 +8279,6 @@ Dean
     font-weight: 500;
     font-size: 14px;
     color: #666666;
-    -webkit-transition-duration: .5s;
-    -o-transition-duration: .5s;
-    transition-duration: .5s;
 }
 
 /*.u__view .view_tag .tag*/
@@ -8394,6 +8390,10 @@ Dean
     letter-spacing: -0.2px;
     color: #4d4d4d;;
     display: inline-block;
+}
+
+.see-also-title:hover {
+    color:#3d5afe;
 }
 
 .see-also-author {
@@ -9814,6 +9814,10 @@ Main Category CSS
     border-radius: 50%;
     margin-right: .4rem;
     border: 1px solid #CCCCCC;
+}
+
+.main-category-card-profile > img:hover {
+    border-color: #3d5afe;
 }
 
 .main-category-card-profile i {

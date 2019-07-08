@@ -1,33 +1,34 @@
 import React from "react";
 import Tooltip from "@material-ui/core/Tooltip";
 import MainRepository from "../../../../redux/MainRepository";
+import { psString } from "../../../../config/localization";
 
 class ContentViewBlockchainButton extends React.Component {
 
   state = {
-    msg: "Register this document to blockchain."
+    msg: psString("b-explain-1")
   };
 
   handleRegisterDocumentInBlockChain = () => {
     const { documentData, getDrizzle, getMyInfo } = this.props;
     if (!documentData) return;
     if (!getMyInfo.ethAccount) {
-      this.setState({ msg: "Please log in to the Meta Mask." });
+      this.setState({ msg: psString("b-error-1") });
       return;
     }
     if (getMyInfo.ethAccount !== getDrizzle.getLoggedInAccount()) {
-      this.setState({ msg: "Please log in with the correct account." });
+      this.setState({ msg: psString("b-error-2") });
       return;
     }
 
-    this.setState({ msg: "Pending" }, () => {
+    this.setState({ msg: psString("pending") }, () => {
       getDrizzle.registerDocumentToSmartContract(documentData.documentId).then(res => {
         if (res === "success") {
-          this.setState({ msg: "Successfully registered " }, () => {
+          this.setState({ msg: psString("b-success-1") }, () => {
             document.location.reload();
           });
         } else{
-          this.setState({ msg: "Register this document to blockchain." });
+          this.setState({ msg: psString("b-explain-1") });
         }
       });
     });
@@ -46,9 +47,9 @@ class ContentViewBlockchainButton extends React.Component {
       <span>
         <Tooltip title={msg} placement="bottom">
           <div className={"viewer-btn " + (msg === "Pending" ? "btn-disabled" : "")}
-               disabled={msg === "Pending"}
+               disabled={msg === psString("pending")}
                onClick={() => this.handleRegisterDocumentInBlockChain()}>
-            <i className="material-icons">add_box</i> Register
+            <i className="material-icons">add_box</i> {psString("Register")}
           </div>
         </Tooltip>
       </span>

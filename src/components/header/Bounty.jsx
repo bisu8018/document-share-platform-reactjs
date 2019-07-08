@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React from "react";
 
 import Slide from "@material-ui/core/Slide";
@@ -8,9 +7,11 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import MainRepository from "../../redux/MainRepository";
 
+
 function Transition(props) {
   return <Slide direction="down" {...props} />;
 }
+
 
 class Bounty extends React.Component {
   state = {
@@ -19,11 +20,13 @@ class Bounty extends React.Component {
     classicModal: false,
   };
 
+
   handleClose = (modal) => {
     const x = [];
     x[modal] = false;
     this.setState(x);
   };
+
 
   handleClickOpen = (modal) => {
     if (!MainRepository.Account.isAuthenticated()) {
@@ -36,11 +39,13 @@ class Bounty extends React.Component {
     }
   };
 
+
   handleClickAgree = () => {
     const { getDrizzle } = this.props;
     this.handleClose("classicModal");
     getDrizzle.bounty();
   };
+
 
   componentDidUpdate = () => {
     const { getDrizzle, getWeb3Apis, getMyInfo } = this.props;
@@ -58,10 +63,10 @@ class Bounty extends React.Component {
     }
   };
 
+
   render = () => {
     const { classes } = this.props;
 
-    if (this.state.available > 0) {
       return (
         <span>
              <div className="bounty-btn" onClick={() => this.handleClickOpen("classicModal")}>
@@ -80,13 +85,13 @@ class Bounty extends React.Component {
                 <DialogTitle
                   id="classic-modal-slide-title"
                   disableTypography
-                  className={classes.modalHeader}>
+                  className="">
                   <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                  <h3 className={classes.modalTitle}>Do you need DECK?</h3>
+                  <h3 className="">Do you need DECK?</h3>
                 </DialogTitle>
 
 
-                <DialogContent id="classic-modal-slide-description" className={classes.modalBody}>
+                <DialogContent id="classic-modal-slide-description" className="">
                   <div className="dialog-subject">New users can get 5000 DECK for free. (Gas fee is required)</div>
                   <div className="dialog-subject">You can vote for good docs with DECK and get rewarded.</div>
                 </DialogContent>
@@ -101,9 +106,6 @@ class Bounty extends React.Component {
         </span>
 
       );
-    } else {
-      return null;
-    }
   };
 }
 

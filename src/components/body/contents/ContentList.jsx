@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ThreeBounce } from "better-react-spinkit";
 import MainRepository from "../../../redux/MainRepository";
-import Common from "../../../util/Common";
+import Common from "../../../config/common";
 import ContentTagsContainer from "../../../container/body/contents/ContentTagsContainer";
 import ContentListItemContainer from "../../../container/body/contents/ContentListItemContainer";
 
