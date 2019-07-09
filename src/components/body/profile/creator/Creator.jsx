@@ -34,9 +34,6 @@ class Creator extends React.Component {
     }, err => {
       this.setState({ userInfo: null, errMessage: err });
       console.error(err);
-      setTimeout(() => {
-        this.getProfileInfo(params);
-      }, 8000);
     });
   };
 
@@ -91,10 +88,10 @@ class Creator extends React.Component {
           {userInfo &&
           <Tabs forceRenderTabPanel={true}>
             <TabList>
-              <Tab>{psString("Uploaded")}</Tab>
-              <Tab>{psString("Voted")}</Tab>
+              <Tab>{psString("profile-uploaded")}</Tab>
+              <Tab>{psString("profile-voted")}</Tab>
               {(param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) &&
-              <Tab>{psString("Analytics")}</Tab>}
+              <Tab>{psString("profile-analytics")}</Tab>}
             </TabList>
 
             <TabPanel>

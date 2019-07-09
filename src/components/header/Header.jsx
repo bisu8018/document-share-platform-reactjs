@@ -224,13 +224,13 @@ class Header extends React.Component {
               {!searchBar ?
                 <div className="nav-menu-link-wrapper">
                   <div className="nav-menu-link" id="latestNavLink"
-                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("LATEST")}
+                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("header-category-1")}
                   </div>
                   <div className="nav-menu-link" id="featuredNavLink"
-                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("FEATURED")}
+                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("header-category-2")}
                   </div>
                   <div className="nav-menu-link" id="popularNavLink"
-                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("POPULAR")}
+                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("header-category-3")}
                   </div>
                   <div className="mobile-header-search-btn-wrapper">
                     <div className="web-header-search-btn" onClick={() => this.showSearchBar()}/>
@@ -273,7 +273,7 @@ class Header extends React.Component {
 
               {!MainRepository.Account.isAuthenticated() && !getTempEmail &&
               <div className="d-none d-sm-inline-block login-btn ml-2" onClick={() => this.handleLogin()}>
-                Login
+                {psString("header-login")}
               </div>
               }
 

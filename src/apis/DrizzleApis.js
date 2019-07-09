@@ -3,22 +3,25 @@ import { store } from "../index";
 import MainRepository from "../redux/MainRepository";
 import { setAlertCode, setMyInfo } from "../redux/reducer/main";
 
-/*알파용 컨트랙*/
-/*import DocumentRegistry from "apis/contracts-alpha/DocumentRegistry.json";
-import Deck from "apis/contracts-alpha/Deck.json";
-import BountyOne from "apis/contracts-alpha/BountyOne.json";
-import Curator from "apis/contracts-alpha/Curator.json";
-import Creator from "apis/contracts-alpha/Creator.json";
-import RewardPool from "apis/contracts-alpha/RewardPool.json";*/
+let DocumentRegistry, Deck, BountyOne, Curator, Creator, RewardPool;
 
-/*개발계용 컨트랙*/
-import DocumentRegistry from "apis/contracts-dev/DocumentRegistry.json";
-import Deck from "apis/contracts-dev/Deck.json";
-import BountyOne from "apis/contracts-dev/BountyOne.json";
-import Curator from "apis/contracts-dev/Curator.json";
-import Creator from "apis/contracts-dev/Creator.json";
-import RewardPool from "apis/contracts-dev/RewardPool.json";
-
+if (process.env.NODE_ENV_SUB === "production") {
+  /*알파용 컨트랙*/
+  DocumentRegistry = require("apis/contracts-alpha/DocumentRegistry.json");
+  Deck = require("apis/contracts-alpha/Deck.json");
+  BountyOne = require("apis/contracts-alpha/BountyOne.json");
+  Curator = require("apis/contracts-alpha/Curator.json");
+  Creator = require("apis/contracts-alpha/Creator.json");
+  RewardPool = require("apis/contracts-alpha/RewardPool.json");
+} else {
+  /*개발계용 컨트랙*/
+  DocumentRegistry = require("apis/contracts-dev/DocumentRegistry.json");
+  Deck = require("apis/contracts-dev/Deck.json");
+  BountyOne = require("apis/contracts-dev/BountyOne.json");
+  Curator = require("apis/contracts-dev/Curator.json");
+  Creator = require("apis/contracts-dev/Creator.json");
+  RewardPool = require("apis/contracts-dev/RewardPool.json");
+}
 
 const defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
 
@@ -26,8 +29,8 @@ export default class DrizzleApis {
   options = {
     contracts: [DocumentRegistry, Deck, BountyOne, Curator, Creator, RewardPool],  // 드리즐 컨트랙 설정,
     polls: {
-      accounts: 10000,
-    },
+      accounts: 10000
+    }
   };
   drizzleStore = generateStore(this.options);   // 드리즐 스토어 셋팅
 
@@ -130,7 +133,7 @@ export default class DrizzleApis {
         transactionStack = this.drizzleState.transactionStack;
 
         if (Object.keys(transactions).length === stackId + 1) status = transactions[transactionStack[stackId]].status;
-        else if(Object.keys(transactions).length === stackId + 2 ) status = "error";
+        else if (Object.keys(transactions).length === stackId + 2) status = "error";
 
         if (status === "success" || status === "error") {
           clearInterval(this.txInterval);
@@ -184,7 +187,7 @@ export default class DrizzleApis {
     return new Promise((resolve) => {
         const Creator = this.drizzle.contracts.Creator;
         const RewardPool = this.drizzle.contracts.RewardPool;
-       // console.log("claimAuthorReward", ethAccount, "Profile account", documentId, this.fromAscii(documentId));
+        // console.log("claimAuthorReward", ethAccount, "Profile account", documentId, this.fromAscii(documentId));
         const stackId = RewardPool.methods["claim"].cacheSend(this.fromAscii(documentId), Creator.address, { from: ethAccount });
 
         resolve(this.getTransactionStatus(stackId));

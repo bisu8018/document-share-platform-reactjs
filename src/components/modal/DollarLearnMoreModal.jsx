@@ -52,7 +52,7 @@ class DollarLearnMoreModal extends React.PureComponent {
 
     return (
       <span>
-             <span className="alert-banner-learn-more" onClick={() => this.handleClickOpen("classicModal")}>Learn more.</span>
+             <span className="alert-banner-learn-more" onClick={() => this.handleClickOpen("classicModal")}>{psString("dollar-policy-learn-more")}</span>
 
         <Dialog
           fullWidth={true}
@@ -82,7 +82,7 @@ class DollarLearnMoreModal extends React.PureComponent {
               </DialogContent>
 
               <DialogActions className="modal-footer">
-                <div onClick={() => this.getStarted()} className="ok-btn">{psString('Got it')}</div>
+                <div onClick={() => this.getStarted()} className="ok-btn">{psString('dollar-learn-more-btn')}</div>
               </DialogActions>
             </Dialog>
       </span>

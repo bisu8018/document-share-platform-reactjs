@@ -37,7 +37,6 @@
 }
 
 html {
-    font-family: HelveticaNeue, 'Poppins', sans-serif;
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
@@ -63,7 +62,7 @@ section {
 
 body {
     margin: 0;
-    font-family: "HelveticaNeue", "Roboto", "Arial", sans-serif;
+    font-family: "HelveticaNeue", 'Noto Sans KR', MalgumGothic, Helvetica, Arial, sans-serif;
     font-size: 1rem;
     line-height: 1.5;
     text-align: left;
@@ -6961,7 +6960,7 @@ Dean*/
 
 .content-list-path {
     text-transform: uppercase;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", 'Noto Sans KR', sans-serif;
     font-size: 22px;
     font-weight: 500;
     margin-top: 20px;
@@ -7251,7 +7250,6 @@ Dean*/
     display: none;
     position: absolute;
     min-height: 40px;
-    bottom: -30px;
     background: #0d73f8;
     z-index: 1;
     width: 300px;
@@ -7262,8 +7260,8 @@ Dean*/
 }
 
 .info-detail-reward-info.info-fullscreen,
-.tracking-item .info-detail-reward-info{
-    bottom: -48px !important;
+.tracking-item .info-detail-reward-info {
+    top: 30px !important;
 }
 
 .tab-item-info-wrapper {
@@ -7487,7 +7485,7 @@ Dean*/
 
     .menu-content-item-sub {
         text-align: left !important;
-        font-family: 'Poppins', sans-serif !important;
+        font-family: 'Poppins', 'Noto Sans KR', sans-serif !important;
         font-size: 16px !important;
         font-weight: 400 !important;
         line-height: 2.25 !important;
@@ -7929,7 +7927,7 @@ Duration CSS*/
     position: absolute;
     display: inline-block;
     font-size: 12px;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", 'Noto Sans KR', sans-serif;
     right: 120px;
     top: 5px;
 }
@@ -8393,7 +8391,7 @@ Dean
 }
 
 .see-also-title:hover {
-    color:#3d5afe;
+    color: #3d5afe;
 }
 
 .see-also-author {
@@ -8857,6 +8855,7 @@ Dean
     color: #666666;
     cursor: pointer;
     padding-top: 10px;
+    width: 50px;
 }
 
 .custom-input-copy-text:hover {
@@ -9041,7 +9040,7 @@ contentContainer 배너 CSS*/
 }
 
 .main-banner-subject {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
     padding-bottom: 5px;
     font-size: 50px;
     color: white;
@@ -9211,10 +9210,6 @@ Dean
     cursor: pointer;
     border-bottom: 1px solid #3681fe;
     display: inline-block;
-}
-
-.alert-banner-learn-more:hover {
-    font-weight: bold;
 }
 
 .privacy-banner-wrapper,
@@ -9435,7 +9430,7 @@ dean
 .react-autosuggest__input {
     height: 30px;
     padding: 0 10px;
-    font-family: Helvetica, sans-serif;
+    font-family: Helvetica, 'Noto Sans KR', sans-serif;
     font-weight: 300;
     font-size: 16px;
     margin-left: 20px;
@@ -9714,7 +9709,7 @@ Main Category CSS
     font-size: 22px;
     font-weight: 500;
     color: #4d4d4d;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
     text-transform: uppercase;
 }
 
@@ -9836,7 +9831,7 @@ Main Category CSS
 .main-category-card-name {
     font-size: 14px;
     margin-left: 6px;
-    top: 3px;
+    top: 2px;
     color: #4d4d4d;
     position: relative;
 }
@@ -9933,7 +9928,7 @@ Main Category CSS
 }
 
 .view_content .info-detail-reward-info {
-    bottom: -45px !important;
+    top: 30px !important;
 }
 
 .content-list-wrapper .reward-info-not-registered {
@@ -9947,10 +9942,10 @@ Main Category CSS
 }
 
 
-    /*
-    프로필 카드 CSS
-    2019-05-23 Dean
-    */
+/*
+프로필 카드 CSS
+2019-05-23 Dean
+*/
 
 .profile-card {
     width: 245px;
@@ -10031,7 +10026,7 @@ Main Category CSS
 
 .menu-content-item {
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
     font-size: 40px;
     font-weight: 500;
     font-style: normal;
@@ -10049,7 +10044,7 @@ Main Category CSS
 
 .menu-content-item-sub {
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
     font-size: 24px;
     font-weight: 300;
     font-style: normal;
@@ -10301,7 +10296,7 @@ About us page CSS
 
 
 .about-main-title {
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", 'Noto Sans KR', sans-serif;
     font-size: 50px;
     font-weight: 600;
     line-height: 1.24;
@@ -10326,7 +10321,7 @@ About us page CSS
 }
 
 .about-sub-title {
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", 'Noto Sans KR', sans-serif;
     font-size: 36px;
     font-weight: 600;
     color: #3681fe;

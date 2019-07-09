@@ -25,14 +25,14 @@ class Footer extends React.Component {
               <div className="footer-nav footer-nav-divider mb-2" onClick={() => Common.scrollTop()}>FAQ</div>
             </Link>
             <Link to="/guide">
-              <div className="footer-nav footer-nav-divider footer-nav-divider-ug mb-2" onClick={() => Common.scrollTop()}>User Guide</div>
+              <div className="footer-nav footer-nav-divider footer-nav-divider-ug mb-2"
+                   onClick={() => Common.scrollTop()}>User Guide
+              </div>
             </Link>
             <div className="footer-br"/>
             <Link to="/terms">
-              <div className="footer-nav footer-nav-divider  mb-2" onClick={() => Common.scrollTop()}>Terms of Service</div>
-            </Link>
-            <Link to="/policies">
-              <div className="footer-nav footer-nav-divider  mb-2" onClick={() => Common.scrollTop()}>Policies</div>
+              <div className="footer-nav footer-nav-divider  mb-2" onClick={() => Common.scrollTop()}>Terms of Service
+              </div>
             </Link>
             <Link to="/privacy">
               <div className="footer-nav" onClick={() => Common.scrollTop()}>Privacy</div>
@@ -40,10 +40,18 @@ class Footer extends React.Component {
           </div>
           <div className="footer-sns col-sm-3 row">
             <div className="m-auto">
-              <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-facebook.svg")} alt="Facebook"/>
-              <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-twitter.svg")} alt="Twitter"/>
-              <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-insta.svg")} alt="Instagram"/>
-              <img className="c-pointer" src={require("assets/image/sns/ic-sns-linkedin.svg")} alt="Linkedin"/>
+              <a target="_blank" href={"https://www.facebook.com/polarishare/"} rel="noopener noreferrer">
+                <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-facebook.svg")} alt="Facebook Page"/>
+              </a>
+              <a target="_blank" href={"https://twitter.com/Polarishare"} rel="noopener noreferrer">
+                <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-twitter.svg")} alt="Twitter Page"/>
+              </a>
+              <a target="_blank" href={"https://www.instagram.com/polarishare.io/"} rel="noopener noreferrer">
+              <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-insta.svg")} alt="Instagram Page"/>
+              </a>
+              <a target="_blank" href={"https://www.linkedin.com/in/decompany-io-720812178/"} rel="noopener noreferrer">
+                <img className="c-pointer" src={require("assets/image/sns/ic-sns-linkedin.svg")} alt="Linkedin Page"/>
+              </a>
             </div>
           </div>
           <div className="footer-copyright">

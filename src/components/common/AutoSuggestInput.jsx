@@ -1,6 +1,7 @@
 import * as React from "react";
 import Autosuggest from "react-autosuggest";
 import Common from "../../config/common";
+import { psString } from "../../config/localization";
 
 class AutoSuggestInput extends React.Component {
 
@@ -133,11 +134,11 @@ class AutoSuggestInput extends React.Component {
     switch (type) {
       case "tag":
       case "currentTag":
-        _placeholder = "Tag Search . . .";
+        _placeholder = psString("auto-placeholder-1");
         break;
 
       case "name":
-        _placeholder = "Name Search . . .";
+        _placeholder = psString("auto-placeholder-2");
         break;
 
       default:

@@ -52,7 +52,7 @@ class About extends React.PureComponent {
           <div className="about-section-3"/>
           <div className="col-12 col-md-6">
             <div className="about-sub-title ">
-              {psString("Service")}
+              {psString("about-service")}
             </div>
             <div className="about-sub-content ">
               {psString("about-second-section-explain")}
@@ -89,7 +89,7 @@ class About extends React.PureComponent {
                   </div>
 
                   <div className="main-category-card-reward-info d-inline-block">
-                    Creator payout <span className="font-weight-bold">21 DECK</span> in 7 days
+                    {psString("profile-payout-txt-1")} <span className="font-weight-bold">21 DECK</span> {psString("profile-payout-txt-2")}
                   </div>
                 </div>
               </div>
@@ -132,7 +132,7 @@ class About extends React.PureComponent {
         <div className="col-12 row about-section-wrapper">
           <div className="col-12 mb-4 mb-md-5">
             <div className="about-sub-title ">
-              {psString("Vision")}
+              {psString("about-vision")}
             </div>
             <div className="about-sub-content ">
               {psString("about-third-section-explain")}
@@ -176,7 +176,7 @@ class About extends React.PureComponent {
 
         <div className="col-12 row about-section-wrapper">
           <div className="about-section-5"/>
-          <div className="about-sub-title col-12 ">  {psString("Polaris Share Team")}</div>
+          <div className="about-sub-title col-12 ">  {psString("about-ps-team")}</div>
 
 
           <div className="row col-12 ">

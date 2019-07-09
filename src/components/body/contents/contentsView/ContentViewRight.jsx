@@ -1,6 +1,7 @@
 import React from "react";
 import { ThreeBounce } from 'better-react-spinkit'
 import FeaturedList from "../../../common/FeaturedListItem";
+import { psString } from "../../../../config/localization";
 
 class ContentViewRight extends React.Component {
 
@@ -11,7 +12,7 @@ class ContentViewRight extends React.Component {
     } else {
       return (
         <div className="u__right">
-          <div>See also</div>
+          <div>{psString("see-also-text")}</div>
           <div className="hr mt-2"/>
           {featuredList.length > 0 && featuredList.map((result, idx) => (
             <FeaturedList resultItem={result} key={idx}/>

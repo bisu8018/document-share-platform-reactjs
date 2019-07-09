@@ -1,6 +1,7 @@
 import React from "react";
 import Common from "../../config/common";
 import DollarLearnMoreModal from "./DollarLearnMoreModal";
+import { psString } from "../../config/localization";
 
 class DollarPolicyModal extends React.PureComponent {
   state = {
@@ -49,7 +50,7 @@ class DollarPolicyModal extends React.PureComponent {
           </div>
 
           <div className="alert-banner-text">
-            The dollar amount shown here is a test token and is only a reference value, not an actual amount.
+            {psString("dollar-policy-content")}
             <span className="mr-3"/>
             <DollarLearnMoreModal close={() => {
               this.getStarted();

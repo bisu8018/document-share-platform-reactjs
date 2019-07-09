@@ -1,11 +1,12 @@
+
 export const APP_PROPERTIES = {
 
-  env: (!process.env.NODE_ENV) ? 'local':process.env.NODE_ENV,
+  env: (!process.env.NODE_ENV_SUB) ? 'local':process.env.NODE_ENV_SUB,
   domain:function(){
-    if(process.env.NODE_ENV === 'production'){
+    if(this.env === 'production'){
       return APP_PROPERTIES.production.domain;
-    }else if(process.env.NODE_ENV === 'dev'){
-      return APP_PROPERTIES.local.domain;
+    }else if(this.env === 'development'){
+      return APP_PROPERTIES.dev.domain;
     }else {
       return APP_PROPERTIES.local.domain;
     }
@@ -21,7 +22,7 @@ export const APP_PROPERTIES = {
       embed: "https://embed.share.decompany.io/"
     }
   },
-  dev:{
+  production:{
     domain:{
       mainHost: 'https://www.polarishare.com',
       upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
@@ -32,7 +33,7 @@ export const APP_PROPERTIES = {
       embed: "https://embed.polarishare.com/",
     }
   },
-  production:{
+  dev:{
     domain:{
       mainHost: 'https://share.decompany.io',
       upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',

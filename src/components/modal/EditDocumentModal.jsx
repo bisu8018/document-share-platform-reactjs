@@ -328,13 +328,13 @@ class EditDocumentModal extends React.Component {
 
     return (
       <span>
-        <Tooltip title={psString("Settings of this document")} placement="bottom">
+        <Tooltip title={psString("tooltip-settings")} placement="bottom">
           <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
-            <i className="material-icons">settings</i> {psString("Settings")}
+            <i className="material-icons">settings</i> {psString("common-modal-settings")}
           </div>
         </Tooltip>
         {type && type === "menu" &&
-        <span className="d-inline-block d-sm-none" onClick={() => this.handleClickOpen("classicModal")}>{psString("Upload")}</span>
+        <span className="d-inline-block d-sm-none" onClick={() => this.handleClickOpen("classicModal")}>{psString("common-modal-upload")}</span>
         }
 
         <Dialog
@@ -354,18 +354,18 @@ class EditDocumentModal extends React.Component {
 
 
               <DialogContent id="classic-modal-slide-description">
-                <div className="dialog-subject">{psString("Title")}</div>
+                <div className="dialog-subject">{psString("common-modal-title")}</div>
                 <input type="text" placeholder={psString("title-placeholder")} id="docTitle"
                        className={"custom-input " + (titleError.length > 0 ? "custom-input-warning" : "")}
                        value={title}
                        onChange={(e) => this.handleTitleChange(e)}/>
                 <span>{titleError}</span>
 
-                <div className="dialog-subject mt-3 mb-2">{psString("Description")}</div>
+                <div className="dialog-subject mt-3 mb-2">{psString("common-modal-description")}</div>
                 <textarea id="docDesc" value={desc} placeholder={psString("description-placeholder")}
                           onChange={(e) => this.handleDescChange(e)} className="custom-textarea"/>
 
-                <div className="dialog-subject mt-3">{psString("Tag")}</div>
+                <div className="dialog-subject mt-3">{psString("common-modal-tag")}</div>
                 {tags &&
                 <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
                            className={"react-tagsinput " + (tagError.length > 0 ? "tag-input-warning" : "")}
@@ -373,7 +373,7 @@ class EditDocumentModal extends React.Component {
                 }
                 <span> {tagError}</span>
 
-                 <div className="dialog-subject mb-2 mt-3">{psString("Option")}</div>
+                 <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
                   <div className="row">
                   <div className="col-12 col-sm-6">
                     <input type="checkbox" id="useTrackingCheckboxEdit" onChange={(e) => this.handleTrackingCheckbox(e)}
@@ -404,7 +404,7 @@ class EditDocumentModal extends React.Component {
                  </div>
 
 
-                <div className="dialog-subject mb-2 mt-3">{psString("CC License")}</div>
+                <div className="dialog-subject mb-2 mt-3">{psString("edit-cc-license")}</div>
                 <div className="row">
                   <div className="col-12 col-sm-6">
                     <input type="checkbox" id="ccByCheckboxEdit" onChange={(e) => this.handleCcByCheckbox(e)}
@@ -446,8 +446,8 @@ class EditDocumentModal extends React.Component {
 
 
                   <DialogActions className="modal-footer">
-                  <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">{psString("Cancel")}</div>
-                  <div onClick={() => this.handleConfirmBtn()} className="ok-btn">{psString("Confirm")}</div>
+                  <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">{psString("common-modal-cancel")}</div>
+                  <div onClick={() => this.handleConfirmBtn()} className="ok-btn">{psString("common-modal-confirm")}</div>
                   </DialogActions>
                   </Dialog>
                   </span>

@@ -21,7 +21,7 @@ class ContentViewBlockchainButton extends React.Component {
       return;
     }
 
-    this.setState({ msg: psString("pending") }, () => {
+    this.setState({ msg: psString("b-pending") }, () => {
       getDrizzle.registerDocumentToSmartContract(documentData.documentId).then(res => {
         if (res === "success") {
           this.setState({ msg: psString("b-success-1") }, () => {
@@ -46,10 +46,10 @@ class ContentViewBlockchainButton extends React.Component {
     return (
       <span>
         <Tooltip title={msg} placement="bottom">
-          <div className={"viewer-btn " + (msg === "Pending" ? "btn-disabled" : "")}
-               disabled={msg === psString("pending")}
+          <div className={"viewer-btn " + (msg === psString("b-pending") ? "btn-disabled" : "")}
+               disabled={msg === psString("b-pending")}
                onClick={() => this.handleRegisterDocumentInBlockChain()}>
-            <i className="material-icons">add_box</i> {psString("Register")}
+            <i className="material-icons">add_box</i> {psString("register-btn")}
           </div>
         </Tooltip>
       </span>

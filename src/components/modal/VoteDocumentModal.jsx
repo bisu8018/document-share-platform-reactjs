@@ -38,7 +38,7 @@ class VoteDocumentModal extends React.Component {
       balance: -1,
       classicModal: false,
       deckError: "",
-      msg: psString("Vote on this document")
+      msg: psString("vote-modal-tooltip-1")
     };
   }
 
@@ -62,8 +62,8 @@ class VoteDocumentModal extends React.Component {
     const { deposit, balance } = this.state;
     return new Promise((resolve) => {
       let errMsg = "";
-      if (deposit <= 0) errMsg = psString("Deposit must be greater than zero .");
-      else if (deposit > Number(Common.toDeck(balance).toFixed(2))) errMsg = psString("Deposit must be less than balance .");
+      if (deposit <= 0) errMsg = psString("vote-modal-err-1");
+      else if (deposit > Number(Common.toDeck(balance).toFixed(2))) errMsg = psString("vote-modal-err-2");
 
       this.setState({ deckError: errMsg }, () => {
         resolve(errMsg);
@@ -200,7 +200,7 @@ class VoteDocumentModal extends React.Component {
       return;
     }
 
-    this.setState({ msg: psString("Vote on this document") }, () => {
+    this.setState({ msg: psString("vote-modal-tooltip-1") }, () => {
       const x = [];
       x[modal] = true;
       this.setState(x);
@@ -270,7 +270,7 @@ class VoteDocumentModal extends React.Component {
     let btnText, statusFlag;
 
     if (voteStatus === "INIT" || voteStatus === "COMPLETE") {
-      btnText = psString("Confirm");
+      btnText = psString("common-modal-confirm");
       statusFlag = false;
     } else {
       btnText = psString("Pending");
@@ -279,9 +279,9 @@ class VoteDocumentModal extends React.Component {
 
     if (!isLogin) {
       return (
-        <Tooltip title={psString("Please, login")} placement="bottom">
+        <Tooltip title={psString("vote-modal-tooltip-2")} placement="bottom">
           <div className="viewer-btn" onClick={this.handleLogin.bind(this)}>
-            <i className="material-icons">how_to_vote</i> {psString("Vote")}
+            <i className="material-icons">how_to_vote</i> {psString("vote-modal-btn")}
           </div>
         </Tooltip>
       );
@@ -290,17 +290,17 @@ class VoteDocumentModal extends React.Component {
     return (
       <span>
         {(!getDrizzle || !getDrizzle.isAuthenticated()) &&
-        <Tooltip title={psString("Please, work with MetaMask")} placement="bottom">
+        <Tooltip title={psString("vote-modal-tooltip-3")} placement="bottom">
           <div className="viewer-btn">
-            <i className="material-icons">how_to_vote</i> {psString("Vote")}
+            <i className="material-icons">how_to_vote</i> {psString("vote-modal-btn")}
           </div>
         </Tooltip>
         }
 
         {getDrizzle && getIsDocumentExist &&
-        <Tooltip title={psString("Vote on this document")} placement="bottom">
+        <Tooltip title={psString("vote-modal-tooltip-1")} placement="bottom">
           <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
-            <i className="material-icons">how_to_vote</i> {psString("Vote")}
+            <i className="material-icons">how_to_vote</i> {psString("vote-modal-btn")}
           </div>
         </Tooltip>
         }
@@ -319,7 +319,7 @@ class VoteDocumentModal extends React.Component {
             id="classic-modal-slide-title"
             disableTypography>
             <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-            <div className="vote-modal-title">{psString("Vote on document")}</div>
+            <div className="vote-modal-title">{psString("vote-modal-title")}</div>
           </DialogTitle>
 
 
@@ -327,13 +327,13 @@ class VoteDocumentModal extends React.Component {
             <div className="vote-modal-subject">{psString("vote-modal-subj-1")}</div>
             <ul className="voteList">
               <li>
-                <strong>You : </strong>
+                <strong>{psString("vote-modal-you")} : </strong>
                 <CuratorUserActiveVoteContainer documentData={documentData}
                                                 deposit={this.state.deposit}
                                                 loggedInAccount={getMyInfo.ethAccount}/>
               </li>
               <li>
-                <strong>Total : </strong>
+                <strong>{psString("vote-modal-total")} : </strong>
                 <CuratorActiveVoteContainer documentData={documentData}
                                             deposit={this.state.deposit}
                                             loggedInAccount={getMyInfo.ethAccount}/>
@@ -364,7 +364,7 @@ class VoteDocumentModal extends React.Component {
 
 
           <DialogActions className="modal-footer">
-            <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">{psString("Cancel")}</div>
+            <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">{psString("common-modal-cancel")}</div>
             <div onClick={() => this.onClickVote()}
                  className={"ok-btn " + (statusFlag || balance <= 0 ? "btn-disabled" : "")}>{btnText}</div>
             <div className="d-none">{voteStatus}</div>

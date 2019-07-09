@@ -75,11 +75,11 @@ import ReactGA from 'react-ga';
 var _hsq = window._hsq = window._hsq || [];
 
 // GA
-if (process.env.NODE_ENV != 'production') {
+if (process.env.NODE_ENV_SUB !== 'production') {
   ReactGA.initialize('UA-129300994-1', {
     debug: false,
     gaOptions: {
-      env: process.env.NODE_ENV
+      env: process.env.NODE_ENV_SUB
     }
   });
   console.log("google analytics on!!!", process.env)

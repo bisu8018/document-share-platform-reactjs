@@ -2,6 +2,7 @@ import React from "react";
 import { ThreeBounce } from "better-react-spinkit";
 import Chart from "react-google-charts";
 import Common from "../../config/common";
+import { psString } from "../../config/localization";
 
 //https://www.npmjs.com/package/react-google-charts#quick-start
 //구글 리액트 차트 라이브러리
@@ -21,19 +22,19 @@ class CustomChart extends React.Component {
         legend: { position: "top", maxLines: 3 }
       },
       trackingOption: {
-        title: "TOTAL TIME SPENT PER PAGE",
+        title: psString("chart-tracking-option-title"),
         vAxis: { format: 'number' },
         hAxis: { format: 'number' },
       },
     },
     columns: {
       analyticsColumns: [
-        {type: "number", label: "Date"},
-        {type: "number", label: "Visit Count"}
+        {type: "number", label: psString("chart-date")},
+        {type: "number", label: psString("chart-visit-count")}
       ],
       trackingColumns : [
-        {type: "number",  label: "Page"},
-        {type: "date",  label: "Time Spend Minutes"},
+        {type: "number",  label: psString("chart-page")},
+        {type: "date",  label: psString("chart-time-spend-min")},
       ]
     }
   };
@@ -76,7 +77,7 @@ class CustomChart extends React.Component {
       dataArr[i] = [dummyValue, 0];
     }
 
-    dataArr[arrSize] = ["Date", "Visit Count"];
+    dataArr[arrSize] = [psString("chart-date"), psString("chart-visit-count")];
 
     // 해당 빈 배열에 chart data 값 삽입
     if (year) {
@@ -110,7 +111,7 @@ class CustomChart extends React.Component {
 
   getTrackingData = () => {
     const { chartData } = this.props;
-    let dataArr = [["Page", "Time Spend Minutes"]];
+    let dataArr = [[psString("chart-page"), psString("chart-time-spend-min")]];
 
     for (let [key, value] of Object.entries(chartData)) {
       let tmpArr = [key, value/1000/60];

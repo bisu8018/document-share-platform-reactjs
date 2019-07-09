@@ -1,6 +1,7 @@
 import { APP_PROPERTIES } from "../properties/app.properties";
 import MainRepository from "../redux/MainRepository";
 import BigNumber from "bignumber.js/bignumber";
+import { psString } from "./localization";
 
 const imgDomain = APP_PROPERTIES.domain().image;
 //const apiDomain = APP_PROPERTIES.domain().api;
@@ -126,15 +127,15 @@ export default ({
     let m = Math.floor((currentDate - lastDate) / (60 * 1000));
     let s = Math.floor((currentDate - lastDate) / (1000));
 
-    if (y !== 0) return y + (isMobile ? "y" : " year") + (y > 1 && !isMobile ? "s" : "") + " ago";
+    if (y !== 0) return y + (isMobile ? "y" : psString("common-year")) + (y > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
     else {
-      if (d !== 0) return d + (isMobile ? "d" : " day") + (d > 1 && !isMobile ? "s" : "") + " ago";
+      if (d !== 0) return d + (isMobile ? "d" : psString("common-day")) + (d > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
       else {
-        if (h !== 0) return h + (isMobile ? "h" : " hour") + (h > 1 && !isMobile ? "s" : "") + " ago";
+        if (h !== 0) return h + (isMobile ? "h" : psString("common-hour")) + (h > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
         else {
-          if (m !== 0) return m + (isMobile ? "m" : " minute") + (m > 1 && !isMobile ? "s" : "") + " ago";
+          if (m !== 0) return m + (isMobile ? "m" : psString("common-minute")) + (m > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
           else {
-            return s + (isMobile ? "s" : " second") + (s > 1 && !isMobile ? "s" : "") + " ago";
+            return s + (isMobile ? "s" : psString("common-second")) + (s > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
           }
         }
       }

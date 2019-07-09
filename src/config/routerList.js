@@ -8,7 +8,6 @@ import ContentViewContainer from "../container/body/contents/contentsView/Conten
 import AudienceTrackingDetailContainer from "../container/body/tracking/AudienceTrackingDetailContainer";
 import Signup from "../components/common/etc/Signup";
 import ContentListContainer from "../container/body/contents/ContentListContainer";
-import Policies from "../components/body/faq/Policies";
 import emailVerifyContainer from "../container/etc/emailVerifyContainer";
 import Privacy from "../components/body/faq/Privacy";
 import About from "../components/body/faq/About";
@@ -61,11 +60,6 @@ export default ({
         path: "/faq",
         name: "faq",
         component: Faq
-      },
-      {
-        path: "/policies",
-        name: "policies",
-        component: Policies
       },
       {
         path: "/privacy",

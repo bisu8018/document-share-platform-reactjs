@@ -62,7 +62,7 @@ class ApproveModal extends React.Component {
               <DialogTitle
                 id="classic-modal-slide-title"
                 disableTypography>
-                <h3>{psString("Approve DECK")}</h3>
+                <h3>{psString("approve-title")}</h3>
               </DialogTitle>
 
 
@@ -79,8 +79,8 @@ class ApproveModal extends React.Component {
               </DialogContent>
 
               <DialogActions className="modal-footer">
-                <div onClick={() => this.handleClose()} className="cancel-btn">{psString("Cancel")}</div>
-                <div onClick={() => this.handleApprove()} className="ok-btn"> {psString("Approve")}</div>
+                <div onClick={() => this.handleClose()} className="cancel-btn">{psString("common-modal-cancel")}</div>
+                <div onClick={() => this.handleApprove()} className="ok-btn"> {psString("common-modal-approve")}</div>
               </DialogActions>
             </Dialog>
       </span>

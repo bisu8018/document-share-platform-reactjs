@@ -6,6 +6,7 @@ import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../config/common";
 import Tooltip from "@material-ui/core/Tooltip";
 import { ThreeBounce } from "better-react-spinkit";
+import { psString } from "../../../config/localization";
 
 class AudienceTrackingDetail extends React.Component {
   state = {
@@ -35,7 +36,7 @@ class AudienceTrackingDetail extends React.Component {
     const { setAlertCode } = this.props;
     this.props.history.push({
       pathname: "/404",
-      state: { errMessage: "Please access with the correct path." }
+      state: { errMessage: psString("tracking-list-err-1") }
     });
     setAlertCode(2002);
   };
@@ -43,7 +44,7 @@ class AudienceTrackingDetail extends React.Component {
 
   // 트랙킹 정보 GET
   getTrackingInfo = () => {
-    const { location, getIncludeOnlyOnePage, getShowAnonymous } = this.props;
+    const { location } = this.props;
 
     let cid = null;
     if (location.state && location.state.cid) cid = location.state.cid;
@@ -55,8 +56,8 @@ class AudienceTrackingDetail extends React.Component {
       const params = {
         cid: cid,
         documentId: location.state.document.documentId,
-        include: getIncludeOnlyOnePage,
-        anonymous: getShowAnonymous
+        include: location.state.onePageFlag,
+        anonymous: location.state.anonymousFlag
       };
 
       MainRepository.Tracking.getTrackingInfo(params, (res) => {
@@ -115,7 +116,7 @@ class AudienceTrackingDetail extends React.Component {
               <span className="tracking-time d-block d-sm-inline-block">{time}</span>
               <div className="back-btn-wrapper" onClick={history.goBack}>
                 <img src={require("assets/image/icon/i_arrow_back.png")} alt="back"/>
-                Back to visitor list
+                {psString("tracking-detail-back")}
               </div>
             </div>
 

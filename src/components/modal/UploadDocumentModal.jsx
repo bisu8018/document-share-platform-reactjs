@@ -383,14 +383,14 @@ class UploadDocumentModal extends React.Component {
       <span>
             <div className="upload-btn d-none d-sm-inline-block"
                  onClick={() => this.handleClickOpen("classicModal")}>
-              {psString("Upload")}
+              {psString("common-modal-upload")}
             </div>
             <div className="mobile-upload-btn d-sm-none d-inline-block"
                  onClick={() => this.handleClickOpen("classicModal")}/>
 
 
         {type && type === "menu" &&
-        <span className="d-inline-block d-sm-none" onClick={() => this.handleClickOpen("classicModal")}>{psString("Upload")}</span>
+        <span className="d-inline-block d-sm-none" onClick={() => this.handleClickOpen("classicModal")}>{psString("common-modal-upload")}</span>
         }
 
 
@@ -412,21 +412,21 @@ class UploadDocumentModal extends React.Component {
 
 
               <DialogContent id="classic-modal-slide-description ">
-                <div className="dialog-subject">{psString("Title")}</div>
+                <div className="dialog-subject">{psString("common-modal-title")}</div>
                 <input type="text" placeholder={psString("title-placeholder")} id="docTitle"
                        className={"custom-input " + (titleError.length > 0 ? "custom-input-warning" : "")}
                        onChange={(e) => this.handleTitleChange(e)}/>
                 <span>{titleError}</span>
 
 
-                <div className="dialog-subject mt-3 mb-2">{psString("Description")}</div>
+                <div className="dialog-subject mt-3 mb-2">{psString("common-modal-description")}</div>
                 <textarea id="docDesc"
                           placeholder={psString("description-placeholder")}
                           className="custom-textarea"
                           onChange={(e) => this.handleDescChange(e)}/>
 
 
-                <div className="dialog-subject mt-3">{psString("File")}</div>
+                <div className="dialog-subject mt-3">{psString("common-modal-file")}</div>
                 <input type="text" value={fileInfo.filename || ""} readOnly
                        placeholder={psString("file-placeholder")} id="docFileInput"
                        className={"custom-input-file " + (fileInfoError.length > 0 ? "custom-input-warning" : "")}
@@ -435,14 +435,14 @@ class UploadDocumentModal extends React.Component {
                 <input type="file" id="docFile" onChange={(e) => this.handleFileChange(e.target.files)}/>
 
 
-                <div className="dialog-subject mt-3 mb-1">{psString("Tag")}</div>
+                <div className="dialog-subject mt-3 mb-1">{psString("common-modal-tag")}</div>
                 <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
                            className={"react-tagsinput " + (tagError.length > 0 ? "tag-input-warning" : "")}
                            value={tags} onChange={this.handleTagChange} validate={false} onlyUnique/>
                            <span>{tagError}</span>
 
 
-                <div className="dialog-subject mb-2 mt-3">{psString("Option")}</div>
+                <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
                 <div className="row">
                   <div className="col-12 col-sm-6">
                     <input type="checkbox" id="useTrackingCheckbox" onChange={(e) => this.handleTrackingCheckbox(e)}
@@ -473,7 +473,7 @@ class UploadDocumentModal extends React.Component {
                  </div>
 
 
-                <div className="dialog-subject mb-2 mt-3">{psString("CC License")}</div>
+                <div className="dialog-subject mb-2 mt-3">{psString("edit-cc-license")}</div>
                 <div className="row">
                   <div className="col-12 col-sm-6">
                     <input type="checkbox" id="ccByCheckbox" onChange={(e) => this.handleCcByCheckbox(e)}
@@ -517,8 +517,8 @@ class UploadDocumentModal extends React.Component {
 
 
               <DialogActions className="modal-footer">
-                <div onClick={() => this.handleClose("classicModal")} className="cancel-btn ">{psString("Cancel")}</div>
-                <div onClick={() => this.handleUploadBtn()} className="ok-btn">{psString("Upload")}</div>
+                <div onClick={() => this.handleClose("classicModal")} className="cancel-btn ">{psString("common-modal-cancel")}</div>
+                <div onClick={() => this.handleUploadBtn()} className="ok-btn">{psString("common-modal-upload")}</div>
               </DialogActions>
 
 

@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>POLARIS SHARE – 귀하의 컴퓨터 안에서 잠자고 있는 문서들을 깨우십시요</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no, address=no, email=no"/>
+    <link href="about/css/introduction.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans|Roboto&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="POLARIS SHARE – 귀하의 컴퓨터 안에서 잠자고 있는 문서들을 깨우십시요"/>
+    <meta property="og:url" content="https://www.polarishare.com/"/>
+    <script type="text/javascript">
+      $(function() {
+        $("input[type=email]").click(function() {
+          $(this).val("");
+        });
+      });
+
+      function postEmail(idx) {
+        let data;
+        //let url = "https://api.share.decompany.io/ve/api/email/verifyemailrequest";     // 개발
+        let url = "https://api.polarishare.com/ve/api/email/verifyemailrequest";       // 알파
+        let id = "emailFirst";
+        if (idx === 2) id = "emailSecond";
+        else if (idx === 3) id = "emailThird";
+
+        data = { email: document.getElementById(id).value };
+
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: data,
+          success: function(response) {
+            if (response.success && response.success === true) {
+              alert("인증 메일을 성공적으로 발송하였습니다.");
+              document.getElementById(id).value = "이메일 주소를 입력하세요";
+            } else {
+              if (response.message === "invalid email") alert("이메일 양식이 올바르지 않습니다.");
+              else alert("이미 전송한 이메일 주소 입니다.");
+            }
+          },
+          dataType: "json"
+        });
+      }
+    </script>
+</head>
+<body>
+<div id="wrapper">
+    <header>
+        <div class="box">
+            <a href="/"><h1>POLARIS SHARE</h1></a>
+            <div class="visual">
+                <h2>귀하의 컴퓨터 안에서 <br> 잠자고 있는 문서들을 깨우세요</h2>
+                <a href="/" class="home">홈페이지로 이동하기</a>
+                <p class="txt alpha"><em>알파</em> 서비스 개시 준비중</p>
+            </div>
+            <fieldset id="email">
+                <legend>이메일 주소를 입력하세요</legend>
+                <h3>VIP 크리에이터가 되십시요.</h3>
+                <p><span class="title">더 상세한 정보를 보려면</span>
+                    <span class="input-area">
+                        <input type="email"
+                               name="email"
+                               id="emailFirst"
+                               value="이메일 주소를 입력하세요">
+                    <button onclick="postEmail(1)">제출하기</button>
+                </span></p>
+            </fieldset>
+        </div>
+    </header>
+    <div id="container">
+        <!-- about -->
+        <div class="about">
+            <div class="box">
+                <h2>폴라리스 쉐어에 대해서</h2>
+                <h3 class="ct">제작자와 큐레이터가 문서에 상호 작용하고 문서를 공유 할 수 있게 해주는 지식 공유 플랫폼</h3>
+                <ul>
+                    <li class="about-01">
+							<span>
+								<strong>지식 공유</strong>
+								폭넓은 분야의 지식을 공유하세요
+							</span>
+                    </li>
+                    <li class="about-02">
+							<span>
+								<strong>보상</strong>
+								크리에이터와 큐레이터 모두에 지급되는 보상<br>
+								<em>크리에이터 : 컨텐츠를 생산</em>
+								<em>큐레이터 : 투표를 통해 양질의 컨텐츠를 선별</em>
+							</span>
+                    </li>
+                    <li class="about-03">
+							<span>
+								<strong>토큰 경제</strong>
+								블록체인 기술을 활용한 토큰 경제 시스템 기반
+							</span>
+                    </li>
+                    <li class="about-04">
+							<span>
+								<strong>잠재 고객 추적</strong>
+							B2B 마케터는 본인의 문서에 관심을 가지는 잠재고객을 확보하여 마케팅 성과를 향상시킬 수 있습니다.
+							</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- // about end -->
+
+        <!-- reasons -->
+        <div class="reasons">
+            <div class="box">
+                <h2>크리에이터가 되어야 하는 4가지 이유</h2>
+                <ul>
+                    <li class="reasons-01">
+							<span>
+							당신의 문서를 많은 사람이 볼수록,<br>
+							더 많은 저자 보상을 수령할 수 있습니다.
+							</span>
+                    </li>
+                    <li class="reasons-02">
+							<span>
+							잠재고객의 연락처를 수집하고 그들의 활동을 추적하세요. <br> 누가 어떤 관심사를 가지고 있는지 확인해서 최고의 마케팅 성과를 내세요.
+							</span>
+                    </li>
+                    <li class="reasons-03">
+							<span>
+                                문서를 통해서 당신과 당신의 제품에 대해서 사람들에게 알리고, 평판을 넓히세요. <br> 당신의 분야에서 최고의 전문가가 될 수 있습니다.
+							</span>
+                    </li>
+                    <li class="reasons-04">
+							<span>
+							어떠한 형식이나 주제의 문서도 간단한 절차로 대중에게 공유할 수 있습니다.
+							</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- // reasons end -->
+
+        <!-- step -->
+        <div class="step">
+            <div class="box">
+                <h2>초기 크리에이터의 일원이 될 준비가 되셨나요? </h2>
+                <ul>
+                    <li class="step-01"><span class="title">Step 1</span>이메일 주소를 입력하세요
+                        <fieldset id="email">
+                            <legend>이메일 주소를 입력하세요</legend>
+                            <p><span class="input-area"><input
+                                    type="email"
+                                    id="emailSecond"
+                                    value="이메일 주소를 입력하세요"><button onclick="postEmail(2)">발송</button></span>
+                            </p>
+                        </fieldset>
+                    </li>
+                    <li class="step-02"><span class="title">Step 2</span>폴라리스 쉐어 팀이 알파 서비스 개시와 관련해서 상세한 정보를 가지고 연락드리겠습니다. <br>(공식적인 오픈일은 6/17입니다.)
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- // step end -->
+
+        <!-- upload process -->
+        <div class="upload">
+            <div class="box">
+                <h2>무엇을 업로드할지 고민하지 마십시요</h2>
+                <p class="img upload-knowledge-img">
+                    <img src="about/img/upload.png" alt="Any document is okay!" class="upload-img">
+                    <img src="about/img/m-upload.png" alt="Any document is okay!" class="mobile upload-img">
+                </p>
+                <h3>어떤 컨텐츠도 지식이 될 수 있습니다.</h3>
+            </div>
+        </div>
+        <!-- // upload process end -->
+
+        <!-- Polaris Share Process -->
+        <div class="process">
+            <div class="box">
+                <h2>폴라리스 쉐어 처리 흐름</h2>
+                <p class="img">
+                    <img src="about/img/share-process.png" alt="">
+                    <img src="about/img/m-share-process.png" alt="">
+                </p>
+                <ul>
+                    <li class="process-01">
+                        <strong>크리에이터</strong>
+                        지식을 생산하고 문서화된 지식을 대중에 공유하며, 이를 통해서 보상을 수령합니다.
+                    </li>
+                    <li class="process-02">
+                        <strong>큐레이터</strong>
+                        자신이 보유하고 있는 토큰으로 컨텐츠에 투표함으로써 양질의 컨텐츠를 선별하는데 기여합니다. 그리고 본인이 투표한 컨텐츠의 뷰수에 비례해서 투표보상을 수령합니다.
+
+                    </li>
+                    <li class="process-03">
+                        <strong>Deck</strong>
+                        자신이 보유하고 있는 토큰으로 컨텐츠에 투표함으로써 양질의 컨텐츠를 선별하는데 기여합니다. 그리고 본인이 투표한 컨텐츠의 뷰수에 비례해서 투표보상을 수령합니다.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- // reasons end -->
+
+        <!-- roadmap -->
+        <div class="roadmap">
+            <div class="box">
+                <h2>첫 번째 목표로 가는 일정</h2>
+                <div>
+                    <dl class="roadmap-01">
+                        <dt><strong>Alpha</strong><span class="date">2019년 6월</span></dt>
+                        <dd>Alpha Test<br>크리에이터 모집<br>업데이트</dd>
+                    </dl>
+                    <dl class="roadmap-02">
+                        <dt><strong>Beta</strong><span class="date">2019년 9월</span></dt>
+                        <dd>Beta Test<br>거래소 상장<br>본격적인 마케팅<br>비디오 포스팅 지원<br>지갑 및 토큰 발행
+                        </dd>
+                    </dl>
+                    <dl class="roadmap-03">
+                        <dt><strong>Release</strong><span class="date">2019년 12월</span></dt>
+                        <dd>Polaris Share 정식 서비스 개시<br>토큰 거래</dd>
+                    </dl>
+                    <dl class="roadmap-04">
+                        <dt><strong>1st Goal</strong><span class="date">2020년</span></dt>
+                        <dd>모바일 앱 개발 (iOS, Android)</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <!-- // roadmap end -->
+
+        <!-- banner -->
+        <div class="banner">
+            문서를 공유하고 보상을 받으세요!
+        </div>
+        <!--// banner end -->
+        <!-- email -->
+        <div class="email">
+            <div class="box">
+                <h3>VIP 크리에이터가 되십시요</h3>
+                <fieldset id="email">
+                    <legend>이메일 주소를 입력하세요</legend>
+                    <p><span class="title">더 상세한 정보를 보려면</span>
+                        <span class="input-area" for="emailThird">
+                            <input type="email"
+                                   id="emailThird"
+                                   value="이메일 주소를 입력하세요">
+                            <button onclick="postEmail(3)">제출하기</button>
+                        </span>
+
+                    </p>
+                </fieldset>
+            </div>
+        </div>
+        <!-- // email end -->
+    </div>
+    <!-- footer -->
+    <footer>
+        <div class="box">
+            <h1>POLARIS SHARE</h1>
+            <p class="txt alpha"><em>ALPHA</em> <span><strong>Launching</strong><br>In preparation</span>
+                <a href="/" class="home">홈페이지로 이동하기</a></p>
+            <copyright>Copyright&copy; 2019 DECOMPANY</copyright>
+        </div>
+    </footer>
+    <!-- // footer end -->
+</div>
+</body>
+</html>

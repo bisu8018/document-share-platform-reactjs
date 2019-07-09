@@ -17,7 +17,7 @@ class ContentViewCarousel extends React.Component {
     audienceEmail: null,
     emailFlag: false,
     emailFlagTemp: false,
-    pageChangedFlag: 0
+    pageChangedFlag: null
   };
 
 
@@ -76,7 +76,7 @@ class ContentViewCarousel extends React.Component {
     const { handleEmailFlag, getMyInfo, getTempEmail } = this.props;
     const { emailFlagTemp } = this.state;
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let ss = getTempEmail;
 
       this.setState({ emailFlag: false }, () => {
@@ -117,7 +117,7 @@ class ContentViewCarousel extends React.Component {
       if (target.forceTracking) {
         let ft = await this.handleFlag(page);
         if (!ft) return false;
-      } else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp && !getTempEmail) {;
+      } else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp && !getTempEmail) {
         this.setState({ emailFlag: true }, () => {
           handleEmailFlag(true);
         });
@@ -150,15 +150,16 @@ class ContentViewCarousel extends React.Component {
 
 
   // 떠남 상태 관리
-  handleTrackingLeave = () => {
+  handleTrackingLeave = (documentId) => {
     const { target } = this.props;
     const { readPage } = this.state;
 
     if (!readPage) return false;
-    let documentId = target.documentId;
+    let _documentId = documentId || target.documentId;
+
     try {
       TrackingApis.tracking({
-        id: documentId,
+        id: _documentId,
         n: -1,
         ev: "leave"
       }, false, true);
@@ -179,13 +180,19 @@ class ContentViewCarousel extends React.Component {
     this.setState({ autoSlideFlag: !this.state.autoSlideFlag });
   };
 
-  // see also 통한 페이지 전환 시, readPage 값 0으로 초기화
-  handlePageChanged = () => {
-    const {pageChangedFlag} = this.state;
-    const {catchPageChanged} = this.props;
 
-    if(pageChangedFlag !== catchPageChanged) {
-      this.setState({readPage : null, pageChangedFlag : catchPageChanged })
+  // see also 통한 페이지 전환 시, readPage 값 0으로 초기화
+  handlePageChanged = async () => {
+    const { pageChangedFlag } = this.state;
+    const { target } = this.props;
+
+    let documentId = target.documentId;
+
+    if (pageChangedFlag !== documentId) {
+      if (pageChangedFlag !== null) {
+        this.handleTrackingLeave(pageChangedFlag);
+      }
+      this.setState({ readPage: null, pageChangedFlag: documentId });
     }
   };
 

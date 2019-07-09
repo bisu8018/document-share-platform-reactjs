@@ -8,6 +8,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import CustomChart from "../../common/CustomChart";
 import AutoSuggestInputContainer from "../../../container/common/AutoSuggestInputContainer";
 import PayoutCard from "../../common/card/PayoutCard";
+import { psString } from "../../../config/localization";
 
 class AudienceTrackingList extends React.Component {
   state = {
@@ -48,7 +49,7 @@ class AudienceTrackingList extends React.Component {
     const { setAlertCode } = this.props;
     this.props.history.push({
       pathname: "/404",
-      state: { errMessage: "Please access with the correct path." }
+      state: { errMessage: psString("tracking-list-err-1") }
     });
     setAlertCode(2002);
   };
@@ -173,7 +174,7 @@ class AudienceTrackingList extends React.Component {
 
   // 검색 초기화
   handleClearSearch = () => {
-    this.setState({filterList:null, selectedSearch:null})
+    this.setState({ filterList: null, selectedSearch: null });
   };
 
 
@@ -249,7 +250,7 @@ class AudienceTrackingList extends React.Component {
 
   // 특정 링크 클릭 이벤트 관리
   handleLinkClickEvent = (e) => {
-    const { location, match } = this.props;
+    const { location, match, getShowAnonymous, getIncludeOnlyOnePage } = this.props;
     const documentData = location.state.documentData;
     const documentText = location.state.documentText;
     let _cid = e.target.parentElement.dataset.cid;
@@ -258,7 +259,15 @@ class AudienceTrackingList extends React.Component {
 
     this.props.history.push({
       pathname: "/trackingDetail/" + match.params.identification + "/" + match.params.seoTitle,
-      state: { document: documentData, documentText: documentText, cid: _cid, email: _email, time: _time }
+      state: {
+        document: documentData,
+        documentText: documentText,
+        cid: _cid,
+        email: _email,
+        time: _time,
+        anonymousFlag: getShowAnonymous,
+        onePageFlag: getIncludeOnlyOnePage
+      }
     });
   };
 
@@ -313,20 +322,22 @@ class AudienceTrackingList extends React.Component {
                      onClick={this.handleOptionButtonClickEvent.bind(this)}>
                   <i className="material-icons">more_vert</i>
                   <div className={"option-table" + (tableOptionFlag ? "" : " d-none")}>
-                    <div title={getShowAnonymous ? "Hide Anonymous" : "Show Anonymous"}
-                         onClick={(e) => this.handleHideOption(e)}>
-                      {getShowAnonymous ? "Hide Anonymous" : "Show Anonymous"}
+                    <div
+                      title={getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
+                      onClick={(e) => this.handleHideOption(e)}>
+                      {getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
                     </div>
-                    <div title={getIncludeOnlyOnePage ? "Exclude only one page" : "Include only one page"}
-                         onClick={(e) => this.handleOnePageOption(e)}>
-                      {getIncludeOnlyOnePage ? "Exclude only one page" : "Include only one page"}
+                    <div
+                      title={getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
+                      onClick={(e) => this.handleOnePageOption(e)}>
+                      {getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
                     </div>
                   </div>
                 </div>
 
 
                 <div className="col-view tracking-item mb-1  mt-1 position-relative">
-                 <span className={"info-detail-reward mr-2 " + (documentData.isRegistry ? "" : "color-not-registered") }
+                 <span className={"info-detail-reward mr-2 " + (documentData.isRegistry ? "" : "color-not-registered")}
                        onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
                        onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
                     ${Common.deckToDollar(reward)}
@@ -347,7 +358,7 @@ class AudienceTrackingList extends React.Component {
                 <Tooltip title="Export tracking data as Excel file." placement="bottom">
                   <div className="viewer-btn" onClick={() => this.handleExport()}>
                     <i className="material-icons">save</i>
-                    Export
+                    {psString("tracking-list-export")}
                   </div>
                 </Tooltip>
                 }
@@ -358,20 +369,23 @@ class AudienceTrackingList extends React.Component {
 
           <div className="tracking_inner">
             <div className="col-sm-12 col-md-12 row tracking_top">
-              <div className="pl-0 tracking-list-title d-none d-sm-inline-block col-5 col-md-7 col-lg-9 mb-3">Visitors
+              <div className="pl-0 tracking-list-title d-none d-sm-inline-block col-5 col-md-7 col-lg-9 mb-3">
+                {psString("tracking-list-visitors")}
               </div>
 
               <div className="option-menu-btn d-inline-block d-sm-none"
                    onClick={this.handleOptionButtonClickEvent.bind(this)}>
                 <i className="material-icons">more_vert</i>
                 <div className={"option-table" + (tableOptionFlag ? "" : " d-none")}>
-                  <div title={getShowAnonymous ? "Hide Anonymous" : "Show Anonymous"}
-                       onClick={(e) => this.handleHideOption(e)}>
-                    {getShowAnonymous ? "Hide Anonymous" : "Show Anonymous"}
+                  <div
+                    title={getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
+                    onClick={(e) => this.handleHideOption(e)}>
+                    {getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
                   </div>
-                  <div title={getIncludeOnlyOnePage ? "Exclude only one page" : "Include only one page"}
-                       onClick={(e) => this.handleOnePageOption(e)}>
-                    {getIncludeOnlyOnePage ? "Exclude only one page" : "Include only one page"}
+                  <div
+                    title={getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
+                    onClick={(e) => this.handleOnePageOption(e)}>
+                    {getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
                   </div>
                 </div>
               </div>
@@ -387,10 +401,12 @@ class AudienceTrackingList extends React.Component {
                     </div>
                   </div> :
                   <div className="tracking-list-search-selected-wrapper">
-                  <div className="tracking-list-search-selected">
-                    {selectedSearch || "Anonymous"}
-                  </div>
-                    <i className="material-icons" onClick={() => {this.handleClearSearch()}} >close</i>
+                    <div className="tracking-list-search-selected">
+                      {selectedSearch || psString("tracking-list-anonymous")}
+                    </div>
+                    <i className="material-icons" onClick={() => {
+                      this.handleClearSearch();
+                    }}>close</i>
                   </div>
                 }
               </div>
@@ -399,12 +415,12 @@ class AudienceTrackingList extends React.Component {
               <div className="tracking_table">
 
                 <div className="tracking-table-tr row">
-                  <div className="col-4 tracking-table-td">Name</div>
+                  <div className="col-4 tracking-table-td">{psString("tracking-list-name")}</div>
 
-                  <div className="col-3 col-sm-2 tracking-table-td tac">Views</div>
+                  <div className="col-3 col-sm-2 tracking-table-td tac">{psString("tracking-list-views")}</div>
 
 
-                  <div className="col-3 tracking-table-td tar">Last Viewed</div>
+                  <div className="col-3 tracking-table-td tar">{psString("tracking-list-last")}</div>
 
 
                   <div className="col-2 col-sm-3 tracking-table-td "/>
@@ -417,19 +433,19 @@ class AudienceTrackingList extends React.Component {
                     <div onClick={this.handleLinkClickEvent.bind(this)}
                          id={"trackingTableTr" + idx}
                          data-cid={result.cid}
-                         data-email={result.user ? result.user.e : "Anonymous"}
+                         data-email={result.user ? result.user.e : psString("tracking-list-anonymous")}
                          data-time={result.viewTimestamp}
                          className="row tracking-table-tr c-pointer">
 
 
                       <div className="col-4 tracking-table-td">
-                        {result.user ? result.user.e : "Anonymous"}
+                        {result.user ? result.user.e : psString("tracking-list-anonymous")}
                       </div>
 
 
                       <div className="col-3 col-sm-2 tracking-table-td tac">
                         <Tooltip
-                          title={"View count" + (result.count > 1 ? "s" : "") + ": " + result.count}
+                          title={psString("tracking-list-view-count") + (result.count > 1 ? psString("tracking-list-view-times") : "") + ": " + result.count}
                           placement="top">
                           <span>{result.count}</span>
                         </Tooltip>
@@ -452,7 +468,7 @@ class AudienceTrackingList extends React.Component {
                           </Tooltip>
 
                           <Tooltip
-                            title={"Viewed: " + (Math.round((result.readPageCount / documentData.totalPages) * 100)) + "%"}
+                            title={psString("tracking-list-viewed") + ": " + (Math.round((result.readPageCount / documentData.totalPages) * 100)) + "%"}
                             placement="top">
                             <div className="circular-chart-wrapper">
                               <svg viewBox="0 0 32 32" className="circular-chart" width="24" height="24">
@@ -490,7 +506,7 @@ class AudienceTrackingList extends React.Component {
 
 
                 {loading && <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}
-                {!loading && rst.length === 0 && <div className="no-data">No data</div>}
+                {!loading && rst.length === 0 && <div className="no-data">{psString("tracking-list-no-data")}</div>}
 
               </div>
             </div>

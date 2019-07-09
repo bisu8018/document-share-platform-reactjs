@@ -85,7 +85,7 @@ class CuratorVoteTab extends React.Component {
     return (
       <div>
         <div className="document-total-num">
-          {psString("Total documents :")} <span className="font-weight-bold">{resultList.length}</span>
+          {psString("profile-total-documents")} <span className="font-weight-bold">{resultList.length}</span>
         </div>
         {resultList.length > 0 ?
           <InfiniteScroll

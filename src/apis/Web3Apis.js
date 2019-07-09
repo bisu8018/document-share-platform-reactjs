@@ -1,23 +1,27 @@
 import Web3 from "web3";
 
-/*알파용 컨트랙*/
-/*import DocumentRegistry from "apis/contracts-alpha/DocumentRegistry.json";
-import Deck from "apis/contracts-alpha/Deck.json";
-import BountyOne from "apis/contracts-alpha/BountyOne.json";
-import Curator from "apis/contracts-alpha/Curator.json";
-import Creator from "apis/contracts-alpha/Creator.json";
-import RewardPool from "apis/contracts-alpha/RewardPool.json";*/
-
-/*개발계용 컨트랙*/
-import DocumentRegistry from "apis/contracts-dev/DocumentRegistry.json";
-import Deck from "apis/contracts-dev/Deck.json";
-import BountyOne from "apis/contracts-dev/BountyOne.json";
-import Curator from "apis/contracts-dev/Curator.json";
-import Creator from "apis/contracts-dev/Creator.json";
-import RewardPool from "apis/contracts-dev/RewardPool.json";
 
 let defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/43132d938aaa4d96a453fd1c708b7f6c"));
+let DocumentRegistry, Deck, BountyOne, Curator, Creator, RewardPool;
+
+if (process.env.NODE_ENV_SUB === "production") {
+  /*알파용 컨트랙*/
+  DocumentRegistry = require("apis/contracts-alpha/DocumentRegistry.json");
+  Deck = require("apis/contracts-alpha/Deck.json");
+  BountyOne = require("apis/contracts-alpha/BountyOne.json");
+  Curator = require("apis/contracts-alpha/Curator.json");
+  Creator = require("apis/contracts-alpha/Creator.json");
+  RewardPool = require("apis/contracts-alpha/RewardPool.json");
+} else {
+  /*개발계용 컨트랙*/
+  DocumentRegistry = require("apis/contracts-dev/DocumentRegistry.json");
+  Deck = require("apis/contracts-dev/Deck.json");
+  BountyOne = require("apis/contracts-dev/BountyOne.json");
+  Curator = require("apis/contracts-dev/Curator.json");
+  Creator = require("apis/contracts-dev/Creator.json");
+  RewardPool = require("apis/contracts-dev/RewardPool.json");
+}
 
 
 export default class Web3Apis {

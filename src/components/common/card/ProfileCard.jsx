@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import MainRepository from "../../../redux/MainRepository";
 import UserInfo from "../../../redux/model/UserInfo";
 import Common from "../../../config/common";
+import { psString } from "../../../config/localization";
 
 class ProfileCard extends React.Component {
   state = {
@@ -71,22 +72,18 @@ class ProfileCard extends React.Component {
         </div>
 
         <div className="mb-4">
-          <div className="profile-card-total-balance">
-            Total Balance
-          </div>
+          <div className="profile-card-total-balance">{psString("profile-card-total-balance")}</div>
           <BalanceOfContainer balance={balance}/>
         </div>
 
         <div>
           {MainRepository.Account.isAuthenticated() ?
             <Link to={"/" + identification}>
-              <div className="my-account-btn mb-2" id="profileCardMyAccountBtn" onClick={() => Common.scrollTop()}>
-                My page
-              </div>
+              <div className="my-account-btn mb-2" id="profileCardMyAccountBtn" onClick={() => Common.scrollTop()}>{psString("profile-card-my-page")}</div>
             </Link> :
-            <div className="my-account-btn mb-2" onClick={() => MainRepository.Account.login()}> Login </div>
+            <div className="my-account-btn mb-2" onClick={() => MainRepository.Account.login()}> {psString("profile-card-login")} </div>
           }
-          <div className="profile-card-logout-btn" onClick={() => this.handleLogout()}>Sign out</div>
+          <div className="profile-card-logout-btn" onClick={() => this.handleLogout()}>{psString("profile-card-logout")}</div>
         </div>
 
       </div>

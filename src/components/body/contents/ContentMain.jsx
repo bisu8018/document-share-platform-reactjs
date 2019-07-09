@@ -56,6 +56,10 @@ class ContentMain extends Component {
 
   // see more 트리거 버튼
   handelTrigger = (arr) => {
+    if(arr === "최신") arr = "latest";
+    else if(arr === "추천") arr = "featured";
+    else if(arr === "인기") arr = "popular";
+
     document.getElementById(arr + "NavLink").click();
   };
 
@@ -99,9 +103,9 @@ class ContentMain extends Component {
 
     //배너 버튼 텍스트
     const buttonText = [
-      psString("Join Now"),
-      psString("Sign up"),
-      psString("Upload now")
+      psString("main-banner-btn-1"),
+      psString("main-banner-btn-2"),
+      psString("main-banner-btn-3")
     ];
 
     // 배너 내용
@@ -114,7 +118,7 @@ class ContentMain extends Component {
 
     // path 카테고리
     const category = [
-      psString("latest"), psString("featured"), psString("popular")
+      psString("main-category-1"), psString("main-category-2"), psString("main-category-3")
     ];
 
     return (
@@ -147,7 +151,7 @@ class ContentMain extends Component {
                            onClick={() => this.handleLogin()}>{buttonText[idx]}</div>
                     }
                     <Link to="/faq">
-                      <div className="main-learn-more-btn ml-2 mr-2" onClick={() => Common.scrollTop()}>{psString("Learn more")}</div>
+                      <div className="main-learn-more-btn ml-2 mr-2" onClick={() => Common.scrollTop()}>{psString("main-banner-btn-4")}</div>
                     </Link>
                   </div>
                 </div>
@@ -170,7 +174,7 @@ class ContentMain extends Component {
 
                 <div className="mb-3">
                   <span className="main-category-name">{arr}</span>
-                  <span className="main-category-see-all" onClick={() => this.handelTrigger(arr)}>{psString("See All")}
+                  <span className="main-category-see-all" onClick={() => this.handelTrigger(arr)}>{psString("main-see-all")}
                       <i className="material-icons">keyboard_arrow_right</i></span>
 
                 </div>

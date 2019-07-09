@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Common from "../../../../config/common";
 import CuratorClaimContainer from "../../../../container/body/profile/curator/CuratorClaimContainer";
 import LinesEllipsis from "react-lines-ellipsis";
+import { psString } from "../../../../config/localization";
 
 class CuratorTabItem extends React.Component {
   constructor(props) {
@@ -102,7 +103,7 @@ class CuratorTabItem extends React.Component {
 
               {reward > 0 &&
               <div className="info-detail-reward-info" id={document.seoTitle + "rewardVote"}>
-                Creator payout <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> in 7 days
+                {psString("profile-payout-txt-1")} <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> {psString("profile-payout-txt-2")}
               </div>
               }
 

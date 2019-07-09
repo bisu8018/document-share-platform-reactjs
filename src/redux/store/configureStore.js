@@ -8,7 +8,7 @@ export default () => {
   store = createStore(
     rootReducer,
     applyMiddleware(thunk));
-  if (!process.env.NODE_ENV === "production" && !process.env.NODE_ENV === "dev" ) store = createStore(rootReducer, applyMiddleware(storeLogger));
+  if (!process.env.NODE_ENV_SUB === "production" && !process.env.NODE_ENV_SUB === "development" ) store = createStore(rootReducer, applyMiddleware(storeLogger));
 
   return store;
 }

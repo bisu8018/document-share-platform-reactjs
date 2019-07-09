@@ -171,7 +171,7 @@ class CreatorSummary extends React.Component {
                 <strong>{userName || userInfo.email}</strong>
                 {this.getMyInfo().email === userInfo.email &&
                 <div className="username-edit-btn ml-2" onClick={() => this.handleClickEvent()} >
-                  {psString("Edit")}</div>
+                  {psString("profile-edit")}</div>
                 }
               </span>}
 
@@ -188,17 +188,17 @@ class CreatorSummary extends React.Component {
             </div>
 
             <div className="profile_info_desc">
-              {psString("Total balance :")}
+              {psString("profile-total-balance")}
               <span className="color">
                 <BalanceOfContainer balance={balance}/>
               </span>
               <br/>
-              {psString("Estimated earnings for today :")}
+              {psString("profile-estimated-earnings")}
               <span className="color">
                 <DollarWithDeck deck={Number(authorTodayReward || 0) + Number(curatorEstimatedToday || 0)}/>
               </span>
               <br/>
-              {psString("Revenue for the last 7 days :")}
+              {psString("profile-revenue-7-days")}
               <span className="color">
                 <DollarWithDeck deck={Number(author7DayReward || 0) + Number(curatorTotalRewards || 0)}/>
               </span>
@@ -209,24 +209,24 @@ class CreatorSummary extends React.Component {
 
         <div className="row">
           <div className=" profile-creator col-sm-12 col-md-6">
-            <h5>{psString("Author rewards")}</h5>
+            <h5>{psString("profile-author-rewards")}</h5>
             <div className="profile_info_desc">
-              {psString("Estimated earnings for today :")}
+              {psString("profile-estimated-earnings")}
               <span><DollarWithDeck deck={authorTodayReward}/></span>
               <br/>
-              {psString("Revenue for the last 7 days :")}
+              {psString("profile-revenue-7-days")}
               <span><DollarWithDeck deck={author7DayReward}/></span>
             </div>
           </div>
 
 
           <div className=" profile-curator col-sm-12 col-md-6">
-            <h5>{psString("Curator rewards")}</h5>
+            <h5>{psString("profile-curator-rewards")}</h5>
             <div className="profile_info_desc">
-              {psString("Estimated earnings for today :")}
+              {psString("profile-estimated-earnings")}
               <span><DollarWithDeck deck={curatorEstimatedToday}/></span>
               <br/>
-              {psString("Revenue for the last 7 days :")}
+              {psString("profile-revenue-7-days")}
               <span><DollarWithDeck deck={curatorTotalRewards}/></span>
             </div>
           </div>

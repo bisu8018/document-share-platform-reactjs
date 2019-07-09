@@ -21,7 +21,7 @@ class CopyModal extends React.Component {
     this.state = {
       classicModal: false,
       url: "",
-      copyText: psString("Copy")
+      copyText: psString("common-modal-copy")
     };
   }
 
@@ -31,7 +31,7 @@ class CopyModal extends React.Component {
     this.setState({
       classicModal: false,
       url: "",
-      copyText: psString("Copy")
+      copyText: psString("common-modal-copy")
     });
   };
 
@@ -60,7 +60,7 @@ class CopyModal extends React.Component {
     let copyUrl = document.getElementById("copyInput");
     copyUrl.select();
     document.execCommand("copy");
-    this.setState({ copyText: psString("Done")});
+    this.setState({ copyText: psString("common-modal-done")});
   };
 
 
@@ -70,10 +70,10 @@ class CopyModal extends React.Component {
 
     return (
       <span>
-         <Tooltip title={psString("Clip the URL of this document")} placement="bottom">
+         <Tooltip title={psString("tooltip-copy")} placement="bottom">
            {type !== "onlyIcon" ?
              <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
-               <i className="material-icons">share</i> {psString("Copy Link")}
+               <i className="material-icons">share</i> {psString("copy-modal-btn")}
              </div>
              :
              <div className="share-btn-wrapper">
@@ -95,7 +95,7 @@ class CopyModal extends React.Component {
                 id="classic-modal-slide-title"
                 disableTypography>
                 <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                <h3>{psString("Copy URL")}</h3>
+                <h3>{psString("copy-modal-title")}</h3>
               </DialogTitle>
 
 

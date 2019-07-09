@@ -41,12 +41,13 @@ export default {
     //Google Analytics 초기화
     //UA-129300994-1 : share
     //UA-140503497-1 : polaris
-    let gaId = process.env.NODE_ENV === "production" ? "UA-129300994-1" : "UA-129300994-1";
-    if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "dev") {
+
+    let gaId = process.env.NODE_ENV_SUB === "production" ? "UA-140503497-1" : "UA-129300994-1";
+    if (process.env.NODE_ENV_SUB === "production" || process.env.NODE_ENV_SUB === "development") {
       ReactGA.initialize(gaId, {
         debug: false,
         gaOptions: {
-          env: process.env.NODE_ENV
+          env: process.env.NODE_ENV_SUB
         }
       });
     }

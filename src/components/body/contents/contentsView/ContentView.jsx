@@ -20,12 +20,11 @@ class ContentView extends React.Component {
     documentText: null,
     author: null,
     featuredList: null,
-    catchPageChanged : 0    // feature list 통한 페이지 전환 시, 체크 위한 랜덤 값
   };
 
-  getContentInfo = (documentId) => {
-    this.setState({ documentTitle: documentId });
-    MainRepository.Document.getDocument(documentId, (res) => {
+  getContentInfo = (seoTitle) => {
+    this.setState({ documentTitle: seoTitle });
+    MainRepository.Document.getDocument(seoTitle, (res) => {
       this.setState({
         documentTitle: res.document.seoTitle,
         documentData: res.document,
@@ -34,7 +33,6 @@ class ContentView extends React.Component {
         documentText: res.text,
         author: res.document.author,
         errMessage: null,
-        catchPageChanged : Math.floor(Math.random() * 1000) +1
       }, () => {
         this.checkUrl(res);
         this.setDocumentIsExist();  //문서 로드 후 문서 블록체인 등록 체크
@@ -48,11 +46,10 @@ class ContentView extends React.Component {
         documentText: null,
         author: null,
         featuredList: null,
-        catchPageChanged : 0    // feature list 통한 페이지 전환 시, 체크 위한 랜덤 값
       });
       console.error(err);
       setTimeout(() => {
-        this.getContentInfo(documentId);
+        this.getContentInfo(seoTitle);
       },8000)
     });
   };
@@ -100,13 +97,14 @@ class ContentView extends React.Component {
 
   render() {
     const { auth, match, ...rest } = this.props;
-    const { documentData, documentText, totalViewCountInfo, featuredList, author, errMessage, catchPageChanged } = this.state;
+    const { documentData, documentText, totalViewCountInfo, featuredList, author, errMessage } = this.state;
     if (!documentData && !errMessage) {
       return (<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>);
     }
     if (!documentData && errMessage) {
       return (errMessage && <NotFoundPage errMessage={errMessage}/>);
     }
+
 
     return (
 
@@ -148,7 +146,7 @@ class ContentView extends React.Component {
 
         <div className="col-md-12 col-lg-8 view_left">
           <ContentViewFullScreenContainer documentData={documentData} documentText={documentText} totalViewCountInfo={totalViewCountInfo}
-                                          auth={auth} author={author} catchPageChanged={catchPageChanged}/>
+                                          auth={auth} author={author} />
         </div>
 
         <div className="col-md-12 col-lg-4 ">

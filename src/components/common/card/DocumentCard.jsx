@@ -2,6 +2,7 @@ import React from "react";
 import Common from "../../../config/common";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
+import { psString } from "../../../config/localization";
 
 class DocumentCard extends React.Component {
   constructor(props) {
@@ -104,13 +105,13 @@ class DocumentCard extends React.Component {
           {reward > 0 && (
             documentData.isRegistry ?
               <div className={"main-category-card-reward-info"} id={path + idx}>
-                Creator payout
-                <span className="font-weight-bold ml-1">{(!reward ? 0 : reward)} DECK</span> in 7 days
+                {psString("profile-payout-txt-1")}
+                <span className="font-weight-bold ml-1">{(!reward ? 0 : reward)} DECK</span> {psString("profile-payout-txt-2")}
               </div>
               :
               <div className={"main-category-card-reward-info reward-info-not-registered"} id={path + idx}>
-                <div className="reward-info-not-registered-syntax">NOT REGISTERED ON BLOCKCHAIN</div>
-                Creator can be paid
+                <div className="reward-info-not-registered-syntax">{psString("payout-registered")}</div>
+                {psString("payout-text-2")}
                 <span className="font-weight-bold ml-1">{(!reward ? 0 : reward)} DECK</span>
               </div>
           )

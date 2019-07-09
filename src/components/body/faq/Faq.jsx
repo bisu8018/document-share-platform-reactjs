@@ -90,8 +90,12 @@ class Faq extends React.PureComponent {
             {psString("faq-answer-16")}
             <br/>
 
-            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-17")}</div>
+            <div className="font-weight-bold mt-5 mb-3">{psString("faq-question-17")}</div>
             {psString("faq-answer-17")}
+            <br/>
+
+            <div className="font-weight-bold mt-5 mb-2">{psString("faq-question-18")}</div>
+            {psString("faq-answer-18")}
             <br/>
 
           </div>

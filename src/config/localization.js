@@ -1,10 +1,8 @@
-import common from "./common";
-
 const strings = new Map([
 
   // main
   ["main-banner-subj-1", {
-    KOR: "공유를 통한 가치 현실화",
+    KOR: "고품질의 문서가 필요하신가요?",
     ENG: "Realization of Value via Sharing"
   }],
   ["main-banner-subj-2", {
@@ -12,20 +10,24 @@ const strings = new Map([
     ENG: "Content Free"
   }],
   ["main-banner-subj-3", {
-    KOR: "공유를 통한 가치 현실화",
+    KOR: "당신의 잠재 고객을 성장시키세요",
     ENG: "Grow Your Audience"
   }],
-  ["Join Now", {
+  ["main-banner-btn-1", {
     KOR: "지금 가입하세요",
     ENG: "Join Now"
   }],
-  ["Sign up", {
+  ["main-banner-btn-2", {
     KOR: "등록",
     ENG: "Sign up"
   }],
-  ["Upload now", {
+  ["main-banner-btn-3", {
     KOR: "지금 업로드하세요",
     ENG: "Upload now"
+  }],
+  ["main-banner-btn-4", {
+    KOR: "상세보기",
+    ENG: "Learn more"
   }],
   ["main-banner-explain-1", {
     KOR: "최신, 추천, 인기 문서를 둘러보세요. \n관심 분야의 문서를 보고 싶다면 태그 검색도 해보세요.",
@@ -39,23 +41,19 @@ const strings = new Map([
     KOR: "귀하의 슬라이드를 업로드하고 이를 외부 채널에도 공유하십시요. \n 잠재 고객들을 추적하고 연락처를 수집할 수 있습니다. ",
     ENG: "Upload your slides and share them on high-quality channels.\n Track lead activity and collect contacts.\n"
   }],
-  ["Learn more", {
-    KOR: "상세보기",
-    ENG: "Learn more"
-  }],
-  ["See All", {
+  ["main-see-all", {
     KOR: "더보기",
     ENG: "See All"
   }],
-  ["latest", {
+  ["main-category-1", {
     KOR: "최신",
     ENG: "latest"
   }],
-  ["featured", {
+  ["main-category-2", {
     KOR: "추천",
     ENG: "featured"
   }],
-  ["popular", {
+  ["main-category-3", {
     KOR: "인기",
     ENG: "popular"
   }],
@@ -66,21 +64,25 @@ const strings = new Map([
     KOR: "해당 문서를 읽기 위해서는 이메일 입력이 필요합니다.",
     ENG: "If you want to read the document, you need to enter email."
   }],
-  ["Link to this URL", {
+  ["viewer-page-title-1", {
     KOR: "해당 링크로 이동",
     ENG: "Link to this URL"
   }],
-  ["Share with Linkedin", {
+  ["viewer-page-sns-linkedin", {
     KOR: "링크드인 공유하기",
     ENG: "Share with Linkedin"
   }],
-  ["Share with Facebook", {
+  ["viewer-page-sns-fb", {
     KOR: "페이스북 공유하기",
     ENG: "Share with Facebook"
   }],
-  ["Share with Twitter", {
+  ["viewer-page-sns-twitter", {
     KOR: "트위터 공유하기",
     ENG: "Share with Twitter"
+  }],
+  ["viewer-page-cc-title", {
+    KOR: "이 저작물은 Creative Commons Attribution 2.0 Generic License 에 따라 사용이 허가되었습니다.",
+    ENG: "This work is licensed under a Creative Commons Attribution 2.0 Generic License."
   }],
 
 
@@ -101,7 +103,7 @@ const strings = new Map([
     KOR: "등록 성공",
     ENG: "Successfully registered "
   }],
-  ["pending", {
+  ["b-pending", {
     KOR: "팬딩중",
     ENG: "Pending"
   }],
@@ -123,15 +125,15 @@ const strings = new Map([
     KOR: "우리는 수년간 전세계 고객들을 대상으로 Polaris Office 를 서비스하면서 수많은 문서와 지식들이 활용되지 못하고 있음을 발견했습니다. 이 문제를 해결하기 위해서 우리는 Polaris Share를 만들 것입니다. Polaris Share는 지식 생산자와 소비자를 연결하여 탈중앙화된 인센티브 기반의 지식 거래 시스템을 구축합니다. 우리는 회사에서 전문가를 고용하지 않고도 전세계에서 가장 필요한 기술을 가진 사람과 일할 수 있는 환경을 제공하고, 동시에 개인이 특정 회사에 고용되지 않고도 원하는만큼 일하고 정당한 보수를 받을 수 있는 일하는 환경을 만들어 나가고자 합니다. ",
     ENG: "Polaris Share connects knowledge creators and seekers to build a decentralized and incentive-based knowledge trading system. We create an environment that allows companies to work with people with most required skills from all around the world without hiring them, and at the same time, helps individuals work when and where they want and receive decent rewards without being hired by a certain company. We have realized that a wealth of knowledge and a good number of Knowledge Creators are not fully tapped. In order to solve this problem, we plan to create a Decentralized and Incentive-based knowledge trading system “Polaris Share.”"
   }],
-  ["Service", {
+  ["about-service", {
     KOR: "서비스",
     ENG: "Service"
   }],
   ["about-second-section-explain", {
-    KOR: "Polaris Share 는 단순한 문서 공유 서비스를 넘어서서 전문가들에 의한 큐레이션과 거래 시스템을 제공합니다. 서비스 내의 다양한 기여 활동에 대해서 적절한 보상을 지급함으로써 자발적인 참여를 유도하여 탈중앙화된 지속 가능한 시스템을 구축했습니다. 이와 같은 지식 거래 생태계에서 지식 생산자는 자유롭게 일하고 적절한 대가를 받을 수 있으며, 지식 소비자는 양질의 지식을 저렴한 비용으로 소비할 수 있습니다.",
+    KOR: "Polaris Share 는 단순한 문서 공유 서비스를 넘어서서 전문가들에 의한 큐레이션과 거래 시스템을 제공합니다. 서비스 내의 다양한 기여 활동에 대해서 적절한 보상을 지급함으로써 자발적인 참여를 유도하여 탈중앙화된 지속 가능한 시스템을 구축했습니다. 이와 같은 지식 거래 생태계에서 지식 생산자는 자유롭게 일하고 적절한 대가를 받을 수 있으며, 지식 소비자는 고품질의 지식을 저렴한 비용으로 소비할 수 있습니다.",
     ENG: "Polaris Share service is a decentralized and incentivized knowledge trading system that connects a knowledge creator and an audience. This project goes beyond a simple document sharing service by grading the value of the knowledge and trading them so that the knowledge creators can get the compensation and the audience can get higher quality knowledge at a low cost."
   }],
-  ["Vision", {
+  ["about-vision", {
     KOR: "비전",
     ENG: "Vision"
   }],
@@ -156,14 +158,14 @@ const strings = new Map([
     ENG: "Knowledge Creators get rewards from sharing or selling documents on Polaris Share with no or with low transaction fees"
   }],
   ["about-third-section-chap-subj-3", {
-    KOR: "양질의 컨텐츠",
+    KOR: "고품질의 컨텐츠",
     ENG: "Content shared"
   }],
   ["about-third-section-chap-explain-3", {
-    KOR: "일반 대중들은 지식 생산자들에 의해서 공유된 양질의 다양한 컨텐츠를 소비하고 활용할 수 있습니다. ",
+    KOR: "일반 대중들은 지식 생산자들에 의해서 공유된 고품질의 다양한 컨텐츠를 소비하고 활용할 수 있습니다. ",
     ENG: "Audiences will benefit from more and better content shared by Knowledge creators."
   }],
-  ["Polaris Share Team", {
+  ["about-ps-team", {
     KOR: "Polaris Share 팀",
     ENG: "Polaris Share Team"
   }],
@@ -202,7 +204,7 @@ const strings = new Map([
     ENG: "Creator: Creators can receive a certain amount of compensation as a token based on the number of page views."
   }],
   ["faq-answer-4b", {
-    KOR: "Curator : 토큰을 사용하여 양질의 문서에 투표하면 해당 문서의 페이지뷰 수에 따라서 토큰으로 보상이 지급되며, 투표 기간이 끝나면 보상과 투표한 토큰을 함께 지급받습니다. ",
+    KOR: "Curator : 토큰을 사용하여 고품질의 문서에 투표하면 해당 문서의 페이지뷰 수에 따라서 토큰으로 보상이 지급되며, 투표 기간이 끝나면 보상과 투표한 토큰을 함께 지급받습니다. ",
     ENG: "Curator: Curators can earn tokens according to the number of page views when voting on a high quality document and at the end of the voting period, you can get rewards."
   }],
   ["faq-answer-4c", {
@@ -230,11 +232,11 @@ const strings = new Map([
     ENG: "Total balance: Total token retention."
   }],
   ["faq-answer-6b", {
-    KOR: "Estimated earnings for today : 오늘 하루 동안 예상 수익 (전체 또는 각각의 Creator, Curator 보상금) ",
+    KOR: "오늘 예상 수익 : 오늘 하루 동안 예상 수익 (전체 또는 각각의 Creator, Curator 보상금) ",
     ENG: "Estimated earnings for today: Estimated revenue for the day (Total or Each reward for Creators and Curators)"
   }],
   ["faq-answer-6c", {
-    KOR: "Revenue for the last 7 days : 최근 7일간의 예상 수익 (전체 또는 각각의 Creator, Curator 보상금)",
+    KOR: "지난 7일 간 수입 : 최근 7일간의 예상 수익 (전체 또는 각각의 Creator, Curator 보상금)",
     ENG: "Revenue for the last 7 days: Estimated revenue for the last 7 days (Total or Each reward for Creators and Curators)"
   }],
   ["faq-question-7", {
@@ -290,7 +292,7 @@ const strings = new Map([
     ENG: "What is a reward pool?"
   }],
   ["faq-answer-13", {
-    KOR: "매일 백서에 정의된 양의 보상 토큰이 자동으로 편성되는데 이를 reward pool이라고 합니다. 이 토큰들은 creator나 curator 등의 기여도에 따라서 매일 배분됩니다. ",
+    KOR: "매일 백서에 정의된 양의 보상 토큰이 자동으로 편성되는데 이를 리워드 풀(reward pool)이라고 합니다. 이 토큰들은 크리에이터나 큐레이터 등의 기여도에 따라서 매일 배분됩니다. ",
     ENG: "Every day a fixed amount of Deck tokens are allocated to the network reward fund, commonly called the reward pool. Tokens are distributed to creators and curators for posting and voting on document."
   }],
   ["faq-question-14", {
@@ -302,19 +304,19 @@ const strings = new Map([
     ENG: "Tokens are distributed according to the number of page views. 70% is awarded as a reward for creators and 30% is awarded to curators."
   }],
   ["faq-question-15", {
-    KOR: "Deck은 무엇입니까?",
+    KOR: "덱(Deck)은 무엇입니까?",
     ENG: "What is Deck?"
   }],
   ["faq-answer-15", {
-    KOR: "Polaris Share에서 사용할 수 있는 디지털 화폐로서 이더리움 네트워크와 여러 거래소에서 거래할 수 있는 ERC20 규격의 암호화폐입니다. ",
+    KOR: "폴라리스 쉐어에서 사용할 수 있는 디지털 화폐로서 이더리움 네트워크와 여러 거래소에서 거래할 수 있는 ERC20 규격의 암호화폐입니다. ",
     ENG: "Deck is an ERC-20 token used in Polaris Share that can withdraw to an exchange."
   }],
   ["faq-question-16", {
-    KOR: "크레이터는 실시간으로 보상을 받나요?",
+    KOR: "크리에이터는 실시간으로 보상을 받나요?",
     ENG: "Does creator get rewards in real time?"
   }],
   ["faq-answer-16", {
-    KOR: "Creator 보상은 매일 0시~0시10분 GMT+0 사이에 정산됩니다. ",
+    KOR: "크리에이터 보상은 매일 0시~0시10분 GMT+0 사이에 정산됩니다. ",
     ENG: "Creators get paid between AM 0:00 and AM 0:10 every day. (GMT+0)"
   }],
   ["faq-question-17", {
@@ -322,8 +324,16 @@ const strings = new Map([
     ENG: "When does curator get reward?"
   }],
   ["faq-answer-17", {
-    KOR: "Curator 보상은 투표일로 부터 1주+2일 후에 투표에 사용한 토큰과 함께 지급받을 수 있습니다. ",
+    KOR: "큐레이터 보상은 투표일로 부터 1주+2일 후에 투표에 사용한 토큰과 함께 지급받을 수 있습니다. ",
     ENG: "Curators get paid with tokens used for voting in 3 weeks+2 days from a voting day."
+  }],
+  ["faq-question-18", {
+    KOR: "크리에이터와 큐레이터의 보상은 어떠한 차이가 있나요?",
+    ENG: "What is the difference between the rewards of creators and curators?"
+  }],
+  ["faq-answer-18", {
+    KOR: "크리에이터와 큐레이터들은 각각 문서 별로 매일 발생한 보상의 70%와 30%를 지급받습니다.",
+    ENG: "Creators and curators receive 70% and 30% of the daily rewards for each document."
   }],
 
   // user profile
@@ -339,49 +349,53 @@ const strings = new Map([
     KOR: "4~20자 이내의 영문과 숫자가 섞어 입력해 주십시오.",
     ENG: "Enter 4 to 20 digits with a mix of letters and numbers."
   }],
-  ["Edit", {
+  ["profile-edit", {
     KOR: "수정",
     ENG: "Edit"
   }],
-  ["Total balance :", {
-    KOR: "총 잔액 : ",
+  ["profile-total-balance", {
+    KOR: "총 보유량 : ",
     ENG: "Total balance :"
   }],
-  ["Estimated earnings for today :", {
+  ["profile-estimated-earnings", {
     KOR: "오늘 예상 수익 : ",
     ENG: "Estimated earnings for today :"
   }],
-  ["Revenue for the last 7 days :", {
+  ["profile-revenue-7-days", {
     KOR: "지난 7일 간 수입 : ",
     ENG: "Revenue for the last 7 days :"
   }],
-  ["Author rewards", {
-    KOR: "작성자 보상",
-    ENG: "Author rewards"
+  ["profile-author-rewards", {
+    KOR: "크리에이터 보상",
+    ENG: "Creator rewards"
   }],
-  ["Curator rewards", {
+  ["profile-curator-rewards", {
     KOR: "큐레이터 보상",
     ENG: "Curator rewards"
   }],
-  ["Uploaded", {
+  ["profile-uploaded", {
     KOR: "업로드",
     ENG: "Uploaded"
   }],
-  ["Voted", {
+  ["profile-voted", {
     KOR: "투표",
     ENG: "Voted"
   }],
-  ["Vote", {
-    KOR: "투표",
-    ENG: "Vote"
-  }],
-  ["Analytics", {
+  ["profile-analytics", {
     KOR: "애널리틱스",
     ENG: "Analytics"
   }],
-  ["Total documents :", {
+  ["profile-total-documents", {
     KOR: "총 문서량 :",
     ENG: "Total documents :"
+  }],
+  ["profile-payout-txt-1", {
+    KOR: "7일간 크리에이터 지급액 ",
+    ENG: "Creator payout $"
+  }],
+  ["profile-payout-txt-2", {
+    KOR: "",
+    ENG: "in 7 days"
   }],
 
   // Alert
@@ -399,7 +413,7 @@ const strings = new Map([
   }],
   ["alert-2021", {
     KOR: "이메일 검증 성공",
-    ENG: "Success e-mail verification."
+    ENG: "Email verification succeeded"
   }],
   ["alert-2022", {
     KOR: "이메일 검증 실패",
@@ -451,45 +465,81 @@ const strings = new Map([
   }],
 
   // Common
-  ["Cancel", {
+  ["common-modal-cancel", {
     KOR: "취소",
     ENG: "Cancel"
   }],
-  ["Settings", {
+  ["common-modal-settings", {
     KOR: "설정",
     ENG: "Settings"
   }],
-  ["Upload", {
+  ["common-modal-upload", {
     KOR: "업로드",
     ENG: "Upload"
   }],
-  ["Title", {
+  ["common-modal-title", {
     KOR: "제목",
     ENG: "Title"
   }],
-  ["Description", {
+  ["common-modal-description", {
     KOR: "설명",
     ENG: "Description"
   }],
-  ["File", {
+  ["common-modal-file", {
     KOR: "파일",
     ENG: "File"
   }],
-  ["Tag", {
+  ["common-modal-tag", {
     KOR: "태그",
     ENG: "Tag"
   }],
-  ["Option", {
+  ["common-modal-option", {
     KOR: "옵션",
     ENG: "Option"
   }],
-  ["Done", {
+  ["common-modal-approve", {
+    KOR: "승인",
+    ENG: "Approve"
+  }],
+  ["common-modal-confirm", {
+    KOR: "확인",
+    ENG: "Confirm"
+  }],
+  ["common-modal-done", {
     KOR: "완료",
     ENG: "Done"
   }],
-  ["Copy", {
+  ["common-modal-copy", {
     KOR: "복사",
     ENG: "Copy"
+  }],
+  ["common-year", {
+    KOR: " 년",
+    ENG: " year"
+  }],
+  ["common-day", {
+    KOR: " 일",
+    ENG: " day"
+  }],
+  ["common-hour", {
+    KOR: " 시간",
+    ENG: " hour"
+  }],
+  ["common-minute", {
+    KOR: " 분",
+    ENG: " minute"
+  }],
+  ["common-second", {
+    KOR: " 초",
+    ENG: " second"
+  }],
+  ["common-times", {
+    KOR: "",
+    ENG: "s"
+  }],
+  ["common-ago", {
+    KOR: " 전",
+    ENG: " ago"
   }],
   ["title-placeholder", {
     KOR: "업로드 문서 제목",
@@ -505,7 +555,7 @@ const strings = new Map([
   }],
 
   // Approve Modal
-  ["Approve DECK", {
+  ["approve-title", {
     KOR: "Deck 승인",
     ENG: "Approve DECK"
   }],
@@ -516,14 +566,6 @@ const strings = new Map([
   ["approve-explain-2", {
     KOR: "\"Approve\"를 클릭하고 나면, 투표를 완료하기 위해서 트랜잭션에 사인하라는 요청이 한 번 더 표시될 것입니다. ",
     ENG: "After clicking \"Approve\", you will be asked to sign a transaction, followed by second transaction to complete your requested voting."
-  }],
-  ["Approve", {
-    KOR: "승인",
-    ENG: "Approve"
-  }],
-  ["Confirm", {
-    KOR: "확인",
-    ENG: "Confirm"
   }],
 
   // Cookie Policy Modal
@@ -549,7 +591,7 @@ const strings = new Map([
     KOR: "테스트에 적극적으로 참여하는 사용자는 상용 버전의 Polaris Share를 열 때 적절한 보상을 제공할 예정입니다.",
     ENG: "Users who actively participate in the test provide appropriate compensation when opening the commercial version of Polaris Share."
   }],
-  ["Got it", {
+  ["dollar-learn-more-btn", {
     KOR: "알겠습니다",
     ENG: "Got it"
   }],
@@ -579,17 +621,17 @@ const strings = new Map([
     KOR: "문서 내려받기 허용",
     ENG: "Allow download document."
   }],
-  ["CC License", {
+  ["edit-cc-license", {
     KOR: "CC 인증",
     ENG: "CC License"
   }],
-  ["Settings of this document", {
+  ["tooltip-settings", {
     KOR: "문서 설정하기",
     ENG: "Settings of this document"
   }],
 
   // RegBlockchain Button
-  ["Register", {
+  ["register-btn", {
     KOR: "등록",
     ENG: "Register"
   }],
@@ -623,19 +665,15 @@ const strings = new Map([
   }],
 
   // Vote Document Modal
-  ["Vote on this document", {
-    KOR: "이 문서에 투표하기",
-    ENG: "Vote on this document"
-  }],
-  ["Vote on document", {
+  ["vote-modal-title", {
     KOR: "문서에 투표하기",
     ENG: "Vote on document"
   }],
-  ["Deposit must be greater than zero .", {
+  ["vote-modal-err-1", {
     KOR: "예치금은 0보다 큰 값이어야 합니다.",
     ENG: "Deposit must be greater than zero ."
   }],
-  ["Deposit must be less than balance .", {
+  ["vote-modal-err-2", {
     KOR: "예치금은 잔고보다 작은 값이어야 합니다.",
     ENG: "Deposit must be less than balance ."
   }],
@@ -655,59 +693,290 @@ const strings = new Map([
     KOR: "알림: 투표에 사용된 토큰은 8일 후에 인출할 수 있습니다.",
     ENG: "Note: The token used for voting can be withdrawn after 3 days."
   }],
-  ["Please, login", {
+  ["vote-modal-tooltip-1", {
+    KOR: "이 문서에 투표하기",
+    ENG: "Vote on this document"
+  }],
+  ["vote-modal-tooltip-2", {
     KOR: "로그인 부탁드립니다",
     ENG: "Please, login"
   }],
-  ["Please, work with MetaMask", {
+  ["vote-modal-tooltip-3", {
     KOR: "메타마스트 사용 부탁드립니다",
     ENG: "Please, work with MetaMask"
   }],
+  ["vote-modal-btn", {
+    KOR: "투표",
+    ENG: "Vote"
+  }],
+  ["vote-modal-you", {
+    KOR: "나",
+    ENG: "You"
+  }],
+  ["vote-modal-total", {
+    KOR: "총액",
+    ENG: "Total"
+  }],
 
   // Copy modal
-  ["Copy Link", {
+  ["copy-modal-btn", {
     KOR: "링크 복사",
     ENG: "Copy Link"
   }],
-  ["Copy URL", {
+  ["copy-modal-title", {
     KOR: "URL 복사",
     ENG: "Copy URL"
   }],
-  ["Clip the URL of this document", {
+  ["tooltip-copy", {
     KOR: "문서 URL 복사하기",
     ENG: "Clip the URL of this document"
   }],
 
-  // Download
-  ["Download", {
+  // Download button
+  ["download-btn", {
     KOR: "다운로드",
     ENG: "Download"
   }],
-  ["Download this document", {
+  ["tooltip-download", {
     KOR: "문서 다운로드하기",
     ENG: "Download this document"
   }],
-  ["Tracking", {
+
+  //Tracking button
+  ["tracking-btn", {
     KOR: "트랙킹",
     ENG: "Tracking"
   }],
-  ["Track activity of your audience.", {
-    KOR: "유저 활동 추적하기",
+  ["tooltip-tracking", {
+    KOR: "잠재 고객 추적하기",
     ENG: "Track activity of your audience."
   }],
 
   // Header
-  ["LATEST", {
+  ["header-category-1", {
     KOR: "최신",
     ENG: "LATEST"
   }],
-  ["FEATURED", {
+  ["header-category-2", {
     KOR: "추천",
     ENG: "FEATURED"
   }],
-  ["POPULAR", {
+  ["header-category-3", {
     KOR: "인기",
     ENG: "POPULAR"
+  }],
+  ["header-login", {
+    KOR: "로그인",
+    ENG: "Login"
+  }],
+
+  // Content View Right
+  ["see-also-text", {
+    KOR: "관련 문서",
+    ENG: "See also"
+  }],
+
+
+  // Payout information
+  ["payout-text", {
+    KOR: "크리에이터 지급액",
+    ENG: "Creator payout $"
+  }],
+  ["payout-text-2", {
+    KOR: "크리에이터 예상 지급액 ",
+    ENG: "Creator can be paid"
+  }],
+  ["payout-registered", {
+    KOR: "블록체인에 미등록",
+    ENG: "NOT REGISTERED ON BLOCKCHAIN"
+  }],
+
+  // Profile card
+  ["profile-card-total-balance", {
+    KOR: "총 보유액",
+    ENG: "Total Balance"
+  }],
+  ["profile-card-my-page", {
+    KOR: "마이 페이지",
+    ENG: "My page"
+  }],
+  ["profile-card-login", {
+    KOR: "로그인",
+    ENG: "Login"
+  }],
+  ["profile-card-logout", {
+    KOR: "로그아웃",
+    ENG: "Sign out"
+  }],
+
+  // Custom Chart
+  ["chart-tracking-option-title", {
+    KOR: "페이지당 총 소요시간",
+    ENG: "TOTAL TIME SPENT PER PAGE"
+  }],
+  ["chart-date", {
+    KOR: "날짜",
+    ENG: "Date"
+  }],
+  ["chart-visit-count", {
+    KOR: "방문자 수",
+    ENG: "Visit Count"
+  }],
+  ["chart-page", {
+    KOR: "페이지",
+    ENG: "Page"
+  }],
+  ["chart-time-spend-min", {
+    KOR: "소요 시간 (분)",
+    ENG: "Time Spend (Min)"
+  }],
+
+  // Tracking List
+  ["tracking-list-option-hide", {
+    KOR: "익명 숨김",
+    ENG: "Hide Anonymous"
+  }],
+  ["tracking-list-option-show", {
+    KOR: "익명 표시",
+    ENG: "Show Anonymous"
+  }],
+  ["tracking-list-option-exclude", {
+    KOR: "1 페이지 제외",
+    ENG: "Exclude only one page"
+  }],
+  ["tracking-list-option-include", {
+    KOR: "1 페이지 포함",
+    ENG: "Include only one page"
+  }],
+  ["tracking-list-err-1", {
+    KOR: "올바른 경로로 접근해주시기 바랍니다.",
+    ENG: "Please access with the correct path."
+  }],
+  ["tracking-list-export", {
+    KOR: "내보내기",
+    ENG: "Export"
+  }],
+  ["tracking-list-visitors", {
+    KOR: "방문자 목록",
+    ENG: "Visitors"
+  }],
+  ["tracking-list-anonymous", {
+    KOR: "익명",
+    ENG: "Anonymous"
+  }],
+  ["tracking-list-name", {
+    KOR: "성명",
+    ENG: "Name"
+  }],
+  ["tracking-list-views", {
+    KOR: "조회수",
+    ENG: "Views"
+  }],
+  ["tracking-list-last", {
+    KOR: "최근 조회날짜",
+    ENG: "Last Viewed"
+  }],
+  ["tracking-list-view-count", {
+    KOR: "조회수",
+    ENG: "View count"
+  }],
+  ["tracking-list-view-times", {
+    KOR: "",
+    ENG: "s"
+  }],
+  ["tracking-list-viewed", {
+    KOR: "열람률",
+    ENG: "Viewed"
+  }],
+  ["tracking-list-no-data", {
+    KOR: "데이터 없음",
+    ENG: "No data"
+  }],
+
+  // Tracking detail
+  ["tracking-detail-back", {
+    KOR: "방문자 리스트로 돌아가기",
+    ENG: "Back to visitor list"
+  }],
+
+  // Auto Suggest Input
+  ["auto-placeholder-1", {
+    KOR: "태그 검색 . . .",
+    ENG: "Tag Search . . ."
+  }],
+  ["auto-placeholder-2", {
+    KOR: "이름 검색 . . .",
+    ENG: "Name Search . . ."
+  }],
+
+  // Dollar Policy Modal
+  ["dollar-policy-content", {
+    KOR: "이곳에 표시된 달러 금액은 테스트 토큰이며 실제 금액이 아닌 오직 참조 값입니다.",
+    ENG: "The dollar amount shown here is a test token and is only a reference value, not an actual amount."
+  }],
+  ["dollar-policy-learn-more", {
+    KOR: "상세 보기",
+    ENG: "Learn more"
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
+  }],
+  ["", {
+    KOR: "",
+    ENG: ""
   }],
   ["", {
     KOR: "",
@@ -727,14 +996,46 @@ const strings = new Map([
   }],
 ]);
 
+
+
 export let Lang = {
   EN: "EN",
   KO: "KO"
 };
 
 
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) === 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+
+function setCookie(cname, cvalue, exdays) {
+  let d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + "; " + expires + "; path=/;";
+}
+
+
+function deleteCookie(name) {
+  if (this.getCookie(name)) document.cookie = name + "=;expires=Thu, 01-Jan-70 00:00:01 GMT";
+}
+
+
 function checkLocale(): Lang {
-  let cookieLang = common.getCookie("language");
+  let cookieLang = getCookie("language");
 
   // 쿠키 값이 있을 때
   if (cookieLang !== "") {
@@ -754,13 +1055,13 @@ function checkLocale(): Lang {
   switch (userLang.toLowerCase()) {
     case "en":
     case "en-us":
-      common.setCookie("language", "en", 30);
+      setCookie("language", "en", 30);
       return Lang.EN;
 
     case "ko-kr":
     case "ko":
     default:
-      common.setCookie("language", "ko", 30);
+      setCookie("language", "ko", 30);
       return Lang.KO;
 
   }
@@ -777,17 +1078,17 @@ export function psGetLang(): Lang {
 export function psSetLang(lang: Lang) {
   currentLang = lang;
 
-  common.deleteCookie("language");
+  deleteCookie("language");
 
   switch (lang) {
     case Lang.EN:
-      common.setCookie("language", "en", 30);
+      setCookie("language", "en", 30);
       window.location.reload();
       break;
 
     case Lang.KO:
     default:
-      common.setCookie("language", "ko", 30);
+      setCookie("language", "ko", 30);
       window.location.reload();
       break;
   }

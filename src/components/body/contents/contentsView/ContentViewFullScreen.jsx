@@ -142,7 +142,7 @@ class ContentViewFullScreen extends Component {
   }
 
   render() {
-    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, catchPageChanged } = this.props;
+    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
     const { page, isFull, carouselClass, emailFlag } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0;
@@ -161,7 +161,6 @@ class ContentViewFullScreen extends Component {
 
             <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
                                           tracking={true} handleEmailFlag={this.handleEmailFlag}
-                                          catchPageChanged={catchPageChanged}
                                           getPageNum={(page) => {
                                             this.getPageNum(page);
                                           }}/>
@@ -218,15 +217,15 @@ class ContentViewFullScreen extends Component {
             <CopyModal documentData={documentData}/>
 
             {documentData.isDownload &&
-            <Tooltip title={psString("Download this document")} placement="bottom">
+            <Tooltip title={psString("tooltip-download")} placement="bottom">
               <div className="viewer-btn" onClick={this.handleDownloadContent}>
-                <i className="material-icons">save_alt</i> {psString("Download")}
+                <i className="material-icons">save_alt</i> {psString("download-btn")}
               </div>
             </Tooltip>
             }
 
             {accountId === Common.getMySub() &&
-            <Tooltip title={psString("Track activity of your audience.")} placement="bottom">
+            <Tooltip title={psString("tooltip-tracking")} placement="bottom">
               <Link to={{
                 pathname: "/tracking/" + identification + "/" + documentData.seoTitle,
                 state: {
@@ -236,7 +235,7 @@ class ContentViewFullScreen extends Component {
                 }
               }}>
                 <div className="viewer-btn" onClick={() => Common.scrollTop()}>
-                  <i className="material-icons">bar_chart</i> {psString("Tracking")}
+                  <i className="material-icons">bar_chart</i> {psString("tracking-btn")}
                 </div>
               </Link></Tooltip>
             }
@@ -249,7 +248,7 @@ class ContentViewFullScreen extends Component {
 
           <div className="view_desc">
             <Linkify properties={{
-              title: psString("Link to this URL"),
+              title: psString("viewer-page-title-1"),
               rel: "nofollow",
               target: "_blank",
               style: { color: "#3681fe", fontWeight: "400" }
@@ -264,7 +263,7 @@ class ContentViewFullScreen extends Component {
             </div>
 
             <div className="sns-share-icon-wrapper mb-3">
-              <Tooltip title={psString("Share with Linkedin")} placement="bottom">
+              <Tooltip title={psString("viewer-page-sns-linkedin")} placement="bottom">
                 <div className="d-inline-block mr-3">
                   <LinkedinShareButton url={ogUrl} className="sns-share-icon " title={documentData.title}>
                     <img src={require("assets/image/sns/ic-sns-linkedin-color.png")} alt="linkedin sns icon"/>
@@ -272,7 +271,7 @@ class ContentViewFullScreen extends Component {
                 </div>
               </Tooltip>
 
-              <Tooltip title={psString("Share with Facebook")} placement="bottom">
+              <Tooltip title={psString("viewer-page-sns-fb")} placement="bottom">
                 <div className="d-inline-block mr-3">
                   <FacebookShareButton url={ogUrl} className="sns-share-icon">
                     <img src={require("assets/image/sns/ic-sns-facebook-color.png")} alt="facebook sns icon"/>
@@ -280,7 +279,7 @@ class ContentViewFullScreen extends Component {
                 </div>
               </Tooltip>
 
-              <Tooltip title={psString("Share with Twitter")} placement="bottom">
+              <Tooltip title={psString("viewer-page-sns-twitter")} placement="bottom">
                 <div className="d-inline-block">
                   <TwitterShareButton url={ogUrl} className="sns-share-icon" hashtags={documentData.tags}
                                       title={documentData.title}>
@@ -291,9 +290,8 @@ class ContentViewFullScreen extends Component {
 
 
               {documentData.cc &&
-              <Tooltip title="This work is licensed under a Creative Commons Attribution 2.0 Generic License."
+              <Tooltip title={psString("viewer-page-cc-title")}
                        placement="bottom">
-                {/* eslint-disable-next-line react/jsx-no-target-blank */}
                 <a className="float-right" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/"
                    target="_blank" rel="license noopener noreferrer">
                   <img alt="Creative Commons License" className="cc-img"
