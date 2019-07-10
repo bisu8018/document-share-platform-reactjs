@@ -27,13 +27,15 @@ Client Architecture
 
 ## Note
 - This project is a reactive web production using the Google material UI library.
-- <b>AXIOS</b> was used to communicate with the server.
-<br>(Ref : https://github.com/decompanyio/decompanyio-front-end/tree/master/src/service)
-- Communicate with all servers through <b>MainRepository.js</b>
-<br>(Ref : https://github.com/decompanyio/decompanyio-front-end/blob/master/src/redux/MainRepository.js)
-- Applied to <b>model</b> for all <b>GET response data</b> 
-<br>(Ref : https://github.com/decompanyio/decompanyio-front-end/tree/master/src/redux/model)  
-- Using <b>Redux</b> and Thunk(https://www.npmjs.com/package/redux-thunk)와 StoreLogger middleware 
+- Using <b>Redux</b> with Thunk(https://www.npmjs.com/package/redux-thunk) and StoreLogger middleware 
 - Only create a container when you need to use <b>Redux</b>.
 - When block chain is not used, delete and comment block chain related functions such as <b>web3</b> and <b>drizzle</b>.
 - Specifying the URL for each environment variable in <b>app.properties.js</b>
+- <b>AXIOS</b> was used to communicate with the server.
+<br>(Ref : https://github.com/decompanyio/decompanyio-front-end/tree/master/src/service)
+
+- Communicate with all servers through <b>MainRepository.js</b>
+<br>(Ref : https://github.com/decompanyio/decompanyio-front-end/blob/master/src/redux/MainRepository.js)
+
+- Applied to <b>model</b> for all <b>GET response data</b> 
+<br>(Ref : https://github.com/decompanyio/decompanyio-front-end/tree/master/src/redux/model)  
