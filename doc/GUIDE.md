@@ -5,6 +5,8 @@
 Full Architecture
 > https://drive.google.com/file/d/1Q94ubwcRWHg7zRoyrFPLPckq-Y0NzQHV/view?usp=sharing
 
+<br>
+
 Client Architecture
 > https://www.polarisoffice.com/d/2RQQv3Kt
 
