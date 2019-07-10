@@ -9,15 +9,15 @@
 > Production URL : https://www.polarishare.com
 
 ## Build
-- npm run build (share.decompany.io 개발 서버 빌드)
-- npm run build:production (www.polarishare.com 운영 서버 빌드)
+- npm run build (share.decompany.io, Dev Server Build)
+- npm run build:production (www.polarishare.com Production Server Build)
 
 ## Deploy
 - npm run deploy (개발 빌드 및 배포 진행, aws s3 sync build/ s3://share.decompany.io)
 - npm run deploy:production (운영 빌드 및 배포 진행, aws s3 sync build/ s3://www.polarishare.com)
 
 ## Local
-- npm start (3000 포트)
+- npm start (port 8000)
 
 ## Directory
 - config : eject 제공 환경설정 파일 (웹팩, 환경변수 ..)
