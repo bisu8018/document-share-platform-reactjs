@@ -34,6 +34,7 @@
 <br>(참고 : https://github.com/decompanyio/decompanyio-front-end/blob/master/src/redux/MainRepository.js)
 - 모든 <b>GET response Data</b> 에 대하여 <b>model</b> 적용 
 <br>(참고 : https://github.com/decompanyio/decompanyio-front-end/tree/master/src/redux/model)  
-- Redux 사용하며, Thunk(https://www.npmjs.com/package/redux-thunk)와 StoreLogger 미들웨어 사용 
-- Redux 사용이 필요할 때만 container 생성
-- 블록체인 미사용시, web3, drizzle 관련 함수 삭제 및 주석처리 필요
+- <b>Redux</b> 사용하며, <b>Thunk</b>(https://www.npmjs.com/package/redux-thunk)와 StoreLogger 미들웨어 사용 
+- <b>Redux</b> 사용이 필요할 때만 container 생성
+- 블록체인 미사용시, <b>web3</b>, <b>drizzle</b> 관련 함수 삭제 및 주석처리 필요
+- <b>app.properties.js</b> 에 환경변수 별 URL 명시

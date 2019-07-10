@@ -31,6 +31,7 @@ Client Architecture
 <br>(Ref : https://github.com/decompanyio/decompanyio-front-end/blob/master/src/redux/MainRepository.js)
 - Applied to <b>model</b> for all <b>GET response data</b> 
 <br>(Ref : https://github.com/decompanyio/decompanyio-front-end/tree/master/src/redux/model)  
-- Using Redux and Thunk(https://www.npmjs.com/package/redux-thunk)와 StoreLogger middleware 
-- Only create a container when you need to use Redux.
-- When block chain is not used, delete and comment block chain related functions such as web3 and drizzle.
+- Using <b>Redux</b> and Thunk(https://www.npmjs.com/package/redux-thunk)와 StoreLogger middleware 
+- Only create a container when you need to use <b>Redux</b>.
+- When block chain is not used, delete and comment block chain related functions such as <b>web3</b> and <b>drizzle</b>.
+- Specifying the URL for each environment variable in <b>app.properties.js</b>
