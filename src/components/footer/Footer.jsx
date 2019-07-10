@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Common from "../../config/common";
+import { psString } from "../../config/localization";
 
 class Footer extends React.Component {
 
@@ -19,23 +20,23 @@ class Footer extends React.Component {
           </div>
           <div className="footer-legal col-sm-6 row">
             <Link to="/about">
-              <div className="footer-nav footer-nav-divider mb-2" onClick={() => Common.scrollTop()}>About US</div>
+              <div className="footer-nav footer-nav-divider mb-2" onClick={() => Common.scrollTop()}>{psString("footer-1")}</div>
             </Link>
             <Link to="/faq">
               <div className="footer-nav footer-nav-divider mb-2" onClick={() => Common.scrollTop()}>FAQ</div>
             </Link>
             <Link to="/guide">
               <div className="footer-nav footer-nav-divider footer-nav-divider-ug mb-2"
-                   onClick={() => Common.scrollTop()}>User Guide
+                   onClick={() => Common.scrollTop()}>{psString("footer-2")}
               </div>
             </Link>
             <div className="footer-br"/>
             <Link to="/terms">
-              <div className="footer-nav footer-nav-divider  mb-2" onClick={() => Common.scrollTop()}>Terms of Service
+              <div className="footer-nav footer-nav-divider  mb-2" onClick={() => Common.scrollTop()}>{psString("footer-3")}
               </div>
             </Link>
             <Link to="/privacy">
-              <div className="footer-nav" onClick={() => Common.scrollTop()}>Privacy</div>
+              <div className="footer-nav" onClick={() => Common.scrollTop()}>{psString("footer-4")}</div>
             </Link>
           </div>
           <div className="footer-sns col-sm-3 row">

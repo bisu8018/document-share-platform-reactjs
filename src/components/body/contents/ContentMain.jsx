@@ -38,7 +38,11 @@ class ContentMain extends Component {
   // 사이트 path 체크
   getList = (path) => {
     const { latestDocuments, featuredDocuments, popularDocuments } = this.state;
-    return path === "latest" ? latestDocuments : path === "featured" ? featuredDocuments : popularDocuments;
+    let _path = path;
+    if(path === "최신") _path = "latest";
+    else if(path === "추천") _path = "featured";
+    else if(path === "인기") _path = "popular";
+    return _path === "latest" ? latestDocuments : _path === "featured" ? featuredDocuments : popularDocuments;
   };
 
 
@@ -56,11 +60,12 @@ class ContentMain extends Component {
 
   // see more 트리거 버튼
   handelTrigger = (arr) => {
-    if(arr === "최신") arr = "latest";
-    else if(arr === "추천") arr = "featured";
-    else if(arr === "인기") arr = "popular";
+    let _arr = arr;
+    if(arr === "최신") _arr = "latest";
+    else if(arr === "추천") _arr = "featured";
+    else if(arr === "인기") _arr = "popular";
 
-    document.getElementById(arr + "NavLink").click();
+    document.getElementById(_arr + "NavLink").click();
   };
 
 

@@ -918,49 +918,53 @@ const strings = new Map([
     KOR: "상세 보기",
     ENG: "Learn more"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+
+  // Menu
+  ["menu-1", {
+    KOR: "회사소개",
+    ENG: "About Us"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["menu-2", {
+    KOR: "유저 가이드",
+    ENG: "User Guide"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["menu-3", {
+    KOR: "Linkedin 공식계정",
+    ENG: "Official Linkedin"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["menu-4", {
+    KOR: "백서",
+    ENG: "Whitepaper"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["menu-login", {
+    KOR: "로그인",
+    ENG: "Login"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["menu-sign-out", {
+    KOR: "로그아웃",
+    ENG: "Sign out"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["menu-5", {
+    KOR: "연락처",
+    ENG: "Connect With Us"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+
+  // Footer
+  ["footer-1", {
+    KOR: "회사소개",
+    ENG: "About US"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["footer-2", {
+    KOR: "유저 가이드",
+    ENG: "User Guide"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["footer-3", {
+    KOR: "이용약관",
+    ENG: "Terms of Service"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["footer-4", {
+    KOR: "개인정보처리방침",
+    ENG: "Privacy Policy"
   }],
   ["", {
     KOR: "",
@@ -1067,8 +1071,8 @@ function checkLocale(): Lang {
   }
 }
 
-//let currentLang: Lang = Lang.EN;
-let currentLang: Lang = checkLocale();
+let currentLang: Lang = Lang.EN;
+//let currentLang: Lang = checkLocale();
 
 
 export function psGetLang(): Lang {
