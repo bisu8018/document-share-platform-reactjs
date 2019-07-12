@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import VoteDocument from "../../components/modal/VoteDocumentModal";
+import VoteDocument from "../../components/common/modal/VoteDocumentModal";
 import { setAlertCode, setDrizzleApis } from "../../redux/reducer/main";
 
 export default connect(

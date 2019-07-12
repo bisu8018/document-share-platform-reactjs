@@ -1,4 +1,5 @@
 import React from "react";
+import DropdownContainer from "../../container/common/DropdownContainer";
 
 class Dropdown extends React.Component {
   state = {
@@ -39,6 +40,9 @@ class Dropdown extends React.Component {
 
     });
   }
+
+
+  //<DropdownContainer dataList={dataList} selected={(value) => this.handleCategories(value)}/>
 
 
   render() {

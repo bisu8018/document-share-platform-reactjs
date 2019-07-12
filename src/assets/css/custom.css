@@ -1,35 +1,3 @@
-@font-face {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: bold;
-    src: url(../font/Poppins-Bold.ttf) format('ttf');
-    src: url(../font/Poppins-Bold.ttf);
-}
-
-@font-face {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 500;
-    src: url(../font/Poppins-SemiBold.ttf) format('ttf');
-    src: url(../font/Poppins-SemiBold.ttf);
-}
-
-@font-face {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 300;
-    src: url(../font/Poppins-Medium.ttf) format('ttf');
-    src: url(../font/Poppins-Medium.ttf);
-}
-
-@font-face {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    src: url(../font/Poppins-Regular.ttf) format('ttf');
-    src: url(../font/Poppins-Regular.ttf);
-}
-
 *,
 *::before,
 *::after {
@@ -43,6 +11,8 @@ html {
     -ms-overflow-style: scrollbar;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     scroll-behavior: smooth;
+    -ms-content-zooming: none;
+    -ms-touch-action: pan-x pan-y;
 }
 
 
@@ -62,14 +32,14 @@ section {
 
 body {
     margin: 0;
-    font-family: "HelveticaNeue", 'Noto Sans KR', MalgumGothic, Helvetica, Arial, sans-serif;
+    font-family: Helvetica, source-han-sans-korean, MalgumGothic, Arial, sans-serif;
     font-size: 1rem;
     line-height: 1.5;
     text-align: left;
     background-color: #FFFFFF;
     -ms-text-size-adjust: none;
     -webkit-text-size-adjust: none;
-    color: #666666;
+    color: #4d4d4d;
     font-weight: 300;
 }
 
@@ -180,7 +150,7 @@ sup {
 }
 
 a {
-    color: #666666;
+    color: #4d4d4d;
     text-decoration: none;
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
@@ -4812,10 +4782,6 @@ legend {
     border-bottom: 0;
 }
 
-.serif-font {
-    font-family: "Roboto Slab", "Times New Roman", serif;
-}
-
 * {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     -webkit-tap-highlight-color: transparent;
@@ -5238,6 +5204,13 @@ form {
     margin-left: -10px;
 }
 
+.navbar .navbar-brand-mobile > img {
+    height: 45px;
+    width: auto;
+    margin-left: -10px;
+    margin-top: -5px;
+}
+
 .navbar.navbar-transparent {
     background-color: transparent !important;
     box-shadow: none;
@@ -5454,6 +5427,18 @@ b {
 }
 
 @media all and (max-width: 991px) {
+    .about-yt-wrapper {
+        text-align: center !important;
+        padding: 0;
+    }
+
+    .about-yt-wrapper > iframe {
+        width: 100%;
+        height: 100%;
+        height: -moz-available; /* WebKit-based browsers will ignore this. */
+        height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+    }
+
     .main-banner-subject {
         font-size: 40px !important;
     }
@@ -5932,7 +5917,10 @@ b {
 
 .login-btn {
     cursor: pointer;
-    padding: 5px 15px;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 33px;
     font-size: 14px;
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
@@ -6069,7 +6057,10 @@ dean
 
 .upload-btn {
     cursor: pointer;
-    padding: 5px 15px;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 33px;
     font-size: 14px;
     color: #0d73f8;
     background: white;
@@ -6080,6 +6071,7 @@ dean
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+    transition: 0.2s all ease-in-out;
 }
 
 .upload-btn:hover {
@@ -6120,6 +6112,11 @@ dean
     z-index: 1;
     position: relative;
     margin-bottom: 45px
+}
+
+.main-learn-more-btn:hover {
+    background: #3681fe;
+    border-color: #3681fe;
 }
 
 .link-arrow-btn {
@@ -6888,7 +6885,6 @@ Dean*/
     color: #47583f;
     font-size: 15px;
     font-weight: 400;
-    transition: 0.2s all ease-in-out;
     position: absolute;
 }
 
@@ -6924,7 +6920,6 @@ Dean*/
 .tags_menu li a:hover {
     color: #0d73f8 !important;
     font-weight: bold;
-    transition: 0.2s all ease-in-out;
 }
 
 .l-table {
@@ -6960,7 +6955,7 @@ Dean*/
 
 .content-list-path {
     text-transform: uppercase;
-    font-family: "Poppins", 'Noto Sans KR', sans-serif;
+    font-family: poppins, 'source-han-sans-korean', sans-serif;
     font-size: 22px;
     font-weight: 500;
     margin-top: 20px;
@@ -7073,7 +7068,7 @@ Dean*/
 }
 
 .details-info-desc-wrapper {
-    height: 35px;
+    height: 40px;
     overflow: hidden;
     margin-bottom: 5px;
 }
@@ -7282,13 +7277,174 @@ Dean*/
     }
 }
 
+
+@media (max-width: 1024px) {
+    .col-view {
+        display: block;
+        flex: 0 0 100%;
+        max-width: 100%;
+        width: 100%;
+        text-align: left;
+    }
+
+    .u__view .txt_view {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+}
+
 @media (max-width: 991px) {
+    .tac-md {
+        text-align: center !important;
+    }
+
+
+    .navbar-expand-lg > .container,
+    .navbar-expand-lg > .container-fluid {
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .u__view {
+        border: none
+    }
+
+    .screen-option {
+        right: 0;
+    }
+
+    .u__center-container {
+        padding: 0 12px;
+    }
+
+    .u__right {
+        margin: 20px 0;
+    }
+
     .main-category-card-wrapper {
         justify-content: center;
+    }
+
+    .language-btn {
+        display: none !important;
+    }
+}
+
+
+@media (max-width: 850px) {
+
+    .main-banner-content {
+        font-size: 16px !important;
+    }
+
+    .content-main-container {
+        padding-left: 12px;
+        padding-right: 12px;
+        padding-bottom: 0;
+    }
+
+    footer .footer-nav-divider.footer-nav-divider-ug:after {
+        opacity: 0;
+        margin: 0;
+    }
+
+    .footer-logo {
+        display: none !important;
+    }
+
+    .footer-legal,
+    .footer-copyright,
+    .footer-sns {
+        justify-content: center;
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+
+    .footer-copyright {
+        margin-top: 25px;
+    }
+
+    .footer-sns {
+        margin-top: 15px;
+    }
+
+    .footer-copyright {
+        display: block;
+        text-align: center;
+    }
+
+    .footer-br {
+        display: block !important;
+    }
+
+    .footer-sns-wrapper {
+        right: auto !important;
+        position: relative !important;
     }
 }
 
 @media (max-width: 767px) {
+    .language-btn {
+        display: flex !important;
+    }
+
+    .thumb_image,
+    .tab-thumbnail {
+        padding-top: 0;
+    }
+
+    .tracking_detail_title {
+        font-size: 18px;
+    }
+
+    .u__view {
+        padding: 0 !important;
+    }
+
+    .u__view .view_top {
+        border-right: none;
+        border-left: none;
+        border-top: none;
+    }
+
+    .u__right {
+        margin-left: -15px;
+        margin-right: -15px;
+        padding: 20px 15px !important;
+        min-height: 300px !important;
+        box-shadow: none;
+    }
+
+    .view_left {
+        padding: 0 !important;
+    }
+
+    .view_content {
+        padding: 0 15px !important;
+    }
+
+    .col-ab {
+        position: static;
+        width: 100%;
+    }
+
+    .article_top {
+        display: none;
+    }
+
+    .u__view .view_date:before {
+        margin: 0 5px;
+    }
+
+    #container {
+        margin-bottom: 0;
+        margin-top: 57px !important;
+    }
+
+    #container.container_view .card {
+        border-radius: 0
+    }
+
     .u__left {
         border: none;
         padding: 0;
@@ -7307,9 +7463,29 @@ Dean*/
     .profile-creator, .profile-curator {
         padding: 15px 0 !important;
     }
+
+    .tracking-detail-container .profile_info_name {
+        font-size: 18px;
+        margin-left: 15px !important;
+    }
 }
 
+
 @media (max-width: 575px) {
+
+    .language-btn {
+        margin: 0 10px !important;
+    }
+
+    .main-category-card,
+    .main-category-card-img-wrapper{
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .main-banner-content {
+        margin-bottom: 30px !important;
+    }
 
     .not-convert-container {
         width: 100%;
@@ -7409,10 +7585,6 @@ Dean*/
 
     .cc-container {
         margin-bottom: 25px !important;
-    }
-
-    .navbar .navbar-brand > img {
-        width: 173px !important;
     }
 
     .menu-btn {
@@ -7576,6 +7748,30 @@ Dean*/
         padding: 30px !important;
     }
 }
+
+@media (max-width: 420px) {
+    .tracking_top .form-inline {
+        width: 160px;
+    }
+}
+
+@media (max-width: 374px) {
+    .tracking_detail_title {
+        padding-top: 0;
+        margin-top: 15px;
+    }
+
+    .profile_top .col-sm-3 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .profile_top .col-sm-9 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
 
 .profile_container {
     margin-bottom: 50px;
@@ -7857,26 +8053,6 @@ author tap list analytics*/
     left: 30%;
 }
 
-@media (max-width: 767px) {
-    .tracking-detail-container .profile_info_name {
-        font-size: 18px;
-        margin-left: 15px !important;
-    }
-}
-
-@media (max-width: 374px) {
-
-    .profile_top .col-sm-3 {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-
-    .profile_top .col-sm-9 {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-}
-
 
 /*Dean
 2019-06-12
@@ -7927,7 +8103,7 @@ Duration CSS*/
     position: absolute;
     display: inline-block;
     font-size: 12px;
-    font-family: "Poppins", 'Noto Sans KR', sans-serif;
+    font-family: poppins, 'Noto Sans KR', sans-serif;
     right: 120px;
     top: 5px;
 }
@@ -8038,15 +8214,9 @@ Duration CSS*/
     font-weight: bold;
     text-align: center;
     padding: 30px;
+    color: #bdbdbd;
     cursor: context-menu;
 }
-
-@media (max-width: 420px) {
-    .tracking_top .form-inline {
-        width: 160px;
-    }
-}
-
 
 .tar {
     text-align: right !important;
@@ -8417,96 +8587,6 @@ Dean
     position: absolute;
 }
 
-@media (max-width: 1024px) {
-    .col-view {
-        display: block;
-        flex: 0 0 100%;
-        max-width: 100%;
-        width: 100%;
-        text-align: left;
-    }
-
-    .u__view .txt_view {
-        margin-top: 0;
-        margin-bottom: 5px;
-    }
-}
-
-@media (max-width: 991px) {
-
-    .navbar-expand-lg > .container,
-    .navbar-expand-lg > .container-fluid {
-        padding-right: 0;
-        padding-left: 0;
-    }
-
-    .u__view {
-        border: none
-    }
-
-    .screen-option {
-        right: 0;
-    }
-
-    .u__center-container {
-        padding: 0 12px;
-    }
-
-    .u__right {
-        margin: 20px 0;
-    }
-}
-
-@media (max-width: 767px) {
-    .u__view {
-        padding: 0;
-    }
-
-    .u__view .view_top {
-        border-right: none;
-        border-left: none;
-        border-top: none;
-    }
-
-    .u__right {
-        margin-left: -15px;
-        margin-right: -15px;
-        padding: 20px 15px;
-        min-height: 300px;
-        box-shadow: none;
-    }
-
-    .view_left {
-        padding: 0 !important;
-    }
-
-    .view_content {
-        padding: 0 15px !important;
-    }
-
-    .col-ab {
-        position: static;
-        width: 100%;
-    }
-
-    .article_top {
-        display: none;
-    }
-
-    .u__view .view_date:before {
-        margin: 0 5px;
-    }
-
-    #container {
-        margin-bottom: 0;
-        margin-top: 57px !important;
-    }
-
-    #container.container_view .card {
-        border-radius: 0
-    }
-}
-
 .deck {
     display: inline-block;
     margin-left: 10px;
@@ -8704,25 +8784,6 @@ Dean
     100% {
         opacity: 0;
         max-height: 0;
-    }
-}
-
-
-@media (max-width: 767px) {
-    .thumb_image,
-    .tab-thumbnail {
-        padding-top: 0;
-    }
-
-    .tracking_detail_title {
-        font-size: 18px;
-    }
-}
-
-@media (max-width: 375px) {
-    .tracking_detail_title {
-        padding-top: 0;
-        margin-top: 15px;
     }
 }
 
@@ -9044,7 +9105,7 @@ contentContainer 배너 CSS*/
     padding-bottom: 5px;
     font-size: 50px;
     color: white;
-    font-weight: 500;
+    font-weight: 600;
     font-style: normal;
     display: inline-block;
     z-index: 1;
@@ -9104,67 +9165,27 @@ contentContainer 배너 CSS*/
     display: none;
 }
 
-@media (max-width: 850px) {
-
-    .main-banner-content {
-        font-size: 16px !important;
-    }
-
-    .content-main-container {
-        padding-left: 12px;
-        padding-right: 12px;
-        padding-bottom: 0;
-    }
-
-    footer .footer-nav-divider.footer-nav-divider-ug:after {
-        opacity: 0;
-        margin: 0;
-    }
-
-    .footer-logo {
-        display: none !important;
-    }
-
-    .footer-legal,
-    .footer-copyright,
-    .footer-sns {
-        justify-content: center;
-        max-width: 100%;
-        flex: 0 0 100%;
-    }
-
-    .footer-copyright {
-        margin-top: 25px;
-    }
-
-    .footer-sns {
-        margin-top: 15px;
-    }
-
-    .footer-copyright {
-        display: block;
-        text-align: center;
-    }
-
-    .footer-br {
-        display: block;
-    }
+.footer-sns-wrapper {
+    position: absolute;
+    right: 15px;
 }
 
+
 @media (max-width: 480px) {
+
     .content-main-container {
         margin-top: 25px;
     }
 
     .main-banner-subject {
-        font-size: 23px !important;
+        font-size: 30px !important;
     }
 
     .main-upload-btn,
     .main-learn-more-btn {
-        width: 200px;
-        padding-top: 7px;
-        height: 40px;
+        width: 200px !important;
+        padding-top: 7px !important;
+        height: 40px !important;
     }
 
     .main-banner-content {
@@ -9548,6 +9569,36 @@ dean
     height: 20px !important;
 }
 
+
+/*2019-07-12
+dean
+로딩 페이지 CSS*/
+.loading-wrapper {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    z-index: 4;
+    align-items: center;
+}
+
+.loading-wrapper > img {
+    position: absolute;
+    z-index: 1;
+}
+
+.loading-wrapper > span > div {
+    width: 180px !important;
+    height: 180px !important;
+}
+
+
 /*체크박스 CSS
 이용법 :
 <input type="checkbox" v-model="checkbox" id="termsCheckbox"> //실제 체크박스
@@ -9707,7 +9758,7 @@ Main Category CSS
 
 .main-category-name {
     font-size: 22px;
-    font-weight: 500;
+    font-weight: 600;
     color: #4d4d4d;
     font-family: 'Poppins', 'Noto Sans KR', sans-serif;
     text-transform: uppercase;
@@ -9761,7 +9812,7 @@ Main Category CSS
     width: auto;
     position: relative;
     height: 168px;
-    border-radius: 4px 4px 0 0;
+    border-radius: 3px 3px 0 0;
     overflow: hidden;
     border-bottom: 1px solid #cccccc;
 }
@@ -9785,7 +9836,7 @@ Main Category CSS
     font-weight: bold;
     line-height: 1.38;
     letter-spacing: -0.2px;
-    color: #4d4d4d;
+    color: #4d4d4d !important;
 }
 
 .main-category-card-title > a:hover {
@@ -10209,6 +10260,24 @@ Ads CSS
     width: 100%;
 }
 
+.language-btn {
+    font-family: poppins, 'Noto Sans KR', sans-serif;
+    color: #666666;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
+    cursor: pointer;
+    -webkit-transition-duration: .2s;
+    -o-transition-duration: .2s;
+    transition-duration: .2s;
+}
+
+.language-btn:hover {
+    color: #3681fe;
+}
+
 
 /*
 legal CSS
@@ -10296,7 +10365,7 @@ About us page CSS
 
 
 .about-main-title {
-    font-family: "Poppins", 'Noto Sans KR', sans-serif;
+    font-family: poppins, 'Noto Sans KR', sans-serif;
     font-size: 50px;
     font-weight: 600;
     line-height: 1.24;
@@ -10321,7 +10390,7 @@ About us page CSS
 }
 
 .about-sub-title {
-    font-family: "Poppins", 'Noto Sans KR', sans-serif;
+    font-family: poppins, 'Noto Sans KR', sans-serif;
     font-size: 36px;
     font-weight: 600;
     color: #3681fe;
@@ -10387,6 +10456,11 @@ About us page CSS
 
 .about-text-align {
     text-align: left;
+}
+
+.about-yt-wrapper {
+    text-align: right;
+    padding-right: 0 !important;
 }
 
 @media all and (max-width: 767px) {
@@ -10530,14 +10604,15 @@ Dropdown CSS
     align-items: center;
 }
 
-.header-select-custom {
-    border: none;
-    color: #4d4d4d;
-    background: none;
+.header-category {
     height: 42px;
     font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #666666;
 }
 
 .select-custom {
@@ -10552,8 +10627,7 @@ Dropdown CSS
     cursor: pointer;
 }
 
-.select-custom select,
-.header-select-custom select {
+.select-custom select {
     border: none;
     box-shadow: none;
     background: transparent;
@@ -10561,7 +10635,16 @@ Dropdown CSS
     -webkit-appearance: none;
 }
 
-.select-custom select:focus,
-.header-select-custom select:focus {
+.select-custom select:focus{
     outline: none;
 }
+
+
+/*Copy modal
+dean
+2019-07-12*/
+.share-modal-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+

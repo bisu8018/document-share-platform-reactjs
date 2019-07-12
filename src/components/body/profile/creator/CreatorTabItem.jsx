@@ -6,7 +6,7 @@ import CreatorClaimContainer from "../../../../container/body/profile/creator/Cr
 import { FadingCircle } from "better-react-spinkit";
 import Tooltip from "@material-ui/core/Tooltip";
 import LinesEllipsis from "react-lines-ellipsis";
-import CopyModal from "../../../modal/CopyModal";
+import CopyModal from "../../../common/modal/CopyModal";
 import PayoutCard from "../../../common/card/PayoutCard";
 
 class CreatorTabItem extends React.Component {

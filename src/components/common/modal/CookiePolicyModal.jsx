@@ -1,6 +1,6 @@
 import React from "react";
-import Common from "../../config/common";
-import { psString } from "../../config/localization";
+import Common from "../../../config/common";
+import { psString } from "../../../config/localization";
 
 class CookiePolicyModal extends React.PureComponent {
   state = {

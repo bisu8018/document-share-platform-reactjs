@@ -186,7 +186,7 @@ class CustomChart extends React.Component {
           options={_options}
           columns={_columns}
           width="100%"
-          loader={<ThreeBounce name="ball-pulse-sync"/>}
+          loader={<ThreeBounce name="ball-pulse-sync" color="#ababab"/>}
           legendToggle
         />
       </div>

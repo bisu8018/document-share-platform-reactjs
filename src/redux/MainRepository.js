@@ -225,11 +225,10 @@ export default {
         });
       });
     },
-    handleAuthentication({ location }, callback) {
+    handleAuthentication({ location }, callback, error) {
       if (/access_token|id_token|error/.test(location.hash)) {
         instance.InitData.authData.parseHash((err, authResult) => {
           if (authResult && authResult.accessToken && authResult.idToken) {
-            //console.log("handleAuthentication", authResult, err);
             this.setMyInfo(authResult, user => {
               this.setSession(authResult, user);
               this.scheduleRenewal();
@@ -238,6 +237,7 @@ export default {
             });
           } else if (err) {
             this.clearSession();
+            error(err);
           }
         });
       }
@@ -451,7 +451,7 @@ export default {
     }
   },
   Document: {
-    async registerDocument(args, progress, callback) {
+    async registerDocument(args, progress, callback, error) {
       const authResult = await instance.Account.renewSessionPromise();
       let fileInfo = args.fileInfo;
       let user = args.userInfo;
@@ -505,14 +505,19 @@ export default {
             callback: progress
           }).then(() => {
             callback(res);
+          }).catch(err => {
+            console.error("Document Registration Error", err);
+            error(err);
           });
 
         } else if (res && !res.success) {
           let error = JSON.stringify(res);
           console.error("Document Registration Error", error);
+          error(error);
         }
       }, (err) => {
         console.error("Document Registration Error", err);
+        error(err);
       });
     },
     documentUpload(params) {

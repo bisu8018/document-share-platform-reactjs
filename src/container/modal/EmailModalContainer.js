@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import EmailModal from "../../components/modal/EmailModal";
+import EmailModal from "../../components/common/modal/EmailModal";
 import { setMyInfo } from "../../redux/reducer/main";
 import { setTempEmail } from "../../redux/reducer/emailModal";
 

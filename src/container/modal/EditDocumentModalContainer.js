@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import EditDocumentModal from "../../components/modal/EditDocumentModal";
+import EditDocumentModal from "../../components/common/modal/EditDocumentModal";
 
 export default connect(
   state => ({

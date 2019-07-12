@@ -16,7 +16,7 @@ class AutoSuggestInput extends React.Component {
 
   // 자동 완성 리스트 설정
   getSuggestions = value => {
-    const { type, getTagList, getCurrentTagList, getNameList } = this.props;
+    const { type, getTagList, getNameList } = this.props;
 
     const escapedValue = Common.escapeRegexCharacters(value.trim());
 
@@ -27,9 +27,6 @@ class AutoSuggestInput extends React.Component {
     switch (type) {
       case "tag":
         return getTagList.filter(data => regex.test(data._id));
-
-      case "currentTag":
-        return getCurrentTagList.filter(data => regex.test(data._id));
 
       case "name":
         let tempArr =
@@ -59,7 +56,6 @@ class AutoSuggestInput extends React.Component {
 
     switch (type) {
       case "tag":
-      case "currentTag":
         return suggestion._id;
 
       case "name":
@@ -77,7 +73,6 @@ class AutoSuggestInput extends React.Component {
 
     switch (type) {
       case "tag":
-      case "currentTag":
         return suggestion._id;
 
       case "name":
@@ -133,7 +128,6 @@ class AutoSuggestInput extends React.Component {
 
     switch (type) {
       case "tag":
-      case "currentTag":
         _placeholder = psString("auto-placeholder-1");
         break;
 

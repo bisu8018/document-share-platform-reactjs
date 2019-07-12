@@ -505,7 +505,7 @@ class AudienceTrackingList extends React.Component {
                 ))}
 
 
-                {loading && <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}
+                {loading && <div className="spinner mb-4"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>}
                 {!loading && rst.length === 0 && <div className="no-data">{psString("tracking-list-no-data")}</div>}
 
               </div>

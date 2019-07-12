@@ -1,6 +1,6 @@
 import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { ThreeBounce } from 'better-react-spinkit';
+import { ThreeBounce } from "better-react-spinkit";
 
 import MainRepository from "../../../../redux/MainRepository";
 import NoDataIcon from "../../../common/NoDataIcon";
@@ -15,6 +15,7 @@ class CuratorUploadTab extends React.Component {
     isEndPage: false,
     moreDataFlag: false,
     totalViewCountInfo: null,
+    loading: false
   };
 
 
@@ -48,25 +49,34 @@ class CuratorUploadTab extends React.Component {
     };
     else _params = { pageNo: pageNo, email: userInfo.email, pageSize: 10000 };
 
+    // 로딩 on
+    this.setState({ loading: true });
+
     let param = this.getParam();
-    if(param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()){
+    if (param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) {
       MainRepository.Account.getDocuments(_params, (res) => {
-        this.handleData(res)
+        this.handleData(res);
+
+        // 로딩 off
+        this.setState({ loading: false });
       }, err => {
         console.error(err);
         setTimeout(() => {
           this.fetchDocuments(params);
-        },8000);
-      })
-    }else {
+        }, 8000);
+      });
+    } else {
       MainRepository.Document.getDocumentList(_params, (res) => {
-        this.handleData(res)
+        this.handleData(res);
+
+        // 로딩 off
+        this.setState({ loading: false });
       }, err => {
         console.error("Curator upload document GET ERROR", err);
         setTimeout(() => {
           this.fetchDocuments(params);
-        },8000);
-      })
+        }, 8000);
+      });
     }
   };
 
@@ -111,7 +121,7 @@ class CuratorUploadTab extends React.Component {
 
 
   render() {
-    const { resultList, isEndPage,  totalViewCountInfo } = this.state;
+    const { resultList, isEndPage, totalViewCountInfo, loading } = this.state;
     const { userInfo } = this.props;
 
     return (
@@ -120,20 +130,25 @@ class CuratorUploadTab extends React.Component {
         <div className="document-total-num">
           {psString("profile-total-documents")} <span className="font-weight-bold">{resultList.length}</span>
         </div>
+
+
         {resultList.length > 0 ?
           <InfiniteScroll
             className="overflow-hidden"
             dataLength={resultList.length}
             next={this.fetchMoreData}
             hasMore={!isEndPage}
-            loader={<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}>
+            loader={<div className="spinner"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>}>
             {resultList.length > 0 && resultList.map((result, idx) => (
-              <CreatorTabItemContainer document={result} userInfo={userInfo} key={idx} totalViewCountInfo={totalViewCountInfo}/>
-            ))}
-          </InfiniteScroll>
+              <CreatorTabItemContainer document={result} userInfo={userInfo} key={idx}
+                                       totalViewCountInfo={totalViewCountInfo}/>
+            ))}</InfiniteScroll>
           :
-          <NoDataIcon className="no-data">No data</NoDataIcon>
+          !loading && <NoDataIcon className="no-data">No data</NoDataIcon>
         }
+
+
+        {loading && <div className="spinner mb-4"><ThreeBounce name="ball-pulse-sync" color="#ababab"/></div>}
       </div>
 
     );

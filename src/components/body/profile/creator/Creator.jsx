@@ -81,7 +81,7 @@ class Creator extends React.Component {
             userInfo={userInfo}/>
           }
 
-          {!userInfo && !errMessage && <div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}
+          {!userInfo && !errMessage && <div className="spinner"><ThreeBounce name="ball-pulse-sync" color="#ababab"/></div>}
 
           {errMessage && <NotFoundPage errMessage={errMessage}/>}
 

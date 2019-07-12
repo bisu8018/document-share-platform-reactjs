@@ -99,7 +99,7 @@ class ContentView extends React.Component {
     const { auth, match, ...rest } = this.props;
     const { documentData, documentText, totalViewCountInfo, featuredList, author, errMessage } = this.state;
     if (!documentData && !errMessage) {
-      return (<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>);
+      return (<div className="spinner"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>);
     }
     if (!documentData && errMessage) {
       return (errMessage && <NotFoundPage errMessage={errMessage}/>);
@@ -110,38 +110,7 @@ class ContentView extends React.Component {
 
       <div data-parallax="true" className="container_view row col-re">
         <Helmet>
-          <meta charSet="utf-8"/>
           <title>{documentData.title}</title>
-
-          <meta property="og:locale" content="en_US"/>
-          <meta property="og:type" content="website"/>
-          <meta property="og:title" content={documentData.title}/>
-          <meta property="og:url" content={window.location.href}/>
-
-          <meta name="description" content={documentData.desc}/>
-          <meta name="thumbnail" content={this.getImgUrl()}/>
-          <link rel="canonical"
-                href={window.location.href}/>
-
-          <meta content="2237550809844881" className="fb_og_meta" property="fb:app_id" name="fb_app_id"/>
-          <meta content="decompany:document" className="fb_og_meta" property="og:type" name="og_type"/>
-          <meta content={window.location.href} className="fb_og_meta" property="og:url" name="og_url"/>
-          <meta content={this.getImgUrl()} className="fb_og_meta" property="og:image" name="og_image"/>
-          <meta content={documentData.title} className="fb_og_meta" property="og:title" name="og_title"/>
-          <meta content={documentData.desc} className="fb_og_meta" property="og:description" name="og_description"/>
-          <meta content={Common.timestampToDateTime(documentData.created)} className="fb_og_meta"
-                property="decompany:created_time" name="document_created_time"/>
-          <meta content={documentData.username || documentData.accountId} className="fb_og_meta" property="decompany:author"
-                name="document_created_time_author"/>
-          <meta content={documentData.viewCount} className="fb_og_meta" property="decompany:view_count"
-                name="document_view_count"/>
-          <meta content={documentData.totalPages} className="fb_og_meta" property="decompany:total_pages"
-                name="document_total_pages"/>
-          <meta content={documentData.latestPageView} className="fb_og_meta" property="decompany:latest_page_view"
-                name="document_latest_page_view"/>
-          <meta content={documentData.category} className="fb_og_meta" property="decompany:category"
-                name="document_category"/>
-          <meta content={documentData.tags} className="fb_og_meta" property="decompany:tags" name="document_tags"/>
         </Helmet>
 
         <div className="col-md-12 col-lg-8 view_left">

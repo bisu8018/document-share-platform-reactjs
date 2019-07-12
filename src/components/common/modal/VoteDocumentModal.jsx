@@ -8,12 +8,12 @@ import DialogActions from "@material-ui/core/DialogActions/index";
 import Tooltip from "@material-ui/core/Tooltip/index";
 import Slide from "@material-ui/core/Slide/index";
 
-import MainRepository from "../../redux/MainRepository";
-import Common from "../../config/common";
-import CuratorUserActiveVoteContainer from "../../container/common/UserActiveVoteContainer";
-import CuratorActiveVoteContainer from "../../container/common/ActiveVoteContainer";
+import MainRepository from "../../../redux/MainRepository";
+import Common from "../../../config/common";
+import CuratorUserActiveVoteContainer from "../../../container/common/UserActiveVoteContainer";
+import CuratorActiveVoteContainer from "../../../container/common/ActiveVoteContainer";
 import ApproveModal from "./ApproveModal";
-import { psString } from "../../config/localization";
+import { psString } from "../../../config/localization";
 
 const style = {
   modalCloseButton: {
@@ -280,7 +280,7 @@ class VoteDocumentModal extends React.Component {
     if (!isLogin) {
       return (
         <Tooltip title={psString("vote-modal-tooltip-2")} placement="bottom">
-          <div className="viewer-btn" onClick={this.handleLogin.bind(this)}>
+          <div className="viewer-btn mb-1" onClick={this.handleLogin.bind(this)}>
             <i className="material-icons">how_to_vote</i> {psString("vote-modal-btn")}
           </div>
         </Tooltip>
@@ -291,7 +291,7 @@ class VoteDocumentModal extends React.Component {
       <span>
         {(!getDrizzle || !getDrizzle.isAuthenticated()) &&
         <Tooltip title={psString("vote-modal-tooltip-3")} placement="bottom">
-          <div className="viewer-btn">
+          <div className="viewer-btn mb-1">
             <i className="material-icons">how_to_vote</i> {psString("vote-modal-btn")}
           </div>
         </Tooltip>
@@ -299,7 +299,7 @@ class VoteDocumentModal extends React.Component {
 
         {getDrizzle && getIsDocumentExist &&
         <Tooltip title={psString("vote-modal-tooltip-1")} placement="bottom">
-          <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
+          <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
             <i className="material-icons">how_to_vote</i> {psString("vote-modal-btn")}
           </div>
         </Tooltip>

@@ -41,6 +41,11 @@ class Alert extends React.PureComponent {
         msg = psString("alert-2003");   // 로그인 필요
         break;
 
+      case 2004 :
+        status = "error";
+        msg = psString("alert-2004");   // 로그인 필요
+        break;
+
       // 이메일 메세지 2031~
       case 2021 :
         status = "success";
@@ -90,7 +95,7 @@ class Alert extends React.PureComponent {
         break;
 
 
-      //지갑 메세지 2050~
+      //지갑 메세지 2051~
       case 2051 :
         status = "warning";
         msg = psString("alert-2051");   // 잘못된 메타마스크
@@ -101,6 +106,13 @@ class Alert extends React.PureComponent {
         status = "warning";
         msg = psString("alert-2052");  // 잘못된 이더리움 네트워크 접속
         sub = psString("alert-2052-sub");
+        break;
+
+
+      //업로드 메세지 2071~
+      case 2071 :
+        status = "error";
+        msg = psString("alert-2071");   // 업로드 싪패
         break;
 
 

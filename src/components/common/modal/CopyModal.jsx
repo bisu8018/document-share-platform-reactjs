@@ -5,7 +5,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import Tooltip from "@material-ui/core/Tooltip";
-import { psString } from "../../config/localization";
+import { psString } from "../../../config/localization";
 
 
 function Transition(props) {
@@ -21,7 +21,8 @@ class CopyModal extends React.Component {
     this.state = {
       classicModal: false,
       url: "",
-      copyText: psString("common-modal-copy")
+      copyText: psString("common-modal-copy"),
+      copyEmbedText: psString("common-modal-copy")
     };
   }
 
@@ -31,18 +32,33 @@ class CopyModal extends React.Component {
     this.setState({
       classicModal: false,
       url: "",
-      copyText: psString("common-modal-copy")
+      embed: "",
+      copyText: psString("common-modal-copy"),
+      copyEmbedText: psString("common-modal-copy")
     });
+  };
+
+
+  getEmbed = (url) => {
+    return "<iframe src=\"" +
+      url
+      + "\" title=\"embed\" width=\"640\" height=\"360\" frameBorder=\"0\" marginWidth=\"0\" marginHeight=\"0\" scrolling=\"no\" allowFullScreen/>";
+  };
+
+  setUrl = () => {
+    const { documentData, type } = this.props;
+    let url = documentData.shortUrl || APP_PROPERTIES.domain().embed + (type === "onlyIcon" ? documentData.seoTitle : ""),
+      embed = this.getEmbed(url);
+    this.setState({ url: url, embed: embed });
   };
 
 
   // 모달 open 관리
   handleClickOpen = (modal) => {
-    const { documentData, type } = this.props;
     const x = [];
     x[modal] = true;
     this.setState(x);
-    this.setState({ url: (documentData.shortUrl || APP_PROPERTIES.domain().embed + (type === "onlyIcon" ? documentData.seoTitle : "")) });
+    this.setUrl();
   };
 
 
@@ -60,24 +76,34 @@ class CopyModal extends React.Component {
     let copyUrl = document.getElementById("copyInput");
     copyUrl.select();
     document.execCommand("copy");
-    this.setState({ copyText: psString("common-modal-done")});
+    this.setState({ copyText: psString("common-modal-done") });
+  };
+
+
+  // 임베드 복사 관리
+  handleEmbedCopy = () => {
+    let copyUrl = document.getElementById("copyEmbedInput");
+    copyUrl.select();
+    document.execCommand("copy");
+    this.setState({ copyEmbedText: psString("common-modal-done") });
   };
 
 
   render() {
-    const { classicModal, url, copyText } = this.state;
+    const { classicModal, url, copyText, embed } = this.state;
     const { type } = this.props;
 
     return (
       <span>
          <Tooltip title={psString("tooltip-copy")} placement="bottom">
            {type !== "onlyIcon" ?
-             <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
-               <i className="material-icons">share</i> {psString("copy-modal-btn")}
+             <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
+               <i className="material-icons">share</i> {psString("share-modal-btn")}
              </div>
              :
              <div className="share-btn-wrapper">
-             <i className="material-icons mr-3 share-btn" onClick={() => this.handleClickOpen("classicModal")}>share</i>
+               <i className="material-icons mr-3 share-btn"
+                  onClick={() => this.handleClickOpen("classicModal")}>share</i>
              </div>
            }
               </Tooltip>
@@ -95,12 +121,23 @@ class CopyModal extends React.Component {
                 id="classic-modal-slide-title"
                 disableTypography>
                 <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                <h3>{psString("copy-modal-title")}</h3>
+                <h3>{psString("share-modal-title")}</h3>
               </DialogTitle>
 
 
               <DialogContent id="classic-modal-slide-description">
-                <div className="position-relative mb-2 d-flex">
+                <div className="share-modal-title">Embed {"</>"}</div>
+                 <div className="position-relative mb-5 d-flex">
+                  <textarea value={embed}
+                            id="copyEmbedInput"
+                            readOnly
+                            className="custom-textarea"/>
+                  <div className="custom-input-copy-text ml-2 pt-0"
+                       onClick={() => this.handleEmbedCopy()}>{copyText}</div>
+                </div>
+
+                <div className="share-modal-title">{psString("share-modal-copy")}</div>
+                <div className="position-relative mb-3 d-flex">
                   <input type="text" value={url}
                          id="copyInput"
                          readOnly

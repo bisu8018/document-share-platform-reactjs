@@ -30,25 +30,39 @@ class ContentMain extends Component {
       console.error(err);
       this.setTimeout = setTimeout(() => {
         this.getDocuments(path);
-      },8000);
+      }, 8000);
     });
+  };
+
+
+  // 카테고리 영어 return
+  getEngPath = (path) => {
+    let _path = path;
+    if (path === "최신문서" || path === "최신") _path = "latest";
+    else if (path === "추천문서" || path === "추천") _path = "featured";
+    else if (path === "인기문서" || path === "인기") _path = "popular";
+
+    return _path;
   };
 
 
   // 사이트 path 체크
   getList = (path) => {
     const { latestDocuments, featuredDocuments, popularDocuments } = this.state;
-    let _path = path;
-    if(path === "최신") _path = "latest";
-    else if(path === "추천") _path = "featured";
-    else if(path === "인기") _path = "popular";
+    let _path = this.getEngPath(path);
     return _path === "latest" ? latestDocuments : _path === "featured" ? featuredDocuments : popularDocuments;
   };
 
 
   // 로그인
   handleLogin = () => {
-    MainRepository.Account.login();
+    if(!MainRepository.Account.isAuthenticated()) MainRepository.Account.login();
+  };
+
+  // 검색 버튼 트리거
+  handleTagClick = () => {
+    document.getElementById("headerSearchBtnWrapper").click();
+
   };
 
 
@@ -60,11 +74,7 @@ class ContentMain extends Component {
 
   // see more 트리거 버튼
   handelTrigger = (arr) => {
-    let _arr = arr;
-    if(arr === "최신") _arr = "latest";
-    else if(arr === "추천") _arr = "featured";
-    else if(arr === "인기") _arr = "popular";
-
+    let _arr = this.getEngPath(arr);
     document.getElementById(_arr + "NavLink").click();
   };
 
@@ -72,7 +82,7 @@ class ContentMain extends Component {
   // 스크롤 이벤트 리스너
   handleResize = (e) => {
     let countCards = (window.innerWidth > 1293 || window.innerWidth < 993) ? 4 : 6;
-    this.setState({latestListMany : countCards});
+    this.setState({ latestListMany: countCards });
   };
 
 
@@ -123,7 +133,9 @@ class ContentMain extends Component {
 
     // path 카테고리
     const category = [
-      psString("main-category-1"), psString("main-category-2"), psString("main-category-3")
+      psString("main-category-2"),
+      psString("main-category-1"),
+      psString("main-category-3")
     ];
 
     return (
@@ -149,14 +161,21 @@ class ContentMain extends Component {
                         <div key={idx}>{line}</div>)
                       )}
                     </div>
-                    {idx === 3 ?
+                    {idx !== 2 ?
+                      (idx === 1 ?
+                          <div className="main-upload-btn mr-2 ml-2 mb-3"
+                               onClick={() => this.handleLogin()}>{buttonText[idx]}</div>
+                          :
+                          <div className="main-upload-btn mr-2 ml-2 mb-3"
+                               onClick={() => this.handleTagClick()}>{buttonText[idx]}</div>
+                      )
+                      :
                       <div className="main-upload-btn mr-2 ml-2 mb-3"
-                           onClick={() => this.handleUploadBtn()}>{buttonText[3]}</div> :
-                      <div className="main-upload-btn mr-2 ml-2 mb-3"
-                           onClick={() => this.handleLogin()}>{buttonText[idx]}</div>
+                           onClick={() => this.handleUploadBtn()}>{buttonText[idx]}</div>
                     }
                     <Link to="/faq">
-                      <div className="main-learn-more-btn ml-2 mr-2" onClick={() => Common.scrollTop()}>{psString("main-banner-btn-4")}</div>
+                      <div className="main-learn-more-btn ml-2 mr-2"
+                           onClick={() => Common.scrollTop()}>{psString("main-banner-btn-4")}</div>
                     </Link>
                   </div>
                 </div>
@@ -179,15 +198,17 @@ class ContentMain extends Component {
 
                 <div className="mb-3">
                   <span className="main-category-name">{arr}</span>
-                  <span className="main-category-see-all" onClick={() => this.handelTrigger(arr)}>{psString("main-see-all")}
-                      <i className="material-icons">keyboard_arrow_right</i></span>
+                  <span className="main-category-see-all"
+                        onClick={() => this.handelTrigger(arr)}>{psString("main-see-all")}
+                    <i className="material-icons">keyboard_arrow_right</i></span>
 
                 </div>
 
                 <div className="row main-category-card-wrapper">
                   {this.getList(arr) && this.getList(arr).resultList.map((res, idx) => {
                     return (idx < latestListMany &&
-                      <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res} countCards={latestListMany}
+                      <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res}
+                                             countCards={latestListMany}
                                              totalViewCountInfo={this.getList(arr).totalViewCountInfo}/>
                     );
                   })}

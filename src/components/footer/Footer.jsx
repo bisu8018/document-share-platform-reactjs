@@ -40,7 +40,7 @@ class Footer extends React.Component {
             </Link>
           </div>
           <div className="footer-sns col-sm-3 row">
-            <div className="m-auto">
+            <div className="footer-sns-wrapper">
               <a target="_blank" href={"https://www.facebook.com/polarishare/"} rel="noopener noreferrer">
                 <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-facebook.svg")} alt="Facebook Page"/>
               </a>

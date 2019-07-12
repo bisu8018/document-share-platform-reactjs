@@ -1,7 +1,7 @@
 import React from "react";
 import MainRepository from "../../../../redux/MainRepository";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { ThreeBounce } from 'better-react-spinkit';
+import { ThreeBounce } from "better-react-spinkit";
 import CuratorTabItemContainer from "../../../../container/body/profile/curator/CuratorTabItemContainer";
 import NoDataIcon from "../../../common/NoDataIcon";
 import { psString } from "../../../../config/localization";
@@ -14,6 +14,7 @@ class CuratorVoteTab extends React.Component {
     isEndPage: false,
     moreDataFlag: false,
     totalViewCountInfo: null,
+    loading: false
   };
 
   fetchMoreData = () => {
@@ -34,10 +35,13 @@ class CuratorVoteTab extends React.Component {
     if (userInfo.ethAccount && userInfo.ethAccount.length > 0) {
       _params = {
         pageNo: pageNo,
-        ethAccount: userInfo.ethAccount,
+        ethAccount: userInfo.ethAccount
 
       };
     } else return false;
+
+    // 로딩 on
+    this.setState({ loading: true });
 
     MainRepository.Curator.getCuratorDocuments(_params, res => {
       if (res.resultList.length > 0) {
@@ -66,11 +70,13 @@ class CuratorVoteTab extends React.Component {
           this.setState({ totalViewCountInfo: res.totalViewCountInfo });
         }
       }
+      // 로딩 off
+      this.setState({ loading: false });
     }, (err) => {
-      console.error("Error CuratorDocumentList", err)
+      console.error("Error CuratorDocumentList", err);
       setTimeout(() => {
         this.fetchDocuments(params);
-      },8000);
+      }, 8000);
     });
   };
 
@@ -79,7 +85,7 @@ class CuratorVoteTab extends React.Component {
   }
 
   render() {
-    const { resultList, isEndPage, totalViewCountInfo } = this.state;
+    const { resultList, isEndPage, totalViewCountInfo, loading } = this.state;
     const { userInfo } = this.props;
 
     return (
@@ -87,22 +93,27 @@ class CuratorVoteTab extends React.Component {
         <div className="document-total-num">
           {psString("profile-total-documents")} <span className="font-weight-bold">{resultList.length}</span>
         </div>
+
+
         {resultList.length > 0 ?
           <InfiniteScroll
             className="overflow-hidden"
             dataLength={resultList.length}
             next={this.fetchMoreData}
             hasMore={!isEndPage}
-            loader={<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}>
+            loader={<div className="spinner"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>}>
 
 
             {resultList.length > 0 && resultList.map((result, idx) => (
-              <CuratorTabItemContainer document={result} key={idx} userInfo={userInfo} totalViewCountInfo={totalViewCountInfo}/>
-            ))}
-          </InfiniteScroll>
+              <CuratorTabItemContainer document={result} key={idx} userInfo={userInfo}
+                                       totalViewCountInfo={totalViewCountInfo}/>
+            ))} </InfiniteScroll>
           :
-          <NoDataIcon className="no-data">No data</NoDataIcon>
+          !loading && <NoDataIcon className="no-data">No data</NoDataIcon>
         }
+
+
+        {loading && <div className="spinner mb-4"><ThreeBounce name="ball-pulse-sync" color="#ababab"/></div>}
       </div>
     );
   }

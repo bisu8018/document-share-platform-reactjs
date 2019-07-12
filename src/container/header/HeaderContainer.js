@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import Header from "../../components/header/Header";
-import { setCurrentTagList, setIsMobile } from "../../redux/reducer/main";
+import { setIsMobile } from "../../redux/reducer/main";
 import { setDropdownShow } from "../../redux/reducer/header";
 
 export default connect(
@@ -11,7 +11,6 @@ export default connect(
     getDropdownShow: state.header.dropdownShow
   }),
   dispatch => ({
-    setCurrentTagList: (currentTagList: []) => dispatch(setCurrentTagList(currentTagList)),
     setDropdownShow: (dropdownShow: boolean) => dispatch(setDropdownShow(dropdownShow)),
     setIsMobile: (isMobile: boolean) => dispatch(setIsMobile(isMobile)),
   })

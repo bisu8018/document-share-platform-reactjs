@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import { setCurrentTagList } from "../../redux/reducer/main";
 import SearchBar from "../../components/header/SearchBar";
 
 export default connect(
@@ -8,6 +7,5 @@ export default connect(
     getIsMobile: state.main.isMobile,
   }),
   dispatch => ({
-    setCurrentTagList: (currentTagList: []) => dispatch(setCurrentTagList(currentTagList)),
   })
 )(SearchBar);

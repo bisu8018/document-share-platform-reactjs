@@ -14,7 +14,6 @@ export const APP_PROPERTIES = {
   local:{
     domain:{
       mainHost: 'http://localhost:8000',
-      upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
       image: 'https://thumb.share.decompany.io',
       api: "https://api.share.decompany.io/rest",
       email: "https://api.share.decompany.io/ve",
@@ -25,7 +24,6 @@ export const APP_PROPERTIES = {
   production:{
     domain:{
       mainHost: 'https://www.polarishare.com',
-      upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
       image: 'https://res.polarishare.com',
       api: "https://api.polarishare.com/rest",
       email: "https://api.polarishare.com/ve",
@@ -36,7 +34,6 @@ export const APP_PROPERTIES = {
   dev:{
     domain:{
       mainHost: 'https://share.decompany.io',
-      upload: 'https://24gvmjxwme.execute-api.us-west-1.amazonaws.com',
       image: 'https://thumb.share.decompany.io',
       api: "https://api.share.decompany.io/rest",
       email: "https://api.share.decompany.io/ve",

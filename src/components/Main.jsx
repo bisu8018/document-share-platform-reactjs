@@ -4,7 +4,7 @@ import history from "apis/history/history";
 
 import RouterList from "../config/routerList";
 import MainRepository from "../redux/MainRepository";
-import CookiePolicyModal from "./modal/CookiePolicyModal";
+import CookiePolicyModal from "./common/modal/CookiePolicyModal";
 import UserInfo from "../redux/model/UserInfo";
 import HeaderContainer from "../container/header/HeaderContainer";
 import Footer from "./footer/Footer";
@@ -13,11 +13,13 @@ import "react-tabs/style/react-tabs.css";
 import "react-tagsinput/react-tagsinput.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import AlertListContainer from "../container/common/alert/AlertListContainer";
-import DollarPolicyModal from "./modal/DollarPolicyModal";
+import DollarPolicyModal from "./common/modal/DollarPolicyModal";
+import LoadingModal from "./common/modal/LoadingModal";
 
 class Main extends Component {
   state = {
-    init: false,
+    initData: false,
+    initDom: false,
     myInfo: new UserInfo()
   };
 
@@ -25,24 +27,34 @@ class Main extends Component {
   //초기화
   init = () => {
     MainRepository.init(() => {
-      this.setTagList();  //태그 리스트 GET
-      this.setMyInfo();   // 내 정보 GET
-      this.setIsMobile();   // 모바일 유무 GET
-      this.setAuthorDailyRewardPool();   // 크리에이터 리워드풀 GET
-      this.setCuratorDailyRewardPool();   // 큐레이터 리워드풀 GET
+      //태그 리스트 GET
+      this.setTagList()
+      // 내 정보 GET
+        .then(this.setMyInfo())
+        // 모바일 유무 GET
+        .then(this.setIsMobile())
+        // 크리에이터 리워드풀 GET
+        .then(this.setAuthorDailyRewardPool())
+        // 큐레이터 리워드풀 GET
+        .then(this.setCuratorDailyRewardPool())
+
+        .then(this.setState({ initData: true }));
     });
   };
 
 
   //태그 리스트 GET
   setTagList = () => {
-    const { setTagList, setCurrentTagList } = this.props;
+    const { setTagList } = this.props;
 
-    MainRepository.Document.getTagList("latest", result => {
-      setTagList(result.resultList);
-      setCurrentTagList(result.resultList);
-    }, err => {
-      console.error(err);
+    return new Promise((resolve, reject) => {
+      MainRepository.Document.getTagList("latest", result => {
+        setTagList(result.resultList);
+        resolve();
+      }, err => {
+        console.error(err);
+        reject(err);
+      });
     });
   };
 
@@ -51,18 +63,22 @@ class Main extends Component {
   setMyInfo = () => {
     const { getMyInfo, setMyInfo } = this.props;
 
-    if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
-      let myInfo = MainRepository.Account.getMyInfo();
+    return new Promise((resolve, reject) => {
+      if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
+        let myInfo = MainRepository.Account.getMyInfo();
 
-      MainRepository.Account.getAccountInfo(myInfo.sub, result => {
-        let res = new UserInfo(result);
-        if (!result.picture) res.picture = localStorage.getItem("user_info").picture;
-        setMyInfo(res);
-        this.setState({ init: true, myInfo: res });
-      }, err => {
-        console.error(err);
-      });
-    }
+        MainRepository.Account.getAccountInfo(myInfo.sub, result => {
+          let res = new UserInfo(result);
+          if (!result.picture) res.picture = localStorage.getItem("user_info").picture;
+          setMyInfo(res);
+          this.setState({ myInfo: res });
+          resolve();
+        }, err => {
+          console.error(err);
+          reject(err);
+        });
+      }
+    });
   };
 
 
@@ -97,6 +113,10 @@ class Main extends Component {
     history.listen(MainRepository.Analytics.sendPageView);
   }
 
+  componentDidMount() {
+    this.setState({initDom : true});
+  }
+
   /*  componentDidCatch(error, errorInfo) {
       // [2019-04-10]   센트리 에러 체킹
       // https://docs.sentry.io/platforms/javascript/react/?_ga=2.47401252.280930552.1554857590-1128220521.1554857590
@@ -113,15 +133,15 @@ class Main extends Component {
 
   render() {
     const { getMyInfo } = this.props;
+    const { initData, initDom } = this.state;
 
-    if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) return <div/>;
+    if (!initData || !initDom || (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0)) return <LoadingModal/>;
 
     return (
 
       <Router history={history}>
         <div id="container-wrapper">
           <HeaderContainer/>
-
 
 
           <div id="container" data-parallax="true">
@@ -147,7 +167,6 @@ class Main extends Component {
           <Footer/>
 
           <AlertListContainer/>
-
         </div>
       </Router>
 

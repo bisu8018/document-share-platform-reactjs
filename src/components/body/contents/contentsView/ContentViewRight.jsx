@@ -8,7 +8,7 @@ class ContentViewRight extends React.Component {
   render() {
     const { documentData, featuredList } = this.props;
     if (!documentData) {
-      return (<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>);
+      return (<div className="spinner"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>);
     } else {
       return (
         <div className="u__right">

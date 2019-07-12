@@ -21,7 +21,8 @@ class CuratorAnalyticsTab extends React.Component {
     week: 1,
     year: null,
     documentId: null,
-    chartFlag: false
+    chartFlag: false,
+    loading: false
   };
 
   // infinity scroll 문서 리스트 추가 로드
@@ -43,6 +44,10 @@ class CuratorAnalyticsTab extends React.Component {
     if (userInfo.username && userInfo.username.length > 0) _params = { pageNo: pageNo, username: userInfo.username };
     else _params = { pageNo: pageNo, email: userInfo.email };
 
+
+    // 로딩 on
+    this.setState({ loading: true });
+
     MainRepository.Document.getDocumentList(_params, (res) => {
       if (res && res.resultList) {
         if (this.state.resultList) {
@@ -63,6 +68,8 @@ class CuratorAnalyticsTab extends React.Component {
           this.setState({ isEndPage: true });
         }
       }
+      // 로딩 off
+      this.setState({ loading: false });
     }, err => {
       console.error("Creator analytics info GET ERROR", err);
       setTimeout(() => {
@@ -183,7 +190,7 @@ class CuratorAnalyticsTab extends React.Component {
   }
 
   render() {
-    const { resultList, spreadItem, isEndPage, analyticsList, year, week, chartFlag } = this.state;
+    const { resultList, spreadItem, isEndPage, analyticsList, year, week, chartFlag, loading } = this.state;
     const { userInfo } = this.props;
     let identification = userInfo.username && userInfo.username.length > 0 ? userInfo.username : userInfo.email;
 
@@ -192,56 +199,60 @@ class CuratorAnalyticsTab extends React.Component {
         <div className="document-total-num mb-2">
           {psString("profile-total-documents")} <span className="font-weight-bold">{resultList.length}</span>
         </div>
-        <InfiniteScroll
-          className="overflow-hidden"
-          dataLength={resultList.length}
-          next={this.fetchMoreData}
-          hasMore={!isEndPage}
-          loader={<div className="spinner"><ThreeBounce name="ball-pulse-sync"/></div>}>
 
 
-          {resultList.length > 0 && resultList.map((result, idx) => (
-            <div className="row analytics-inner" key={idx}>
+        {resultList.length > 0 ?
+          <InfiniteScroll
+            className="overflow-hidden"
+            dataLength={resultList.length}
+            next={this.fetchMoreData}
+            hasMore={!isEndPage}
+            loader={<div className="spinner"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>}>
 
-              <div className="d-none d-sm-inline-block col-sm-2">
-                <Link to={"/" + identification + "/" + result.seoTitle}>
-                  <div className="analytics-thumb-image" onClick={() => Common.scrollTop()}>
-                    <img src={Common.getThumbnail(result.documentId, 320, 1, result.documentName)}
-                         alt={result.title ? result.title : result.documentName} className="img-fluid"/>
-                  </div>
-                </Link>
-              </div>
 
-              <div className="col-10 col-sm-7 mb-4">
-                <Link to={"/" + identification + "/" + result.seoTitle}>
-                  <div className="analytics-info-title" onClick={() => Common.scrollTop()}>  {result.title ? result.title : result.documentName} </div>
-                </Link>
-              </div>
+            {resultList.length > 0 && resultList.map((result, idx) => (
+              <div className="row analytics-inner" key={idx}>
 
-              <div className="d-none d-sm-inline-block col-sm-2 analytics-info-date">
-                {Common.dateTimeAgo(result.created)}
-              </div>
-
-              <div className="col-2 col-sm-1 analytics-btn-div"
-                   onClick={this.handleClick.bind(this)}
-                   title="See analytics of this document"
-                   data-key={idx}
-                   data-id={result.documentId}>
-                <i><img src={require("assets/image/icon/i_faq_reverse.png")} alt="dropdown icon"/></i>
-              </div>
-
-              <div className="col-12 ">
-                {idx === spreadItem &&
-                <div className="chart-date-btn ml-3 ml-sm-4" onClick={this.handleWeekBtnClick.bind(this)}>
-                  <div data-value="1w" className={week === 1 ? "clicked" : ""}>1w</div>
-                  <div data-value="1m" className={week === 4 ? "clicked" : ""}>1m</div>
-                  <div data-value="3m" className={week === 12 ? "clicked" : ""}>3m</div>
-                  <div data-value="6m" className={week === 24 ? "clicked" : ""}>6m</div>
-                  <div data-value="1y" className={year === 1 ? "clicked" : ""}>1y</div>
+                <div className="d-none d-sm-inline-block col-sm-2">
+                  <Link to={"/" + identification + "/" + result.seoTitle}>
+                    <div className="analytics-thumb-image" onClick={() => Common.scrollTop()}>
+                      <img src={Common.getThumbnail(result.documentId, 320, 1, result.documentName)}
+                           alt={result.title ? result.title : result.documentName} className="img-fluid"/>
+                    </div>
+                  </Link>
                 </div>
-                }
-                {idx === spreadItem && analyticsList && analyticsList.resultList.length > 0 &&
-                <span>
+
+                <div className="col-10 col-sm-7 mb-4">
+                  <Link to={"/" + identification + "/" + result.seoTitle}>
+                    <div className="analytics-info-title"
+                         onClick={() => Common.scrollTop()}>  {result.title ? result.title : result.documentName} </div>
+                  </Link>
+                </div>
+
+                <div className="d-none d-sm-inline-block col-sm-2 analytics-info-date">
+                  {Common.dateTimeAgo(result.created)}
+                </div>
+
+                <div className="col-2 col-sm-1 analytics-btn-div"
+                     onClick={this.handleClick.bind(this)}
+                     title="See analytics of this document"
+                     data-key={idx}
+                     data-id={result.documentId}>
+                  <i><img src={require("assets/image/icon/i_faq_reverse.png")} alt="dropdown icon"/></i>
+                </div>
+
+                <div className="col-12 ">
+                  {idx === spreadItem &&
+                  <div className="chart-date-btn ml-3 ml-sm-4" onClick={this.handleWeekBtnClick.bind(this)}>
+                    <div data-value="1w" className={week === 1 ? "clicked" : ""}>1w</div>
+                    <div data-value="1m" className={week === 4 ? "clicked" : ""}>1m</div>
+                    <div data-value="3m" className={week === 12 ? "clicked" : ""}>3m</div>
+                    <div data-value="6m" className={week === 24 ? "clicked" : ""}>6m</div>
+                    <div data-value="1y" className={year === 1 ? "clicked" : ""}>1y</div>
+                  </div>
+                  }
+                  {idx === spreadItem && analyticsList && analyticsList.resultList.length > 0 &&
+                  <span>
                     <Tooltip title="Export tracking data as Excel file." placement="bottom">
                       <div className="viewer-btn float-right"
                            onClick={() => this.handleExport(result.seoTitle)}>
@@ -249,18 +260,23 @@ class CuratorAnalyticsTab extends React.Component {
                         Export
                       </div>
                     </Tooltip>
-                  {chartFlag &&
-                  <CustomChart chartData={analyticsList} week={week} year={year} subject="analytics"/>
-                  }
+                    {chartFlag &&
+                    <CustomChart chartData={analyticsList} week={week} year={year} subject="analytics"/>
+                    }
                 </span>
-                }
-                {idx === spreadItem && analyticsList && analyticsList.resultList.length === 0 &&
-                <NoDataIcon/>
-                }
+                  }
+                  {idx === spreadItem && analyticsList && analyticsList.resultList.length === 0 &&
+                  <NoDataIcon/>
+                  }
+                </div>
               </div>
-            </div>
-          ))}
-        </InfiniteScroll>
+            ))} </InfiniteScroll>
+          :
+          !loading && <NoDataIcon className="no-data">No data</NoDataIcon>
+        }
+
+
+        {loading && <div className="spinner mb-4"><ThreeBounce name="ball-pulse-sync" color="#ababab"/></div>}
       </div>
 
     );

@@ -1,7 +1,7 @@
 import React from "react";
-import Common from "../../config/common";
+import Common from "../../../config/common";
 import DollarLearnMoreModal from "./DollarLearnMoreModal";
-import { psString } from "../../config/localization";
+import { psString } from "../../../config/localization";
 
 class DollarPolicyModal extends React.PureComponent {
   state = {

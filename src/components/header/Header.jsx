@@ -7,7 +7,7 @@ import MenuContainer from "../../container/header/MenuContainer";
 import ProfileCardContainer from "../../container/common/ProfileCardContainer";
 import AdsContainer from "../../container/ads/AdsContainer";
 import SearchBarContainer from "../../container/header/SearchBarContainer";
-import { psString } from "../../config/localization";
+import { psGetLang, psSetLang, psString } from "../../config/localization";
 
 //import Bounty from "./Bounty";
 
@@ -58,7 +58,6 @@ class Header extends React.Component {
       autoSuggestEle.onMouseOut = function() {
         alert("Clicked");
       };
-      autoSuggestEle.focus();
     });
   };
 
@@ -69,7 +68,7 @@ class Header extends React.Component {
 
 
   // 화면 크기 이벤트 리스너
-  handleResize= (e) => {
+  handleResize = (e) => {
     const { setIsMobile } = this.props;
     if (e.currentTarget.innerWidth < 576) {
       setIsMobile(true);
@@ -83,38 +82,38 @@ class Header extends React.Component {
   clickEventListener = () => {
     const { setDropdownShow } = this.props;
     document.addEventListener("click", (e) => {
-    let targetElement = e.target; // clicked element
+        let targetElement = e.target; // clicked element
 
-    // 프로필 카드
-    const profileCard = document.getElementById("profileCard");
-    if (profileCard && !profileCard.contains(targetElement)) {
-      this.profileCardHide();
-    }
+        // 프로필 카드
+        const profileCard = document.getElementById("profileCard");
+        if (profileCard && !profileCard.contains(targetElement)) {
+          this.profileCardHide();
+        }
 
-    // 헤더 검색 카테고리 드롭다운
-    const dropdownList = document.getElementById("dropdownList");
-    if (dropdownList && !dropdownList.contains(targetElement)) {
-      setDropdownShow(false);
-    }
+        // 헤더 검색 카테고리 드롭다운
+        const dropdownList = document.getElementById("dropdownList");
+        if (dropdownList && !dropdownList.contains(targetElement)) {
+          setDropdownShow(false);
+        }
 
-    // 프로필 카드 프로필 버튼
-    const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
-    if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) {
-      this.profileCardHide();
-    }
+        // 프로필 카드 프로필 버튼
+        const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
+        if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) {
+          this.profileCardHide();
+        }
 
-    // 검색 input
-    const headerAutoSuggest = document.getElementById("headerAutoSuggest");
-    if (headerAutoSuggest &&
-      !headerAutoSuggest.contains(targetElement) &&
-      "headerAutoSuggest" !== targetElement.id &&
-      "headerSearchIcon" !== targetElement.id &&
-      "headerSearchSelectBar" !== targetElement.id &&
-      targetElement.classList[0] !== "react-autosuggest__input" &&
-      targetElement.classList[0] !== "react-autosuggest__suggestion"
-    ) {
-      this.closeSearchBar();
-    }
+        // 검색 input
+        const headerAutoSuggest = document.getElementById("headerAutoSuggest");
+        if (headerAutoSuggest &&
+          !headerAutoSuggest.contains(targetElement) &&
+          "headerAutoSuggest" !== targetElement.id &&
+          "headerSearchIcon" !== targetElement.id &&
+          "headerSearchSelectBar" !== targetElement.id &&
+          targetElement.classList[0] !== "react-autosuggest__input" &&
+          targetElement.classList[0] !== "react-autosuggest__suggestion"
+        ) {
+          this.closeSearchBar();
+        }
 
       }
     );
@@ -156,9 +155,9 @@ class Header extends React.Component {
     this.removeClass();
     let path = e.target.innerHTML.toLowerCase();
 
-    if(path === "최신") path = "latest";
-    else if(path === "추천") path = "featured";
-    else if(path === "인기") path = "popular";
+    if (path === "최신") path = "latest";
+    else if (path === "추천") path = "featured";
+    else if (path === "인기") path = "popular";
 
     history.push("/" + path + "/" + Common.getTag());
     e.target.classList.add("on");
@@ -168,6 +167,15 @@ class Header extends React.Component {
 
   handleClose = () => {
     this.setState({ adShow: false });
+  };
+
+
+  handleLang = () => {
+    if(psGetLang() === "EN") {
+      psSetLang("KO");
+    }else{
+      psSetLang("EN");
+    }
   };
 
 
@@ -214,26 +222,32 @@ class Header extends React.Component {
             <AdsContainer close={() => this.handleClose()}/>
             }
             <div className="col-4 col-md-3 mt-1">
-              <a className="navbar-brand" href={"/"}>
-                <img src={require("assets/image/logo.svg")} alt="POLARIS SHARE"/>
-              </a>
+              {getIsMobile ?
+                <a className="navbar-brand-mobile" href={"/"}>
+                  <img src={require("assets/image/logo-cut.png")} alt="POLARIS SHARE"/>
+                </a>
+                :
+                <a className="navbar-brand" href={"/"}>
+                  <img src={require("assets/image/logo.svg")} alt="POLARIS SHARE"/>
+                </a>
+              }
             </div>
 
 
             <div className="navbar-menu col-md-6 d-none d-md-block">
               {!searchBar ?
                 <div className="nav-menu-link-wrapper">
-                  <div className="nav-menu-link" id="latestNavLink"
-                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("header-category-1")}
-                  </div>
-                  <div className="nav-menu-link" id="featuredNavLink"
+                  <div className={"nav-menu-link " + (Common.getPath() === "featured" ? "on" : "")} id="featuredNavLink"
                        onClick={(e) => this.handleNavMenuLink(e)}>{psString("header-category-2")}
                   </div>
-                  <div className="nav-menu-link" id="popularNavLink"
+                  <div className={"nav-menu-link " + (Common.getPath() === "latest" ? "on" : "")} id="latestNavLink"
+                       onClick={(e) => this.handleNavMenuLink(e)}>{psString("header-category-1")}
+                  </div>
+                  <div className={"nav-menu-link " + (Common.getPath() === "popular" ? "on" : "")} id="popularNavLink"
                        onClick={(e) => this.handleNavMenuLink(e)}>{psString("header-category-3")}
                   </div>
                   <div className="mobile-header-search-btn-wrapper">
-                    <div className="web-header-search-btn" onClick={() => this.showSearchBar()}/>
+                    <div className="web-header-search-btn" id="headerSearchBtnWrapper" onClick={() => this.showSearchBar()}/>
                   </div>
                 </div>
                 :
@@ -243,6 +257,7 @@ class Header extends React.Component {
 
 
             <div className="header-bar   col-8 col-md-3">
+              <div className="language-btn" onClick={() => this.handleLang()}>{psGetLang() === "EN" ? "KOR" : "ENG"}</div>
               <div className="mobile-header-search-btn d-inline-block d-sm-none" onClick={() => this.showSearchBar()}/>
               {/*<Bounty/>*/}
               <UploadDocumentModalContainer {...this.props} />
@@ -272,7 +287,7 @@ class Header extends React.Component {
 
 
               {!MainRepository.Account.isAuthenticated() && !getTempEmail &&
-              <div className="d-none d-sm-inline-block login-btn ml-2" onClick={() => this.handleLogin()}>
+              <div className="d-none d-sm-flex login-btn ml-2" onClick={() => this.handleLogin()}>
                 {psString("header-login")}
               </div>
               }

@@ -5,10 +5,10 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-import Common from "../../config/common";
-import MainRepository from "../../redux/MainRepository";
-import TrackingApis from "../../apis/TrackingApis";
-import { psString } from "../../config/localization";
+import Common from "../../../config/common";
+import MainRepository from "../../../redux/MainRepository";
+import TrackingApis from "../../../apis/TrackingApis";
+import { psString } from "../../../config/localization";
 
 
 function Transition(props) {

@@ -4,8 +4,7 @@ import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
 
 
-class About extends React.PureComponent {
-
+class About extends React.Component {
 
   render() {
 
@@ -26,7 +25,8 @@ class About extends React.PureComponent {
             </div>
             <div className="about-text-align">
               <Link to="/faq">
-                <div className="main-learn-more-btn tac" onClick={() => Common.scrollTop()} title="Link to FAQ">{psString("Learn more")}</div>
+                <div className="main-learn-more-btn tac" onClick={() => Common.scrollTop()}
+                     title="Link to FAQ">{psString("main-banner-btn-4")}</div>
               </Link>
             </div>
           </div>
@@ -41,8 +41,16 @@ class About extends React.PureComponent {
             <div className="about-sub-title ">
               {psString("about-first-section-subj")}
             </div>
-            <div className="about-sub-content ">
-              {psString("about-first-section-explain")}
+            <div className="about-sub-content row">
+              <div className="col-12 col-lg-6 p-0 mb-5">
+                {psString("about-first-section-explain")}
+              </div>
+              <div className="col-12 col-lg-6 about-yt-wrapper">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/3sVNpNd4Z6A" title="About Decompany"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen/>
+              </div>
             </div>
           </div>
         </div>
@@ -89,7 +97,8 @@ class About extends React.PureComponent {
                   </div>
 
                   <div className="main-category-card-reward-info d-inline-block">
-                    {psString("profile-payout-txt-1")} <span className="font-weight-bold">21 DECK</span> {psString("profile-payout-txt-2")}
+                    {psString("profile-payout-txt-1")} <span
+                    className="font-weight-bold">21 DECK</span> {psString("profile-payout-txt-2")}
                   </div>
                 </div>
               </div>

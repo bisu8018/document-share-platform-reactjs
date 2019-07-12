@@ -10,7 +10,7 @@ import {
 // import ContentViewComment from "./ContentViewComment";
 import Common from "../../../../config/common";
 import Tooltip from "@material-ui/core/Tooltip";
-import CopyModal from "../../../modal/CopyModal";
+import CopyModal from "../../../common/modal/CopyModal";
 import MainRepository from "../../../../redux/MainRepository";
 import EditDocumentModalContainer from "../../../../container/modal/EditDocumentModalContainer";
 import ContentViewCarouselContainer
@@ -218,7 +218,7 @@ class ContentViewFullScreen extends Component {
 
             {documentData.isDownload &&
             <Tooltip title={psString("tooltip-download")} placement="bottom">
-              <div className="viewer-btn" onClick={this.handleDownloadContent}>
+              <div className="viewer-btn mb-1" onClick={this.handleDownloadContent}>
                 <i className="material-icons">save_alt</i> {psString("download-btn")}
               </div>
             </Tooltip>

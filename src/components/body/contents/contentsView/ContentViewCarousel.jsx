@@ -17,6 +17,7 @@ class ContentViewCarousel extends React.Component {
     audienceEmail: null,
     emailFlag: false,
     emailFlagTemp: false,
+    loginTrackingFlag: false,
     pageChangedFlag: null
   };
 
@@ -106,10 +107,15 @@ class ContentViewCarousel extends React.Component {
         handleEmailFlag(false);
       });
     }
+
+    // 같은 페이지 일 경우
     if (page === readPage) return;
+
+    // url 페이지 파라미터 값 변경
     this.setState({ readPage: page }, () => {
       this.handleUrl();
     });
+
 
     // 트래킹 사용
     if (target.useTracking) {
@@ -122,7 +128,6 @@ class ContentViewCarousel extends React.Component {
           handleEmailFlag(true);
         });
       }
-
       await TrackingApis.tracking({
         id: target.documentId,
         n: page + 1,
@@ -138,6 +143,7 @@ class ContentViewCarousel extends React.Component {
           if (emailFlag) this.setState({ emailFlag: false });
         }
       });
+
     } else {
       // 오직 뷰 카운트만을 위한 트랙킹 기능
       TrackingApis.tracking({
@@ -235,6 +241,8 @@ class ContentViewCarousel extends React.Component {
               </div>
             </div>
           </div>
+
+
           <Carousel
             showThumbs={false}
             showStatus={false}
@@ -255,9 +263,14 @@ class ContentViewCarousel extends React.Component {
         </div>
 
 
+
+
         <div className="landscape-warning-message">
           This viewer is only viewable in landscape mode.
         </div>
+
+
+
 
         {!MainRepository.Account.isAuthenticated() && emailFlag && target.useTracking &&
         <EmailModalContainer handleTracking={() => this.handleTracking()}

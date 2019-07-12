@@ -8,10 +8,10 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-import MainRepository from "../../redux/MainRepository";
+import MainRepository from "../../../redux/MainRepository";
 import Tooltip from "@material-ui/core/Tooltip";
-import Common from "../../config/common";
-import { psString } from "../../config/localization";
+import Common from "../../../config/common";
+import { psString } from "../../../config/localization";
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -329,7 +329,7 @@ class EditDocumentModal extends React.Component {
     return (
       <span>
         <Tooltip title={psString("tooltip-settings")} placement="bottom">
-          <div className="viewer-btn" onClick={() => this.handleClickOpen("classicModal")}>
+          <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
             <i className="material-icons">settings</i> {psString("common-modal-settings")}
           </div>
         </Tooltip>
