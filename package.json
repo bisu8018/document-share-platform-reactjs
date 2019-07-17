@@ -1,7 +1,7 @@
 {
   "name": "polarishare_front_end",
   "description": "www.polarishare.com",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "license": "ISC",
   "private": true,
   "main": "index.js",
@@ -100,14 +100,14 @@
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
+    "test": "node scripts/test.js",
     "start": "set PORT=8000 && node scripts/start.js",
     "build": "set NODE_ENV_SUB=development&& node scripts/create.robots.js && npm run build-css && node scripts/build.js",
     "build:production": "set NODE_ENV_SUB=production&& node scripts/create.robots.js && npm run build-css && node scripts/build.js",
-    "deploy": "npm run build && aws s3 sync build/ s3://share.decompany.io --cache-control max-age=60 --acl public-read && npm run invaildate:dev",
-    "deploy:production": "npm run build:production && aws s3 sync build/ s3://www.polarishare.com --cache-control max-age=60 && npm run invaildate:production",
     "invaildate:dev": "aws cloudfront create-invalidation --distribution-id EDFUPNJU9XKGX --paths /*",
     "invaildate:production": "aws cloudfront create-invalidation --distribution-id E1UYELY2K59G6Q --paths /*",
-    "test": "node scripts/test.js"
+    "deploy": "npm run build && aws s3 sync build/ s3://share.decompany.io --cache-control max-age=60 --acl public-read && npm run invaildate:dev",
+    "deploy:production": "npm run build:production && aws s3 sync build/ s3://www.polarishare.com --cache-control max-age=60 && npm run invaildate:production"
   },
   "eslintConfig": {
     "extends": "react-app"

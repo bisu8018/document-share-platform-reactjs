@@ -5,7 +5,7 @@ import { APP_PROPERTIES } from "properties/app.properties";
 
 import ContentViewRight from "./ContentViewRight";
 import MainRepository from "../../../../redux/MainRepository";
-import Common from "../../../../config/common";
+import common from "../../../../config/common";
 import NotFoundPage from "../../../common/NotFoundPage";
 import ContentViewFullScreenContainer
   from "../../../../container/body/contents/contentsView/ContentViewFullScreenContainer";
@@ -29,7 +29,7 @@ class ContentView extends React.Component {
         documentTitle: res.document.seoTitle,
         documentData: res.document,
         totalViewCountInfo: res.totalViewCountInfo,
-        featuredList: res.featuredList,
+        featuredList: common.shuffleArray(res.featuredList),
         documentText: res.text,
         author: res.document.author,
         errMessage: null,
@@ -69,7 +69,7 @@ class ContentView extends React.Component {
 
   getImgUrl = () => {
     const { documentData } = this.state;
-    return Common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName);
+    return common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName);
   };
 
   checkUrl = (res) => {

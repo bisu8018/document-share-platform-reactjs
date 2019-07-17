@@ -35,6 +35,7 @@ class EditDocumentModal extends React.Component {
       nc: false,   //CC License nc 사용유무
       nd: false,   //CC License nd 사용유무
       sa: false,   //CC License sa 사용유무
+      moreOptions: true,    // more options show / hide
       username: null,
       desc: ""
     };
@@ -59,6 +60,7 @@ class EditDocumentModal extends React.Component {
       nc: false,   //CC License nc 사용유무
       nd: false,   //CC License nd 사용유무
       sa: false,   //CC License sa 사용유무
+      moreOptions: true,    // more options show / hide
       username: null,
       desc: ""
     });
@@ -262,6 +264,26 @@ class EditDocumentModal extends React.Component {
   };
 
 
+  // more 옵션 관리 버튼
+  handleMoreOptions = () => {
+    const { moreOptions } = this.state;
+    let _moreOptions = moreOptions;
+    this.setState({ moreOptions: !moreOptions }, () => {
+      if (_moreOptions === true) {
+        this.setState({
+          useTracking: false,
+          forceTracking: false,
+          allowDownload: false,
+          by: false,
+          nc: false,
+          sa: false,
+          nd: false
+        });
+      }
+    });
+  };
+
+
   //제목 유효성 체크
   validateTitle = () => {
     const { title } = this.state;
@@ -323,7 +345,7 @@ class EditDocumentModal extends React.Component {
   };
 
   render() {
-    const { classicModal, title, allowDownload, desc, tags, useTracking, forceTracking, titleError, tagError, by, nc, nd, sa } = this.state;
+    const { classicModal, moreOptions, title, allowDownload, desc, tags, useTracking, forceTracking, titleError, tagError, by, nc, nd, sa } = this.state;
     const { type } = this.props;
 
     return (
@@ -334,10 +356,12 @@ class EditDocumentModal extends React.Component {
           </div>
         </Tooltip>
         {type && type === "menu" &&
-        <span className="d-inline-block d-sm-none" onClick={() => this.handleClickOpen("classicModal")}>{psString("common-modal-upload")}</span>
+        <span className="d-inline-block d-sm-none"
+              onClick={() => this.handleClickOpen("classicModal")}>{psString("common-modal-upload")}</span>
         }
 
         <Dialog
+          className="modal-width"
           fullWidth={true}
           open={classicModal}
           TransitionComponent={Transition}
@@ -373,81 +397,98 @@ class EditDocumentModal extends React.Component {
                 }
                 <span> {tagError}</span>
 
-                 <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
+
+            <div className="modal-more-btn-wrapper">
+               <div className="modal-more-btn-line"/>
+               <div className="modal-more-btn" onClick={() => this.handleMoreOptions()}>
+                 More Options
+                 <img className="reward-arrow"
+                      src={require("assets/image/icon/i_arrow_" + (moreOptions ? "down_grey.svg" : "up_grey.png"))}
+                      alt="arrow button"/>
+               </div>
+            </div>
+
+                {moreOptions &&
+                <div>
+                  <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
                   <div className="row">
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="useTrackingCheckboxEdit" onChange={(e) => this.handleTrackingCheckbox(e)}
-                           checked={useTracking}/>
+                    <div className="col-12 col-sm-6">
+                      <input type="checkbox" id="useTrackingCheckboxEdit"
+                             onChange={(e) => this.handleTrackingCheckbox(e)}
+                             checked={useTracking}/>
 
-                    <label htmlFor="useTrackingCheckboxEdit">
-                      <span><i className="material-icons">done</i></span>
+                      <label htmlFor="useTrackingCheckboxEdit">
+                        <span><i className="material-icons">done</i></span>
                         {psString("doc-option-1")}
-                    </label>
+                      </label>
+                    </div>
+                    <div className="col-12 col-sm-6">
+                      <input type="checkbox" id="forceTrackingCheckboxEdit"
+                             onChange={(e) => this.handleForceTrackingCheckbox(e)}
+                             checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
+                      <label htmlFor="forceTrackingCheckboxEdit">
+                        <span><i className="material-icons">done</i></span>
+                        {psString("doc-option-2")}
+                      </label>
+                    </div>
+                    <div className="col-12 col-sm-6">
+                      <input type="checkbox" id="allowDownloadEdit" checked={allowDownload}
+                             onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
+                      <label htmlFor="allowDownloadEdit">
+                        <span><i className="material-icons">done</i></span>
+                        {psString("doc-option-3")}
+                      </label>
+                    </div>
                   </div>
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="forceTrackingCheckboxEdit"
-                           onChange={(e) => this.handleForceTrackingCheckbox(e)}
-                           checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
-                    <label htmlFor="forceTrackingCheckboxEdit">
-                      <span><i className="material-icons">done</i></span>
-                      {psString("doc-option-2")}
-                    </label>
-                   </div>
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="allowDownloadEdit" checked={allowDownload}
-                           onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
-                    <label htmlFor="allowDownloadEdit">
-                      <span><i className="material-icons">done</i></span>
-                      {psString("doc-option-3")}
-                    </label>
-                   </div>
-                 </div>
 
 
-                <div className="dialog-subject mb-2 mt-3">{psString("edit-cc-license")}</div>
-                <div className="row">
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="ccByCheckboxEdit" onChange={(e) => this.handleCcByCheckbox(e)}
-                           checked={by}/>
-                    <label htmlFor="ccByCheckboxEdit">
-                      <span><i className="material-icons">done</i></span>
-                      Attribution
-                    </label>
-                  </div>
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="ccNcCheckboxEdit" onChange={(e) => this.handleCcNcCheckbox(e)}
-                           checked={nc}/>
-                    <label htmlFor="ccNcCheckboxEdit">
-                      <span><i className="material-icons">done</i></span>
-                     Noncommercial
-                    </label>
-                  </div>
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="ccNdCheckboxEdit" onChange={(e) => this.handleCcNdCheckbox(e)}
-                           checked={sa ? false : nd} disabled={sa}/>
-                    <label htmlFor="ccNdCheckboxEdit">
-                      <span><i className="material-icons">done</i></span>
+                  <div className="dialog-subject mb-2 mt-3">{psString("edit-cc-license")}</div>
+                  <div className="row">
+                    <div className="col-12 col-sm-6">
+                      <input type="checkbox" id="ccByCheckboxEdit" onChange={(e) => this.handleCcByCheckbox(e)}
+                             checked={by}/>
+                      <label htmlFor="ccByCheckboxEdit">
+                        <span><i className="material-icons">done</i></span>
+                        Attribution
+                      </label>
+                    </div>
+                    <div className="col-12 col-sm-6">
+                      <input type="checkbox" id="ccNcCheckboxEdit" onChange={(e) => this.handleCcNcCheckbox(e)}
+                             checked={nc}/>
+                      <label htmlFor="ccNcCheckboxEdit">
+                        <span><i className="material-icons">done</i></span>
+                        Noncommercial
+                      </label>
+                    </div>
+                    <div className="col-12 col-sm-6">
+                      <input type="checkbox" id="ccNdCheckboxEdit" onChange={(e) => this.handleCcNdCheckbox(e)}
+                             checked={sa ? false : nd} disabled={sa}/>
+                      <label htmlFor="ccNdCheckboxEdit">
+                        <span><i className="material-icons">done</i></span>
                         No Derivative Works
-                    </label>
+                      </label>
+                    </div>
+                    <div className="col-12 col-sm-6">
+                      <input type="checkbox" id="ccSaCheckboxEdit" onChange={(e) => this.handleCcSaCheckbox(e)}
+                             checked={nd ? false : sa} disabled={nd}/>
+                      <label htmlFor="ccSaCheckboxEdit">
+                        <span><i className="material-icons">done</i></span>
+                        Share Alike
+                      </label>
+                    </div>
                   </div>
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="ccSaCheckboxEdit" onChange={(e) => this.handleCcSaCheckbox(e)}
-                           checked={nd ? false : sa} disabled={nd}/>
-                    <label htmlFor="ccSaCheckboxEdit">
-                      <span><i className="material-icons">done</i></span>
-                         Share Alike
-                    </label>
-                  </div>
-                 </div>
 
-
+                </div>
+                }
 
                   </DialogContent>
 
 
                   <DialogActions className="modal-footer">
-                  <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">{psString("common-modal-cancel")}</div>
-                  <div onClick={() => this.handleConfirmBtn()} className="ok-btn">{psString("common-modal-confirm")}</div>
+                  <div onClick={() => this.handleClose("classicModal")}
+                       className="cancel-btn">{psString("common-modal-cancel")}</div>
+                  <div onClick={() => this.handleConfirmBtn()}
+                       className="ok-btn">{psString("common-modal-confirm")}</div>
                   </DialogActions>
                   </Dialog>
                   </span>

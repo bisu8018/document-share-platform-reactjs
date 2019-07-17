@@ -45,6 +45,7 @@ class UploadDocumentModal extends React.Component {
       nc: false,   //CC License nc 사용유무
       nd: false,   //CC License nd 사용유무
       sa: false,   //CC License sa 사용유무
+      moreOptions: false,    // more options show / hide
       username: null,
       desc: ""
     };
@@ -129,6 +130,7 @@ class UploadDocumentModal extends React.Component {
       nc: false,   //CC License nc 사용유무
       nd: false,   //CC License nd 사용유무
       sa: false,   //CC License sa 사용유무
+      moreOptions: false,    // more options show / hide
       username: null,
       desc: ""
     });
@@ -223,14 +225,14 @@ class UploadDocumentModal extends React.Component {
       this.setState({ username: _username });
       this.handleOpen(modal);
 
-    } else if (modal === "classicModalSub" ) {
-      if(getDrizzle && ethAccount){
+    } else if (modal === "classicModalSub") {
+      if (getDrizzle && ethAccount) {
         getWeb3Apis.getBalance(ethAccount, res => {
-          if(res > 0) this.handleOpen("classicModalSub_onChain");    // 모달 2
+          if (res > 0) this.handleOpen("classicModalSub_onChain");    // 모달 2
           else this.handleOpen("classicModalSub_noneChain");    // 모달 3
         });
 
-      }else{
+      } else {
         this.handleOpen("classicModalSub_noneChain");    // 모달 3
       }
     }
@@ -357,6 +359,26 @@ class UploadDocumentModal extends React.Component {
   };
 
 
+  // more 옵션 관리 버튼
+  handleMoreOptions = () => {
+    const { moreOptions } = this.state;
+    let _moreOptions = moreOptions;
+    this.setState({ moreOptions: !moreOptions }, () => {
+      if (_moreOptions === true) {
+        this.setState({
+          useTracking: false,
+          forceTracking: false,
+          allowDownload: false,
+          by: false,
+          nc: false,
+          sa: false,
+          nd: false
+        });
+      }
+    });
+  };
+
+
   //제목 유효성 체크
   validateTitle = () => {
     const { title } = this.state;
@@ -431,12 +453,13 @@ class UploadDocumentModal extends React.Component {
 
 
   render() {
-    const { classicModal, classicModalSub_onChain, fileInfo, tags, percentage, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa } = this.state;
+    const { classicModal, classicModalSub_onChain, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload } = this.state;
     const { type } = this.props;
 
     return (
       <span>
-        <div className="upload-btn d-none d-sm-flex" id="uploadBtn" onClick={() => this.handleClickOpen("classicModal")}>
+        <div className="upload-btn d-none d-sm-flex" id="uploadBtn"
+             onClick={() => this.handleClickOpen("classicModal")}>
           {psString("common-modal-upload")}
         </div>
         <div className="mobile-upload-btn d-sm-none d-inline-block"
@@ -450,6 +473,7 @@ class UploadDocumentModal extends React.Component {
 
 
         <Dialog
+          className="modal-width"
           fullWidth={true}
           open={classicModal}
           TransitionComponent={Transition}
@@ -493,71 +517,87 @@ class UploadDocumentModal extends React.Component {
                        value={tags} onChange={this.handleTagChange} validate={false} onlyUnique/>
                        <span>{tagError}</span>
 
-            <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
-            <div className="row">
-              <div className="col-12 col-sm-6">
-                <input type="checkbox" id="useTrackingCheckbox" onChange={(e) => this.handleTrackingCheckbox(e)}
-                       checked={useTracking}/>
-
-                <label htmlFor="useTrackingCheckbox">
-                  <span><i className="material-icons">done</i></span>
-                  {psString("doc-option-1")}
-                </label>
-              </div>
-              <div className="col-12 col-sm-6">
-                <input type="checkbox" id="forceTrackingCheckbox"
-                       onChange={(e) => this.handleForceTrackingCheckbox(e)}
-                       checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
-                <label htmlFor="forceTrackingCheckbox">
-                  <span><i className="material-icons">done</i></span>
-                  {psString("doc-option-2")}
-                </label>
+            <div className="modal-more-btn-wrapper">
+               <div className="modal-more-btn-line"/>
+               <div className="modal-more-btn" onClick={() => this.handleMoreOptions()}>
+                 More Options
+                 <img className="reward-arrow"
+                      src={require("assets/image/icon/i_arrow_" + (moreOptions ? "down_grey.svg" : "up_grey.png"))}
+                      alt="arrow button"/>
                </div>
-              <div className="col-12 col-sm-6">
-                <input type="checkbox" id="allowDownload"
-                       onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
-                <label htmlFor="allowDownload">
-                  <span><i className="material-icons">done</i></span>
-                  {psString("doc-option-3")}
-                </label>
-               </div>
-             </div>
+            </div>
 
-            <div className="dialog-subject mb-2 mt-3">{psString("edit-cc-license")}</div>
-            <div className="row">
-              <div className="col-12 col-sm-6">
-                <input type="checkbox" id="ccByCheckbox" onChange={(e) => this.handleCcByCheckbox(e)}
-                       checked={by}/>
-                <label htmlFor="ccByCheckbox">
-                  <span><i className="material-icons">done</i></span>
-                  Attribution
-                </label>
+            {moreOptions &&
+            <div>
+              <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
+              <div className="row">
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="useTrackingCheckbox" onChange={(e) => this.handleTrackingCheckbox(e)}
+                         checked={useTracking}/>
+
+                  <label htmlFor="useTrackingCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    {psString("doc-option-1")}
+                  </label>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="forceTrackingCheckbox"
+                         onChange={(e) => this.handleForceTrackingCheckbox(e)}
+                         checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
+                  <label htmlFor="forceTrackingCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    {psString("doc-option-2")}
+                  </label>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="allowDownload" checked={allowDownload}
+                         onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
+                  <label htmlFor="allowDownload">
+                    <span><i className="material-icons">done</i></span>
+                    {psString("doc-option-3")}
+                  </label>
+                </div>
               </div>
-              <div className="col-12 col-sm-6">
-                <input type="checkbox" id="ccNcCheckbox" onChange={(e) => this.handleCcNcCheckbox(e)}
-                       checked={nc}/>
-                <label htmlFor="ccNcCheckbox">
-                  <span><i className="material-icons">done</i></span>
-                 Noncommercial
-                </label>
-              </div>
-              <div className="col-12 col-sm-6">
-                <input type="checkbox" id="ccNdCheckbox" onChange={(e) => this.handleCcNdCheckbox(e)}
-                       checked={sa ? false : nd} disabled={sa}/>
-                <label htmlFor="ccNdCheckbox">
-                  <span><i className="material-icons">done</i></span>
+
+              <div className="dialog-subject mb-2 mt-3">{psString("edit-cc-license")}</div>
+              <div className="row">
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccByCheckbox" onChange={(e) => this.handleCcByCheckbox(e)}
+                         checked={by}/>
+                  <label htmlFor="ccByCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    Attribution
+                  </label>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccNcCheckbox" onChange={(e) => this.handleCcNcCheckbox(e)}
+                         checked={nc}/>
+                  <label htmlFor="ccNcCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    Noncommercial
+                  </label>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccNdCheckbox" onChange={(e) => this.handleCcNdCheckbox(e)}
+                         checked={sa ? false : nd} disabled={sa}/>
+                  <label htmlFor="ccNdCheckbox">
+                    <span><i className="material-icons">done</i></span>
                     No Derivative Works
-                </label>
+                  </label>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccSaCheckbox" onChange={(e) => this.handleCcSaCheckbox(e)}
+                         checked={nd ? false : sa} disabled={nd}/>
+                  <label htmlFor="ccSaCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    Share Alike
+                  </label>
+                </div>
               </div>
-              <div className="col-12 col-sm-6">
-                <input type="checkbox" id="ccSaCheckbox" onChange={(e) => this.handleCcSaCheckbox(e)}
-                       checked={nd ? false : sa} disabled={nd}/>
-                <label htmlFor="ccSaCheckbox">
-                  <span><i className="material-icons">done</i></span>
-                     Share Alike
-                </label>
-              </div>
-             </div>
+
+            </div>
+            }
+
           </DialogContent>
 
 
@@ -583,6 +623,7 @@ class UploadDocumentModal extends React.Component {
 
 
         <Dialog
+          className="modal-width"
           fullWidth={true}
           open={classicModalSub_onChain}
           TransitionComponent={Transition}
@@ -594,7 +635,8 @@ class UploadDocumentModal extends React.Component {
           <DialogTitle
             id="classic-modal-slide-title"
             disableTypography>
-            <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModalSub_onChain")}>close</i>
+            <i className="material-icons modal-close-btn"
+               onClick={() => this.handleClose("classicModalSub_onChain")}>close</i>
             <h3>{psString("upload-doc-subj-2")}</h3>
           </DialogTitle>
 

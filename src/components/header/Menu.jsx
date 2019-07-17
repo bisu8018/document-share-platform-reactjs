@@ -11,10 +11,16 @@ class Menu extends React.Component {
   };
 
   menuShow = () => {
+    document.body.style.overflow = "hidden";
+    document.body.style.paddingRight = "5px";
+
     this.setState({ menuShow: true });
   };
 
   menuHide = () => {
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+
     this.setState({ menuShow: false });
   };
 
@@ -107,9 +113,10 @@ class Menu extends React.Component {
           }
           {getTempEmail &&
           <div className="menu-logout-btn d-flex d-sm-none" onClick={() => this.handleLogout()}>{psString("menu-sign-out")}</div>}
+
+          <div className="header-version">{Common.getVersion()}</div>
         </div>
         }
-
 
       </div>
     );

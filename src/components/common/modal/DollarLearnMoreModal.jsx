@@ -55,6 +55,7 @@ class DollarLearnMoreModal extends React.PureComponent {
              <span className="alert-banner-learn-more" onClick={() => this.handleClickOpen("classicModal")}>{psString("dollar-policy-learn-more")}</span>
 
         <Dialog
+          className="modal-width"
           fullWidth={true}
           open={classicModal}
           TransitionComponent={Transition}

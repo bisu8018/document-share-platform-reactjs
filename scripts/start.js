@@ -127,7 +127,11 @@ checkBrowsers(paths.appPath, isInteractive)
         console.log();
       }
 
-      console.log(chalk.cyan('Starting the development server...\n'));
+      console.log("프로젝트 버전 : " + require(paths.appPackageJson).version);
+      process.env.PROJECT_VERSION = require(paths.appPackageJson).version;
+
+      console.log();
+      console.log(chalk.cyan('개발서버 실행 ...\n'));
       openBrowser(urls.localUrlForBrowser);
     });
 

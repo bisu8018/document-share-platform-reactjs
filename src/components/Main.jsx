@@ -113,6 +113,7 @@ class Main extends Component {
     history.listen(MainRepository.Analytics.sendPageView);
   }
 
+
   componentDidMount() {
     this.setState({initDom : true});
   }
@@ -164,9 +165,12 @@ class Main extends Component {
             </div>
           </div>
 
+
           <Footer/>
 
+
           <AlertListContainer/>
+
         </div>
       </Router>
 

@@ -87,7 +87,7 @@ class CreatorTabItem extends React.Component {
           <div className="details_info-padding">
             <Link to={"/" + identification + "/" + document.seoTitle}
                   className={(document.state && document.state === "NOT_CONVERT" ? " not-convert-wrapper" : "")}>
-              <div className="info_title mb-2"
+              <div className="info_title mb-1"
                    onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
             </Link>
 

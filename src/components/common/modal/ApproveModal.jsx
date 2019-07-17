@@ -51,6 +51,7 @@ class ApproveModal extends React.Component {
     return (
       <span>
         <Dialog
+          className="modal-width"
           fullWidth={true}
           open={classicModal}
           TransitionComponent={Transition}

@@ -72,7 +72,7 @@ class CuratorTabItem extends React.Component {
         <div className="col-12 col-sm-9 col-lg-10 p-0">
           <div className="details_info-padding">
             <Link to={"/" + identification + "/" + document.seoTitle}>
-              <div className="info_title mb-2"
+              <div className="info_title mb-1"
                    onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
             </Link>
 
@@ -103,7 +103,7 @@ class CuratorTabItem extends React.Component {
 
               {reward > 0 &&
               <div className="info-detail-reward-info" id={document.seoTitle + "rewardVote"}>
-                {psString("profile-payout-txt-1")} <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> {psString("profile-payout-txt-2")}
+                {psString("profile-payout-txt-3")} <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> {psString("profile-payout-txt-2")}
               </div>
               }
 

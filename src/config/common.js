@@ -156,68 +156,11 @@ export default ({
     };
     return (new Date(timestamp)).toLocaleString("en-US", options);
   },
-  getThumbnail: (documentId, size, pageNo, documentName) => {
-    let _size = size;
-    if (documentName) {
-      if (documentName.lastIndexOf(".dotx") > 0 || documentName.lastIndexOf(".dot") > 0 || documentName.lastIndexOf(".docx") > 0) {
-        _size = "1024";
-      }
-    }
-    return imgDomain + "/" + documentId + "/" + _size + "/" + pageNo;
-  },
-  getText: (documentId, pageNo, callback, error) => {
-    let textUrl = imgDomain + "/THUMBNAIL/" + documentId + "/text/" + pageNo;
-
-    fetch(textUrl).then((result) => {
-      if (result.status === 404) return error(result.statusText);
-      result.text().then((_result) => {
-        callback(_result);
-      });
-    });
-  },
-  getPath: () => {
-    const pathArr = window.location.pathname.split("/");
-    return pathArr[1];
-  },
-  getMySub: () => {
-    let authSub = "";
-    let isAuthenticated = MainRepository.Account.isAuthenticated();
-
-    if (isAuthenticated) {
-      authSub = MainRepository.Account.getMyInfo().sub || "";
-    }
-
-    return authSub;
-  },
-
-  getTag: () => {
-    const pathArr = window.location.pathname.split("/");
-    let tag = "";
-    if (pathArr.length > 2 && (pathArr[1] === "latest" || pathArr[1] === "featured" || pathArr[1] === "popular")) {
-      tag = decodeURI(pathArr[2]);
-    }
-    return tag;
-  },
   escapeRegexCharacters: str => {
     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   },
   loginCheck: () => {
     if (!MainRepository.Account.isAuthenticated()) return MainRepository.Account.login();
-  },
-  getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(";");
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) === " ") {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) === 0) {
-        return c.substring(name.length, c.length);
-      }
-    }
-    return "";
   },
   setCookie(cname, cvalue, exdays) {
     let d = new Date();
@@ -281,11 +224,11 @@ export default ({
     return deckStr;
   },
   authorCalculateReward: (pv: number, tpv: number, pool: number) => {
-    if (tpv === 0 || pv === 0 || pool === 0) return 0;
+    if (tpv === 0 || pv === 0 || pool === 0 || !tpv || !pv || !pool ) return 0;
     return (pv * (pool / tpv));
   },
   curatorCalculateReward: (pool: number, v: number, tv: number, pv: number, tpvs: number) => {
-    if (pool === 0 || v === 0 || tv === 0 || pv === 0 || tpvs === 0) return 0;
+    if (pool === 0 || v === 0 || tv === 0 || pv === 0 || tpvs === 0 || !pool || !v || !tv || !pv || !tpvs ) return 0;
     return (pool * (Math.pow(pv, 2) / tpvs)) * (v / tv);
   },
   jsonToQueryString: (json) => {
@@ -294,6 +237,84 @@ export default ({
         return encodeURIComponent(key) + "=" +
           encodeURIComponent(json[key]);
       }).join("&");
+  },
+  shuffleArray: (array) => {
+  let currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+},
+  getThumbnail: (documentId, size, pageNo, documentName) => {
+    let _size = size;
+    if (documentName) {
+      if (documentName.lastIndexOf(".dotx") > 0 || documentName.lastIndexOf(".dot") > 0 || documentName.lastIndexOf(".docx") > 0) {
+        _size = "1024";
+      }
+    }
+    return imgDomain + "/" + documentId + "/" + _size + "/" + pageNo;
+  },
+  getText: (documentId, pageNo, callback, error) => {
+    let textUrl = imgDomain + "/THUMBNAIL/" + documentId + "/text/" + pageNo;
+
+    fetch(textUrl).then((result) => {
+      if (result.status === 404) return error(result.statusText);
+      result.text().then((_result) => {
+        callback(_result);
+      });
+    });
+  },
+  getPath: () => {
+    const pathArr = window.location.pathname.split("/");
+    return pathArr[1];
+  },
+  getVersion: () => {
+    return "v " + process.env.PROJECT_VERSION
+  },
+  getMySub: () => {
+    let authSub = "";
+    let isAuthenticated = MainRepository.Account.isAuthenticated();
+
+    if (isAuthenticated) {
+      authSub = MainRepository.Account.getMyInfo().sub || "";
+    }
+
+    return authSub;
+  },
+
+  getTag: () => {
+    const pathArr = window.location.pathname.split("/");
+    let tag = "";
+    if (pathArr.length > 2 && (pathArr[1] === "latest" || pathArr[1] === "featured" || pathArr[1] === "popular")) {
+      tag = decodeURI(pathArr[2]);
+    }
+    return tag;
+  },
+  getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(";");
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === " ") {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
   },
   getAuthorNDaysReward(result: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
     if (!totalViewCountInfo || !result.latestPageviewList || getCreatorDailyRewardPool === 0) return;
@@ -395,7 +416,7 @@ export default ({
 
 
   // Curator N Days Total Reward
-  getCuratorNDaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, day: number, latestRewardVoteList: any) {
+  getCuratorNDaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, day: number, latestRewardVoteList: any, test) {
     if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
     let totalReward = 0;
 
@@ -431,14 +452,15 @@ export default ({
             const tj = totalViewCountInfo[j];
             if (tj._id.year === y && tj._id.month === m && tj._id.dayOfMonth === d) tpvs = tj.totalPageviewSquare;
           }
-          if (this.dateAgo(timestamp) <= day) reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
-          if (i === dk.depositList.length - 1) totalReward += reward;
+          //console.log(v, tv, pv, tpvs);
+          if (this.dateAgo(timestamp) <= day) {
+            reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
+          }
+          if (i <= dk.depositList.length - 1) totalReward += reward;
         }
-
-
-        if (k === documentList.length - 1) return totalReward;
       }
     }
+    return totalReward;
   },
 
 
@@ -483,10 +505,8 @@ export default ({
           if (this.dateAgo(timestamp) <= 7 && this.dateAgo(timestamp) > 0) reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
           if (i === dk.depositList.length - 1) totalReward += reward;
         }
-
-
-        if (k === documentList.length - 1) return totalReward;
       }
     }
+    return totalReward;
   }
 });

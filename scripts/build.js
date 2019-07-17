@@ -1,6 +1,5 @@
 'use strict';
 
-
 console.log();
 console.log("환경변수 셋팅 . . .");
 
@@ -146,6 +145,9 @@ function build(previousFileSizes) {
     console.log();
   }
 
+
+  console.log("프로젝트 버전 : " + require(paths.appPackageJson).version);
+  console.log();
   console.log('최적화된 프로덕션 빌드 생성 중 ...');
 
   const compiler = webpack(config);

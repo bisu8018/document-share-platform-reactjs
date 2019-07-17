@@ -142,7 +142,7 @@ class CreatorSummary extends React.Component {
 
     let author7DayReward = Common.toDeck(Common.getAuthor7DaysTotalReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo));
     let authorTodayReward = Common.toDeck(Common.getAuthorNDaysTotalReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo, 0));
-    let curatorEstimatedToday = Common.toDeck(Common.getCuratorNDaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, 0, latestRewardVoteList));
+    let curatorEstimatedToday = Common.toDeck(Common.getCuratorNDaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, 0, latestRewardVoteList, 1));
     let curatorTotalRewards = Common.toDeck(Common.getCurator7DaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, latestRewardVoteList));
 
     return (
@@ -194,12 +194,12 @@ class CreatorSummary extends React.Component {
               </span>
               <br/>
               {psString("profile-estimated-earnings")}
-              <span className="color">
+              <span className="color ml-1">
                 <DollarWithDeck deck={Number(authorTodayReward || 0) + Number(curatorEstimatedToday || 0)}/>
               </span>
               <br/>
               {psString("profile-revenue-7-days")}
-              <span className="color">
+              <span className="color ml-1">
                 <DollarWithDeck deck={Number(author7DayReward || 0) + Number(curatorTotalRewards || 0)}/>
               </span>
             </div>
@@ -212,10 +212,10 @@ class CreatorSummary extends React.Component {
             <h5>{psString("profile-author-rewards")}</h5>
             <div className="profile_info_desc">
               {psString("profile-estimated-earnings")}
-              <span><DollarWithDeck deck={authorTodayReward}/></span>
+              <span className="ml-1"><DollarWithDeck deck={authorTodayReward}/></span>
               <br/>
               {psString("profile-revenue-7-days")}
-              <span><DollarWithDeck deck={author7DayReward}/></span>
+              <span className="ml-1"><DollarWithDeck deck={author7DayReward}/></span>
             </div>
           </div>
 
@@ -224,10 +224,10 @@ class CreatorSummary extends React.Component {
             <h5>{psString("profile-curator-rewards")}</h5>
             <div className="profile_info_desc">
               {psString("profile-estimated-earnings")}
-              <span><DollarWithDeck deck={curatorEstimatedToday}/></span>
+              <span className="ml-1"><DollarWithDeck deck={curatorEstimatedToday}/></span>
               <br/>
               {psString("profile-revenue-7-days")}
-              <span><DollarWithDeck deck={curatorTotalRewards}/></span>
+              <span className="ml-1"><DollarWithDeck deck={curatorTotalRewards}/></span>
             </div>
           </div>
         </div>

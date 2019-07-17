@@ -6108,14 +6108,13 @@ dean
     width: 235px;
     padding-top: 11px;
     height: 50px;
-    transition: 0.2s all ease-in-out;
     z-index: 1;
     position: relative;
     margin-bottom: 45px
 }
 
 .main-learn-more-btn:hover {
-    background: #3681fe;
+    color: #3681fe;
     border-color: #3681fe;
 }
 
@@ -6416,6 +6415,21 @@ dean
 
 .modal-close-btn:hover {
     color: #3681fe;
+}
+
+.modal-more-btn {
+    position: absolute;
+    letter-spacing: 1px;
+    cursor: pointer;
+    font-size: 13px;
+    -webkit-transition: 0.2s all ease-in-out;
+    transition: 0.2s all ease-in-out;
+    margin: auto;
+    left: calc(50% - 75px);
+    background: white;
+    width: 150px;
+    text-align: center;
+    color: #4d4d4d;
 }
 
 .banner-close-btn {
@@ -7070,7 +7084,6 @@ Dean*/
 .details-info-desc-wrapper {
     height: 40px;
     overflow: hidden;
-    margin-bottom: 5px;
 }
 
 
@@ -7472,13 +7485,27 @@ Dean*/
 
 
 @media (max-width: 575px) {
+    .header-version {
+        color: #cecece !important;
+        font-size: 10px !important;
+        bottom: 4px !important;
+        left: 8px !important;
+    }
+
+    .loading-wrapper > img {
+        width: 25%;
+    }
+
+    .main-category-card-reward-info {
+        width: 100% !important;
+    }
 
     .language-btn {
-        margin: 0 10px !important;
+        margin: 4px 10px !important;
     }
 
     .main-category-card,
-    .main-category-card-img-wrapper{
+    .main-category-card-img-wrapper {
         width: 100% !important;
         height: auto !important;
     }
@@ -7491,7 +7518,7 @@ Dean*/
         width: 100%;
     }
 
-    .MuiDialog-paper-5 {
+    .modal-width > div:last-child > div:first-child {
         margin: 0 !important;
         max-height: 100% !important;
         height: 100% !important;
@@ -9959,7 +9986,7 @@ Main Category CSS
     display: none;
     position: absolute;
     min-height: 40px;
-    top: 325px;
+    margin-top: 12px;
     left: 0;
     background: #0d73f8;
     z-index: 1;
@@ -10213,6 +10240,14 @@ Ads CSS
     margin-left: -35px;
 }
 
+.header-version {
+    color: #505050;
+    font-size: 12px;
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+}
+
 .header-search-wrapper {
     display: flex;
     align-items: center;
@@ -10261,21 +10296,15 @@ Ads CSS
 }
 
 .language-btn {
-    font-family: poppins, 'Noto Sans KR', sans-serif;
-    color: #666666;
-    font-size: 15px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    margin: 0 20px;
+    margin: 4px 26px;
     cursor: pointer;
-    -webkit-transition-duration: .2s;
-    -o-transition-duration: .2s;
-    transition-duration: .2s;
+    border: 1px solid #ababab;
+    width: 35px;
+    height: 24px;
 }
 
 .language-btn:hover {
-    color: #3681fe;
+    border-color: #3681fe;
 }
 
 
@@ -10635,7 +10664,7 @@ Dropdown CSS
     -webkit-appearance: none;
 }
 
-.select-custom select:focus{
+.select-custom select:focus {
     outline: none;
 }
 
@@ -10648,3 +10677,18 @@ dean
     margin-bottom: 15px;
 }
 
+
+.modal-more-btn-wrapper {
+    margin: 40px 0 0 0;
+    position: relative;
+    height: 20px;
+}
+
+.modal-more-btn-line {
+    height: 1px;
+    position: absolute;
+    background: #d0d0d0;
+    left: 0;
+    top: 9px;
+    width: 100%;
+}

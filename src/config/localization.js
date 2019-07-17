@@ -2,8 +2,8 @@ const strings = new Map([
 
   // main
   ["main-banner-subj-1", {
-    KOR: "찾고 계신 문서가 있나요? ",
-    ENG: "Realization of Value via Sharing"
+    KOR: "찾고 계신 문서가 있나요?",
+    ENG: "Documents you are looking for"
   }],
   ["main-banner-subj-2", {
     KOR: "무료료 문서를 다운로드하려면",
@@ -31,7 +31,7 @@ const strings = new Map([
   }],
   ["main-banner-explain-1", {
     KOR: "최신, 추천, 인기 문서를 둘러보세요. \n관심 분야의 문서를 보고 싶다면 태그 검색도 해보세요.",
-    ENG: "Polaris Share values ​​the content you share.\nShare your content and get a transparent monetary reward.\n Join now as a creator"
+    ENG: "Browse the latest, featured, and popular documents.\n If you want to see documents of interest, try search by tag."
   }],
   ["main-banner-explain-2", {
     KOR: "구글 또는 링크드인 계정이 있다면, 몇 번의 클릭만으로 쉽게 가입할 수 있습니다. \n 로그인하면 다양한 문서를 무료로 다운로드할 수 있습니다.",
@@ -391,11 +391,15 @@ const strings = new Map([
   }],
   ["profile-payout-txt-1", {
     KOR: "7일간 크리에이터 지급액 ",
-    ENG: "Creator payout $"
+    ENG: "Creator payout"
   }],
   ["profile-payout-txt-2", {
     KOR: "",
     ENG: "in 7 days"
+  }],
+  ["profile-payout-txt-3", {
+    KOR: "7일간 큐레이터 지급액",
+    ENG: "Curator payout"
   }],
 
   // Alert
@@ -499,11 +503,11 @@ const strings = new Map([
   }],
   ["common-modal-tag", {
     KOR: "태그",
-    ENG: "Tag"
+    ENG: "Tags"
   }],
   ["common-modal-option", {
     KOR: "옵션",
-    ENG: "Option"
+    ENG: "Options"
   }],
   ["common-modal-approve", {
     KOR: "승인",
@@ -801,9 +805,13 @@ const strings = new Map([
     KOR: "공유하기",
     ENG: "Share"
   }],
-  ["share-modal-copy", {
-    KOR: "URL 복사",
-    ENG: "Copy URL"
+  ["copy-short-url", {
+    KOR: "Short URL",
+    ENG: "Short URL"
+  }],
+  ["copy-embed-url", {
+    KOR: "Embed URL",
+    ENG: "Embed URL"
   }],
   ["tooltip-copy", {
     KOR: "문서 공유하기",

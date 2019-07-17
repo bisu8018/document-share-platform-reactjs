@@ -307,6 +307,7 @@ class VoteDocumentModal extends React.Component {
 
         {getDrizzle && getMyInfo.ethAccount &&
         <Dialog
+          className="modal-width"
           fullWidth={this.state.fullWidth}
           open={this.state.classicModal}
           TransitionComponent={Transition}

@@ -8,6 +8,7 @@ import ProfileCardContainer from "../../container/common/ProfileCardContainer";
 import AdsContainer from "../../container/ads/AdsContainer";
 import SearchBarContainer from "../../container/header/SearchBarContainer";
 import { psGetLang, psSetLang, psString } from "../../config/localization";
+import Tooltip from "@material-ui/core/Tooltip";
 
 //import Bounty from "./Bounty";
 
@@ -171,9 +172,9 @@ class Header extends React.Component {
 
 
   handleLang = () => {
-    if(psGetLang() === "EN") {
+    if (psGetLang() === "EN") {
       psSetLang("KO");
-    }else{
+    } else {
       psSetLang("EN");
     }
   };
@@ -247,7 +248,8 @@ class Header extends React.Component {
                        onClick={(e) => this.handleNavMenuLink(e)}>{psString("header-category-3")}
                   </div>
                   <div className="mobile-header-search-btn-wrapper">
-                    <div className="web-header-search-btn" id="headerSearchBtnWrapper" onClick={() => this.showSearchBar()}/>
+                    <div className="web-header-search-btn" id="headerSearchBtnWrapper"
+                         onClick={() => this.showSearchBar()}/>
                   </div>
                 </div>
                 :
@@ -256,8 +258,12 @@ class Header extends React.Component {
             </div>
 
 
-            <div className="header-bar   col-8 col-md-3">
-              <div className="language-btn" onClick={() => this.handleLang()}>{psGetLang() === "EN" ? "KOR" : "ENG"}</div>
+            <div className="header-bar  col-8 col-md-3">
+              <Tooltip title={psGetLang() === "EN" ? "Korean" : "English"} placement="bottom">
+                <img className="language-btn"
+                     src={require("assets/image/icon/i_flag_" + (psGetLang() === "EN" ? "kor" : "eng") + ".png")}
+                     alt="Language Button" onClick={() => this.handleLang()}/>
+              </Tooltip>
               <div className="mobile-header-search-btn d-inline-block d-sm-none" onClick={() => this.showSearchBar()}/>
               {/*<Bounty/>*/}
               <UploadDocumentModalContainer {...this.props} />
