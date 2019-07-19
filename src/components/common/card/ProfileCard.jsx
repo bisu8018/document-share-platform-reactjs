@@ -5,10 +5,12 @@ import MainRepository from "../../../redux/MainRepository";
 import UserInfo from "../../../redux/model/UserInfo";
 import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
+import { FadingCircle } from "better-react-spinkit";
 
 class ProfileCard extends React.Component {
   state = {
-    balance: -1
+    balance: -1,
+    loading: false
   };
 
 
@@ -18,9 +20,9 @@ class ProfileCard extends React.Component {
     const { balance } = this.state;
     let address = getMyInfo.ethAccount;
     if (!address || balance > 0) return false;
-
+    this.setState({ loading: true });
     getWeb3Apis.getBalance(getMyInfo.ethAccount, res => {
-      this.setState({ balance: res });
+      this.setState({ balance: res, loading: false });
     });
   };
 
@@ -46,7 +48,7 @@ class ProfileCard extends React.Component {
 
   render() {
     const { getMyInfo, getTempEmail } = this.props;
-    const { balance } = this.state;
+    const { balance, loading } = this.state;
 
     let identification = (getMyInfo.username.length && getMyInfo.username.length > 0 ? getMyInfo.username : getMyInfo.email);
 
@@ -54,17 +56,13 @@ class ProfileCard extends React.Component {
       <div className="profile-card tac" id="profileCard">
         <div className="mt-4 mb-4">
 
-
           {MainRepository.Account.isAuthenticated() ?
             getMyInfo.picture.length > 0 ?
               <img src={getMyInfo.picture} className="profile-card-avatar" alt="profile"/> :
               <img src={require("assets/image/icon/i_anonymous.png")} className="profile-card-avatar" alt="profile"/>
-
             :
-
-              <div className="profile-card-avatar-init">{getTempEmail[0]}</div>
+            <div className="profile-card-avatar-init">{getTempEmail[0]}</div>
           }
-
 
           <div className="profile-card-username mt-2">
             {MainRepository.Account.isAuthenticated() ? identification : getTempEmail}
@@ -73,17 +71,24 @@ class ProfileCard extends React.Component {
 
         <div className="mb-4">
           <div className="profile-card-total-balance">{psString("profile-card-total-balance")}</div>
+          {!loading ?
           <BalanceOfContainer balance={balance}/>
+          :
+            <div className="profile-card-loading-wrapper"><FadingCircle color="#3681fe"/></div>
+          }
         </div>
 
         <div>
           {MainRepository.Account.isAuthenticated() ?
             <Link to={"/" + identification}>
-              <div className="my-account-btn mb-2" id="profileCardMyAccountBtn" onClick={() => Common.scrollTop()}>{psString("profile-card-my-page")}</div>
+              <div className="my-account-btn mb-2" id="profileCardMyAccountBtn"
+                   onClick={() => Common.scrollTop()}>{psString("profile-card-my-page")}</div>
             </Link> :
-            <div className="my-account-btn mb-2" onClick={() => MainRepository.Account.login()}> {psString("profile-card-login")} </div>
+            <div className="my-account-btn mb-2"
+                 onClick={() => MainRepository.Account.login()}> {psString("profile-card-login")} </div>
           }
-          <div className="profile-card-logout-btn" onClick={() => this.handleLogout()}>{psString("profile-card-logout")}</div>
+          <div className="profile-card-logout-btn"
+               onClick={() => this.handleLogout()}>{psString("profile-card-logout")}</div>
         </div>
 
       </div>

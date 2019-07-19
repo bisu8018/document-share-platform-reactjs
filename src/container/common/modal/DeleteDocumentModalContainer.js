@@ -1,10 +1,9 @@
 import { connect } from "react-redux";
-import UploadDocumentModal from "../../components/common/modal/UploadDocumentModal";
-import { setAlertCode } from "../../redux/reducer/main";
+import { setAlertCode } from "../../../redux/reducer/main";
+import DeleteDocumentModal from "../../../components/common/modal/DeleteDocumentModal";
 
 export default connect(
   state => ({
-    getTagList: state.main.tagList,
     getDrizzle: state.main.drizzleApis,
     getMyInfo: state.main.myInfo,
     getWeb3Apis: state.main.web3Apis,
@@ -14,4 +13,4 @@ export default connect(
       dispatch(setAlertCode(alertCode));
     }
   })
-)(UploadDocumentModal);
+)(DeleteDocumentModal);

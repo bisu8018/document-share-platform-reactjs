@@ -151,7 +151,7 @@ class ContentList extends Component {
               ))}
             </InfiniteScroll>
             {this.state.loading &&
-            <div className="spinner"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>
+            <div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>
             }
           </div>
         </div>

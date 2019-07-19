@@ -29,7 +29,9 @@ class Main extends Component {
     MainRepository.init(() => {
       //태그 리스트 GET
       this.setTagList()
-      // 내 정보 GET
+         // 업로드 태그 리스트 GET
+        .then(this.setUploadTagList())
+         // 내 정보 GET
         .then(this.setMyInfo())
         // 모바일 유무 GET
         .then(this.setIsMobile())
@@ -48,8 +50,24 @@ class Main extends Component {
     const { setTagList } = this.props;
 
     return new Promise((resolve, reject) => {
-      MainRepository.Document.getTagList("latest", result => {
+      MainRepository.Document.getTagList("featured", result => {
         setTagList(result.resultList);
+        resolve();
+      }, err => {
+        console.error(err);
+        reject(err);
+      });
+    });
+  };
+
+
+  //업로드 태그 리스트 GET
+  setUploadTagList = () => {
+    const { setUploadTagList } = this.props;
+
+    return new Promise((resolve, reject) => {
+      MainRepository.Document.getTagList("latest", result => {
+        setUploadTagList(result.resultList);
         resolve();
       }, err => {
         console.error(err);

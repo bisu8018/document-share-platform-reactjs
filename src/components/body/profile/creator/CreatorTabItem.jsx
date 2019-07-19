@@ -63,20 +63,22 @@ class CreatorTabItem extends React.Component {
 
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
           <Link to={"/" + identification + "/" + document.seoTitle}
-                className={(document.state && document.state === "NOT_CONVERT" ? " not-convert-wrapper" : "")}>
+                className={(document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
             <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
-              <img src={Common.getThumbnail(document.documentId, "thumb", 1, document.documentName)}
-                   alt={document.title ? document.title : document.documentName}
-                   className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (document.state && document.state === "NOT_CONVERT" ? " not-convert-background" : "")}/>
 
-              {document.state && document.state === "NOT_CONVERT" &&
-              <div className="not-convert-container">
-                <div className="not-convert">
-                  <Tooltip title="Converting document..." placement="bottom">
-                    <FadingCircle size={40} color={"#3d5afe"}/>
-                  </Tooltip>
-                </div>
-              </div>
+              {document.state && document.state !== "CONVERT_COMPLETE" ?
+                <Tooltip title="Converting document..." placement="bottom">
+                  <div className="not-convert-container">
+                    <div className="not-convert">
+                      <FadingCircle size={40} color={"#3d5afe"}/>
+                    </div>
+                  </div>
+                </Tooltip>
+                :
+                <img src={Common.getThumbnail(document.documentId, "thumb", 1, document.documentName)}
+                     alt={document.title ? document.title : document.documentName}
+                     className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>
+
               }
             </div>
           </Link>
@@ -86,14 +88,14 @@ class CreatorTabItem extends React.Component {
         <div className="col-12 col-sm-9 col-lg-10 p-0">
           <div className="details_info-padding">
             <Link to={"/" + identification + "/" + document.seoTitle}
-                  className={(document.state && document.state === "NOT_CONVERT" ? " not-convert-wrapper" : "")}>
+                  className={(document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
               <div className="info_title mb-1"
                    onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
             </Link>
 
             <div className="details-info-desc-wrapper">
               <Link to={"/" + identification + "/" + document.seoTitle}
-                    className={"info_desc " + (document.state && document.state === "NOT_CONVERT" ? " not-convert-wrapper" : "")}
+                    className={"info_desc " + (document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}
                     title="description"
                     onClick={() => Common.scrollTop()}>
                 {document.desc &&
@@ -118,16 +120,12 @@ class CreatorTabItem extends React.Component {
                      alt="arrow button"/>
               </span>
 
-              {reward > 0 &&
-              <PayoutCard reward={reward} data={document}/>
-              }
+              {reward > 0 && <PayoutCard reward={reward} data={document}/>}
 
 
               <span className="info-detail-view mr-3">{view}</span>
               <span className="info-detail-vote mr-3">{Common.deckStr(vote)}</span>
-              {document.state !== "NOT_CONVERT" &&
-              <CopyModal documentData={document} type="onlyIcon"/>
-              }
+              {document.state === "CONVERT_COMPLETE" && <CopyModal documentData={document} type="onlyIcon"/>}
               <div className="info-date info-date-profile">
                 {Common.dateTimeAgo(document.created)}
               </div>

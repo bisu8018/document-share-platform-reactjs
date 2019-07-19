@@ -1,6 +1,5 @@
 import React from "react";
 import Tooltip from "@material-ui/core/Tooltip";
-import MainRepository from "../../../../redux/MainRepository";
 import { psString } from "../../../../config/localization";
 
 class ContentViewBlockchainButton extends React.Component {
@@ -36,13 +35,10 @@ class ContentViewBlockchainButton extends React.Component {
   };
 
   render() {
-    const { documentData, getDrizzle, getIsDocumentExist } = this.props;
+    const { getDrizzle, getIsDocumentExist } = this.props;
     const { msg } = this.state;
-    let idFromDoc = documentData.accountId;
-    let idFromAuth = MainRepository.Account.getMyInfo();
-    let sub = idFromAuth ? idFromAuth.sub : null;
 
-    if (getIsDocumentExist || idFromDoc !== sub || !getDrizzle.isInitialized() || !getDrizzle.isAuthenticated()) return null;
+    if (getIsDocumentExist || !getDrizzle.isInitialized() || !getDrizzle.isAuthenticated()) return null;
     return (
       <span>
         <Tooltip title={msg} placement="bottom">

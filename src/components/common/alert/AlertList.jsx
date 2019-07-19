@@ -6,12 +6,16 @@ class AlertList extends React.Component {
     container: []
   };
 
+
+  // alert 배열 push
   pushAlert = (serial, code) => {
     return (
       <AlertContainer code={code} close={() => this.handleClose(serial)} idx={serial}/>
     );
   };
 
+
+  // 랜더링 준비작업
   readyRender = () => {
     const { container } = this.state;
 
@@ -30,6 +34,8 @@ class AlertList extends React.Component {
     }
   };
 
+
+  // 컨테이너 셋팅 작업
   setContainer = () => {
     const { container } = this.state;
     const { getAlertCode, setAlertCode } = this.props;
@@ -47,9 +53,10 @@ class AlertList extends React.Component {
     });
   };
 
+
+  // 닫기 버튼 관리
   handleClose = (serial) => {
     const { container } = this.state;
-
 
     for (let i = 0; i < container.length; ++i) {
       if (container[i].serial === serial) {
@@ -64,6 +71,8 @@ class AlertList extends React.Component {
     }
   };
 
+
+  // 렌더링 관리
   handelRender = () => {
     const { container } = this.state;
     const { getAlertCode } = this.props;
@@ -77,10 +86,13 @@ class AlertList extends React.Component {
     }
   };
 
+
   render() {
     const { container } = this.state;
     const { getAlertCode } = this.props;
-this.handelRender();
+
+    this.handelRender();
+
     return (
       <div className="alert-list-wrapper">
         <span className="d-none">{getAlertCode}</span>

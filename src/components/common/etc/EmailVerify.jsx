@@ -45,7 +45,7 @@ class EmailVerify extends React.Component {
   render() {
     return (
       <div>
-        <div className="spinner mt-5"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>
+        <div className="spinner mt-5"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>
       </div>
     );
   }

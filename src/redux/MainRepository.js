@@ -475,6 +475,7 @@ export default {
           useTracking: useTracking,
           forceTracking: forceTracking,
           isDownload: isDownload,
+          isPublic: false,
           cc: cc
         },
         header: {
@@ -543,7 +544,7 @@ export default {
         }
       });
     },
-    getTagList(path: String, callback: any, error:any) {
+    getTagList(path: String, callback: any, error: any) {
       let params = {
         t: path
       };
@@ -588,7 +589,8 @@ export default {
           useTracking: data.useTracking,
           forceTracking: data.forceTracking,
           isDownload: data.isDownload,
-          cc: data.cc
+          cc: data.cc,
+          isPublic: data.isPublic
         },
         header: {
           "Authorization": `Bearer ${token}`
@@ -599,6 +601,39 @@ export default {
         callback(documentInfo);
       }, error => {
         console.error(error);
+      });
+    },
+    async publishDocument(data: any, callback: any) {
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const _data = {
+        data: data,
+        header: {
+          "Authorization": `Bearer ${token}`
+        }
+      };
+      DocService.POST.updateDocument(_data, (rst) => {
+        let documentInfo = new DocumentInfo(rst.result);
+        callback(documentInfo);
+      }, error => {
+        console.error(error);
+      });
+    },
+    async deleteDocument(data: any, callback: any, error: any) {
+      const authResult = await instance.Account.renewSessionPromise();
+      let token = authResult.idToken;
+      const _data = {
+        data: data,
+        header: {
+          "Authorization": `Bearer ${token}`
+        }
+      };
+      DocService.POST.updateDocument(_data, (rst) => {
+        let documentInfo = new DocumentInfo(rst.result);
+        callback(documentInfo);
+      }, err => {
+        console.error(err);
+        error(err);
       });
     }
   },
@@ -684,5 +719,5 @@ export default {
         callback(trackingExport);
       });
     }
-  },
+  }
 };

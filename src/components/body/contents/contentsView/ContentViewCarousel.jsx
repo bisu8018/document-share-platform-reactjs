@@ -3,8 +3,10 @@ import { Carousel } from "react-responsive-carousel";
 import TrackingApis from "apis/TrackingApis";
 import Common from "../../../../config/common";
 import MainRepository from "../../../../redux/MainRepository";
-import EmailModalContainer from "../../../../container/modal/EmailModalContainer";
+import EmailModalContainer from "../../../../container/common/modal/EmailModalContainer";
 import UserInfo from "../../../../redux/model/UserInfo";
+import Tooltip from "@material-ui/core/Tooltip";
+import { psString } from "../../../../config/localization";
 
 class ContentViewCarousel extends React.Component {
 
@@ -223,7 +225,6 @@ class ContentViewCarousel extends React.Component {
   render() {
     const { target, documentText } = this.props;
     const { emailFlag } = this.state;
-
     const arr = [target.totalPages];
     for (let i = 0; i < target.totalPages; i++) {
       arr[i] = Common.getThumbnail(target.documentId, 2048, i + 1);
@@ -232,10 +233,17 @@ class ContentViewCarousel extends React.Component {
     return (
       <div className="card card-raised">
         <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel" data-interval="3000">
+          {!target.isPublic &&
+          <Tooltip title={psString("viewer-page-carousel-private")} placement="bottom">
+            <div className="carousel-lock">
+              <i className="material-icons">lock</i>
+            </div>
+          </Tooltip>
+          }
           <div className="screen-option-bar">
             <i className="material-icons" onClick={this.handleOptionBarClickEvent.bind(this)}>more_vert</i>
             <div className={"screen-option" + (this.state.slideOptionFlag ? "" : " d-none")}>
-              <div title={this.state.autoSlideFlag ? "Switch to Manual Slide Mode" : "Switch to Auto Slide Mode"}
+              <div title={this.state.autoSlideFlag ? psString("viewer-page-carousel-slide-mode-manual") : psString("viewer-page-carousel-slide-mode-auto")}
                    onClick={this.handleOptionBtnClickEvent.bind(this)}>
                 {this.state.autoSlideFlag ? "Auto Mode" : "Manual Mode"}
               </div>
@@ -263,13 +271,9 @@ class ContentViewCarousel extends React.Component {
         </div>
 
 
-
-
         <div className="landscape-warning-message">
           This viewer is only viewable in landscape mode.
         </div>
-
-
 
 
         {!MainRepository.Account.isAuthenticated() && emailFlag && target.useTracking &&

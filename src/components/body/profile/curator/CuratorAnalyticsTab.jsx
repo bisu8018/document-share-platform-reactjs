@@ -207,7 +207,7 @@ class CuratorAnalyticsTab extends React.Component {
             dataLength={resultList.length}
             next={this.fetchMoreData}
             hasMore={!isEndPage}
-            loader={<div className="spinner"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>}>
+            loader={<div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>}>
 
 
             {resultList.length > 0 && resultList.map((result, idx) => (
@@ -276,7 +276,7 @@ class CuratorAnalyticsTab extends React.Component {
         }
 
 
-        {loading && <div className="spinner mb-4"><ThreeBounce name="ball-pulse-sync" color="#ababab"/></div>}
+        {loading && <div className="spinner mb-4"><ThreeBounce name="ball-pulse-sync" color="#3681fe"/></div>}
       </div>
 
     );

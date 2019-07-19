@@ -39,8 +39,7 @@ class UploadDocumentModal extends React.Component {
       forceTracking: false,   // 트래킹 강제 사용 유무
       allowDownload: false,   // 다운로드 허용
       classicModal: false,    // 모달
-      classicModalSub_onChain: false,    // 모달2
-      classicModalSub_noneChain: false,    // 모달3
+      classicModalSub: false,    // 모달2
       by: false,   //CC License by 사용유무
       nc: false,   //CC License nc 사용유무
       nd: false,   //CC License nd 사용유무
@@ -53,7 +52,7 @@ class UploadDocumentModal extends React.Component {
 
   // 문서 등록 API
   registerDocument = () => {
-    const { getMyInfo } = this.props;
+    const { getMyInfo, setAlertCode } = this.props;
     const { title, fileInfo, tags, desc, useTracking, forceTracking, allowDownload } = this.state;
 
     let ethAccount = getMyInfo.ethAccount;
@@ -71,6 +70,10 @@ class UploadDocumentModal extends React.Component {
         isDownload: allowDownload,
         cc: this.getCcValue()
       }, this.handleProgress, result => {
+        if(result.code && result.code === "EXCEEDEDLIMIT") {
+          setAlertCode(2072);
+          reject();
+        }
         resolve(result);
       }, err => {
         reject(err);
@@ -124,8 +127,7 @@ class UploadDocumentModal extends React.Component {
       forceTracking: false,   // 트래킹 강제 사용 유무
       allowDownload: false,   // 다운로드 허용
       classicModal: false,    // 모달 종료
-      classicModalSub_onChain: false,    // 모달2
-      classicModalSub_noneChain: false,    // 모달3
+      classicModalSub: false,    // 모달2
       by: false,   //CC License by 사용유무
       nc: false,   //CC License nc 사용유무
       nd: false,   //CC License nd 사용유무
@@ -145,32 +147,25 @@ class UploadDocumentModal extends React.Component {
 
   //업로드 함수
   handleUpload = async () => {
-    const { getDrizzle, getMyInfo, setAlertCode } = this.props;
-    let ethAccount = getMyInfo.ethAccount;
+    const { setAlertCode } = this.props;
 
     document.getElementById("progressModal").style.display = "block";   //진행도 모달 열기
     document.getElementById("progressWrapper").style.display = "block";   //진행도 wrapper 모달 열기
 
     // 문서 등록 API
     this.registerDocument().then(res => {
-
-      //문서 업로드 완료 후 블록체인 등록
-      if (getDrizzle && ethAccount) getDrizzle.registerDocumentToSmartContract(res.documentId);
-
       document.getElementById("progressModal").style.display = "none"; //진행도 모달 닫기
       document.getElementById("progressWrapper").style.display = "none"; //진행도 모달 wrapper 닫기
 
       this.handleClose("classicModal"); //모달 닫기
-      //this.handleClickOpen("classicModalSub"); //모달2 열기
+      this.handleClickOpen("classicModalSub"); //두번째 모달 열기
 
     }).catch(err => {
       console.error(err);
 
-      this.handleClose("classicModal"); //모달 닫기
-      this.handleClose("classicModalSub_onChain"); //모달2 닫기
-      this.handleClose("classicModalSub_noneChain"); //모달3 닫기
-
       setAlertCode(2071);
+      this.handleClose("classicModal"); //모달 닫기
+      this.handleClose("classicModalSub"); //모달2 닫기
     });
   };
 
@@ -178,9 +173,7 @@ class UploadDocumentModal extends React.Component {
   // 업로드 버튼 관리
   handleUploadBtn = () => {
     // input 값 유효성 검사
-    if (!this.validateTitle() || !this.validateFile() || !this.validateTag()) {
-      return false;
-    }
+    if (!this.validateTitle() || !this.validateFile() || !this.validateTag()) return false;
     this.handleUpload();
   };
 
@@ -198,9 +191,9 @@ class UploadDocumentModal extends React.Component {
   handleFileChange = (e) => {
     const file = e[0];
     if (!file) return false;
-    let filename = file.name;
-    let fileSize = file.size;
-    let ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length).toLowerCase();
+    let filename = file.name,
+      fileSize = file.size,
+      ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length).toLowerCase();
     this.setState({
       fileInfo: {
         file: file,
@@ -216,34 +209,22 @@ class UploadDocumentModal extends React.Component {
 
   // 모달 open 상태 관리
   handleClickOpen = (modal) => {
-    const { getMyInfo, getDrizzle, getWeb3Apis } = this.props;
+    const { getMyInfo } = this.props;
     let ethAccount = getMyInfo.ethAccount;
 
     if (modal === "classicModal") {   // 모달 1
       let username = MainRepository.Account.getMyInfo().username;
       let _username = username ? username : ethAccount;
       this.setState({ username: _username });
-      this.handleOpen(modal);
-
-    } else if (modal === "classicModalSub") {
-      if (getDrizzle && ethAccount) {
-        getWeb3Apis.getBalance(ethAccount, res => {
-          if (res > 0) this.handleOpen("classicModalSub_onChain");    // 모달 2
-          else this.handleOpen("classicModalSub_noneChain");    // 모달 3
-        });
-
-      } else {
-        this.handleOpen("classicModalSub_noneChain");    // 모달 3
-      }
     }
+    this.handleOpen(modal);
   };
 
 
   // 모달 open 관리
   handleOpen = (modal) => {
-    if (!MainRepository.Account.isAuthenticated()) {
-      return MainRepository.Account.login();
-    } else {
+    if (!MainRepository.Account.isAuthenticated()) return MainRepository.Account.login();
+    else {
       const x = [];
       x[modal] = true;
       this.setState(x);
@@ -287,14 +268,8 @@ class UploadDocumentModal extends React.Component {
   handleTrackingCheckbox = () => {
     const { useTracking } = this.state;
     let newValue = !useTracking;
-    this.setState({
-      useTracking: newValue
-    }, () => {
-      if (!useTracking) {
-        this.setState({
-          forceTracking: false
-        });
-      }
+    this.setState({ useTracking: newValue }, () => {
+      if (!useTracking) this.setState({ forceTracking: false });
     });
   };
 
@@ -303,9 +278,7 @@ class UploadDocumentModal extends React.Component {
   handleForceTrackingCheckbox = () => {
     const { forceTracking } = this.state;
     let newValue = !forceTracking;
-    this.setState({
-      forceTracking: newValue
-    });
+    this.setState({ forceTracking: newValue });
   };
 
 
@@ -313,9 +286,7 @@ class UploadDocumentModal extends React.Component {
   handleAllowDownloadCheckbox = () => {
     const { allowDownload } = this.state;
     let newValue = !allowDownload;
-    this.setState({
-      allowDownload: newValue
-    });
+    this.setState({ allowDownload: newValue });
   };
 
 
@@ -323,9 +294,7 @@ class UploadDocumentModal extends React.Component {
   handleCcByCheckbox = () => {
     const { by } = this.state;
     let newValue = !by;
-    this.setState({
-      by: newValue
-    });
+    this.setState({ by: newValue });
   };
 
 
@@ -333,9 +302,7 @@ class UploadDocumentModal extends React.Component {
   handleCcNcCheckbox = () => {
     const { nc } = this.state;
     let newValue = !nc;
-    this.setState({
-      nc: newValue
-    });
+    this.setState({ nc: newValue });
   };
 
 
@@ -343,9 +310,7 @@ class UploadDocumentModal extends React.Component {
   handleCcNdCheckbox = () => {
     const { nd } = this.state;
     let newValue = !nd;
-    this.setState({
-      nd: newValue
-    });
+    this.setState({ nd: newValue });
   };
 
 
@@ -353,13 +318,11 @@ class UploadDocumentModal extends React.Component {
   handleCcSaCheckbox = () => {
     const { sa } = this.state;
     let newValue = !sa;
-    this.setState({
-      sa: newValue
-    });
+    this.setState({ sa: newValue });
   };
 
 
-  // more 옵션 관리 버튼
+  // more 옵션 관리
   handleMoreOptions = () => {
     const { moreOptions } = this.state;
     let _moreOptions = moreOptions;
@@ -422,9 +385,9 @@ class UploadDocumentModal extends React.Component {
       }
     };
 
-    let tagList = this.props.getTagList;
-    let inputValue = (props.value && props.value.trim().toLowerCase()) || "";
-    let inputLength = inputValue.length;
+    let tagList = this.props.getUploadTagList,
+      inputValue = (props.value && props.value.trim().toLowerCase()) || "",
+      inputLength = inputValue.length;
     let suggestions = tagList.length > 0 ?
       tagList.sort((a, b) => b.value - a.value).filter((tag) => {
         return tag._id.toLowerCase().slice(0, inputLength) === inputValue;
@@ -453,7 +416,7 @@ class UploadDocumentModal extends React.Component {
 
 
   render() {
-    const { classicModal, classicModalSub_onChain, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload } = this.state;
+    const { classicModal, classicModalSub, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload } = this.state;
     const { type } = this.props;
 
     return (
@@ -517,10 +480,12 @@ class UploadDocumentModal extends React.Component {
                        value={tags} onChange={this.handleTagChange} validate={false} onlyUnique/>
                        <span>{tagError}</span>
 
+
+
             <div className="modal-more-btn-wrapper">
                <div className="modal-more-btn-line"/>
                <div className="modal-more-btn" onClick={() => this.handleMoreOptions()}>
-                 More Options
+                 {psString("common-modal-more-option")}
                  <img className="reward-arrow"
                       src={require("assets/image/icon/i_arrow_" + (moreOptions ? "down_grey.svg" : "up_grey.png"))}
                       alt="arrow button"/>
@@ -594,19 +559,16 @@ class UploadDocumentModal extends React.Component {
                   </label>
                 </div>
               </div>
-
             </div>
             }
 
           </DialogContent>
-
 
           <DialogActions className="modal-footer">
             <div onClick={() => this.handleClose("classicModal")}
                  className="cancel-btn ">{psString("common-modal-cancel")}</div>
             <div onClick={() => this.handleUploadBtn()} className="ok-btn">{psString("common-modal-upload")}</div>
           </DialogActions>
-
 
           <div className="progress-wrapper" id="progressWrapper"/>
           <div className="progress-modal" id="progressModal">
@@ -620,40 +582,31 @@ class UploadDocumentModal extends React.Component {
 
 
 
-
-
         <Dialog
           className="modal-width"
           fullWidth={true}
-          open={classicModalSub_onChain}
+          open={classicModalSub}
           TransitionComponent={Transition}
           keepMounted
           aria-labelledby="classic-modal-slide-title"
           aria-describedby="classic-modal-slide-description">
 
-
           <DialogTitle
             id="classic-modal-slide-title"
             disableTypography>
             <i className="material-icons modal-close-btn"
-               onClick={() => this.handleClose("classicModalSub_onChain")}>close</i>
+               onClick={() => this.handleClose("classicModalSub")}>close</i>
             <h3>{psString("upload-doc-subj-2")}</h3>
           </DialogTitle>
 
-
           <DialogContent id="classic-modal-slide-description ">
-            <div className="">{psString("upload-doc-desc-1")}</div>
+            <div className="">{psString("upload-doc-desc-2")}</div>
           </DialogContent>
 
-
           <DialogActions className="modal-footer">
-            <div onClick={() => this.handleClose("classicModalSub_onChain")}
-                 className="cancel-btn ">{psString("common-modal-later")}</div>
-            <div onClick={() => this.handleUploadBtn()} className="ok-btn">{psString("upload-doc-btn-1")}</div>
+            <div onClick={() => this.handleClose()} className="ok-btn">{psString("common-modal-confirm")}</div>
           </DialogActions>
         </Dialog>
-
-
 
 
 

@@ -2,13 +2,12 @@ import React from "react";
 import history from "apis/history/history";
 import MainRepository from "../../redux/MainRepository";
 import Common from "../../config/common";
-import UploadDocumentModalContainer from "../../container/modal/UploadDocumentModalContainer";
+import UploadDocumentModalContainer from "../../container/common/modal/UploadDocumentModalContainer";
 import MenuContainer from "../../container/header/MenuContainer";
 import ProfileCardContainer from "../../container/common/ProfileCardContainer";
 import AdsContainer from "../../container/ads/AdsContainer";
 import SearchBarContainer from "../../container/header/SearchBarContainer";
 import { psGetLang, psSetLang, psString } from "../../config/localization";
-import Tooltip from "@material-ui/core/Tooltip";
 
 //import Bounty from "./Bounty";
 
@@ -258,12 +257,11 @@ class Header extends React.Component {
             </div>
 
 
-            <div className="header-bar  col-8 col-md-3">
-              <Tooltip title={psGetLang() === "EN" ? "Korean" : "English"} placement="bottom">
-                <img className="language-btn"
-                     src={require("assets/image/icon/i_flag_" + (psGetLang() === "EN" ? "kor" : "eng") + ".png")}
-                     alt="Language Button" onClick={() => this.handleLang()}/>
-              </Tooltip>
+            <div className="header-bar   col-8 col-md-3">
+              <div className="language-btn" onClick={() => this.handleLang()}>
+                <i className="material-icons" >language</i>
+                {psGetLang() === "EN" ? "KR" : "EN"}
+              </div>
               <div className="mobile-header-search-btn d-inline-block d-sm-none" onClick={() => this.showSearchBar()}/>
               {/*<Bounty/>*/}
               <UploadDocumentModalContainer {...this.props} />

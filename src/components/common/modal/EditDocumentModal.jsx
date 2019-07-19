@@ -84,7 +84,6 @@ class EditDocumentModal extends React.Component {
 
   // CC 상세값 GET
   getCcDetailValue = (cc) => {
-    console.log(cc);
     if (cc === "by") this.setState({ by: true });
     else if (cc === "by-nc") this.setState({ by: true, nc: true });
     else if (cc === "by-nd") this.setState({ by: true, nd: true });
@@ -117,7 +116,8 @@ class EditDocumentModal extends React.Component {
       useTracking: useTracking,
       forceTracking: !useTracking ? false : forceTracking,
       isDownload: allowDownload,
-      cc: this.getCcValue()
+      cc: this.getCcValue(),
+      isPublic: false
     };
     MainRepository.Document.updateDocument(data, (result) => {
       history.push("/" + Common.getPath() + "/" + result.seoTitle);
@@ -401,7 +401,7 @@ class EditDocumentModal extends React.Component {
             <div className="modal-more-btn-wrapper">
                <div className="modal-more-btn-line"/>
                <div className="modal-more-btn" onClick={() => this.handleMoreOptions()}>
-                 More Options
+                 {psString("common-modal-more-option")}
                  <img className="reward-arrow"
                       src={require("assets/image/icon/i_arrow_" + (moreOptions ? "down_grey.svg" : "up_grey.png"))}
                       alt="arrow button"/>

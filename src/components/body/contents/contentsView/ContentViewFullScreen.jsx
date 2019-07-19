@@ -7,19 +7,23 @@ import {
   LinkedinShareButton,
   TwitterShareButton
 } from "react-share";
-// import ContentViewComment from "./ContentViewComment";
 import Common from "../../../../config/common";
 import Tooltip from "@material-ui/core/Tooltip";
-import CopyModal from "../../../common/modal/CopyModal";
 import MainRepository from "../../../../redux/MainRepository";
-import EditDocumentModalContainer from "../../../../container/modal/EditDocumentModalContainer";
+import EditDocumentModalContainer from "../../../../container/common/modal/EditDocumentModalContainer";
 import ContentViewCarouselContainer
   from "../../../../container/body/contents/contentsView/ContentViewCarouselContainer";
 import Linkify from "react-linkify";
 import RegBlockchainBtnContainer from "../../../../container/body/contents/contentsView/RegBlockchainBtnContainer";
-import VoteDocumentModalContainer from "../../../../container/modal/VoteDocumentModalContainer";
+import VoteDocumentModalContainer from "../../../../container/common/modal/VoteDocumentModalContainer";
 import PayoutCard from "../../../common/card/PayoutCard";
 import { psString } from "../../../../config/localization";
+import PublishModalContainer from "../../../../container/common/modal/PublishModalContainer";
+import DeleteDocumentModalContainer from "../../../../container/common/modal/DeleteDocumentModalContainer";
+import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
+
+// import ContentViewComment from "./ContentViewComment";
+
 
 class ContentViewFullScreen extends Component {
 
@@ -69,11 +73,11 @@ class ContentViewFullScreen extends Component {
 
   //전체화면 전환
   goFull = () => {
-    let element = document.getElementsByClassName("selected")[0].firstChild;
-    let imgWidth = element.clientWidth;
-    let imgHeight = element.clientHeight;
-    let deviceRatio = window.innerWidth / window.innerHeight;
-    let imgRatio = imgWidth / imgHeight;
+    let element = document.getElementsByClassName("selected")[0].firstChild,
+      imgWidth = element.clientWidth,
+      imgHeight = element.clientHeight,
+      deviceRatio = window.innerWidth / window.innerHeight,
+      imgRatio = imgWidth / imgHeight;
 
     if (this.state.isFull) {
       this.setState({ isFull: false });
@@ -130,9 +134,9 @@ class ContentViewFullScreen extends Component {
     if (!MainRepository.Account.isAuthenticated() && !getMyInfo.email) {
       return setAlertCode(2003);
     }
-    const accountId = documentData.accountId;
-    const documentId = documentData.documentId;
-    const documentName = documentData.documentName;
+    const accountId = documentData.accountId,
+      documentId = documentData.documentId,
+      documentName = documentData.documentName;
     this.getContentDownload(accountId, documentId, documentName);
   };
 
@@ -147,11 +151,12 @@ class ContentViewFullScreen extends Component {
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0;
     let reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7));
-    let view = documentData.latestPageview || 0;
-    let accountId = documentData.accountId || "";
-    let profileUrl = author ? author.picture : null;
-    let identification = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId;
-    let ogUrl = APP_PROPERTIES.domain().embed + documentData.seoTitle;
+
+    let view = documentData.latestPageview || 0,
+      accountId = documentData.accountId || "",
+      profileUrl = author ? author.picture : null,
+      identification = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId,
+      ogUrl = APP_PROPERTIES.domain().embed + documentData.seoTitle;
 
     return (
 
@@ -201,9 +206,7 @@ class ContentViewFullScreen extends Component {
                    alt="arrow button"/>
             </span>
 
-            {reward > 0 &&
-            <PayoutCard reward={reward} data={documentData}/>
-            }
+            {reward > 0 && <PayoutCard reward={reward} data={documentData}/>}
 
             <span className="info-detail-view mr-3">{view}</span>
             <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
@@ -211,10 +214,13 @@ class ContentViewFullScreen extends Component {
 
 
           <div className="d-inline-block mb-3">
+            {!documentData.isPublic &&
+            <PublishModalContainer documentData={documentData}/>}
+
             {accountId === Common.getMySub() && documentData &&
             <EditDocumentModalContainer documentData={documentData}/>}
 
-            <CopyModal documentData={documentData}/>
+            <CopyModalContainer documentData={documentData}/>
 
             {documentData.isDownload &&
             <Tooltip title={psString("tooltip-download")} placement="bottom">
@@ -237,14 +243,26 @@ class ContentViewFullScreen extends Component {
                 <div className="viewer-btn" onClick={() => Common.scrollTop()}>
                   <i className="material-icons">bar_chart</i> {psString("tracking-btn")}
                 </div>
-              </Link></Tooltip>
+              </Link>
+            </Tooltip>
             }
 
+            {documentData.isPublic && (accountId === Common.getMySub() && documentData) &&
             <RegBlockchainBtnContainer documentData={documentData}/>
+            }
+
+            {documentData.isPublic &&
             <VoteDocumentModalContainer documentData={documentData}/>
+            }
+
+            {!documentData.isPublic && (accountId === Common.getMySub() && documentData) &&
+            <DeleteDocumentModalContainer documentData={documentData}/>
+            }
           </div>
 
+
           <div className="hr mb-2"/>
+
 
           <div className="view_desc">
             <Linkify properties={{

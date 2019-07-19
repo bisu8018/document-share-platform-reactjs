@@ -80,7 +80,7 @@ checkBrowsers(paths.appPath, isInteractive)
   .then(
     ({ stats, previousFileSizes, warnings }) => {
       if (warnings.length) {
-        console.log(chalk.yellow('Compiled with warnings.\n'));
+        console.log(chalk.yellow('컴파일 경고.\n'));
         console.log(warnings.join('\n\n'));
         console.log(
           '\nSearch for the ' +
@@ -93,10 +93,10 @@ checkBrowsers(paths.appPath, isInteractive)
             ' to the line before.\n'
         );
       } else {
-        console.log(chalk.green('Compiled successfully.\n'));
+        console.log(chalk.green('컴파일 성공.\n'));
       }
 
-      console.log('File sizes after gzip:\n');
+      console.log('gzip 파일 사이즈:\n');
       printFileSizesAfterBuild(
         stats,
         previousFileSizes,
@@ -119,7 +119,7 @@ checkBrowsers(paths.appPath, isInteractive)
       );
     },
     err => {
-      console.log(chalk.red('Failed to compile.\n'));
+      console.log(chalk.red('컴파일 실패.\n'));
       printBuildError(err);
       process.exit(1);
     }

@@ -191,7 +191,7 @@ class AudienceTrackingDetail extends React.Component {
                 </ul>
               ))}
 
-              {loading && <div className="spinner"><ThreeBounce color="#ababab"  name="ball-pulse-sync"/></div>}
+              {loading && <div className="spinner"><ThreeBounce color="#3681fe"  name="ball-pulse-sync"/></div>}
 
             </div>
           </div>

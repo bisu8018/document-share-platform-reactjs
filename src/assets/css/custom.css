@@ -519,7 +519,6 @@ mark,
 }
 
 .not-convert {
-    width: auto;
     height: 100%;
     display: flex;
     align-items: center;
@@ -527,7 +526,8 @@ mark,
 }
 
 .not-convert-container {
-    width: 162px;
+    width: 100%;
+    max-width: 163px;
     height: 100%;
     position: absolute;
     left: 0;
@@ -6429,7 +6429,7 @@ dean
     background: white;
     width: 150px;
     text-align: center;
-    color: #4d4d4d;
+    color: #888888;
 }
 
 .banner-close-btn {
@@ -6585,12 +6585,18 @@ dean
 
 .share-btn {
     display: inline-block;
-    font-size: 15px;
-    font-weight: bold;
-    color: #666666;
+    font-size: 14px;
+    padding: 1px 2px 1px 1px;
+    background: #666666;
+    color: white;
     position: absolute;
     cursor: pointer;
-    top: 3px;
+    top: 2px;
+    border-radius: 5px;
+}
+
+.share-btn:hover {
+    background: #3681fe !important;
 }
 
 .share-btn-wrapper {
@@ -6676,6 +6682,12 @@ Dean*/
     color: white;
     background: #3d5afe;
     margin: auto;
+}
+
+.profile-card-loading-wrapper {
+    display: flex;
+    justify-content: center;
+    padding-top: 2px;
 }
 
 
@@ -7515,7 +7527,7 @@ Dean*/
     }
 
     .not-convert-container {
-        width: 100%;
+        max-width: 100%;
     }
 
     .modal-width > div:last-child > div:first-child {
@@ -7860,6 +7872,10 @@ Dean*/
     letter-spacing: -0.2px;
     color: #4d4d4d;
     margin-bottom: 8px;
+}
+
+.profile_info_name > span > strong {
+    font-weight: 600;
 }
 
 .tracking-detail-container .profile_info_name {
@@ -8336,7 +8352,7 @@ Dean
 }
 
 .screen-option > div {
-    min-width: 100px;
+    min-width: 105px;
     padding: 5px 8px;
     color: white;
     text-align: center;
@@ -8922,28 +8938,35 @@ Dean
 }
 
 .custom-textarea {
-    background: #f3f3f3;
-    border: none;
+    background: white;
+    border: 1px solid #d2d2d2 ;
     width: 100%;
     font-size: 14px;
     font-weight: 400;
     padding: 10px;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
 }
 
-.custom-textarea:hover,
+.custom-textarea:not(#copyEmbedInput):hover,
 .custom-textarea:focus {
-    background: #c8deff;
+    border-color: #3681fe;
+    box-shadow: 0 0 0 1px #3681fe;
 }
 
 .custom-input-copy-text {
-    text-align: right;
-    right: 0;
-    top: 5px;
+    display: flex;
     font-weight: 400;
     color: #666666;
     cursor: pointer;
     padding-top: 10px;
     width: 50px;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-input-copy-text > i {
+    font-size: 25px;
 }
 
 .custom-input-copy-text:hover {
@@ -9403,6 +9426,27 @@ ContentViewFullScreen 카로셀
     padding: 20px !important;
 }
 
+.carousel-lock {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 1;
+    opacity: 0.7;
+    cursor: context-menu;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.carousel-lock:hover {
+    opacity: 1;
+}
+
+.carousel-lock > i {
+    font-size: 35px;
+}
+
 
 /*2019-06-11
 dean
@@ -9698,6 +9742,80 @@ input[type="checkbox"]:checked + label span i {
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+}
+
+
+/*라디오버튼 CSS
+이용법 :
+<input type="radio" v-model="radio" id="termsCheckbox"> //실제 체크박스
+<label for="termsCheckbox"><span><i class="material-icons">done</i></span>{{$str('termsLabel')}}</label> //스타일 체크박스
+   */
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"] + label {
+    color: #666666;
+    font-size: 13px;
+    align-items: center;
+    display: flex;
+}
+
+input[type="radio"]:disabled + label {
+    color: #d0d0d0;
+    font-size: 13px;
+    align-items: center;
+    display: flex;
+}
+
+input[type="radio"] + label span {
+    display: inline-block;
+    position: relative;
+    min-width: 20px;
+    min-height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background: white;
+    border: 1px solid #8d8d8d;
+    cursor: pointer;
+    border-radius: 30px;
+}
+
+input[type="radio"]:checked + label span {
+    border: 1px solid #3681fe;
+    font-size: 13px;
+    color: #3681fe;
+    font-weight: bold;
+}
+
+input[type="radio"]:disabled + label span {
+    border: 1px solid #d0d0d0;
+    font-size: 13px;
+    color: #d0d0d0;
+    font-weight: bold;
+}
+
+input[type="radio"]:hover:not(:disabled) + label span {
+    border: 1px solid #3681fe;
+}
+
+input[type="radio"] + label span i {
+    display: none;
+}
+
+input[type="radio"]:checked + label span i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    color: #3681fe;
+    font-weight: bold;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    margin-top: 0.5px;
+    margin-left: 0.7px;
 }
 
 
@@ -10041,12 +10159,16 @@ Main Category CSS
     width: 90px;
     height: 90px;
     border: 1px solid #cccccc;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .profile-card-username {
     color: #4d4d4d;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .profile-card-total-balance {
@@ -10296,15 +10418,26 @@ Ads CSS
 }
 
 .language-btn {
-    margin: 4px 26px;
+    font-family: poppins, 'Noto Sans KR', sans-serif;
+    color: #666666;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
     cursor: pointer;
-    border: 1px solid #ababab;
-    width: 35px;
-    height: 24px;
+    -webkit-transition-duration: .2s;
+    -o-transition-duration: .2s;
+    transition-duration: .2s;
+}
+
+.language-btn > i {
+    font-size: 20px;
+    margin-right: 3px;
 }
 
 .language-btn:hover {
-    border-color: #3681fe;
+    color: #3681fe;
 }
 
 
@@ -10692,3 +10825,4 @@ dean
     top: 9px;
     width: 100%;
 }
+

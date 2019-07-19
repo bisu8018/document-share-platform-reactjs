@@ -99,7 +99,7 @@ class ContentView extends React.Component {
     const { auth, match, ...rest } = this.props;
     const { documentData, documentText, totalViewCountInfo, featuredList, author, errMessage } = this.state;
     if (!documentData && !errMessage) {
-      return (<div className="spinner"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>);
+      return (<div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>);
     }
     if (!documentData && errMessage) {
       return (errMessage && <NotFoundPage errMessage={errMessage}/>);

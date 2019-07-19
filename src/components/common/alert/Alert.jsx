@@ -25,6 +25,8 @@ class Alert extends React.PureComponent {
       //=============================================
       //클라이언트 단 상태코드
       //=============================================
+
+
       // 시스템 메세지 2000~
       case 2001 :
         status = "error";
@@ -45,6 +47,12 @@ class Alert extends React.PureComponent {
         status = "error";
         msg = psString("alert-2004");   // 로그인 필요
         break;
+
+      case 2005 :
+        status = "success";
+        msg = psString("alert-2005");   // 복사 성공
+        break;
+
 
       // 이메일 메세지 2031~
       case 2021 :
@@ -108,11 +116,25 @@ class Alert extends React.PureComponent {
         sub = psString("alert-2052-sub");
         break;
 
+      case 2053 :
+        status = "warning";
+        msg = psString("alert-2053");  // 토큰 잔액 부족
+        sub = psString("alert-2053-sub");
+        break;
+
 
       //업로드 메세지 2071~
       case 2071 :
         status = "error";
         msg = psString("alert-2071");   // 업로드 싪패
+        break;
+      case 2072 :
+        status = "error";
+        msg = psString("alert-2072");   // 비공개 문서 허용 5개 초과
+        break;
+      case 2073 :
+        status = "error";
+        msg = psString("alert-2073");   // 문서 삭제 실패
         break;
 
 

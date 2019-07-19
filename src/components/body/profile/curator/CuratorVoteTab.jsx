@@ -101,7 +101,7 @@ class CuratorVoteTab extends React.Component {
             dataLength={resultList.length}
             next={this.fetchMoreData}
             hasMore={!isEndPage}
-            loader={<div className="spinner"><ThreeBounce color="#ababab" name="ball-pulse-sync"/></div>}>
+            loader={<div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>}>
 
 
             {resultList.length > 0 && resultList.map((result, idx) => (
@@ -111,9 +111,6 @@ class CuratorVoteTab extends React.Component {
           :
           !loading && <NoDataIcon className="no-data">No data</NoDataIcon>
         }
-
-
-        {loading && <div className="spinner mb-4"><ThreeBounce name="ball-pulse-sync" color="#ababab"/></div>}
       </div>
     );
   }

@@ -21,9 +21,7 @@ class CopyModal extends React.Component {
     this.state = {
       classicModal: false,
       url: "",
-      currentUrl: "",
-      copyText: psString("common-modal-copy"),
-      copyEmbedText: psString("common-modal-copy")
+      currentUrl: ""
     };
   }
 
@@ -34,19 +32,20 @@ class CopyModal extends React.Component {
       classicModal: false,
       url: "",
       currentUrl: "",
-      embed: "",
-      copyText: psString("common-modal-copy"),
-      copyEmbedText: psString("common-modal-copy")
+      embed: ""
     });
   };
 
 
+  // 임베트 태그 GET
   getEmbed = (url) => {
     return "<iframe src=\"" +
       url
       + "\" title=\"embed\" width=\"640\" height=\"360\" frameBorder=\"0\" marginWidth=\"0\" marginHeight=\"0\" scrolling=\"no\" allowFullScreen/>";
   };
 
+
+  // URL 셋팅
   setUrl = () => {
     const { documentData, type } = this.props;
     let url = documentData.shortUrl || APP_PROPERTIES.domain().embed + (type === "onlyIcon" ? documentData.seoTitle : ""),
@@ -74,34 +73,24 @@ class CopyModal extends React.Component {
 
 
   // 복사 관리
-  handleCopy = () => {
-    let copyUrl = document.getElementById("copyInput");
+  handleCopy = (id) => {
+    const { setAlertCode } = this.props;
+
+    let copyUrl = document.getElementById(id);
     copyUrl.select();
     document.execCommand("copy");
-    this.setState({ copyText: psString("common-modal-done") });
-  };
+    setAlertCode(2005);
 
+    document.getElementById("icon-1").innerText = "file_copy";
+    document.getElementById("icon-2").innerText = "file_copy";
+    document.getElementById("icon-3").innerText = "file_copy";
 
-  // 임베드 태그 복사 관리
-  handleEmbedCopy = () => {
-    let copyUrl = document.getElementById("copyEmbedInput");
-    copyUrl.select();
-    document.execCommand("copy");
-    this.setState({ copyEmbedText: psString("common-modal-done") });
-  };
-
-
-  // 임베드 링크 복사 관리
-  handleEmbedUrlCopy = () => {
-    let copyUrl = document.getElementById("copyEmbedUrlInput");
-    copyUrl.select();
-    document.execCommand("copy");
-    this.setState({ copyEmbedText: psString("common-modal-done") });
+    copyUrl.nextElementSibling.firstChild.textContent = "done";
   };
 
 
   render() {
-    const { classicModal, url, currentUrl, copyText, embed } = this.state;
+    const { classicModal, url, currentUrl, embed } = this.state;
     const { type } = this.props;
 
     return (
@@ -112,8 +101,8 @@ class CopyModal extends React.Component {
                <i className="material-icons">share</i> {psString("share-modal-btn")}
              </div>
              :
-             <div className="share-btn-wrapper">
-               <i className="material-icons mr-3 share-btn"
+             <div className="share-btn-wrapper  mr-3 ml-1">
+               <i className="material-icons share-btn"
                   onClick={() => this.handleClickOpen("classicModal")}>share</i>
              </div>
            }
@@ -138,14 +127,15 @@ class CopyModal extends React.Component {
 
 
               <DialogContent id="classic-modal-slide-description">
-                <div className="share-modal-title">Embed {"</>"}</div>
-                 <div className="position-relative mb-5 d-flex">
-                  <textarea value={embed}
-                            id="copyEmbedInput"
-                            readOnly
-                            className="custom-textarea"/>
-                  <div className="custom-input-copy-text ml-2 pt-0"
-                       onClick={() => this.handleEmbedCopy()}>{copyText}</div>
+                <div className="share-modal-title">{psString("copy-short-url")}</div>
+                <div className="position-relative mb-4 d-flex">
+                  <input type="text" value={url}
+                         id="copyInput"
+                         readOnly
+                         className="custom-input"/>
+                  <div className="custom-input-copy-text ml-2" onClick={() => this.handleCopy("copyInput")}>
+                    <i className="material-icons" id="icon-1">file_copy</i>
+                  </div>
                 </div>
 
                 <div className="share-modal-title">{psString("copy-embed-url")}</div>
@@ -154,16 +144,20 @@ class CopyModal extends React.Component {
                          id="copyEmbedUrlInput"
                          readOnly
                          className="custom-input"/>
-                  <div className="custom-input-copy-text ml-2" onClick={() => this.handleEmbedUrlCopy()}>{copyText}</div>
+                  <div className="custom-input-copy-text ml-2" onClick={() => this.handleCopy("copyEmbedUrlInput")}>
+                    <i className="material-icons" id="icon-2">file_copy</i>
+                  </div>
                 </div>
 
-                <div className="share-modal-title">{psString("copy-short-url")}</div>
-                <div className="position-relative mb-4 d-flex">
-                  <input type="text" value={url}
-                         id="copyInput"
-                         readOnly
-                         className="custom-input"/>
-                  <div className="custom-input-copy-text ml-2" onClick={() => this.handleCopy()}>{copyText}</div>
+                <div className="share-modal-title">Embed {"</>"}</div>
+                 <div className="position-relative mb-5 d-flex">
+                  <textarea value={embed}
+                            id="copyEmbedInput"
+                            readOnly
+                            className="custom-textarea"/>
+                  <div className="custom-input-copy-text ml-2 pt-0" onClick={() => this.handleCopy("copyEmbedInput")}>
+                    <i className="material-icons" id="icon-3">file_copy</i>
+                  </div>
                 </div>
               </DialogContent>
             </Dialog>
