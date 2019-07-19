@@ -18,7 +18,9 @@ class ProfileCard extends React.Component {
   getBalance = () => {
     const { getWeb3Apis, getMyInfo } = this.props;
     const { balance } = this.state;
+
     let address = getMyInfo.ethAccount;
+
     if (!address || balance > 0) return false;
     this.setState({ loading: true });
     getWeb3Apis.getBalance(getMyInfo.ethAccount, res => {
@@ -34,10 +36,7 @@ class ProfileCard extends React.Component {
       MainRepository.Account.logout(() => {
         setMyInfo(new UserInfo());
       });
-    } else {
-      window.location.reload();
-    }
-
+    } else window.location.reload();
   };
 
 
@@ -72,8 +71,8 @@ class ProfileCard extends React.Component {
         <div className="mb-4">
           <div className="profile-card-total-balance">{psString("profile-card-total-balance")}</div>
           {!loading ?
-          <BalanceOfContainer balance={balance}/>
-          :
+            <BalanceOfContainer balance={balance}/>
+            :
             <div className="profile-card-loading-wrapper"><FadingCircle color="#3681fe"/></div>
           }
         </div>

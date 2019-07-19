@@ -52,8 +52,8 @@ class DeleteDocumentModal extends React.Component {
 
   // delete 관리
   handleDelete = async () => {
-    const {setAlertCode} = this.props;
-    MainRepository.Document.deleteDocument({isDelete: true}, () => {
+    const { setAlertCode } = this.props;
+    MainRepository.Document.deleteDocument({ isDelete: true }, () => {
       this.handleClose("classicModal");
       document.location.reload();
     }, () => {
@@ -64,14 +64,21 @@ class DeleteDocumentModal extends React.Component {
 
   render() {
     const { classicModal } = this.state;
+    const { type } = this.props;
 
     return (
       <span>
          <Tooltip title={psString("tooltip-delete")} placement="bottom">
-             <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
-               <i className="material-icons mr-3">delete_outline</i>
-               {psString("common-modal-delete")}
-             </div>
+                 {type !== "onlyIcon" ?
+                   <div className="viewer-btn mb-1 mr-3" onClick={() => this.handleClickOpen("classicModal")}>
+                     <i className="material-icons ">delete_outline</i>
+                     {psString("common-modal-delete")}
+                   </div>
+                   :
+                   <div className="delete-btn-wrapper ml-1 mr-3" onClick={() => this.handleClickOpen("classicModal")}>
+                     <i className="material-icons ">delete</i>
+                   </div>
+                 }
          </Tooltip>
 
         <Dialog

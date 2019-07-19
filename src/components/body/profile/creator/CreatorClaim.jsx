@@ -8,6 +8,8 @@ class CreatorClaim extends React.Component {
     btnText: psString("claim-text") + " $"
   };
 
+
+  // 크리에이터 확정 보상 GET
   getDetermineCreatorReward = () => {
     const { document, getWeb3Apis, getDrizzle, getMyInfo } = this.props;
     const { determineReward } = this.state;
@@ -21,6 +23,8 @@ class CreatorClaim extends React.Component {
     }
   };
 
+
+  // 클레임 버튼 클릭 관리
   handelClickClaim = () => {
     const { document, getDrizzle, getMyInfo, setAlertCode } = this.props;
     if (!getMyInfo.ethAccount) {
@@ -43,18 +47,21 @@ class CreatorClaim extends React.Component {
     }
   };
 
+
   componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
     this.getDetermineCreatorReward();
   }
+
 
   render() {
     const { getDrizzle, userInfo, getMyInfo, getIsMobile } = this.props;
     const { determineReward, btnText } = this.state;
 
-    let myEthAccount = getMyInfo.ethAccount;
-    let ethAccount = userInfo ? userInfo.ethAccount : "";
+    let myEthAccount = getMyInfo.ethAccount,
+     ethAccount = userInfo ? userInfo.ethAccount : "",
+     claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
+
     let drizzleAccount = getDrizzle ? getDrizzle.getLoggedInAccount() : "";
-    let claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
     if (myEthAccount !== ethAccount || !getDrizzle.isAuthenticated() || ethAccount !== drizzleAccount || claimReward <= 0 || btnText === psString("claim-btn-text-1") ) return <div/>;
 
     return (

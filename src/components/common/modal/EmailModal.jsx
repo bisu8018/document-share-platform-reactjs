@@ -1,5 +1,4 @@
 import React from "react";
-
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -28,49 +27,62 @@ class EmailModal extends React.Component {
     };
   }
 
+
+  // state 초기화
   clearState = () => {
-    this.setState({
-      classicModal: false,
-      email: ""
-    });
+    this.setState({ classicModal: false, email: "" });
   };
+
 
   //이메일 유효성 체크
   validateEmail = () => {
     const { email } = this.state;
     let checkEmail = Common.checkEmailForm(email);
-    this.setState({
-      emailError:
-        checkEmail ? "" : psString("email-modal-error-1")
-    });
+    this.setState({ emailError: checkEmail ? "" : psString("email-modal-error-1") });
     return checkEmail;
   };
+
 
   //체크박스 유효성 체크
   validateCheckBox = () => {
     const { policyChecked } = this.state;
     const termsCheckbox = document.getElementById("termsCheckbox").nextElementSibling.firstChild;
-    if (policyChecked) {
-      termsCheckbox.style.border = "1px solid #7fc241";
-    } else {
-      termsCheckbox.style.border = "1px solid #f92121";
-    }
+
+    if (policyChecked) termsCheckbox.style.border = "1px solid #3681fe";
+    else termsCheckbox.style.border = "1px solid #f92121";
 
     return policyChecked;
   };
 
+
+  // 메일 세션 저장
   setSessionInfo = (data) => {
     const { setTempEmail } = this.props;
     setTempEmail(data.email);
   };
 
+
+  // 모달 오픈 관리
   handleClickOpen = (modal) => {
     const x = [];
     x[modal] = true;
     this.setState(x);
   };
 
+
+  // 모달 닫기 관리
   handleClose = (modal) => {
+    const { useTracking } = this.props;
+    const x = [];
+    x[modal] = false;
+    this.setState(x);
+    useTracking();
+    this.clearState();
+  };
+
+
+  // 강제입력 시 모달 종료 관리
+  handleBack = (modal) => {
     const { forceTracking } = this.props;
     const x = [];
     x[modal] = false;
@@ -79,12 +91,16 @@ class EmailModal extends React.Component {
     this.clearState();
   };
 
+
+  // 메일 입력 체크
   handleEmailChange = e => {
     this.setState({ email: e.target.value }, () => {
       this.validateEmail();
     });
   };
 
+
+  // 보내기 버튼 클릭 시
   handleSendBtn = async () => {
     const { email } = this.state;
     const { handleTracking, documentId } = this.props;
@@ -107,18 +123,23 @@ class EmailModal extends React.Component {
     }
   };
 
+
+  // 체크박스 관리
   handleCheckbox = (e) => {
     this.setState({ policyChecked: e.target.checked }, () => {
       this.validateCheckBox();
     });
   };
 
+
   componentWillMount() {
     this.handleClickOpen("classicModal");
   }
 
+
   render() {
     const { classicModal, emailError } = this.state;
+    const { documentData } = this.props;
 
     return (
       <span>
@@ -135,8 +156,7 @@ class EmailModal extends React.Component {
               <DialogTitle
                 id="classic-modal-slide-title"
                 disableTypography>
-                <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                <h3>{psString("email-modal-subj")}</h3>
+                <h3>{documentData.forceTracking === true ? psString("email-modal-subj-1") : psString("email-modal-subj-2")}</h3>
               </DialogTitle>
 
 
@@ -153,13 +173,20 @@ class EmailModal extends React.Component {
                 <label htmlFor="termsCheckbox">
                   <span><i className="material-icons">done</i></span>
                   {psString("email-modal-explain-2")}
-                    <a className="checkbox-policy-link" target="_blank" href={"/legal/policy.html"}
-                       rel="noopener noreferrer">{psString("email-modal-explain-3")}</a>
+                  <a className="checkbox-policy-link ml-1" target="_blank" href={"/legal/policy.html"}
+                     rel="noopener noreferrer">{psString("email-modal-explain-3")}</a>
                 </label>
               </DialogContent>
 
               <DialogActions className="modal-footer">
-                <div onClick={() => this.handleSendBtn()} className="ok-btn">{psString("Sign up")}</div>
+                {documentData.forceTracking === true ?
+                  <div onClick={() => this.handleBack("classicModal")}
+                       className="cancel-btn">{psString("email-modal-btn-cancel-2")}</div>
+                  :
+                  <div onClick={() => this.handleClose("classicModal")}
+                       className="cancel-btn">{psString("email-modal-btn-cancel-1")}</div>
+                }
+                <div onClick={() => this.handleSendBtn()} className="ok-btn">{psString("email-modal-btn-ok")}</div>
               </DialogActions>
             </Dialog>
       </span>

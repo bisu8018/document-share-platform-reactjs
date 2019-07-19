@@ -28,10 +28,9 @@ class DocumentCard extends React.Component {
   // 이미지 정보 GET
   getImgInfo = () => {
     const { documentData } = this.props;
-    let imgUrl = Common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName);
     let img = new Image();
 
-    img.src = imgUrl;
+    img.src = Common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName);
     img.onload = () => {
       let height = img.height;
       let width = img.width;
@@ -47,13 +46,13 @@ class DocumentCard extends React.Component {
     const { idx, path, documentData, getCreatorDailyRewardPool, totalViewCountInfo, countCards } = this.props;
     const { ratio } = this.state;
 
-    let author = documentData.author;
-    let identification = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId;
-    let imgUrl = Common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName);
-    let profileUrl = author ? author.picture : null;
-    let vote = Common.toEther(documentData.latestVoteAmount) || 0;
-    let reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7));
-    let view = documentData.latestPageview || 0;
+    let author = documentData.author,
+      identification = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId,
+      imgUrl = Common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName),
+      profileUrl = author ? author.picture : null,
+      vote = Common.toEther(documentData.latestVoteAmount) || 0,
+      reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
+      view = documentData.latestPageview || 0;
 
     return (
       <div>
@@ -106,7 +105,8 @@ class DocumentCard extends React.Component {
             documentData.isRegistry ?
               <div className={"main-category-card-reward-info"} id={path + idx}>
                 {psString("profile-payout-txt-1")}
-                <span className="font-weight-bold ml-1">{(!reward ? 0 : reward)} DECK</span> {psString("profile-payout-txt-2")}
+                <span
+                  className="font-weight-bold ml-1">{(!reward ? 0 : reward)} DECK</span> {psString("profile-payout-txt-2")}
               </div>
               :
               <div className={"main-category-card-reward-info reward-info-not-registered"} id={path + idx}>

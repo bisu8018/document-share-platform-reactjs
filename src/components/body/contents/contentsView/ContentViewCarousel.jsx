@@ -17,14 +17,14 @@ class ContentViewCarousel extends React.Component {
     autoSlideFlag: false,
     slideOptionFlag: false,
     audienceEmail: null,
-    emailFlag: false,
-    emailFlagTemp: false,
+    emailFlag: false,   // true : 메일 수집 모달 표시
+    emailFlagTemp: false,   // true : 메일 수집 모달 표시
     loginTrackingFlag: false,
     pageChangedFlag: null
   };
 
 
-// 로그인 시, cid ~ email 싱크 작업
+  // 로그인 시, cid ~ email 싱크 작업
   postTrackingConfirm = (pageNum) => {
     const { target, getMyInfo } = this.props;
     const trackingInfo = TrackingApis.setTrackingInfo();
@@ -41,6 +41,20 @@ class ContentViewCarousel extends React.Component {
     });
   };
 
+
+  // Tracking API POST
+  postTracking = (page, type, callback) => {
+    TrackingApis.tracking({
+      id: this.props.target.documentId,
+      n: page + 1,
+      ev: type
+    }, true).then(res => {
+      callback(res);
+    });
+  };
+
+
+  // 페이지 GET
   getPageNum = () => {
     let pageNum = window.location.pathname.split("/")[3];
     pageNum = pageNum && pageNum > "1" ? Number(pageNum.split("-")[0]) - 1 : 0;
@@ -48,15 +62,16 @@ class ContentViewCarousel extends React.Component {
   };
 
 
+  // URL 관리
   handleUrl = () => {
     const { readPage } = this.state;
     const { documentText, getPageNum } = this.props;
 
-    let pageNum = window.location.pathname.split("/");
-    let url = window.location.origin + "/" + pageNum[1] + "/" + pageNum[2] + "/";
-    let _readPage = readPage + 1;
+    let pageNum = window.location.pathname.split("/"),
+      url = window.location.origin + "/" + pageNum[1] + "/" + pageNum[2] + "/",
+      _readPage = readPage + 1,
+      _documentText = "";
 
-    let _documentText = "";
     if (documentText && documentText.length > 0 && documentText[readPage]) _documentText = documentText[readPage].substr(0, 10).trim().replace(/([^A-Za-z0-9 ])+/g, "").replace(/([ ])+/g, "-");
     if (_documentText.length > 0) _documentText = "-" + _documentText;
 
@@ -64,13 +79,6 @@ class ContentViewCarousel extends React.Component {
       window.history.replaceState({}, _readPage + _documentText, url + (_readPage === 1 ? "" : _readPage + _documentText));
       getPageNum(_readPage);  //Parent 인 ContentView 로 pageNum 전달, page 에 따른 문서 설명 전환 용. redux 로 대체 가능
     }
-  };
-
-
-  // 이메일 강제 입력 on/off
-  handleForceTracking = () => {
-    const { target } = this.props;
-    if (!target.forceTracking) this.setState({ emailFlagTemp: true });
   };
 
 
@@ -118,41 +126,30 @@ class ContentViewCarousel extends React.Component {
       this.handleUrl();
     });
 
-
-    // 트래킹 사용
+    // 트래킹 / 강제 트래킹 분기처리
     if (target.useTracking) {
-      // 강제 트래킹
-      if (target.forceTracking) {
-        let ft = await this.handleFlag(page);
-        if (!ft) return false;
-      } else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp && !getTempEmail) {
+      if (target.forceTracking && !await this.handleFlag(page)) return false;
+      else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp && !getTempEmail) {
         this.setState({ emailFlag: true }, () => {
           handleEmailFlag(true);
         });
       }
-      await TrackingApis.tracking({
-        id: target.documentId,
-        n: page + 1,
-        ev: "view"
-      }, true).then(res => {
-        // 비로그인 상태에서 email로 로그인 시, 트래킹 위한 redux 저장
+
+      this.postTracking(page, "view", res => {
         if (res.user) {
+          // 비로그인 상태에서 email로 로그인 시, 트래킹 위한 redux 저장
           if (getMyInfo.email === "") {
             let userInfo = new UserInfo();
             userInfo.email = res.user.e;
             setMyInfo(userInfo);
           }
+
           if (emailFlag) this.setState({ emailFlag: false });
         }
       });
-
     } else {
       // 오직 뷰 카운트만을 위한 트랙킹 기능
-      TrackingApis.tracking({
-        id: target.documentId,
-        n: page + 1,
-        ev: "none"
-      }, true);
+      this.postTracking(page, "none");
     }
   };
 
@@ -177,6 +174,35 @@ class ContentViewCarousel extends React.Component {
   };
 
 
+  // see also 통한 페이지 전환 시, readPage 값 0으로 초기화
+  handlePageChanged = async () => {
+    const { pageChangedFlag } = this.state;
+    const { target } = this.props;
+
+    let documentId = target.documentId;
+
+    if (pageChangedFlag !== documentId) {
+      if (pageChangedFlag !== null) this.handleTrackingLeave(pageChangedFlag);
+      this.setState({ readPage: null, pageChangedFlag: documentId });
+    }
+  };
+
+
+  // 이메일 비강제 입력 모달 종료 시 플래그 조정
+  handleUseTrackingFlag = () => {
+    this.setState({ emailFlagTemp: true });
+  };
+
+
+  // 이메일 강제 입력 모달 종료 시 플래그 조정
+  handleForceTrackingFlag = () => {
+    this.setState({ readPage: 0, emailFlag: false }, () => {
+      this.props.handleEmailFlag(false);
+      this.handleUrl();
+    });
+  };
+
+
   // 슬라이드 옵션 창 on/off
   handleOptionBarClickEvent = () => {
     this.setState({ slideOptionFlag: !this.state.slideOptionFlag });
@@ -186,22 +212,6 @@ class ContentViewCarousel extends React.Component {
   // 자동 슬라이드 설정 on/off
   handleOptionBtnClickEvent = () => {
     this.setState({ autoSlideFlag: !this.state.autoSlideFlag });
-  };
-
-
-  // see also 통한 페이지 전환 시, readPage 값 0으로 초기화
-  handlePageChanged = async () => {
-    const { pageChangedFlag } = this.state;
-    const { target } = this.props;
-
-    let documentId = target.documentId;
-
-    if (pageChangedFlag !== documentId) {
-      if (pageChangedFlag !== null) {
-        this.handleTrackingLeave(pageChangedFlag);
-      }
-      this.setState({ readPage: null, pageChangedFlag: documentId });
-    }
   };
 
 
@@ -222,10 +232,12 @@ class ContentViewCarousel extends React.Component {
     this.handlePageChanged();
   }
 
+
   render() {
     const { target, documentText } = this.props;
     const { emailFlag } = this.state;
     const arr = [target.totalPages];
+
     for (let i = 0; i < target.totalPages; i++) {
       arr[i] = Common.getThumbnail(target.documentId, 2048, i + 1);
     }
@@ -243,8 +255,9 @@ class ContentViewCarousel extends React.Component {
           <div className="screen-option-bar">
             <i className="material-icons" onClick={this.handleOptionBarClickEvent.bind(this)}>more_vert</i>
             <div className={"screen-option" + (this.state.slideOptionFlag ? "" : " d-none")}>
-              <div title={this.state.autoSlideFlag ? psString("viewer-page-carousel-slide-mode-manual") : psString("viewer-page-carousel-slide-mode-auto")}
-                   onClick={this.handleOptionBtnClickEvent.bind(this)}>
+              <div
+                title={this.state.autoSlideFlag ? psString("viewer-page-carousel-slide-mode-manual") : psString("viewer-page-carousel-slide-mode-auto")}
+                onClick={this.handleOptionBtnClickEvent.bind(this)}>
                 {this.state.autoSlideFlag ? "Auto Mode" : "Manual Mode"}
               </div>
             </div>
@@ -277,8 +290,10 @@ class ContentViewCarousel extends React.Component {
 
 
         {!MainRepository.Account.isAuthenticated() && emailFlag && target.useTracking &&
-        <EmailModalContainer handleTracking={() => this.handleTracking()}
-                             forceTracking={() => this.handleForceTracking()} documentId={target.documentId}/>
+        <EmailModalContainer handleTracking={() => this.handleTracking()} documentData={target}
+                             useTracking={() => this.handleUseTrackingFlag()}
+                             forceTracking={() => this.handleForceTrackingFlag()}
+                             documentId={target.documentId}/>
         }
       </div>
     );

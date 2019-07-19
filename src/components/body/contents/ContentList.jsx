@@ -18,11 +18,14 @@ class ContentList extends Component {
     tagSearchFlag: false
   };
 
+
   constructor(props) {
     super(props);
     this.handleCategories = this.handleCategories.bind(this);
   }
 
+
+  // 무한 스크롤 두번째 데이터 GET
   fetchMoreData = () => {
     const { pageNo, tag, path, resultList } = this.state;
 
@@ -36,6 +39,8 @@ class ContentList extends Component {
     });
   };
 
+
+  // document 데이터 fetch
   fetchDocuments = (args) => {
     const { path, resultList, tagSearchFlag } = this.state;
     const params = {
@@ -46,8 +51,8 @@ class ContentList extends Component {
 
     MainRepository.Document.getDocumentList(params, (res) => {
       this.setState({ loading: false });
-      const _resultList = res.resultList ? res.resultList : [];
-      const pageNo = res.pageNo;
+      const _resultList = res.resultList ? res.resultList : [],
+        pageNo = res.pageNo;
 
       if (_resultList.length > 0) {
         if (resultList.length > 0 && !tagSearchFlag) {
@@ -68,10 +73,12 @@ class ContentList extends Component {
       this.setTimeout = setTimeout(() => {
         this.fetchDocuments(args);
         clearTimeout(this.setTimeout);
-      },8000);
+      }, 8000);
     });
   };
 
+
+  // fetch 진행
   setFetch = () => {
     this.setState({
       resultList: [],
@@ -88,28 +95,32 @@ class ContentList extends Component {
     });
   };
 
+
   //태그 리스트 GET
   setTagList = () => {
     const { setTagList, getTagList } = this.props;
 
     let path = Common.getPath();
-    if(getTagList.path !== path){
-      MainRepository.Document.getTagList(path,result => {
+    if (getTagList.path !== path) {
+      MainRepository.Document.getTagList(path, result => {
         setTagList(result.resultList);
       });
     }
   };
 
-  handleCategories = () => {
-    let path = Common.getPath();
-    let sec_path = Common.getTag();
 
+  // 카테고리 관리
+  handleCategories = () => {
+    let path = Common.getPath(), sec_path = Common.getTag();
     this.props.history.push("/" + path + "/" + sec_path);
   };
 
+
+  // 업로드 버튼 관리
   handleUploadBtn = () => {
     document.getElementById("uploadBtn").click();
   };
+
 
   componentDidUpdate = () => {
     let pathArr = window.location.pathname.split("/");
@@ -118,10 +129,12 @@ class ContentList extends Component {
     }
   };
 
+
   componentWillMount() {
     this.setFetch();
     this.setTagList();
   }
+
 
   render() {
     const { match, isEndPage, getIsMobile } = this.props;

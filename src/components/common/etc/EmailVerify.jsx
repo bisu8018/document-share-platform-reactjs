@@ -36,10 +36,8 @@ class EmailVerify extends React.Component {
   };
 
   componentWillMount(): void {
-    let url_string = window.location.href;
-    let url = new URL(url_string);
-    let c = url.searchParams.get("code");
-    this.getVerifiedValue(c);
+    let url = new URL(window.location.href);
+    this.getVerifiedValue(url.searchParams.get("code"));
   }
 
   render() {

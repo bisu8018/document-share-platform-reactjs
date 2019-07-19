@@ -39,7 +39,7 @@ class Main extends Component {
         .then(this.setAuthorDailyRewardPool())
         // 큐레이터 리워드풀 GET
         .then(this.setCuratorDailyRewardPool())
-
+        // 초기화 완료
         .then(this.setState({ initData: true }));
     });
   };

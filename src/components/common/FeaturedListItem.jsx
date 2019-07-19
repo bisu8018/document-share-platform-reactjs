@@ -15,13 +15,12 @@ class FeaturedList extends React.Component {
   // 이미지 정보 GET
   getImgInfo = () => {
     const { resultItem } = this.props;
-    let imgUrl = Common.getThumbnail(resultItem.documentId, 320, 1, resultItem.documentName);
     let img = new Image();
 
-    img.src = imgUrl;
+    img.src = Common.getThumbnail(resultItem.documentId, 320, 1, resultItem.documentName);
     img.onload = () => {
-      let height = img.height;
-      let width = img.width;
+      let height = img.height,
+        width = img.width;
       this.setState({ ratio: (width / height) });
     };
   };

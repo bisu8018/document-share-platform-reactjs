@@ -28,8 +28,8 @@ class CuratorTabItem extends React.Component {
   // 이미지 정보 GET
   getImgInfo = () => {
     const { document } = this.props;
-    let imgUrl = Common.getThumbnail(document.documentId, 320, 1, document.documentName);
-    let img = new Image();
+    let imgUrl = Common.getThumbnail(document.documentId, 320, 1, document.documentName),
+      img = new Image();
 
     img.src = imgUrl;
     img.onload = () => {
@@ -48,10 +48,10 @@ class CuratorTabItem extends React.Component {
     const { document, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
     const { ratio } = this.state;
 
-    let reward = Common.toEther(Common.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7));
-    let vote = Common.toEther(document.latestVoteAmount) || 0;
-    let view = document.latestPageview || 0;
-    let identification = document.author ? (document.author.username && document.author.username.length > 0 ? document.author.username : document.author.email) : document.accountId;
+    let reward = Common.toEther(Common.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
+      vote = Common.toEther(document.latestVoteAmount) || 0,
+      view = document.latestPageview || 0,
+      identification = document.author ? (document.author.username && document.author.username.length > 0 ? document.author.username : document.author.email) : document.accountId;
 
     return (
 
@@ -103,7 +103,8 @@ class CuratorTabItem extends React.Component {
 
               {reward > 0 &&
               <div className="info-detail-reward-info" id={document.seoTitle + "rewardVote"}>
-                {psString("profile-payout-txt-3")} <span className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> {psString("profile-payout-txt-2")}
+                {psString("profile-payout-txt-3")} <span
+                className="font-weight-bold">{(!reward ? 0 : reward)} DECK</span> {psString("profile-payout-txt-2")}
               </div>
               }
 

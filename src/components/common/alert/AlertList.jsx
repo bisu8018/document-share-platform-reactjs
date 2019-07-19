@@ -79,20 +79,14 @@ class AlertList extends React.Component {
 
     let conLength = container.length;
 
-    if (getAlertCode) {
-      if (conLength === 0 || (conLength > 0 && container[conLength - 1].code !== getAlertCode)) {
-        this.readyRender();
-      }
-    }
+    if (getAlertCode) if (conLength === 0 || (conLength > 0 && container[conLength - 1].code !== getAlertCode)) this.readyRender();
   };
 
 
   render() {
     const { container } = this.state;
     const { getAlertCode } = this.props;
-
     this.handelRender();
-
     return (
       <div className="alert-list-wrapper">
         <span className="d-none">{getAlertCode}</span>

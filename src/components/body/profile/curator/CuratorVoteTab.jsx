@@ -17,6 +17,8 @@ class CuratorVoteTab extends React.Component {
     loading: false
   };
 
+
+  // 무한 스크롤 다음 문서 DATA fetch
   fetchMoreData = () => {
     const { pageNo } = this.state;
     if (this.state.moreDataFlag) {
@@ -26,6 +28,8 @@ class CuratorVoteTab extends React.Component {
     }
   };
 
+
+  // 문서 정보 fetch
   fetchDocuments = (params) => {
     const { userInfo, getDocumentList } = this.props;
     const { resultList } = this.state;
@@ -46,15 +50,9 @@ class CuratorVoteTab extends React.Component {
     MainRepository.Curator.getCuratorDocuments(_params, res => {
       if (res.resultList.length > 0) {
         if (resultList.length > 0) {
-          this.setState({
-            resultList: resultList.concat(res.resultList),
-            pageNo: res.pageNo
-          });
+          this.setState({ resultList: resultList.concat(res.resultList), pageNo: res.pageNo });
         } else {
-          this.setState({
-            resultList: res.resultList,
-            pageNo: res.pageNo
-          }, () => {
+          this.setState({ resultList: res.resultList, pageNo: res.pageNo }, () => {
             // 2019-04-16, 임시 사용, AuthorSummary 데이터 전달 위한 Event
             getDocumentList(res);
           });
@@ -62,13 +60,9 @@ class CuratorVoteTab extends React.Component {
 
         this.setState({ moreDataFlag: true });
 
-        if (res.count === 0 || res.resultList.length < 10) {
-          this.setState({ isEndPage: true });
-        }
+        if (res.count === 0 || res.resultList.length < 10) this.setState({ isEndPage: true });
 
-        if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) {
-          this.setState({ totalViewCountInfo: res.totalViewCountInfo });
-        }
+        if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) this.setState({ totalViewCountInfo: res.totalViewCountInfo });
       }
       // 로딩 off
       this.setState({ loading: false });
@@ -80,9 +74,11 @@ class CuratorVoteTab extends React.Component {
     });
   };
 
+
   componentWillMount() {
     this.fetchDocuments();
   }
+
 
   render() {
     const { resultList, isEndPage, totalViewCountInfo, loading } = this.state;

@@ -73,16 +73,21 @@ class AudienceTrackingDetail extends React.Component {
     }
   };
 
+
+  // 이미지 URL GET
   getImgUrl = (page) => {
-    const { location } = this.props;
-    return Common.getThumbnail(location.state.document.documentId, 320, page);
+    return Common.getThumbnail(this.props.location.state.document.documentId, 320, page);
   };
 
+
+  // 정렬 시간 GET
   getSortedTime = (result) => {
     result.viewTracking.sort((a, b) => a.t - b.t);
     return Common.timestampToTime(result.viewTracking[0].t);
   };
 
+
+  // 머문 시간 GET
   getStayingTime = (result) => {
     result.viewTracking.sort((a, b) => a.t - b.t);
     let nextDt = result.viewTracking[result.viewTracking.length - 1].t;
@@ -91,9 +96,11 @@ class AudienceTrackingDetail extends React.Component {
     return Common.timestampToDurationJustTime(nextDt - prevDt);
   };
 
+
   componentWillMount() {
     this.getTrackingInfo();
   }
+
 
   render() {
     const { history, match, location } = this.props;
@@ -102,8 +109,8 @@ class AudienceTrackingDetail extends React.Component {
     if (!location.state || !location.state.cid) return false;
 
     const documentText = location.state.documentText;
-    let email = location.state.email;
-    let time = Common.timestampToDate(Number(location.state.time));
+    let email = location.state.email,
+      time = Common.timestampToDate(Number(location.state.time));
 
     return (
 
@@ -191,7 +198,7 @@ class AudienceTrackingDetail extends React.Component {
                 </ul>
               ))}
 
-              {loading && <div className="spinner"><ThreeBounce color="#3681fe"  name="ball-pulse-sync"/></div>}
+              {loading && <div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>}
 
             </div>
           </div>

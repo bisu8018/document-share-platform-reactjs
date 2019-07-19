@@ -45,10 +45,11 @@ class CuratorClaim extends React.Component {
   render() {
     const { getDrizzle, userInfo, getMyInfo, getIsMobile } = this.props;
     const { determineReward, btnText } = this.state;
-    let myEthAccount = getMyInfo.ethAccount;
-    let ethAccount = userInfo ? userInfo.ethAccount : "";
+    let myEthAccount = getMyInfo.ethAccount,
+      ethAccount = userInfo ? userInfo.ethAccount : "",
+      claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
+
     let drizzleAccount = getDrizzle ? getDrizzle.getLoggedInAccount() : "";
-    let claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
     if (myEthAccount !== ethAccount || !getDrizzle.isAuthenticated() || ethAccount !== drizzleAccount || claimReward <= 0 || btnText === "Complete") return <div/>;
 
     return (

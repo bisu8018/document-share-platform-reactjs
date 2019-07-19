@@ -27,6 +27,7 @@ class Creator extends React.Component {
     return decodeURI(pathArr[1]);
   };
 
+
   // 프로필 정보 GET
   getProfileInfo = (params: any) => {
     MainRepository.Account.getProfileInfo(params, result => {
@@ -37,15 +38,18 @@ class Creator extends React.Component {
     });
   };
 
+
   //업로드 탭에서 문서 목록 GET, AuthorSummary에서 계산 위해 사용
   getUploadDocumentList = (result: any) => {
     this.setState({ uploadDocumentList: result });
   };
 
+
   //투표 탭에서 문서 목록 GET, AuthorSummary에서 계산 위해 사용
   getVoteDocumentList = (result: any) => {
     this.setState({ voteDocumentList: result });
   };
+
 
   componentWillMount(): void {
     const { getMyInfo } = this.props;

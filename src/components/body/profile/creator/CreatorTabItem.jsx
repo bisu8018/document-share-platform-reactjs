@@ -6,8 +6,9 @@ import CreatorClaimContainer from "../../../../container/body/profile/creator/Cr
 import { FadingCircle } from "better-react-spinkit";
 import Tooltip from "@material-ui/core/Tooltip";
 import LinesEllipsis from "react-lines-ellipsis";
-import CopyModal from "../../../common/modal/CopyModal";
 import PayoutCard from "../../../common/card/PayoutCard";
+import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
+import DeleteDocumentModalContainer from "../../../../container/common/modal/DeleteDocumentModalContainer";
 
 class CreatorTabItem extends React.Component {
   constructor(props) {
@@ -59,13 +60,10 @@ class CreatorTabItem extends React.Component {
     return (
 
       <div className="pl-3 pl-sm-0 pr-3 pr-sm-0 row u_center_inner">
-
-
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
           <Link to={"/" + identification + "/" + document.seoTitle}
                 className={(document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
             <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
-
               {document.state && document.state !== "CONVERT_COMPLETE" ?
                 <Tooltip title="Converting document..." placement="bottom">
                   <div className="not-convert-container">
@@ -78,7 +76,6 @@ class CreatorTabItem extends React.Component {
                 <img src={Common.getThumbnail(document.documentId, "thumb", 1, document.documentName)}
                      alt={document.title ? document.title : document.documentName}
                      className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>
-
               }
             </div>
           </Link>
@@ -122,10 +119,10 @@ class CreatorTabItem extends React.Component {
 
               {reward > 0 && <PayoutCard reward={reward} data={document}/>}
 
-
               <span className="info-detail-view mr-3">{view}</span>
               <span className="info-detail-vote mr-3">{Common.deckStr(vote)}</span>
-              {document.state === "CONVERT_COMPLETE" && <CopyModal documentData={document} type="onlyIcon"/>}
+              {document.state === "CONVERT_COMPLETE" && <CopyModalContainer documentData={document} type="onlyIcon"/>}
+              {document.isPublic === false && <DeleteDocumentModalContainer type="onlyIcon"/>}
               <div className="info-date info-date-profile">
                 {Common.dateTimeAgo(document.created)}
               </div>

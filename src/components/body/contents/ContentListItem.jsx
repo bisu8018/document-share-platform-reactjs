@@ -13,10 +13,12 @@ class ContentListItem extends React.Component {
     };
   }
 
+
   // 리워드 정보 표시
   showRewardInfo = (id) => {
     if (document.getElementById(id)) document.getElementById(id).style.display = "block";
   };
+
 
   // 리워드 정보 숨김
   hideRewardInfo = (id) => {
@@ -27,17 +29,15 @@ class ContentListItem extends React.Component {
   // 이미지 정보 GET
   getImgInfo = () => {
     const { result } = this.props;
-    let imgUrl = Common.getThumbnail(result.documentId, 320, 1, result.documentName);
     let img = new Image();
-
-    img.src = imgUrl;
+    img.src = Common.getThumbnail(result.documentId, 320, 1, result.documentName);
     img.onload = () => {
-      let height = img.height;
-      let width = img.width;
+      let height = img.height, width = img.width;
       this.setState({ ratio: (width / height) });
     };
   };
 
+  
   componentWillMount(): void {
     this.getImgInfo();
   }
@@ -47,12 +47,12 @@ class ContentListItem extends React.Component {
     const { result, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
     const { ratio } = this.state;
 
-    let vote = Common.toEther(result.latestVoteAmount) || 0;
-    let reward = Common.toEther(Common.getAuthorNDaysReward(result, getCreatorDailyRewardPool, totalViewCountInfo, 7));
-    let view = result.latestPageview || 0;
-    let imageUrl = Common.getThumbnail(result.documentId, (getIsMobile ? 640 : 320), 1, result.documentName);
-    let profileUrl = result.author ? result.author.picture : null;
-    let identification = result.author ? (result.author.username && result.author.username.length > 0 ? result.author.username : result.author.email) : result.accountId;
+    let vote = Common.toEther(result.latestVoteAmount) || 0,
+      reward = Common.toEther(Common.getAuthorNDaysReward(result, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
+      view = result.latestPageview || 0,
+      imageUrl = Common.getThumbnail(result.documentId, (getIsMobile ? 640 : 320), 1, result.documentName),
+      profileUrl = result.author ? result.author.picture : null,
+      identification = result.author ? (result.author.username && result.author.username.length > 0 ? result.author.username : result.author.email) : result.accountId;
 
     return (
       <div className="row u_center_inner" key={result.seoTitle}>

@@ -747,25 +747,45 @@ const strings = new Map([
   }],
 
   // Email modal
-  ["email-modal-subj", {
-    KOR: "더 읽고 싶나요?",
-    ENG: "Want to read more?"
+  ["email-modal-subj-1", {
+    KOR: "연락처를 남겨주세요.",
+    ENG: "Please leave your contact information."
+  }],
+  ["email-modal-subj-2", {
+    KOR: "이 문서의 내용이 마음에 드시나요?",
+    ENG: "Do you like the contents of this documents?"
   }],
   ["email-modal-explain-1", {
-    KOR: "아래 이메일 주소를 제출하고 메일 수신함에서 가입 링크를 확인하여 가입 절차를 진행하십시요. 귀하가 아래 입력창에 입력한 정보는 이 컨텐츠의 저자가 열람할 수 있습니다.",
-    ENG: "Please check sign-up link in your inbox. The author of this content can view the information you have entered."
+    KOR: "이 문서를 보시려면 귀하의 연락처를 남겨주세요. 저자로부터 새로운 소식을 받을 수 있습니다.",
+    ENG: "Please leave your contact information to view this document. You can receive new news from the author."
   }],
   ["email-modal-explain-2", {
     KOR: "이 정보를 제출하는데 동의합니다. 제출된 데이터는 폴라리스 쉐어의 개인정보 처리 정책에 따라서 수집되고 활용됩니다.",
-    ENG: "I agree to submit this information, which will be collected and used according to"
+    ENG: "I agree to submit this information, which will be collected and used according to "
   }],
   ["email-modal-explain-3", {
     KOR: " 폴라리스 쉐어의 개인정보 처리 정책 ",
     ENG: "Polaris Share’s privacy policy."
   }],
+  ["email-modal-explain-4", {
+    KOR: "이 문서의 저자에게 귀하의 연락처를 남겨보세요. 저자로부터 새로운 소식을 받을 수 있습니다.",
+    ENG: "Please leave your contact information to the author of this documents. You can receive new news from the author."
+  }],
   ["email-modal-error-1", {
     KOR: "이메일 양식에 맞지 않습니다.",
-    ENG: "Email address does not fit the form ."
+    ENG: "Email address does not fit the form."
+  }],
+  ["email-modal-btn-ok", {
+    KOR: "주소 제출 및 수신 수락",
+    ENG: "Submit address and Accept mail"
+  }],
+  ["email-modal-btn-cancel-1", {
+    KOR: "다음에",
+    ENG: "Later"
+  }],
+  ["email-modal-btn-cancel-2", {
+    KOR: "돌아가기",
+    ENG: "Back"
   }],
 
   // Upload Document Modal
@@ -1247,16 +1267,16 @@ const strings = new Map([
 
   // Delete Document Modal
   ["tooltip-delete", {
-    KOR: "삭제하기",
-    ENG: "Delete"
+    KOR: "문서 삭제하기",
+    ENG: "Delete this documents"
   }],
   ["delete-modal-title", {
     KOR: "문서 삭제하기",
     ENG: "Delete documents"
   }],
   ["delete-modal-desc", {
-    KOR: "문서 삭제하시겠습니까?",
-    ENG: ""
+    KOR: "삭제시 재복구가 불가능합니다. 그래도 문서를 삭제하시겠습니까? ",
+    ENG: "It can not be restored when deleted. Are you sure you want to delete the documents?"
   }],
 
   // Creator Claim

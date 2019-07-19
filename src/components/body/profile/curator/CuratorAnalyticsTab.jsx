@@ -1,5 +1,5 @@
 import React from "react";
-import { ThreeBounce } from 'better-react-spinkit'
+import { ThreeBounce } from "better-react-spinkit";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -29,9 +29,7 @@ class CuratorAnalyticsTab extends React.Component {
   fetchMoreData = () => {
     const { pageNo } = this.state;
     if (this.state.moreDataFlag) {
-      this.fetchDocuments({
-        pageNo: pageNo + 1
-      });
+      this.fetchDocuments({ pageNo: pageNo + 1 });
     }
   };
 
@@ -74,8 +72,8 @@ class CuratorAnalyticsTab extends React.Component {
       console.error("Creator analytics info GET ERROR", err);
       setTimeout(() => {
         this.fetchDocuments(params);
-      },8000);
-    })
+      }, 8000);
+    });
   };
 
   // 차트 정보 GET
@@ -99,13 +97,13 @@ class CuratorAnalyticsTab extends React.Component {
 
   // 스크롤 아웃 관리 메소드
   handleClick = (e) => {
-    const parentElement = e.currentTarget.parentElement;
-    const anotherItem = document.getElementsByClassName("scroll-out");
-    const anotherArrow = document.getElementsByClassName("on");
-    let dataKey = e.currentTarget.getAttribute("data-key");
-    let dataId = e.currentTarget.getAttribute("data-id");
+    const parentElement = e.currentTarget.parentElement,
+      anotherItem = document.getElementsByClassName("scroll-out"),
+      anotherArrow = document.getElementsByClassName("on"),
+      dataKey = e.currentTarget.getAttribute("data-key"),
+      dataId = e.currentTarget.getAttribute("data-id");
 
-    this.setState({week: 1, year: null}, () => {
+    this.setState({ week: 1, year: null }, () => {
       if (parentElement.children[3].classList.length > 3) {
         parentElement.children[3].classList.remove("on");
         parentElement.children[4].classList.remove("scroll-out");
@@ -192,6 +190,7 @@ class CuratorAnalyticsTab extends React.Component {
   render() {
     const { resultList, spreadItem, isEndPage, analyticsList, year, week, chartFlag, loading } = this.state;
     const { userInfo } = this.props;
+
     let identification = userInfo.username && userInfo.username.length > 0 ? userInfo.username : userInfo.email;
 
     return (

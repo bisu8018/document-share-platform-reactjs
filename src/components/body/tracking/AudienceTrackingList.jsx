@@ -28,18 +28,12 @@ class AudienceTrackingList extends React.Component {
   // 검색 박스 관리
   selectedSearch = (value) => {
     let result = this.state.resultList;
-
-
     let filteredResult = result.filter(el => {
       if (value.user) {
-
         if (el.user) return el.user.e.indexOf(value.user.e) !== -1;
         return false;
-
       } else return !el.user;
     });
-
-
     this.setState({ filterList: filteredResult, selectedSearch: value.user ? value.user.e : null });
   };
 
@@ -75,8 +69,7 @@ class AudienceTrackingList extends React.Component {
       }
     }
 
-    this.setState({ chartLoading: false });
-    this.setState({ chartResultList: dataObj });
+    this.setState({ chartLoading: false, chartResultList: dataObj });
   };
 
 
@@ -97,8 +90,7 @@ class AudienceTrackingList extends React.Component {
       this.setState({ loading: true, resultList: [] }, () => {
         MainRepository.Tracking.getTrackingList(params, (res) => {
           let resData = res;
-          this.setState({ loading: false });
-          this.setState({ resultList: resData.resultList ? resData.resultList : [] });
+          this.setState({ loading: false, resultList: resData.resultList ? resData.resultList : [] });
         }, err => {
           console.error(err);
           setTimeout(() => {
@@ -159,13 +151,11 @@ class AudienceTrackingList extends React.Component {
     if (location.state && location.state.documentData) documentData = location.state.documentData;
     if (documentData === null) this.wrongAccess();
     else {
-      let imgUrl = Common.getThumbnail(documentData.documentId, 320, 1, documentData.documentName);
-      let img = new Image();
+      let imgUrl = Common.getThumbnail(documentData.documentId, 320, 1, documentData.documentName), img = new Image();
 
       img.src = imgUrl;
       img.onload = () => {
-        let height = img.height;
-        let width = img.width;
+        let height = img.height, width = img.width;
         this.setState({ ratio: (width / height) });
       };
     }
@@ -183,8 +173,7 @@ class AudienceTrackingList extends React.Component {
     const { selectedTr } = this.state;
     e.stopPropagation();    // 버블링 방지
 
-    let idx, cid;
-    let target = e.target.parentElement;
+    let idx, cid, target = e.target.parentElement;
 
     if (target.dataset.idx) {
       idx = target.dataset.idx;
@@ -251,11 +240,12 @@ class AudienceTrackingList extends React.Component {
   // 특정 링크 클릭 이벤트 관리
   handleLinkClickEvent = (e) => {
     const { location, match, getShowAnonymous, getIncludeOnlyOnePage } = this.props;
-    const documentData = location.state.documentData;
-    const documentText = location.state.documentText;
-    let _cid = e.target.parentElement.dataset.cid;
-    let _email = e.target.parentElement.dataset.email;
-    let _time = e.target.parentElement.dataset.time;
+    const documentData = location.state.documentData,
+      documentText = location.state.documentText;
+
+    let _cid = e.target.parentElement.dataset.cid,
+      _email = e.target.parentElement.dataset.email,
+      _time = e.target.parentElement.dataset.time;
 
     this.props.history.push({
       pathname: "/trackingDetail/" + match.params.identification + "/" + match.params.seoTitle,
@@ -284,13 +274,14 @@ class AudienceTrackingList extends React.Component {
 
     if (!location.state || !location.state.documentData) return false;
 
-    const rst = !this.state.filterList ? this.state.resultList : this.state.filterList;
-    const documentData = location.state.documentData;
-    const totalViewCountInfo = location.state.totalViewCountInfo;
-    let addr = Common.getThumbnail(documentData.documentId, 320, 1);
-    let reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7));
-    let vote = Common.toEther(documentData.latestVoteAmount);
-    let view = documentData.latestPageview || 0;
+    const rst = !this.state.filterList ? this.state.resultList : this.state.filterList,
+      documentData = location.state.documentData,
+      totalViewCountInfo = location.state.totalViewCountInfo;
+
+    let addr = Common.getThumbnail(documentData.documentId, 320, 1),
+      reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
+      vote = Common.toEther(documentData.latestVoteAmount),
+      view = documentData.latestPageview || 0;
 
     return (
 
@@ -413,19 +404,11 @@ class AudienceTrackingList extends React.Component {
 
 
               <div className="tracking_table">
-
                 <div className="tracking-table-tr row">
                   <div className="col-4 tracking-table-td">{psString("tracking-list-name")}</div>
-
                   <div className="col-3 col-sm-2 tracking-table-td tac">{psString("tracking-list-views")}</div>
-
-
                   <div className="col-3 tracking-table-td tar">{psString("tracking-list-last")}</div>
-
-
                   <div className="col-2 col-sm-3 tracking-table-td "/>
-
-
                 </div>
 
                 {rst.length > 0 && rst.map((result, idx) => (

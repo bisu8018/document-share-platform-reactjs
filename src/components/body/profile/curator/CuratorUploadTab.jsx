@@ -27,12 +27,8 @@ class CuratorUploadTab extends React.Component {
 
   // 무한 스크롤 데이터 추가 GET
   fetchMoreData = () => {
-    const { pageNo } = this.state;
-    if (this.state.moreDataFlag) {
-      this.fetchDocuments({
-        pageNo: pageNo + 1
-      });
-    }
+    const { pageNo, moreDataFlag } = this.state;
+    if (moreDataFlag) this.fetchDocuments({ pageNo: pageNo + 1 });
   };
 
 
@@ -104,13 +100,8 @@ class CuratorUploadTab extends React.Component {
 
       this.setState({ moreDataFlag: true });
 
-      if (res.count === 0 || res.resultList.length < 10) {
-        this.setState({ isEndPage: true });
-      }
-
-      if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) {
-        this.setState({ totalViewCountInfo: res.totalViewCountInfo });
-      }
+      if (res.count === 0 || res.resultList.length < 10) this.setState({ isEndPage: true });
+      if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) this.setState({ totalViewCountInfo: res.totalViewCountInfo });
     }
   };
 

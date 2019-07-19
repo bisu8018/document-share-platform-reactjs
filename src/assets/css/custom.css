@@ -6585,10 +6585,10 @@ dean
 
 .share-btn {
     display: inline-block;
-    font-size: 14px;
+    font-size: 15px;
     padding: 1px 2px 1px 1px;
-    background: #666666;
-    color: white;
+    font-weight: bold;
+    color: #666666;
     position: absolute;
     cursor: pointer;
     top: 2px;
@@ -6604,6 +6604,26 @@ dean
     position: relative;
     width: 16px;
     height: 16px;
+}
+
+.delete-btn-wrapper {
+    display: inline-block;
+    position: relative;
+    height: 16px;
+    width: 16px;
+}
+
+.delete-btn-wrapper > i {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 19px;
+    position: absolute;
+    top: 1px;
+    color: #666666;
+}
+
+.delete-btn-wrapper > i:hover {
+    color: #3681fe;
 }
 
 /*아바타 CSS
@@ -9867,6 +9887,7 @@ footer {
     min-height: 130px;
     color: white;
     width: 100%;
+    clear: both;
 }
 
 footer .footer-nav {

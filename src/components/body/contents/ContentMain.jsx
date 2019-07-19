@@ -18,11 +18,7 @@ class ContentMain extends Component {
 
 // 문서 목록 GET
   getDocuments = (path) => {
-    const params = {
-      path: path
-    };
-
-    MainRepository.Document.getDocumentList(params, (res) => {
+    MainRepository.Document.getDocumentList({path: path}, (res) => {
       if (path === "latest") this.setState({ latestDocuments: res });
       else if (path === "featured") this.setState({ featuredDocuments: res });
       else if (path === "popular") this.setState({ popularDocuments: res });
@@ -58,6 +54,7 @@ class ContentMain extends Component {
   handleLogin = () => {
     if(!MainRepository.Account.isAuthenticated()) MainRepository.Account.login();
   };
+
 
   // 검색 버튼 트리거
   handleTagClick = () => {
@@ -100,8 +97,7 @@ class ContentMain extends Component {
 
 
   componentWillUnmount() {
-    window.removeEventListener("resize", () => {
-    });
+    window.removeEventListener("resize", () => {});
   }
 
 
