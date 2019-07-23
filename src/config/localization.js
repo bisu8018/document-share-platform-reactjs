@@ -899,7 +899,7 @@ const strings = new Map([
   }],
   ["tooltip-tracking", {
     KOR: "잠재 고객 추적하기",
-    ENG: "Track activity of your audience."
+    ENG: "Track activity of your audience"
   }],
 
   // Header
@@ -1246,7 +1246,7 @@ const strings = new Map([
   // Publish Modal
   ["tooltip-publish", {
     KOR: "출판하기",
-    ENG: "Publish"
+    ENG: "Publish this documents"
   }],
   ["publish-modal-title", {
     KOR: "문서 출판하기",
@@ -1300,25 +1300,35 @@ const strings = new Map([
     KOR: "팬딩중",
     ENG: "pending"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+
+  // Helmet title
+  ["helmet-title-about-us", {
+    KOR: "회사소개",
+    ENG: "About us"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["helmet-title-guide", {
+    KOR: "유저 가이드",
+    ENG: "User Guide"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["helmet-title-terms", {
+    KOR: "이용약관",
+    ENG: "Terms of Service"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["helmet-title-privacy", {
+    KOR: "개인정보처리방침",
+    ENG: "Privacy Policy"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+  ["helmet-title-latest", {
+    KOR: "최신문서",
+    ENG: "Latest"
+  }],
+  ["helmet-title-featured", {
+    KOR: "추천문서",
+    ENG: "Featured"
+  }],
+  ["helmet-title-popular", {
+    KOR: "인기문서",
+    ENG: "Popular"
   }],
   ["", {
     KOR: "",

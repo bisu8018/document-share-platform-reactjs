@@ -46,7 +46,7 @@ class CuratorAnalyticsTab extends React.Component {
     // 로딩 on
     this.setState({ loading: true });
 
-    MainRepository.Document.getDocumentList(_params, (res) => {
+    MainRepository.Document.getDocumentList(_params).then(res => {
       if (res && res.resultList) {
         if (this.state.resultList) {
           this.setState({
@@ -68,7 +68,7 @@ class CuratorAnalyticsTab extends React.Component {
       }
       // 로딩 off
       this.setState({ loading: false });
-    }, err => {
+    },err => {
       console.error("Creator analytics info GET ERROR", err);
       setTimeout(() => {
         this.fetchDocuments(params);

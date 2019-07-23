@@ -149,7 +149,7 @@ class ContentViewCarousel extends React.Component {
       });
     } else {
       // 오직 뷰 카운트만을 위한 트랙킹 기능
-      this.postTracking(page, "none");
+      this.postTracking(page, "none", ()=>{});
     }
   };
 
@@ -182,8 +182,11 @@ class ContentViewCarousel extends React.Component {
     let documentId = target.documentId;
 
     if (pageChangedFlag !== documentId) {
-      if (pageChangedFlag !== null) this.handleTrackingLeave(pageChangedFlag);
-      this.setState({ readPage: null, pageChangedFlag: documentId });
+      if (pageChangedFlag !== null) {
+        this.handleTrackingLeave(pageChangedFlag);
+        this.setState({ readPage: null });
+      }
+      this.setState({ pageChangedFlag: documentId });
     }
   };
 

@@ -9,6 +9,8 @@ import LinesEllipsis from "react-lines-ellipsis";
 import PayoutCard from "../../../common/card/PayoutCard";
 import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
 import DeleteDocumentModalContainer from "../../../../container/common/modal/DeleteDocumentModalContainer";
+import { psString } from "../../../../config/localization";
+import PublishModalContainer from "../../../../container/common/modal/PublishModalContainer";
 
 class CreatorTabItem extends React.Component {
   constructor(props) {
@@ -87,7 +89,14 @@ class CreatorTabItem extends React.Component {
             <Link to={"/" + identification + "/" + document.seoTitle}
                   className={(document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
               <div className="info_title mb-1"
-                   onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
+                   onClick={() => Common.scrollTop()}>
+                {document.title ? document.title : document.documentName}
+                {!document.isPublic &&
+                <Tooltip title={psString("viewer-page-carousel-private")} placement="bottom">
+                  <i className="material-icons ml-2">lock</i>
+                </Tooltip>
+                }
+              </div>
             </Link>
 
             <div className="details-info-desc-wrapper">
@@ -122,7 +131,8 @@ class CreatorTabItem extends React.Component {
               <span className="info-detail-view mr-3">{view}</span>
               <span className="info-detail-vote mr-3">{Common.deckStr(vote)}</span>
               {document.state === "CONVERT_COMPLETE" && <CopyModalContainer documentData={document} type="onlyIcon"/>}
-              {document.isPublic === false && <DeleteDocumentModalContainer type="onlyIcon"/>}
+              {((Common.dateAgo(document.created) > 0 && document.state !== "CONVERT_COMPLETE") || document.isPublic === false) &&
+              <DeleteDocumentModalContainer documentData={document} type="onlyIcon"/>}
               <div className="info-date info-date-profile">
                 {Common.dateTimeAgo(document.created)}
               </div>
@@ -131,6 +141,11 @@ class CreatorTabItem extends React.Component {
                 <CreatorClaimContainer {...this.props} document={document}/>
               </div>
 
+              {!document.isPublic &&
+              <div className={(getIsMobile ? "mt-2" : "float-right")}>
+                <PublishModalContainer documentData={document} type={"tabItem"}/>
+              </div>
+              }
             </div>
           </div>
 

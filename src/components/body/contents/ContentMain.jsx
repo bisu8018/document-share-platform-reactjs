@@ -18,11 +18,11 @@ class ContentMain extends Component {
 
 // 문서 목록 GET
   getDocuments = (path) => {
-    MainRepository.Document.getDocumentList({path: path}, (res) => {
+    MainRepository.Document.getDocumentList({path: path}).then(res => {
       if (path === "latest") this.setState({ latestDocuments: res });
       else if (path === "featured") this.setState({ featuredDocuments: res });
       else if (path === "popular") this.setState({ popularDocuments: res });
-    }, err => {
+    },err => {
       console.error(err);
       this.setTimeout = setTimeout(() => {
         this.getDocuments(path);

@@ -30,7 +30,7 @@ class UserActiveVote extends React.Component {
   render() {
     const userActiveVote = this.state.userActiveVote,
       textDeck = Common.toEther(userActiveVote ? userActiveVote : 0).toFixed(2),
-      textDollar = Common.toDollar(userActiveVote).toFixed(1);
+      textDollar = Common.toDollar(userActiveVote).toFixed(1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
 
     return (
       <span>

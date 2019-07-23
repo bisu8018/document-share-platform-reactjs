@@ -14,7 +14,7 @@ class CuratorClaim extends React.Component {
     if (document && getDrizzle.isAuthenticated() && getMyInfo.ethAccount && determineReward === null) {
       getWeb3Apis.getDetermineCuratorReward(document.documentId, getMyInfo.ethAccount).then((data) => {
         this.setState({ determineReward: (data && Common.toDeck(data[0]) > 0 ? Common.toDeck(data[0]) : 0) });
-      }).catch((err) => {
+      },(err) => {
         console.error(err);
       });
     }

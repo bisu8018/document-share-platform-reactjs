@@ -1,24 +1,31 @@
 'use strict';
 
-// Do this as the first thing so that any code reading it knows the right env.
+
+// 환경변수 설정
 process.env.BABEL_ENV = 'test';
 process.env.NODE_ENV = 'test';
 process.env.PUBLIC_URL = '';
 
-// Makes the script crash on unhandled rejections instead of silently
-// ignoring them. In the future, promise rejections that are not handled will
-// terminate the Node.js process with a non-zero exit code.
+
+// unhandled rejection 을 무시하지 않고 스크립트 충돌 발생시킴.
+// 그 후, unhandled Promise rejection 은 non-zero exit code와 함께 Node.js 프로세스 제거함.
 process.on('unhandledRejection', err => {
   throw err;
 });
 
-// Ensure environment variables are read.
+
+// 환경변수 Read 체크 필요
 require('../config/env');
 
 
 const jest = require('jest');
 const execSync = require('child_process').execSync;
 let argv = process.argv.slice(2);
+
+
+console.log("process.argv : ", process.argv);
+console.log("process.env.CI : ", process.env.CI);
+
 
 function isInGitRepository() {
   try {

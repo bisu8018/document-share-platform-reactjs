@@ -12,7 +12,11 @@ class CreatorSummary extends React.Component {
     profileImage: "",
     userName: "",
     userNameEdit: false,
-    errMsg: ""
+    errMsg: "",
+    author7DayReward: null,
+    authorTodayReward: null,
+    curatorEstimatedToday: null,
+    curatorTotalRewards: null
   };
 
 
@@ -43,6 +47,30 @@ class CreatorSummary extends React.Component {
   };
 
 
+  // 크리에이터 7일간 리워드
+  setAuthor7DayReward = (docList, pool, countInfo) => {
+    this.setState({ author7DayReward: Common.toDeck(Common.getAuthor7DaysTotalReward(docList, pool, countInfo)) });
+  };
+
+
+  // 크리에이터 하루 리워드
+  setAuthorTodayReward = (docList, pool, countInfo) => {
+    this.setState({ authorTodayReward: Common.toDeck(Common.getAuthorNDaysTotalReward(docList, pool, countInfo, 0)) });
+  };
+
+
+  // 큐레이터 7일간 리워드
+  setCuratorEstimatedToday = (docList, pool, countInfo, voteList) => {
+    this.setState({ curatorEstimatedToday: Common.toDeck(Common.getCuratorNDaysTotalReward(docList, pool, countInfo, 0, voteList, 1)) });
+  };
+
+
+  // 큐레이터 하루 리워드
+  setCuratorTotalRewards = (docList, pool, countInfo, voteList) => {
+    this.setState({ curatorTotalRewards: Common.toDeck(Common.getCurator7DaysTotalReward(docList, pool, countInfo, voteList)) });
+  };
+
+
   // 잔액 조회
   getBalance = () => {
     const { getWeb3Apis, userInfo } = this.props;
@@ -67,7 +95,7 @@ class CreatorSummary extends React.Component {
     const file = e[0];
 
     // upload url GET
-    MainRepository.Account.getProfileImageUploadUrl(result => {
+    MainRepository.Account.getProfileImageUploadUrl().then(result => {
       let params = {
         file: file,
         signedUrl: result.signedUploadUrl
@@ -75,14 +103,17 @@ class CreatorSummary extends React.Component {
       // 이미지 서버에 업로드
       MainRepository.Account.profileImageUpload(params, () => {
         let url = APP_PROPERTIES.domain().profile + result.picture;
+
         // 유저 정보 업데이트
         MainRepository.Account.updateProfileImage(url, () => {
           this.setState({ profileImage: url });
         });
       }, () => {
-        let imgField = document.getElementById("imgFile");
-        imgField.value = null;
+        document.getElementById("imgFile").value = null;
       });
+    },err => {
+      console.error(err);
+      document.getElementById("imgFile").value = null;
     });
   };
 
@@ -138,12 +169,16 @@ class CreatorSummary extends React.Component {
 
   render() {
     const { userInfo, getCreatorDailyRewardPool, getCuratorDailyRewardPool, uploadTotalViewCountInfo, uploadDocumentList, voteDocumentList, voteTotalViewCountInfo, latestRewardVoteList } = this.props;
-    const { balance, userNameEdit, userName, profileImage, errMsg } = this.state;
+    const { author7DayReward, authorTodayReward, curatorEstimatedToday, curatorTotalRewards, balance, userNameEdit, userName, profileImage, errMsg } = this.state;
 
-    let author7DayReward = Common.toDeck(Common.getAuthor7DaysTotalReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo));
-    let authorTodayReward = Common.toDeck(Common.getAuthorNDaysTotalReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo, 0));
-    let curatorEstimatedToday = Common.toDeck(Common.getCuratorNDaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, 0, latestRewardVoteList, 1));
-    let curatorTotalRewards = Common.toDeck(Common.getCurator7DaysTotalReward(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, latestRewardVoteList));
+    if (uploadDocumentList && getCreatorDailyRewardPool && uploadTotalViewCountInfo) {
+      if(!author7DayReward) this.setAuthor7DayReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo);
+      if(!authorTodayReward) this.setAuthorTodayReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo);
+    }
+    if (voteDocumentList && getCuratorDailyRewardPool && voteTotalViewCountInfo && latestRewardVoteList) {
+      if(!curatorEstimatedToday)  this.setCuratorEstimatedToday(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo,latestRewardVoteList);
+      if(!curatorTotalRewards)  this.setCuratorTotalRewards(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo,latestRewardVoteList);
+    }
 
     return (
 
@@ -170,7 +205,7 @@ class CreatorSummary extends React.Component {
               <span className="d-flex">
                 <strong>{userName || userInfo.email}</strong>
                 {this.getMyInfo().email === userInfo.email &&
-                <div className="username-edit-btn ml-2" onClick={() => this.handleClickEvent()} >
+                <div className="username-edit-btn ml-2" onClick={() => this.handleClickEvent()}>
                   {psString("profile-edit")}</div>
                 }
               </span>}
@@ -179,7 +214,7 @@ class CreatorSummary extends React.Component {
               <span className="d-flex">
                 <input type="text" id="userNameEditInput" placeholder="User Name . . ." value={this.state.userName}
                        className={"username-edit-input mr-2 " + (errMsg.length > 0 ? "username-edit-input-warning" : "")}
-                       onChange={(e) => this.handleChangeUsername(e)} spellCheck= "false" maxLength="20"/>
+                       onChange={(e) => this.handleChangeUsername(e)} spellCheck="false" maxLength="20"/>
                 <div onClick={() => this.handleEditBtn()} className="username-edit-btn mr-2">Done</div>
                 <div onClick={() => this.handleCancelEvent()} className="username-cancel-btn">Cancel</div>
                 {errMsg.length > 0 && <div className="username-edit-input-warning-msg">{errMsg}</div>}

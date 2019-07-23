@@ -11,17 +11,15 @@ class Menu extends React.Component {
   };
 
   menuShow = () => {
-    document.body.style.overflow = "hidden";
-    document.body.style.paddingRight = "5px";
-
-    this.setState({ menuShow: true });
+    this.setState({ menuShow: true }, () => {
+      Common.setBodyStyleLock();
+    });
   };
 
   menuHide = () => {
-    document.body.style.overflow = "";
-    document.body.style.paddingRight = "";
-
-    this.setState({ menuShow: false });
+    this.setState({ menuShow: false }, () => {
+      Common.setBodyStyleUnlock();
+    });
   };
 
   menuClick = () => {
@@ -98,7 +96,7 @@ class Menu extends React.Component {
               <div className="menu-content-item" onClick={() => this.menuClick()}>FAQ</div>
             </Link>
             <a href="http://www.decompany.io/" target="_blank" rel="noopener noreferrer">
-            <div className="menu-content-item">{psString("menu-5")}</div>
+              <div className="menu-content-item">{psString("menu-5")}</div>
             </a>
             <a href="https://www.linkedin.com/in/decompany-io-720812178/" target="_blank" rel="noopener noreferrer">
               <div className="menu-content-item-sub">{psString("menu-3")}</div>
@@ -108,11 +106,14 @@ class Menu extends React.Component {
 
 
           {!MainRepository.Account.isAuthenticated() ?
-            <div className="menu-login-btn d-flex d-sm-none" onClick={() => this.handleLogin()}>{psString("menu-login")}</div> :
-            <div className="menu-logout-btn d-flex d-sm-none" onClick={() => this.handleLogout()}>{psString("menu-sign-out")}</div>
+            <div className="menu-login-btn d-flex d-sm-none"
+                 onClick={() => this.handleLogin()}>{psString("menu-login")}</div> :
+            <div className="menu-logout-btn d-flex d-sm-none"
+                 onClick={() => this.handleLogout()}>{psString("menu-sign-out")}</div>
           }
           {getTempEmail &&
-          <div className="menu-logout-btn d-flex d-sm-none" onClick={() => this.handleLogout()}>{psString("menu-sign-out")}</div>}
+          <div className="menu-logout-btn d-flex d-sm-none"
+               onClick={() => this.handleLogout()}>{psString("menu-sign-out")}</div>}
 
           <div className="header-version">{Common.getVersion()}</div>
         </div>

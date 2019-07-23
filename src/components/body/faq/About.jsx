@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
+import { Helmet } from "react-helmet";
 
 
 class About extends React.Component {
@@ -11,7 +12,9 @@ class About extends React.Component {
     return (
 
       <div className="container ">
-
+        <Helmet>
+          <title>{psString("helmet-title-about-us") + " | Polaris Share"}</title>
+        </Helmet>
 
         <div className="col-12 row about-section-1-wrapper">
           <div className="about-section-1"/>

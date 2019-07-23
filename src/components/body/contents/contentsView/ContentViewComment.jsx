@@ -1,28 +1,37 @@
 import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
-
-const style = {};
 
 class ContentViewComment extends React.Component {
+  /**
+   *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+   *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
 
-  addComment = () => {
+
+  /*  // 디스커스 셋팅
+  setConfig = () => {
+    this.page.url = "https://share.decompany.io";  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = "polarishare"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+  };*/
+
+
+  //디스커스 초기화
+  init = () => {
+    let d = document, s = d.createElement("script");
+    s.src = "https://polarishare.disqus.com/embed.js";
+    s.setAttribute("data-timestamp", +new Date());
+    (d.head || d.body).appendChild(s);
   };
 
+
+  componentWillMount(): void {
+    this.init();
+  }
+
   render() {
-    //const { classes } = this.props;
-    //const document = this.state.document;
 
     return (
-      <div className="row">
-        <div className="col-10">
-          <input type="text" id="comment" />
-        </div>
-        <div className="col-2">
-          <div className="claim-btn" onClick={() => this.addComment()}>ADD</div>
-        </div>
-      </div>
+      <div id="disqus_thread" className="mb-sm-5 mb-2"/>
     );
   }
 }
 
-export default withStyles(style)(ContentViewComment);
+export default ContentViewComment;

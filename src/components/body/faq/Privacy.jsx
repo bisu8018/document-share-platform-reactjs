@@ -1,4 +1,6 @@
 import React from "react";
+import { Helmet } from "react-helmet";
+import { psString } from "../../../config/localization";
 
 
 class Privacy extends React.PureComponent {
@@ -9,10 +11,9 @@ class Privacy extends React.PureComponent {
     return (
 
       <div className="row mb-5">
-
-
-
-
+        <Helmet>
+          <title>{psString("helmet-title-privacy") + " | Polaris Share"}</title>
+        </Helmet>
 
 
 

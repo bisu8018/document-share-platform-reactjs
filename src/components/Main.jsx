@@ -15,12 +15,12 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import AlertListContainer from "../container/common/alert/AlertListContainer";
 import DollarPolicyModal from "./common/modal/DollarPolicyModal";
 import LoadingModal from "./common/modal/LoadingModal";
+import common from "../config/common";
 
 class Main extends Component {
   state = {
     initData: false,
-    initDom: false,
-    myInfo: new UserInfo()
+    initDom: false
   };
 
 
@@ -29,9 +29,9 @@ class Main extends Component {
     MainRepository.init(() => {
       //태그 리스트 GET
       this.setTagList()
-         // 업로드 태그 리스트 GET
+      // 업로드 태그 리스트 GET
         .then(this.setUploadTagList())
-         // 내 정보 GET
+        // 내 정보 GET
         .then(this.setMyInfo())
         // 모바일 유무 GET
         .then(this.setIsMobile())
@@ -40,7 +40,7 @@ class Main extends Component {
         // 큐레이터 리워드풀 GET
         .then(this.setCuratorDailyRewardPool())
         // 초기화 완료
-        .then(this.setState({ initData: true }));
+        .then(this.setInitData());
     });
   };
 
@@ -49,15 +49,8 @@ class Main extends Component {
   setTagList = () => {
     const { setTagList } = this.props;
 
-    return new Promise((resolve, reject) => {
-      MainRepository.Document.getTagList("featured", result => {
-        setTagList(result.resultList);
-        resolve();
-      }, err => {
-        console.error(err);
-        reject(err);
-      });
-    });
+    return MainRepository.Document.getTagList("featured")
+      .then(result => setTagList(result.resultList),err => err);
   };
 
 
@@ -65,15 +58,8 @@ class Main extends Component {
   setUploadTagList = () => {
     const { setUploadTagList } = this.props;
 
-    return new Promise((resolve, reject) => {
-      MainRepository.Document.getTagList("latest", result => {
-        setUploadTagList(result.resultList);
-        resolve();
-      }, err => {
-        console.error(err);
-        reject(err);
-      });
-    });
+    return MainRepository.Document.getTagList("latest")
+      .then(result => setUploadTagList(result.resultList),err => err);
   };
 
 
@@ -81,48 +67,42 @@ class Main extends Component {
   setMyInfo = () => {
     const { getMyInfo, setMyInfo } = this.props;
 
-    return new Promise((resolve, reject) => {
-      if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
-        let myInfo = MainRepository.Account.getMyInfo();
-
-        MainRepository.Account.getAccountInfo(myInfo.sub, result => {
-          let res = new UserInfo(result);
-          if (!result.picture) res.picture = localStorage.getItem("user_info").picture;
-          setMyInfo(res);
-          this.setState({ myInfo: res });
-          resolve();
-        }, err => {
-          console.error(err);
-          reject(err);
-        });
-      }
-    });
+    if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
+      let myInfo = MainRepository.Account.getMyInfo();
+      return MainRepository.Account.getAccountInfo(myInfo.sub).then(result => {
+        let res = new UserInfo(result);
+        if (!result.picture) res.picture = localStorage.getItem("user_info").picture;
+        setMyInfo(res);
+      },err => err);
+    }
   };
 
 
   // 모바일 유무 GET
   setIsMobile = () => {
     const { setIsMobile } = this.props;
-
-    if (document.documentElement.clientWidth < 576) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
+    if (document.documentElement.clientWidth < 576) return setIsMobile(true);
+    else return setIsMobile(false);
   };
 
 
   // 크리에이터 리워드풀 GET
   setAuthorDailyRewardPool = () => {
     const { setAuthorDailyRewardPool } = this.props;
-    setAuthorDailyRewardPool(115068493148000000000000);    // web3 speed issue, 리워드풀 하드코딩
+    return setAuthorDailyRewardPool(115068493148000000000000);    // web3 speed issue, 리워드풀 하드코딩
   };
 
 
   // 큐레이터 리워드풀 GET
   setCuratorDailyRewardPool = () => {
     const { setCuratorDailyRewardPool } = this.props;
-    setCuratorDailyRewardPool(49315068492000000000000);   // web3 speed issue, 리워드풀 하드코딩
+    return setCuratorDailyRewardPool(49315068492000000000000);   // web3 speed issue, 리워드풀 하드코딩
+  };
+
+
+  //init 데이터 SET
+  setInitData = () => {
+    return this.setState({ initData: true });
   };
 
 
@@ -133,7 +113,7 @@ class Main extends Component {
 
 
   componentDidMount() {
-    this.setState({initDom : true});
+    this.setState({ initDom: true });
   }
 
   /*  componentDidCatch(error, errorInfo) {
@@ -154,10 +134,15 @@ class Main extends Component {
     const { getMyInfo } = this.props;
     const { initData, initDom } = this.state;
 
-    if (!initData || !initDom || (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0)) return <LoadingModal/>;
+    let flag = !initData || !initDom || (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0);
+
+    if(!flag) common.setBodyStyleUnlock();
+    else  {
+      common.setBodyStyleLock();
+      return (<LoadingModal/>);
+    }
 
     return (
-
       <Router history={history}>
         <div id="container-wrapper">
           <HeaderContainer/>

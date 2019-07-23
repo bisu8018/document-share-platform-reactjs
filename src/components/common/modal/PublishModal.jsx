@@ -64,15 +64,18 @@ class PublishModal extends React.Component {
   handlePublish = async () => {
     const { documentData, getDrizzle, getMyInfo, setAlertCode } = this.props;
     let ethAccount = getMyInfo.ethAccount;
-    MainRepository.Document.publishDocument({isPublic: true}, () => {
-
+    let data = {
+      isPublic: true,
+      documentId: documentData.documentId
+    };
+    MainRepository.Document.publishDocument(data).then(() => {
       if (getDrizzle && ethAccount) {
         this.getBalance().then(res => {
-          if (res && res > 0) getDrizzle.registerDocumentToSmartContract(documentData.documentId).then(() => {
+          if (res && res > 0) {
+            getDrizzle.registerDocumentToSmartContract(documentData.documentId);
             this.handleClose("classicModal");
             document.location.reload();
-          });
-          else {
+          } else {
             setAlertCode(2053);
             setTimeout(() => {
               this.handleClose("classicModal");
@@ -80,7 +83,7 @@ class PublishModal extends React.Component {
             }, 3000);
           }
         });
-      }else{
+      } else {
         this.handleClose("classicModal");
         document.location.reload();
       }
@@ -90,17 +93,23 @@ class PublishModal extends React.Component {
 
   render() {
     const { classicModal } = this.state;
-    const { getDrizzle, getMyInfo } = this.props;
+    const { getDrizzle, getMyInfo, type, getIsMobile } = this.props;
 
     let ethAccount = getMyInfo.ethAccount;
 
     return (
       <span>
-         <Tooltip title={psString("tooltip-copy")} placement="bottom">
+         <Tooltip title={psString("tooltip-publish")} placement="bottom">
+           {type === "tabItem" ?
+             <div className={"claim-btn " + (getIsMobile ? " w-100" : "")} onClick={() => this.handleClickOpen("classicModal")}>
+               {psString("common-modal-publish")}
+             </div>
+             :
              <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
                <i className="material-icons mr-3">publish</i>
                {psString("common-modal-publish")}
              </div>
+           }
          </Tooltip>
 
         <Dialog
@@ -127,16 +136,12 @@ class PublishModal extends React.Component {
 
 
           <DialogActions className="modal-footer">
-            {!getDrizzle && ethAccount &&
             <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">
               {psString("common-modal-cancel")}
             </div>
-            }
             <div onClick={() => this.handlePublish()} className={"ok-btn "}>
-                {psString(getDrizzle && ethAccount ? "common-modal-confirm" : "publish-modal-confirm-btn")}
-              </div>
-
-
+                {psString(getDrizzle && ethAccount ? "publish-modal-confirm-btn" : "common-modal-confirm")}
+            </div>
           </DialogActions>
         </Dialog>
       </span>

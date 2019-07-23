@@ -34,7 +34,7 @@ class ActiveVote extends React.Component {
   render() {
     const activeVote = this.state.curatorRewardOnUserDocument;
     const textDeck = Common.toDeck(activeVote ? activeVote : 0).toFixed(2);
-    const textDollar = Common.toDollar(activeVote).toFixed(1);
+    const textDollar = Common.toDollar(activeVote).toFixed(1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
     return (
       <span>

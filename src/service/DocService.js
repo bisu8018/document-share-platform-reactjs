@@ -9,19 +9,24 @@ let updateDocumentUrl = "document/update";
 
 export default {
   GET: {
-    document: (data, callback) => {
-      AxiosService._requestWithUrlPram( getDocumentUrl + "/" + data, "GET", null,
-        (data) => {
-          callback(data);
-        }, () => {
-        });
+    document: (data) => {
+      return new Promise((resolve, reject) => {
+        AxiosService._requestWithUrlPram(getDocumentUrl + "/" + data, "GET", null,
+          (data) => {
+            resolve(data);
+          }, (err) => {
+            reject(err);
+          });
+      });
     },
-    documentList: (data, callback, error) => {
+    documentList: (data) => {
+      return new Promise((resolve, reject) => {
       AxiosService._requestWithUrlPram(getDocumentListUrl, "GET", data,
         (data) => {
-          callback(data);
+          resolve(data);
         }, (err) => {
-          error(err);
+          reject(err);
+        });
         });
     },
     documentDownload: (data, callback, error) => {
@@ -31,7 +36,7 @@ export default {
         }, (err) => {
           error(err);
         });
-    },
+    }
   },
   POST: {
     sendVoteInfo: (data, callback, error) => {
@@ -50,14 +55,15 @@ export default {
           error(err);
         });
     },
-    updateDocument: (data, callback, error) => {
+    updateDocument: (data) => {
+      return new Promise((resolve, reject) => {
       AxiosService._requestWithHeaderBody(updateDocumentUrl, "POST", data,
         (data) => {
-          callback(data);
+          resolve(data);
         }, (err) => {
-          error(err);
+          reject(err);
         });
-    },
-
-  },
+        });
+    }
+  }
 };

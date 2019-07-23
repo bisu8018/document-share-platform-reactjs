@@ -45,29 +45,24 @@ class CuratorUploadTab extends React.Component {
     };
     else _params = { pageNo: pageNo, email: userInfo.email, pageSize: 10000 };
 
-    // 로딩 on
-    this.setState({ loading: true });
-
+    this.setState({ loading: true });   // 로딩 on
     let param = this.getParam();
-    if (param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) {
-      MainRepository.Account.getDocuments(_params, (res) => {
-        this.handleData(res);
 
-        // 로딩 off
-        this.setState({ loading: false });
-      }, err => {
+    if (param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) {
+      MainRepository.Account.getDocuments(_params).then(res => {
+        this.handleData(res);
+        this.setState({ loading: false });    // 로딩 off
+      },err => {
         console.error(err);
         setTimeout(() => {
           this.fetchDocuments(params);
         }, 8000);
       });
     } else {
-      MainRepository.Document.getDocumentList(_params, (res) => {
+      MainRepository.Document.getDocumentList(_params).then(res => {
         this.handleData(res);
-
-        // 로딩 off
-        this.setState({ loading: false });
-      }, err => {
+        this.setState({ loading: false });    // 로딩 off
+      },err => {
         console.error("Curator upload document GET ERROR", err);
         setTimeout(() => {
           this.fetchDocuments(params);

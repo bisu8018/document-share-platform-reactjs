@@ -10,11 +10,11 @@ class Callback extends Component {
 
     MainRepository.Account.handleAuthentication(this.props, () => {
       let myInfo = MainRepository.Account.getMyInfo();
-      MainRepository.Account.getAccountInfo(myInfo.sub, result => {
+      return MainRepository.Account.getAccountInfo(myInfo.sub).then(result => {
         // 로그인 성공시, 유사 로그인 정보 삭제
         setTempEmail(null);
         setMyInfo(result);
-
+        console.log(result);
         history.push("/");
       });
     }, err => {

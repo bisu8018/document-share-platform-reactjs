@@ -55,7 +55,7 @@ class Bounty extends React.Component {
       getWeb3Apis.getBountyAvailable(getMyInfo.ethAccount).then((data) => {
         this.setState({ isAuthenticated: true });
         this.setState({ available: data });
-      }).catch((err) => {
+      },err => {
         console.error(err);
       });
     } else if (!isAuthenticated && this.state.isAuthenticated) {

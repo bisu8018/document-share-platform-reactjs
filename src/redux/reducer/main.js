@@ -3,6 +3,8 @@ import UserInfo from "../model/UserInfo";
 import Web3Apis from "../../apis/Web3Apis";
 import DrizzleApis from "../../apis/DrizzleApis";
 
+
+
 // 액션 생성자
 export const setInitComplete = (initComplete: boolean) => ({ type: ReduxTypes.SET_INIT_COMPLETE, initComplete });
 export const setMyInfo = (myInfo: any) => ({ type: ReduxTypes.SET_MY_INFO, myInfo });

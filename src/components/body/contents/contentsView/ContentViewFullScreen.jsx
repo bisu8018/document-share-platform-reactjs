@@ -22,7 +22,7 @@ import PublishModalContainer from "../../../../container/common/modal/PublishMod
 import DeleteDocumentModalContainer from "../../../../container/common/modal/DeleteDocumentModalContainer";
 import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
 
-// import ContentViewComment from "./ContentViewComment";
+import ContentViewComment from "./ContentViewComment";
 
 
 class ContentViewFullScreen extends Component {
@@ -35,27 +35,7 @@ class ContentViewFullScreen extends Component {
     eventId: null,
     emailFlag: false,
     reward: 0,
-    isDocumentExist: null
-  };
-
-
-  //문서 다운로드
-  getContentDownload = (accountId, documentId, documentName) => {
-    let params = {
-      documentId: documentId
-    };
-    MainRepository.Document.getDocumentDownloadUrl(params, result => {
-      const a = document.createElement("a");
-
-      a.style.display = "none";
-      document.body.appendChild(a);
-      a.href = result.downloadUrl;
-      a.setAttribute("download", documentName);
-      a.click();
-
-      window.URL.revokeObjectURL(a.href);
-      document.body.removeChild(a);
-    });
+    isDocumentExist: null,
   };
 
 
@@ -96,6 +76,26 @@ class ContentViewFullScreen extends Component {
   //현재 page GET
   getPageNum = (page) => {
     this.setState({ page: page });
+  };
+
+
+  //문서 다운로드
+  getContentDownload = (accountId, documentId, documentName) => {
+    let params = {
+      documentId: documentId
+    };
+    MainRepository.Document.getDocumentDownloadUrl(params, result => {
+      const a = document.createElement("a");
+
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.href = result.downloadUrl;
+      a.setAttribute("download", documentName);
+      a.click();
+
+      window.URL.revokeObjectURL(a.href);
+      document.body.removeChild(a);
+    });
   };
 
 
@@ -146,7 +146,7 @@ class ContentViewFullScreen extends Component {
   }
 
   render() {
-    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
+    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
     const { page, isFull, carouselClass, emailFlag } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0;
@@ -335,7 +335,7 @@ class ContentViewFullScreen extends Component {
             </div>
           </div>
 
-          {/*<ContentViewComment/>*/}
+          {update === false && <ContentViewComment/>}
 
         </div>
 

@@ -1,8 +1,6 @@
 import ReactGA from "react-ga";
 import auth0 from "auth0-js";
 import axios from "axios";
-//import * as Sentry from "@sentry/browser";
-
 import { AUTH_CONFIG } from "properties/auth.properties";
 import { APP_PROPERTIES } from "properties/app.properties";
 
@@ -26,6 +24,7 @@ import TrackingService from "../service/TrackingService";
 import CuratorSummary from "./model/CuratorSummary";
 import AnalyticsService from "../service/AnalyticsService";
 import TagService from "../service/TagService";
+//import * as Sentry from "@sentry/browser";
 
 let instance: any;
 
@@ -259,25 +258,20 @@ export default {
         localStorage.setItem("user_info", JSON.stringify(userInfo));
       }
     },
-    async getAccountInfo(id, callback, error) {
+    async getAccountInfo(id) {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const data = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
-        params: {
-          "id": id
-        }
+        header: { "Authorization": `Bearer ${token}` },
+        params: { "id": id }
       };
 
-      AuthService.GET.accountInfo(data, (result => {
-        let userInfo = new UserInfo(result.user);
-        callback(userInfo);
-      }), err => {
-        this.logout();
-        error(err);
-      });
+      return AuthService.GET.accountInfo(data)
+        .then(result => new UserInfo(result.user))
+        .catch(err => {
+          this.logout();
+          return err;
+        });
     },
     getProfileInfo(params, callback, error) {
       AuthService.GET.profileGet(params, (result => {
@@ -330,20 +324,15 @@ export default {
           expiresAt: JSON.parse(localStorage.getItem("expires_at"))
         });
     },
-    async getProfileImageUploadUrl(callback, error) {
+    async getProfileImageUploadUrl() {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        }
+        header: { "Authorization": `Bearer ${token}` }
       };
-      AuthService.POST.profileImageUpdate(_data, (result) => {
-        let userProfile = new UserProfile(result);
-        callback(userProfile);
-      }, err => {
-        error(err);
-      });
+      return AuthService.POST.profileImageUpdate(_data)
+        .then(result => new UserProfile(result))
+        .catch(err => err);
     },
     async syncEthereum(ethAccount: string, callback) {
       const authResult = await instance.Account.renewSessionPromise();
@@ -426,7 +415,7 @@ export default {
       Common.deleteCookie("_ga");
       Common.deleteCookie("_gid");
     },
-    async getDocuments(data: any, callback: any, error: any) {
+    async getDocuments(data: any) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
@@ -439,16 +428,13 @@ export default {
         }
       };
 
-      AuthService.GET.documents(params, result => {
-        let documentList = new DocumentList((result));
-        callback(documentList);
-      }, err => {
-        error(err);
-      });
+      return AuthService.GET.documents(params)
+        .then(result => new DocumentList((result)))
+        .catch(err => err);
     }
   },
   Document: {
-    async registerDocument(args, progress, callback, error) {
+    async registerDocument(args: any, progress: any, callback: any, error: any) {
       const authResult = await instance.Account.renewSessionPromise();
       let fileInfo = args.fileInfo;
       let user = args.userInfo;
@@ -534,34 +520,21 @@ export default {
       };
       return axios.put(params.signedUrl, params.file, config);
     },
-    getDocument(documentId: string, callback: any, error: any) {
-      DocService.GET.document(documentId, (result) => {
-        if (!result.message) {
-          let document = new Document(result);
-          callback(document);
-        } else {
-          error(result.message);
-        }
-      });
+    getDocument(documentId: string) {
+      return DocService.GET.document(documentId).then(result => {
+        if (!result.message) return new Document(result);
+        else throw new Error(result.message);
+      }).catch(err => err);
     },
-    getTagList(path: String, callback: any, error: any) {
-      let params = {
-        t: path
-      };
-      TagService.GET.tagList(params, result => {
-        let tagList = new TagList((result));
-        callback(tagList);
-      }, err => {
-        error(err);
-      });
+    getTagList(path: String) {
+      return TagService.GET.tagList({ t: path })
+        .then(result => new TagList((result)))
+        .catch(err => err);
     },
-    getDocumentList(params: any, callback: any, error: any) {
-      DocService.GET.documentList(params, result => {
-        let documentList = new DocumentList((result));
-        callback(documentList);
-      }, err => {
-        error(err);
-      });
+    getDocumentList(params: any) {
+      return DocService.GET.documentList(params)
+        .then(result => new DocumentList(result))
+        .catch(err => err);
     },
     getDocumentDownloadUrl(params: any, callback: any) {
       DocService.GET.documentDownload(params, result => {
@@ -577,7 +550,7 @@ export default {
         callback(result);
       });
     },
-    async updateDocument(data: any, callback: any) {
+    async updateDocument(data: any) {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
@@ -596,14 +569,11 @@ export default {
           "Authorization": `Bearer ${token}`
         }
       };
-      DocService.POST.updateDocument(_data, (rst) => {
-        let documentInfo = new DocumentInfo(rst.result);
-        callback(documentInfo);
-      }, error => {
-        console.error(error);
-      });
+      return DocService.POST.updateDocument(_data)
+        .then(rst => new DocumentInfo(rst.result))
+        .catch(error => console.error(error));
     },
-    async publishDocument(data: any, callback: any) {
+    async publishDocument(data: any) {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
@@ -612,14 +582,11 @@ export default {
           "Authorization": `Bearer ${token}`
         }
       };
-      DocService.POST.updateDocument(_data, (rst) => {
-        let documentInfo = new DocumentInfo(rst.result);
-        callback(documentInfo);
-      }, error => {
-        console.error(error);
-      });
+      return DocService.POST.updateDocument(_data)
+        .then(rst => new DocumentInfo(rst.result))
+        .catch(error => console.error(error));
     },
-    async deleteDocument(data: any, callback: any, error: any) {
+    async deleteDocument(data: any) {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
@@ -628,13 +595,9 @@ export default {
           "Authorization": `Bearer ${token}`
         }
       };
-      DocService.POST.updateDocument(_data, (rst) => {
-        let documentInfo = new DocumentInfo(rst.result);
-        callback(documentInfo);
-      }, err => {
-        console.error(err);
-        error(err);
-      });
+      return DocService.POST.updateDocument(_data)
+        .then(rst => new DocumentInfo(rst.result))
+        .catch(error => console.error(error));
     }
   },
   Curator: {

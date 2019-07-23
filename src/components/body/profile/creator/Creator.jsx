@@ -10,6 +10,7 @@ import CreatorSummaryContainer from "../../../../container/body/profile/creator/
 import CuratorVoteTabContainer from "../../../../container/body/profile/curator/CuratorVoteTabContainer";
 import CuratorUploadTabContainer from "../../../../container/body/profile/curator/CuratorUploadTabContainer";
 import { psString } from "../../../../config/localization";
+import { Helmet } from "react-helmet";
 
 
 class Creator extends React.Component {
@@ -70,9 +71,20 @@ class Creator extends React.Component {
     const { userInfo, errMessage, uploadDocumentList, voteDocumentList } = this.state;
 
     let param = this.getParam();
+
     return (
 
       <div className="row mb-5">
+
+        <Helmet>
+          {userInfo ?
+            <title>{param + " | Polaris Share"}</title>
+            :
+            <title>{"Polaris Share"}</title>
+          }
+        </Helmet>
+
+
         <div className="col-12 u__center">
 
           {userInfo &&
@@ -85,7 +97,8 @@ class Creator extends React.Component {
             userInfo={userInfo}/>
           }
 
-          {!userInfo && !errMessage && <div className="spinner"><ThreeBounce name="ball-pulse-sync" color="#3681fe"/></div>}
+          {!userInfo && !errMessage &&
+          <div className="spinner"><ThreeBounce name="ball-pulse-sync" color="#3681fe"/></div>}
 
           {errMessage && <NotFoundPage errMessage={errMessage}/>}
 

@@ -273,7 +273,7 @@ class VoteDocumentModal extends React.Component {
       btnText = psString("common-modal-confirm");
       statusFlag = false;
     } else {
-      btnText = psString("Pending");
+      btnText = psString("b-pending");
       statusFlag = true;
     }
 
@@ -346,7 +346,7 @@ class VoteDocumentModal extends React.Component {
             <ul className="voteList">
               <li>
                 <span className="color-main-color font-weight-bold">{Common.toDeck(balance).toFixed(2)}</span> DECK
-                ($ <span className="color-main-color"> {Common.toDollar(balance)} </span>)
+                ($ <span className="color-main-color"> {Common.toDollar(balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} </span>)
               </li>
             </ul>
 

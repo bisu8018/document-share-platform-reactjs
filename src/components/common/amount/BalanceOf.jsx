@@ -6,7 +6,7 @@ class BalanceOf extends React.Component {
 
   render() {
     const { balance } = this.props;
-    let balanceDollarStr = "$ " + Common.toDollar(balance.toString());
+    let balanceDollarStr = "$ " + Common.toDollar(balance.toString()).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
     let balanceDeckStr = (balance >= 0 ?  Common.toDeck(balance) : 0).toFixed(2) + " DECK";
 
     return (

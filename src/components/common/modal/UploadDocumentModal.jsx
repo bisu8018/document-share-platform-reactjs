@@ -160,7 +160,7 @@ class UploadDocumentModal extends React.Component {
       this.handleClose("classicModal"); //모달 닫기
       this.handleClickOpen("classicModalSub"); //두번째 모달 열기
 
-    }).catch(err => {
+    },err => {
       console.error(err);
 
       setAlertCode(2071);

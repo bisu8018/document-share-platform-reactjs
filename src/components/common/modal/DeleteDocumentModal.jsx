@@ -52,10 +52,14 @@ class DeleteDocumentModal extends React.Component {
 
   // delete 관리
   handleDelete = async () => {
-    const { setAlertCode } = this.props;
-    MainRepository.Document.deleteDocument({ isDelete: true }, () => {
+    const { setAlertCode, documentData } = this.props;
+    let data = {
+      isDeleted: true,
+      documentId: documentData.documentId
+    };
+    MainRepository.Document.deleteDocument(data).then(() => {
       this.handleClose("classicModal");
-      document.location.reload();
+      //document.location.reload();
     }, () => {
       setAlertCode(2073);
     });
@@ -109,7 +113,7 @@ class DeleteDocumentModal extends React.Component {
               {psString("common-modal-cancel")}
             </div>
             <div onClick={() => this.handleDelete()} className={"ok-btn "}>
-                {psString("common-modal-confirm")}
+                {psString("common-modal-delete")}
             </div>
           </DialogActions>
         </Dialog>

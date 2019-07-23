@@ -5,6 +5,9 @@ import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../config/common";
 import ContentTagsContainer from "../../../container/body/contents/ContentTagsContainer";
 import ContentListItemContainer from "../../../container/body/contents/ContentListItemContainer";
+import NoDataIcon from "../../common/NoDataIcon";
+import { Helmet } from "react-helmet";
+import { psString } from "../../../config/localization";
 
 class ContentList extends Component {
   state = {
@@ -30,12 +33,11 @@ class ContentList extends Component {
     const { pageNo, tag, path, resultList } = this.state;
 
     let _pageNo = (resultList.length === 0 ? 1 : pageNo + 1);
-    this.setState({ loading: true }, () => {
-      this.fetchDocuments({
-        pageNo: _pageNo,
-        tag: tag,
-        path: path
-      });
+
+    this.fetchDocuments({
+      pageNo: _pageNo,
+      tag: tag,
+      path: path
     });
   };
 
@@ -48,11 +50,11 @@ class ContentList extends Component {
       tag: args.tag,
       path: args.path ? args.path : path
     };
-
-    MainRepository.Document.getDocumentList(params, (res) => {
+    this.setState({ loading: true });
+    MainRepository.Document.getDocumentList(params).then(res => {
       this.setState({ loading: false });
-      const _resultList = res.resultList ? res.resultList : [],
-        pageNo = res.pageNo;
+      const _resultList = res.resultList ? res.resultList : [];
+      const pageNo = res.pageNo;
 
       if (_resultList.length > 0) {
         if (resultList.length > 0 && !tagSearchFlag) {
@@ -67,7 +69,7 @@ class ContentList extends Component {
       if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) {
         this.setState({ totalViewCountInfo: res.totalViewCountInfo });
       }
-    }, (err) => {
+    },err => {
       this.setState({ loading: false });
       console.error(err);
       this.setTimeout = setTimeout(() => {
@@ -102,7 +104,7 @@ class ContentList extends Component {
 
     let path = Common.getPath();
     if (getTagList.path !== path) {
-      MainRepository.Document.getTagList(path, result => {
+      MainRepository.Document.getTagList(path).then(result => {
         setTagList(result.resultList);
       });
     }
@@ -142,6 +144,10 @@ class ContentList extends Component {
 
     return (
       <div className="row">
+        <Helmet>
+          <title>{psString("helmet-title-" + Common.getPath()) + " | Polaris Share"}</title>
+        </Helmet>
+
         <div className="col-lg-3  overflow-hidden">
           <ContentTagsContainer path={match.path} url={match.url} {...this.props}/>
         </div>
@@ -165,6 +171,9 @@ class ContentList extends Component {
             </InfiniteScroll>
             {this.state.loading &&
             <div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>
+            }
+            {!this.state.loading && ((resultList && resultList.length === 0) || !resultList) &&
+            <NoDataIcon className="no-data">No data</NoDataIcon>
             }
           </div>
         </div>

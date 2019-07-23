@@ -119,12 +119,10 @@ class EditDocumentModal extends React.Component {
       cc: this.getCcValue(),
       isPublic: false
     };
-    MainRepository.Document.updateDocument(data, (result) => {
+    MainRepository.Document.updateDocument(data).then(result => {
       history.push("/" + Common.getPath() + "/" + result.seoTitle);
       this.handleClose();
-
-      //임시로 사용, redux로 교체 필요
-      document.location.reload();
+      document.location.reload();   //임시로 사용, redux 로 교체 검토 필요
     });
   };
 

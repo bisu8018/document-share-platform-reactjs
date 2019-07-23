@@ -4,7 +4,7 @@ import BigNumber from "bignumber.js/bignumber";
 import { psString } from "./localization";
 
 const imgDomain = APP_PROPERTIES.domain().image;
-//const apiDomain = APP_PROPERTIES.domain().api;
+const env = APP_PROPERTIES.env;
 
 export default ({
   // Timestamp GET
@@ -145,6 +145,18 @@ export default ({
   scrollTop: () => {
     window.scrollTo(0, 0);
   },
+  // Set BODY TAG Style
+  setBodyStyleLock: () => {
+    document.body.style.overflow = "hidden";
+    document.body.style.paddingRight = "5px";
+    return true;
+  },
+  // Set BODY TAG Style
+  setBodyStyleUnlock: () => {
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+    return true;
+  },
   convertTimestampToString: (timestamp) => {
     const options = {
       weekday: "long",
@@ -182,16 +194,16 @@ export default ({
     return name.match(regExp);
   },
   toDollar: (deck: string) => {
-    if(isNaN(deck) || !deck) return 0;
+    if (isNaN(deck) || !deck) return 0;
     let c = 0.005;
     let d = new BigNumber("1e+18");
     let bn = new BigNumber(deck);
     let dollar = bn.dividedBy(d).multipliedBy(c);
     //120,000,000,000,000,000,000
-    return Math.round(dollar.toNumber() * 100) / 100;
+    return (Math.round(dollar.toNumber() * 100) / 100);
   },
   toDeck: (smallDeck: string) => {
-    if(isNaN(smallDeck) || !smallDeck) return 0;
+    if (isNaN(smallDeck) || !smallDeck) return 0;
     let d = new BigNumber("1e+18");
     let bn = new BigNumber(smallDeck);
     let deck = bn.dividedBy(d);
@@ -199,7 +211,7 @@ export default ({
     return Math.round(deck.toNumber() * 100) / 100;
   },
   toEther: (str: string) => {
-    if(isNaN(str) ||!str) return 0;
+    if (isNaN(str) || !str) return 0;
     let d = new BigNumber("1e+18");
     let bn = new BigNumber(str);
     let ether = bn.dividedBy(d);
@@ -210,7 +222,7 @@ export default ({
     let c = 0.005;
     let bn = new BigNumber(str);
     let dollar = bn.multipliedBy(c);
-    return Math.round(dollar.toNumber() * 100) / 100;
+    return (Math.round(dollar.toNumber() * 100) / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   },
   deckStr: (deck: number) => {
     let deck1m = Math.round((deck) / 1000000) > 0 ? Math.floor((deck) / 100000) / 10 : 0;
@@ -224,11 +236,11 @@ export default ({
     return deckStr;
   },
   authorCalculateReward: (pv: number, tpv: number, pool: number) => {
-    if (tpv === 0 || pv === 0 || pool === 0 || !tpv || !pv || !pool ) return 0;
+    if (tpv === 0 || pv === 0 || pool === 0 || !tpv || !pv || !pool) return 0;
     return (pv * (pool / tpv));
   },
   curatorCalculateReward: (pool: number, v: number, tv: number, pv: number, tpvs: number) => {
-    if (pool === 0 || v === 0 || tv === 0 || pv === 0 || tpvs === 0 || !pool || !v || !tv || !pv || !tpvs ) return 0;
+    if (pool === 0 || v === 0 || tv === 0 || pv === 0 || tpvs === 0 || !pool || !v || !tv || !pv || !tpvs) return 0;
     return (pool * (Math.pow(pv, 2) / tpvs)) * (v / tv);
   },
   jsonToQueryString: (json) => {
@@ -239,23 +251,23 @@ export default ({
       }).join("&");
   },
   shuffleArray: (array) => {
-  let currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length, temporaryValue, randomIndex;
 
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
 
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
 
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
 
-  return array;
-},
+    return array;
+  },
   getThumbnail: (documentId, size, pageNo, documentName) => {
     let _size = size;
     if (documentName) {
@@ -280,7 +292,7 @@ export default ({
     return pathArr[1];
   },
   getVersion: () => {
-    return "v " + process.env.PROJECT_VERSION
+    return "v " + process.env.PROJECT_VERSION;
   },
   getMySub: () => {
     let authSub = "";
@@ -351,7 +363,7 @@ export default ({
         let reward = 0;
 
         for (let i = 0; i < dk.latestPageviewList.length; ++i) {
-          let di =  dk.latestPageviewList[i];
+          let di = dk.latestPageviewList[i];
           y = di.year;
           m = di.month;
           d = di.dayOfMonth;
@@ -367,8 +379,8 @@ export default ({
             }
           }
           if (this.dateAgo(timestamp) <= day) reward += this.authorCalculateReward(pv, tpv, getCreatorDailyRewardPool);
-          if (i === dk.latestPageviewList.length - 1) totalReward += reward;
         }
+        totalReward += reward;
       }
       if (k === documentList.length - 1) {
         return totalReward;
@@ -405,10 +417,8 @@ export default ({
           if (this.dateAgo(timestamp) <= 7 && this.dateAgo(timestamp) > 0) {
             reward += this.authorCalculateReward(pv, tpv, getCreatorDailyRewardPool);
           }
-          if (i === dk.latestPageviewList.length - 1) {
-            totalReward += reward;
-          }
         }
+        totalReward += reward;
       }
     }
     return totalReward;
@@ -419,6 +429,14 @@ export default ({
   getCuratorNDaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, day: number, latestRewardVoteList: any, test) {
     if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
     let totalReward = 0;
+
+    if (env === "local") {
+      console.log("%cEstimated earnings for today", "color:blue;font-weight:bold;font-size:22px");
+      console.log("Document List", documentList);
+      console.log("Total View Count Info", totalViewCountInfo);
+      console.log("%cTotal Docs : " + documentList.length, "color:red;font-weight:bold;");
+      console.log("%cPool : " + getCuratorDailyRewardPool + "\n", "color:red;font-weight:bold;");
+    }
 
     for (let k = 0; k < documentList.length; ++k) {
       const dk = documentList[k];
@@ -434,6 +452,13 @@ export default ({
           }
         }
 
+        if (env === "local") {
+          console.log("\n\n");
+          console.log("%c[" + dk.title + "]", "font-weight:bold;font-size:16px");
+          console.log("Vote counts : " + dk.depositList.length);
+          console.log("TV : " + tv);
+          console.log("\n");
+        }
 
         for (let i = 0; i < dk.depositList.length; ++i) {
           const di = dk.depositList[i];
@@ -450,16 +475,34 @@ export default ({
 
           for (let j = 0; j < totalViewCountInfo.length; ++j) {
             const tj = totalViewCountInfo[j];
-            if (tj._id.year === y && tj._id.month === m && tj._id.dayOfMonth === d) tpvs = tj.totalPageviewSquare;
+
+            if (tj._id.year === y && tj._id.month === m && tj._id.dayOfMonth === d) {
+              tpvs = tj.totalPageviewSquare;
+              break;
+            } else tpvs = 0;
           }
+
           //console.log(v, tv, pv, tpvs);
-          if (this.dateAgo(timestamp) <= day) {
-            reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
+          if (this.dateAgo(timestamp) <= day) reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
+
+          if (env === "local") {
+            console.log("%cNo." + Number(i + 1), "font-weight:bold");
+            console.log("PV : " + pv);
+            console.log("TPVS : " + tpvs);
+            console.log("%c(" + getCuratorDailyRewardPool + " × (" + Math.pow(pv, 2) + " ÷ " + tpvs + ")) × (" + v + " ÷ " + tv + ")", "font-weight:bold");
+            console.log("%c(리워드풀 × (페이지뷰 ÷ 페이지뷰 스퀘어)) × (투표수 ÷ 총 투표수)", "font-size:11px;color:grey");
+            console.log("%cREWARD : $" + this.deckToDollar(this.toDeck(reward)), "color:red");
+            console.log("\n");
           }
-          if (i <= dk.depositList.length - 1) totalReward += reward;
         }
+        totalReward += reward;
       }
     }
+
+    console.log("\n\n");
+    console.log("%cTOTAL REWARD : $" + this.deckToDollar(this.toDeck(totalReward)), "font-weight:bold;font-size:17px;color:purple");
+    console.log("\n\n\n\n\n\n\n\n");
+
     return totalReward;
   },
 
@@ -468,6 +511,14 @@ export default ({
   getCurator7DaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, latestRewardVoteList: any) {
     if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
     let totalReward = 0;
+
+    if (env === "local") {
+      console.log("%cRevenue for the last 7 days", "color:blue;font-weight:bold;font-size:22px");
+      console.log("Document List", documentList);
+      console.log("Total View Count Info", totalViewCountInfo);
+      console.log("%cTotal Docs : " + documentList.length, "color:red;font-weight:bold;");
+      console.log("%cPool : " + getCuratorDailyRewardPool + "\n", "color:red;font-weight:bold;");
+    }
 
     for (let k = 0; k < documentList.length; ++k) {
       const dk = documentList[k];
@@ -483,6 +534,13 @@ export default ({
           }
         }
 
+        if (env === "local") {
+          console.log("\n\n");
+          console.log("%c[" + dk.title + "]", "font-weight:bold;font-size:16px");
+          console.log("Vote counts : " + dk.depositList.length);
+          console.log("TV : " + tv);
+          console.log("\n");
+        }
 
         for (let i = 0; i < dk.depositList.length; ++i) {
           const di = dk.depositList[i];
@@ -503,10 +561,25 @@ export default ({
           }
 
           if (this.dateAgo(timestamp) <= 7 && this.dateAgo(timestamp) > 0) reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
-          if (i === dk.depositList.length - 1) totalReward += reward;
+
+          if (env === "local") {
+            console.log("%cNo." + Number(i + 1), "font-weight:bold");
+            console.log("PV : " + pv);
+            console.log("TPVS : " + tpvs);
+            console.log("%c(" + getCuratorDailyRewardPool + " × (" + Math.pow(pv, 2) + " ÷ " + tpvs + ")) × (" + v + " ÷ " + tv + ")", "font-weight:bold");
+            console.log("%c(리워드풀 × (페이지뷰 ÷ 페이지뷰 스퀘어)) × (투표수 ÷ 총 투표수)", "font-size:11px;color:grey");
+            console.log("%cREWARD : $" + this.deckToDollar(this.toDeck(reward)), "color:red");
+            console.log("\n");
+          }
         }
+        totalReward += reward;
       }
     }
+
+    console.log("\n\n");
+    console.log("%cTOTAL REWARD : $" + this.deckToDollar(this.toDeck(totalReward)), "font-weight:bold;font-size:17px;color:purple");
+    console.log("\n\n\n\n\n\n\n\n");
+
     return totalReward;
   }
 });
