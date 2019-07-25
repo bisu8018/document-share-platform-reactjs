@@ -1,7 +1,7 @@
 {
   "name": "polarishare_front_end",
   "description": "www.polarishare.com",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "license": "ISC",
   "private": true,
   "main": "index.js",
