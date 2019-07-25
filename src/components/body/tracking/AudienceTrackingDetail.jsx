@@ -92,8 +92,8 @@ class AudienceTrackingDetail extends React.Component {
     result.viewTracking.sort((a, b) => a.t - b.t);
     let nextDt = result.viewTracking[result.viewTracking.length - 1].t;
     let prevDt = result.viewTracking[0].t;
-
-    return Common.timestampToDurationJustTime(nextDt - prevDt);
+    let rstTime = Common.timestampToDurationJustTime(nextDt - prevDt);
+    return (rstTime === "0s " ? "" : "( " + rstTime + ")");
   };
 
 
@@ -114,7 +114,7 @@ class AudienceTrackingDetail extends React.Component {
 
     return (
 
-      <div className="u__center tracking-detail-container">
+      <section className="u__center tracking-detail-container container">
 
         <div className="row tracking_inner">
           <div className="col-sm-12 col-md-12 tracking_top">
@@ -136,7 +136,7 @@ class AudienceTrackingDetail extends React.Component {
                       <div className="font-weight-bold">
                         {this.getSortedTime(result)}
                         <span className="ml-2 font-weight-normal">
-                        ( {this.getStayingTime(result)})
+                         {this.getStayingTime(result)}
                         </span>
                       </div>
                     </div>
@@ -203,7 +203,7 @@ class AudienceTrackingDetail extends React.Component {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
     );
   }

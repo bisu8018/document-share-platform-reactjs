@@ -18,7 +18,19 @@ export const APP_PROPERTIES = {
       api: "https://api.share.decompany.io/rest",
       email: "https://api.share.decompany.io/ve",
       profile: "https://profile.share.decompany.io/",
-      embed: "https://embed.share.decompany.io/"
+      embed: "https://embed.share.decompany.io/",
+      bounty: "https://api.share.decompany.io/bounty/"
+    }
+  },
+  dev:{
+    domain:{
+      mainHost: 'https://share.decompany.io',
+      image: 'https://thumb.share.decompany.io',
+      api: "https://api.share.decompany.io/rest",
+      email: "https://api.share.decompany.io/ve",
+      profile: "https://profile.share.decompany.io/",
+      embed: "https://embed.share.decompany.io/",
+      bounty: "https://api.share.decompany.io/bounty/"
     }
   },
   production:{
@@ -30,16 +42,5 @@ export const APP_PROPERTIES = {
       profile: "https://res.polarishare.com/",
       embed: "https://embed.polarishare.com/",
     }
-  },
-  dev:{
-    domain:{
-      mainHost: 'https://share.decompany.io',
-      image: 'https://thumb.share.decompany.io',
-      api: "https://api.share.decompany.io/rest",
-      email: "https://api.share.decompany.io/ve",
-      profile: "https://profile.share.decompany.io/",
-      embed: "https://embed.share.decompany.io/",
-    }
   }
-
 };

@@ -35,10 +35,10 @@ class ContentViewBlockchainButton extends React.Component {
   };
 
   render() {
-    const { getDrizzle, getIsDocumentExist } = this.props;
+    const { getDrizzle, documentData } = this.props;
     const { msg } = this.state;
 
-    if (getIsDocumentExist || !getDrizzle.isInitialized() || !getDrizzle.isAuthenticated()) return null;
+    if (documentData.isRegistry || !getDrizzle.isInitialized() || !getDrizzle.isAuthenticated()) return null;
     return (
       <span>
         <Tooltip title={msg} placement="bottom">

@@ -4,7 +4,7 @@ import Common from "../../../../config/common";
 class CuratorClaim extends React.Component {
   state = {
     determineReward: null,
-    btnText: "Claim $"
+    btnText: "Claim $ "
   };
 
   getDetermineCuratorReward = () => {
@@ -31,7 +31,7 @@ class CuratorClaim extends React.Component {
         });
         if (btnText === "Complete") window.location.reload();//this.setState({ voteStatus: "COMPLETE" });
         else {
-          this.setState({ voteStatus: "Claim $" });
+          this.setState({ voteStatus: "Claim $ " });
           setAlertCode(2035);
         }
       });
@@ -54,7 +54,7 @@ class CuratorClaim extends React.Component {
 
     return (
       <div className={"claim-btn " + (btnText === "Pending" ? "btn-disabled" : "") + (getIsMobile ? " w-100" : "")}
-           onClick={() => this.handelClickClaim()} title={"Claim $" + claimReward}>
+           onClick={() => this.handelClickClaim()} title={"Claim $ " + claimReward}>
         {btnText} {(btnText === "Pending" ? "" : claimReward)}
       </div>
     );

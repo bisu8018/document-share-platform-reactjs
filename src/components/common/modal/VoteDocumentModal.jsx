@@ -231,12 +231,12 @@ class VoteDocumentModal extends React.Component {
 
   // 밸런스 정보 GET
   handleBalance = () => {
-    const { getWeb3Apis, getDrizzle, getMyInfo, getIsDocumentExist } = this.props;
+    const { getWeb3Apis, getDrizzle, getMyInfo, documentData } = this.props;
     const { balance } = this.state;
 
     let address = getMyInfo.ethAccount;
 
-    if (getDrizzle && (!getDrizzle.isInitialized() || !getIsDocumentExist)) return false;
+    if (getDrizzle && (!getDrizzle.isInitialized() || !documentData.isRegistry)) return false;
     if (!address || balance >= 0) return false;
 
     let ethAccount = getMyInfo.ethAccount;
@@ -260,12 +260,12 @@ class VoteDocumentModal extends React.Component {
   }
 
   render() {
-    const { documentData, getDrizzle, getIsDocumentExist, getMyInfo } = this.props;
+    const { documentData, getDrizzle, getMyInfo } = this.props;
     const { deckError, balance, voteStatus, approve } = this.state;
 
     this.handleBalance();
     let isLogin = MainRepository.Account.isAuthenticated();
-    if (getDrizzle && (!getDrizzle.isInitialized() || !getIsDocumentExist)) return <div/>;
+    if (getDrizzle && (!getDrizzle.isInitialized() || !documentData.isRegistry)) return <div/>;
 
     let btnText, statusFlag;
 
@@ -297,7 +297,7 @@ class VoteDocumentModal extends React.Component {
         </Tooltip>
         }
 
-        {getDrizzle && getIsDocumentExist &&
+        {getDrizzle && documentData.isRegistry &&
         <Tooltip title={psString("vote-modal-tooltip-1")} placement="bottom">
           <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
             <i className="material-icons">how_to_vote</i> {psString("vote-modal-btn")}

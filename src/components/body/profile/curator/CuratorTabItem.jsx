@@ -55,8 +55,7 @@ class CuratorTabItem extends React.Component {
 
     return (
 
-      <div className="pl-3 pl-sm-0 pr-3 pr-sm-0 row u_center_inner">
-
+      <div className="row u_center_inner">
 
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
           <Link to={"/" + identification + "/" + document.seoTitle}>
@@ -93,10 +92,10 @@ class CuratorTabItem extends React.Component {
             </div>
 
             <div className="tab-item-info-wrapper">
-              <span className="info-detail-reward mr-2"
+              <span className="info-detail-reward mr-3"
                     onMouseOver={() => this.showRewardInfo(document.seoTitle + "rewardVote")}
                     onMouseOut={() => this.hideRewardInfo(document.seoTitle + "rewardVote")}>
-                ${Common.deckToDollar(reward)}
+                $ {Common.deckToDollar(reward)}
                 <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")}
                      alt="arrow button"/>
               </span>

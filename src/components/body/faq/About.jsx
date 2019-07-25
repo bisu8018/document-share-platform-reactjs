@@ -10,13 +10,12 @@ class About extends React.Component {
   render() {
 
     return (
-
       <div className="container ">
         <Helmet>
           <title>{psString("helmet-title-about-us") + " | Polaris Share"}</title>
         </Helmet>
 
-        <div className="col-12 row about-section-1-wrapper">
+        <section className="col-12 row about-section-1-wrapper">
           <div className="about-section-1"/>
 
           <div className="col-12 col-md-6 order-last order-md-first">
@@ -36,10 +35,10 @@ class About extends React.Component {
           <div className="col-12 col-md-6 about-main-img order-first order-md-last">
             <img src={require("assets/image/common/about-main.png")} alt="about us main"/>
           </div>
-        </div>
+        </section>
 
 
-        <div className=" row about-section-wrapper">
+        <section className=" row about-section-wrapper">
           <div className="col-12">
             <div className="about-sub-title ">
               {psString("about-first-section-subj")}
@@ -56,10 +55,10 @@ class About extends React.Component {
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
 
-        <div className="col-12 row about-section-3-wrapper">
+        <section className="col-12 row about-section-3-wrapper">
           <div className="about-section-3"/>
           <div className="col-12 col-md-6">
             <div className="about-sub-title ">
@@ -138,10 +137,10 @@ class About extends React.Component {
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
 
-        <div className="col-12 row about-section-wrapper">
+        <section className="col-12 row about-section-wrapper">
           <div className="col-12 mb-4 mb-md-5">
             <div className="about-sub-title ">
               {psString("about-vision")}
@@ -183,10 +182,10 @@ class About extends React.Component {
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
 
-        <div className="col-12 row about-section-wrapper">
+        <section className="col-12 row about-section-wrapper">
           <div className="about-section-5"/>
           <div className="about-sub-title col-12 ">  {psString("about-ps-team")}</div>
 
@@ -302,7 +301,7 @@ class About extends React.Component {
           </div>
 
 
-        </div>
+        </section>
 
       </div>
 

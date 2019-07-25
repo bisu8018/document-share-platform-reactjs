@@ -29,6 +29,7 @@ class Header extends React.Component {
   }
 
 
+  // 헤더 네비 카테고리 클래스 삭제
   removeClass = () => {
     const navElByClass = document.getElementsByClassName("nav-menu-link");
     for (let i = 0; i < navElByClass.length; ++i) {
@@ -37,12 +38,11 @@ class Header extends React.Component {
   };
 
 
+  // 헤더 네비 카테고리 클래스 추가
   addClass = () => {
     let pathname = window.location.pathname.split("/")[1];
 
-    if (pathname === "callback") {
-      pathname = "";
-    }
+    if (pathname === "callback") pathname = "";
 
     if (pathname === "latest" || pathname === "featured" || pathname === "popular") {
       let _pathname = (pathname === "callback" ? "" : pathname) + "NavLink";
@@ -52,6 +52,7 @@ class Header extends React.Component {
   };
 
 
+  // 검색바 보임
   showSearchBar = () => {
     this.setState({ searchBar: true }, () => {
       const autoSuggestEle = document.getElementById("headerAutoSuggest").firstChild.firstChild;
@@ -62,19 +63,15 @@ class Header extends React.Component {
   };
 
 
-  closeSearchBar = () => {
-    this.setState({ searchBar: false });
-  };
+  // 검색 바 종료
+  closeSearchBar = () => this.setState({ searchBar: false });
 
 
   // 화면 크기 이벤트 리스너
   handleResize = (e) => {
     const { setIsMobile } = this.props;
-    if (e.currentTarget.innerWidth < 576) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
+    if (e.currentTarget.innerWidth < 576) setIsMobile(true);
+    else setIsMobile(false);
   };
 
 
@@ -86,21 +83,18 @@ class Header extends React.Component {
 
         // 프로필 카드
         const profileCard = document.getElementById("profileCard");
-        if (profileCard && !profileCard.contains(targetElement)) {
-          this.profileCardHide();
-        }
+        if (profileCard && !profileCard.contains(targetElement)) this.profileCardHide();
+
 
         // 헤더 검색 카테고리 드롭다운
         const dropdownList = document.getElementById("dropdownList");
-        if (dropdownList && !dropdownList.contains(targetElement)) {
-          setDropdownShow(false);
-        }
+        if (dropdownList && !dropdownList.contains(targetElement)) setDropdownShow(false);
+
 
         // 프로필 카드 프로필 버튼
         const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
-        if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) {
-          this.profileCardHide();
-        }
+        if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) this.profileCardHide(profileCardMyAccountBtn.dataset.id);
+
 
         // 검색 input
         const headerAutoSuggest = document.getElementById("headerAutoSuggest");
@@ -111,35 +105,28 @@ class Header extends React.Component {
           "headerSearchSelectBar" !== targetElement.id &&
           targetElement.classList[0] !== "react-autosuggest__input" &&
           targetElement.classList[0] !== "react-autosuggest__suggestion"
-        ) {
-          this.closeSearchBar();
-        }
-
+        ) this.closeSearchBar();
       }
     );
   };
 
   // 프로필 카드 보임
-  profileCardShow = () => {
-    this.setState({ profileCardShow: true });
-  };
+  profileCardShow = () => this.setState({ profileCardShow: true });
 
 
   // 프로필 카드 숨김
-  profileCardHide = () => {
-    this.setState({ profileCardShow: false });
-  };
+  profileCardHide = (id) => this.setState({ profileCardShow: false },()=>history.push("/" + id));
 
 
-  handleDrawerToggle = () => {
-    this.setState({ mobileOpen: !this.state.mobileOpen });
-  };
-
-  handleLogin = () => {
-    MainRepository.Account.login();
-  };
+  // 메뉴바 토클 관리
+  handleDrawerToggle = () => this.setState({ mobileOpen: !this.state.mobileOpen });
 
 
+  // 로그인 관리
+  handleLogin = () => MainRepository.Account.login();
+
+
+  // 스크롤 관리
   handleScroll = () => {
     let currentScrollPos = window.pageYOffset;
     if (this.state.prevScrollPos > currentScrollPos || currentScrollPos <= 0) {
@@ -151,6 +138,7 @@ class Header extends React.Component {
   };
 
 
+  // 헤더 네비 카테고리 관리
   handleNavMenuLink = (e) => {
     this.removeClass();
     let path = e.target.innerHTML.toLowerCase();
@@ -165,18 +153,12 @@ class Header extends React.Component {
   };
 
 
-  handleClose = () => {
-    this.setState({ adShow: false });
-  };
+  // 상단 광고 종료 관리
+  handleClose = () => this.setState({ adShow: false });
 
 
-  handleLang = () => {
-    if (psGetLang() === "EN") {
-      psSetLang("KO");
-    } else {
-      psSetLang("EN");
-    }
-  };
+  // 언어 설정 관리
+  handleLang = () => psGetLang() === "EN" ? psSetLang("KO") : psSetLang("EN");
 
 
   componentWillMount() {
@@ -205,6 +187,7 @@ class Header extends React.Component {
   render() {
     const { prevScrollPos, searchBar, profileCardShow, adShow } = this.state;
     const { getMyInfo, getTempEmail, getIsMobile } = this.props;
+
     let pathname = history.location.pathname.split("/")[1];
 
     return (
@@ -259,7 +242,7 @@ class Header extends React.Component {
 
             <div className="header-bar   col-8 col-md-3">
               <div className="language-btn" onClick={() => this.handleLang()}>
-                <i className="material-icons" >language</i>
+                <i className="material-icons">language</i>
                 {psGetLang() === "EN" ? "KR" : "EN"}
               </div>
               <div className="mobile-header-search-btn d-inline-block d-sm-none" onClick={() => this.showSearchBar()}/>

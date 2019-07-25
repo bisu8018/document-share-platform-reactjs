@@ -11,6 +11,7 @@ import CuratorVoteTabContainer from "../../../../container/body/profile/curator/
 import CuratorUploadTabContainer from "../../../../container/body/profile/curator/CuratorUploadTabContainer";
 import { psString } from "../../../../config/localization";
 import { Helmet } from "react-helmet";
+import log from "../../../../config/log";
 
 
 class Creator extends React.Component {
@@ -22,48 +23,44 @@ class Creator extends React.Component {
   };
 
 
-  //URL 파라미터 유저 identificatin GET
-  getParam = () => {
-    let pathArr = window.location.pathname.split("/");
-    return decodeURI(pathArr[1]);
-  };
-
-
-  // 프로필 정보 GET
-  getProfileInfo = (params: any) => {
-    MainRepository.Account.getProfileInfo(params, result => {
-      this.setState({ userInfo: result, errMessage: null });
-    }, err => {
-      this.setState({ userInfo: null, errMessage: err });
-      console.error(err);
-    });
-  };
-
-
-  //업로드 탭에서 문서 목록 GET, AuthorSummary에서 계산 위해 사용
-  getUploadDocumentList = (result: any) => {
-    this.setState({ uploadDocumentList: result });
-  };
-
-
-  //투표 탭에서 문서 목록 GET, AuthorSummary에서 계산 위해 사용
-  getVoteDocumentList = (result: any) => {
-    this.setState({ voteDocumentList: result });
-  };
-
-
-  componentWillMount(): void {
+  // 초기화
+  init = () => {
     const { getMyInfo } = this.props;
-    let presentValue = this.getParam();
-    let params = {};
+
+    log.Creator.init();
+    let presentValue = this.getParam(), params = {};
 
     if (getMyInfo.username !== presentValue && getMyInfo.email !== presentValue && getMyInfo.sub !== presentValue) {
       if (Common.checkEmailForm(presentValue)) params = { email: presentValue };
       else params = { username: presentValue };
       this.getProfileInfo(params);
-    } else {
-      this.setState({ userInfo: getMyInfo, errMessage: null });
-    }
+    } else this.setState({ userInfo: getMyInfo, errMessage: null });
+  };
+
+
+  // 프로필 정보 GET
+  getProfileInfo = (params: any) => {
+    MainRepository.Account.getProfileInfo(params).then(result =>
+        this.setState({ userInfo: result, errMessage: null }, () => log.Creator.getProfileInfo(null, result))
+      , err =>
+        this.setState({ userInfo: null, errMessage: err }, () => log.Creator.getProfileInfo(err)));
+  };
+
+
+  // URL 파라미터 유저 identification GET
+  getParam = () => decodeURI(window.location.pathname.split("/")[1]);
+
+
+  //업로드 탭에서 문서 목록 GET, AuthorSummary에서 계산 위해 사용
+  getUploadDocumentList = (result: any) => this.setState({ uploadDocumentList: result });
+
+
+  //투표 탭에서 문서 목록 GET, AuthorSummary에서 계산 위해 사용
+  getVoteDocumentList = (result: any) => this.setState({ voteDocumentList: result });
+
+
+  componentWillMount(): void {
+    this.init();
   }
 
   render() {
@@ -73,19 +70,10 @@ class Creator extends React.Component {
     let param = this.getParam();
 
     return (
-
-      <div className="row mb-5">
-
-        <Helmet>
-          {userInfo ?
-            <title>{param + " | Polaris Share"}</title>
-            :
-            <title>{"Polaris Share"}</title>
-          }
-        </Helmet>
-
-
-        <div className="col-12 u__center">
+        <section className="mb-5 u__center container">
+          <Helmet>
+            {userInfo ? <title>{param + " | Polaris Share"}</title> : <title>{"Polaris Share"}</title>}
+          </Helmet>
 
           {userInfo &&
           <CreatorSummaryContainer
@@ -133,8 +121,7 @@ class Creator extends React.Component {
 
           </Tabs>
           }
-        </div>
-      </div>
+        </section>
 
     );
   }

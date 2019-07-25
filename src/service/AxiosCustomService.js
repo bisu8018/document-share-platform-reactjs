@@ -51,25 +51,3 @@ export async function get(url, data){
   return await axios.get(url, {params: params}, {headers:header});
 
 }
-
-
-
-
-// Get short URL
-
-/*
-export function getShortUrl(url: string) {
-  return new Promise((resolve, reject) => {
-    const url = "https://tinyurl.com/create.php";
-    axios.get(url, null).then((res) => {
-      console.log(res);
-      /!*const regex = /(https?:\/\/tinyurl.com\/)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi;
-      const list = body.match(regex).reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]);*!/
-
-      //resolve(list[0]);
-    }).catch((err) => {
-      reject(err);
-    });
-  })
-}*/
-

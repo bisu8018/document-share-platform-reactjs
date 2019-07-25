@@ -22,12 +22,6 @@ let  ReduxTypes ={
 
 
   //======================================
-  //            ContentView
-  // =====================================
-  SET_IS_DOCUMENT_EXIST : "contentView/SET_IS_DOCUMENT_EXIST",
-
-
-  //======================================
   //            AudienceTracking
   // =====================================
   SET_SHOW_ANONYMOUS : "audienceTracking/SET_SHOW_ANONYMOUS",

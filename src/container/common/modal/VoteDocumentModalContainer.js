@@ -6,8 +6,7 @@ export default connect(
   state => ({
     getWeb3Apis: state.main.web3Apis,
     getDrizzle: state.main.drizzleApis,
-    getMyInfo: state.main.myInfo,
-    getIsDocumentExist: state.contentView.isDocumentExist
+    getMyInfo: state.main.myInfo
   }),
   dispatch => ({
     setDrizzleApis: () => {

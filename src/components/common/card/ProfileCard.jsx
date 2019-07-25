@@ -1,9 +1,7 @@
 import React from "react";
 import BalanceOfContainer from "../../../container/common/BalanceOfContainer";
-import { Link } from "react-router-dom";
 import MainRepository from "../../../redux/MainRepository";
 import UserInfo from "../../../redux/model/UserInfo";
-import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
 import { FadingCircle } from "better-react-spinkit";
 
@@ -29,14 +27,10 @@ class ProfileCard extends React.Component {
   };
 
 
+  // 로그아웃 관리
   handleLogout = () => {
-    const { setMyInfo } = this.props;
-
-    if (MainRepository.Account.isAuthenticated()) {
-      MainRepository.Account.logout(() => {
-        setMyInfo(new UserInfo());
-      });
-    } else window.location.reload();
+    if (MainRepository.Account.isAuthenticated()) MainRepository.Account.logout(() => this.props.setMyInfo(new UserInfo()));
+    else window.location.reload();
   };
 
 
@@ -79,10 +73,9 @@ class ProfileCard extends React.Component {
 
         <div>
           {MainRepository.Account.isAuthenticated() ?
-            <Link to={"/" + identification}>
-              <div className="my-account-btn mb-2" id="profileCardMyAccountBtn"
-                   onClick={() => Common.scrollTop()}>{psString("profile-card-my-page")}</div>
-            </Link> :
+            <div className="my-account-btn mb-2" id="profileCardMyAccountBtn"
+                 data-id={identification}>{psString("profile-card-my-page")}</div>
+            :
             <div className="my-account-btn mb-2"
                  onClick={() => MainRepository.Account.login()}> {psString("profile-card-login")} </div>
           }

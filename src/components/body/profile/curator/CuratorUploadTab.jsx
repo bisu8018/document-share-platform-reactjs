@@ -112,7 +112,7 @@ class CuratorUploadTab extends React.Component {
 
     return (
 
-      <div>
+      <div className="col-12">
         <div className="document-total-num">
           {psString("profile-total-documents")} <span className="font-weight-bold">{resultList.length}</span>
         </div>

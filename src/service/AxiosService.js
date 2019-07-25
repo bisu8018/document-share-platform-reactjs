@@ -33,7 +33,7 @@ export default {
       data: data,
       headers: _header
     })
-      .then((response) => {
+      .then(response => {
         if (this.DEBUG()) {
           console.log("성공\nurl: " + url + "\nres:\n" + JSON.stringify(response.data));
         }
@@ -45,7 +45,7 @@ export default {
           failure(response.data.message);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.response) {
           let status = error.response.status;
           let headers = error.response.headers;

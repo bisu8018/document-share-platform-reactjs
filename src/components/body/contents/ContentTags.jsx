@@ -12,7 +12,7 @@ class ContentTags extends React.Component {
     const { getTagList, path } = this.props;
     return (
 
-      <div className="u__left d-none d-lg-block">
+      <nav className="col-lg-3  overflow-hidden u__left d-none d-lg-block">
         <ul className="tags_menu">
           <li className="tags_menu_all_tags">
             <NavLink exact to={path + "/"} activeClassName="on" onClick={() => {this.handleClick()}}>#All Tags</NavLink>
@@ -27,7 +27,7 @@ class ContentTags extends React.Component {
           })
           }
         </ul>
-      </div>
+      </nav>
 
     );
   }

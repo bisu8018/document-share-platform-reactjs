@@ -37,7 +37,7 @@ class ContentListItem extends React.Component {
     };
   };
 
-  
+
   componentWillMount(): void {
     this.getImgInfo();
   }
@@ -103,7 +103,7 @@ class ContentListItem extends React.Component {
             <span className={"info-detail-reward mr-3 " + (result.isRegistry ? "" : "color-not-registered")}
                   onMouseOver={() => this.showRewardInfo(result.seoTitle + "reward")}
                   onMouseOut={() => this.hideRewardInfo(result.seoTitle + "reward")}>
-              ${Common.deckToDollar(reward)}
+              $ {Common.deckToDollar(reward)}
               <img className="reward-arrow"
                    src={require("assets/image/icon/i_arrow_down_" + (result.isRegistry ? "blue" : "grey") + ".svg")}
                    alt="arrow button"/>

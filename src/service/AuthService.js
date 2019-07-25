@@ -66,13 +66,15 @@ export default {
           });
       });
     },
-    profileGet: (data, callback, error) => {
-      AxiosService._requestWithUrlPram(profileGetUrl, "GET", data,
-        (data) => {
-          callback(data);
-        }, (err) => {
-          error(err);
-        });
+    profileGet: (data) => {
+      return new Promise((resolve, reject) => {
+        AxiosService._requestWithUrlPram(profileGetUrl, "GET", data,
+          (data) => {
+            resolve(data);
+          }, (err) => {
+            reject(err);
+          });
+      });
     }
   }
 };

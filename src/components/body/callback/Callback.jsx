@@ -14,7 +14,6 @@ class Callback extends Component {
         // 로그인 성공시, 유사 로그인 정보 삭제
         setTempEmail(null);
         setMyInfo(result);
-        console.log(result);
         history.push("/");
       });
     }, err => {

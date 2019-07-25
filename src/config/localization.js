@@ -248,7 +248,7 @@ const strings = new Map([
     ENG: "Estimated earnings for today: Estimated revenue for the day (Total or Each reward for Creators and Curators)"
   }],
   ["faq-answer-6c", {
-    KOR: "지난 7일 간 수입 : 최근 7일간의 예상 수익 (전체 또는 각각의 Creator, Curator 보상금)",
+    KOR: "지난 7일 간 수익 : 최근 7일간의 예상 수익 (전체 또는 각각의 Creator, Curator 보상금)",
     ENG: "Revenue for the last 7 days: Estimated revenue for the last 7 days (Total or Each reward for Creators and Curators)"
   }],
   ["faq-question-7", {
@@ -374,7 +374,7 @@ const strings = new Map([
     ENG: "Estimated earnings for today :"
   }],
   ["profile-revenue-7-days", {
-    KOR: "지난 7일 간 수입 : ",
+    KOR: "지난 7일 간 수익 : ",
     ENG: "Revenue for the last 7 days :"
   }],
   ["profile-author-rewards", {
@@ -394,7 +394,7 @@ const strings = new Map([
     ENG: "Voted"
   }],
   ["profile-analytics", {
-    KOR: "애널리틱스",
+    KOR: "통계분석",
     ENG: "Analytics"
   }],
   ["profile-total-documents", {

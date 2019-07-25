@@ -61,7 +61,7 @@ class CreatorTabItem extends React.Component {
 
     return (
 
-      <div className="pl-3 pl-sm-0 pr-3 pr-sm-0 row u_center_inner">
+      <div className="row u_center_inner">
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
           <Link to={"/" + identification + "/" + document.seoTitle}
                 className={(document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
@@ -91,7 +91,7 @@ class CreatorTabItem extends React.Component {
               <div className="info_title mb-1"
                    onClick={() => Common.scrollTop()}>
                 {document.title ? document.title : document.documentName}
-                {!document.isPublic &&
+                {document.isPublic === false &&
                 <Tooltip title={psString("viewer-page-carousel-private")} placement="bottom">
                   <i className="material-icons ml-2">lock</i>
                 </Tooltip>
@@ -120,7 +120,7 @@ class CreatorTabItem extends React.Component {
               <span className={"info-detail-reward mr-3 " + (document.isRegistry ? "" : "color-not-registered")}
                     onMouseOver={() => this.showRewardInfo(document.seoTitle + "reward")}
                     onMouseOut={() => this.hideRewardInfo(document.seoTitle + "reward")}>
-                ${Common.deckToDollar(reward)}
+                $ {Common.deckToDollar(reward)}
                 <img className="reward-arrow"
                      src={require("assets/image/icon/i_arrow_down_" + (document.isRegistry ? "blue" : "grey") + ".svg")}
                      alt="arrow button"/>
@@ -131,7 +131,7 @@ class CreatorTabItem extends React.Component {
               <span className="info-detail-view mr-3">{view}</span>
               <span className="info-detail-vote mr-3">{Common.deckStr(vote)}</span>
               {document.state === "CONVERT_COMPLETE" && <CopyModalContainer documentData={document} type="onlyIcon"/>}
-              {((Common.dateAgo(document.created) > 0 && document.state !== "CONVERT_COMPLETE") || document.isPublic === false) &&
+              {((Common.dateAgo(document.created) > 0 && document.state && document.state !== "CONVERT_COMPLETE") || document.isPublic === false) &&
               <DeleteDocumentModalContainer documentData={document} type="onlyIcon"/>}
               <div className="info-date info-date-profile">
                 {Common.dateTimeAgo(document.created)}
@@ -141,7 +141,7 @@ class CreatorTabItem extends React.Component {
                 <CreatorClaimContainer {...this.props} document={document}/>
               </div>
 
-              {!document.isPublic &&
+              {document.isPublic === false &&
               <div className={(getIsMobile ? "mt-2" : "float-right")}>
                 <PublishModalContainer documentData={document} type={"tabItem"}/>
               </div>

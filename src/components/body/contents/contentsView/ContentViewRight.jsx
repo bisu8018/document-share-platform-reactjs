@@ -11,13 +11,13 @@ class ContentViewRight extends React.Component {
       return (<div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>);
     } else {
       return (
-        <div className="u__right">
+        <aside className="u__right col-md-12 col-lg-4 ">
           <div>{psString("see-also-text")}</div>
           <div className="hr mt-2"/>
           {featuredList.length > 0 && featuredList.map((result, idx) => (
             <FeaturedList resultItem={result} key={idx}/>
           ))}
-        </div>
+        </aside>
       );
     }
 

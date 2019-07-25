@@ -30,13 +30,9 @@ let instance: any;
 
 export default {
   init(callback: () => any) {
-    instance = this;    // 자기 참조
+    // 자기 참조
+    instance = this;
 
-    //센트리 초기화
-    /*  Sentry.init({
-        dsn: "https://6dfadc862ca64af08fd6b39ade991deb@sentry.io/1450741"
-      });
-  */
     //Google Analytics 초기화
     let gaId = process.env.NODE_ENV_SUB === "production" ? "UA-140503497-1" : "UA-129300994-1";
     if (process.env.NODE_ENV_SUB === "production" || process.env.NODE_ENV_SUB === "development") {
@@ -121,11 +117,8 @@ export default {
   },
   Account: {
     login(isSilentAuthentication) {
-      if (isSilentAuthentication) {
-        instance.InitData.authData.authorize({ prompt: "none" });
-      } else {
-        instance.InitData.authData.authorize();
-      }
+      if (isSilentAuthentication) instance.InitData.authData.authorize({ prompt: "none" });
+      else instance.InitData.authData.authorize();
     },
     logout(callback) {
       this.clearSession();
@@ -141,34 +134,23 @@ export default {
       const token = localStorage.getItem("id_token");
       const userInfo = localStorage.getItem("user_info");
       const data = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
+        header: { "Authorization": `Bearer ${token}` },
         data: userInfo
       };
-      AuthService.POST.sync(data, (result) => {
-        callback(result);
-      }, (err) => {
-        error(err);
-      });
+      AuthService.POST.sync(data, (result) => callback(result), err => error(err));
     },
     syncUser() {
       const session = this.getSession();
       const idToken = localStorage.getItem("id_token");
       if (idToken && session) {
         this.sync(res => {
-          if (res.success) {
-            localStorage.setItem("user_sync", JSON.stringify(res));
-          } else {
+          if (res.success) localStorage.setItem("user_sync", JSON.stringify(res));
+          else {
             console.error("Login failed because user sync failed.");
             this.logout();
           }
-        }, (err) => {
-          console.log(err);
-        });
-      } else {
-        console.log("session is not init...");
-      }
+        }, (err) => console.log(err));
+      } else console.log("session is not init...");
     },
     isAuthenticated() {
       const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
@@ -189,19 +171,15 @@ export default {
             this.renewSession();
           }, timeout);
         })();
-      } else if (timeout <= 0) {
-        this.logout();
-      }
+      } else if (timeout <= 0) this.logout();
     },
     renewSession() {
       instance.InitData.authData.checkSession({}, (err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
-          this.setMyInfo(authResult, user => {
-            this.setSession(authResult, user);
-          });
+          this.setMyInfo(authResult, user => this.setSession(authResult, user));
         } else if (err) {
           this.logout();
-          console.log(err);
+          console.error(err);
         }
       });
     },
@@ -210,9 +188,7 @@ export default {
         instance.InitData.authData.checkSession({}, (err, authResult) => {
           if (authResult && authResult.accessToken && authResult.idToken) {
             resolve(authResult);
-            this.setMyInfo(authResult, user => {
-              this.setSession(authResult, user);
-            });
+            this.setMyInfo(authResult, user => this.setSession(authResult, user));
           } else if (err) {
             console.log(err);
             this.clearSession();
@@ -254,9 +230,8 @@ export default {
       localStorage.setItem("access_token", authResult.accessToken);
       localStorage.setItem("id_token", authResult.idToken);
       localStorage.setItem("expires_at", expiresAt);
-      if (userInfo) {
-        localStorage.setItem("user_info", JSON.stringify(userInfo));
-      }
+
+      if (userInfo) localStorage.setItem("user_info", JSON.stringify(userInfo));
     },
     async getAccountInfo(id) {
       const authResult = await instance.Account.renewSessionPromise();
@@ -273,18 +248,11 @@ export default {
           return err;
         });
     },
-    getProfileInfo(params, callback, error) {
-      AuthService.GET.profileGet(params, (result => {
-        let userInfo = null;
-        if (result.user) {
-          userInfo = new UserInfo(result.user);
-          callback(userInfo);
-        } else {
-          error(result.message);
-        }
-      }), err => {
-        error(err);
-      });
+    getProfileInfo(params) {
+      return AuthService.GET.profileGet(params).then(result => {
+        if (result.user) return new UserInfo(result.user);
+        else return result.message;
+      }, err => err);
     },
     getMyInfo() {
       let userInfo = JSON.parse(localStorage.getItem("user_info"));
@@ -305,9 +273,7 @@ export default {
     getMyEmail() {
       let userInfo = JSON.parse(localStorage.getItem("user_info"));
 
-      if (!userInfo && !this.isAuthenticated()) {
-        return "";
-      }
+      if (!userInfo && !this.isAuthenticated()) return "";
 
       if (!userInfo && this.isAuthenticated()) {
         this.renewSession();
@@ -327,9 +293,8 @@ export default {
     async getProfileImageUploadUrl() {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
-      const _data = {
-        header: { "Authorization": `Bearer ${token}` }
-      };
+      const _data = { header: { "Authorization": `Bearer ${token}` } };
+
       return AuthService.POST.profileImageUpdate(_data)
         .then(result => new UserProfile(result))
         .catch(err => err);
@@ -338,12 +303,8 @@ export default {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
-        data: {
-          "ethAccount": ethAccount
-        }
+        header: { "Authorization": `Bearer ${token}` },
+        data: { "ethAccount": ethAccount }
       };
       AuthService.POST.ethereumSync(_data, (res, error) => {
         this.renewSession();
@@ -354,12 +315,8 @@ export default {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
-        data: {
-          "username": username
-        }
+        header: { "Authorization": `Bearer ${token}` },
+        data: { "username": username }
       };
       AuthService.POST.accountUpdate(_data, () => {
         this.renewSession();
@@ -370,12 +327,8 @@ export default {
       const authResult = await instance.Account.renewSessionPromise();
       let token = authResult.idToken;
       const _data = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
-        data: {
-          "picture": url
-        }
+        header: { "Authorization": `Bearer ${token}` },
+        data: { "picture": url }
       };
       AuthService.POST.accountUpdate(_data, () => {
         this.renewSession();
@@ -383,22 +336,11 @@ export default {
       });
     },
     profileImageUpload(params, callback, error) {
-      if (params.file == null) {
-        console.error("file object is null", params);
-        return;
-      }
+      if (params.file == null) return console.error("file object is null", params);
 
       axios.put(params.signedUrl, params.file)
-        .then(
-          response => {
-            callback(response);
-          }
-        )
-        .catch(
-          err => {
-            error(err);
-          }
-        );
+        .then(response => callback(response))
+        .catch(err => error(err));
     },
     clearSession() {
       //Auth0 API
@@ -419,9 +361,7 @@ export default {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
+        header: { "Authorization": `Bearer ${token}` },
         params: {
           "pageSize": data.pageSize,
           "pageNo": data.pageNo
@@ -436,17 +376,17 @@ export default {
   Document: {
     async registerDocument(args: any, progress: any, callback: any, error: any) {
       const authResult = await instance.Account.renewSessionPromise();
-      let fileInfo = args.fileInfo;
-      let user = args.userInfo;
-      let ethAccount = args.ethAccount;
-      let tags = args.tags;
-      let title = args.title;
-      let desc = args.desc;
-      let useTracking = args.useTracking;
-      let forceTracking = args.forceTracking;
-      let isDownload = args.isDownload;
-      let cc = args.cc;
-      let token = authResult.idToken;
+      let fileInfo = args.fileInfo,
+        user = args.userInfo,
+        ethAccount = args.ethAccount,
+        tags = args.tags,
+        title = args.title,
+        desc = args.desc,
+        useTracking = args.useTracking,
+        forceTracking = args.forceTracking,
+        isDownload = args.isDownload,
+        cc = args.cc,
+        token = authResult.idToken;
 
       const data = {
         data: {
@@ -464,20 +404,16 @@ export default {
           isPublic: false,
           cc: cc
         },
-        header: {
-          "Authorization": `Bearer ${token}`
-        }
+        header: { "Authorization": `Bearer ${token}` }
       };
-      if (!fileInfo.file) {
-        console.error("The registration value(file or metadata) is invalid.", fileInfo);
-        return;
-      }
+
+      if (!fileInfo.file) return console.error("The registration value(file or metadata) is invalid.", fileInfo);
 
       DocService.POST.registerDocument(data, (res) => {
         if (res && res.success) {
-          let documentId = res.documentId;
-          let owner = res.accountId;
-          let signedUrl = res.signedUrl;
+          let documentId = res.documentId,
+            owner = res.accountId,
+            signedUrl = res.signedUrl;
 
           this.documentUpload({
             file: fileInfo.file,
@@ -487,12 +423,11 @@ export default {
             owner: owner,
             signedUrl: signedUrl,
             callback: progress
-          }).then(() => {
-            callback(res);
-          }).catch(err => {
-            console.error("Document Registration Error", err);
-            error(err);
-          });
+          }).then(() => callback(res))
+            .catch(err => {
+              console.error("Document Registration Error", err);
+              error(err);
+            });
 
         } else if (res && !res.success) {
           let error = JSON.stringify(res);
@@ -505,10 +440,7 @@ export default {
       });
     },
     documentUpload(params) {
-      if (params.file == null || params.fileid == null || params.ext == null) {
-        console.error("file object is null", params);
-        return;
-      }
+      if (params.file == null || params.fileid == null || params.ext == null) return console.error("file object is null", params);
 
       const config = {
         onUploadProgress: (e) => {
@@ -543,12 +475,7 @@ export default {
       });
     },
     getTodayVotedDocumentsByCurator(params: any, callback: any) {
-      const data = {
-        accountId: params.accountId
-      };
-      DocService.POST.todayVotedDocumentsByCurator(data, (result) => {
-        callback(result);
-      });
+      DocService.POST.todayVotedDocumentsByCurator({ accountId: params.accountId }, (result) => callback(result));
     },
     async updateDocument(data: any) {
       const authResult = await instance.Account.renewSessionPromise();
@@ -565,9 +492,7 @@ export default {
           cc: data.cc,
           isPublic: data.isPublic
         },
-        header: {
-          "Authorization": `Bearer ${token}`
-        }
+        header: { "Authorization": `Bearer ${token}` }
       };
       return DocService.POST.updateDocument(_data)
         .then(rst => new DocumentInfo(rst.result))
@@ -578,9 +503,7 @@ export default {
       let token = authResult.idToken;
       const _data = {
         data: data,
-        header: {
-          "Authorization": `Bearer ${token}`
-        }
+        header: { "Authorization": `Bearer ${token}` }
       };
       return DocService.POST.updateDocument(_data)
         .then(rst => new DocumentInfo(rst.result))
@@ -591,9 +514,7 @@ export default {
       let token = authResult.idToken;
       const _data = {
         data: data,
-        header: {
-          "Authorization": `Bearer ${token}`
-        }
+        header: { "Authorization": `Bearer ${token}` }
       };
       return DocService.POST.updateDocument(_data)
         .then(rst => new DocumentInfo(rst.result))
@@ -602,40 +523,31 @@ export default {
   },
   Curator: {
     async getCuratorDocuments(params: any, callback: any, error: any) {
-      CuratorService.GET.curatorDocuments(params, (result) => {
-        let curatorDocuments = new CuratorDocuments(result);
-        callback(curatorDocuments);
-      }, (err) => {
-        error(err);
-      });
+      CuratorService.GET.curatorDocuments(params
+        , result => callback(new CuratorDocuments(result))
+        , err => error(err));
     },
-    async getCuratorSummary(ethAccount: String, callback: any, error: any) {
+    async getCuratorSummary(ethAccount: String) {
       const params = { ethAccount: ethAccount };
+
       return new Promise((resolve, reject) => {
-        CuratorService.GET.curatorSummary(params, (res) => {
-          let curatorSummary = new CuratorSummary(res);
-          resolve(curatorSummary);
-        }, (err) => {
-          reject(err);
-        });
+        CuratorService.GET.curatorSummary(params
+          , res => resolve(new CuratorSummary(res))
+          , err => reject(err));
       });
     }
   },
   Tracking: {
     postTrackingConfirm(data) {
       return new Promise((resolve) => {
-        TrackingService.POST.trackingConfirm(data, (result) => {
-          resolve(result);
-        });
+        TrackingService.POST.trackingConfirm(data, result => resolve(result));
       });
     },
     async getTrackingInfo(data: any, callback: any, error: any) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
+        header: { "Authorization": `Bearer ${token}` },
         params: {
           "cid": data.cid,
           "documentId": data.documentId,
@@ -643,44 +555,36 @@ export default {
           "anonymous": data.anonymous
         }
       };
-      TrackingService.GET.trackingInfo(params, (result) => {
-        callback(result);
-      }, err => {
-        error(err);
-      });
+      TrackingService.GET.trackingInfo(params
+        , result => callback(result)
+        , err => error(err));
     },
     async getTrackingList(data: any, callback: any, error: any) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
+        header: { "Authorization": `Bearer ${token}` },
         params: data
       };
-      //console.log("getTrackingList", data);
-      TrackingService.GET.trackingList(params, (result) => {
-        callback(result);
-      }, err => {
-        error(err);
-      });
+
+      TrackingService.GET.trackingList(params
+        , result => callback(result)
+        , err => error(err));
     },
     async getTrackingExport(documentId: string, callback: any) {
       const authResult = await instance.Account.renewSessionPromise();
       const token = authResult.idToken;
       const params = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
-        params: {
-          "documentId": documentId
-        }
+        header: { "Authorization": `Bearer ${token}` },
+        params: { "documentId": documentId }
       };
 
-      TrackingService.GET.trackingExport(params, (result) => {
-        let trackingExport = new TrackingExport(result);
-        callback(trackingExport);
-      });
+      TrackingService.GET.trackingExport(params, result => callback(new TrackingExport(result)));
+    }
+  },
+  Bounty: {
+    getBounty(data) {
+
     }
   }
 };

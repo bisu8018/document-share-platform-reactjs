@@ -6,6 +6,7 @@ import MainRepository from "../../../redux/MainRepository";
 import DocumentCardContainer from "../../../container/common/DocumentCardContainer";
 import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
+import log from "../../../config/log";
 
 class ContentMain extends Component {
   state = {
@@ -16,14 +17,29 @@ class ContentMain extends Component {
   };
 
 
+  // 초기화
+  init = () => {
+    log.ContentMain.init();
+    // 추천문서 목록 GET
+    this.getDocuments("featured")
+    // 최신문서 목록 GET
+      .then(this.getDocuments("latest"))
+      // 인기문서 목록 GET
+      .then(this.getDocuments("popular"))
+      // 스크롤 이벤트 리스너
+      .then(this.handleResize());
+  };
+
+
 // 문서 목록 GET
   getDocuments = (path) => {
-    MainRepository.Document.getDocumentList({path: path}).then(res => {
+    return MainRepository.Document.getDocumentList({ path: path }).then(res => {
+      log.ContentMain.getDocuments(null, path);
       if (path === "latest") this.setState({ latestDocuments: res });
       else if (path === "featured") this.setState({ featuredDocuments: res });
       else if (path === "popular") this.setState({ popularDocuments: res });
-    },err => {
-      console.error(err);
+    }, err => {
+      log.ContentMain.getDocuments(err, path);
       this.setTimeout = setTimeout(() => {
         this.getDocuments(path);
       }, 8000);
@@ -52,34 +68,33 @@ class ContentMain extends Component {
 
   // 로그인
   handleLogin = () => {
-    if(!MainRepository.Account.isAuthenticated()) MainRepository.Account.login();
+    if (!MainRepository.Account.isAuthenticated()) MainRepository.Account.login();
   };
 
 
   // 검색 버튼 트리거
-  handleTagClick = () => {
-    document.getElementById("headerSearchBtnWrapper").click();
-
-  };
+  handleTagClick = () => document.getElementById("headerSearchBtnWrapper").click();
 
 
   // 업로드 버튼
-  handleUploadBtn = () => {
-    document.getElementById("uploadBtn").click();
-  };
+  handleUploadBtn = () => document.getElementById("uploadBtn").click();
 
 
   // see more 트리거 버튼
-  handelTrigger = (arr) => {
-    let _arr = this.getEngPath(arr);
-    document.getElementById(_arr + "NavLink").click();
+  handelTrigger = (arr) => document.getElementById(this.getEngPath(arr) + "NavLink").click();
+
+
+  // 스크롤 이벤트 리스너 시작
+  handleResize = (e) => {
+    let countCards = (window.innerWidth > 1293 || window.innerWidth < 993) ? 4 : 6;
+    this.setState({ latestListMany: countCards }, () => log.ContentMain.handleResize());
   };
 
 
-  // 스크롤 이벤트 리스너
-  handleResize = (e) => {
-    let countCards = (window.innerWidth > 1293 || window.innerWidth < 993) ? 4 : 6;
-    this.setState({ latestListMany: countCards });
+  // 스크롤 이벤트 리스너 종료
+  handleResizeEnd = (e) => {
+    log.ContentMain.handleResizeEnd();
+    window.removeEventListener("resize", () => {});
   };
 
 
@@ -89,15 +104,12 @@ class ContentMain extends Component {
 
 
   componentWillMount() {
-    this.getDocuments("latest");
-    this.getDocuments("featured");
-    this.getDocuments("popular");
-    this.handleResize();
+    this.init();
   }
 
 
   componentWillUnmount() {
-    window.removeEventListener("resize", () => {});
+    this.handleResizeEnd();
   }
 
 
@@ -135,7 +147,7 @@ class ContentMain extends Component {
     ];
 
     return (
-      <div className="row">
+      <section className="row container">
         <div className="main-banner" id="mainBanner">
           <Carousel
             useKeyboardArrows={false}
@@ -214,7 +226,7 @@ class ContentMain extends Component {
 
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

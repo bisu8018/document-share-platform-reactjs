@@ -284,12 +284,8 @@ class AudienceTrackingList extends React.Component {
       view = documentData.latestPageview || 0;
 
     return (
-
-      <div className="row">
-        <div className="u__center w-100">
-          <div className="row">
-
-
+        <section className="u__center w-100 container">
+          <div className="row tracking-list-wrapper">
             <div className="col-12 col-sm-3 col-lg-2 col-thumb mt-2">
               <Link to={"/" + match.params.identification + "/" + documentData.seoTitle}>
                 <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
@@ -328,10 +324,10 @@ class AudienceTrackingList extends React.Component {
 
 
                 <div className="col-view tracking-item mb-1  mt-1 position-relative">
-                 <span className={"info-detail-reward mr-2 " + (documentData.isRegistry ? "" : "color-not-registered")}
+                 <span className={"info-detail-reward mr-3 " + (documentData.isRegistry ? "" : "color-not-registered")}
                        onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
                        onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
-                    ${Common.deckToDollar(reward)}
+                    $ {Common.deckToDollar(reward)}
                    <img className="reward-arrow"
                         src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
                         alt="arrow button"/>
@@ -470,7 +466,7 @@ class AudienceTrackingList extends React.Component {
                              data-cid={result.cid}>
                           <div className={"chart-btn " + (result.totalReadTimestamp === 0 ? "btn-disabled" : "")}>
                             <i className="material-icons">bar_chart</i>
-                            <i className="material-icons">keyboard_arrow_up</i>
+                            <i className="material-icons">{selectedTr && String(idx) === selectedTr ? "keyboard_arrow_down" : "keyboard_arrow_up"}</i>
                           </div>
                         </div>
                       </div>
@@ -494,8 +490,7 @@ class AudienceTrackingList extends React.Component {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
 
     );
   }

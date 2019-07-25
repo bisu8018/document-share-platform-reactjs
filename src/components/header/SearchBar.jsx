@@ -30,8 +30,8 @@ class SearchBar extends React.Component {
   // 현재 카테고리 GET
   getCollectPath = () => {
     let path = window.location.pathname;
-    if (path.split("/")[1]) return path.split("/")[1];
-    else return "featured";
+    if (path.split("/")[1] === "latest" || path.split("/")[1] === "featured" || path.split("/")[1] === "popular") return path.split("/")[1];
+    else return "latest";
   };
 
 
@@ -41,7 +41,7 @@ class SearchBar extends React.Component {
     return (
 
       <div className="header-search-wrapper" id="headerAutoSuggest">
-        <div className="header-category">{common.getPath() || "featured"}</div>
+        <div className="header-category">{this.getCollectPath()}</div>
 
         <span className="mr-4"/>
 

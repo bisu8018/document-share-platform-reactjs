@@ -43,14 +43,12 @@ class ContentViewCarousel extends React.Component {
 
 
   // Tracking API POST
-  postTracking = (page, type, callback) => {
-    TrackingApis.tracking({
+  postTracking = (page, type) => {
+    return TrackingApis.tracking({
       id: this.props.target.documentId,
       n: page + 1,
       ev: type
-    }, true).then(res => {
-      callback(res);
-    });
+    }, true).then(res => res);
   };
 
 
@@ -135,7 +133,7 @@ class ContentViewCarousel extends React.Component {
         });
       }
 
-      this.postTracking(page, "view", res => {
+      return this.postTracking(page, "view").then(res => {
         if (res.user) {
           // 비로그인 상태에서 email로 로그인 시, 트래킹 위한 redux 저장
           if (getMyInfo.email === "") {
@@ -149,7 +147,7 @@ class ContentViewCarousel extends React.Component {
       });
     } else {
       // 오직 뷰 카운트만을 위한 트랙킹 기능
-      this.postTracking(page, "none", ()=>{});
+      return this.postTracking(page, "none").then(() => {});
     }
   };
 

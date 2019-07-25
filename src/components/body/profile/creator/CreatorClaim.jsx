@@ -5,7 +5,7 @@ import { psString } from "../../../../config/localization";
 class CreatorClaim extends React.Component {
   state = {
     determineReward: null,
-    btnText: psString("claim-text") + " $"
+    btnText: psString("claim-text") + " $ "
   };
 
 
@@ -41,7 +41,7 @@ class CreatorClaim extends React.Component {
       this.setState({ btnText: psString("claim-btn-text-2") }, () => {
         getDrizzle.creatorClaimReward(document.documentId, getMyInfo.ethAccount).then((res) => {
           if(res === "success") this.setState({ btnText: psString("claim-btn-text-1") },()=>{window.location.reload()});
-          else this.setState({ btnText: psString("claim-text") + " $" }, () => {setAlertCode(2035)});
+          else this.setState({ btnText: psString("claim-text") + " $ " }, () => {setAlertCode(2035)});
         });
       });
     }

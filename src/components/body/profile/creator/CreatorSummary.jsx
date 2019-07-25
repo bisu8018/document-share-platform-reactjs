@@ -5,6 +5,7 @@ import MainRepository from "../../../../redux/MainRepository";
 import Common from "../../../../config/common";
 import BalanceOfContainer from "../../../../container/common/BalanceOfContainer";
 import { psString } from "../../../../config/localization";
+import log from "../../../../config/log";
 
 class CreatorSummary extends React.Component {
   state = {
@@ -20,74 +21,80 @@ class CreatorSummary extends React.Component {
   };
 
 
+  // 초기화
+  init = () => {
+    const { userInfo } = this.props;
+    this.setState({ userName: userInfo.username, profileImage: userInfo.picture }, () => log.CreatorSummary.init());
+  };
+
+
   //유저 네임 유효성 체크
   userNameValidate = (name) => {
-    if (!name || name.length < 1) {
-      this.setState({ errMsg: psString("profile-error-1") });
-      return false;
-    }
-    if (!Common.checkUsernameForm(name)) {
-      this.setState({ errMsg: psString("profile-error-2") });
-      return false;
-    }
-    if (name.length < 4 || name.length > 20) {
-      this.setState({ errMsg: psString("profile-error-3") });
-      return false;
-    }
-    if (this.state.errMsg !== "") this.setState({ errMsg: "" }, () => {
-      return true;
-    });
-    return true;
+    if (!name || name.length < 1)
+      this.setState({ errMsg: psString("profile-error-1") }, () => false);
+
+    if (!Common.checkUsernameForm(name))
+      this.setState({ errMsg: psString("profile-error-2") }, () => false);
+
+    if (name.length < 4 || name.length > 20)
+      this.setState({ errMsg: psString("profile-error-3") }, () => false);
+
+    if (this.state.errMsg !== "")
+      this.setState({ errMsg: "" }, () => true);
+
+    return name;
   };
 
 
   // 내 정보 GET
-  getMyInfo = () => {
-    return MainRepository.Account.getMyInfo();
-  };
+  getMyInfo = () => MainRepository.Account.getMyInfo();
 
 
   // 크리에이터 7일간 리워드
-  setAuthor7DayReward = (docList, pool, countInfo) => {
-    this.setState({ author7DayReward: Common.toDeck(Common.getAuthor7DaysTotalReward(docList, pool, countInfo)) });
-  };
+  setAuthor7DayReward = (docList, pool, countInfo) => this.setState({ author7DayReward: Common.toDeck(Common.getAuthor7DaysTotalReward(docList, pool, countInfo)) });
 
 
   // 크리에이터 하루 리워드
-  setAuthorTodayReward = (docList, pool, countInfo) => {
-    this.setState({ authorTodayReward: Common.toDeck(Common.getAuthorNDaysTotalReward(docList, pool, countInfo, 0)) });
-  };
+  setAuthorTodayReward = (docList, pool, countInfo) => this.setState({ authorTodayReward: Common.toDeck(Common.getAuthorNDaysTotalReward(docList, pool, countInfo, 0)) });
 
 
   // 큐레이터 7일간 리워드
-  setCuratorEstimatedToday = (docList, pool, countInfo, voteList) => {
-    this.setState({ curatorEstimatedToday: Common.toDeck(Common.getCuratorNDaysTotalReward(docList, pool, countInfo, 0, voteList, 1)) });
-  };
+  setCuratorEstimatedToday = (docList, pool, countInfo, voteList) => this.setState({ curatorEstimatedToday: Common.toDeck(Common.getCuratorNDaysTotalReward(docList, pool, countInfo, 0, voteList, 1)) });
 
 
   // 큐레이터 하루 리워드
-  setCuratorTotalRewards = (docList, pool, countInfo, voteList) => {
-    this.setState({ curatorTotalRewards: Common.toDeck(Common.getCurator7DaysTotalReward(docList, pool, countInfo, voteList)) });
-  };
+  setCuratorTotalRewards = (docList, pool, countInfo, voteList) => this.setState({ curatorTotalRewards: Common.toDeck(Common.getCurator7DaysTotalReward(docList, pool, countInfo, voteList)) });
 
+
+  // 리워드 조회
+  getRewards = () => {
+    const { getCreatorDailyRewardPool, getCuratorDailyRewardPool, uploadTotalViewCountInfo, uploadDocumentList, voteDocumentList, voteTotalViewCountInfo, latestRewardVoteList } = this.props;
+    const { author7DayReward, authorTodayReward, curatorEstimatedToday, curatorTotalRewards } = this.state;
+
+    if (uploadDocumentList && getCreatorDailyRewardPool && uploadTotalViewCountInfo) {
+      if (author7DayReward === null) this.setAuthor7DayReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo);
+      if (authorTodayReward === null) this.setAuthorTodayReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo);
+    }
+    if (voteDocumentList && getCuratorDailyRewardPool && voteTotalViewCountInfo && latestRewardVoteList) {
+      if (curatorEstimatedToday === null) this.setCuratorEstimatedToday(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, latestRewardVoteList);
+      if (curatorTotalRewards === null) this.setCuratorTotalRewards(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, latestRewardVoteList);
+    }
+  };
 
   // 잔액 조회
   getBalance = () => {
     const { getWeb3Apis, userInfo } = this.props;
     const { balance } = this.state;
-    let address = userInfo.ethAccount;
-    if (!address || balance >= 0) return false;
 
-    getWeb3Apis.getBalance(userInfo.ethAccount, res => {
-      this.setState({ balance: res });
-    });
+    if (!userInfo.ethAccount || balance >= 0) return false;
+
+    getWeb3Apis.getBalance(userInfo.ethAccount, res => this.setState({ balance: res }, () => log.CreatorSummary.getBalance()));
+    return true;
   };
 
 
   // file upload
-  handleFileUpload = () => {
-    document.getElementById("imgFile").click();
-  };
+  handleFileUpload = () => document.getElementById("imgFile").click();
 
 
   //file input 등록/변경 시, url get
@@ -96,22 +103,17 @@ class CreatorSummary extends React.Component {
 
     // upload url GET
     MainRepository.Account.getProfileImageUploadUrl().then(result => {
-      let params = {
-        file: file,
-        signedUrl: result.signedUploadUrl
-      };
+      let params = { file: file, signedUrl: result.signedUploadUrl };
+
       // 이미지 서버에 업로드
       MainRepository.Account.profileImageUpload(params, () => {
         let url = APP_PROPERTIES.domain().profile + result.picture;
 
         // 유저 정보 업데이트
-        MainRepository.Account.updateProfileImage(url, () => {
-          this.setState({ profileImage: url });
-        });
-      }, () => {
-        document.getElementById("imgFile").value = null;
-      });
-    },err => {
+        MainRepository.Account.updateProfileImage(url, () => this.setState({ profileImage: url }));
+      }, () => document.getElementById("imgFile").value = null);
+
+    }, err => {
       console.error(err);
       document.getElementById("imgFile").value = null;
     });
@@ -147,45 +149,30 @@ class CreatorSummary extends React.Component {
 
 
   //유져네임 수정 상태 핸들
-  handleChangeUsername = (e) => {
-    let name = e.target.value;
-    this.userNameValidate(name);
-    this.setState({ userName: name });
-  };
+  handleChangeUsername = (e) => this.setState({ userName: this.userNameValidate(e.target.value) });
 
 
   shouldComponentUpdate = () => {
-    this.getBalance();    // 잔액 조회
-    return true;
+    return this.getBalance(); // 잔액 조회
   };
 
 
   componentWillMount(): void {
-    const { userInfo } = this.props;
-
-    this.setState({ userName: userInfo.username });
-    this.setState({ profileImage: userInfo.picture });
+    this.init();
   }
 
   render() {
-    const { userInfo, getCreatorDailyRewardPool, getCuratorDailyRewardPool, uploadTotalViewCountInfo, uploadDocumentList, voteDocumentList, voteTotalViewCountInfo, latestRewardVoteList } = this.props;
+    const { userInfo } = this.props;
     const { author7DayReward, authorTodayReward, curatorEstimatedToday, curatorTotalRewards, balance, userNameEdit, userName, profileImage, errMsg } = this.state;
 
-    if (uploadDocumentList && getCreatorDailyRewardPool && uploadTotalViewCountInfo) {
-      if(!author7DayReward) this.setAuthor7DayReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo);
-      if(!authorTodayReward) this.setAuthorTodayReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo);
-    }
-    if (voteDocumentList && getCuratorDailyRewardPool && voteTotalViewCountInfo && latestRewardVoteList) {
-      if(!curatorEstimatedToday)  this.setCuratorEstimatedToday(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo,latestRewardVoteList);
-      if(!curatorTotalRewards)  this.setCuratorTotalRewards(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo,latestRewardVoteList);
-    }
+    this.getRewards();
 
     return (
 
       <div className="profile_container">
+        <div className="profile-top-wrapper"/>
         <div className="row  profile_top">
-          <div className="profile-top-wrapper"/>
-          <div className="pl-0 col-12 col-sm-2 col-lg-1 ">
+          <div className="col-12 col-sm-2 col-lg-1 ">
             <div className="profile-image" title="Change profile image">
               <img src={profileImage} alt="profile" className="img-fluid"/>
               {this.getMyInfo().email === userInfo.email &&

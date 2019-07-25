@@ -21,8 +21,8 @@ import { psString } from "../../../../config/localization";
 import PublishModalContainer from "../../../../container/common/modal/PublishModalContainer";
 import DeleteDocumentModalContainer from "../../../../container/common/modal/DeleteDocumentModalContainer";
 import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
-
 import ContentViewComment from "./ContentViewComment";
+import { FadingCircle } from "better-react-spinkit";
 
 
 class ContentViewFullScreen extends Component {
@@ -36,6 +36,7 @@ class ContentViewFullScreen extends Component {
     emailFlag: false,
     reward: 0,
     isDocumentExist: null,
+    downloadLoading: false
   };
 
 
@@ -95,6 +96,8 @@ class ContentViewFullScreen extends Component {
 
       window.URL.revokeObjectURL(a.href);
       document.body.removeChild(a);
+
+      this.setState({downloadLoading : false});
     });
   };
 
@@ -127,6 +130,7 @@ class ContentViewFullScreen extends Component {
   //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
     const { getMyInfo, documentData, setAlertCode } = this.props;
+    this.setState({downloadLoading : true});
     if (!documentData) {
       console.log("getting document meta information!");
       return;
@@ -147,7 +151,7 @@ class ContentViewFullScreen extends Component {
 
   render() {
     const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
-    const { page, isFull, carouselClass, emailFlag } = this.state;
+    const { page, isFull, carouselClass, emailFlag, downloadLoading } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0;
     let reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7));
@@ -160,7 +164,7 @@ class ContentViewFullScreen extends Component {
 
     return (
 
-      <div className={"u__view " + (isFull && (carouselClass === "deviceRatio" ? "device-ratio" : "img-ratio"))}>
+      <article className={"col-md-12 col-lg-8 view_left u__view " + (isFull && (carouselClass === "deviceRatio" ? "device-ratio" : "img-ratio"))}>
         <div className="view_top">
           <Fullscreen enabled={isFull} onChange={isFull => this.handleFullChange(isFull)}>
 
@@ -197,10 +201,10 @@ class ContentViewFullScreen extends Component {
 
           <div className="mb-3 d-inline-block position-relative">
 
-            <span className={"info-detail-reward mr-2 " + (documentData.isRegistry ? "" : "color-not-registered")}
+            <span className={"info-detail-reward mr-3 " + (documentData.isRegistry ? "" : "color-not-registered")}
                   onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
                   onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
-              ${Common.deckToDollar(reward)}
+              $ {Common.deckToDollar(reward)}
               <img className="reward-arrow"
                    src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
                    alt="arrow button"/>
@@ -224,8 +228,9 @@ class ContentViewFullScreen extends Component {
 
             {documentData.isDownload &&
             <Tooltip title={psString("tooltip-download")} placement="bottom">
-              <div className="viewer-btn mb-1" onClick={this.handleDownloadContent}>
-                <i className="material-icons">save_alt</i> {psString("download-btn")}
+              <div className={"viewer-btn mb-1 " + (downloadLoading ? "btn-disabled" : "") } onClick={() => this.handleDownloadContent()}>
+                <i className="material-icons">save_alt</i>{psString("download-btn")}
+                {downloadLoading && <div className="download-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
               </div>
             </Tooltip>
             }
@@ -340,7 +345,7 @@ class ContentViewFullScreen extends Component {
         </div>
 
 
-      </div>
+      </article>
     )
       ;
   }

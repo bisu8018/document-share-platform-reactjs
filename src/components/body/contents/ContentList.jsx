@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ThreeBounce } from "better-react-spinkit";
+import { Helmet } from "react-helmet";
+import { psString } from "../../../config/localization";
+import log from "../../../config/log";
 import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../config/common";
 import ContentTagsContainer from "../../../container/body/contents/ContentTagsContainer";
 import ContentListItemContainer from "../../../container/body/contents/ContentListItemContainer";
 import NoDataIcon from "../../common/NoDataIcon";
-import { Helmet } from "react-helmet";
-import { psString } from "../../../config/localization";
+
 
 class ContentList extends Component {
   state = {
@@ -26,6 +28,14 @@ class ContentList extends Component {
     super(props);
     this.handleCategories = this.handleCategories.bind(this);
   }
+
+
+  // 초기화
+  init = () => {
+    log.ContentList.init();
+    this.setFetch();
+    this.setTagList();
+  };
 
 
   // 무한 스크롤 두번째 데이터 GET
@@ -53,25 +63,25 @@ class ContentList extends Component {
     this.setState({ loading: true });
     MainRepository.Document.getDocumentList(params).then(res => {
       this.setState({ loading: false });
+      log.ContentList.fetchDocuments();
       const _resultList = res.resultList ? res.resultList : [];
       const pageNo = res.pageNo;
 
       if (_resultList.length > 0) {
-        if (resultList.length > 0 && !tagSearchFlag) {
-          this.setState({ resultList: resultList.concat(_resultList), pageNo: pageNo });
-        } else {
-          this.setState({ resultList: _resultList, pageNo: pageNo, tagSearchFlag: false });
-        }
-      } else {
-        this.setState({ isEndPage: true });
-      }
+        if (resultList.length > 0 && !tagSearchFlag) this.setState({
+          resultList: resultList.concat(_resultList),
+          pageNo: pageNo
+        });
+        else this.setState({ resultList: _resultList, pageNo: pageNo, tagSearchFlag: false });
+      } else this.setState({ isEndPage: true });
+
 
       if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) {
         this.setState({ totalViewCountInfo: res.totalViewCountInfo });
       }
-    },err => {
+    }, err => {
       this.setState({ loading: false });
-      console.error(err);
+      log.ContentList.fetchDocuments(err);
       this.setTimeout = setTimeout(() => {
         this.fetchDocuments(args);
         clearTimeout(this.setTimeout);
@@ -82,17 +92,19 @@ class ContentList extends Component {
 
   // fetch 진행
   setFetch = () => {
-    this.setState({
+    let path = Common.getPath(), tag = Common.getTag();
+
+    return this.setState({
       resultList: [],
       pageNo: 1,
       isEndPage: false,
-      tag: Common.getTag(),
-      path: Common.getPath(),
+      tag: tag,
+      path: path,
       tagSearchFlag: true
     }, () => {
       this.fetchDocuments({
-        tag: Common.getTag(),
-        path: Common.getPath()
+        tag: tag,
+        path: path
       });
     });
   };
@@ -103,11 +115,8 @@ class ContentList extends Component {
     const { setTagList, getTagList } = this.props;
 
     let path = Common.getPath();
-    if (getTagList.path !== path) {
-      MainRepository.Document.getTagList(path).then(result => {
-        setTagList(result.resultList);
-      });
-    }
+    if (getTagList.path !== path) MainRepository.Document.getTagList(path).then(result => setTagList(result.resultList)).then(log.ContentList.setTagList());
+
   };
 
 
@@ -126,15 +135,12 @@ class ContentList extends Component {
 
   componentDidUpdate = () => {
     let pathArr = window.location.pathname.split("/");
-    if (pathArr.length > 2 && decodeURI(pathArr[2]) !== this.state.tag) {
-      this.setFetch();
-    }
+    if (pathArr.length > 2 && decodeURI(pathArr[2]) !== this.state.tag) this.setFetch();
   };
 
 
   componentWillMount() {
-    this.setFetch();
-    this.setTagList();
+    this.init();
   }
 
 
@@ -143,16 +149,14 @@ class ContentList extends Component {
     const { resultList, totalViewCountInfo } = this.state;
 
     return (
-      <div className="row">
+      <div className="row container">
         <Helmet>
           <title>{psString("helmet-title-" + Common.getPath()) + " | Polaris Share"}</title>
         </Helmet>
 
-        <div className="col-lg-3  overflow-hidden">
-          <ContentTagsContainer path={match.path} url={match.url} {...this.props}/>
-        </div>
+        <ContentTagsContainer path={match.path} url={match.url} {...this.props}/>
 
-        <div className="col-sm-12 col-lg-9 u__center-container">
+        <section className="col-sm-12 col-lg-9 u__center-container">
 
           <div className="d-block d-sm-none content-list-path">{Common.getPath()}</div>
 
@@ -176,7 +180,7 @@ class ContentList extends Component {
             <NoDataIcon className="no-data">No data</NoDataIcon>
             }
           </div>
-        </div>
+        </section>
 
       </div>
     );

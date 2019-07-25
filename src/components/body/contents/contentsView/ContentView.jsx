@@ -9,6 +9,7 @@ import common from "../../../../config/common";
 import NotFoundPage from "../../../common/NotFoundPage";
 import ContentViewFullScreenContainer
   from "../../../../container/body/contents/contentsView/ContentViewFullScreenContainer";
+import log from "../../../../config/log";
 
 
 class ContentView extends React.Component {
@@ -28,10 +29,18 @@ class ContentView extends React.Component {
   }
 
 
+  // 초기화
+  init = () => {
+    log.ContentView.init();
+    if (!this.state.documentData) this.getContentInfo(this.getSeoTitle());
+  };
+
+
   // 문서 정보 GET
   getContentInfo = (seoTitle) => {
     this.setState({ documentTitle: seoTitle, update: true });
-    MainRepository.Document.getDocument(seoTitle).then(res => {
+    return MainRepository.Document.getDocument(seoTitle).then(res => {
+      log.ContentView.getContentInfo(null, res);
       this.setState({
         documentTitle: res.document.seoTitle,
         documentData: res.document,
@@ -42,43 +51,18 @@ class ContentView extends React.Component {
         errMessage: null,
         update: false
       }, () => {
-        this.checkUrl(res);
-        this.setDocumentIsExist();  //문서 로드 후 문서 블록체인 등록 체크
+        if (this.getSeoTitle() !== res.document.seoTitle) this.checkUrl(res);
       });
     }, err => {
-      this.setState({
-        documentTitle: null,
-        documentData: null,
-        totalViewCountInfo: null,
-        errMessage: err,
-        documentText: null,
-        author: null,
-        featuredList: null
-      });
-      console.error(err);
-      setTimeout(() => {
-        this.getContentInfo(seoTitle);
-      }, 8000);
-    });
-  };
-
-
-  // 문서 블록체인 등록 여부 체크
-  setDocumentIsExist = () => {
-    const { getWeb3Apis } = this.props;
-    const { documentData } = this.state;
-    getWeb3Apis.isDocumentExist(documentData.documentId, res => {
-      this.props.setIsDocumentExist(res);
-    }, err => {
-      console.error(err);
+      log.ContentView.getContentInfo(err);
+      this.setStateClear(err);
+      setTimeout(this.getContentInfo(seoTitle), 8000);
     });
   };
 
 
   // SEO TITLE GET
-  getSeoTitle = () => {
-    return this.props.match.params.documentId;
-  };
+  getSeoTitle = () => this.props.match.params.documentId;
 
 
   // 이미지 URL GET
@@ -88,14 +72,24 @@ class ContentView extends React.Component {
   };
 
 
+  //state clear
+  setStateClear = err => this.setState({
+    documentTitle: null,
+    documentData: null,
+    totalViewCountInfo: null,
+    errMessage: err,
+    documentText: null,
+    author: null,
+    featuredList: null
+  });
+
+
   // URL 검사
-  checkUrl = (res) => {
-    if (this.getSeoTitle() !== res.document.seoTitle) window.history.replaceState({}, res.document.seoTitle, APP_PROPERTIES.domain().mainHost + "/" + res.document.author.username + "/" + res.document.seoTitle);
-  };
+  checkUrl = res => window.history.replaceState({}, res.document.seoTitle, APP_PROPERTIES.domain().mainHost + "/" + res.document.author.username + "/" + res.document.seoTitle);
 
 
   componentWillMount() {
-    if (!this.state.documentData) this.getContentInfo(this.getSeoTitle());
+    this.init();
   }
 
 
@@ -120,21 +114,20 @@ class ContentView extends React.Component {
 
 
     return (
-      <div data-parallax="true" className="container_view row col-re">
+      <section data-parallax="true" className="container_view row col-re container">
         <Helmet>
           <title>{documentData.title}</title>
         </Helmet>
 
-        <div className="col-md-12 col-lg-8 view_left">
           <ContentViewFullScreenContainer documentData={documentData} documentText={documentText}
                                           totalViewCountInfo={totalViewCountInfo} update={update}
                                           auth={auth} author={author}/>
-        </div>
 
-        <div className="col-md-12 col-lg-4 ">
-          <ContentViewRight documentData={documentData} author={author} featuredList={featuredList} {...rest}/>
-        </div>
-      </div>
+
+        <ContentViewRight documentData={documentData} author={author}
+                          featuredList={featuredList} {...rest}/>
+
+      </section>
 
     );
   }

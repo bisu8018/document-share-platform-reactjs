@@ -430,12 +430,14 @@ export default ({
     if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
     let totalReward = 0;
 
+
     if (env === "local") {
       console.log("%cEstimated earnings for today", "color:blue;font-weight:bold;font-size:22px");
       console.log("Document List", documentList);
       console.log("Total View Count Info", totalViewCountInfo);
       console.log("%cTotal Docs : " + documentList.length, "color:red;font-weight:bold;");
       console.log("%cPool : " + getCuratorDailyRewardPool + "\n", "color:red;font-weight:bold;");
+      console.log("%c공식 : (리워드풀 × (페이지뷰 ÷ 페이지뷰 스퀘어)) × (투표수 ÷ 총 투표수)\n", "font-size:11px;color:grey");
     }
 
     for (let k = 0; k < documentList.length; ++k) {
@@ -482,7 +484,6 @@ export default ({
             } else tpvs = 0;
           }
 
-          //console.log(v, tv, pv, tpvs);
           if (this.dateAgo(timestamp) <= day) reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
 
           if (env === "local") {
@@ -490,7 +491,6 @@ export default ({
             console.log("PV : " + pv);
             console.log("TPVS : " + tpvs);
             console.log("%c(" + getCuratorDailyRewardPool + " × (" + Math.pow(pv, 2) + " ÷ " + tpvs + ")) × (" + v + " ÷ " + tv + ")", "font-weight:bold");
-            console.log("%c(리워드풀 × (페이지뷰 ÷ 페이지뷰 스퀘어)) × (투표수 ÷ 총 투표수)", "font-size:11px;color:grey");
             console.log("%cREWARD : $" + this.deckToDollar(this.toDeck(reward)), "color:red");
             console.log("\n");
           }
@@ -499,9 +499,11 @@ export default ({
       }
     }
 
-    console.log("\n\n");
-    console.log("%cTOTAL REWARD : $" + this.deckToDollar(this.toDeck(totalReward)), "font-weight:bold;font-size:17px;color:purple");
-    console.log("\n\n\n\n\n\n\n\n");
+    if (env === "local") {
+      console.log("\n\n");
+      console.log("%cTOTAL REWARD : $" + this.deckToDollar(this.toDeck(totalReward)), "font-weight:bold;font-size:17px;color:purple");
+      console.log("\n\n\n\n\n\n\n\n");
+    }
 
     return totalReward;
   },
@@ -518,6 +520,7 @@ export default ({
       console.log("Total View Count Info", totalViewCountInfo);
       console.log("%cTotal Docs : " + documentList.length, "color:red;font-weight:bold;");
       console.log("%cPool : " + getCuratorDailyRewardPool + "\n", "color:red;font-weight:bold;");
+      console.log("%c공식 : (리워드풀 × (페이지뷰 ÷ 페이지뷰 스퀘어)) × (투표수 ÷ 총 투표수)\n", "font-size:11px;color:grey");
     }
 
     for (let k = 0; k < documentList.length; ++k) {
@@ -567,7 +570,6 @@ export default ({
             console.log("PV : " + pv);
             console.log("TPVS : " + tpvs);
             console.log("%c(" + getCuratorDailyRewardPool + " × (" + Math.pow(pv, 2) + " ÷ " + tpvs + ")) × (" + v + " ÷ " + tv + ")", "font-weight:bold");
-            console.log("%c(리워드풀 × (페이지뷰 ÷ 페이지뷰 스퀘어)) × (투표수 ÷ 총 투표수)", "font-size:11px;color:grey");
             console.log("%cREWARD : $" + this.deckToDollar(this.toDeck(reward)), "color:red");
             console.log("\n");
           }
@@ -576,9 +578,11 @@ export default ({
       }
     }
 
-    console.log("\n\n");
-    console.log("%cTOTAL REWARD : $" + this.deckToDollar(this.toDeck(totalReward)), "font-weight:bold;font-size:17px;color:purple");
-    console.log("\n\n\n\n\n\n\n\n");
+    if (env === "local") {
+      console.log("\n\n");
+      console.log("%cTOTAL REWARD : $" + this.deckToDollar(this.toDeck(totalReward)), "font-weight:bold;font-size:17px;color:purple");
+      console.log("\n\n\n\n\n\n\n\n");
+    }
 
     return totalReward;
   }
