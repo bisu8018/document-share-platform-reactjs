@@ -1,4 +1,5 @@
 import React from "react";
+import { APP_PROPERTIES } from "properties/app.properties";
 
 class ContentViewComment extends React.Component {
   /**
@@ -16,7 +17,7 @@ class ContentViewComment extends React.Component {
   //디스커스 초기화
   init = () => {
     let d = document, s = d.createElement("script");
-    s.src = "https://polarishare.disqus.com/embed.js";
+    s.src = "https://" + (APP_PROPERTIES.env === "production" ? "polaris-share" : "polarishare") + ".disqus.com/embed.js";
     s.setAttribute("data-timestamp", +new Date());
     (d.head || d.body).appendChild(s);
   };

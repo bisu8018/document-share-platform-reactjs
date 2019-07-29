@@ -6,7 +6,7 @@ import { setAlertCode } from "../redux/reducer/main";
 
 export default {
   getRootUrlWithApi: function() {
-    return  APP_PROPERTIES.domain().api + "/api/";
+    return APP_PROPERTIES.domain().api + "/api/";
   },
   /**
    * @return {boolean}
@@ -15,17 +15,12 @@ export default {
     return false;
   },
   _request: function(url, type, data, success, failure, header) {
-    if (this.DEBUG()) {
-      console.log("[request]\nurl: " + url + "\ndata: " + data);
-    }
+    if (this.DEBUG()) console.log("[request]\nurl: " + url + "\ndata: " + data);
 
     let _header = {};
-    if(type !== 'GET'){
-      _header = {"Content-Type": "application/json"};
-    }
-    if(header){
-      _header = Object.assign(header,_header);
-    }
+
+    if (type !== "GET") _header = { "Content-Type": "application/json" };
+    if (header) _header = Object.assign(header, _header);
 
     axios({
       method: type,
@@ -34,29 +29,24 @@ export default {
       headers: _header
     })
       .then(response => {
-        if (this.DEBUG()) {
-          console.log("성공\nurl: " + url + "\nres:\n" + JSON.stringify(response.data));
+          if (this.DEBUG()) console.log("성공\nurl: " + url + "\nres:\n" + JSON.stringify(response.data));
+
+          if (response.data.success && response.data.success === true) success(response.data);  //성공 alert
+          else {
+            store.dispatch(setAlertCode(2001));  // Alert Show
+            failure(response.data.message);
+          }
         }
-        if (response.data.success && response.data.success === true) {
-          success(response.data);
-          //성공 alert
-        } else {
-          store.dispatch(setAlertCode(2001));  // Alert Show
-          failure(response.data.message);
-        }
-      })
+      )
       .catch(error => {
         if (error.response) {
-          let status = error.response.status;
-          let headers = error.response.headers;
-          let data = error.response.data;
-          let statusText = error.response.statusText;
+          let status = error.response.status,
+            headers = error.response.headers,
+            data = error.response.data,
+            statusText = error.response.statusText;
 
           if (this.DEBUG()) {
-            console.log(headers);
-            console.log(data);
-            console.log(status);
-            console.log(statusText);
+            console.log(headers, data, status, statusText);
             console.log("Error!\ncode:" + status + "\nmessage:" + statusText + "\nerror:" + error);
           }
           console.log("Status: " + status);
@@ -69,7 +59,8 @@ export default {
         console.log(error);
         failure(error);
 
-      }).then(() => {});
+      }).then(() => {
+    });
   },
   _requestPlain: function(url, type, success, failure) {
     this._request(
@@ -79,10 +70,11 @@ export default {
       success,
       failure
     );
-  },
+  }
+  ,
   _requestWithUrlPram: function(url, type, data, success, failure) {
     data = data || {};
-    let params = data?"?" + qs.stringify(data) : "" ;
+    let params = data ? "?" + qs.stringify(data) : "";
     this._request(
       url + params,
       type,
@@ -90,8 +82,9 @@ export default {
       success,
       failure
     );
-  },
-  _requestWithBody: function (url, type, data, success, failure) {
+  }
+  ,
+  _requestWithBody: function(url, type, data, success, failure) {
     let _data = data || {};
 
     this._request(
@@ -100,43 +93,47 @@ export default {
       JSON.stringify(_data),
       success,
       failure
-    )
-  },
-  _requestWithHeader: function (url, type, data, success, failure) {
+    );
+  }
+  ,
+  _requestWithHeader: function(url, type, data, success, failure) {
     const _header = data.header || {};
     const _data = data.data || {};
     this._request(
-      url ,
+      url,
       type,
       _data,
       success,
       failure,
       _header
-    )
-  },
-  _requestWithHeaderBody: function (url, type, data, success, failure) {
+    );
+  }
+  ,
+  _requestWithHeaderBody: function(url, type, data, success, failure) {
     const _header = data.header || {};
     const _data = data.data || {};
     this._request(
-      url ,
+      url,
       type,
       JSON.stringify(_data),
       success,
       failure,
       _header
-    )
-  },
-  _requestGetWithHeader: function (url, type, data, success, failure) {
+    );
+  }
+  ,
+  _requestGetWithHeader: function(url, type, data, success, failure) {
     const _header = data.header || {};
-    let _params = data.params?"?" + qs.stringify(data.params) : "" ;
+    let _params = data.params ? "?" + qs.stringify(data.params) : "";
 
     this._request(
-      url + _params ,
+      url + _params,
       type,
       null,
       success,
       failure,
       _header
-    )
-  },
-};
+    );
+  }
+}
+;

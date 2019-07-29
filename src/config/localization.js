@@ -425,7 +425,7 @@ const strings = new Map([
   }],
   ["alert-2003", {
     KOR: "로그인이 필요합니다.",
-    ENG: "Requires login."
+    ENG: "Login Please."
   }],
   ["alert-2004", {
     KOR: "로그인 실패",
@@ -689,10 +689,6 @@ const strings = new Map([
     KOR: "CC 라이센스",
     ENG: "CC License"
   }],
-  ["tooltip-settings", {
-    KOR: "문서 설정하기",
-    ENG: "Settings of this document"
-  }],
   ["doc-private", {
     KOR: "비공개",
     ENG: "Private"
@@ -802,7 +798,7 @@ const strings = new Map([
     ENG: "Successfully uploaded"
   }],
   ["upload-doc-desc-2", {
-    KOR: "현재 업로드된 문서는 Private(비공개) 상태입니다. 문서를 공개하려고 하신다면, 설정에서 Public(공개) 상태로 변경해 주시기 바랍니다.",
+    KOR: "현재 업로드된 문서는 Private(비공개) 상태입니다. 문서를 공개하려고 하신다면, Public(공개) 상태로 변경해 주시기 바랍니다.",
     ENG: "Currently uploaded documents are in Private state. If you want to make the documents public, please change it from Private to Public."
   }],
 
@@ -1266,10 +1262,6 @@ const strings = new Map([
   }],
 
   // Delete Document Modal
-  ["tooltip-delete", {
-    KOR: "문서 삭제하기",
-    ENG: "Delete this documents"
-  }],
   ["delete-modal-title", {
     KOR: "문서 삭제하기",
     ENG: "Delete documents"

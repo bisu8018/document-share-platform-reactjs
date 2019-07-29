@@ -264,7 +264,6 @@ class VoteDocumentModal extends React.Component {
     const { deckError, balance, voteStatus, approve } = this.state;
 
     this.handleBalance();
-    let isLogin = MainRepository.Account.isAuthenticated();
     if (getDrizzle && (!getDrizzle.isInitialized() || !documentData.isRegistry)) return <div/>;
 
     let btnText, statusFlag;
@@ -277,35 +276,16 @@ class VoteDocumentModal extends React.Component {
       statusFlag = true;
     }
 
-    if (!isLogin) {
-      return (
-        <Tooltip title={psString("vote-modal-tooltip-2")} placement="bottom">
-          <div className="viewer-btn mb-1" onClick={this.handleLogin.bind(this)}>
-            <i className="material-icons">how_to_vote</i> {psString("vote-modal-btn")}
-          </div>
-        </Tooltip>
-      );
-    }
+    if (!MainRepository.Account.isAuthenticated() || !(getDrizzle && getMyInfo.ethAccount && documentData.isRegistry)) return false;
 
     return (
       <span>
-        {(!getDrizzle || !getDrizzle.isAuthenticated()) &&
-        <Tooltip title={psString("vote-modal-tooltip-3")} placement="bottom">
-          <div className="viewer-btn mb-1">
-            <i className="material-icons">how_to_vote</i> {psString("vote-modal-btn")}
-          </div>
-        </Tooltip>
-        }
-
-        {getDrizzle && documentData.isRegistry &&
         <Tooltip title={psString("vote-modal-tooltip-1")} placement="bottom">
           <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
             <i className="material-icons">how_to_vote</i> {psString("vote-modal-btn")}
           </div>
         </Tooltip>
-        }
 
-        {getDrizzle && getMyInfo.ethAccount &&
         <Dialog
           className="modal-width"
           fullWidth={this.state.fullWidth}
@@ -346,7 +326,8 @@ class VoteDocumentModal extends React.Component {
             <ul className="voteList">
               <li>
                 <span className="color-main-color font-weight-bold">{Common.toDeck(balance).toFixed(2)}</span> DECK
-                ($ <span className="color-main-color"> {Common.toDollar(balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} </span>)
+                ($ <span
+                className="color-main-color"> {Common.toDollar(balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} </span>)
               </li>
             </ul>
 
@@ -365,13 +346,13 @@ class VoteDocumentModal extends React.Component {
 
 
           <DialogActions className="modal-footer">
-            <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">{psString("common-modal-cancel")}</div>
+            <div onClick={() => this.handleClose("classicModal")}
+                 className="cancel-btn">{psString("common-modal-cancel")}</div>
             <div onClick={() => this.onClickVote()}
                  className={"ok-btn " + (statusFlag || balance <= 0 ? "btn-disabled" : "")}>{btnText}</div>
             <div className="d-none">{voteStatus}</div>
           </DialogActions>
         </Dialog>
-        }
 
         {approve === false &&
         <ApproveModal ok={() => this.okApprove()} cancel={() => this.handleClose()}/>

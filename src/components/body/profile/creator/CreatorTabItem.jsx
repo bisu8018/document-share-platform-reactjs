@@ -9,7 +9,6 @@ import LinesEllipsis from "react-lines-ellipsis";
 import PayoutCard from "../../../common/card/PayoutCard";
 import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
 import DeleteDocumentModalContainer from "../../../../container/common/modal/DeleteDocumentModalContainer";
-import { psString } from "../../../../config/localization";
 import PublishModalContainer from "../../../../container/common/modal/PublishModalContainer";
 
 class CreatorTabItem extends React.Component {
@@ -91,11 +90,6 @@ class CreatorTabItem extends React.Component {
               <div className="info_title mb-1"
                    onClick={() => Common.scrollTop()}>
                 {document.title ? document.title : document.documentName}
-                {document.isPublic === false &&
-                <Tooltip title={psString("viewer-page-carousel-private")} placement="bottom">
-                  <i className="material-icons ml-2">lock</i>
-                </Tooltip>
-                }
               </div>
             </Link>
 

@@ -34,7 +34,7 @@ class NotFoundPage extends React.Component{
     const { errMessage, location } = this.props;
 
     return (
-      <div className="no-data-icon">
+      <div className="no-data-icon container">
         <i className="material-icons">report</i>
 
         <br/>

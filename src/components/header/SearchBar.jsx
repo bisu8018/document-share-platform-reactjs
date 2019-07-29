@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import history from "apis/history/history";
 import AutoSuggestInputContainer from "../../container/common/AutoSuggestInputContainer";
-import common from "../../config/common";
 
 class SearchBar extends React.Component {
 

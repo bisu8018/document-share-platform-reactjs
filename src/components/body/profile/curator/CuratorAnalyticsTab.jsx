@@ -194,7 +194,7 @@ class CuratorAnalyticsTab extends React.Component {
     let identification = userInfo.username && userInfo.username.length > 0 ? userInfo.username : userInfo.email;
 
     return (
-      <div>
+      <div className="col-12">
         <div className="document-total-num mb-2">
           {psString("profile-total-documents")} <span className="font-weight-bold">{resultList.length}</span>
         </div>
@@ -212,7 +212,7 @@ class CuratorAnalyticsTab extends React.Component {
             {resultList.length > 0 && resultList.map((result, idx) => (
               <div className="row analytics-inner" key={idx}>
 
-                <div className="d-none d-sm-inline-block col-sm-2">
+                <div className="d-none pl-0 d-sm-inline-block col-sm-2">
                   <Link to={"/" + identification + "/" + result.seoTitle}>
                     <div className="analytics-thumb-image" onClick={() => Common.scrollTop()}>
                       <img src={Common.getThumbnail(result.documentId, 320, 1, result.documentName)}

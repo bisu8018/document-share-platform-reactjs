@@ -176,7 +176,7 @@ export default {
     renewSession() {
       instance.InitData.authData.checkSession({}, (err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
-          this.setMyInfo(authResult, user => this.setSession(authResult, user));
+          this.setMyInfo(authResult).then(user => this.setSession(authResult, user));
         } else if (err) {
           this.logout();
           console.error(err);
@@ -188,7 +188,7 @@ export default {
         instance.InitData.authData.checkSession({}, (err, authResult) => {
           if (authResult && authResult.accessToken && authResult.idToken) {
             resolve(authResult);
-            this.setMyInfo(authResult, user => this.setSession(authResult, user));
+            this.setMyInfo(authResult).then(user => this.setSession(authResult, user));
           } else if (err) {
             console.log(err);
             this.clearSession();
@@ -197,32 +197,35 @@ export default {
         });
       });
     },
-    handleAuthentication({ location }, callback, error) {
-      if (/access_token|id_token|error/.test(location.hash)) {
+    handleAuthentication({ location }) {
+      return new Promise((resolve, reject) => {
+        if (!/access_token|id_token|error/.test(location.hash)) reject();
         instance.InitData.authData.parseHash((err, authResult) => {
           if (authResult && authResult.accessToken && authResult.idToken) {
-            this.setMyInfo(authResult, user => {
+            this.setMyInfo(authResult).then(user => {
               this.setSession(authResult, user);
               this.scheduleRenewal();
               this.syncUser();
-              callback();
+              resolve(user.sub);
             });
           } else if (err) {
             this.clearSession();
-            error(err);
+            reject(err);
           }
         });
-      }
+      });
     },
-    setMyInfo(authResult, callback) {
-      instance.InitData.authData.client.userInfo(authResult.accessToken, (err, user) => {
-        if (err) {
-          //console.error("Getting userInfo", err);
-          console.error(`Error: ${err.error}. Getting UserInfo`);
-        } else {
-          //console.log("Getting Userinfo Success!!", { user, authResult });
-          callback(user);
-        }
+    setMyInfo(authResult) {
+      return new Promise((resolve, reject) => {
+        instance.InitData.authData.client.userInfo(authResult.accessToken, (err, user) => {
+          if (err) {
+            //console.error("Getting userInfo", err);
+            reject(console.error(`Error: ${err.error}. Getting UserInfo`));
+          } else {
+            //console.log("Getting Userinfo Success!!", { user, authResult });
+            resolve(user);
+          }
+        });
       });
     },
     setSession(authResult, userInfo) {
@@ -468,11 +471,10 @@ export default {
         .then(result => new DocumentList(result))
         .catch(err => err);
     },
-    getDocumentDownloadUrl(params: any, callback: any) {
-      DocService.GET.documentDownload(params, result => {
-        let documentDownload = new DocumentDownload(result);
-        callback(documentDownload);
-      });
+    getDocumentDownloadUrl(params: any) {
+      return DocService.GET.documentDownload(params)
+        .then(result => new DocumentDownload(result)
+          , err => err);
     },
     getTodayVotedDocumentsByCurator(params: any, callback: any) {
       DocService.POST.todayVotedDocumentsByCurator({ accountId: params.accountId }, (result) => callback(result));
@@ -489,8 +491,7 @@ export default {
           useTracking: data.useTracking,
           forceTracking: data.forceTracking,
           isDownload: data.isDownload,
-          cc: data.cc,
-          isPublic: data.isPublic
+          cc: data.cc
         },
         header: { "Authorization": `Bearer ${token}` }
       };

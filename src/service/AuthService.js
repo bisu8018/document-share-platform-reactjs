@@ -12,36 +12,24 @@ export default {
   POST: {
     sync: (data, callback, error) => {
       AxiosService._requestWithHeader(accountSyncUrl, "POST", data,
-        (data) => {
-          callback(data);
-        }, (err) => {
-          error(err);
-        });
+        data => callback(data)
+        , err => error(err));
     },
     accountUpdate: (data, callback, error) => {
       AxiosService._requestWithHeader(accountUpdateUrl, "POST", data,
-        (data) => {
-          callback(data);
-        }, (err) => {
-          error(err);
-        });
+        data => callback(data)
+        , err => error(err));
     },
     ethereumSync: (data, callback, error) => {
       AxiosService._requestWithHeader(ethereumSyncUrl, "POST", data,
-        (data) => {
-          callback(data);
-        }, (err) => {
-          error(err);
-        });
+        data => callback(data)
+        , err => error(err));
     },
     profileImageUpdate: (data) => {
       return new Promise((resolve, reject) => {
         AxiosService._requestWithHeader(profileImageUpdateUrl, "POST", data,
-          (data) => {
-            resolve(data);
-          }, (err) => {
-            reject(err);
-          });
+          data => resolve(data)
+          , err => reject(err));
       });
     }
   },
@@ -49,31 +37,22 @@ export default {
     documents: (data) => {
       return new Promise((resolve, reject) => {
         AxiosService._requestGetWithHeader(documentsUrl, "GET", data,
-          (data) => {
-            resolve(data);
-          }, (err) => {
-            reject(err);
-          });
+          data => resolve(data)
+          , err => reject(err));
       });
     },
     accountInfo: (data) => {
       return new Promise((resolve, reject) => {
         AxiosService._requestGetWithHeader(accountGetUrl, "GET", data,
-          (data) => {
-            resolve(data);
-          }, (err) => {
-            reject(err);
-          });
+          data => resolve(data)
+          , err => reject(err));
       });
     },
     profileGet: (data) => {
       return new Promise((resolve, reject) => {
         AxiosService._requestWithUrlPram(profileGetUrl, "GET", data,
-          (data) => {
-            resolve(data);
-          }, (err) => {
-            reject(err);
-          });
+          data => resolve(data)
+          , err => reject(err));
       });
     }
   }

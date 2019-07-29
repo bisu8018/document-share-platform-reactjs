@@ -7,11 +7,8 @@ export default {
     tagList: (data) => {
       return new Promise((resolve, reject) => {
         AxiosService._requestWithUrlPram(tagListUrl, "GET", data,
-          (data) => {
-            resolve(data);
-          }, (err) => {
-            reject(err);
-          });
+          data => resolve(data)
+          , err => reject(err));
       });
     }
   }

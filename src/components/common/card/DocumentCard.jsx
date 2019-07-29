@@ -91,7 +91,7 @@ class DocumentCard extends React.Component {
               <span className={"main-category-card-reward " + (documentData.isRegistry ? "" : "color-not-registered")}
                     onMouseOver={() => this.showRewardInfo(path + idx)}
                     onMouseOut={() => this.hideRewardInfo(path + idx)}>
-                ${Common.deckToDollar(reward)}
+                $ {Common.deckToDollar(reward)}
                 <img className="reward-arrow"
                      src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
                      alt="arrow button"/>

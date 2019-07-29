@@ -3,7 +3,6 @@ import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import Tooltip from "@material-ui/core/Tooltip";
 import { psString } from "../../../config/localization";
 import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../../redux/MainRepository";
@@ -68,22 +67,12 @@ class DeleteDocumentModal extends React.Component {
 
   render() {
     const { classicModal } = this.state;
-    const { type } = this.props;
 
     return (
-      <span>
-         <Tooltip title={psString("tooltip-delete")} placement="bottom">
-                 {type !== "onlyIcon" ?
-                   <div className="viewer-btn mb-1 mr-3" onClick={() => this.handleClickOpen("classicModal")}>
-                     <i className="material-icons ">delete_outline</i>
-                     {psString("common-modal-delete")}
-                   </div>
-                   :
-                   <div className="delete-btn-wrapper ml-1 mr-3" onClick={() => this.handleClickOpen("classicModal")}>
-                     <i className="material-icons ">delete</i>
-                   </div>
-                 }
-         </Tooltip>
+      <div>
+        <div className="option-table-btn " onClick={() => this.handleClickOpen("classicModal")}>
+          {psString("common-modal-delete")}
+        </div>
 
         <Dialog
           className="modal-width"
@@ -113,11 +102,11 @@ class DeleteDocumentModal extends React.Component {
               {psString("common-modal-cancel")}
             </div>
             <div onClick={() => this.handleDelete()} className={"ok-btn "}>
-                {psString("common-modal-delete")}
+              {psString("common-modal-delete")}
             </div>
           </DialogActions>
         </Dialog>
-      </span>
+      </div>
     );
   }
 }

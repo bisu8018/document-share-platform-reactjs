@@ -6230,10 +6230,12 @@ dean
 }
 
 .mobile-upload-btn {
-    width: 27px;
-    height: 27px;
-    margin: 0 6px;
     background-image: url(../image/icon/i_upload.svg);
+    width: 28px;
+    height: 28px;
+    margin: 0 4px;
+    background-size: cover;
+    background-position-y: 2px;
     cursor: pointer;
 }
 
@@ -6575,6 +6577,18 @@ dean
     position: absolute;
     left: 5px;
     top: 4px;
+}
+
+.view-option-btn {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    z-index: 1;
+}
+
+.view-option-btn > i:hover {
+    color: #3681fe;
 }
 
 .share-btn {
@@ -6976,12 +6990,12 @@ Dean*/
 }
 
 .u__center {
-    max-width: 1400px;
+    max-width: 1300px;
     min-height: 100vh;
 }
 
 .u__center-faq {
-    max-width: 1400px;
+    max-width: 1300px;
     min-height: 100vh;
     background-color: #fff;
     margin-top: 10px;
@@ -7022,6 +7036,7 @@ Dean*/
     letter-spacing: -0.2px;
     color: #4d4d4d;
     vertical-align: middle;
+    position: relative;
 }
 
 .tracking-detail-title {
@@ -7273,6 +7288,7 @@ Dean*/
     font-weight: 500;
     color: #0d73f8;
     top: 1px;
+    letter-spacing: -1px;
 }
 
 .info-detail-reward > i {
@@ -8242,16 +8258,20 @@ Duration CSS*/
     border: 1px solid #979797;
 }
 
-.option-table > div {
-    padding: 5px 10px;
+.option-table .option-table-btn {
+    padding: 6px 10px;
+    min-width: 90px;
+    cursor: pointer;
     background: white;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 500;
     overflow: hidden;
     white-space: nowrap;
     color: #4d4d4d;
 }
 
-.option-table > div:hover {
+
+.option-table .option-table-btn:hover{
     background: #3681fe;
     color: white;
 }
@@ -8271,7 +8291,7 @@ Duration CSS*/
 }
 
 .tracking-table-tr:hover {
-    background: #f3f3f3;
+    background: #fdfdfd;
 }
 
 .tracking-table-td {
@@ -8313,8 +8333,8 @@ Duration CSS*/
 }
 
 .u__view {
-    max-width: 1400px;
-    padding: 20px 30px;
+    max-width: 1300px;
+    padding: 20px;
     background-color: #fff;
     border-right: 1px solid #b3b3b3;
 }
@@ -8399,6 +8419,7 @@ Dean
 
 .view_content {
     margin-top: 15px;
+    position: relative;
 }
 
 .view_content .view_content-desc {
@@ -8598,6 +8619,11 @@ Dean
     display: inline-table;
     width: 100%;
     position: relative;
+}
+
+.see-also-main-title {
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+    font-weight: 600;
 }
 
 .see-also-thumbnail {
@@ -9452,31 +9478,6 @@ ContentViewFullScreen 카로셀
     padding: 20px !important;
 }
 
-.carousel-lock {
-    position: absolute;
-    bottom: 7px;
-    left: 9px;
-    z-index: 3;
-    opacity: 0.5;
-    cursor: pointer;
-    -ms-user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-}
-
-.carousel-lock:hover {
-    opacity: 1;
-}
-
-.carousel-lock > i {
-    font-size: 31px;
-    background: white;
-    border-radius: 50%;
-    padding: 5px;
-}
-
-
 /*2019-06-11
 dean
 contentMain 배너 카로셀*/
@@ -9950,6 +9951,7 @@ Main Category CSS
     color: #808080;
     cursor: pointer;
     position: relative;
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
 }
 
 .main-category-see-all:hover {
@@ -10128,6 +10130,7 @@ Main Category CSS
     font-size: 16px;
     font-weight: 500;
     color: #0d73f8;
+    letter-spacing: -1px;
 }
 
 .main-category-card-count {
@@ -10214,12 +10217,14 @@ Main Category CSS
     font-size: 16px;
     font-weight: 500;
     color: #0d73f8;
+    letter-spacing: -1px;
 }
 
 .balance-of-deck {
     font-size: 13px;
     font-weight: 300;
     color: #0d73f8;
+    letter-spacing: -1px;
 }
 
 .color .balance-of-dollar {
@@ -10433,11 +10438,13 @@ Ads CSS
 }
 
 .mobile-header-search-btn {
-    cursor: pointer;
-    width: 27px;
-    height: 27px;
-    margin: 0 6px;
     background-image: url(../image/icon/i_search.svg);
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    margin: 0 6px;
+    background-size: cover;
+    background-position-y: 2px;
 }
 
 .mobile-header-search-bar-wrapper {

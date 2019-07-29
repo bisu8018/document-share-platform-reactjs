@@ -85,7 +85,7 @@ class CuratorVoteTab extends React.Component {
     const { userInfo } = this.props;
 
     return (
-      <div>
+      <div className="col-12">
         <div className="document-total-num">
           {psString("profile-total-documents")} <span className="font-weight-bold">{resultList.length}</span>
         </div>

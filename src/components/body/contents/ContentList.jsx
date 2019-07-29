@@ -61,6 +61,7 @@ class ContentList extends Component {
       path: args.path ? args.path : path
     };
     this.setState({ loading: true });
+
     MainRepository.Document.getDocumentList(params).then(res => {
       this.setState({ loading: false });
       log.ContentList.fetchDocuments();
@@ -74,7 +75,6 @@ class ContentList extends Component {
         });
         else this.setState({ resultList: _resultList, pageNo: pageNo, tagSearchFlag: false });
       } else this.setState({ isEndPage: true });
-
 
       if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) {
         this.setState({ totalViewCountInfo: res.totalViewCountInfo });
@@ -116,7 +116,6 @@ class ContentList extends Component {
 
     let path = Common.getPath();
     if (getTagList.path !== path) MainRepository.Document.getTagList(path).then(result => setTagList(result.resultList)).then(log.ContentList.setTagList());
-
   };
 
 
@@ -128,9 +127,7 @@ class ContentList extends Component {
 
 
   // 업로드 버튼 관리
-  handleUploadBtn = () => {
-    document.getElementById("uploadBtn").click();
-  };
+  handleUploadBtn = () => document.getElementById("uploadBtn").click();
 
 
   componentDidUpdate = () => {
@@ -154,33 +151,33 @@ class ContentList extends Component {
           <title>{psString("helmet-title-" + Common.getPath()) + " | Polaris Share"}</title>
         </Helmet>
 
+
         <ContentTagsContainer path={match.path} url={match.url} {...this.props}/>
 
-        <section className="col-sm-12 col-lg-9 u__center-container">
 
+        <section className="col-sm-12 col-lg-9 u__center-container">
           <div className="d-block d-sm-none content-list-path">{Common.getPath()}</div>
 
-          <div className="mt-0 mt-sm-4 pt-0 pt-sm-2 u__center content-list-wrapper">
+          <InfiniteScroll
+            className={(getIsMobile ? "overflow-initial " : "") + "mt-0 mt-sm-4 pt-0 pt-sm-2 u__center content-list-wrapper"}
+            dataLength={resultList.length}
+            next={this.fetchMoreData}
+            hasMore={!isEndPage}
+          >
+            {resultList.length > 0 && resultList.map((result) => (
+              <ContentListItemContainer key={result.documentId + result.accountId} result={result}
+                                        totalViewCountInfo={totalViewCountInfo}/>
+            ))}
+          </InfiniteScroll>
+          {this.state.loading &&
+          <div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>
+          }
+          {!this.state.loading && ((resultList && resultList.length === 0) || !resultList) &&
+          <NoDataIcon className="no-data">No data</NoDataIcon>
+          }
 
-            <InfiniteScroll
-              className={getIsMobile ? "overflow-initial" : ""}
-              dataLength={resultList.length}
-              next={this.fetchMoreData}
-              hasMore={!isEndPage}
-            >
-              {resultList.length > 0 && resultList.map((result) => (
-                <ContentListItemContainer key={result.documentId + result.accountId} result={result}
-                                          totalViewCountInfo={totalViewCountInfo}/>
-              ))}
-            </InfiniteScroll>
-            {this.state.loading &&
-            <div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>
-            }
-            {!this.state.loading && ((resultList && resultList.length === 0) || !resultList) &&
-            <NoDataIcon className="no-data">No data</NoDataIcon>
-            }
-          </div>
         </section>
+
 
       </div>
     );

@@ -17,7 +17,7 @@ class Bounty extends React.Component {
   state = {
     available: 0,
     isAuthenticated: false,
-    classicModal: false,
+    classicModal: false
   };
 
 
@@ -49,26 +49,23 @@ class Bounty extends React.Component {
 
   componentDidUpdate = () => {
     const { getDrizzle, getWeb3Apis, getMyInfo } = this.props;
-    if(!getDrizzle || !getWeb3Apis || !getMyInfo) return false;
+    if (!getDrizzle || !getWeb3Apis || !getMyInfo) return false;
+
     let isAuthenticated = getDrizzle.isAuthenticated();
+
     if (isAuthenticated && !this.state.isAuthenticated) {
-      getWeb3Apis.getBountyAvailable(getMyInfo.ethAccount).then((data) => {
-        this.setState({ isAuthenticated: true });
-        this.setState({ available: data });
-      },err => {
-        console.error(err);
-      });
-    } else if (!isAuthenticated && this.state.isAuthenticated) {
+      getWeb3Apis.getBountyAvailable(getMyInfo.ethAccount)
+        .then((data) => this.setState({ isAuthenticated: true, available: data })
+          , err => console.error(err));
+    } else if (!isAuthenticated && this.state.isAuthenticated)
       this.setState({ isAuthenticated: false });
-    }
   };
 
 
   render = () => {
-    const { classes } = this.props;
 
-      return (
-        <span>
+    return (
+      <span>
              <div className="bounty-btn" onClick={() => this.handleClickOpen("classicModal")}>
                  GET<br/>FREE DECK !!
             </div>
@@ -87,7 +84,8 @@ class Bounty extends React.Component {
                   id="classic-modal-slide-title"
                   disableTypography
                   className="">
-                  <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
+                  <i className="material-icons modal-close-btn"
+                     onClick={() => this.handleClose("classicModal")}>close</i>
                   <h3 className="">Do you need DECK?</h3>
                 </DialogTitle>
 
@@ -106,7 +104,7 @@ class Bounty extends React.Component {
             </Dialog>
         </span>
 
-      );
+    );
   };
 }
 

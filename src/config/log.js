@@ -19,7 +19,7 @@ export default ({
 
   // Main.jsx
   Main: {
-    init: (err) => {
+    init: err => {
       if (envFlag) {
         if (!err) {
           console.log("%cPOLARIS SHARE %c" + common.getVersion(), init, init + "font-size:25px !important;");
@@ -27,25 +27,25 @@ export default ({
         }
       } // else "Do something!"
     },
-    setTagList: (err) => {
+    setTagList: err => {
       if (envFlag) {
         if (!err) console.log("Tag List SETTING : %c COMPLETE", success);
         else console.log("Tag List SETTING : %c FAILED", failed, err);
       } // else "Do something!"
     },
-    setUploadTagList: (err) => {
+    setUploadTagList: err => {
       if (envFlag) {
         if (!err) console.log("Upload Tag List SETTING : %c COMPLETE", success);
         else console.log("Upload Tag List SETTING : %c FAILED", failed, err);
       } // else "Do something!"
     },
-    setIsMobile: (err) => {
+    setIsMobile: err => {
       if (envFlag) {
         if (!err) console.log("Mobile Environment SETTING : %c COMPLETE", success);
         else console.log("Mobile Environment SETTING : %c FAILED", failed, err);
       } // else "Do something!"
     },
-    setMyInfo: (err) => {
+    setMyInfo: err => {
       if (envFlag) {
         if (!err) console.log("User Information SETTING : %c COMPLETE", success);
         else console.log("User Information SETTING : %c FAILED", failed, err);
@@ -65,9 +65,18 @@ export default ({
     }
   },
 
+  // Header.jsx
+  Header: {
+    init: err => {
+      if (envFlag) {
+        if (!err) console.log("%cHeader.jsx", component);
+      } // else "Do something!"
+    },
+  },
+
   // ContentMain.jsx
   ContentMain: {
-    init: (err) => {
+    init: err => {
       if (envFlag) {
         if (!err) console.log("%cContentMain.jsx", component);
       } // else "Do something!"
@@ -78,13 +87,13 @@ export default ({
         else console.log("%c\"" + category + "\" %cDocument List SETTING : %c FAILED", categories, "", failed, err);
       } // else "Do something!"
     },
-    handleResize: (err) => {
+    handleResize: err => {
       if (envFlag) {
         if (!err) console.log("Scroll Event Listener START : %c COMPLETE", success);
         else console.log("Scroll Event Listener START : %c FAILED", failed, err);
       } // else "Do something!"
     },
-    handleResizeEnd: (err) => {
+    handleResizeEnd: err => {
       if (envFlag) {
         if (!err) console.log("Scroll Event Listener END : %c COMPLETE", success);
         else console.log("Scroll Event Listener END : %c FAILED", failed, err);
@@ -94,18 +103,18 @@ export default ({
 
   // ContentList.jsx
   ContentList: {
-    init: (err) => {
+    init: err => {
       if (envFlag) {
         if (!err) console.log("%cContentList.jsx", component);
       } // else "Do something!"
     },
-    fetchDocuments: (err) => {
+    fetchDocuments: err => {
       if (envFlag) {
         if (!err) console.log("Document List FETCHING : %c COMPLETE", success);
         else console.log("Document List FETCHING : %c FAILED", failed, err);
       } // else "Do something!"
     },
-    setTagList: (err) => {
+    setTagList: err => {
       if (envFlag) {
         if (!err) console.log("Content Tag List FETCHING : %c COMPLETE", success);
         else console.log("Content Tag List FETCHING : %c FAILED", failed, err);
@@ -115,7 +124,7 @@ export default ({
 
   // ContentView.jsx
   ContentView: {
-    init: (err) => {
+    init: err => {
       if (envFlag) {
         if (!err) console.log("%cContentView.jsx", component);
       } // else "Do something!"
@@ -130,9 +139,30 @@ export default ({
     }
   },
 
+  // ContentViewFullscreen.jsx
+  ContentViewFullscreen: {
+    init: err => {
+      if (envFlag) {
+        if (!err) console.log("%cContentViewFullscreen.jsx", component);
+      } // else "Do something!"
+    },
+    getContentDownload: err => {
+      if (envFlag) {
+        if (!err) console.log("Document Download Url SETTING : %c COMPLETE", success);
+        else console.log("Document Download Url SETTING : %c FAILED", failed, err);
+      } // else "Do something!"
+    },
+    getReward: err => {
+      if (envFlag) {
+        if (!err) console.log("User Reward SETTING : %c COMPLETE", success);
+        else console.log("User Reward SETTING : %c FAILED", failed, err);
+      } // else "Do something!"
+    }
+  },
+
   // Creator.jsx
   Creator: {
-    init: (err) => {
+    init: err => {
       if (envFlag) {
         if (!err) console.log("%cCreator.jsx", component);
       } // else "Do something!"
@@ -149,16 +179,16 @@ export default ({
 
   // CreatorSummary.jsx
   CreatorSummary: {
-    init: (err) => {
+    init: err => {
       if (envFlag) {
         if (!err) console.log("%cCreatorSummary.jsx", component);
       } // else "Do something!"
     },
-    getBalance: (err) => {
+    getBalance: err => {
       if (envFlag) {
         if (!err) console.log("Balance SETTING : %c COMPLETE", success);
         else console.log("Balance SETTING : %c FAILED", failed, err);
       } // else "Do something!"
-    },
+    }
   }
 });

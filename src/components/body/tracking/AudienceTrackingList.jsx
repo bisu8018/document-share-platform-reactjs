@@ -309,12 +309,12 @@ class AudienceTrackingList extends React.Component {
                      onClick={this.handleOptionButtonClickEvent.bind(this)}>
                   <i className="material-icons">more_vert</i>
                   <div className={"option-table" + (tableOptionFlag ? "" : " d-none")}>
-                    <div
+                    <div className="option-table-btn "
                       title={getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
                       onClick={(e) => this.handleHideOption(e)}>
                       {getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
                     </div>
-                    <div
+                    <div className="option-table-btn "
                       title={getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
                       onClick={(e) => this.handleOnePageOption(e)}>
                       {getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}

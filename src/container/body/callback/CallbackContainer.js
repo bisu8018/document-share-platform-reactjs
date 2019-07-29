@@ -4,7 +4,9 @@ import { setAlertCode, setMyInfo } from "../../../redux/reducer/main";
 import { setTempEmail } from "../../../redux/reducer/emailModal";
 
 export default connect(
-  state => ({}),
+  state => ({
+    getMyInfo: state.main.myInfo,
+  }),
   dispatch => ({
     setMyInfo: (myInfo: any) => {
       dispatch(setMyInfo(myInfo));

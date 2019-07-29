@@ -12,7 +12,7 @@ class ContentViewRight extends React.Component {
     } else {
       return (
         <aside className="u__right col-md-12 col-lg-4 ">
-          <div>{psString("see-also-text")}</div>
+          <div className="see-also-main-title">{psString("see-also-text")}</div>
           <div className="hr mt-2"/>
           {featuredList.length > 0 && featuredList.map((result, idx) => (
             <FeaturedList resultItem={result} key={idx}/>

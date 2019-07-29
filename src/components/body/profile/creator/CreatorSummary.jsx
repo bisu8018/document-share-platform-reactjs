@@ -81,6 +81,7 @@ class CreatorSummary extends React.Component {
     }
   };
 
+
   // 잔액 조회
   getBalance = () => {
     const { getWeb3Apis, userInfo } = this.props;
@@ -121,18 +122,11 @@ class CreatorSummary extends React.Component {
 
 
   //username 수정 시
-  handleClickEvent = () => {
-    this.setState({ userNameEdit: true }, () => {
-      if (this.state.userNameEdit) document.getElementById("userNameEditInput").focus();
-    });
-  };
+  handleClickEvent = () => this.setState({ userNameEdit: true }, () => document.getElementById("userNameEditInput").focus());
 
 
   //username 수정 취소 시
-  handleCancelEvent = () => {
-    const { userInfo } = this.props;
-    this.setState({ userName: userInfo.username, userNameEdit: false, errMsg: "" });
-  };
+  handleCancelEvent = () => this.setState({ userName: this.props.userInfo.username, userNameEdit: false, errMsg: "" });
 
 
   //수정 버튼 핸들
@@ -153,7 +147,8 @@ class CreatorSummary extends React.Component {
 
 
   shouldComponentUpdate = () => {
-    return this.getBalance(); // 잔액 조회
+    this.getBalance(); // 잔액 조회
+    return true;
   };
 
 
@@ -188,17 +183,14 @@ class CreatorSummary extends React.Component {
 
           <div className="col-12 col-sm-10 col-lg-11 ">
             <div className="profile_info_name">
-              {!userNameEdit &&
-              <span className="d-flex">
+              <span className={!userNameEdit ? "d-flex" : "d-none"}>
                 <strong>{userName || userInfo.email}</strong>
                 {this.getMyInfo().email === userInfo.email &&
                 <div className="username-edit-btn ml-2" onClick={() => this.handleClickEvent()}>
                   {psString("profile-edit")}</div>
                 }
-              </span>}
-
-              {userNameEdit &&
-              <span className="d-flex">
+              </span>
+              <span className={userNameEdit ? "d-flex" : "d-none"}>
                 <input type="text" id="userNameEditInput" placeholder="User Name . . ." value={this.state.userName}
                        className={"username-edit-input mr-2 " + (errMsg.length > 0 ? "username-edit-input-warning" : "")}
                        onChange={(e) => this.handleChangeUsername(e)} spellCheck="false" maxLength="20"/>
@@ -206,7 +198,6 @@ class CreatorSummary extends React.Component {
                 <div onClick={() => this.handleCancelEvent()} className="username-cancel-btn">Cancel</div>
                 {errMsg.length > 0 && <div className="username-edit-input-warning-msg">{errMsg}</div>}
               </span>
-              }
             </div>
 
             <div className="profile_info_desc">

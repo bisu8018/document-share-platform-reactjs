@@ -8,6 +8,7 @@ import ProfileCardContainer from "../../container/common/ProfileCardContainer";
 import AdsContainer from "../../container/ads/AdsContainer";
 import SearchBarContainer from "../../container/header/SearchBarContainer";
 import { psGetLang, psSetLang, psString } from "../../config/localization";
+import log from "../../config/log";
 
 //import Bounty from "./Bounty";
 
@@ -27,6 +28,15 @@ class Header extends React.Component {
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
   }
+
+
+  // init
+  init = () => {
+    log.Header.init();
+    this.setState({ prevScrollPos: window.pageYOffset}, () => {
+      this.clickEventListener();
+    });
+  };
 
 
   // 헤더 네비 카테고리 클래스 삭제
@@ -55,10 +65,11 @@ class Header extends React.Component {
   // 검색바 보임
   showSearchBar = () => {
     this.setState({ searchBar: true }, () => {
-      const autoSuggestEle = document.getElementById("headerAutoSuggest").firstChild.firstChild;
-      autoSuggestEle.onMouseOut = function() {
-        alert("Clicked");
-      };
+      /* const autoSuggestEle = document.getElementById("headerAutoSuggest").firstChild.firstChild;
+       autoSuggestEle.onMouseOut = function() {
+         alert("Clicked");
+       };
+       autoSuggestEle.focus();*/
     });
   };
 
@@ -67,42 +78,47 @@ class Header extends React.Component {
   closeSearchBar = () => this.setState({ searchBar: false });
 
 
-  // 화면 크기 이벤트 리스너
-  handleResize = (e) => {
-    const { setIsMobile } = this.props;
-    if (e.currentTarget.innerWidth < 576) setIsMobile(true);
-    else setIsMobile(false);
-  };
-
-
   // 클릭 이벤트 리스너
   clickEventListener = () => {
-    const { setDropdownShow } = this.props;
-    document.addEventListener("click", (e) => {
-        let targetElement = e.target; // clicked element
+    const { setDropdownShow, getMyInfo } = this.props;
+
+    document.addEventListener("click", e => {
+        // clicked element
+        let targetElement = e.target;
+
+        // 광고 표시 관리
+        if(Common.getPath() !== "") this.setState({ adShow: false });
 
         // 프로필 카드
         const profileCard = document.getElementById("profileCard");
-        if (profileCard && !profileCard.contains(targetElement)) this.profileCardHide();
-
+        const headerAvatar = document.getElementById("header-avatar");
+        if (profileCard && !profileCard.contains(targetElement) && !headerAvatar.contains(targetElement)) this.profileCardHide();
 
         // 헤더 검색 카테고리 드롭다운
         const dropdownList = document.getElementById("dropdownList");
         if (dropdownList && !dropdownList.contains(targetElement)) setDropdownShow(false);
 
+        // 뷰어페이지 옵션창
+        const viewerOptionBtn = document.getElementById("viewer-option-btn");
+        const viewerOptionTable = document.getElementById("viewer-option-table");
+        if (viewerOptionBtn &&  !viewerOptionBtn.contains(targetElement)) viewerOptionTable.classList.add("d-none");
 
         // 프로필 카드 프로필 버튼
         const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
-        if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) this.profileCardHide(profileCardMyAccountBtn.dataset.id);
-
+        if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) {
+          history.push("/" + getMyInfo.username);
+          this.profileCardHide();
+        }
 
         // 검색 input
         const headerAutoSuggest = document.getElementById("headerAutoSuggest");
+
         if (headerAutoSuggest &&
           !headerAutoSuggest.contains(targetElement) &&
           "headerAutoSuggest" !== targetElement.id &&
           "headerSearchIcon" !== targetElement.id &&
           "headerSearchSelectBar" !== targetElement.id &&
+          "headerSearchBtnWrapper" !== targetElement.id &&
           targetElement.classList[0] !== "react-autosuggest__input" &&
           targetElement.classList[0] !== "react-autosuggest__suggestion"
         ) this.closeSearchBar();
@@ -110,12 +126,21 @@ class Header extends React.Component {
     );
   };
 
+
   // 프로필 카드 보임
   profileCardShow = () => this.setState({ profileCardShow: true });
 
 
   // 프로필 카드 숨김
-  profileCardHide = (id) => this.setState({ profileCardShow: false },()=>history.push("/" + id));
+  profileCardHide = () => this.setState({ profileCardShow: false });
+
+
+  // 화면 크기 이벤트 리스너
+  handleResize = e => {
+    const { setIsMobile } = this.props;
+    if (e.currentTarget.innerWidth < 576) setIsMobile(true);
+    else setIsMobile(false);
+  };
 
 
   // 메뉴바 토클 관리
@@ -124,6 +149,14 @@ class Header extends React.Component {
 
   // 로그인 관리
   handleLogin = () => MainRepository.Account.login();
+
+
+  // 상단 광고 종료
+  handleAdClose = () => this.setState({ adShow: null });
+
+
+  // 언어 설정 관리
+  handleLang = () => psGetLang() === "EN" ? psSetLang("KO") : psSetLang("EN");
 
 
   // 스크롤 관리
@@ -153,17 +186,8 @@ class Header extends React.Component {
   };
 
 
-  // 상단 광고 종료 관리
-  handleClose = () => this.setState({ adShow: false });
-
-
-  // 언어 설정 관리
-  handleLang = () => psGetLang() === "EN" ? psSetLang("KO") : psSetLang("EN");
-
-
   componentWillMount() {
-    this.setState({ prevScrollPos: window.pageYOffset });
-    this.clickEventListener();
+    this.init();
   }
 
 
@@ -193,16 +217,14 @@ class Header extends React.Component {
     return (
 
       <header id="header">
-        {adShow && !pathname && (window.pageYOffset === 0) &&
-        <div className="ad-dummy"/>
-        }
+        {adShow === true && !pathname && (window.pageYOffset === 0) && <div className="ad-dummy"/>}
 
         <nav
           className={"navbar navbar-default navbar-expand-lg fixed-top " + (adShow && !pathname && (window.pageYOffset <= "55") ? "ad-effective" : "")}
           id="header__main-nav">
           <div className="container-fluid container">
             {adShow && !pathname && (window.pageYOffset <= "55") &&
-            <AdsContainer close={() => this.handleClose()}/>
+            <AdsContainer close={() => this.handleAdClose()}/>
             }
             <div className="col-4 col-md-3 mt-1">
               {getIsMobile ?
@@ -255,7 +277,7 @@ class Header extends React.Component {
 
                 {MainRepository.Account.isAuthenticated() ?
                   getMyInfo.picture.length > 0 ?
-                    <img src={getMyInfo.picture} className="avatar" alt="Link to my profile"/> :
+                    <img src={getMyInfo.picture} id="header-avatar" className="avatar" alt="Link to my profile"/> :
                     <img src={require("assets/image/icon/i_anonymous.png")} className="avatar"
                          alt="Link to my profile"/>
 

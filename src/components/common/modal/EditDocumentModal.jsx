@@ -9,7 +9,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../../redux/MainRepository";
-import Tooltip from "@material-ui/core/Tooltip";
 import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
 
@@ -116,8 +115,7 @@ class EditDocumentModal extends React.Component {
       useTracking: useTracking,
       forceTracking: !useTracking ? false : forceTracking,
       isDownload: allowDownload,
-      cc: this.getCcValue(),
-      isPublic: false
+      cc: this.getCcValue()
     };
     MainRepository.Document.updateDocument(data).then(result => {
       history.push("/" + Common.getPath() + "/" + result.seoTitle);
@@ -344,19 +342,12 @@ class EditDocumentModal extends React.Component {
 
   render() {
     const { classicModal, moreOptions, title, allowDownload, desc, tags, useTracking, forceTracking, titleError, tagError, by, nc, nd, sa } = this.state;
-    const { type } = this.props;
 
     return (
-      <span>
-        <Tooltip title={psString("tooltip-settings")} placement="bottom">
-          <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
-            <i className="material-icons">settings</i> {psString("common-modal-settings")}
+      <div>
+          <div className="option-table-btn " onClick={() => this.handleClickOpen("classicModal")}>
+           {psString("common-modal-settings")}
           </div>
-        </Tooltip>
-        {type && type === "menu" &&
-        <span className="d-inline-block d-sm-none"
-              onClick={() => this.handleClickOpen("classicModal")}>{psString("common-modal-upload")}</span>
-        }
 
         <Dialog
           className="modal-width"
@@ -489,7 +480,7 @@ class EditDocumentModal extends React.Component {
                        className="ok-btn">{psString("common-modal-confirm")}</div>
                   </DialogActions>
                   </Dialog>
-                  </span>
+                  </div>
     );
   }
 }

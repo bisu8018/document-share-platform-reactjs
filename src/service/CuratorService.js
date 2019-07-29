@@ -7,22 +7,14 @@ export default {
   GET: {
     curatorDocuments: (data, callback, error) => {
       AxiosService._requestWithUrlPram(getCuratorDocumentsUrl, "GET", data,
-        (data) => {
-          callback(data);
-        }, (err) => {
-          error(err);
-        });
+        data => callback(data)
+        , err => error(err));
     },
     curatorSummary: (data, callback, error) => {
       AxiosService._requestWithUrlPram(getCuratorSummaryUrl, "GET", data,
-        (data) => {
-          callback(data);
-        }, (err) => {
-          error(err);
-        });
-    },
+        data => callback(data)
+        , err => error(err));
+    }
   },
-  POST: {
-
-  },
+  POST: {}
 };

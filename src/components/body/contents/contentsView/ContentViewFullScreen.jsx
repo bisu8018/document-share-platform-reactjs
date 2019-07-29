@@ -8,6 +8,7 @@ import {
   TwitterShareButton
 } from "react-share";
 import Common from "../../../../config/common";
+import log from "../../../../config/log";
 import Tooltip from "@material-ui/core/Tooltip";
 import MainRepository from "../../../../redux/MainRepository";
 import EditDocumentModalContainer from "../../../../container/common/modal/EditDocumentModalContainer";
@@ -36,18 +37,24 @@ class ContentViewFullScreen extends Component {
     emailFlag: false,
     reward: 0,
     isDocumentExist: null,
-    downloadLoading: false
+    downloadLoading: false,
   };
 
 
+  // 초기화
+  init = () => {
+    log.ContentViewFullscreen.init();
+    this.getReward();
+  };
+
   // 리워드 정보 표시
-  showRewardInfo = (id) => {
+  showRewardInfo = id => {
     if (document.getElementById(id)) document.getElementById(id).style.display = "block";
   };
 
 
   // 리워드 정보 숨김
-  hideRewardInfo = (id) => {
+  hideRewardInfo = id => {
     if (document.getElementById(id)) document.getElementById(id).style.display = "none";
   };
 
@@ -75,30 +82,29 @@ class ContentViewFullScreen extends Component {
 
 
   //현재 page GET
-  getPageNum = (page) => {
-    this.setState({ page: page });
-  };
+  getPageNum = page => this.setState({ page: page });
 
 
   //문서 다운로드
   getContentDownload = (accountId, documentId, documentName) => {
-    let params = {
-      documentId: documentId
-    };
-    MainRepository.Document.getDocumentDownloadUrl(params, result => {
-      const a = document.createElement("a");
+    this.setState({ downloadLoading: true });
 
-      a.style.display = "none";
-      document.body.appendChild(a);
-      a.href = result.downloadUrl;
-      a.setAttribute("download", documentName);
-      a.click();
+    MainRepository.Document.getDocumentDownloadUrl({ documentId: documentId }).then(result => {
+        const a = document.createElement("a");
 
-      window.URL.revokeObjectURL(a.href);
-      document.body.removeChild(a);
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.href = result.downloadUrl;
+        a.setAttribute("download", documentName);
+        a.click();
 
-      this.setState({downloadLoading : false});
-    });
+        window.URL.revokeObjectURL(a.href);
+        document.body.removeChild(a);
+
+        this.setState({ downloadLoading: false });
+      }, err =>
+        this.setState({ downloadLoading: false }, () => log.ContentViewFullscreen.getContentDownload(err))
+    );
   };
 
 
@@ -106,57 +112,54 @@ class ContentViewFullScreen extends Component {
   getReward = () => {
     const { documentData, getWeb3Apis } = this.props;
     getWeb3Apis.getNDaysRewards(documentData.documentId, 7).then(res => {
+      log.ContentViewFullscreen.getReward();
       let reward = Common.toEther(res);
       this.setState({ reward: reward });
-    });
+    }, err => log.ContentViewFullscreen.getReward(err));
   };
 
 
+  // 설정창 관리
+  handleSetting = () => document.getElementById("viewer-option-table").classList.remove("d-none");
+
+
   //전체화면 전환 컨트롤
-  handleFullChange = (_isFull) => {
-    const { isFull } = this.state;
-    if (isFull !== _isFull) {
-      this.goFull();
-    }
+  handleFullChange = _isFull => {
+    if (this.state.isFull !== _isFull) this.goFull();
   };
 
 
   //이메일 입력 여부 Flag
-  handleEmailFlag = (flag) => {
-    this.setState({ emailFlag: flag });
-  };
+  handleEmailFlag = flag => this.setState({ emailFlag: flag });
 
 
   //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
     const { getMyInfo, documentData, setAlertCode } = this.props;
-    this.setState({downloadLoading : true});
-    if (!documentData) {
-      console.log("getting document meta information!");
-      return;
-    }
-    if (!MainRepository.Account.isAuthenticated() && !getMyInfo.email) {
-      return setAlertCode(2003);
-    }
+
+    if (!documentData) return console.log("getting document meta information!");
+    if (!MainRepository.Account.isAuthenticated() && !getMyInfo.email) return setAlertCode(2003);
+
     const accountId = documentData.accountId,
       documentId = documentData.documentId,
       documentName = documentData.documentName;
+
     this.getContentDownload(accountId, documentId, documentName);
   };
 
 
   componentWillMount(): void {
-    this.getReward();
+    this.init();
   }
+
 
   render() {
     const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
     const { page, isFull, carouselClass, emailFlag, downloadLoading } = this.state;
 
-    let vote = Common.toEther(documentData.latestVoteAmount) || 0;
-    let reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7));
-
-    let view = documentData.latestPageview || 0,
+    let vote = Common.toEther(documentData.latestVoteAmount) || 0,
+      reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
+      view = documentData.latestPageview || 0,
       accountId = documentData.accountId || "",
       profileUrl = author ? author.picture : null,
       identification = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId,
@@ -164,7 +167,8 @@ class ContentViewFullScreen extends Component {
 
     return (
 
-      <article className={"col-md-12 col-lg-8 view_left u__view " + (isFull && (carouselClass === "deviceRatio" ? "device-ratio" : "img-ratio"))}>
+      <article
+        className={"col-md-12 col-lg-8 view_left u__view " + (isFull && (carouselClass === "deviceRatio" ? "device-ratio" : "img-ratio"))}>
         <div className="view_top">
           <Fullscreen enabled={isFull} onChange={isFull => this.handleFullChange(isFull)}>
 
@@ -173,15 +177,30 @@ class ContentViewFullScreen extends Component {
                                           getPageNum={(page) => {
                                             this.getPageNum(page);
                                           }}/>
-
             <div className="view_screen">
               <i title="Fullscreen button" className="material-icons" onClick={this.goFull}>fullscreen</i>
             </div>
           </Fullscreen>
         </div>
 
+
         <div className="view_content">
-          <div className="u_title pt-2 pb-2 mt-2 mb-2">   {documentData.title ? documentData.title : ""}</div>
+          {accountId === Common.getMySub() &&
+          <div className="view-option-btn" id="viewer-option-btn">
+            <i className="material-icons" onClick={() => this.handleSetting()}>more_vert</i>
+            <div className="option-table d-none" id="viewer-option-table">
+              <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>Download</div>
+              {documentData &&
+              <EditDocumentModalContainer documentData={documentData}/>}
+              {!documentData.isPublic && (accountId === Common.getMySub() && documentData) &&
+              <DeleteDocumentModalContainer documentData={documentData}/>}
+            </div>
+          </div>
+          }
+
+          <div className="u_title pt-2 pb-2 mt-2 mb-2">
+            {documentData.title ? documentData.title : ""}
+          </div>
 
           <div>
             <Link to={"/" + identification} className="info_name"
@@ -221,16 +240,24 @@ class ContentViewFullScreen extends Component {
             {!documentData.isPublic &&
             <PublishModalContainer documentData={documentData}/>}
 
-            {accountId === Common.getMySub() && documentData &&
-            <EditDocumentModalContainer documentData={documentData}/>}
+
+            {documentData.isPublic && (accountId === Common.getMySub() && documentData) &&
+            <RegBlockchainBtnContainer documentData={documentData}/>
+            }
+
+            {documentData.isPublic &&
+            <VoteDocumentModalContainer documentData={documentData}/>
+            }
 
             <CopyModalContainer documentData={documentData}/>
 
-            {documentData.isDownload &&
+            {documentData.isDownload && accountId !== Common.getMySub() &&
             <Tooltip title={psString("tooltip-download")} placement="bottom">
-              <div className={"viewer-btn mb-1 " + (downloadLoading ? "btn-disabled" : "") } onClick={() => this.handleDownloadContent()}>
+              <div className={"viewer-btn mb-1 " + (downloadLoading ? "btn-disabled" : "")}
+                   onClick={() => this.handleDownloadContent()}>
                 <i className="material-icons">save_alt</i>{psString("download-btn")}
-                {downloadLoading && <div className="download-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
+                {downloadLoading &&
+                <div className="download-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
               </div>
             </Tooltip>
             }
@@ -250,18 +277,6 @@ class ContentViewFullScreen extends Component {
                 </div>
               </Link>
             </Tooltip>
-            }
-
-            {documentData.isPublic && (accountId === Common.getMySub() && documentData) &&
-            <RegBlockchainBtnContainer documentData={documentData}/>
-            }
-
-            {documentData.isPublic &&
-            <VoteDocumentModalContainer documentData={documentData}/>
-            }
-
-            {!documentData.isPublic && (accountId === Common.getMySub() && documentData) &&
-            <DeleteDocumentModalContainer documentData={documentData}/>
             }
           </div>
 

@@ -71,7 +71,6 @@ class Main extends Component {
   // 내 정보 GET
   setMyInfo = () => {
     const { getMyInfo, setMyInfo } = this.props;
-
     if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
       let myInfo = MainRepository.Account.getMyInfo();
       MainRepository.Account.getAccountInfo(myInfo.sub).then(result => {

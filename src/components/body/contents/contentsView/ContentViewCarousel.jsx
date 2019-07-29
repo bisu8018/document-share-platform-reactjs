@@ -5,7 +5,6 @@ import Common from "../../../../config/common";
 import MainRepository from "../../../../redux/MainRepository";
 import EmailModalContainer from "../../../../container/common/modal/EmailModalContainer";
 import UserInfo from "../../../../redux/model/UserInfo";
-import Tooltip from "@material-ui/core/Tooltip";
 import { psString } from "../../../../config/localization";
 
 class ContentViewCarousel extends React.Component {
@@ -111,26 +110,20 @@ class ContentViewCarousel extends React.Component {
     const { emailFlagTemp, readPage, emailFlag } = this.state;
 
     if ((page === null || page === undefined) && target.forceTracking) {
-      return this.setState({ emailFlag: false }, () => {
-        handleEmailFlag(false);
-      });
+      this.setState({ emailFlag: false }, () => handleEmailFlag(false));
     }
 
     // 같은 페이지 일 경우
     if (page === readPage) return;
 
     // url 페이지 파라미터 값 변경
-    this.setState({ readPage: page }, () => {
-      this.handleUrl();
-    });
+    this.setState({ readPage: page }, () => this.handleUrl());
 
     // 트래킹 / 강제 트래킹 분기처리
     if (target.useTracking) {
       if (target.forceTracking && !await this.handleFlag(page)) return false;
       else if (!target.forceTracking && page > 0 && !getMyInfo.email && !emailFlagTemp && !getTempEmail) {
-        this.setState({ emailFlag: true }, () => {
-          handleEmailFlag(true);
-        });
+        this.setState({ emailFlag: true }, () => handleEmailFlag(true));
       }
 
       return this.postTracking(page, "view").then(res => {
@@ -145,10 +138,9 @@ class ContentViewCarousel extends React.Component {
           if (emailFlag) this.setState({ emailFlag: false });
         }
       });
-    } else {
-      // 오직 뷰 카운트만을 위한 트랙킹 기능
-      return this.postTracking(page, "none").then(() => {});
-    }
+    } else return this.postTracking(page, "none").then(() => {
+    });    // 오직 뷰 카운트만을 위한 트랙킹 기능
+
   };
 
 
@@ -173,7 +165,7 @@ class ContentViewCarousel extends React.Component {
 
 
   // see also 통한 페이지 전환 시, readPage 값 0으로 초기화
-  handlePageChanged = async () => {
+  handlePageChanged = () => {
     const { pageChangedFlag } = this.state;
     const { target } = this.props;
 
@@ -190,9 +182,7 @@ class ContentViewCarousel extends React.Component {
 
 
   // 이메일 비강제 입력 모달 종료 시 플래그 조정
-  handleUseTrackingFlag = () => {
-    this.setState({ emailFlagTemp: true });
-  };
+  handleUseTrackingFlag = () => this.setState({ emailFlagTemp: true });
 
 
   // 이메일 강제 입력 모달 종료 시 플래그 조정
@@ -239,20 +229,11 @@ class ContentViewCarousel extends React.Component {
     const { emailFlag } = this.state;
     const arr = [target.totalPages];
 
-    for (let i = 0; i < target.totalPages; i++) {
-      arr[i] = Common.getThumbnail(target.documentId, 2048, i + 1);
-    }
+    for (let i = 0; i < target.totalPages; i++) arr[i] = Common.getThumbnail(target.documentId, 2048, i + 1);
 
     return (
       <div className="card card-raised">
         <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel" data-interval="3000">
-          {!target.isPublic &&
-          <Tooltip title={psString("viewer-page-carousel-private")} placement="bottom">
-            <div className="carousel-lock">
-              <i className="material-icons">lock</i>
-            </div>
-          </Tooltip>
-          }
           <div className="screen-option-bar">
             <i className="material-icons" onClick={this.handleOptionBarClickEvent.bind(this)}>more_vert</i>
             <div className={"screen-option" + (this.state.slideOptionFlag ? "" : " d-none")}>
@@ -279,14 +260,9 @@ class ContentViewCarousel extends React.Component {
             {arr.length > 0 ? arr.map((addr, idx) => (
               <img key={idx} title={target.title} src={addr} alt={documentText[idx]} data-small="" data-normal=""
                    data-full=""
-                   className={"landscape-show " + (target.forceTracking && emailFlag && !MainRepository.Account.isAuthenticated() ? "img-cloudy" : "")}/>
+                   className={(target.forceTracking && emailFlag && !MainRepository.Account.isAuthenticated() ? "img-cloudy" : "")}/>
             )) : "no data"}
           </Carousel>
-        </div>
-
-
-        <div className="landscape-warning-message">
-          This viewer is only viewable in landscape mode.
         </div>
 
 
