@@ -137,7 +137,7 @@ class ContentViewFullScreen extends Component {
   handleDownloadContent = () => {
     const { getMyInfo, documentData, setAlertCode } = this.props;
 
-    if (!documentData) return console.log("getting document meta information!");
+    if (!documentData) return setAlertCode(2091);
     if (!MainRepository.Account.isAuthenticated() && !getMyInfo.email) return setAlertCode(2003);
 
     const accountId = documentData.accountId,

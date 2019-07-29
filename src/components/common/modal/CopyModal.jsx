@@ -101,10 +101,7 @@ class CopyModal extends React.Component {
                <i className="material-icons">share</i> {psString("share-modal-btn")}
              </div>
              :
-             <div className="share-btn-wrapper  mr-3 ml-1">
-               <i className="material-icons share-btn"
-                  onClick={() => this.handleClickOpen("classicModal")}>share</i>
-             </div>
+             <div className="option-table-btn" onClick={() => this.handleClickOpen("classicModal")}>{psString("share-modal-btn")}</div>
            }
               </Tooltip>
 

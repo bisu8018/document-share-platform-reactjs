@@ -8,7 +8,7 @@ import NotFoundPage from "../../../common/NotFoundPage";
 import CuratorAnalyticsTabContainer from "../../../../container/body/profile/curator/CuratorAnalyticsTabContainer";
 import CreatorSummaryContainer from "../../../../container/body/profile/creator/CreatorSummaryContainer";
 import CuratorVoteTabContainer from "../../../../container/body/profile/curator/CuratorVoteTabContainer";
-import CuratorUploadTabContainer from "../../../../container/body/profile/curator/CuratorUploadTabContainer";
+import CreatorUploadTabContainer from "../../../../container/body/profile/creator/CreatorUploadTabContainer";
 import { psString } from "../../../../config/localization";
 import { Helmet } from "react-helmet";
 import log from "../../../../config/log";
@@ -100,7 +100,7 @@ class Creator extends React.Component {
             </TabList>
 
             <TabPanel>
-              <CuratorUploadTabContainer
+              <CreatorUploadTabContainer
                 userInfo={userInfo}
                 getDocumentList={this.getUploadDocumentList.bind(this)}
               />

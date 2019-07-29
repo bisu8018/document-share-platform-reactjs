@@ -82,7 +82,7 @@ class Header extends React.Component {
   clickEventListener = () => {
     const { setDropdownShow, getMyInfo } = this.props;
 
-    document.addEventListener("click", e => {
+      document.addEventListener("click", e => {
         // clicked element
         let targetElement = e.target;
 

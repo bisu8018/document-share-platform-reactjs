@@ -507,6 +507,10 @@ const strings = new Map([
     KOR: "문서삭제 실패",
     ENG: "Delete failed"
   }],
+  ["alert-2091", {
+    KOR: "다운로드 실패",
+    ENG: "Download failed"
+  }],
 
   // Common
   ["common-modal-cancel", {

@@ -1,9 +1,9 @@
 import { connect } from "react-redux";
-import CuratorUploadTab from "../../../../components/body/profile/curator/CuratorUploadTab";
+import CreatorUploadTab from "../../../../components/body/profile/curator/CreatorUploadTab";
 
 export default connect(
   state => ({
     getMyInfo: state.main.myInfo,
   }),
   dispatch => ({})
-)(CuratorUploadTab);
+)(CreatorUploadTab);

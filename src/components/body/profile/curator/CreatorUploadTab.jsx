@@ -7,8 +7,9 @@ import NoDataIcon from "../../../common/NoDataIcon";
 import CreatorTabItemContainer from "../../../../container/body/profile/creator/CreatorTabItemContainer";
 import Common from "../../../../config/common";
 import { psString } from "../../../../config/localization";
+import log from "../../../../config/log";
 
-class CuratorUploadTab extends React.Component {
+class CreatorUploadTab extends React.Component {
   state = {
     resultList: [],
     pageNo: null,
@@ -19,11 +20,19 @@ class CuratorUploadTab extends React.Component {
   };
 
 
-  //URL 파라미터 유저 identificatin GET
+  // 초기화
+  init = () => {
+    log.CreatorUploadTab.init();
+    this.fetchDocuments();
+  };
+
+
+  //URL 파라미터 유저 identification GET
   getParam = () => {
     let pathArr = window.location.pathname.split("/");
     return decodeURI(pathArr[1]);
   };
+
 
   // 무한 스크롤 데이터 추가 GET
   fetchMoreData = () => {
@@ -52,7 +61,7 @@ class CuratorUploadTab extends React.Component {
       MainRepository.Account.getDocuments(_params).then(res => {
         this.handleData(res);
         this.setState({ loading: false });    // 로딩 off
-      },err => {
+      }, err => {
         console.error(err);
         setTimeout(() => {
           this.fetchDocuments(params);
@@ -62,7 +71,7 @@ class CuratorUploadTab extends React.Component {
       MainRepository.Document.getDocumentList(_params).then(res => {
         this.handleData(res);
         this.setState({ loading: false });    // 로딩 off
-      },err => {
+      }, err => {
         console.error("Curator upload document GET ERROR", err);
         setTimeout(() => {
           this.fetchDocuments(params);
@@ -101,8 +110,16 @@ class CuratorUploadTab extends React.Component {
   };
 
 
+  // 클릭 이벤트 리스너 종료
+  handleResizeEnd = (e) => {
+    log.ContentMain.handleResizeEnd();
+    window.removeEventListener("click", () => {
+    });
+  };
+
+
   componentWillMount() {
-    this.fetchDocuments();
+    this.init();
   }
 
 
@@ -126,11 +143,13 @@ class CuratorUploadTab extends React.Component {
             hasMore={!isEndPage}
             loader={<div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>}>
             {resultList.length > 0 && resultList.map((result, idx) => (
-              <CreatorTabItemContainer document={result} userInfo={userInfo} key={idx}
+              <CreatorTabItemContainer document={result} userInfo={userInfo} idx={idx} key={idx}
                                        totalViewCountInfo={totalViewCountInfo}/>
             ))}</InfiniteScroll>
           :
-          !loading && <NoDataIcon className="no-data">No data</NoDataIcon>
+          loading ?
+            <div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>
+            :<NoDataIcon className="no-data">No data</NoDataIcon>
         }
       </div>
 
@@ -138,4 +157,4 @@ class CuratorUploadTab extends React.Component {
   }
 }
 
-export default CuratorUploadTab;
+export default CreatorUploadTab;

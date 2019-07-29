@@ -138,6 +138,13 @@ class Alert extends React.PureComponent {
         break;
 
 
+      //문서 관련 메세지 2091~
+      case 2091 :
+        status = "error";
+        msg = psString("alert-2091");   // 다운로드 싪패
+        break;
+
+
 
       //=============================================
       //서버 단 상태코드

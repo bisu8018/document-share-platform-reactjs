@@ -1,11 +1,17 @@
 import { connect } from "react-redux";
 import CreatorTabItem from "../../../../components/body/profile/creator/CreatorTabItem";
+import { setAlertCode } from "../../../../redux/reducer/main";
 
 export default connect(
   state => ({
     getWeb3Apis: state.main.web3Apis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
-    getIsMobile: state.main.isMobile
+    getIsMobile: state.main.isMobile,
+    getMyInfo: state.main.myInfo,
   }),
-  dispatch => ({})
+  dispatch => ({
+    setAlertCode: (alertCode: number) => {
+      dispatch(setAlertCode(alertCode));
+    },
+  })
 )(CreatorTabItem);

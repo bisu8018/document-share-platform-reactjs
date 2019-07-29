@@ -190,5 +190,14 @@ export default ({
         else console.log("Balance SETTING : %c FAILED", failed, err);
       } // else "Do something!"
     }
+  },
+
+  // CreatorUploadTab.jsx
+  CreatorUploadTab: {
+    init: err => {
+      if (envFlag) {
+        if (!err) console.log("%cCreatorUploadTab.jsx", component);
+      } // else "Do something!"
+    },
   }
 });
