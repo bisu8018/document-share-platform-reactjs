@@ -114,7 +114,7 @@ class CreatorSummary extends React.Component {
         MainRepository.Account.updateProfileImage(url, () => this.setState({ profileImage: url }));
       }, () => document.getElementById("imgFile").value = null);
 
-    }, err => {
+    }).catch(err => {
       console.error(err);
       document.getElementById("imgFile").value = null;
     });

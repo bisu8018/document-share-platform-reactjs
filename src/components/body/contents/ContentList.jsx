@@ -76,10 +76,9 @@ class ContentList extends Component {
         else this.setState({ resultList: _resultList, pageNo: pageNo, tagSearchFlag: false });
       } else this.setState({ isEndPage: true });
 
-      if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) {
-        this.setState({ totalViewCountInfo: res.totalViewCountInfo });
-      }
-    }, err => {
+      if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) this.setState({ totalViewCountInfo: res.totalViewCountInfo });
+
+    }).then(err => {
       this.setState({ loading: false });
       log.ContentList.fetchDocuments(err);
       this.setTimeout = setTimeout(() => {

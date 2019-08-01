@@ -115,7 +115,7 @@ class ContentViewFullScreen extends Component {
       log.ContentViewFullscreen.getReward();
       let reward = Common.toEther(res);
       this.setState({ reward: reward });
-    }, err => log.ContentViewFullscreen.getReward(err));
+    }).catch( err => log.ContentViewFullscreen.getReward(err));
   };
 
 
@@ -240,13 +240,12 @@ class ContentViewFullScreen extends Component {
             {!documentData.isPublic &&
             <PublishModalContainer documentData={documentData}/>}
 
+            {documentData.isPublic &&
+            <VoteDocumentModalContainer documentData={documentData}/>
+            }
 
             {documentData.isPublic && (accountId === Common.getMySub() && documentData) &&
             <RegBlockchainBtnContainer documentData={documentData}/>
-            }
-
-            {documentData.isPublic &&
-            <VoteDocumentModalContainer documentData={documentData}/>
             }
 
             <CopyModalContainer documentData={documentData}/>
@@ -257,7 +256,7 @@ class ContentViewFullScreen extends Component {
                    onClick={() => this.handleDownloadContent()}>
                 <i className="material-icons">save_alt</i>{psString("download-btn")}
                 {downloadLoading &&
-                <div className="download-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
+                <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
               </div>
             </Tooltip>
             }

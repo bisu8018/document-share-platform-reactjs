@@ -7,9 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import { psString } from "../../../config/localization";
 
-function Transition(props) {
-  return <Slide direction="down" {...props} />;
-}
+const Transition = props => <Slide direction="down" {...props} />;
 
 class DollarLearnMoreModal extends React.PureComponent {
 

@@ -1,19 +1,19 @@
 import React from "react";
 import AutoSuggest from "react-autosuggest";
 import TagsInput from "react-tagsinput";
-
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import history from "apis/history/history";
 import MainRepository from "../../../redux/MainRepository";
 import { Circle } from "better-react-spinkit";
 import { psString } from "../../../config/localization";
+import common from "../../../config/common";
 
-function Transition(props) {
-  return <Slide direction="down" {...props} />;
-}
+
+const Transition = props => <Slide direction="down" {...props} />;
 
 class UploadDocumentModal extends React.Component {
 
@@ -46,17 +46,30 @@ class UploadDocumentModal extends React.Component {
       sa: false,   //CC License sa 사용유무
       moreOptions: false,    // more options show / hide
       username: null,
-      desc: ""
+      desc: "",
+      privateFull: false    // 프라이빗 문서 5개 체크
     };
   }
 
+
+  // 프라이빗 문서 보유수 체크
+  checkPrivateDoc = (res) => {
+    if (res.privateDocumentCount >= 5) {     // 컨버터 타이밍으로 인해 반환 되는 값이 최신화가 안돼있어 + 1 해줘야한다.
+      this.setState({ privateFull: true }, () => {
+        this.handleClickOpen("classicModalSub"); //두번째 모달 열기
+      });
+    } else this.handleClickOpen("classicModalSub"); //두번째 모달 열기
+  };
+
+
   // 문서 등록 API
   registerDocument = () => {
-    const { getMyInfo, setAlertCode } = this.props;
+    const { getMyInfo, setAlertCode, setMyInfo } = this.props;
     const { title, fileInfo, tags, desc, useTracking, forceTracking, allowDownload } = this.state;
 
-    let ethAccount = getMyInfo.ethAccount;
-    let userInfo = MainRepository.Account.getMyInfo();
+    let ethAccount = getMyInfo.ethAccount,
+      userInfo = MainRepository.Account.getMyInfo();
+
     return new Promise((resolve, reject) => {
       MainRepository.Document.registerDocument({
         fileInfo: fileInfo,
@@ -70,14 +83,15 @@ class UploadDocumentModal extends React.Component {
         isDownload: allowDownload,
         cc: this.getCcValue()
       }, this.handleProgress, result => {
-        if(result.code && result.code === "EXCEEDEDLIMIT") {
+        if (result.code && result.code === "EXCEEDEDLIMIT") {
+          let tmpMyInfo = getMyInfo;
+          tmpMyInfo.privateDocumentCount = 5;
+          setMyInfo(tmpMyInfo);
           setAlertCode(2072);
           reject();
         }
         resolve(result);
-      }, err => {
-        reject(err);
-      });
+      }, err => reject(err));
     });
   };
 
@@ -139,30 +153,37 @@ class UploadDocumentModal extends React.Component {
   };
 
 
-  // 파일 업로드 관리
-  handleFileUpload = () => {
-    document.getElementById("docFile").click();
+  // 진행도 모달 닫기
+  handleProcessModalClose = () => {
+    document.getElementById("progressModal").style.display = "none"; //진행도 모달 닫기
+    document.getElementById("progressWrapper").style.display = "none"; //진행도 모달 wrapper 닫기
   };
 
 
-  //업로드 함수
-  handleUpload = async () => {
-    const { setAlertCode } = this.props;
-
+  // 진행도 모달 열기
+  handleProcessModalOpen = () => {
     document.getElementById("progressModal").style.display = "block";   //진행도 모달 열기
     document.getElementById("progressWrapper").style.display = "block";   //진행도 wrapper 모달 열기
+  };
+
+
+  // 파일 업로드 관리
+  handleFileUpload = () => document.getElementById("docFile").click();
+
+
+  //업로드 함수
+  handleUpload = () => {
+    const { setAlertCode } = this.props;
+
+    this.handleProcessModalOpen();
 
     // 문서 등록 API
     this.registerDocument().then(res => {
-      document.getElementById("progressModal").style.display = "none"; //진행도 모달 닫기
-      document.getElementById("progressWrapper").style.display = "none"; //진행도 모달 wrapper 닫기
-
+      this.handleProcessModalClose();
       this.handleClose("classicModal"); //모달 닫기
-      this.handleClickOpen("classicModalSub"); //두번째 모달 열기
-
-    },err => {
+      this.checkPrivateDoc(res);
+    }).catch(err => {
       console.error(err);
-
       setAlertCode(2071);
       this.handleClose("classicModal"); //모달 닫기
       this.handleClose("classicModalSub"); //모달2 닫기
@@ -208,32 +229,31 @@ class UploadDocumentModal extends React.Component {
 
 
   // 모달 open 상태 관리
-  handleClickOpen = (modal) => {
+  handleClickOpen = modal => {
     const { getMyInfo } = this.props;
-    let ethAccount = getMyInfo.ethAccount;
 
-    if (modal === "classicModal") {   // 모달 1
-      let username = MainRepository.Account.getMyInfo().username;
-      let _username = username ? username : ethAccount;
-      this.setState({ username: _username });
-    }
-    this.handleOpen(modal);
+    let username = getMyInfo.username;
+    let _username = username ? username : getMyInfo.ethAccount;
+    this.setState({ username: _username }, () => {
+      this.handleOpen(modal);
+    });
   };
 
 
   // 모달 open 관리
-  handleOpen = (modal) => {
+  handleOpen = modal => {
     if (!MainRepository.Account.isAuthenticated()) return MainRepository.Account.login();
     else {
       const x = [];
       x[modal] = true;
       this.setState(x);
+      this.props.setAlertCode(2074);
     }
   };
 
 
   // 모달 종료 관리
-  handleClose = (modal) => {
+  handleClose = modal => {
     const x = [];
     x[modal] = false;
     this.setState(x);
@@ -243,25 +263,15 @@ class UploadDocumentModal extends React.Component {
 
 
   // 제목 변경 관리
-  handleTitleChange = e => {
-    this.setState({ title: e.target.value }, () => {
-      this.validateTitle();
-    });
-  };
+  handleTitleChange = e => this.setState({ title: e.target.value }, () => this.validateTitle());
 
 
   // 태그 변경 관리
-  handleTagChange = (tags) => {
-    this.setState({ tags: tags }, () => {
-      this.validateTag();
-    });
-  };
+  handleTagChange = tags => this.setState({ tags: tags }, () => this.validateTag());
 
 
   // 설명 수정 관리
-  handleDescChange = (e) => {
-    this.setState({ desc: e.target.value });
-  };
+  handleDescChange = e => this.setState({ desc: e.target.value });
 
 
   // 유저 트래킹 체크박스
@@ -342,6 +352,14 @@ class UploadDocumentModal extends React.Component {
   };
 
 
+  // 링크 이동 관리
+  handleLinkBtn = (modal) => {
+    this.handleClose(modal);
+    let username = this.props.getMyInfo.username;
+    history.push("/" + username);
+  };
+
+
   //제목 유효성 체크
   validateTitle = () => {
     const { title } = this.state;
@@ -416,7 +434,7 @@ class UploadDocumentModal extends React.Component {
 
 
   render() {
-    const { classicModal, classicModalSub, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload } = this.state;
+    const { privateFull, classicModal, classicModalSub, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload, username } = this.state;
     const { type } = this.props;
 
     return (
@@ -600,11 +618,14 @@ class UploadDocumentModal extends React.Component {
           </DialogTitle>
 
           <DialogContent id="classic-modal-slide-description ">
-            <div className="">{psString("upload-doc-desc-2")}</div>
+            <div className="">{psString("upload-doc-desc-" + (privateFull ? "3" : "2"))}</div>
           </DialogContent>
 
           <DialogActions className="modal-footer">
             <div onClick={() => this.handleClose()} className="ok-btn">{psString("common-modal-confirm")}</div>
+            {username !== common.getPath() &&
+            <div onClick={() => this.handleLinkBtn()} className="ok-btn">{psString("private-doc-modal-btn")}</div>
+            }
           </DialogActions>
         </Dialog>
 

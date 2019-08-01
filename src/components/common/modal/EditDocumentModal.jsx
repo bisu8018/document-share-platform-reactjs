@@ -12,9 +12,7 @@ import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
 
-function Transition(props) {
-  return <Slide direction="down" {...props} />;
-}
+const Transition = props => <Slide direction="down" {...props} />;
 
 class EditDocumentModal extends React.Component {
 

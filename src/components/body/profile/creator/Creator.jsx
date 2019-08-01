@@ -40,10 +40,12 @@ class Creator extends React.Component {
 
   // 프로필 정보 GET
   getProfileInfo = (params: any) => {
-    MainRepository.Account.getProfileInfo(params).then(result =>
-        this.setState({ userInfo: result, errMessage: null }, () => log.Creator.getProfileInfo(null, result))
-      , err =>
-        this.setState({ userInfo: null, errMessage: err }, () => log.Creator.getProfileInfo(err)));
+    MainRepository.Account.getProfileInfo(params)
+      .then(result => this.setState({
+        userInfo: result,
+        errMessage: null
+      }, () => log.Creator.getProfileInfo(null, result)))
+      .catch(err => this.setState({ userInfo: null, errMessage: err }, () => log.Creator.getProfileInfo(err)));
   };
 
 
@@ -70,58 +72,58 @@ class Creator extends React.Component {
     let param = this.getParam();
 
     return (
-        <section className="mb-5 u__center container">
-          <Helmet>
-            {userInfo ? <title>{param + " | Polaris Share"}</title> : <title>{"Polaris Share"}</title>}
-          </Helmet>
+      <section className="mb-5 u__center container">
+        <Helmet>
+          {userInfo ? <title>{param + " | Polaris Share"}</title> : <title>{"Polaris Share"}</title>}
+        </Helmet>
 
-          {userInfo &&
-          <CreatorSummaryContainer
-            uploadDocumentList={uploadDocumentList.resultList}
-            uploadTotalViewCountInfo={uploadDocumentList.totalViewCountInfo}
-            voteDocumentList={voteDocumentList.resultList}
-            voteTotalViewCountInfo={voteDocumentList.totalViewCountInfo}
-            latestRewardVoteList={voteDocumentList.latestRewardVoteList}
-            userInfo={userInfo}/>
-          }
+        {userInfo &&
+        <CreatorSummaryContainer
+          uploadDocumentList={uploadDocumentList.resultList}
+          uploadTotalViewCountInfo={uploadDocumentList.totalViewCountInfo}
+          voteDocumentList={voteDocumentList.resultList}
+          voteTotalViewCountInfo={voteDocumentList.totalViewCountInfo}
+          latestRewardVoteList={voteDocumentList.latestRewardVoteList}
+          userInfo={userInfo}/>
+        }
 
-          {!userInfo && !errMessage &&
-          <div className="spinner"><ThreeBounce name="ball-pulse-sync" color="#3681fe"/></div>}
+        {!userInfo && !errMessage &&
+        <div className="spinner"><ThreeBounce name="ball-pulse-sync" color="#3681fe"/></div>}
 
-          {errMessage && <NotFoundPage errMessage={errMessage}/>}
+        {errMessage && <NotFoundPage errMessage={errMessage}/>}
 
-          {userInfo &&
-          <Tabs forceRenderTabPanel={true}>
-            <TabList>
-              <Tab>{psString("profile-uploaded")}</Tab>
-              <Tab>{psString("profile-voted")}</Tab>
-              {(param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) &&
-              <Tab>{psString("profile-analytics")}</Tab>}
-            </TabList>
-
-            <TabPanel>
-              <CreatorUploadTabContainer
-                userInfo={userInfo}
-                getDocumentList={this.getUploadDocumentList.bind(this)}
-              />
-            </TabPanel>
-
-            <TabPanel>
-              <CuratorVoteTabContainer
-                userInfo={userInfo}
-                getDocumentList={this.getVoteDocumentList.bind(this)}
-              />
-            </TabPanel>
-
+        {userInfo &&
+        <Tabs forceRenderTabPanel={true}>
+          <TabList>
+            <Tab>{psString("profile-uploaded")}</Tab>
+            <Tab>{psString("profile-voted")}</Tab>
             {(param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) &&
-            <TabPanel>
-              <CuratorAnalyticsTabContainer userInfo={userInfo}/>
-            </TabPanel>
-            }
+            <Tab>{psString("profile-analytics")}</Tab>}
+          </TabList>
 
-          </Tabs>
+          <TabPanel>
+            <CreatorUploadTabContainer
+              userInfo={userInfo}
+              getDocumentList={this.getUploadDocumentList.bind(this)}
+            />
+          </TabPanel>
+
+          <TabPanel>
+            <CuratorVoteTabContainer
+              userInfo={userInfo}
+              getDocumentList={this.getVoteDocumentList.bind(this)}
+            />
+          </TabPanel>
+
+          {(param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) &&
+          <TabPanel>
+            <CuratorAnalyticsTabContainer userInfo={userInfo}/>
+          </TabPanel>
           }
-        </section>
+
+        </Tabs>
+        }
+      </section>
 
     );
   }

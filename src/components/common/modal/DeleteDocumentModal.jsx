@@ -6,11 +6,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import { psString } from "../../../config/localization";
 import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../../redux/MainRepository";
+import { FadingCircle } from "better-react-spinkit";
 
 
-function Transition(props) {
-  return <Slide direction="down" {...props} />;
-}
+const Transition = props => <Slide direction="down" {...props} />;
 
 
 class DeleteDocumentModal extends React.Component {
@@ -19,7 +18,8 @@ class DeleteDocumentModal extends React.Component {
     super(props);
 
     this.state = {
-      classicModal: false
+      classicModal: false,
+      loading: false
     };
   }
 
@@ -27,7 +27,8 @@ class DeleteDocumentModal extends React.Component {
   // state 제거
   clearState = () => {
     this.setState({
-      classicModal: false
+      classicModal: false,
+      loading: false
     });
   };
 
@@ -52,21 +53,17 @@ class DeleteDocumentModal extends React.Component {
   // delete 관리
   handleDelete = async () => {
     const { setAlertCode, documentData } = this.props;
-    let data = {
-      isDeleted: true,
-      documentId: documentData.documentId
-    };
-    MainRepository.Document.deleteDocument(data).then(() => {
+
+    this.setState({ loading: true });
+    MainRepository.Document.deleteDocument({ isDeleted: true, documentId: documentData.documentId }).then(() => {
       this.handleClose("classicModal");
-      //document.location.reload();
-    }, () => {
-      setAlertCode(2073);
-    });
+      document.location.reload();
+    }).catch(() => this.setState({ loading: false }, () => setAlertCode(2073)));
   };
 
 
   render() {
-    const { classicModal } = this.state;
+    const { classicModal, loading } = this.state;
 
     return (
       <div>
@@ -102,6 +99,8 @@ class DeleteDocumentModal extends React.Component {
               {psString("common-modal-cancel")}
             </div>
             <div onClick={() => this.handleDelete()} className={"ok-btn "}>
+              {loading &&
+              <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
               {psString("common-modal-delete")}
             </div>
           </DialogActions>

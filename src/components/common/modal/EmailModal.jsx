@@ -10,9 +10,7 @@ import TrackingApis from "../../../apis/TrackingApis";
 import { psString } from "../../../config/localization";
 
 
-function Transition(props) {
-  return <Slide direction="down" {...props} />;
-}
+const Transition = props => <Slide direction="down" {...props} />;
 
 class EmailModal extends React.Component {
 

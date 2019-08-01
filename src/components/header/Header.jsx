@@ -9,6 +9,7 @@ import AdsContainer from "../../container/ads/AdsContainer";
 import SearchBarContainer from "../../container/header/SearchBarContainer";
 import { psGetLang, psSetLang, psString } from "../../config/localization";
 import log from "../../config/log";
+import PrivateDocumentCountModal from "../common/modal/PrivateDocumentCountModal";
 
 //import Bounty from "./Bounty";
 
@@ -33,7 +34,7 @@ class Header extends React.Component {
   // init
   init = () => {
     log.Header.init();
-    this.setState({ prevScrollPos: window.pageYOffset}, () => {
+    this.setState({ prevScrollPos: window.pageYOffset }, () => {
       this.clickEventListener();
     });
   };
@@ -82,12 +83,12 @@ class Header extends React.Component {
   clickEventListener = () => {
     const { setDropdownShow, getMyInfo } = this.props;
 
-      document.addEventListener("click", e => {
+    document.addEventListener("click", e => {
         // clicked element
         let targetElement = e.target;
 
         // 광고 표시 관리
-        if(Common.getPath() !== "") this.setState({ adShow: false });
+        if (Common.getPath() !== "") this.setState({ adShow: false });
 
         // 프로필 카드
         const profileCard = document.getElementById("profileCard");
@@ -101,7 +102,7 @@ class Header extends React.Component {
         // 뷰어페이지 옵션창
         const viewerOptionBtn = document.getElementById("viewer-option-btn");
         const viewerOptionTable = document.getElementById("viewer-option-table");
-        if (viewerOptionBtn &&  !viewerOptionBtn.contains(targetElement)) viewerOptionTable.classList.add("d-none");
+        if (viewerOptionBtn && !viewerOptionBtn.contains(targetElement)) viewerOptionTable.classList.add("d-none");
 
         // 프로필 카드 프로필 버튼
         const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
@@ -269,7 +270,11 @@ class Header extends React.Component {
               </div>
               <div className="mobile-header-search-btn d-inline-block d-sm-none" onClick={() => this.showSearchBar()}/>
               {/*<Bounty/>*/}
-              <UploadDocumentModalContainer {...this.props} />
+              {getMyInfo.privateDocumentCount >= 5 ?
+                <PrivateDocumentCountModal {...this.props} />
+                :
+                <UploadDocumentModalContainer {...this.props} />
+              }
 
 
               {(MainRepository.Account.isAuthenticated() || getTempEmail) &&

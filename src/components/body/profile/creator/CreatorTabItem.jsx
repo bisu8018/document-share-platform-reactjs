@@ -68,18 +68,19 @@ class CreatorTabItem extends React.Component {
   //문서 다운로드
   getContentDownload = (accountId, documentId, documentName) => {
 
-    MainRepository.Document.getDocumentDownloadUrl({ documentId: documentId }).then(result => {
-      const a = document.createElement("a");
+    MainRepository.Document.getDocumentDownloadUrl({ documentId: documentId })
+      .then(result => {
+        const a = document.createElement("a");
 
-      a.style.display = "none";
-      document.body.appendChild(a);
-      a.href = result.downloadUrl;
-      a.setAttribute("download", documentName);
-      a.click();
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.href = result.downloadUrl;
+        a.setAttribute("download", documentName);
+        a.click();
 
-      window.URL.revokeObjectURL(a.href);
-      document.body.removeChild(a);
-    }, err => console.error(err));
+        window.URL.revokeObjectURL(a.href);
+        document.body.removeChild(a);
+      }).catch(err => console.error(err));
   };
 
 
@@ -99,9 +100,9 @@ class CreatorTabItem extends React.Component {
 
 
   // 설정창 관리
-  handleSetting = () =>{
+  handleSetting = () => {
     document.getElementById("viewer-option-table-" + this.props.idx).classList.remove("d-none");
-  } ;
+  };
 
 
   // 클릭 이벤트 리스너 종료
@@ -160,7 +161,8 @@ class CreatorTabItem extends React.Component {
             <i className="material-icons" onClick={() => this.handleSetting()}>more_vert</i>
             <div className="option-table d-none" id={"viewer-option-table-" + idx}>
               {document.state === "CONVERT_COMPLETE" && <CopyModalContainer documentData={document} type="onlyIcon"/>}
-              <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>Download</div>
+              {document.state === "CONVERT_COMPLETE" && document.isDownload &&
+              <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>Download</div>}
               {((Common.dateAgo(document.created) > 0 && document.state && document.state !== "CONVERT_COMPLETE") || document.isPublic === false) &&
               <DeleteDocumentModalContainer documentData={document} type="onlyIcon"/>}
             </div>
@@ -210,7 +212,7 @@ class CreatorTabItem extends React.Component {
               <CreatorClaimContainer {...this.props} document={document}/>
             </div>
 
-            {document.isPublic === false &&
+            {document.isPublic === false && document.state === "CONVERT_COMPLETE" &&
             <div className={(getIsMobile ? "mt-2" : "float-right")}>
               <PublishModalContainer documentData={document} type={"tabItem"}/>
             </div>

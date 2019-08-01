@@ -7,12 +7,10 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { psString } from "../../../config/localization";
 import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../../redux/MainRepository";
+import { FadingCircle } from "better-react-spinkit";
 
 
-function Transition(props) {
-  return <Slide direction="down" {...props} />;
-}
-
+const Transition = props => <Slide direction="down" {...props} />;
 
 class PublishModal extends React.Component {
 
@@ -20,7 +18,9 @@ class PublishModal extends React.Component {
     super(props);
 
     this.state = {
-      classicModal: false
+      classicModal: false,
+      publishLoading: false,
+      registerLoading: false
     };
   }
 
@@ -28,16 +28,30 @@ class PublishModal extends React.Component {
   // state 제거
   clearState = () => {
     this.setState({
-      classicModal: false
+      classicModal: false,
+      registerLoading: false
     });
   };
 
 
+  // 잔액 GET
   getBalance = () => {
     const { getWeb3Apis, getMyInfo } = this.props;
+    return new Promise((resolve) => getWeb3Apis.getBalance(getMyInfo.ethAccount, res => resolve(res)));
+  };
+
+
+  //블록체인 등록
+  registerOnChain = () => {
+    const { documentData, getDrizzle, setAlertCode } = this.props;
+
     return new Promise((resolve) => {
-      getWeb3Apis.getBalance(getMyInfo.ethAccount, res => {
-        resolve(res);
+      this.getBalance().then(res => {
+        if (res && res > 0) getDrizzle.registerDocumentToSmartContract(documentData.documentId).then(resolve());
+        else {
+          setAlertCode(2053);
+          setTimeout(() => resolve(), 3000);
+        }
       });
     });
   };
@@ -60,39 +74,37 @@ class PublishModal extends React.Component {
   };
 
 
-  // publish 관리
-  handlePublish = async () => {
-    const { documentData, getDrizzle, getMyInfo, setAlertCode } = this.props;
-    let ethAccount = getMyInfo.ethAccount;
-    let data = {
-      isPublic: true,
-      documentId: documentData.documentId
-    };
-    MainRepository.Document.publishDocument(data).then(() => {
-      if (getDrizzle && ethAccount) {
-        this.getBalance().then(res => {
-          if (res && res > 0) {
-            getDrizzle.registerDocumentToSmartContract(documentData.documentId);
-            this.handleClose("classicModal");
-            document.location.reload();
-          } else {
-            setAlertCode(2053);
-            setTimeout(() => {
-              this.handleClose("classicModal");
-              document.location.reload();
-            }, 3000);
-          }
-        });
-      } else {
+  // 출판 버튼 클릭 관리
+  handleClickPublish = () => {
+    this.setState({ publishLoading: true }, () => {
+      this.handlePublish().then(() => {
         this.handleClose("classicModal");
         document.location.reload();
-      }
+      });
     });
   };
 
 
+  // 출판/등록 버튼 클릭 관리
+  handleClickRegister = () => {
+    this.setState({ registerLoading: true }, () => {
+      this.handlePublish().then(this.registerOnChain()).then(() => {
+        this.handleClose("classicModal");
+        document.location.reload();
+      });
+    });
+  };
+
+
+  // publish 관리
+  handlePublish = () => MainRepository.Document.publishDocument({
+    isPublic: true,
+    documentId: this.props.documentData.documentId
+  });
+
+
   render() {
-    const { classicModal } = this.state;
+    const { classicModal, publishLoading, registerLoading } = this.state;
     const { getDrizzle, getMyInfo, type, getIsMobile } = this.props;
 
     let ethAccount = getMyInfo.ethAccount;
@@ -101,7 +113,8 @@ class PublishModal extends React.Component {
       <span>
          <Tooltip title={psString("tooltip-publish")} placement="bottom">
            {type === "tabItem" ?
-             <div className={"claim-btn " + (getIsMobile ? " w-100" : "")} onClick={() => this.handleClickOpen("classicModal")}>
+             <div className={"claim-btn " + (getIsMobile ? " w-100" : "")}
+                  onClick={() => this.handleClickOpen("classicModal")}>
                {psString("common-modal-publish")}
              </div>
              :
@@ -131,16 +144,27 @@ class PublishModal extends React.Component {
 
 
           <DialogContent id="classic-modal-slide-description ">
-            <div className="">{psString("publish-modal-desc-" + (!getDrizzle && ethAccount ? "1" : "2"))}</div>
+            <div
+              className="">{psString("publish-modal-desc-" + (!getDrizzle || !(getDrizzle && ethAccount) ? "1" : "2"))}</div>
           </DialogContent>
 
 
           <DialogActions className="modal-footer">
-            <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">
-              {psString("common-modal-cancel")}
-            </div>
-            <div onClick={() => this.handlePublish()} className={"ok-btn "}>
-                {psString(getDrizzle && ethAccount ? "publish-modal-confirm-btn" : "common-modal-confirm")}
+            {!getDrizzle || !(getDrizzle && ethAccount) ?
+              <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">
+                {psString("common-modal-cancel")}</div> :
+              <div onClick={() => this.handleClickPublish()}
+                   className={"ok-btn " + (publishLoading ? "btn-disabled" : "")}>
+                {publishLoading &&
+                <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
+                {psString("publish-modal-publish-btn")}
+              </div>
+            }
+            <div onClick={() => this.handleClickRegister()}
+                 className={"ok-btn " + (registerLoading ? "btn-disabled" : "")}>
+                {registerLoading &&
+                <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
+              {psString(!getDrizzle || !(getDrizzle && ethAccount) ? "publish-modal-publish-btn" : "publish-modal-confirm-btn")}
             </div>
           </DialogActions>
         </Dialog>

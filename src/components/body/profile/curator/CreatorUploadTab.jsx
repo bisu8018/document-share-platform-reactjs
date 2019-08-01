@@ -71,7 +71,7 @@ class CreatorUploadTab extends React.Component {
       MainRepository.Document.getDocumentList(_params).then(res => {
         this.handleData(res);
         this.setState({ loading: false });    // 로딩 off
-      }, err => {
+      }).catch(err => {
         console.error("Curator upload document GET ERROR", err);
         setTimeout(() => {
           this.fetchDocuments(params);

@@ -8,10 +8,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { psString } from "../../../config/localization";
 
 
-function Transition(props) {
-  return <Slide direction="down" {...props} />;
-}
-
+const Transition = props => <Slide direction="down" {...props} />;
 
 class CopyModal extends React.Component {
 
@@ -95,15 +92,18 @@ class CopyModal extends React.Component {
 
     return (
       <span>
-         <Tooltip title={psString("tooltip-copy")} placement="bottom">
-           {type !== "onlyIcon" ?
-             <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
-               <i className="material-icons">share</i> {psString("share-modal-btn")}
-             </div>
-             :
-             <div className="option-table-btn" onClick={() => this.handleClickOpen("classicModal")}>{psString("share-modal-btn")}</div>
-           }
-              </Tooltip>
+        {type !== "onlyIcon" ?
+          <Tooltip title={psString("tooltip-copy")} placement="bottom">
+
+            <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
+              <i className="material-icons">share</i> {psString("share-modal-btn")}
+            </div>
+          </Tooltip>
+          :
+          <div className="option-table-btn"
+               onClick={() => this.handleClickOpen("classicModal")}>{psString("share-modal-btn")}</div>
+        }
+
 
         <Dialog
           className="modal-width"

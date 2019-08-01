@@ -46,29 +46,30 @@ class CuratorAnalyticsTab extends React.Component {
     // 로딩 on
     this.setState({ loading: true });
 
-    MainRepository.Document.getDocumentList(_params).then(res => {
-      if (res && res.resultList) {
-        if (this.state.resultList) {
-          this.setState({
-            resultList: this.state.resultList.concat(res.resultList),
-            pageNo: res.pageNo
-          });
-        } else {
-          this.setState({
-            resultList: res.resultList,
-            pageNo: res.pageNo
-          });
-        }
+    MainRepository.Document.getDocumentList(_params)
+      .then(res => {
+        if (res && res.resultList) {
+          if (this.state.resultList) {
+            this.setState({
+              resultList: this.state.resultList.concat(res.resultList),
+              pageNo: res.pageNo
+            });
+          } else {
+            this.setState({
+              resultList: res.resultList,
+              pageNo: res.pageNo
+            });
+          }
 
-        this.setState({ moreDataFlag: true });
+          this.setState({ moreDataFlag: true });
 
-        if (res.count === 0 || res.resultList.length < 10) {
-          this.setState({ isEndPage: true });
+          if (res.count === 0 || res.resultList.length < 10) {
+            this.setState({ isEndPage: true });
+          }
         }
-      }
-      // 로딩 off
-      this.setState({ loading: false });
-    },err => {
+        // 로딩 off
+        this.setState({ loading: false });
+      }).catch(err => {
       console.error("Creator analytics info GET ERROR", err);
       setTimeout(() => {
         this.fetchDocuments(params);

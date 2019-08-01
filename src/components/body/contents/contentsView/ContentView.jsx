@@ -39,25 +39,26 @@ class ContentView extends React.Component {
   // 문서 정보 GET
   getContentInfo = (seoTitle) => {
     this.setState({ documentTitle: seoTitle, update: true });
-    return MainRepository.Document.getDocument(seoTitle).then(res => {
-      log.ContentView.getContentInfo(null, res);
-      this.setState({
-        documentTitle: res.document.seoTitle,
-        documentData: res.document,
-        totalViewCountInfo: res.totalViewCountInfo,
-        featuredList: common.shuffleArray(res.featuredList),
-        documentText: res.text,
-        author: res.document.author,
-        errMessage: null,
-        update: false
-      }, () => {
-        if (this.getSeoTitle() !== res.document.seoTitle) this.checkUrl(res);
+    return MainRepository.Document.getDocument(seoTitle)
+      .then(res => {
+        log.ContentView.getContentInfo(null, res);
+        this.setState({
+          documentTitle: res.document.seoTitle,
+          documentData: res.document,
+          totalViewCountInfo: res.totalViewCountInfo,
+          featuredList: common.shuffleArray(res.featuredList),
+          documentText: res.text,
+          author: res.document.author,
+          errMessage: null,
+          update: false
+        }, () => {
+          if (this.getSeoTitle() !== res.document.seoTitle) this.checkUrl(res);
+        });
+      }).catch(err => {
+        log.ContentView.getContentInfo(err);
+        this.setStateClear(err);
+        setTimeout(this.getContentInfo(seoTitle), 8000);
       });
-    }, err => {
-      log.ContentView.getContentInfo(err);
-      this.setStateClear(err);
-      setTimeout(this.getContentInfo(seoTitle), 8000);
-    });
   };
 
 
@@ -119,9 +120,9 @@ class ContentView extends React.Component {
           <title>{documentData.title}</title>
         </Helmet>
 
-          <ContentViewFullScreenContainer documentData={documentData} documentText={documentText}
-                                          totalViewCountInfo={totalViewCountInfo} update={update}
-                                          auth={auth} author={author}/>
+        <ContentViewFullScreenContainer documentData={documentData} documentText={documentText}
+                                        totalViewCountInfo={totalViewCountInfo} update={update}
+                                        auth={auth} author={author}/>
 
 
         <ContentViewRight documentData={documentData} author={author}

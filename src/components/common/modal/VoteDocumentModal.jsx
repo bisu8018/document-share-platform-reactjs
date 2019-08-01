@@ -21,9 +21,7 @@ const style = {
   }
 };
 
-function Transition(props) {
-  return <Slide direction="down" {...props} />;
-}
+const Transition = props => <Slide direction="down" {...props} />;
 
 
 class VoteDocumentModal extends React.Component {
@@ -300,7 +298,7 @@ class VoteDocumentModal extends React.Component {
             id="classic-modal-slide-title"
             disableTypography>
             <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-            <div className="vote-modal-title">{psString("vote-modal-title")}</div>
+            <h3 className="vote-modal-title">{psString("vote-modal-title")}</h3>
           </DialogTitle>
 
 

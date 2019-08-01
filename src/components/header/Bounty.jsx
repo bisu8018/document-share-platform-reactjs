@@ -8,9 +8,7 @@ import Dialog from "@material-ui/core/Dialog";
 import MainRepository from "../../redux/MainRepository";
 
 
-function Transition(props) {
-  return <Slide direction="down" {...props} />;
-}
+const Transition = props => <Slide direction="down" {...props} />;
 
 
 class Bounty extends React.Component {
@@ -55,8 +53,8 @@ class Bounty extends React.Component {
 
     if (isAuthenticated && !this.state.isAuthenticated) {
       getWeb3Apis.getBountyAvailable(getMyInfo.ethAccount)
-        .then((data) => this.setState({ isAuthenticated: true, available: data })
-          , err => console.error(err));
+        .then((data) => this.setState({ isAuthenticated: true, available: data }))
+        .catch(err => console.error(err));
     } else if (!isAuthenticated && this.state.isAuthenticated)
       this.setState({ isAuthenticated: false });
   };

@@ -24,6 +24,7 @@ import TrackingService from "../service/TrackingService";
 import CuratorSummary from "./model/CuratorSummary";
 import AnalyticsService from "../service/AnalyticsService";
 import TagService from "../service/TagService";
+import AccountInfo from "./model/AccountInfo";
 //import * as Sentry from "@sentry/browser";
 
 let instance: any;
@@ -245,17 +246,23 @@ export default {
       };
 
       return AuthService.GET.accountInfo(data)
-        .then(result => new UserInfo(result.user))
+        .then(result => {
+          let accountInfo = new AccountInfo(result);
+          accountInfo.user = new UserInfo(result.user);
+          return accountInfo;
+        })
         .catch(err => {
           this.logout();
           return err;
         });
     },
     getProfileInfo(params) {
-      return AuthService.GET.profileGet(params).then(result => {
-        if (result.user) return new UserInfo(result.user);
-        else return result.message;
-      }, err => err);
+      return AuthService.GET.profileGet(params)
+        .then(result => {
+          if (result.user) return new UserInfo(result.user);
+          else return result.message;
+        })
+        .catch(err => err);
     },
     getMyInfo() {
       let userInfo = JSON.parse(localStorage.getItem("user_info"));
@@ -413,7 +420,7 @@ export default {
       if (!fileInfo.file) return console.error("The registration value(file or metadata) is invalid.", fileInfo);
 
       DocService.POST.registerDocument(data, (res) => {
-        if (res && res.success) {
+        if (res && res.success && !res.code) {
           let documentId = res.documentId,
             owner = res.accountId,
             signedUrl = res.signedUrl;
@@ -427,23 +434,15 @@ export default {
             signedUrl: signedUrl,
             callback: progress
           }).then(() => callback(res))
-            .catch(err => {
-              console.error("Document Registration Error", err);
-              error(err);
-            });
+            .catch(err => error(err));
 
-        } else if (res && !res.success) {
-          let error = JSON.stringify(res);
-          console.error("Document Registration Error", error);
-          error(error);
-        }
-      }, (err) => {
-        console.error("Document Registration Error", err);
-        error(err);
-      });
+        } else callback(res);
+      }, (err) => error(err));
     },
     documentUpload(params) {
-      if (params.file == null || params.fileid == null || params.ext == null) return console.error("file object is null", params);
+      console.log(params);
+      if (params.file == null || params.fileid == null || params.ext == null)
+        return console.error("file object is null", params);
 
       const config = {
         onUploadProgress: (e) => {
@@ -453,7 +452,8 @@ export default {
           }
         }
       };
-      return axios.put(params.signedUrl, params.file, config);
+      return axios.put(params.signedUrl, params.file, config).then(res => console.log(res));
+
     },
     getDocument(documentId: string) {
       return DocService.GET.document(documentId).then(result => {
@@ -473,8 +473,8 @@ export default {
     },
     getDocumentDownloadUrl(params: any) {
       return DocService.GET.documentDownload(params)
-        .then(result => new DocumentDownload(result)
-          , err => err);
+        .then(result => new DocumentDownload(result))
+        .catch(err => err);
     },
     getTodayVotedDocumentsByCurator(params: any, callback: any) {
       DocService.POST.todayVotedDocumentsByCurator({ accountId: params.accountId }, (result) => callback(result));

@@ -11,7 +11,7 @@ let rootElement = document.getElementById("root");
 
 ReactDOM.render(
   <Provider store={store}>
-    <MainContainer className="App"/>
+    <MainContainer/>
   </Provider>,
   rootElement
 );

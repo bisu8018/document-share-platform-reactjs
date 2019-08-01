@@ -507,6 +507,18 @@ const strings = new Map([
     KOR: "문서삭제 실패",
     ENG: "Delete failed"
   }],
+  ["alert-2074", {
+    KOR: "비공개 문서 개수",
+    ENG: "Number of private documents"
+  }],
+  ["alert-2074-sub-a", {
+    KOR: "5개 중 ",
+    ENG: " "
+  }],
+  ["alert-2074-sub-b", {
+    KOR: " 개",
+    ENG: " out of 5"
+  }],
   ["alert-2091", {
     KOR: "다운로드 실패",
     ENG: "Download failed"
@@ -804,6 +816,24 @@ const strings = new Map([
   ["upload-doc-desc-2", {
     KOR: "현재 업로드된 문서는 Private(비공개) 상태입니다. 문서를 공개하려고 하신다면, Public(공개) 상태로 변경해 주시기 바랍니다.",
     ENG: "Currently uploaded documents are in Private state. If you want to make the documents public, please change it from Private to Public."
+  }],
+  ["upload-doc-desc-3", {
+    KOR: "현재 5개의 비공개 문서를 보유중 입니다. 이후에 문서를 업로드하시려면, 보유하신 비공개 문서를 Public(공개) 상태로 변경해 주시기 바랍니다.",
+    ENG: "You currently have 5 private documents. To upload your document later, please change it from Private to Public."
+  }],
+
+  // PrivateDocumentCountModal
+  ["private-doc-modal-desc", {
+    KOR: "현재 5개의 비공개 문서를 보유중 입니다. 이후에 문서를 업로드하시려면, 보유하신 비공개 문서를 Public(공개) 상태로 변경해 주시기 바랍니다.",
+    ENG: "You currently have 5 private documents. To upload your document later, please change it from Private to Public."
+  }],
+  ["private-doc-modal-subj", {
+    KOR: "비공개 문서 보유 한도 초과",
+    ENG: "Exceeded private document retention limit"
+  }],
+  ["private-doc-modal-btn", {
+    KOR: "마이페이지로 이동",
+    ENG: "Link to My page"
   }],
 
   // Vote Document Modal
@@ -1160,7 +1190,7 @@ const strings = new Map([
   }],
   ["guide-content-5", {
     KOR: "마이 페이지 또는 메타마스크 등의 지갑에서 토큰 보유량을 확인할 수 있습니다.",
-    ENG: "You can check the amount of your tokens in your wallet, such as \"My Page\" or \"Meta Mask\"."
+    ENG: "You can check the amount of your tokens in your wallet, such as \"My page\" or \"Meta Mask\"."
   }],
   ["guide-subj-6", {
     KOR: "투표하기",
@@ -1257,12 +1287,16 @@ const strings = new Map([
     ENG: "This documents will be transitioned to the Public state. Sign in to the Meta Mask and register the documents in the block chain. Experts can vote on your documents and receive creator rewards based on views."
   }],
   ["publish-modal-desc-2", {
-    KOR: "현재 문서는 Public(공개) 상태로 전환 될것입니다. 계속해서 문서를 블록체인에 등록하시려면, 공개 및 등록 버튼을 클릭하세요. 체인에 등록되면 이후로는 수정할 수 없지만 크리에이터 보상과 추천을 받을 수 있습니다.",
-    ENG: "To continue adding documents to the block chain, click the Register and Publish button. Once registered in the chain, you will not be able to modify it later, but you can get creator compensation and referrals."
+    KOR: "현재 문서는 Public(공개) 상태로 전환 될것입니다. 계속해서 문서를 블록체인에 등록하시려면 약간의 가스비가 필요합니다. 메타마스크 팝업에서 \"승인\" 버튼을 클릭하면 등록됩니다. 문서가 체인에 등록되면 이후로는 수정할 수 없지만 크리에이터 보상과 추천을 받을 수 있습니다.",
+    ENG: "The current document will be transitioned to the Public state. If you want to continue adding documents to the block chain, you will need a small gas bill. Click the \"OK\" button in the meta mask popup to register. Once a document is registered in the chain, you will not be able to edit it later, but you can get creator compensation and referrals."
   }],
   ["publish-modal-confirm-btn", {
-    KOR: "공개 및 등록",
+    KOR: "공개 및 등록하기",
     ENG: "Publish and Register"
+  }],
+  ["publish-modal-publish-btn", {
+    KOR: "공개하기",
+    ENG: "Publish"
   }],
 
   // Delete Document Modal

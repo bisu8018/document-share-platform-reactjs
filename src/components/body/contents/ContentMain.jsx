@@ -38,7 +38,7 @@ class ContentMain extends Component {
       if (path === "latest") this.setState({ latestDocuments: res });
       else if (path === "featured") this.setState({ featuredDocuments: res });
       else if (path === "popular") this.setState({ popularDocuments: res });
-    }, err => {
+    }).catch(err => {
       log.ContentMain.getDocuments(err, path);
       this.setTimeout = setTimeout(() => {
         this.getDocuments(path);

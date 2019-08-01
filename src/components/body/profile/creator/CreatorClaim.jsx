@@ -17,9 +17,7 @@ class CreatorClaim extends React.Component {
     if (document && getDrizzle.isAuthenticated() && getMyInfo.ethAccount && determineReward === null) {
       getWeb3Apis.getDetermineCreatorReward(document.documentId, getMyInfo.ethAccount).then((data) => {
         this.setState({ determineReward: (data && Common.toDeck(data[0]) > 0 ? Common.toDeck(data[0]) : 0) });
-      },(err) => {
-        console.error(err);
-      });
+      }).catch(err => console.error(err));
     }
   };
 
@@ -40,8 +38,12 @@ class CreatorClaim extends React.Component {
 
       this.setState({ btnText: psString("claim-btn-text-2") }, () => {
         getDrizzle.creatorClaimReward(document.documentId, getMyInfo.ethAccount).then((res) => {
-          if(res === "success") this.setState({ btnText: psString("claim-btn-text-1") },()=>{window.location.reload()});
-          else this.setState({ btnText: psString("claim-text") + " $ " }, () => {setAlertCode(2035)});
+          if (res === "success") this.setState({ btnText: psString("claim-btn-text-1") }, () => {
+            window.location.reload();
+          });
+          else this.setState({ btnText: psString("claim-text") + " $ " }, () => {
+            setAlertCode(2035);
+          });
         });
       });
     }
@@ -58,14 +60,16 @@ class CreatorClaim extends React.Component {
     const { determineReward, btnText } = this.state;
 
     let myEthAccount = getMyInfo.ethAccount,
-     ethAccount = userInfo ? userInfo.ethAccount : "",
-     claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
+      ethAccount = userInfo ? userInfo.ethAccount : "",
+      claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
 
     let drizzleAccount = getDrizzle ? getDrizzle.getLoggedInAccount() : "";
-    if (myEthAccount !== ethAccount || !getDrizzle.isAuthenticated() || ethAccount !== drizzleAccount || claimReward <= 0 || btnText === psString("claim-btn-text-1") ) return <div/>;
+    if (myEthAccount !== ethAccount || !getDrizzle.isAuthenticated() || ethAccount !== drizzleAccount || claimReward <= 0 || btnText === psString("claim-btn-text-1")) return <div/>;
 
     return (
-      <div className={"claim-btn " + (btnText === psString("claim-btn-text-2") ? "btn-disabled" : "") + (getIsMobile ? " w-100" : "")} onClick={() => this.handelClickClaim()}>
+      <div
+        className={"claim-btn " + (btnText === psString("claim-btn-text-2") ? "btn-disabled" : "") + (getIsMobile ? " w-100" : "")}
+        onClick={() => this.handelClickClaim()}>
         {btnText} {(btnText === psString("claim-btn-text-2") ? "" : claimReward)}
       </div>
     );

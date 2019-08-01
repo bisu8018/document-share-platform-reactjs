@@ -19,19 +19,16 @@ class EmailVerify extends React.Component {
       url: this.getRootUrlWithApi() + url + c,
       data: {},
       headers: {}
-    })
-      .then((response) => {
-        if (response.data.success && response.data.success === true) setAlertCode(2021);
-        else {
-          //if(response.data.message === "already verified") setAlertCode(2023);
-          //else if(response.data.message === "No Verify Request") setAlertCode(2024);
-        }
-      },(error) => {
-        error.log(error);
-        setAlertCode(2022);
-      }).then(() => {
-      history.push("/");
-    });
+    }).then((response) => {
+      if (response.data.success && response.data.success === true) setAlertCode(2021);
+      else {
+        //if(response.data.message === "already verified") setAlertCode(2023);
+        //else if(response.data.message === "No Verify Request") setAlertCode(2024);
+      }
+    }).catch(err => {
+      console.error(err);
+      setAlertCode(2022);
+    }).then(() => history.push("/"));
   };
 
   componentWillMount(): void {

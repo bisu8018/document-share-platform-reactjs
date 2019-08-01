@@ -4,7 +4,8 @@ import { setAlertCode } from "../../../redux/reducer/main";
 
 export default connect(
   state => ({
-    getWeb3Apis: state.main.web3Apis
+    getWeb3Apis: state.main.web3Apis,
+    getMyInfo: state.main.myInfo,
   }),
   dispatch => ({
     setAlertCode: (alertCode: number) => {

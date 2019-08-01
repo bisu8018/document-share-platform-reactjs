@@ -5,7 +5,6 @@ import history from "apis/history/history";
 import RouterList from "../config/routerList";
 import MainRepository from "../redux/MainRepository";
 import CookiePolicyModal from "./common/modal/CookiePolicyModal";
-import UserInfo from "../redux/model/UserInfo";
 import HeaderContainer from "../container/header/HeaderContainer";
 import Footer from "./footer/Footer";
 
@@ -53,7 +52,8 @@ class Main extends Component {
     const { setTagList } = this.props;
 
     return MainRepository.Document.getTagList("latest")
-      .then(result => setTagList(result.resultList), err => log.Main.setTagList(err))
+      .then(result => setTagList(result.resultList))
+      .catch(err => log.Main.setTagList(err))
       .then(log.Main.setTagList());
   };
 
@@ -63,7 +63,8 @@ class Main extends Component {
     const { setUploadTagList } = this.props;
 
     return MainRepository.Document.getTagList("latest")
-      .then(result => setUploadTagList(result.resultList), err => log.Main.setUploadTagList(err))
+      .then(result => setUploadTagList(result.resultList))
+      .catch(err => log.Main.setUploadTagList(err))
       .then(log.Main.setUploadTagList());
   };
 
@@ -74,11 +75,13 @@ class Main extends Component {
     if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
       let myInfo = MainRepository.Account.getMyInfo();
       MainRepository.Account.getAccountInfo(myInfo.sub).then(result => {
-        let res = new UserInfo(result);
-        if (!result.picture) res.picture = localStorage.getItem("user_info").picture;
+        let res = result.user;
+        if (!res.username || !res.username === "") res.username = res.email;
+        res.privateDocumentCount = result.privateDocumentCount;
+        if (!res.picture) res.picture = localStorage.getItem("user_info").picture;
         log.Main.setMyInfo();
         return setMyInfo(res);
-      }, err => log.Main.setMyInfo(err));
+      }).catch(err => log.Main.setMyInfo(err));
     }
   };
 
@@ -143,7 +146,6 @@ class Main extends Component {
     return (
       <Router history={history}>
         <HeaderContainer/>
-
 
 
         <div id="container" data-parallax="true">
