@@ -15,7 +15,7 @@ class Alert extends React.PureComponent {
   };
 
   componentWillMount() {
-    const { code, getMyInfo } = this.props;
+    const { code, getMyInfo, alertData } = this.props;
 
     let msg = "";
     let sub = "";
@@ -140,6 +140,15 @@ class Alert extends React.PureComponent {
         status = "success";
         msg = psString("alert-2074");   // 비공개 문서 개수
         sub = psString("alert-2074-sub-a") + getMyInfo.privateDocumentCount + psString("alert-2074-sub-b");
+        break;
+      case 2075 :
+        status = "success";
+        msg = psString("alert-2075");   // 컴파일 성공
+        sub = alertData.title;
+        break;
+      case 2076 :
+        status = "success";
+        msg = psString("alert-2076");   // 문서 삭제 성공
         break;
 
 

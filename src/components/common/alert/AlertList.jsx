@@ -8,9 +8,9 @@ class AlertList extends React.Component {
 
 
   // alert 배열 push
-  pushAlert = (serial, code) => {
+  pushAlert = (serial, code, data) => {
     return (
-      <AlertContainer code={code} close={() => this.handleClose(serial)} idx={serial}/>
+      <AlertContainer code={code} close={() => this.handleClose(serial)} idx={serial} alertData={data}/>
     );
   };
 
@@ -38,13 +38,13 @@ class AlertList extends React.Component {
   // 컨테이너 셋팅 작업
   setContainer = () => {
     const { container } = this.state;
-    const { getAlertCode, setAlertCode } = this.props;
+    const { getAlertCode, setAlertCode, getAlertData } = this.props;
 
     let serial = container.length + getAlertCode;
 
     const tempContainer = container;
     tempContainer.push({
-      html: this.pushAlert(serial, getAlertCode),
+      html: this.pushAlert(serial, getAlertCode, getAlertData),
       code: getAlertCode,
       serial: container.length + getAlertCode
     });

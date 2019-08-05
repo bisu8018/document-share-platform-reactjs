@@ -14,7 +14,7 @@ export default connect(
     setTempEmail: (tempEmail: any) => {
       dispatch(setTempEmail(tempEmail));
     },
-    setAlertCode: (alertCode: number) => {
+    setAlertCode: (alertCode: any) => {
       dispatch(setAlertCode(alertCode));
     }
   })

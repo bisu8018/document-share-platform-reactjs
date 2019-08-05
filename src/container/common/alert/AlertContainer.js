@@ -8,7 +8,7 @@ export default connect(
     getMyInfo: state.main.myInfo,
   }),
   dispatch => ({
-    setAlertCode: (alertCode: number) => {
+    setAlertCode: (alertCode: any) => {
       dispatch(setAlertCode(alertCode));
     },
   })

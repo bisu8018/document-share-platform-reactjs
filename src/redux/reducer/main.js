@@ -21,7 +21,7 @@ export const setCuratorDailyRewardPool = (curatorDailyRewardPool: number) => ({
   type: ReduxTypes.SET_CURATOR_DAILY_REWARD_POOL,
   curatorDailyRewardPool
 });
-export const setAlertCode = (alertCode: number) => ({ type: ReduxTypes.SET_ALERT_CODE, alertCode });
+export const setAlertCode = (alertCode: any, alertData:any) => ({ type: ReduxTypes.SET_ALERT_CODE, alertCode, alertData  });
 
 // 초기 상태
 const initState = {
@@ -34,7 +34,8 @@ const initState = {
   drizzleApis: new DrizzleApis(),
   authorDailyRewardPool: 0,
   curatorDailyRewardPool: 0,
-  alertCode: null
+  alertCode: null,
+  alertData: {}
 };
 
 // 리듀서
@@ -88,7 +89,8 @@ export default (state = initState, action: any) => {
     case ReduxTypes.SET_ALERT_CODE:
       return {
         ...state,
-        alertCode: action.alertCode
+        alertCode: action.alertCode,
+        alertData: action.alertData
       };
     default:
       return state;

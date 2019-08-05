@@ -7,7 +7,7 @@ export default connect(
     getWeb3Apis: state.main.web3Apis
   }),
   dispatch => ({
-    setAlertCode: (alertCode: number) => {
+    setAlertCode: (alertCode: any) => {
       dispatch(setAlertCode(alertCode));
     },
   })

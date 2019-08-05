@@ -11,7 +11,7 @@ export default connect(
     getIsMobile: state.main.isMobile,
   }),
   dispatch => ({
-      setAlertCode: (alertCode: number) => {
+      setAlertCode: (alertCode: any) => {
           dispatch(setAlertCode(alertCode));
       },
   })

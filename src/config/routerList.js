@@ -14,8 +14,7 @@ import About from "../components/body/faq/About";
 import Guide from "../components/body/faq/Guide";
 import Terms from "../components/body/faq/Terms";
 
-export default ({
-    routes: [
+export default ([
       {
         path: "/",
         name: "Main",
@@ -111,6 +110,5 @@ export default ({
         name: 'NotFoundPage',
         component: NotFoundPage,
       },
-    ]
-  }
+  ]
 );

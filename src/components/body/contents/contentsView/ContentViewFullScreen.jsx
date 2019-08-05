@@ -192,7 +192,7 @@ class ContentViewFullScreen extends Component {
               <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>Download</div>
               {documentData &&
               <EditDocumentModalContainer documentData={documentData}/>}
-              {!documentData.isPublic && (accountId === Common.getMySub() && documentData) &&
+              {documentData.isRegistry === false && (accountId === Common.getMySub() && documentData) &&
               <DeleteDocumentModalContainer documentData={documentData}/>}
             </div>
           </div>

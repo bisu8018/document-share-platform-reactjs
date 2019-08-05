@@ -12,7 +12,7 @@ export default connect(
     setDrizzleApis: () => {
       dispatch(setDrizzleApis());
     },
-    setAlertCode: (alertCode: number) => {
+    setAlertCode: (alertCode: any) => {
       dispatch(setAlertCode(alertCode));
     },
   })

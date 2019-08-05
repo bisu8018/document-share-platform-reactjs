@@ -3,27 +3,27 @@ const strings = new Map([
   // main
   ["main-banner-subj-1", {
     KOR: "찾고 계신 문서가 있나요?",
-    ENG: "Documents you are looking for"
+    ENG: "Looking for any documents?"
   }],
   ["main-banner-subj-2", {
     KOR: "무료료 문서를 다운로드하려면",
-    ENG: "Content Free"
+    ENG: "To download documents for free,"
   }],
   ["main-banner-subj-3", {
     KOR: "당신의 잠재 고객을 성장시키세요",
-    ENG: "Grow Your Audience"
+    ENG: "grow your audience"
   }],
   ["main-banner-btn-1", {
     KOR: "지금 검색해보세요",
-    ENG: "Search now"
+    ENG: "Search now!"
   }],
   ["main-banner-btn-2", {
     KOR: "회원가입 하기",
-    ENG: "Sign up now"
+    ENG: "Join now!"
   }],
   ["main-banner-btn-3", {
     KOR: "지금 업로드하세요",
-    ENG: "Upload now"
+    ENG: "Upload now!"
   }],
   ["main-banner-btn-4", {
     KOR: "상세보기",
@@ -31,15 +31,15 @@ const strings = new Map([
   }],
   ["main-banner-explain-1", {
     KOR: "최신, 추천, 인기 문서를 둘러보세요. \n관심 분야의 문서를 보고 싶다면 태그 검색도 해보세요.",
-    ENG: "Browse the latest, featured, and popular documents.\n If you want to see documents of interest, try search by tag."
+    ENG: "Check out the Latest, Featured, and Popular documents.\n You can also search for documents in a specific topic by using tags."
   }],
   ["main-banner-explain-2", {
     KOR: "구글 또는 링크드인 계정이 있다면, 몇 번의 클릭만으로 쉽게 가입할 수 있습니다. \n 로그인하면 다양한 문서를 무료로 다운로드할 수 있습니다.",
-    ENG: "Meet advanced content produced by creator. \n Just vote for your favorite documents and you'll be rewarded.\n Sign up now "
+    ENG: "Use your Google or LinkedIn account to sign up. It takes just a few clicks. \n After login, you can download documents for free."
   }],
   ["main-banner-explain-3", {
     KOR: "귀하의 슬라이드를 업로드하고 이를 외부 채널에도 공유하십시요. \n 잠재 고객들을 추적하고 연락처를 수집할 수 있습니다. ",
-    ENG: "Upload your slides and share them on high-quality channels.\n Track lead activity and collect contacts.\n"
+    ENG: "Upload your slides and share them through external channels.\n Connect with your prospects and track their activities.\n"
   }],
   ["main-see-all", {
     KOR: "더보기",
@@ -61,8 +61,8 @@ const strings = new Map([
 
   // viewer page
   ["vp-email-warning", {
-    KOR: "해당 문서를 읽기 위해서는 이메일 입력이 필요합니다.",
-    ENG: "If you want to read the document, you need to enter email."
+    KOR: "이 문서의 모든 내용을 보시려면, 이메일을 제출하고 가입하시기 바랍니다. ",
+    ENG: "To view the entire documents, enter your email to sign up."
   }],
   ["viewer-page-title-1", {
     KOR: "해당 링크로 이동",
@@ -101,15 +101,15 @@ const strings = new Map([
   // blockchain
   ["b-explain-1", {
     KOR: "블록체인에 문서 등록하기",
-    ENG: "Register this documents to blockchain."
+    ENG: "Register this document to blockchain."
   }],
   ["b-error-1", {
     KOR: "메타마스크 로그인 부탁드립니다.",
-    ENG: "Please log in to the Meta Mask."
+    ENG: "Please log in to the MetaMask."
   }],
   ["b-error-2", {
     KOR: "올바른 지갑 계정으로 로그인 부탁드립니다.",
-    ENG: "Please login with the correct wallet account."
+    ENG: "Please check your MetaMask account information."
   }],
   ["b-success-1", {
     KOR: "등록 성공",
@@ -123,11 +123,11 @@ const strings = new Map([
   // About us
   ["about-main-subj", {
     KOR: "지식노동자들을 위한 전혀 새로운 일하는 방법",
-    ENG: "Sharing knowledge in new ways"
+    ENG: "A whole new way to share knowledge"
   }],
   ["about-main-explain", {
     KOR: "폴라리스 쉐어에서 문서를 공유하여 잠재 고객을 발굴하고, 공유한 문서의 유효 조회수에 따른 보상도 받으세요.",
-    ENG: "Polaris Share is a system that shares knowledge and is compensated by user's vote."
+    ENG: "\"Share your documents on Polaris Share, find new prospects, and get rewards based on views."
   }],
   ["about-first-section-subj", {
     KOR: "왜 폴라리스 쉐어를 사용해야 하는가?",
@@ -135,7 +135,7 @@ const strings = new Map([
   }],
   ["about-first-section-explain", {
     KOR: "우리는 수년간 전세계 고객들을 대상으로 Polaris Office 를 서비스하면서 수많은 문서와 지식들이 활용되지 못하고 있음을 발견했습니다. 이 문제를 해결하기 위해서 우리는 Polaris Share를 만들 것입니다. Polaris Share는 지식 생산자와 소비자를 연결하여 탈중앙화된 인센티브 기반의 지식 거래 시스템을 구축합니다. 우리는 회사에서 전문가를 고용하지 않고도 전세계에서 가장 필요한 기술을 가진 사람과 일할 수 있는 환경을 제공하고, 동시에 개인이 특정 회사에 고용되지 않고도 원하는만큼 일하고 정당한 보수를 받을 수 있는 일하는 환경을 만들어 나가고자 합니다. ",
-    ENG: "Polaris Share connects knowledge creators and seekers to build a decentralized and incentive-based knowledge trading system. We create an environment that allows companies to work with people with most required skills from all around the world without hiring them, and at the same time, helps individuals work when and where they want and receive decent rewards without being hired by a certain company. We have realized that a wealth of knowledge and a good number of Knowledge Creators are not fully tapped. In order to solve this problem, we plan to create a Decentralized and Incentive-based knowledge trading system “Polaris Share.”"
+    ENG: "While providing the Polaris Office solution around the world over the years, we realized that there are so much knowledge and documents that haven't send the light of day. To tap into this potential, we decided to create Polaris Share, a decentralized and incentive-based knowledge trading system, by connecting creators and consumers. The platform is designed to create an environment where not only where corporates can still work with experts all over the world without hiring them but individuals can also be fairly compensated for what they offer without being committed to a particular employer."
   }],
   ["about-service", {
     KOR: "서비스",
@@ -143,7 +143,7 @@ const strings = new Map([
   }],
   ["about-second-section-explain", {
     KOR: "폴라리스 쉐어는 단순한 문서 공유 서비스를 넘어서서 전문가들에 의한 큐레이션과 거래 시스템을 제공합니다. 서비스 내의 다양한 기여 활동에 대해서 적절한 보상을 지급함으로써 자발적인 참여를 유도하여 탈중앙화된 지속 가능한 시스템을 구축했습니다. 이와 같은 지식 거래 생태계에서 지식 생산자는 자유롭게 일하고 적절한 대가를 받을 수 있으며, 지식 소비자는 고품질의 지식을 저렴한 비용으로 소비할 수 있습니다.",
-    ENG: "Polaris Share service is a decentralized and incentivized knowledge trading system that connects a knowledge creator and an audience. This project goes beyond a simple documents sharing service by grading the value of the knowledge and trading them so that the knowledge creators can get the compensation and the audience can get higher quality knowledge at a low cost."
+    ENG: "Beyond a simple document sharing service, Polaris Share offers a specialized curation and trading service. By compensating various types of contributions to the service, we have built a decentralized and sustainable system that promotes user engagement. Based on this knowledge training ecosystem, creators can work freely and get fair compensation for their contributions while consumers can access an extensive knowledge base at a low cost."
   }],
   ["about-vision", {
     KOR: "비전",
@@ -151,7 +151,7 @@ const strings = new Map([
   }],
   ["about-third-section-explain", {
     KOR: "탈중앙화되고 인센티브가 주어지는 전문가 지식 거래 시스템",
-    ENG: "Decentralized and Incentivized Professional Knowledge Trading System"
+    ENG: "Decentralized and Incentive-based Professional Knowledge Trading System"
   }],
   ["about-third-section-chap-subj-1", {
     KOR: "지식의 가치",
@@ -159,23 +159,23 @@ const strings = new Map([
   }],
   ["about-third-section-chap-explain-1", {
     KOR: "폴라리스 쉐어는 문서 및 네트워크에 저장된 지식의 가치를 지식의 생산자와 우리 생태계를 유지하는 활동에 기여한 사용자들에게 돌려드립니다.",
-    ENG: "Polaris Share returns the value of knowledge stored in documents and network to Knowledge Creators and other users."
+    ENG: "Polaris Share returns value created from sharing knowledge stored in documents and the network with creators and users who contribute to maintaining our ecosystem."
   }],
   ["about-third-section-chap-subj-2", {
     KOR: "무료 또는 저렴한 수수료",
-    ENG: "No transaction fees"
+    ENG: "Free or small fee"
   }],
   ["about-third-section-chap-explain-2", {
     KOR: "지식 생산자는 폴라리스 쉐어에서 문서를 공유하거나 판매함으로써 무료 또는 매우 적은 수수료만으로 수익을 얻을 수 있습니다. ",
-    ENG: "Knowledge Creators get rewards from sharing or selling documents on Polaris Share with no or with low transaction fees"
+    ENG: "Knowledge creators generate revenue by sharing their documents for free or with a small fee through Polaris Share."
   }],
   ["about-third-section-chap-subj-3", {
     KOR: "고품질의 컨텐츠",
-    ENG: "Content shared"
+    ENG: "High quality content"
   }],
   ["about-third-section-chap-explain-3", {
     KOR: "일반 대중들은 지식 생산자들에 의해서 공유된 고품질의 다양한 컨텐츠를 소비하고 활용할 수 있습니다. ",
-    ENG: "Audiences will benefit from more and better content shared by Knowledge creators."
+    ENG: "People can access and use an extensive amount of high-quality content shared by creators."
   }],
   ["about-ps-team", {
     KOR: "폴라리스 쉐어 팀",
@@ -189,7 +189,7 @@ const strings = new Map([
   }],
   ["faq-answer-1", {
     KOR: "폴라리스 쉐어는 활용되지 않고 저장되어 있는 수만은 문서와 지식들을 활용하여, 미래의 고객을 발굴하고, 전문가 네트워크를 구축하여 새로운 비즈니스 기회 창출에 기여하는 플랫폼입니다.",
-    ENG: "Polaris Share is a platform that uses a number of unutilized documents and knowledge to discover future customers and build a network of experts to create new business opportunities."
+    ENG: "Polaris Share is a platform that creates new business opportunities by sharing idle documents stored in your PC, helping you find new prospects, and establish your own network of experts."
   }],
   ["faq-question-2", {
     KOR: "폴라리스 쉐어는 어떻게 동작하나요?",
@@ -197,31 +197,31 @@ const strings = new Map([
   }],
   ["faq-answer-2", {
     KOR: "수많은 저자들에 의해서 공유된 문서들은 전문가 그룹의 집단 지성에 의해 큐레이션됩니다. 이런 활동이 자발적으로 일어나게 하기 위해서 블록체인 기술을 활용합니다.",
-    ENG: "Documents shared by creators are curated by the collective intelligence of the expert group. To make these activities happen spontaneously, Polaris Share is blockchain-based reward system."
+    ENG: "Documents shared by creators are curated by a collective of expert groups. Blockchain technology is used to encourage participation."
   }],
   ["faq-question-3", {
     KOR: "게시물에 대해 투표하는 데 비용이 들지 않나요?",
-    ENG: "Does it cost to vote?"
+    ENG: "Does it cost anything to vote on a post?"
   }],
   ["faq-answer-3", {
     KOR: "투표 활동에는 비용이 들지 않습니다. 투표에 사용한 토큰은 투표 기간이 끝나면 보상과 함께 돌려받습니다. (다만, 블록체인에 투표 기록을 저장하는 경우 가스비가 발생할 수 있습니다)",
-    ENG: "No. It is free to vote. The tokens used in voting will be returned with the rewards at the end of the voting period. You might even get paid for it."
+    ENG: "No, voting is free. The tokens used for voting will be returned to you with rewards when the voting ends. (However, it may cost you gas if you wish to record your voting history in the blockchain.)"
   }],
   ["faq-question-4", {
     KOR: "폴라리스 쉐어에서 토큰을 받을 수 있는 방법이 있나요?",
-    ENG: "Can I get digital tokens on Polaris Share? How?"
+    ENG: "Can I get digital tokens from Polaris Share? If so, how?"
   }],
   ["faq-answer-4a", {
     KOR: "크리에이터 : 매일 페이지뷰 수에 따라서 일정량의 보상을 토큰으로 지급받습니다.",
-    ENG: "Creator: Creators can receive a certain amount of compensation as a token based on the number of page views."
+    ENG: "Creator: You will get a certain amount of tokens based on the page views on a daily basis."
   }],
   ["faq-answer-4b", {
     KOR: "큐레이터 : 토큰을 사용하여 고품질의 문서에 투표하면 해당 문서의 페이지뷰 수에 따라서 토큰으로 보상이 지급되며, 투표 기간이 끝나면 보상과 투표한 토큰을 함께 지급받습니다. ",
-    ENG: "Curator: Curators can earn tokens according to the number of page views when voting on a high quality documents and at the end of the voting period, you can get rewards."
+    ENG: "Curator: If you vote on documents with your tokens, you will get tokens based on their page views as well as the tokens you used to vote."
   }],
   ["faq-answer-4c", {
     KOR: "이 외에도 추후 암호화폐 거래소를 통해서 토큰을 구매할 수 있을 예정입니다.",
-    ENG: "You will be able to purchase tokens through the Cryptocurrency exchange later."
+    ENG: "Also, we're planning to provide a feature where you can purchase tokens through a cryptocurrency exchange."
   }],
   ["faq-question-5", {
     KOR: "계정은 어떻게 만드나요?",
@@ -229,47 +229,47 @@ const strings = new Map([
   }],
   ["faq-answer-5a", {
     KOR: "구글이나 링크드인 등의 소셜 계정으로 로그인하여 계정을 생성하실 수 있습니다. ",
-    ENG: "You can simply use your social network accounts such as Google or LinkedIn."
+    ENG: "You can log in with your Google account or a social media account (e.g. LinkedIn) and create an account."
   }],
   ["faq-answer-5b", {
     KOR: "크리에이터 보상을 받거나 투표를 하거나 투표를 받으려면 메타마스크를 통해서 사용자 계정에 이더리움 계정을 연결하면 됩니다.",
-    ENG: "If you want to get Creator rewards or vote, connect the Etherium account to your account via the metamask."
+    ENG: "To receive rewards as a creator, or vote or get voted on, link your Ethereum account to your user account via MetaMask."
   }],
   ["faq-question-6", {
     KOR: "내 계정 메뉴에서 사용할 수 있는 정보는 무엇인가요?",
-    ENG: "What information do I need to provide in order to create an account?"
+    ENG: "What kind of information can I access from My Account?"
   }],
   ["faq-answer-6a", {
     KOR: "총 보유량 : 토큰 총 보유량",
-    ENG: "Total balance: Total token retention."
+    ENG: "Total balance: Total amount of tokens you currently have "
   }],
   ["faq-answer-6b", {
     KOR: "오늘 예상 수익 : 오늘 하루 동안 예상 수익 (전체 또는 각각의 Creator, Curator 보상금) ",
-    ENG: "Estimated earnings for today: Estimated revenue for the day (Total or Each reward for Creators and Curators)"
+    ENG: "Estimated earnings for today: Estimated revenue generated today (total amount of reward for both Creator and Curator, or individually)"
   }],
   ["faq-answer-6c", {
     KOR: "지난 7일 간 수익 : 최근 7일간의 예상 수익 (전체 또는 각각의 Creator, Curator 보상금)",
-    ENG: "Revenue for the last 7 days: Estimated revenue for the last 7 days (Total or Each reward for Creators and Curators)"
+    ENG: "Revenue for the last 7 days: Estimated revenue generated for the last 7 days (total amount of reward for both Creator and Curator, or individually)"
   }],
   ["faq-question-7", {
     KOR: "최근 보상을 보려면 어떻게 해야 하나요?",
-    ENG: "How do I see my recent rewards?"
+    ENG: "How can I check the last reward I received?"
   }],
   ["faq-answer-7", {
     KOR: "내 이름을 클릭하여 프로필 페이지로 이동하여 지갑 및 보상 정보를 확인할 수 있습니다.",
-    ENG: "Go to your profile page, then you can see your wallet and reward information."
+    ENG: "Go to your profile page and check your wallet and reward information."
   }],
   ["faq-question-8", {
     KOR: "내 프로필에 무엇이 표시되나요?",
-    ENG: "What is shown in my profile?"
+    ENG: "What information does my profile show?"
   }],
   ["faq-answer-8", {
     KOR: "프로필 사진과 사용자 이름이 표시됩니다.",
-    ENG: "Your profile name and image."
+    ENG: "It shows your username and profile image."
   }],
   ["faq-question-9", {
     KOR: "폴라리스 쉐어에 게시 할 수 있는 항목은 무엇인가요?",
-    ENG: "What can users post to Polaris Share?"
+    ENG: "What can I post on Polaris Share?"
   }],
   ["faq-answer-9", {
     KOR: "ppt/pptx 그리고 pdf 를 지원합니다.",
@@ -281,15 +281,15 @@ const strings = new Map([
   }],
   ["faq-answer-10", {
     KOR: "현재는 제한이 없지만 향후 1주일에 문서 1개로 제한할 계획입니다. 일정량의 토큰을 예치하면 더 많은 문서를 등록할 수 있습니다. ",
-    ENG: "There is no limit for posting, but we are planning to set a limit of 1 documents per a week."
+    ENG: "There is currently no limit on the number of posts. However, we plan to set a limit of one document per week and to allow more posts to be updated when the user deposits a set of tokens."
   }],
   ["faq-question-11", {
     KOR: "내가 게시 한 것을 삭제할 수 있나요?",
-    ENG: "Can I delete my posting?"
+    ENG: "Can I delete my posts?"
   }],
   ["faq-answer-11", {
     KOR: "현재는 고객지원을 요청해서 삭제할 수 있습니다. 추후 문서 관리 기능을 업데이트할 계획입니다.",
-    ENG: "You can request it to Customer Service. We are planning to update documents management system later."
+    ENG: "Currently, you have to contact our customer support to delete your posts. We plan to update the document management capabilities in the future."
   }],
   ["faq-question-12", {
     KOR: "블럭 체인에 의해 생성되는 새로운 토큰은 몇 개인가요?",
@@ -297,7 +297,7 @@ const strings = new Map([
   }],
   ["faq-answer-12", {
     KOR: "토큰의 전체 통화량은 백서에 정의한 수량으로 고정되어 있습니다. ",
-    ENG: "The total amount of tokens is fixed to the quantity defined in the white paper."
+    ENG: "The total amount of tokens in circulation is set to a fixed amount defined in the white paper."
   }],
   ["faq-question-13", {
     KOR: "보상 풀이 무엇인가요?",
@@ -305,15 +305,15 @@ const strings = new Map([
   }],
   ["faq-answer-13", {
     KOR: "매일 백서에 정의된 양의 보상 토큰이 자동으로 편성되는데 이를 리워드 풀(reward pool)이라고 합니다. 이 토큰들은 크리에이터나 큐레이터 등의 기여도에 따라서 매일 배분됩니다. ",
-    ENG: "Every day a fixed amount of Deck tokens are allocated to the network reward fund, commonly called the reward pool. Tokens are distributed to creators and curators for posting and voting on documents."
+    ENG: "A certain amount of tokens is automatically allocated on a daily basis to create a reward pool. These tokens are distributed among creators and curators based on the level of their contribution."
   }],
   ["faq-question-14", {
     KOR: "보상금은 저자와 큐레이터간에 어떻게 나누어 지나요?",
-    ENG: "How is the reward pool divided between creators and curators?"
+    ENG: "How are tokens distributed between creators and curators?"
   }],
   ["faq-answer-14", {
     KOR: "문서 별로 매일 발생한 페이지뷰에 따라서 보상 토큰이 배분되며, 이를 백서에서 정의한 비율로 creator와 curator들이 나누어 가지는데, curator 보상은 투표량에 비례해서 배분합니다. ",
-    ENG: "Tokens are distributed according to the number of page views. 70% is awarded as a reward for creators and 30% is awarded to curators."
+    ENG: "Tokens are distributed between creators and curators based on their daily page views using the ratio set by the white paper. The curator reward is distributed based on the votes they received."
   }],
   ["faq-question-15", {
     KOR: "덱(Deck)은 무엇인가요?",
@@ -321,45 +321,45 @@ const strings = new Map([
   }],
   ["faq-answer-15", {
     KOR: "폴라리스 쉐어에서 사용할 수 있는 디지털 화폐로서 이더리움 네트워크와 여러 거래소에서 거래할 수 있는 ERC20 규격의 암호화폐입니다. ",
-    ENG: "Deck is an ERC-20 token used in Polaris Share that can withdraw to an exchange."
+    ENG: "Deck is an ERC20 digital currency designed for use on the Ethereum platform and other exchanges."
   }],
   ["faq-question-16", {
     KOR: "크리에이터는 실시간으로 보상을 받나요?",
-    ENG: "Does creator get rewards in real time?"
+    ENG: "Do creators receive their rewards in real time?"
   }],
   ["faq-answer-16", {
     KOR: "크리에이터 보상은 매일 0시~0시10분 GMT+0 사이에 정산됩니다. ",
-    ENG: "Creators get paid between AM 0:00 and AM 0:10 every day. (GMT+0)"
+    ENG: "Creators are paid between 12:00 a.m. and 12:10 a.m. (GMT+0) daily."
   }],
   ["faq-question-17", {
     KOR: "큐레이터는 언제 보상을 받을 수 있나요?",
-    ENG: "When does curator get reward?"
+    ENG: "When do curators receive their rewards?"
   }],
   ["faq-answer-17", {
     KOR: "큐레이터 보상은 투표일로 부터 1주+2일 후에 투표에 사용한 토큰과 함께 지급받을 수 있습니다. ",
-    ENG: "Curators get paid with tokens used for voting in 3 weeks+2 days from a voting day."
+    ENG: "Curators receive rewards along with the tokens they used to vote after one week and two days from the vote."
   }],
   ["faq-question-18", {
     KOR: "크리에이터와 큐레이터의 보상은 어떠한 차이가 있나요?",
-    ENG: "What is the difference between the rewards of creators and curators?"
+    ENG: "How do the rewards for creators differ from those for curators?"
   }],
   ["faq-answer-18", {
     KOR: "크리에이터와 큐레이터들은 각각 문서 별로 매일 발생한 보상의 70%와 30%를 지급받습니다.",
-    ENG: "Creators and curators receive 70% and 30% of the daily rewards for each documents."
+    ENG: "Creators and curators receive 70% and 30% of the daily rewards generated for each document respectively."
   }],
 
   // user profile
   ["profile-error-1", {
     KOR: "유져네임을 입력해 주십시오.",
-    ENG: "Please input the user name."
+    ENG: "Please enter a username."
   }],
   ["profile-error-2", {
     KOR: "오직 영문과 숫자만 허용됩니다.",
-    ENG: "Only allow english and numeric."
+    ENG: "Your username must be a combination of letters and numbers."
   }],
   ["profile-error-3", {
     KOR: "4~20자 이내의 영문과 숫자가 섞어 입력해 주십시오.",
-    ENG: "Enter 4 to 20 digits with a mix of letters and numbers."
+    ENG: "It must be between 4 to 20 characters containing both letters and numbers."
   }],
   ["profile-edit", {
     KOR: "수정",
@@ -421,11 +421,11 @@ const strings = new Map([
   }],
   ["alert-2002", {
     KOR: "잘못된 접근입니다.",
-    ENG: "Bad access."
+    ENG: "Invalid access."
   }],
   ["alert-2003", {
     KOR: "로그인이 필요합니다.",
-    ENG: "Login Please."
+    ENG: "You need to log in first."
   }],
   ["alert-2004", {
     KOR: "로그인 실패",
@@ -437,11 +437,11 @@ const strings = new Map([
   }],
   ["alert-2021", {
     KOR: "이메일 검증 성공",
-    ENG: "Email verification succeeded"
+    ENG: "The email address has been verified."
   }],
   ["alert-2022", {
     KOR: "이메일 검증 실패",
-    ENG: "Failed e-mail verification."
+    ENG: "The email address has been failed."
   }],
   ["alert-2023", {
     KOR: "이미 인증되었습니다.",
@@ -453,7 +453,7 @@ const strings = new Map([
   }],
   ["alert-2031", {
     KOR: "투표 가능한 보유금액보다 적은 값을 입력하세요",
-    ENG: "Enter less than the number of votes available."
+    ENG: "Enter a value lower than the number of available votes."
   }],
   ["alert-2032", {
     KOR: "요청 실패.",
@@ -461,31 +461,31 @@ const strings = new Map([
   }],
   ["alert-2033", {
     KOR: "승인 요청 실패.",
-    ENG: "Approve transaction failed."
+    ENG: "Failed to approve."
   }],
   ["alert-2034", {
     KOR: "투표 요청 실패",
-    ENG: "Vote transaction failed."
+    ENG: "Failed to vote."
   }],
   ["alert-2035", {
     KOR: "인출 요청 실패",
-    ENG: "Claim transaction failed."
+    ENG: "Failed to claim."
   }],
   ["alert-2051", {
     KOR: "올바른 계정으로 로그인해주세요",
-    ENG: "Log in with the correct account."
+    ENG: "Enter the correct login information."
   }],
   ["alert-2051-sub", {
     KOR: "메타마스크 계정이 등록된 계정과 다릅니다. 암호화폐를 사용하거나 인출하기 위해서는 올바른 메타마스크 계정으로 로그인해야 합니다.",
-    ENG: "The Metamask account is different from the registered account. You must be signed in with the correct Metamask account to claim and receive payouts."
+    ENG: "The MetaMask account does not match the one that has been registered. You must be logged in with the correct MetaMask account to use or withdraw cryptocurrency."
   }],
   ["alert-2052", {
     KOR: "이더리움 네트워크가 다릅니다.",
-    ENG: "Connect with the correct network."
+    ENG: "The Ethereum network does not match."
   }],
   ["alert-2052-sub", {
     KOR: "메타마스크에서 Rinkeby 네트워크로 설정해주세요.",
-    ENG: "Please set the MetaMask network to: Rinkeby"
+    ENG: "Please set the MetaMask network to Rinkeby."
   }],
   ["alert-2053", {
     KOR: "잔액 부족",
@@ -504,8 +504,8 @@ const strings = new Map([
     ENG: "You can upload up to 5 private documents."
   }],
   ["alert-2073", {
-    KOR: "문서삭제 실패",
-    ENG: "Delete failed"
+    KOR: "문서 삭제 실패",
+    ENG: "Failed to delete documents"
   }],
   ["alert-2074", {
     KOR: "비공개 문서 개수",
@@ -518,6 +518,14 @@ const strings = new Map([
   ["alert-2074-sub-b", {
     KOR: " 개",
     ENG: " out of 5"
+  }],
+  ["alert-2075", {
+    KOR: "문서 컴파일 성공",
+    ENG: "Document compilation succeeded "
+  }],
+  ["alert-2076", {
+    KOR: "문서 삭제 성공",
+    ENG: "Successfully deleted documents"
   }],
   ["alert-2091", {
     KOR: "다운로드 실패",
@@ -641,49 +649,49 @@ const strings = new Map([
   }],
   ["approve-explain-1", {
     KOR: "DECK을 사용하여 투표하려면, Polaris Share 컨트랙트가 당신을 대신해서 DECK을 전송할 수 있도록 최초 한 번 승인해야 합니다. 승인이 완료되기 전까지는 귀하는 문서에 투표할 수 없습니다.",
-    ENG: "To vote on documents using DECK, you must first approve the Polaris Share Contracts to move DECK on your behalf. You will not be able to vote on documents until approval has completed."
+    ENG: "To vote on a document using your DECK, you must approve the Polaris Share Contract to transfer your DECK on your behalf for the first time. You will not be able to vote on documents until approved."
   }],
   ["approve-explain-2", {
     KOR: "\"Approve\"를 클릭하고 나면, 투표를 완료하기 위해서 트랜잭션에 사인하라는 요청이 한 번 더 표시될 것입니다. ",
-    ENG: "After clicking \"Approve\", you will be asked to sign a transaction, followed by second transaction to complete your requested voting."
+    ENG: "After clicking \"Approve,\" you will be asked to sign a transaction to complete the vote once again. "
   }],
 
   // Cookie Policy Modal
   ["cookie-policy-content", {
     KOR: "우리는 유저들에게 서비스를 제공하고 이를 개선하기 위해서 쿠키를 사용합니다. 우리 사이트를 사용함으로써 귀하는 쿠키 정책에 동의하게됩니다.",
-    ENG: "We use cookies to provide and improve our services. By using our site, you consent to our Cookies Policy."
+    ENG: "We use cookies to improve your experience. By your continued use of this site, you accept our cookies policy."
   }],
 
   // Dollor Learn More Modal
   ["dollar-learn-more-subj", {
     KOR: "DECK 테스트 토큰에 대한 중요 공지",
-    ENG: "Important notice about DECK test token."
+    ENG: "Important notice about the DECK test token"
   }],
   ["dollar-learn-more-explain-1", {
     KOR: "Polaris Share 알파 버전에서는 DECK 토큰을 테스트하여 응용 프로그램에서 올바르게 작동하는지 확인합니다.",
-    ENG: "We will test DECK token in the Polaris Share alpha version to make sure it works correctly in the application."
+    ENG: "In the alpha version, DECK tokens are tested to ensure that the application program works as desired."
   }],
   ["dollar-learn-more-explain-2", {
     KOR: "무료 DECK 테스트 토큰으로 Polaris Share 서비스를 자유롭게 경험해보십시오. 테스트 기간이 끝나면 DECK 테스트 토큰도 만료됩니다.",
-    ENG: "Feel free to experience the Polaris Share service with a free DECK test token. At the end of the test period, the DECK test token also expires."
+    ENG: "It is recommended to use free DECK test tokens to get a hands-on experience of the Polaris Share service. Test tokens expire at the end of the test."
   }],
   ["dollar-learn-more-explain-3", {
     KOR: "테스트에 적극적으로 참여하는 사용자는 상용 버전의 Polaris Share를 열 때 적절한 보상을 제공할 예정입니다.",
-    ENG: "Users who actively participate in the test provide appropriate compensation when opening the commercial version of Polaris Share."
+    ENG: "When the commercial version launches, users will be rewarded based on their participation in the test."
   }],
   ["dollar-learn-more-btn", {
     KOR: "알겠습니다",
-    ENG: "Got it"
+    ENG: "I got it."
   }],
 
   // Edit Document Modal
   ["edit-doc-error-1", {
     KOR: "제목은 한 글자 보다 길어야 합니다.",
-    ENG: "Title must be longer than 1 character ."
+    ENG: "Title must be longer than 1 character."
   }],
   ["edit-doc-error-2", {
     KOR: "적어도 1개의 태그를 입력해야 합니다.",
-    ENG: "Tag must be at least 1 tag ."
+    ENG: "You must enter at least 1 tag."
   }],
   ["edit-doc-subj", {
     KOR: "업로드 문서 수정",
@@ -691,15 +699,15 @@ const strings = new Map([
   }],
   ["doc-option-1", {
     KOR: "문서 열람 시 이메일 입력 팝업 표시",
-    ENG: "Use audience tracking."
+    ENG: "Enable pop-up window requesting email address."
   }],
   ["doc-option-2", {
     KOR: "문서 열람 시 이메일 입력 강제",
-    ENG: "Force the audience to tracking."
+    ENG: "Require users to enter their email address when accessing the documents."
   }],
   ["doc-option-3", {
     KOR: "문서 내려받기 허용",
-    ENG: "Allow download documents."
+    ENG: "Enable document downloads."
   }],
   ["edit-cc-license", {
     KOR: "CC 라이센스",
@@ -723,25 +731,25 @@ const strings = new Map([
   // Email modal - basic
   ["email-modal-basic-subj", {
     KOR: "이 문서의 내용이 도움이 되셨나요?",
-    ENG: "Was this documents helpful?"
+    ENG: "Was this document helpful to you?"
   }],
   ["email-modal-basic--explain-1", {
     KOR: "아래 이메일 수신을 수락하시면 이 문서의 저자로부터 새로운 소식을 받아볼 수 있습니다.",
-    ENG: "If you click the Receive Email button, you will receive updates from the authors of this documents."
+    ENG: "You may opt-in to receive the latest news from the creator of this document."
   }],
 
   // Email modal - request
   ["email-modal-request-subj", {
     KOR: "이 문서의 내용이 도움이 되셨나요?",
-    ENG: "Was this documents helpful?"
+    ENG: "Was this document helpful to you?"
   }],
   ["email-modal-request-explain-1", {
     KOR: "이 문서의 저자에게 귀하의 연락처를 남겨보세요. 저자로부터 새로운 소식을 받을 수 있습니다.",
-    ENG: "If you click the Receive Email button, you will receive updates from the authors of this documents."
+    ENG: "Leave your contact information to receive the latest news from the creator of this document."
   }],
   ["email-modal-request-explain-2", {
     KOR: "입력하신 이메일은 폴라리스쉐어의 개인정보 처리 정책에 따라서 수집되고 활용됩니다.",
-    ENG: "If you click the Receive Email button, you will receive updates from the authors of this documents."
+    ENG: "The email address you provided is collected and used in accordance with the Polaris Share's Privacy Policy."
   }],
   ["email-modal-request-btn", {
     KOR: "제출하고 수신 수락",
@@ -751,11 +759,11 @@ const strings = new Map([
   // Email modal - force
   ["email-modal-force-subj", {
     KOR: "연락처를 남겨주세요.",
-    ENG: "Please leave a contact."
+    ENG: "Please leave your contact information."
   }],
   ["email-modal-force-explain-1", {
     KOR: "이 문서를 보시려면 귀하의 연락처를 남겨주세요. 저자로부터 새로운 소식을 받을 수 있습니다. ",
-    ENG: "Please leave your contact information to view this documents. You can receive news from the creator."
+    ENG: "Please enter your contact information to view this document. You will receive the latest news from the creator."
   }],
 
   // Email modal
@@ -769,11 +777,11 @@ const strings = new Map([
   }],
   ["email-modal-explain-1", {
     KOR: "이 문서를 보시려면 귀하의 연락처를 남겨주세요. 저자로부터 새로운 소식을 받을 수 있습니다.",
-    ENG: "Please leave your contact information to view this document. You can receive new news from the author."
+    ENG: "Submit your email address and check the email message containing the registration link to proceed with the registration. The information you provided below can be viewed by the content creator."
   }],
   ["email-modal-explain-2", {
     KOR: "이 정보를 제출하는데 동의합니다. 제출된 데이터는 폴라리스 쉐어의 개인정보 처리 정책에 따라서 수집되고 활용됩니다.",
-    ENG: "I agree to submit this information, which will be collected and used according to "
+    ENG: "I agree to submit this information which will be collected and used in accordance with DeCompany’s Privacy Policy."
   }],
   ["email-modal-explain-3", {
     KOR: " 폴라리스 쉐어의 개인정보 처리 정책 ",
@@ -785,7 +793,7 @@ const strings = new Map([
   }],
   ["email-modal-error-1", {
     KOR: "이메일 양식에 맞지 않습니다.",
-    ENG: "Email address does not fit the form."
+    ENG: "Your email address is invalid."
   }],
   ["email-modal-btn-ok", {
     KOR: "주소 제출 및 수신 수락",
@@ -807,7 +815,7 @@ const strings = new Map([
   }],
   ["upload-doc-check", {
     KOR: "문서 파일을 업로드 해주세요.",
-    ENG: "Please upload documents file."
+    ENG: "Please upload a document file."
   }],
   ["upload-doc-subj-2", {
     KOR: "문서 업로드 성공",
@@ -815,11 +823,19 @@ const strings = new Map([
   }],
   ["upload-doc-desc-2", {
     KOR: "현재 업로드된 문서는 Private(비공개) 상태입니다. 문서를 공개하려고 하신다면, Public(공개) 상태로 변경해 주시기 바랍니다.",
-    ENG: "Currently uploaded documents are in Private state. If you want to make the documents public, please change it from Private to Public."
+    ENG: "The uploaded document is set to Private. To allow public access, please change the setting to Public."
   }],
   ["upload-doc-desc-3", {
     KOR: "현재 5개의 비공개 문서를 보유중 입니다. 이후에 문서를 업로드하시려면, 보유하신 비공개 문서를 Public(공개) 상태로 변경해 주시기 바랍니다.",
     ENG: "You currently have 5 private documents. To upload your document later, please change it from Private to Public."
+  }],
+  ["upload-doc-desc-4-a", {
+    KOR: "현재 고객님의 비공개 문서는 ",
+    ENG: "You currently have "
+  }],
+  ["upload-doc-desc-4-b", {
+    KOR: "개이며, 최대 5개까지만 업로드할 수 있습니다.",
+    ENG: " private documents, and you can only upload up to 5 of them."
   }],
 
   // PrivateDocumentCountModal
@@ -843,11 +859,11 @@ const strings = new Map([
   }],
   ["vote-modal-err-1", {
     KOR: "투표액은 0보다 큰 값이어야 합니다.",
-    ENG: "Deposit must be greater than zero ."
+    ENG: "The amount for voting must be greater than zero."
   }],
   ["vote-modal-err-2", {
     KOR: "투표액은 잔고보다 작은 값이어야 합니다.",
-    ENG: "Deposit must be less than balance ."
+    ENG: "The amount for voting must be less than the balance."
   }],
   ["vote-modal-subj-1", {
     KOR: "1. 투표된 총 토큰량",
@@ -855,15 +871,15 @@ const strings = new Map([
   }],
   ["vote-modal-subj-2", {
     KOR: "2. 사용 가능한 토큰량",
-    ENG: "2. Amount of available tokens"
+    ENG: "2. Amount of tokens available"
   }],
   ["vote-modal-subj-3", {
     KOR: "3. 투표로 예치할 토큰량을 입력하세요",
-    ENG: "3. Enter the number of votes to commit"
+    ENG: "3. Enter the amount of tokens to vote"
   }],
   ["vote-modal-note", {
     KOR: "알림: 투표에 사용된 토큰은 8일 후에 인출할 수 있습니다.",
-    ENG: "Note: The token used for voting can be withdrawn after 3 days."
+    ENG: "Note: The tokens you used to vote can be withdrawn after 8 days."
   }],
   ["vote-modal-tooltip-1", {
     KOR: "이 문서에 투표하기",
@@ -968,7 +984,7 @@ const strings = new Map([
   }],
   ["payout-registered", {
     KOR: "블록체인에 미등록",
-    ENG: "NOT REGISTERED ON BLOCKCHAIN"
+    ENG: "NOT REGISTERD TO THE BLOCKCHAIN"
   }],
 
   // Profile card
@@ -992,7 +1008,7 @@ const strings = new Map([
   // Custom Chart
   ["chart-tracking-option-title", {
     KOR: "페이지당 총 소요시간",
-    ENG: "TOTAL TIME SPENT PER PAGE"
+    ENG: "TOTAL TIME PER PAGE"
   }],
   ["chart-date", {
     KOR: "날짜",
@@ -1030,7 +1046,7 @@ const strings = new Map([
   }],
   ["tracking-list-err-1", {
     KOR: "올바른 경로로 접근해주시기 바랍니다.",
-    ENG: "Please access with the correct path."
+    ENG: "Please access through the correct path."
   }],
   ["tracking-list-export", {
     KOR: "내보내기",
@@ -1092,11 +1108,11 @@ const strings = new Map([
   // Dollar Policy Modal
   ["dollar-policy-content", {
     KOR: "이곳에 표시된 달러 금액은 테스트 토큰이며 실제 금액이 아닌 오직 참조 값입니다.",
-    ENG: "The dollar amount shown here is a test token and is only a reference value, not an actual amount."
+    ENG: "The dollar amount shown here is for test tokens. It is for reference purposes and does not reflect the actual amount."
   }],
   ["dollar-policy-learn-more", {
     KOR: "상세 보기",
-    ENG: "Learn more"
+    ENG: "View details"
   }],
 
   // Menu

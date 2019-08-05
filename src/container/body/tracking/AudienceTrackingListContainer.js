@@ -23,7 +23,7 @@ export default connect(
         callback();
       }));
     },
-    setAlertCode: (alertCode: number) => {
+    setAlertCode: (alertCode: any) => {
       dispatch(setAlertCode(alertCode));
     },
   }),

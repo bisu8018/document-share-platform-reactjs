@@ -10,8 +10,8 @@ export default connect(
     getMyInfo: state.main.myInfo,
   }),
   dispatch => ({
-    setAlertCode: (alertCode: number) => {
-      dispatch(setAlertCode(alertCode));
+    setAlertCode: (alertCode: any, alertData: any) => {
+      dispatch(setAlertCode(alertCode, alertData));
     },
   })
 )(CreatorTabItem);

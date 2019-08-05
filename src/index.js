@@ -4,15 +4,21 @@ import { Provider } from "react-redux";
 import configureStore from "./redux/store/configureStore";
 import "assets/css/custom.css";
 import MainContainer from "./container/MainContainer";
+import { BrowserRouter } from "react-router-dom";
 
-export let store = configureStore(); // 스토어 생성
+let windowFlag = typeof window !== "undefined";
 
-let rootElement = document.getElementById("root");
+export let store = configureStore(windowFlag ? window.__PRELOADED_STATE__ : null); // 스토어 생성
 
-ReactDOM.render(
-  <Provider store={store}>
-    <MainContainer/>
-  </Provider>,
-  rootElement
-);
+if (windowFlag) {
+  ReactDOM.render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <MainContainer/>
+      </BrowserRouter>
+    </Provider>,
+    document.getElementById("root")
+  );
+}
+
 //registerServiceWorker();

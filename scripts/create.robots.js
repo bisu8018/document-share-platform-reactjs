@@ -1,12 +1,13 @@
-const fs = require('fs');
+const fs = require("fs");
 
-console.log("robots.txt 생성 시작. . .");
+console.log((process.env.NODE_ENV_SUB === "production" ? "운영계 " : "개발계 ") + "robots.txt 생성 시작. . .");
 
 let robotsTxt;
 
-if(process.env.NODE_ENV_SUB === "production"){
+if (process.env.NODE_ENV_SUB === "production") {
   robotsTxt = "User-agent: *\n" +
-    "Disallow: /about/\n" +
+    "Disallow: /\n" +   // 크롤러 임시 접근 X
+  /*  "Disallow: /about/\n" +
     "Disallow: /aboutus/\n" +
     "Disallow: /legal/\n" +
     "Disallow: /static/\n" +
@@ -29,14 +30,14 @@ if(process.env.NODE_ENV_SUB === "production"){
     "Disallow: /terms\n" +
     "Disallow: /emailverify\n" +
     "Disallow: /signup\n" +
-    "Disallow: /404\n" +
+    "Disallow: /404\n" +*/
     "Sitemap: https://www.polarishare.com/sitemap.xml\n";
-}else{
+} else {
   robotsTxt = "User-agent: *\n" +
-    "Disallow: *\n" +
+    "Disallow: /\n" +
     "Sitemap: https://share.decompany.io/sitemap.xml\n";
 }
 
 fs.writeFileSync("public/robots.txt", robotsTxt);
 
-console.log("robots.txt 생성 완료. . .");
+console.log((process.env.NODE_ENV_SUB === "production" ? "운영계 " : "개발계 ") + "robots.txt 생성 완료. . .");

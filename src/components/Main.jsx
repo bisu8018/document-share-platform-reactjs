@@ -152,7 +152,7 @@ class Main extends Component {
           <CookiePolicyModal/>
           <DollarPolicyModal/>
           <Switch>
-            {RouterList.routes.map((result, idx) => {
+            {RouterList.map((result, idx) => {
                 let flag = false;
                 if (idx === 0) flag = true;
                 return (

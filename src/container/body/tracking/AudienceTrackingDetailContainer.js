@@ -8,7 +8,7 @@ export default connect(
     getIncludeOnlyOnePage: state.audienceTracking.includeOnlyOnePage,
   }),
   dispatch => ({
-    setAlertCode: (alertCode: number) => {
+    setAlertCode: (alertCode: any) => {
       dispatch(setAlertCode(alertCode));
     },
   }),

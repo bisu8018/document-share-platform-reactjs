@@ -13,7 +13,7 @@ export default connect(
     setMyInfo: (myInfo: any) => {
       dispatch(setMyInfo(myInfo));
     },
-    setAlertCode: (alertCode: number) => {
+    setAlertCode: (alertCode: any) => {
       dispatch(setAlertCode(alertCode));
     }
   })

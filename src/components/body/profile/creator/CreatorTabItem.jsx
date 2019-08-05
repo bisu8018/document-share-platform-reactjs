@@ -17,7 +17,8 @@ class CreatorTabItem extends React.Component {
     super(props);
 
     this.state = {
-      ratio: null
+      ratio: null,
+      documentState: null
     };
   }
 
@@ -84,6 +85,10 @@ class CreatorTabItem extends React.Component {
   };
 
 
+  // 문서 상태 저장
+  setDocumentState = () => this.setState({ documentState: this.props.document.state });
+
+
   //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
     const { getMyInfo, document, setAlertCode } = this.props;
@@ -112,9 +117,28 @@ class CreatorTabItem extends React.Component {
   };
 
 
+  // 문서 상태관리
+  handleState = () => {
+    const { document, setAlertCode } = this.props;
+
+    if (document.state !== "CONVERT_COMPLETE") {
+      this.setInterval = setInterval(() => {
+        MainRepository.Document.getDocument(document.seoTitle).then(res => {
+          if (res && res.document.state === "CONVERT_COMPLETE") {
+            clearInterval(this.setInterval);
+            this.setState({ documentState: res.document.state }, () => setAlertCode(2075, {title:document.title}));
+          }
+        });
+      }, 5000);
+    }
+  };
+
+
   componentWillMount(): void {
     this.getImgInfo();
     this.clickEventListener();
+    this.setDocumentState();
+    this.handleState();
   }
 
 
@@ -125,7 +149,7 @@ class CreatorTabItem extends React.Component {
 
   render() {
     const { document, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, idx } = this.props;
-    const { ratio } = this.state;
+    const { ratio, documentState } = this.state;
 
     let reward = Common.toEther(Common.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
       vote = Common.toEther(document.latestVoteAmount) || 0,
@@ -137,9 +161,9 @@ class CreatorTabItem extends React.Component {
       <div className="row u_center_inner">
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
           <Link to={"/" + identification + "/" + document.seoTitle}
-                className={(document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
+                className={(documentState && documentState !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
             <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
-              {document.state && document.state !== "CONVERT_COMPLETE" ?
+              {documentState && documentState !== "CONVERT_COMPLETE" ?
                 <Tooltip title="Converting document..." placement="bottom">
                   <div className="not-convert-container">
                     <div className="not-convert"><FadingCircle size={40} color={"#3d5afe"}/></div>
@@ -148,7 +172,7 @@ class CreatorTabItem extends React.Component {
                 :
                 <img src={Common.getThumbnail(document.documentId, "thumb", 1, document.documentName)}
                      alt={document.title ? document.title : document.documentName}
-                     className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>
+                     className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (documentState && documentState !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>
               }
             </div>
           </Link>
@@ -160,17 +184,17 @@ class CreatorTabItem extends React.Component {
           <div className="view-option-btn top-0 right-0" id={"viewer-option-btn-" + idx}>
             <i className="material-icons" onClick={() => this.handleSetting()}>more_vert</i>
             <div className="option-table d-none" id={"viewer-option-table-" + idx}>
-              {document.state === "CONVERT_COMPLETE" && <CopyModalContainer documentData={document} type="onlyIcon"/>}
-              {document.state === "CONVERT_COMPLETE" && document.isDownload &&
+              {documentState === "CONVERT_COMPLETE" && <CopyModalContainer documentData={document} type="onlyIcon"/>}
+              {documentState === "CONVERT_COMPLETE" && document.isDownload &&
               <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>Download</div>}
-              {((Common.dateAgo(document.created) > 0 && document.state && document.state !== "CONVERT_COMPLETE") || document.isPublic === false) &&
+              {((Common.dateAgo(document.created) > 0 && documentState && documentState !== "CONVERT_COMPLETE") || document.isRegistry === false) &&
               <DeleteDocumentModalContainer documentData={document} type="onlyIcon"/>}
             </div>
           </div>
           }
 
           <Link to={"/" + identification + "/" + document.seoTitle}
-                className={(document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
+                className={(documentState && documentState !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
             <div className="info_title mb-1"
                  onClick={() => Common.scrollTop()}>
               {document.title ? document.title : document.documentName}
@@ -179,7 +203,7 @@ class CreatorTabItem extends React.Component {
 
           <div className="details-info-desc-wrapper">
             <Link to={"/" + identification + "/" + document.seoTitle}
-                  className={"info_desc " + (document.state && document.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}
+                  className={"info_desc " + (documentState && documentState !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}
                   title="description"
                   onClick={() => Common.scrollTop()}>
               {document.desc &&
@@ -212,7 +236,7 @@ class CreatorTabItem extends React.Component {
               <CreatorClaimContainer {...this.props} document={document}/>
             </div>
 
-            {document.isPublic === false && document.state === "CONVERT_COMPLETE" &&
+            {document.isPublic === false && documentState === "CONVERT_COMPLETE" &&
             <div className={(getIsMobile ? "mt-2" : "float-right")}>
               <PublishModalContainer documentData={document} type={"tabItem"}/>
             </div>

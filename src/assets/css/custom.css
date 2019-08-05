@@ -8292,6 +8292,7 @@ Duration CSS*/
 
 .option-table .option-table-btn {
     padding: 6px 10px;
+    text-align: center;
     min-width: 90px;
     cursor: pointer;
     background: white;
@@ -8928,7 +8929,6 @@ Dean*/
     margin-bottom: 25px;
     padding: 13px 24px 6px 24px;
     background-image: linear-gradient(to right, #5494ff, #307eff);
-    background: -webkit-linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9);
 }
 
 #classic-modal-slide-title > h3{
@@ -9573,6 +9573,20 @@ contentMain 배너 카로셀*/
 /*2019-04-10
 dean
 자동 완성 라이브러리 CSS*/
+.react-tagsinput-tag{
+    background-color: #56a9ef !important;
+    border-radius: 2px;
+    border: none !important;
+    color: #ffffff !important;
+    display: inline-block;
+    font-family: sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    padding: 5px;
+}
+
 .react-tagsinput-input {
     border-radius: 2px !important;
     border: 1px solid #ccc !important;

@@ -36,6 +36,7 @@
 
     <!--##META-TAG##-->
 
+    <!--favicon-->
     <link rel="manifest" crossorigin="use-credentials" type="application/json" href="/manifest.json"/>
     <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png"/>
     <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png"/>
@@ -55,7 +56,10 @@
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 
+    <!--구글 광고 스크립트-->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
+      // adobe 폰트 스크립트
       (function(d) {
         let config = {
             kitId: "whz1rlb",
@@ -70,7 +74,7 @@
         tk.async = true;
         tk.onload = tk.onreadystatechange = function() {
           a = this.readyState;
-          if (f || a && a != "complete" && a != "loaded") return;
+          if (f || a && a !== "complete" && a !== "loaded") return;
           f = true;
           clearTimeout(t);
           try {
@@ -80,6 +84,13 @@
         };
         s.parentNode.insertBefore(tk, s);
       })(document);
+
+
+      // 구글 광고 스크립트
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-2064031911940677",
+      enable_page_level_ads: true
+      });
 
       document.documentElement.addEventListener("touchstart", function(event) {
         if (event.touches.length > 1) {

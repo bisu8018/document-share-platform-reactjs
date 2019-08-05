@@ -47,18 +47,16 @@ class UploadDocumentModal extends React.Component {
       moreOptions: false,    // more options show / hide
       username: null,
       desc: "",
-      privateFull: false    // 프라이빗 문서 5개 체크
+      privateDocCount: false    // 프라이빗 문서 5개 체크
     };
   }
 
 
   // 프라이빗 문서 보유수 체크
   checkPrivateDoc = (res) => {
-    if (res.privateDocumentCount >= 5) {     // 컨버터 타이밍으로 인해 반환 되는 값이 최신화가 안돼있어 + 1 해줘야한다.
-      this.setState({ privateFull: true }, () => {
-        this.handleClickOpen("classicModalSub"); //두번째 모달 열기
-      });
-    } else this.handleClickOpen("classicModalSub"); //두번째 모달 열기
+    this.setState({ privateDocCount: res.privateDocumentCount }, () => {
+      this.handleClickOpen("classicModalSub"); //두번째 모달 열기
+    });
   };
 
 
@@ -235,6 +233,7 @@ class UploadDocumentModal extends React.Component {
     let username = getMyInfo.username;
     let _username = username ? username : getMyInfo.ethAccount;
     this.setState({ username: _username }, () => {
+      if (modal === "classicModal" && getMyInfo.privateDocumentCount > 0) this.props.setAlertCode(2074);
       this.handleOpen(modal);
     });
   };
@@ -247,7 +246,6 @@ class UploadDocumentModal extends React.Component {
       const x = [];
       x[modal] = true;
       this.setState(x);
-      this.props.setAlertCode(2074);
     }
   };
 
@@ -259,6 +257,13 @@ class UploadDocumentModal extends React.Component {
     this.setState(x);
     this.clearForm();
     this.clearState();
+  };
+
+
+  // 마이페이지에서 모달 종료 관리
+  handleCloseOnMyPage = () => {
+    this.handleClose();
+    document.location.reload();
   };
 
 
@@ -434,7 +439,7 @@ class UploadDocumentModal extends React.Component {
 
 
   render() {
-    const { privateFull, classicModal, classicModalSub, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload, username } = this.state;
+    const { privateDocCount, classicModal, classicModalSub, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload, username } = this.state;
     const { type } = this.props;
 
     return (
@@ -514,7 +519,7 @@ class UploadDocumentModal extends React.Component {
             <div>
               <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
               <div className="row">
-                <div className="col-12 col-sm-6">
+                <div className="col-12">
                   <input type="checkbox" id="useTrackingCheckbox" onChange={(e) => this.handleTrackingCheckbox(e)}
                          checked={useTracking}/>
 
@@ -523,7 +528,7 @@ class UploadDocumentModal extends React.Component {
                     {psString("doc-option-1")}
                   </label>
                 </div>
-                <div className="col-12 col-sm-6">
+                <div className="col-12">
                   <input type="checkbox" id="forceTrackingCheckbox"
                          onChange={(e) => this.handleForceTrackingCheckbox(e)}
                          checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
@@ -532,7 +537,7 @@ class UploadDocumentModal extends React.Component {
                     {psString("doc-option-2")}
                   </label>
                 </div>
-                <div className="col-12 col-sm-6">
+                <div className="col-12">
                   <input type="checkbox" id="allowDownload" checked={allowDownload}
                          onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
                   <label htmlFor="allowDownload">
@@ -618,15 +623,20 @@ class UploadDocumentModal extends React.Component {
           </DialogTitle>
 
           <DialogContent id="classic-modal-slide-description ">
-            <div className="">{psString("upload-doc-desc-" + (privateFull ? "3" : "2"))}</div>
-          </DialogContent>
-
-          <DialogActions className="modal-footer">
-            <div onClick={() => this.handleClose()} className="ok-btn">{psString("common-modal-confirm")}</div>
-            {username !== common.getPath() &&
-            <div onClick={() => this.handleLinkBtn()} className="ok-btn">{psString("private-doc-modal-btn")}</div>
+            {privateDocCount >= 5 ?
+              <div>{psString("upload-doc-desc-3")}</div> :
+              <div>{psString("upload-doc-desc-2") + psString("upload-doc-desc-4-a") + privateDocCount + psString("upload-doc-desc-4-b")}</div>
             }
-          </DialogActions>
+          </DialogContent>
+          {username === common.getPath() ?
+            <DialogActions className="modal-footer">
+              <div onClick={() => this.handleCloseOnMyPage()} className="ok-btn">{psString("common-modal-confirm")}</div>
+            </DialogActions> :
+            <DialogActions className="modal-footer">
+              <div onClick={() => this.handleClose()} className="ok-btn">{psString("common-modal-confirm")}</div>
+              <div onClick={() => this.handleLinkBtn()} className="ok-btn">{psString("private-doc-modal-btn")}</div>
+            </DialogActions>
+          }
         </Dialog>
 
 

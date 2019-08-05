@@ -7,6 +7,8 @@ import { psString } from "../../../config/localization";
 import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../../redux/MainRepository";
 import { FadingCircle } from "better-react-spinkit";
+import common from "../../../config/common";
+import history from "apis/history/history";
 
 
 const Transition = props => <Slide direction="down" {...props} />;
@@ -57,8 +59,20 @@ class DeleteDocumentModal extends React.Component {
     this.setState({ loading: true });
     MainRepository.Document.deleteDocument({ isDeleted: true, documentId: documentData.documentId }).then(() => {
       this.handleClose("classicModal");
-      document.location.reload();
+      this.handleDeleteAfter();
     }).catch(() => this.setState({ loading: false }, () => setAlertCode(2073)));
+  };
+
+
+  // 삭제후 관리
+  handleDeleteAfter = (seoTitle) => {
+    const { setAlertCode, documentData } = this.props;
+
+    if (common.getPaths().length > 2 && common.getPaths()[2] === documentData.seoTitle) {
+      history.push("/");
+      setAlertCode(2076);
+    }
+    else document.location.reload();
   };
 
 

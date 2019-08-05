@@ -5,6 +5,6 @@ import CopyModal from "../../../components/common/modal/CopyModal";
 export default connect(
   state => ({}),
   dispatch => ({
-    setAlertCode: (alertCode: number) => {dispatch(setAlertCode(alertCode))}
+    setAlertCode: (alertCode: any) => {dispatch(setAlertCode(alertCode))}
   })
 )(CopyModal);

@@ -291,6 +291,7 @@ export default ({
     const pathArr = window.location.pathname.split("/");
     return pathArr[1];
   },
+  getPaths: () => window.location.pathname.split("/"),
   getVersion: () => {
     return "v " + process.env.PROJECT_VERSION;
   },

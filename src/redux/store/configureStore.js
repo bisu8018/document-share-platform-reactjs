@@ -1,18 +1,22 @@
-import rootReducer from '../reducer';
-import storeLogger from './storeLogger';
-import thunk from 'redux-thunk';
-import { createStore, applyMiddleware  } from "redux";
+import rootReducer from "../reducer";
+import storeLogger from "./storeLogger";
+import thunk from "redux-thunk";
+import { createStore, applyMiddleware, compose } from "redux";
 
-export default () => {
+export default (preloadedState) => {
   let store: *;
+  const isDev = process.env.NODE_ENV === "development";
+  const devTools = isDev && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+  const composeEnhancers = devTools || compose;
+
   store = createStore(
     rootReducer,
-    applyMiddleware(thunk));
-  if (!process.env.NODE_ENV_SUB === "production" && !process.env.NODE_ENV_SUB === "development" ) store = createStore(rootReducer, applyMiddleware(storeLogger));
+    preloadedState,
+    composeEnhancers(applyMiddleware(thunk)));
+  if (!isDev) store = createStore(rootReducer, applyMiddleware(storeLogger));
 
   return store;
 }
-
 
 
 /*

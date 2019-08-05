@@ -107,7 +107,7 @@ class PublishModal extends React.Component {
     const { classicModal, publishLoading, registerLoading } = this.state;
     const { getDrizzle, getMyInfo, type, getIsMobile } = this.props;
 
-    let ethAccount = getMyInfo.ethAccount;
+    let drizzleFlag = getDrizzle && getDrizzle.getReaderAccount() === getMyInfo.ethAccount;
 
     return (
       <span>
@@ -145,26 +145,18 @@ class PublishModal extends React.Component {
 
           <DialogContent id="classic-modal-slide-description ">
             <div
-              className="">{psString("publish-modal-desc-" + (!getDrizzle || !(getDrizzle && ethAccount) ? "1" : "2"))}</div>
+              className="">{psString("publish-modal-desc-" + (!drizzleFlag ? "1" : "2"))}</div>
           </DialogContent>
 
 
           <DialogActions className="modal-footer">
-            {!getDrizzle || !(getDrizzle && ethAccount) ?
-              <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">
-                {psString("common-modal-cancel")}</div> :
-              <div onClick={() => this.handleClickPublish()}
-                   className={"ok-btn " + (publishLoading ? "btn-disabled" : "")}>
-                {publishLoading &&
-                <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
-                {psString("publish-modal-publish-btn")}
-              </div>
-            }
+            <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">
+                {psString("common-modal-cancel")}</div>
             <div onClick={() => this.handleClickRegister()}
                  className={"ok-btn " + (registerLoading ? "btn-disabled" : "")}>
                 {registerLoading &&
                 <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
-              {psString(!getDrizzle || !(getDrizzle && ethAccount) ? "publish-modal-publish-btn" : "publish-modal-confirm-btn")}
+              {psString(!drizzleFlag ? "publish-modal-publish-btn" : "publish-modal-confirm-btn")}
             </div>
           </DialogActions>
         </Dialog>

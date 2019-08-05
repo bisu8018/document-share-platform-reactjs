@@ -440,7 +440,6 @@ export default {
       }, (err) => error(err));
     },
     documentUpload(params) {
-      console.log(params);
       if (params.file == null || params.fileid == null || params.ext == null)
         return console.error("file object is null", params);
 
