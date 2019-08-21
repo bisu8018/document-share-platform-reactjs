@@ -9,7 +9,7 @@ import Tooltip from "@material-ui/core/Tooltip/index";
 import Slide from "@material-ui/core/Slide/index";
 
 import MainRepository from "../../../redux/MainRepository";
-import Common from "../../../config/common";
+import Common from "../../../common/common";
 import CuratorUserActiveVoteContainer from "../../../container/common/UserActiveVoteContainer";
 import CuratorActiveVoteContainer from "../../../container/common/ActiveVoteContainer";
 import ApproveModal from "./ApproveModal";

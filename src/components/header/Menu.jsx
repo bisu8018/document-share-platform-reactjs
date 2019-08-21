@@ -2,8 +2,9 @@ import React from "react";
 import MainRepository from "../../redux/MainRepository";
 import UserInfo from "../../redux/model/UserInfo";
 import { Link } from "react-router-dom";
-import Common from "../../config/common";
+import Common from "../../common/common";
 import { psString } from "../../config/localization";
+import common_view from "../../common/common_view";
 
 class Menu extends React.Component {
   state = {
@@ -12,19 +13,19 @@ class Menu extends React.Component {
 
   menuShow = () => {
     this.setState({ menuShow: true }, () => {
-      Common.setBodyStyleLock();
+      common_view.setBodyStyleLock();
     });
   };
 
   menuHide = () => {
     this.setState({ menuShow: false }, () => {
-      Common.setBodyStyleUnlock();
+      common_view.setBodyStyleUnlock();
     });
   };
 
   menuClick = () => {
     this.menuHide();
-    Common.scrollTop();
+    common_view.scrollTop();
   };
 
   handleLogin = () => {

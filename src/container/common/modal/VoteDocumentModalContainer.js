@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import VoteDocument from "../../../components/common/modal/VoteDocumentModal";
-import { setAlertCode, setDrizzleApis } from "../../../redux/reducer/main";
+import { setAlertCode } from "../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -9,9 +9,6 @@ export default connect(
     getMyInfo: state.main.myInfo
   }),
   dispatch => ({
-    setDrizzleApis: () => {
-      dispatch(setDrizzleApis());
-    },
     setAlertCode: (alertCode: any) => {
       dispatch(setAlertCode(alertCode));
     },

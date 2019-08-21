@@ -10,12 +10,12 @@ class Guide extends React.PureComponent {
 
     return (
 
-      <div className="row mb-5">
+      <div className="row container mb-5">
         <Helmet>
           <title>{psString("helmet-title-guide") + " | Polaris Share"}</title>
         </Helmet>
 
-        <div className="col-sm-12 col-lg-10 offset-lg-1 mb-5 u__center-faq">
+        <div className="col-12 mt-3 mb-5">
           <div className="legal-subject mt-3 mt-sm-5 text-center">{psString("guide-subj-main")}</div>
 
           <div className="legal-content mt-4">

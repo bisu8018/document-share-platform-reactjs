@@ -1,19 +1,14 @@
 import axios from "axios";
 import { APP_PROPERTIES } from "../properties/app.properties";
 import * as qs from "qs";
-import { store } from "../index";
-import { setAlertCode } from "../redux/reducer/main";
 
 export default {
-  getRootUrlWithApi: function() {
-    return APP_PROPERTIES.domain().api + "/api/";
-  },
   /**
    * @return {boolean}
    */
-  DEBUG: function() {
-    return false;
-  },
+  DEBUG: () => false,
+
+  getRootUrlWithApi: () => APP_PROPERTIES.domain().api + "/api/",
   _request: function(url, type, data, success, failure, header) {
     if (this.DEBUG()) console.log("[request]\nurl: " + url + "\ndata: " + data);
 
@@ -30,12 +25,8 @@ export default {
     })
       .then(response => {
           if (this.DEBUG()) console.log("성공\nurl: " + url + "\nres:\n" + JSON.stringify(response.data));
-
           if (response.data.success && response.data.success === true) success(response.data);  //성공 alert
-          else {
-            store.dispatch(setAlertCode(2001));  // Alert Show
-            failure(response.data.message);
-          }
+          else failure(response.data.message);
         }
       )
       .catch(error => {
@@ -50,17 +41,13 @@ export default {
             console.log("Error!\ncode:" + status + "\nmessage:" + statusText + "\nerror:" + error);
           }
           console.log("Status: " + status);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log("Error", error);
-        }
+        } else if (error.request) console.log(error.request);
+        else console.log("Error", error);
 
         console.log(error);
         failure(error);
 
-      }).then(() => {
-    });
+      }).then();
   },
   _requestPlain: function(url, type, success, failure) {
     this._request(

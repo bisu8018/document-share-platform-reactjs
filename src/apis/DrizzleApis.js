@@ -23,7 +23,9 @@ if (process.env.NODE_ENV_SUB === "production") {
   RewardPool = require("apis/contracts-dev/RewardPool.json");
 }
 
+
 const defaultAccountId = "0x7069Ba7ec699e5446cc27058DeF50dE2224796AE";
+
 
 export default class DrizzleApis {
   options = {
@@ -71,7 +73,7 @@ export default class DrizzleApis {
 
   //드리즐 초기화 체크
   isInitialized = () => {
-    if (!this.drizzleState) return;
+    if (!this.drizzleState) return false;
     return this.drizzleState.drizzleStatus.initialized;
   };
 
@@ -147,7 +149,6 @@ export default class DrizzleApis {
   approve = async () => {
     const Deck = this.drizzle.contracts.Deck;
     const RewardPool = this.drizzle.contracts.RewardPool;
-    //let bigNumberDeposit = this.toBigNumber(deposit);
     let temp = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
     let ethAccount = this.drizzleState.accounts[0];
     let stackId = Deck.methods["approve"].cacheSend(RewardPool.address, temp, { from: ethAccount });

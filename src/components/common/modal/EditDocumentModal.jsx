@@ -9,8 +9,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../../redux/MainRepository";
-import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
+import common_view from "../../../common/common_view";
 
 const Transition = props => <Slide direction="down" {...props} />;
 
@@ -38,11 +38,15 @@ class EditDocumentModal extends React.Component {
     };
   }
 
+
+  // form 초기화
   clearForm = () => {
     document.getElementById("docTitle").value = null;
     document.getElementById("docDesc").value = null;
   };
 
+
+  // state 초기화
   clearState = () => {
     this.setState({
       title: "",
@@ -87,16 +91,12 @@ class EditDocumentModal extends React.Component {
     else if (cc === "by-sa") this.setState({ by: true, sa: true });
     else if (cc === "by-nc-sa") this.setState({ by: true, nc: true, sa: true });
     else if (cc === "by-nc-nd") this.setState({ by: true, nc: true, nd: true });
-
   };
 
 
   // 확인 버튼 관리
   handleConfirmBtn = () => {
-    // input 값 유효성 검사
-    if (!this.validateTitle() || !this.validateTag()) {
-      return false;
-    }
+    if (!this.validateTitle() || !this.validateTag()) return false;   // input 값 유효성 검사
     this.handleConfirm();
   };
 
@@ -115,11 +115,12 @@ class EditDocumentModal extends React.Component {
       isDownload: allowDownload,
       cc: this.getCcValue()
     };
-    MainRepository.Document.updateDocument(data).then(result => {
-      history.push("/" + Common.getPath() + "/" + result.seoTitle);
+    console.log(data);
+    /*MainRepository.Document.updateDocument(data).then(result => {
+      history.push("/" + common_view.getPath() + "/" + result.seoTitle);
       this.handleClose();
       document.location.reload();   //임시로 사용, redux 로 교체 검토 필요
-    });
+    });*/
   };
 
 
@@ -139,6 +140,7 @@ class EditDocumentModal extends React.Component {
     let username = MainRepository.Account.getMyInfo().username;
     let email = MainRepository.Account.getMyInfo().email;
     let _username = username ? username : (email ? email : documentData.accountId);
+
     this.setState({ username: _username });
     this.setState({ title: documentData.title });
     this.setState({ desc: documentData.desc });
@@ -186,14 +188,8 @@ class EditDocumentModal extends React.Component {
     const { useTracking } = this.state;
 
     let newValue = !useTracking;
-    this.setState({
-      useTracking: newValue
-    }, () => {
-      if (!useTracking) {
-        this.setState({
-          forceTracking: false
-        });
-      }
+    this.setState({ useTracking: newValue }, () => {
+      if (!useTracking) this.setState({ forceTracking: false });
     });
   };
 
@@ -202,9 +198,7 @@ class EditDocumentModal extends React.Component {
   handleForceTrackingCheckbox = () => {
     const { forceTracking } = this.state;
     let newValue = !forceTracking;
-    this.setState({
-      forceTracking: newValue
-    });
+    this.setState({ forceTracking: newValue });
   };
 
 
@@ -212,9 +206,7 @@ class EditDocumentModal extends React.Component {
   handleAllowDownloadCheckbox = () => {
     const { allowDownload } = this.state;
     let newValue = !allowDownload;
-    this.setState({
-      allowDownload: newValue
-    });
+    this.setState({ allowDownload: newValue });
   };
 
 
@@ -222,9 +214,7 @@ class EditDocumentModal extends React.Component {
   handleCcByCheckbox = () => {
     const { by } = this.state;
     let newValue = !by;
-    this.setState({
-      by: newValue
-    });
+    this.setState({ by: newValue });
   };
 
 
@@ -232,9 +222,7 @@ class EditDocumentModal extends React.Component {
   handleCcNcCheckbox = () => {
     const { nc } = this.state;
     let newValue = !nc;
-    this.setState({
-      nc: newValue
-    });
+    this.setState({ nc: newValue });
   };
 
 
@@ -242,9 +230,7 @@ class EditDocumentModal extends React.Component {
   handleCcNdCheckbox = () => {
     const { nd } = this.state;
     let newValue = !nd;
-    this.setState({
-      nd: newValue
-    });
+    this.setState({ nd: newValue });
   };
 
 
@@ -252,9 +238,7 @@ class EditDocumentModal extends React.Component {
   handleCcSaCheckbox = () => {
     const { sa } = this.state;
     let newValue = !sa;
-    this.setState({
-      sa: newValue
-    });
+    this.setState({ sa: newValue });
   };
 
 
@@ -281,10 +265,7 @@ class EditDocumentModal extends React.Component {
   //제목 유효성 체크
   validateTitle = () => {
     const { title } = this.state;
-    this.setState({
-      titleError:
-        title.length > 0 ? "" : psString("edit-doc-error-1")
-    });
+    this.setState({ titleError: title.length > 0 ? "" : psString("edit-doc-error-1") });
     return title.length > 0;
   };
 
@@ -292,10 +273,7 @@ class EditDocumentModal extends React.Component {
   //태그 유효성 체크
   validateTag = () => {
     const { tags } = this.state;
-    this.setState({
-      tagError:
-        tags.length > 0 ? "" : psString("edit-doc-error-2")
-    });
+    this.setState({ tagError: tags.length > 0 ? "" : psString("edit-doc-error-2") });
     return tags.length > 0;
   };
 
@@ -303,21 +281,15 @@ class EditDocumentModal extends React.Component {
   // 자동완성 및 태그 관련 라이브러리 함수
   autocompleteRenderInput = ({ addTag, ...props }) => {
     let handleOnChange = (e, { newValue, method }) => {
-      if (method === "enter") {
-        e.preventDefault();
-      } else {
-        props.onChange(e);
-      }
+      if (method === "enter") e.preventDefault();
+      else props.onChange(e);
     };
 
     let tagList = this.props.getTagList;
     let inputValue = (props.value && props.value.trim().toLowerCase()) || "";
     let inputLength = inputValue.length;
     let suggestions = tagList.length > 0 ?
-      tagList.filter((tag) => {
-        return tag._id.toLowerCase().slice(0, inputLength) === inputValue;
-      })
-      : [];
+      tagList.filter((tag) => tag._id.toLowerCase().slice(0, inputLength) === inputValue) : [];
 
     return (
       <AutoSuggest
@@ -343,9 +315,9 @@ class EditDocumentModal extends React.Component {
 
     return (
       <div>
-          <div className="option-table-btn " onClick={() => this.handleClickOpen("classicModal")}>
-           {psString("common-modal-settings")}
-          </div>
+        <div className="option-table-btn " onClick={() => this.handleClickOpen("classicModal")}>
+          {psString("common-modal-settings")}
+        </div>
 
         <Dialog
           className="modal-width"
@@ -356,129 +328,129 @@ class EditDocumentModal extends React.Component {
           aria-labelledby="classic-modal-slide-title"
           aria-describedby="classic-modal-slide-description">
 
-              <DialogTitle
-                id="classic-modal-slide-title"
-                disableTypography>
-                <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                <h3>{psString("edit-doc-subj")}</h3>
-              </DialogTitle>
+          <DialogTitle
+            id="classic-modal-slide-title"
+            disableTypography>
+            <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
+            <h3>{psString("edit-doc-subj")}</h3>
+          </DialogTitle>
 
 
-              <DialogContent id="classic-modal-slide-description">
-                <div className="dialog-subject">{psString("common-modal-title")}</div>
-                <input type="text" placeholder={psString("title-placeholder")} id="docTitle"
-                       className={"custom-input " + (titleError.length > 0 ? "custom-input-warning" : "")}
-                       value={title}
-                       onChange={(e) => this.handleTitleChange(e)}/>
-                <span>{titleError}</span>
+          <DialogContent id="classic-modal-slide-description">
+            <div className="dialog-subject">{psString("common-modal-title")}</div>
+            <input type="text" placeholder={psString("title-placeholder")} id="docTitle"
+                   className={"custom-input " + (titleError.length > 0 ? "custom-input-warning" : "")}
+                   value={title}
+                   onChange={(e) => this.handleTitleChange(e)}/>
+            <span>{titleError}</span>
 
-                <div className="dialog-subject mt-3 mb-2">{psString("common-modal-description")}</div>
-                <textarea id="docDesc" value={desc} placeholder={psString("description-placeholder")}
-                          onChange={(e) => this.handleDescChange(e)} className="custom-textarea"/>
+            <div className="dialog-subject mt-3 mb-2">{psString("common-modal-description")}</div>
+            <textarea id="docDesc" value={desc} placeholder={psString("description-placeholder")}
+                      onChange={(e) => this.handleDescChange(e)} className="custom-textarea"/>
 
-                <div className="dialog-subject mt-3">{psString("common-modal-tag")}</div>
-                {tags &&
-                <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
-                           className={"react-tagsinput " + (tagError.length > 0 ? "tag-input-warning" : "")}
-                           value={tags} onChange={this.handleTagChange} validate={false} onlyUnique/>
-                }
-                <span> {tagError}</span>
+            <div className="dialog-subject mt-3">{psString("common-modal-tag")}</div>
+            {tags &&
+            <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
+                       className={"react-tagsinput " + (tagError.length > 0 ? "tag-input-warning" : "")}
+                       value={tags} onChange={this.handleTagChange} validate={false} onlyUnique/>
+            }
+            <span> {tagError}</span>
 
 
             <div className="modal-more-btn-wrapper">
-               <div className="modal-more-btn-line"/>
-               <div className="modal-more-btn" onClick={() => this.handleMoreOptions()}>
-                 {psString("common-modal-more-option")}
-                 <img className="reward-arrow"
-                      src={require("assets/image/icon/i_arrow_" + (moreOptions ? "down_grey.svg" : "up_grey.png"))}
-                      alt="arrow button"/>
-               </div>
+              <div className="modal-more-btn-line"/>
+              <div className="modal-more-btn" onClick={() => this.handleMoreOptions()}>
+                {psString("common-modal-more-option")}
+                <img className="reward-arrow"
+                     src={require("assets/image/icon/i_arrow_" + (moreOptions ? "down_grey.svg" : "up_grey.png"))}
+                     alt="arrow button"/>
+              </div>
             </div>
 
-                {moreOptions &&
-                <div>
-                  <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
-                  <div className="row">
-                    <div className="col-12 col-sm-6">
-                      <input type="checkbox" id="useTrackingCheckboxEdit"
-                             onChange={(e) => this.handleTrackingCheckbox(e)}
-                             checked={useTracking}/>
+            {moreOptions &&
+            <div>
+              <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
+              <div className="row">
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="useTrackingCheckboxEdit"
+                         onChange={(e) => this.handleTrackingCheckbox(e)}
+                         checked={useTracking}/>
 
-                      <label htmlFor="useTrackingCheckboxEdit">
-                        <span><i className="material-icons">done</i></span>
-                        {psString("doc-option-1")}
-                      </label>
-                    </div>
-                    <div className="col-12 col-sm-6">
-                      <input type="checkbox" id="forceTrackingCheckboxEdit"
-                             onChange={(e) => this.handleForceTrackingCheckbox(e)}
-                             checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
-                      <label htmlFor="forceTrackingCheckboxEdit">
-                        <span><i className="material-icons">done</i></span>
-                        {psString("doc-option-2")}
-                      </label>
-                    </div>
-                    <div className="col-12 col-sm-6">
-                      <input type="checkbox" id="allowDownloadEdit" checked={allowDownload}
-                             onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
-                      <label htmlFor="allowDownloadEdit">
-                        <span><i className="material-icons">done</i></span>
-                        {psString("doc-option-3")}
-                      </label>
-                    </div>
-                  </div>
-
-
-                  <div className="dialog-subject mb-2 mt-3">{psString("edit-cc-license")}</div>
-                  <div className="row">
-                    <div className="col-12 col-sm-6">
-                      <input type="checkbox" id="ccByCheckboxEdit" onChange={(e) => this.handleCcByCheckbox(e)}
-                             checked={by}/>
-                      <label htmlFor="ccByCheckboxEdit">
-                        <span><i className="material-icons">done</i></span>
-                        Attribution
-                      </label>
-                    </div>
-                    <div className="col-12 col-sm-6">
-                      <input type="checkbox" id="ccNcCheckboxEdit" onChange={(e) => this.handleCcNcCheckbox(e)}
-                             checked={nc}/>
-                      <label htmlFor="ccNcCheckboxEdit">
-                        <span><i className="material-icons">done</i></span>
-                        Noncommercial
-                      </label>
-                    </div>
-                    <div className="col-12 col-sm-6">
-                      <input type="checkbox" id="ccNdCheckboxEdit" onChange={(e) => this.handleCcNdCheckbox(e)}
-                             checked={sa ? false : nd} disabled={sa}/>
-                      <label htmlFor="ccNdCheckboxEdit">
-                        <span><i className="material-icons">done</i></span>
-                        No Derivative Works
-                      </label>
-                    </div>
-                    <div className="col-12 col-sm-6">
-                      <input type="checkbox" id="ccSaCheckboxEdit" onChange={(e) => this.handleCcSaCheckbox(e)}
-                             checked={nd ? false : sa} disabled={nd}/>
-                      <label htmlFor="ccSaCheckboxEdit">
-                        <span><i className="material-icons">done</i></span>
-                        Share Alike
-                      </label>
-                    </div>
-                  </div>
-
+                  <label htmlFor="useTrackingCheckboxEdit">
+                    <span><i className="material-icons">done</i></span>
+                    {psString("doc-option-1")}
+                  </label>
                 </div>
-                }
+                <div className="col-12">
+                  <input type="checkbox" id="forceTrackingCheckboxEdit"
+                         onChange={(e) => this.handleForceTrackingCheckbox(e)}
+                         checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
+                  <label htmlFor="forceTrackingCheckboxEdit">
+                    <span><i className="material-icons">done</i></span>
+                    {psString("doc-option-2")}
+                  </label>
+                </div>
+                <div className="col-12">
+                  <input type="checkbox" id="allowDownloadEdit" checked={allowDownload}
+                         onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
+                  <label htmlFor="allowDownloadEdit">
+                    <span><i className="material-icons">done</i></span>
+                    {psString("doc-option-3")}
+                  </label>
+                </div>
+              </div>
 
-                  </DialogContent>
+
+              <div className="dialog-subject mb-2 mt-3">{psString("edit-cc-license")}</div>
+              <div className="row">
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccByCheckboxEdit" onChange={(e) => this.handleCcByCheckbox(e)}
+                         checked={by}/>
+                  <label htmlFor="ccByCheckboxEdit">
+                    <span><i className="material-icons">done</i></span>
+                    Attribution
+                  </label>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccNcCheckboxEdit" onChange={(e) => this.handleCcNcCheckbox(e)}
+                         checked={!by ? false : nc} disabled={!by}/>
+                  <label htmlFor="ccNcCheckboxEdit">
+                    <span><i className="material-icons">done</i></span>
+                    Noncommercial
+                  </label>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccNdCheckboxEdit" onChange={(e) => this.handleCcNdCheckbox(e)}
+                         checked={!by || sa ? false : nd} disabled={!by || sa}/>
+                  <label htmlFor="ccNdCheckboxEdit">
+                    <span><i className="material-icons">done</i></span>
+                    No Derivative Works
+                  </label>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccSaCheckboxEdit" onChange={(e) => this.handleCcSaCheckbox(e)}
+                         checked={!by || nd ? false : sa} disabled={!by || nd}/>
+                  <label htmlFor="ccSaCheckboxEdit">
+                    <span><i className="material-icons">done</i></span>
+                    Share Alike
+                  </label>
+                </div>
+              </div>
+
+            </div>
+            }
+
+          </DialogContent>
 
 
-                  <DialogActions className="modal-footer">
-                  <div onClick={() => this.handleClose("classicModal")}
-                       className="cancel-btn">{psString("common-modal-cancel")}</div>
-                  <div onClick={() => this.handleConfirmBtn()}
-                       className="ok-btn">{psString("common-modal-confirm")}</div>
-                  </DialogActions>
-                  </Dialog>
-                  </div>
+          <DialogActions className="modal-footer">
+            <div onClick={() => this.handleClose("classicModal")}
+                 className="cancel-btn">{psString("common-modal-cancel")}</div>
+            <div onClick={() => this.handleConfirmBtn()}
+                 className="ok-btn">{psString("common-modal-confirm")}</div>
+          </DialogActions>
+        </Dialog>
+      </div>
     );
   }
 }

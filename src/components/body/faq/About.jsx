@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
 import { Helmet } from "react-helmet";
+import common_view from "../../../common/common_view";
 
 
 class About extends React.Component {
@@ -27,7 +27,7 @@ class About extends React.Component {
             </div>
             <div className="about-text-align">
               <Link to="/faq">
-                <div className="main-learn-more-btn tac" onClick={() => Common.scrollTop()}
+                <div className="main-learn-more-btn tac" onClick={() => common_view.scrollTop()}
                      title="Link to FAQ">{psString("main-banner-btn-4")}</div>
               </Link>
             </div>

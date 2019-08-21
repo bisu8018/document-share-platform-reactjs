@@ -1,9 +1,9 @@
-import React from "react";
-import BalanceOfContainer from "../../../container/common/BalanceOfContainer";
-import MainRepository from "../../../redux/MainRepository";
-import UserInfo from "../../../redux/model/UserInfo";
-import { psString } from "../../../config/localization";
-import { FadingCircle } from "better-react-spinkit";
+import React from 'react';
+import BalanceOfContainer from '../../../container/common/BalanceOfContainer';
+import MainRepository from '../../../redux/MainRepository';
+import UserInfo from '../../../redux/model/UserInfo';
+import { psString } from '../../../config/localization';
+import { FadingCircle } from 'better-react-spinkit';
 
 class ProfileCard extends React.Component {
   state = {
@@ -46,41 +46,41 @@ class ProfileCard extends React.Component {
     let identification = (getMyInfo.username.length && getMyInfo.username.length > 0 ? getMyInfo.username : getMyInfo.email);
 
     return (
-      <div className="profile-card tac" id="profileCard">
-        <div className="mt-4 mb-4">
+      <div className='profile-card tac' id='profileCard'>
+        <div className='mt-4 mb-4'>
 
           {MainRepository.Account.isAuthenticated() ?
             getMyInfo.picture.length > 0 ?
-              <img src={getMyInfo.picture} className="profile-card-avatar" alt="profile"/> :
-              <img src={require("assets/image/icon/i_anonymous.png")} className="profile-card-avatar" alt="profile"/>
+              <img src={getMyInfo.picture} className='profile-card-avatar' alt='profile'/> :
+              <img src={require('assets/image/icon/i_anonymous.png')} className='profile-card-avatar' alt='profile'/>
             :
-            <div className="profile-card-avatar-init">{getTempEmail[0]}</div>
+            <div className='profile-card-avatar-init'>{getTempEmail[0]}</div>
           }
 
-          <div className="profile-card-username mt-2">
+          <div className='profile-card-username mt-2'>
             {MainRepository.Account.isAuthenticated() ? identification : getTempEmail}
           </div>
         </div>
 
-        <div className="mb-4">
-          <div className="profile-card-total-balance">{psString("profile-card-total-balance")}</div>
+        <div className='mb-4'>
+          <div className='profile-card-total-balance'>{psString('profile-card-total-balance')}</div>
           {!loading ?
             <BalanceOfContainer balance={balance}/>
             :
-            <div className="profile-card-loading-wrapper"><FadingCircle color="#3681fe"/></div>
+            <div className='profile-card-loading-wrapper'><FadingCircle color='#3681fe'/></div>
           }
         </div>
 
         <div>
           {MainRepository.Account.isAuthenticated() ?
-            <div className="my-account-btn mb-2" id="profileCardMyAccountBtn"
-                 data-id={identification}>{psString("profile-card-my-page")}</div>
+            <div className='my-account-btn mb-2' id='profileCardMyAccountBtn'
+                 data-id={identification}>{psString('profile-card-my-page')}</div>
             :
-            <div className="my-account-btn mb-2"
-                 onClick={() => MainRepository.Account.login()}> {psString("profile-card-login")} </div>
+            <div className='my-account-btn mb-2'
+                 onClick={() => MainRepository.Account.login()}> {psString('profile-card-login')} </div>
           }
-          <div className="profile-card-logout-btn"
-               onClick={() => this.handleLogout()}>{psString("profile-card-logout")}</div>
+          <div className='profile-card-logout-btn'
+               onClick={() => this.handleLogout()}>{psString('profile-card-logout')}</div>
         </div>
 
       </div>

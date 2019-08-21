@@ -1,6 +1,6 @@
 import React from "react";
 import Tooltip from "@material-ui/core/Tooltip/index";
-import Common from "../../../config/common";
+import Common from "../../../common/common";
 
 class DollarWithDeck extends React.Component {
 

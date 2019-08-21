@@ -7,11 +7,10 @@ export default connect(
     getDrizzle: state.main.drizzleApis,
     getMyInfo: state.main.myInfo,
     getWeb3Apis: state.main.web3Apis,
-    getIsMobile: state.main.isMobile,
+    getDrizzleApis: state.main.drizzleApis,
+    getIsMobile: state.main.isMobile
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any) => {
-      dispatch(setAlertCode(alertCode));
-    }
+    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
   })
 )(PublishModal);

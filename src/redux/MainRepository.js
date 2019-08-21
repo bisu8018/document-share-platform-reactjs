@@ -18,22 +18,22 @@ import TrackingExport from "./model/TrackingExport";
 import AnalysticsExport from "./model/AnalysticsExport";
 import UserProfile from "./model/UserProfile";
 import DocumentDownload from "./model/DocumentDownload";
-import Common from "../config/common";
 import CuratorService from "../service/CuratorService";
 import TrackingService from "../service/TrackingService";
 import CuratorSummary from "./model/CuratorSummary";
 import AnalyticsService from "../service/AnalyticsService";
 import TagService from "../service/TagService";
 import AccountInfo from "./model/AccountInfo";
-//import * as Sentry from "@sentry/browser";
+import common_view from "../common/common_view";
+//import * as Sentry from '@sentry/browser';
 
 let instance: any;
+let ssr = APP_PROPERTIES.ssr;
 
 export default {
   init(callback: () => any) {
     // 자기 참조
     instance = this;
-
     //Google Analytics 초기화
     let gaId = process.env.NODE_ENV_SUB === "production" ? "UA-140503497-1" : "UA-129300994-1";
     if (process.env.NODE_ENV_SUB === "production" || process.env.NODE_ENV_SUB === "development") {
@@ -46,11 +46,9 @@ export default {
     }
 
     //로그인 체크
-    if (instance.Account.isAuthenticated()) {
-      instance.Account.scheduleRenewal();
-    } else {
-      instance.Account.clearSession();
-    }
+    if (instance.Account.isAuthenticated()) instance.Account.scheduleRenewal();
+    else instance.Account.clearSession();
+
 
     //허브스팟 초기화
     instance.InitData.hsq = window._hsq = window._hsq || [];
@@ -154,11 +152,13 @@ export default {
       } else console.log("session is not init...");
     },
     isAuthenticated() {
+      if (ssr) return false;
+
       const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
       const isUnExpired = new Date().getTime() < expiresAt;
 
       if (!isUnExpired) {
-        //console.error("Session Expired", expiresAt, sessionStorage);
+        //console.error('Session Expired', expiresAt, sessionStorage);
         this.clearSession();
       }
       return isUnExpired;
@@ -220,10 +220,10 @@ export default {
       return new Promise((resolve, reject) => {
         instance.InitData.authData.client.userInfo(authResult.accessToken, (err, user) => {
           if (err) {
-            //console.error("Getting userInfo", err);
+            //console.error('Getting userInfo', err);
             reject(console.error(`Error: ${err.error}. Getting UserInfo`));
           } else {
-            //console.log("Getting Userinfo Success!!", { user, authResult });
+            //console.log('Getting Userinfo Success!!', { user, authResult });
             resolve(user);
           }
         });
@@ -364,8 +364,8 @@ export default {
     },
     clearTrackingCookie() {
       //Google Analystics,
-      Common.deleteCookie("_ga");
-      Common.deleteCookie("_gid");
+      common_view.deleteCookie("_ga");
+      common_view.deleteCookie("_gid");
     },
     async getDocuments(data: any) {
       const authResult = await instance.Account.renewSessionPromise();
@@ -446,12 +446,12 @@ export default {
       const config = {
         onUploadProgress: (e) => {
           if (e.load !== null && params.callback !== null) {
-            //console.log("onUploadProgress : " + e.loaded + "/" + e.total);
+            //console.log('onUploadProgress : ' + e.loaded + '/' + e.total);
             params.callback(e);
           }
         }
       };
-      return axios.put(params.signedUrl, params.file, config).then(res => console.log(res));
+      return axios.put(params.signedUrl, params.file, config);
 
     },
     getDocument(documentId: string) {

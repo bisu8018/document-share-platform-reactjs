@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Common from "../../../../config/common";
+import Common from "../../../../common/common";
 import CuratorClaimContainer from "../../../../container/body/profile/curator/CuratorClaimContainer";
 import LinesEllipsis from "react-lines-ellipsis";
 import { psString } from "../../../../config/localization";
+import common_view from "../../../../common/common_view";
 
 class CuratorTabItem extends React.Component {
   constructor(props) {
@@ -48,7 +49,7 @@ class CuratorTabItem extends React.Component {
     const { document, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
     const { ratio } = this.state;
 
-    let reward = Common.toEther(Common.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
+    let reward = Common.toEther(common_view.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
       vote = Common.toEther(document.latestVoteAmount) || 0,
       view = document.latestPageview || 0,
       identification = document.author ? (document.author.username && document.author.username.length > 0 ? document.author.username : document.author.email) : document.accountId;
@@ -59,7 +60,7 @@ class CuratorTabItem extends React.Component {
 
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
           <Link to={"/" + identification + "/" + document.seoTitle}>
-            <div className="tab-thumbnail" onClick={Common.scrollTop()}>
+            <div className="tab-thumbnail" onClick={common_view.scrollTop()}>
               <img src={Common.getThumbnail(document.documentId, (getIsMobile ? 640 : 320), 1, document.documentName)}
                    alt={document.title ? document.title : document.documentName}
                    className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
@@ -72,13 +73,13 @@ class CuratorTabItem extends React.Component {
           <div className="details_info-padding">
             <Link to={"/" + identification + "/" + document.seoTitle}>
               <div className="info_title mb-1"
-                   onClick={() => Common.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
+                   onClick={() => common_view.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
             </Link>
 
 
             <div className="details-info-desc-wrapper">
               <Link to={"/" + identification + "/" + document.seoTitle} className="info_desc"
-                    onClick={() => Common.scrollTop()}>
+                    onClick={() => common_view.scrollTop()}>
                 {document.desc &&
                 <LinesEllipsis
                   text={document.desc}
@@ -113,7 +114,7 @@ class CuratorTabItem extends React.Component {
 
 
               <div className="info-date">
-                {Common.dateTimeAgo(document.created)}
+                {common_view.dateTimeAgo(document.created)}
               </div>
 
               <div className={(getIsMobile ? "mt-2" : "float-right")}>

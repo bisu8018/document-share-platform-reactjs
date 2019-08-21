@@ -6,10 +6,10 @@ import {
   setIsMobile,
   setMyInfo,
   setTagList,
-  setUploadTagList,
-  setWeb3Apis
+  setUploadTagList, setWeb3Apis, setDrizzleApis
 } from "../redux/reducer/main";
 import Main from "../components/Main";
+
 
 export default connect(
   state => ({
@@ -29,8 +29,9 @@ export default connect(
     setTagList: (tagList: []) => dispatch(setTagList(tagList)),
     setUploadTagList: (uploadTagList: []) => dispatch(setUploadTagList(uploadTagList)),
     setIsMobile: (isMobile: boolean) => dispatch(setIsMobile(isMobile)),
-    setWeb3Apis: (web3apis: any) => dispatch(setWeb3Apis(web3apis)),
     setAuthorDailyRewardPool: (authorRewardPool: any) => dispatch(setAuthorDailyRewardPool(authorRewardPool)),
-    setCuratorDailyRewardPool: (curatorRewardPool: any) => dispatch(setCuratorDailyRewardPool(curatorRewardPool))
+    setCuratorDailyRewardPool: (curatorRewardPool: any) => dispatch(setCuratorDailyRewardPool(curatorRewardPool)),
+    setWeb3Apis: () => dispatch(setWeb3Apis()),
+    setDrizzleApis: () => dispatch(setDrizzleApis())
   })
 )(Main);

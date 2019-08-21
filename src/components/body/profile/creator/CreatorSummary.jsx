@@ -2,10 +2,11 @@ import React from "react";
 import { APP_PROPERTIES } from "properties/app.properties";
 import DollarWithDeck from "../../../common/amount/DollarWithDeck";
 import MainRepository from "../../../../redux/MainRepository";
-import Common from "../../../../config/common";
+import Common from "../../../../common/common";
 import BalanceOfContainer from "../../../../container/common/BalanceOfContainer";
 import { psString } from "../../../../config/localization";
 import log from "../../../../config/log";
+import common_view from "../../../../common/common_view";
 
 class CreatorSummary extends React.Component {
   state = {
@@ -51,19 +52,19 @@ class CreatorSummary extends React.Component {
 
 
   // 크리에이터 7일간 리워드
-  setAuthor7DayReward = (docList, pool, countInfo) => this.setState({ author7DayReward: Common.toDeck(Common.getAuthor7DaysTotalReward(docList, pool, countInfo)) });
+  setAuthor7DayReward = (docList, pool, countInfo) => this.setState({ author7DayReward: Common.toDeck(common_view.getAuthor7DaysTotalReward(docList, pool, countInfo)) });
 
 
   // 크리에이터 하루 리워드
-  setAuthorTodayReward = (docList, pool, countInfo) => this.setState({ authorTodayReward: Common.toDeck(Common.getAuthorNDaysTotalReward(docList, pool, countInfo, 0)) });
+  setAuthorTodayReward = (docList, pool, countInfo) => this.setState({ authorTodayReward: Common.toDeck(common_view.getAuthorNDaysTotalReward(docList, pool, countInfo, 0)) });
 
 
   // 큐레이터 7일간 리워드
-  setCuratorEstimatedToday = (docList, pool, countInfo, voteList) => this.setState({ curatorEstimatedToday: Common.toDeck(Common.getCuratorNDaysTotalReward(docList, pool, countInfo, 0, voteList, 1)) });
+  setCuratorEstimatedToday = (docList, pool, countInfo, voteList) => this.setState({ curatorEstimatedToday: Common.toDeck(common_view.getCuratorNDaysTotalReward(docList, pool, countInfo, 0, voteList, 1)) });
 
 
   // 큐레이터 하루 리워드
-  setCuratorTotalRewards = (docList, pool, countInfo, voteList) => this.setState({ curatorTotalRewards: Common.toDeck(Common.getCurator7DaysTotalReward(docList, pool, countInfo, voteList)) });
+  setCuratorTotalRewards = (docList, pool, countInfo, voteList) => this.setState({ curatorTotalRewards: Common.toDeck(common_view.getCurator7DaysTotalReward(docList, pool, countInfo, voteList)) });
 
 
   // 리워드 조회

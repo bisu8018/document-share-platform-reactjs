@@ -10,7 +10,6 @@ import history from "apis/history/history";
 import MainRepository from "../../../redux/MainRepository";
 import { Circle } from "better-react-spinkit";
 import { psString } from "../../../config/localization";
-import common from "../../../config/common";
 
 
 const Transition = props => <Slide direction="down" {...props} />;
@@ -440,7 +439,7 @@ class UploadDocumentModal extends React.Component {
 
   render() {
     const { privateDocCount, classicModal, classicModalSub, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload, username } = this.state;
-    const { type } = this.props;
+    const { type, path } = this.props;
 
     return (
       <span>
@@ -628,7 +627,7 @@ class UploadDocumentModal extends React.Component {
               <div>{psString("upload-doc-desc-2") + psString("upload-doc-desc-4-a") + privateDocCount + psString("upload-doc-desc-4-b")}</div>
             }
           </DialogContent>
-          {username === common.getPath() ?
+          {username === path ?
             <DialogActions className="modal-footer">
               <div onClick={() => this.handleCloseOnMyPage()} className="ok-btn">{psString("common-modal-confirm")}</div>
             </DialogActions> :

@@ -13,18 +13,10 @@ export default connect(
     getIsMobile: state.main.isMobile
   }),
   dispatch => ({
-    setShowAnonymous: (showAnonymous: boolean, callback) => {
-      dispatch(setShowAnonymous(showAnonymous, () => {
-        callback();
-      }));
-    },
-    setIncludeOnlyOnePage: (includeOnlyOnePage: boolean, callback) => {
-      dispatch(setIncludeOnlyOnePage(includeOnlyOnePage, () => {
-        callback();
-      }));
-    },
-    setAlertCode: (alertCode: any) => {
-      dispatch(setAlertCode(alertCode));
-    },
-  }),
+    setShowAnonymous: (showAnonymous: boolean, callback) =>
+      setShowAnonymous(showAnonymous, dispatch, () => callback()),
+    setIncludeOnlyOnePage: (includeOnlyOnePage: boolean, callback) =>
+      setIncludeOnlyOnePage(includeOnlyOnePage, dispatch, () => callback()),
+    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
+  })
 )(AudienceTrackingList);

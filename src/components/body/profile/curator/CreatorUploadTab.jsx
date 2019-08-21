@@ -5,9 +5,9 @@ import { ThreeBounce } from "better-react-spinkit";
 import MainRepository from "../../../../redux/MainRepository";
 import NoDataIcon from "../../../common/NoDataIcon";
 import CreatorTabItemContainer from "../../../../container/body/profile/creator/CreatorTabItemContainer";
-import Common from "../../../../config/common";
 import { psString } from "../../../../config/localization";
 import log from "../../../../config/log";
+import common_view from "../../../../common/common_view";
 
 class CreatorUploadTab extends React.Component {
   state = {
@@ -57,14 +57,15 @@ class CreatorUploadTab extends React.Component {
     this.setState({ loading: true });   // 로딩 on
     let param = this.getParam();
 
-    if (param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) {
+    if (param === getMyInfo.username || param === getMyInfo.email || param === common_view.getMySub()) {
       MainRepository.Account.getDocuments(_params).then(res => {
         this.handleData(res);
         this.setState({ loading: false });    // 로딩 off
       }, err => {
         console.error(err);
-        setTimeout(() => {
+        this.setTimeout = setTimeout(() => {
           this.fetchDocuments(params);
+          clearTimeout(this.setTimeout);
         }, 8000);
       });
     } else {
@@ -73,8 +74,9 @@ class CreatorUploadTab extends React.Component {
         this.setState({ loading: false });    // 로딩 off
       }).catch(err => {
         console.error("Curator upload document GET ERROR", err);
-        setTimeout(() => {
+        this.setTimeout = setTimeout(() => {
           this.fetchDocuments(params);
+          clearTimeout(this.setTimeout);
         }, 8000);
       });
     }

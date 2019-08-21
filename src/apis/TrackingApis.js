@@ -2,7 +2,7 @@ import $ from "jquery";
 import shortid from "shortid";
 import ReactGA from "react-ga";
 import { APP_PROPERTIES } from "properties/app.properties";
-import Common from "../config/common";
+import Common from "../common/common";
 
 let apiDomain = APP_PROPERTIES.domain().api;
 let trackingUrl = "/api/tracking/collect";

@@ -4,9 +4,10 @@ import { Carousel } from "react-responsive-carousel";
 
 import MainRepository from "../../../redux/MainRepository";
 import DocumentCardContainer from "../../../container/common/DocumentCardContainer";
-import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
 import log from "../../../config/log";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
+import common_view from "../../../common/common_view";
 
 class ContentMain extends Component {
   state = {
@@ -19,6 +20,8 @@ class ContentMain extends Component {
 
   // 초기화
   init = () => {
+    if(APP_PROPERTIES.ssr) return;
+
     log.ContentMain.init();
     // 추천문서 목록 GET
     this.getDocuments("featured")
@@ -42,6 +45,7 @@ class ContentMain extends Component {
       log.ContentMain.getDocuments(err, path);
       this.setTimeout = setTimeout(() => {
         this.getDocuments(path);
+        clearTimeout(this.setTimeout);
       }, 8000);
     });
   };
@@ -155,7 +159,7 @@ class ContentMain extends Component {
             showThumbs={false}
             howThumbs={false}
             showStatus={false}
-            swipeable={!!getIsMobile}
+            swipeable={!getIsMobile}
             interval={5000}
           >
             {subject.map((arr, idx) => (
@@ -183,7 +187,7 @@ class ContentMain extends Component {
                     }
                     <Link to="/faq">
                       <div className="main-learn-more-btn ml-2 mr-2"
-                           onClick={() => Common.scrollTop()}>{psString("main-banner-btn-4")}</div>
+                           onClick={() => common_view.scrollTop()}>{psString("main-banner-btn-4")}</div>
                     </Link>
                   </div>
                 </div>

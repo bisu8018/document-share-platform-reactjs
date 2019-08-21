@@ -1,8 +1,9 @@
 import React from "react";
-import Common from "../../../config/common";
+import Common from "../../../common/common";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 import { psString } from "../../../config/localization";
+import common_view from "../../../common/common_view";
 
 class DocumentCard extends React.Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class DocumentCard extends React.Component {
       imgUrl = Common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName),
       profileUrl = author ? author.picture : null,
       vote = Common.toEther(documentData.latestVoteAmount) || 0,
-      reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
+      reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
       view = documentData.latestPageview || 0;
 
     return (
@@ -59,14 +60,14 @@ class DocumentCard extends React.Component {
         <div
           className={"main-category-card mb-3 " + (idx < (countCards - 1) && " mr-0 mr-sm-3 ") + (idx === (countCards - 1) && " mr-0 mr-sm-3 mr-lg-0")}>
           <Link to={"/" + identification + "/" + documentData.seoTitle}>
-            <div className="main-category-card-img-wrapper" onClick={() => Common.scrollTop()}>
+            <div className="main-category-card-img-wrapper" onClick={() => common_view.scrollTop()}>
               <img src={imgUrl} alt={documentData.title}
                    className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
             </div>
           </Link>
           <div className="main-category-card-content">
             <div className="main-category-card-title">
-              <Link to={"/" + identification + "/" + documentData.seoTitle} onClick={() => Common.scrollTop()}
+              <Link to={"/" + identification + "/" + documentData.seoTitle} onClick={() => common_view.scrollTop()}
                     title={documentData.title}>
                 <LinesEllipsis
                   text={documentData.title ? documentData.title : documentData.documentName}
@@ -79,12 +80,12 @@ class DocumentCard extends React.Component {
             </div>
             <Link to={"/" + identification} className="main-category-card-profile mt-1 mb-1 pt-1 pb-2 w-full">
               {profileUrl ?
-                <img src={profileUrl} alt="profile" onClick={() => Common.scrollTop()}/> :
-                <i className="material-icons img-thumbnail" onClick={() => Common.scrollTop()}>face</i>
+                <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
+                <i className="material-icons img-thumbnail" onClick={() => common_view.scrollTop()}>face</i>
               }
               <span className="main-category-card-name">{identification}</span>
               <span className="main-category-card-date">
-                {Common.dateTimeAgo(documentData.created)}
+                {common_view.dateTimeAgo(documentData.created)}
               </span>
             </Link>
             <div className="main-category-card-count">

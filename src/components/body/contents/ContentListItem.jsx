@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
-import Common from "../../../config/common";
+import Common from "../../../common/common";
 import PayoutCard from "../../common/card/PayoutCard";
+import common_view from "../../../common/common_view";
 
 class ContentListItem extends React.Component {
   constructor(props) {
@@ -48,7 +49,7 @@ class ContentListItem extends React.Component {
     const { ratio } = this.state;
 
     let vote = Common.toEther(result.latestVoteAmount) || 0,
-      reward = Common.toEther(Common.getAuthorNDaysReward(result, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
+      reward = Common.toEther(common_view.getAuthorNDaysReward(result, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
       view = result.latestPageview || 0,
       imageUrl = Common.getThumbnail(result.documentId, (getIsMobile ? 640 : 320), 1, result.documentName),
       profileUrl = result.author ? result.author.picture : null,
@@ -58,7 +59,7 @@ class ContentListItem extends React.Component {
       <div className="row u_center_inner" key={result.seoTitle}>
         <div className="col-thumb-list">
           <Link to={"/" + identification + "/" + result.seoTitle}>
-            <div className="thumb_image" onClick={() => Common.scrollTop()}>
+            <div className="thumb_image" onClick={() => common_view.scrollTop()}>
               <img src={imageUrl} alt={result.title}
                    className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
             </div>
@@ -67,26 +68,26 @@ class ContentListItem extends React.Component {
 
         <div className="col-details_info details_info">
           <div className="mb-3 mb-sm-2 detail-title">
-            <Link to={"/" + identification + "/" + result.seoTitle} onClick={() => Common.scrollTop()}
+            <Link to={"/" + identification + "/" + result.seoTitle} onClick={() => common_view.scrollTop()}
                   title={result.title}> {result.title ? result.title : result.documentName}</Link>
           </div>
           <div className="mb-2">
             <Link to={"/" + identification} className="info_name"
                   title={identification}>
               {profileUrl ?
-                <img src={profileUrl} alt="profile" onClick={() => Common.scrollTop()}/> :
+                <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
                 <i className="material-icons img-thumbnail" onClick={() => this.menuClick()}>face</i>
               }
               {identification}
             </Link>
             <div className="info_date float-right d-inline-block">
-              {Common.dateTimeAgo(result.created)}
+              {common_view.dateTimeAgo(result.created)}
             </div>
           </div>
 
           <div className="details-info-desc-wrapper">
             <Link to={"/" + identification + "/" + result.seoTitle} className="info_desc" title={result.desc}
-                  onClick={() => Common.scrollTop()}>
+                  onClick={() => common_view.scrollTop()}>
               {result.desc &&
               <LinesEllipsis
                 text={result.desc}

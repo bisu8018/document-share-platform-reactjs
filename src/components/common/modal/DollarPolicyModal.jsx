@@ -1,42 +1,40 @@
 import React from "react";
-import Common from "../../../config/common";
 import DollarLearnMoreModal from "./DollarLearnMoreModal";
 import { psString } from "../../../config/localization";
+import common_view from "../../../common/common_view";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 class DollarPolicyModal extends React.PureComponent {
   state = {
     dollarPolicyValue: false
   };
 
-  checkDollarModal = () => {
-    this.modalOn();
-  };
 
-  modalOn = () => {
-  };
+  // 초기화
+  init = () => {
+    if(APP_PROPERTIES.ssr) return;
 
-  modalClose = () => {
-  };
-
-  getStarted = () => {
-    this.modalClose();
-    Common.setCookie("dpv", true, 1000);
-    this.setState({ dollarPolicyValue: true });
-  };
-
-  componentWillMount() {
-    let _dollarPolicyValue = Common.getCookie("dpv");
+    let _dollarPolicyValue = common_view.getCookie("dpv");
     if (!_dollarPolicyValue) {
-      Common.setCookie("dpv", false, 1000);
+      common_view.setCookie("dpv", false, 1000);
       this.setState({ dollarPolicyValue: false });
     } else if (_dollarPolicyValue === "true") {
       this.setState({ dollarPolicyValue: true });
     }
+  };
+
+
+  // 모달 실행 시
+  getStarted = () => {
+    common_view.setCookie("dpv", true, 1000);
+    this.setState({ dollarPolicyValue: true });
+  };
+
+
+  componentWillMount() {
+    this.init();
   }
 
-  componentDidMount() {
-    if (this.state.dollarPolicyValue === false) this.checkDollarModal();
-  }
 
   render() {
     const { dollarPolicyValue } = this.state;

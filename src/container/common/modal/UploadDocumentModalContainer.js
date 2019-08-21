@@ -7,14 +7,11 @@ export default connect(
     getUploadTagList: state.main.uploadTagList,
     getDrizzle: state.main.drizzleApis,
     getMyInfo: state.main.myInfo,
-    getWeb3Apis: state.main.web3Apis,
+    getWeb3Apis: state.main.web3Apis
   }),
   dispatch => ({
-    setMyInfo: (myInfo: any) => {
-      dispatch(setMyInfo(myInfo));
-    },
-    setAlertCode: (alertCode: any) => {
-      dispatch(setAlertCode(alertCode));
-    }
+    setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo)),
+    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
+
   })
 )(UploadDocumentModal);

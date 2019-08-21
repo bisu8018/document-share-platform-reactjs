@@ -5,7 +5,7 @@ import { APP_PROPERTIES } from "properties/app.properties";
 
 import ContentViewRight from "./ContentViewRight";
 import MainRepository from "../../../../redux/MainRepository";
-import common from "../../../../config/common";
+import common from "../../../../common/common";
 import NotFoundPage from "../../../common/NotFoundPage";
 import ContentViewFullScreenContainer
   from "../../../../container/body/contents/contentsView/ContentViewFullScreenContainer";
@@ -57,7 +57,10 @@ class ContentView extends React.Component {
       }).catch(err => {
         log.ContentView.getContentInfo(err);
         this.setStateClear(err);
-        setTimeout(this.getContentInfo(seoTitle), 8000);
+        this.setTimeout = setTimeout(() => {
+          this.getContentInfo(seoTitle);
+          clearTimeout(this.setTimeout);
+        }, 8000);
       });
   };
 
@@ -99,7 +102,8 @@ class ContentView extends React.Component {
     let titleFromUrl = window.location.pathname.split("/")[2];
 
     // See Also 이동 시에만 발생
-    if (titleFromUrl !== documentTitle && !errMessage) this.getContentInfo(titleFromUrl);
+    if (decodeURI(titleFromUrl) !== documentTitle && !errMessage)
+      this.getContentInfo(decodeURI(titleFromUrl));
   };
 
 

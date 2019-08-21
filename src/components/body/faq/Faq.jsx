@@ -10,12 +10,12 @@ class Faq extends React.PureComponent {
 
     return (
 
-      <div className="row mb-5">
+      <div className="row container mb-5">
         <Helmet>
           <title>{"FAQ | Polaris Share"}</title>
         </Helmet>
 
-        <div className="col-sm-12 col-lg-10 offset-lg-1 mb-5 u__center-faq">
+        <div className="col-12 mb-5 mt-3">
           <div className="legal-subject mt-3 mt-sm-5 text-center">FAQ</div>
 
           <div className="legal-content mt-4">

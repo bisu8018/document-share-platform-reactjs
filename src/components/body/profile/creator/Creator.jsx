@@ -2,7 +2,7 @@ import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
 import MainRepository from "../../../../redux/MainRepository";
-import Common from "../../../../config/common";
+import Common from "../../../../common/common";
 import { ThreeBounce } from "better-react-spinkit";
 import NotFoundPage from "../../../common/NotFoundPage";
 import CuratorAnalyticsTabContainer from "../../../../container/body/profile/curator/CuratorAnalyticsTabContainer";
@@ -12,6 +12,9 @@ import CreatorUploadTabContainer from "../../../../container/body/profile/creato
 import { psString } from "../../../../config/localization";
 import { Helmet } from "react-helmet";
 import log from "../../../../config/log";
+import common_view from "../../../../common/common_view";
+import { APP_PROPERTIES } from "../../../../properties/app.properties";
+import LoadingModal from "../../../common/modal/LoadingModal";
 
 
 class Creator extends React.Component {
@@ -26,6 +29,8 @@ class Creator extends React.Component {
   // 초기화
   init = () => {
     const { getMyInfo } = this.props;
+
+    if(APP_PROPERTIES.ssr) return;
 
     log.Creator.init();
     let presentValue = this.getParam(), params = {};
@@ -69,6 +74,8 @@ class Creator extends React.Component {
     const { getMyInfo } = this.props;
     const { userInfo, errMessage, uploadDocumentList, voteDocumentList } = this.state;
 
+    if(APP_PROPERTIES.ssr)  return (<LoadingModal/>);
+
     let param = this.getParam();
 
     return (
@@ -97,7 +104,7 @@ class Creator extends React.Component {
           <TabList>
             <Tab>{psString("profile-uploaded")}</Tab>
             <Tab>{psString("profile-voted")}</Tab>
-            {(param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) &&
+            {(param === getMyInfo.username || param === getMyInfo.email || param === common_view.getMySub()) &&
             <Tab>{psString("profile-analytics")}</Tab>}
           </TabList>
 
@@ -115,7 +122,7 @@ class Creator extends React.Component {
             />
           </TabPanel>
 
-          {(param === getMyInfo.username || param === getMyInfo.email || param === Common.getMySub()) &&
+          {(param === getMyInfo.username || param === getMyInfo.email || param === common_view.getMySub()) &&
           <TabPanel>
             <CuratorAnalyticsTabContainer userInfo={userInfo}/>
           </TabPanel>

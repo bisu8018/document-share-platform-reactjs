@@ -6601,7 +6601,7 @@ dean
 .view-option-btn {
     cursor: pointer;
     position: absolute;
-    right: 10px;
+    right: 0;
     top: 7px;
     z-index: 1;
 }
@@ -6774,7 +6774,7 @@ Dean*/
 }
 
 .alert-success {
-    background-color: #4caf50;
+    background-color: #3681fe;
 }
 
 .alert-warning {
@@ -7017,13 +7017,6 @@ Dean*/
     min-height: 100vh;
 }
 
-.u__center-faq {
-    max-width: 1300px;
-    min-height: 100vh;
-    background-color: #fff;
-    margin-top: 10px;
-}
-
 .u__center-container {
     border-left: 1px solid #b3b3b3;
     padding-left: 25px;
@@ -7138,6 +7131,7 @@ Dean*/
     text-align: center;
     background: #fdfdfd;
     border: 1px solid #e2e2e2;
+    position: relative;
 }
 
 .reward-arrow {
@@ -7557,7 +7551,7 @@ Dean*/
 
 @media (max-width: 575px) {
     #classic-modal-slide-title {
-        padding: 10px 24px 3px 24px !important;
+        padding: 0 24px !important;
     }
 
     #classic-modal-slide-title > h3 {
@@ -8291,13 +8285,13 @@ Duration CSS*/
 }
 
 .option-table .option-table-btn {
+    text-align: left;
     padding: 6px 10px;
-    text-align: center;
     min-width: 90px;
     cursor: pointer;
     background: white;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 400;
     overflow: hidden;
     white-space: nowrap;
     color: #4d4d4d;
@@ -8927,7 +8921,7 @@ Dean*/
     color: white;
     position: relative;
     margin-bottom: 25px;
-    padding: 13px 24px 6px 24px;
+    padding: 0 24px;
     background-image: linear-gradient(to right, #5494ff, #307eff);
 }
 
@@ -9488,7 +9482,7 @@ dean
 }
 
 .no-data-icon > span {
-    color: #4d4d4d;
+    color: #3681fe;
     margin: 0 10px;
     font-weight: bold;
 }

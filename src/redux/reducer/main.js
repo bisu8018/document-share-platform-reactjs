@@ -1,8 +1,6 @@
 import ReduxTypes from "../config/ReduxTypes";
 import UserInfo from "../model/UserInfo";
-import Web3Apis from "../../apis/Web3Apis";
-import DrizzleApis from "../../apis/DrizzleApis";
-
+import { APP_PROPERTIES } from "properties/app.properties";
 
 
 // 액션 생성자
@@ -11,8 +9,8 @@ export const setMyInfo = (myInfo: any) => ({ type: ReduxTypes.SET_MY_INFO, myInf
 export const setTagList = (tagList: []) => ({ type: ReduxTypes.SET_TAG_LIST, tagList });
 export const setUploadTagList = (uploadTagList: []) => ({ type: ReduxTypes.SET_UPLOAD_TAG_LIST, uploadTagList });
 export const setIsMobile = (isMobile: boolean) => ({ type: ReduxTypes.SET_IS_MOBILE, isMobile });
-export const setWeb3Apis = (web3Apis: any) => ({ type: ReduxTypes.SET_WEB3_APIS, web3Apis });
-export const setDrizzleApis = () => ({ type: ReduxTypes.SET_DRIZZLE_APIS, drizzleApis: new DrizzleApis() });
+export const setWeb3Apis = () => ({ type: ReduxTypes.SET_WEB3_APIS, web3Apis: getWeb3Apis() });
+export const setDrizzleApis = () => ({ type: ReduxTypes.SET_DRIZZLE_APIS, drizzleApis: getDrizzleApis() });
 export const setAuthorDailyRewardPool = (authorDailyRewardPool: number) => ({
   type: ReduxTypes.SET_AUTHOR_DAILY_REWARD_POOL,
   authorDailyRewardPool
@@ -21,7 +19,33 @@ export const setCuratorDailyRewardPool = (curatorDailyRewardPool: number) => ({
   type: ReduxTypes.SET_CURATOR_DAILY_REWARD_POOL,
   curatorDailyRewardPool
 });
-export const setAlertCode = (alertCode: any, alertData:any) => ({ type: ReduxTypes.SET_ALERT_CODE, alertCode, alertData  });
+export const setAlertCode = (alertCode: any, alertData: any) => ({
+  type: ReduxTypes.SET_ALERT_CODE,
+  alertCode,
+  alertData
+});
+
+
+// web3 초기화
+const getWeb3Apis = () => {
+  let web3 = null;
+  if (!APP_PROPERTIES.ssr) {
+    let _web3 = require("../../apis/Web3Apis").default;
+    web3 = new _web3();
+  }
+  return web3;
+};
+
+// drizzle 초기화
+const getDrizzleApis = () => {
+  let drizzle = null;
+  if (!APP_PROPERTIES.ssr) {
+    let _drizzle = require("../../apis/DrizzleApis").default;
+    drizzle = new _drizzle();
+  }
+  return drizzle;
+};
+
 
 // 초기 상태
 const initState = {
@@ -30,13 +54,14 @@ const initState = {
   tagList: [],
   uploadTagList: [],
   isMobile: null,
-  web3Apis: new Web3Apis(),
-  drizzleApis: new DrizzleApis(),
+  web3Apis: null,
+  drizzleApis: getDrizzleApis(),
   authorDailyRewardPool: 0,
   curatorDailyRewardPool: 0,
   alertCode: null,
   alertData: {}
 };
+
 
 // 리듀서
 export default (state = initState, action: any) => {

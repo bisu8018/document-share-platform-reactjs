@@ -6,8 +6,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import history from "apis/history/history";
 import { psString } from "../../../config/localization";
 import DialogActions from "@material-ui/core/DialogActions";
-import common from "../../../config/common";
 import MainRepository from "../../../redux/MainRepository";
+import common_view from "../../../common/common_view";
 
 
 const Transition = props => <Slide direction="down" {...props} />;
@@ -111,7 +111,7 @@ class PrivateDocumentCountModal extends React.Component {
 
         <DialogActions className="modal-footer">
           <div onClick={() => this.handleClose()} className="ok-btn">{psString("common-modal-confirm")}</div>
-          {username !== common.getPath() &&
+          {username !== common_view.getPath() &&
           <div onClick={() => this.handleLinkBtn()} className="ok-btn">{psString("private-doc-modal-btn")}</div>
           }
         </DialogActions>

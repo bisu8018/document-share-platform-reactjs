@@ -7,11 +7,12 @@ class ContentViewComment extends React.Component {
    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
 
 
-  /*  // 디스커스 셋팅
-  setConfig = () => {
-    this.page.url = "https://share.decompany.io";  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = "polarishare"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-  };*/
+   // 디스커스 셋팅
+  disqus_config  = () => {
+    console.log(123);
+    //this.page.url = "https://share.decompany.io";  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = this.props.documentData.documentId; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+  };
 
 
   //디스커스 초기화

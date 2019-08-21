@@ -1,41 +1,39 @@
 import React from "react";
-import Common from "../../../config/common";
 import { psString } from "../../../config/localization";
+import common_view from "../../../common/common_view";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 class CookiePolicyModal extends React.PureComponent {
   state = {
     cookiePolicyValue: false
   };
 
-  checkCookieModal = () => {
-    this.modalOn();
-  };
 
-  modalOn = () => {
-  };
+  // 초기화
+  init = () => {
+    if(APP_PROPERTIES.ssr) return;
 
-  modalClose = () => {
-  };
-
-  getStarted = () => {
-    this.modalClose();
-    Common.setCookie("cpv", true, 1000);
-    this.setState({ cookiePolicyValue: true });
-  };
-
-  componentWillMount() {
-    let _cookiePolicyValue = Common.getCookie("cpv");
+    let _cookiePolicyValue = common_view.getCookie("cpv");
     if (!_cookiePolicyValue) {
-      Common.setCookie("cpv", false, 1000);
+      common_view.setCookie("cpv", false, 1000);
       this.setState({ cookiePolicyValue: false });
     } else if (_cookiePolicyValue === "true") {
       this.setState({ cookiePolicyValue: true });
     }
+  };
+
+
+  // 모달 실행 시
+  getStarted = () => {
+    common_view.setCookie("cpv", true, 1000);
+    this.setState({ cookiePolicyValue: true });
+  };
+
+
+  componentWillMount() {
+    this.init();
   }
 
-  componentDidMount() {
-    if (this.state.cookiePolicyValue === false) this.checkCookieModal();
-  }
 
   render() {
     const { cookiePolicyValue } = this.state;

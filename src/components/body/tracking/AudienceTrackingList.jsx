@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Common from "../../../config/common";
+import Common from "../../../common/common";
 import MainRepository from "../../../redux/MainRepository";
 import { ThreeBounce } from "better-react-spinkit";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -9,6 +9,7 @@ import CustomChart from "../../common/CustomChart";
 import AutoSuggestInputContainer from "../../../container/common/AutoSuggestInputContainer";
 import PayoutCard from "../../common/card/PayoutCard";
 import { psString } from "../../../config/localization";
+import common_view from "../../../common/common_view";
 
 class AudienceTrackingList extends React.Component {
   state = {
@@ -93,8 +94,9 @@ class AudienceTrackingList extends React.Component {
           this.setState({ loading: false, resultList: resData.resultList ? resData.resultList : [] });
         }, err => {
           console.error(err);
-          setTimeout(() => {
+          this.setTimeout = setTimeout(() => {
             this.getTrackingList();
+            clearTimeout(this.setTimeout);
           }, 8000);
         });
       });
@@ -124,8 +126,9 @@ class AudienceTrackingList extends React.Component {
         this.setChartData(res.resultList);   // 페이지 별 머문 시간 계산
       }, err => {
         console.error(err);
-        setTimeout(() => {
+        this.setTimeout = setTimeout(() => {
           this.getTrackingInfo();
+          clearTimeout(this.setTimeout);
         }, 8000);
       });
     }
@@ -279,51 +282,51 @@ class AudienceTrackingList extends React.Component {
       totalViewCountInfo = location.state.totalViewCountInfo;
 
     let addr = Common.getThumbnail(documentData.documentId, 320, 1),
-      reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
+      reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
       vote = Common.toEther(documentData.latestVoteAmount),
       view = documentData.latestPageview || 0;
 
     return (
-        <section className="u__center w-100 container">
-          <div className="row tracking-list-wrapper">
-            <div className="col-12 col-sm-3 col-lg-2 col-thumb mt-2">
-              <Link to={"/" + match.params.identification + "/" + documentData.seoTitle}>
-                <div className="tab-thumbnail" onClick={() => Common.scrollTop()}>
-                  <img src={addr}
-                       alt={documentData.title ? documentData.title : documentData.documentName}
-                       className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
-                </div>
+      <section className="u__center w-100 container">
+        <div className="row tracking-list-wrapper">
+          <div className="col-12 col-sm-3 col-lg-2 col-thumb mt-2">
+            <Link to={"/" + match.params.identification + "/" + documentData.seoTitle}>
+              <div className="tab-thumbnail" onClick={() => common_view.scrollTop()}>
+                <img src={addr}
+                     alt={documentData.title ? documentData.title : documentData.documentName}
+                     className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
+              </div>
+            </Link>
+          </div>
+
+
+          <div className="col-12 col-sm-9 col-lg-10 col-details_info p-sm-2 ">
+            <dl className="details_info">
+              <Link to={"/" + match.params.identification + "/" + documentData.seoTitle} className="info_title mb-2"
+                    onClick={() => common_view.scrollTop()}>
+                {documentData.title}
               </Link>
-            </div>
 
 
-            <div className="col-12 col-sm-9 col-lg-10 col-details_info p-sm-2 ">
-              <dl className="details_info">
-                <Link to={"/" + match.params.identification + "/" + documentData.seoTitle} className="info_title mb-2"
-                      onClick={() => Common.scrollTop()}>
-                  {documentData.title}
-                </Link>
-
-
-                <div className="option-menu-btn d-sm-inline-block d-none"
-                     onClick={this.handleOptionButtonClickEvent.bind(this)}>
-                  <i className="material-icons">more_vert</i>
-                  <div className={"option-table" + (tableOptionFlag ? "" : " d-none")}>
-                    <div className="option-table-btn "
-                      title={getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
-                      onClick={(e) => this.handleHideOption(e)}>
-                      {getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
-                    </div>
-                    <div className="option-table-btn "
-                      title={getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
-                      onClick={(e) => this.handleOnePageOption(e)}>
-                      {getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
-                    </div>
+              <div className="option-menu-btn d-sm-inline-block d-none"
+                   onClick={this.handleOptionButtonClickEvent.bind(this)}>
+                <i className="material-icons">more_vert</i>
+                <div className={"option-table" + (tableOptionFlag ? "" : " d-none")}>
+                  <div className="option-table-btn "
+                       title={getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
+                       onClick={(e) => this.handleHideOption(e)}>
+                    {getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
+                  </div>
+                  <div className="option-table-btn "
+                       title={getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
+                       onClick={(e) => this.handleOnePageOption(e)}>
+                    {getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
                   </div>
                 </div>
+              </div>
 
 
-                <div className="col-view tracking-item mb-1  mt-1 position-relative">
+              <div className="col-view tracking-item mb-1  mt-1 position-relative">
                  <span className={"info-detail-reward mr-3 " + (documentData.isRegistry ? "" : "color-not-registered")}
                        onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
                        onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
@@ -333,82 +336,82 @@ class AudienceTrackingList extends React.Component {
                         alt="arrow button"/>
                   </span>
 
-                  {reward > 0 &&
-                  <PayoutCard reward={reward} data={documentData}/>
-                  }
-
-                  <span className="info-detail-view mr-3">{view}</span>
-                  <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
-                  <span className="ml-4 info_date"> {Common.timestampToDate(documentData.created)}</span>
-                </div>
-                {location &&
-                <Tooltip title="Export tracking data as Excel file." placement="bottom">
-                  <div className="viewer-btn" onClick={() => this.handleExport()}>
-                    <i className="material-icons">save</i>
-                    {psString("tracking-list-export")}
-                  </div>
-                </Tooltip>
+                {reward > 0 &&
+                <PayoutCard reward={reward} data={documentData}/>
                 }
-              </dl>
-            </div>
+
+                <span className="info-detail-view mr-3">{view}</span>
+                <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
+                <span className="ml-4 info_date"> {Common.timestampToDate(documentData.created)}</span>
+              </div>
+              {location &&
+              <Tooltip title="Export tracking data as Excel file." placement="bottom">
+                <div className="viewer-btn" onClick={() => this.handleExport()}>
+                  <i className="material-icons">save</i>
+                  {psString("tracking-list-export")}
+                </div>
+              </Tooltip>
+              }
+            </dl>
           </div>
+        </div>
 
 
-          <div className="tracking_inner">
-            <div className="col-sm-12 col-md-12 row tracking_top">
-              <div className="pl-0 tracking-list-title d-none d-sm-inline-block col-5 col-md-7 col-lg-9 mb-3">
-                {psString("tracking-list-visitors")}
-              </div>
+        <div className="tracking_inner">
+          <div className="col-sm-12 col-md-12 row tracking_top">
+            <div className="pl-0 tracking-list-title d-none d-sm-inline-block col-5 col-md-7 col-lg-9 mb-3">
+              {psString("tracking-list-visitors")}
+            </div>
 
-              <div className="option-menu-btn d-inline-block d-sm-none"
-                   onClick={this.handleOptionButtonClickEvent.bind(this)}>
-                <i className="material-icons">more_vert</i>
-                <div className={"option-table" + (tableOptionFlag ? "" : " d-none")}>
-                  <div
-                    title={getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
-                    onClick={(e) => this.handleHideOption(e)}>
-                    {getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
-                  </div>
-                  <div
-                    title={getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
-                    onClick={(e) => this.handleOnePageOption(e)}>
-                    {getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
-                  </div>
+            <div className="option-menu-btn d-inline-block d-sm-none"
+                 onClick={this.handleOptionButtonClickEvent.bind(this)}>
+              <i className="material-icons">more_vert</i>
+              <div className={"option-table" + (tableOptionFlag ? "" : " d-none")}>
+                <div
+                  title={getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
+                  onClick={(e) => this.handleHideOption(e)}>
+                  {getShowAnonymous ? psString("tracking-list-option-hide") : psString("tracking-list-option-show")}
+                </div>
+                <div
+                  title={getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
+                  onClick={(e) => this.handleOnePageOption(e)}>
+                  {getIncludeOnlyOnePage ? psString("tracking-list-option-exclude") : psString("tracking-list-option-include")}
                 </div>
               </div>
+            </div>
 
 
-              <div className=" p-0 col-8 col-md-5 col-lg-3">
-                {!this.state.filterList ?
-                  <div className="tags_menu_search_container row">
-                    <AutoSuggestInputContainer search={this.selectedSearch} type={"name"}
-                                               getNameList={this.state.resultList}/>
-                    <div className="search-btn">
-                      <i className="material-icons">search</i>
-                    </div>
-                  </div> :
-                  <div className="tracking-list-search-selected-wrapper">
-                    <div className="tracking-list-search-selected">
-                      {selectedSearch || psString("tracking-list-anonymous")}
-                    </div>
-                    <i className="material-icons" onClick={() => {
-                      this.handleClearSearch();
-                    }}>close</i>
+            <div className=" p-0 col-8 col-md-5 col-lg-3">
+              {!this.state.filterList ?
+                <div className="tags_menu_search_container row">
+                  <AutoSuggestInputContainer search={this.selectedSearch} type={"name"}
+                                             getNameList={this.state.resultList}/>
+                  <div className="search-btn">
+                    <i className="material-icons">search</i>
                   </div>
-                }
+                </div> :
+                <div className="tracking-list-search-selected-wrapper">
+                  <div className="tracking-list-search-selected">
+                    {selectedSearch || psString("tracking-list-anonymous")}
+                  </div>
+                  <i className="material-icons" onClick={() => {
+                    this.handleClearSearch();
+                  }}>close</i>
+                </div>
+              }
+            </div>
+
+
+            <div className="tracking_table">
+              <div className="tracking-table-tr row">
+                <div className="col-4 tracking-table-td">{psString("tracking-list-name")}</div>
+                <div className="col-3 col-sm-2 tracking-table-td tac">{psString("tracking-list-views")}</div>
+                <div className="col-3 tracking-table-td tar">{psString("tracking-list-last")}</div>
+                <div className="col-2 col-sm-3 tracking-table-td "/>
               </div>
 
-
-              <div className="tracking_table">
-                <div className="tracking-table-tr row">
-                  <div className="col-4 tracking-table-td">{psString("tracking-list-name")}</div>
-                  <div className="col-3 col-sm-2 tracking-table-td tac">{psString("tracking-list-views")}</div>
-                  <div className="col-3 tracking-table-td tar">{psString("tracking-list-last")}</div>
-                  <div className="col-2 col-sm-3 tracking-table-td "/>
-                </div>
-
-                {rst.length > 0 && rst.map((result, idx) => (
-                  <span key={idx}>
+              {rst.length > 0 && rst.map((result, idx) => (
+                <span key={idx}>
                     <div onClick={this.handleLinkClickEvent.bind(this)}
                          id={"trackingTableTr" + idx}
                          data-cid={result.cid}
@@ -432,7 +435,7 @@ class AudienceTrackingList extends React.Component {
 
 
                       <div className="col-3 tracking-table-td tar">
-                        {Common.dateTimeAgo(result.viewTimestamp, getIsMobile)}
+                        {common_view.dateTimeAgo(result.viewTimestamp, getIsMobile)}
                       </div>
 
 
@@ -466,31 +469,32 @@ class AudienceTrackingList extends React.Component {
                              data-cid={result.cid}>
                           <div className={"chart-btn " + (result.totalReadTimestamp === 0 ? "btn-disabled" : "")}>
                             <i className="material-icons">bar_chart</i>
-                            <i className="material-icons">{selectedTr && String(idx) === selectedTr ? "keyboard_arrow_down" : "keyboard_arrow_up"}</i>
+                            <i
+                              className="material-icons">{selectedTr && String(idx) === selectedTr ? "keyboard_arrow_down" : "keyboard_arrow_up"}</i>
                           </div>
                         </div>
                       </div>
 
 
                     </div>
-                    {selectedTr && String(idx) === selectedTr && chartResultList &&
-                    <div className="col-12">
-                      <CustomChart chartData={chartResultList} subject="tracking"/>
-                    </div>
-                    }
+                  {selectedTr && String(idx) === selectedTr && chartResultList &&
+                  <div className="col-12">
+                    <CustomChart chartData={chartResultList} subject="tracking"/>
+                  </div>
+                  }
 
                 </span>
 
-                ))}
+              ))}
 
 
-                {loading && <div className="spinner mb-4"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>}
-                {!loading && rst.length === 0 && <div className="no-data">{psString("tracking-list-no-data")}</div>}
+              {loading && <div className="spinner mb-4"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>}
+              {!loading && rst.length === 0 && <div className="no-data">{psString("tracking-list-no-data")}</div>}
 
-              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
     );
   }

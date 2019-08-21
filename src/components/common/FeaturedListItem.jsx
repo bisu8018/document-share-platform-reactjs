@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Common from "../../config/common";
+import Common from "../../common/common";
+import common_view from "../../common/common_view";
 
 class FeaturedList extends React.Component {
 
@@ -40,7 +41,7 @@ class FeaturedList extends React.Component {
       <div className="see-also-container">
 
         <Link to={"/" + identification + "/" + resultItem.seoTitle}>
-          <div className="see-also-thumbnail" onClick={Common.scrollTop()}>
+          <div className="see-also-thumbnail" onClick={common_view.scrollTop()}>
             <img src={Common.getThumbnail(resultItem.documentId, 320, 1, resultItem.documentName)}
                  className={ratio >= 1.8 ? "see-also-card-img-landscape" : "main-category-card-img"}
                  alt={resultItem.documentName ? resultItem.documentName : resultItem.documentId}/>
@@ -49,7 +50,7 @@ class FeaturedList extends React.Component {
         </Link>
 
         <div className="see-also-content">
-          <Link to={"/" + identification} className="info_name see-also-author" onClick={Common.scrollTop()}>
+          <Link to={"/" + identification} className="info_name see-also-author" onClick={common_view.scrollTop()}>
             {identification}
           </Link>
         </div>

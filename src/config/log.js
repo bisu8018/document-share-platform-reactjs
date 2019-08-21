@@ -1,5 +1,5 @@
 import { APP_PROPERTIES } from "../properties/app.properties";
-import common from "./common";
+import common from "../common/common";
 
 
 // 환경변수 LOCAL 일때만 로그 표시
@@ -43,6 +43,18 @@ export default ({
       if (envFlag) {
         if (!err) console.log("Mobile Environment SETTING : %c COMPLETE", success);
         else console.log("Mobile Environment SETTING : %c FAILED", failed, err);
+      } // else "Do something!"
+    },
+    setWeb3Apis: err => {
+      if (envFlag) {
+        if (!err) console.log("Web3 Environment SETTING : %c COMPLETE", success);
+        else console.log("Web3 Environment SETTING : %c FAILED", failed, err);
+      } // else "Do something!"
+    },
+    setDrizzleApis: err => {
+      if (envFlag) {
+        if (!err) console.log("Drizzle Environment SETTING : %c COMPLETE", success);
+        else console.log("Drizzle Environment SETTING : %c FAILED", failed, err);
       } // else "Do something!"
     },
     setMyInfo: err => {

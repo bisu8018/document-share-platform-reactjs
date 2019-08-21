@@ -5,10 +5,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 import MainRepository from "../../../../redux/MainRepository";
 import { Link } from "react-router-dom";
-import Common from "../../../../config/common";
+import Common from "../../../../common/common";
 import CustomChart from "../../../common/CustomChart";
 import NoDataIcon from "../../../common/NoDataIcon";
 import { psString } from "../../../../config/localization";
+import common_view from "../../../../common/common_view";
 
 class CuratorAnalyticsTab extends React.Component {
   state = {
@@ -71,8 +72,9 @@ class CuratorAnalyticsTab extends React.Component {
         this.setState({ loading: false });
       }).catch(err => {
       console.error("Creator analytics info GET ERROR", err);
-      setTimeout(() => {
+      this.setTimeout = setTimeout(() => {
         this.fetchDocuments(params);
+        clearTimeout(this.setTimeout);
       }, 8000);
     });
   };
@@ -215,7 +217,7 @@ class CuratorAnalyticsTab extends React.Component {
 
                 <div className="d-none pl-0 d-sm-inline-block col-sm-2">
                   <Link to={"/" + identification + "/" + result.seoTitle}>
-                    <div className="analytics-thumb-image" onClick={() => Common.scrollTop()}>
+                    <div className="analytics-thumb-image" onClick={() => common_view.scrollTop()}>
                       <img src={Common.getThumbnail(result.documentId, 320, 1, result.documentName)}
                            alt={result.title ? result.title : result.documentName} className="img-fluid"/>
                     </div>
@@ -225,12 +227,12 @@ class CuratorAnalyticsTab extends React.Component {
                 <div className="col-10 col-sm-7 mb-4">
                   <Link to={"/" + identification + "/" + result.seoTitle}>
                     <div className="analytics-info-title"
-                         onClick={() => Common.scrollTop()}>  {result.title ? result.title : result.documentName} </div>
+                         onClick={() => common_view.scrollTop()}>  {result.title ? result.title : result.documentName} </div>
                   </Link>
                 </div>
 
                 <div className="d-none d-sm-inline-block col-sm-2 analytics-info-date">
-                  {Common.dateTimeAgo(result.created)}
+                  {common_view.dateTimeAgo(result.created)}
                 </div>
 
                 <div className="col-2 col-sm-1 analytics-btn-div"

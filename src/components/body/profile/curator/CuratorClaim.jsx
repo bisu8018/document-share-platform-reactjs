@@ -1,5 +1,6 @@
 import React from "react";
-import Common from "../../../../config/common";
+import Common from "../../../../common/common";
+import { APP_PROPERTIES } from "../../../../properties/app.properties";
 
 class CuratorClaim extends React.Component {
   state = {
@@ -7,17 +8,29 @@ class CuratorClaim extends React.Component {
     btnText: "Claim $ "
   };
 
+
+  // 초기화
+  init = () => {
+    if(APP_PROPERTIES.ssr) return;
+
+    this.getDetermineCuratorReward();
+  };
+
+
+  // 큐레이터 리워드 GET
   getDetermineCuratorReward = () => {
-    const { document, getWeb3Apis, getDrizzle, getMyInfo } = this.props;
+    const { document, getWeb3Apis, getMyInfo } = this.props;
     const { determineReward } = this.state;
 
-    if (document && getDrizzle.isAuthenticated() && getMyInfo.ethAccount && determineReward === null) {
+    if (document &&  getMyInfo.ethAccount && determineReward === null) {
       getWeb3Apis.getDetermineCuratorReward(document.documentId, getMyInfo.ethAccount).then((data) => {
         this.setState({ determineReward: (data && Common.toDeck(data[0]) > 0 ? Common.toDeck(data[0]) : 0) });
       }).catch(err => console.error(err));
     }
   };
 
+
+  // 클레임 버튼 클릭 관리
   handelClickClaim = () => {
     const { document, getDrizzle, getMyInfo, setAlertCode } = this.props;
     const { btnText } = this.state;
@@ -36,9 +49,11 @@ class CuratorClaim extends React.Component {
     }
   };
 
+
   componentWillMount(): void {
-    this.getDetermineCuratorReward();
+    this.init();
   }
+
 
   render() {
     const { getDrizzle, userInfo, getMyInfo, getIsMobile } = this.props;
@@ -48,7 +63,7 @@ class CuratorClaim extends React.Component {
       claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
 
     let drizzleAccount = getDrizzle ? getDrizzle.getLoggedInAccount() : "";
-    if (myEthAccount !== ethAccount || !getDrizzle.isAuthenticated() || ethAccount !== drizzleAccount || claimReward <= 0 || btnText === "Complete") return <div/>;
+    if (myEthAccount !== ethAccount || ethAccount !== drizzleAccount || !getDrizzle.isAuthenticated() || claimReward <= 0 || btnText === "Complete") return <div/>;
 
     return (
       <div className={"claim-btn " + (btnText === "Pending" ? "btn-disabled" : "") + (getIsMobile ? " w-100" : "")}

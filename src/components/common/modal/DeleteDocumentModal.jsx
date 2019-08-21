@@ -7,8 +7,8 @@ import { psString } from "../../../config/localization";
 import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../../redux/MainRepository";
 import { FadingCircle } from "better-react-spinkit";
-import common from "../../../config/common";
 import history from "apis/history/history";
+import common_view from "../../../common/common_view";
 
 
 const Transition = props => <Slide direction="down" {...props} />;
@@ -68,7 +68,7 @@ class DeleteDocumentModal extends React.Component {
   handleDeleteAfter = (seoTitle) => {
     const { setAlertCode, documentData } = this.props;
 
-    if (common.getPaths().length > 2 && common.getPaths()[2] === documentData.seoTitle) {
+    if (common_view.getPaths().length > 2 && common_view.getPaths()[2] === documentData.seoTitle) {
       history.push("/");
       setAlertCode(2076);
     }

@@ -5,10 +5,11 @@ import { Helmet } from "react-helmet";
 import { psString } from "../../../config/localization";
 import log from "../../../config/log";
 import MainRepository from "../../../redux/MainRepository";
-import Common from "../../../config/common";
 import ContentTagsContainer from "../../../container/body/contents/ContentTagsContainer";
 import ContentListItemContainer from "../../../container/body/contents/ContentListItemContainer";
 import NoDataIcon from "../../common/NoDataIcon";
+import common_view from "../../../common/common_view";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 
 class ContentList extends Component {
@@ -32,6 +33,8 @@ class ContentList extends Component {
 
   // 초기화
   init = () => {
+    if(APP_PROPERTIES.ssr) return;
+
     log.ContentList.init();
     this.setFetch();
     this.setTagList();
@@ -77,8 +80,7 @@ class ContentList extends Component {
       } else this.setState({ isEndPage: true });
 
       if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) this.setState({ totalViewCountInfo: res.totalViewCountInfo });
-
-    }).then(err => {
+    }).catch(err => {
       this.setState({ loading: false });
       log.ContentList.fetchDocuments(err);
       this.setTimeout = setTimeout(() => {
@@ -91,7 +93,7 @@ class ContentList extends Component {
 
   // fetch 진행
   setFetch = () => {
-    let path = Common.getPath(), tag = Common.getTag();
+    let path = common_view.getPath(), tag = common_view.getTag();
 
     return this.setState({
       resultList: [],
@@ -112,26 +114,21 @@ class ContentList extends Component {
   //태그 리스트 GET
   setTagList = () => {
     const { setTagList, getTagList } = this.props;
-
-    let path = Common.getPath();
+    let path = common_view.getPath();
     if (getTagList.path !== path) MainRepository.Document.getTagList(path).then(result => setTagList(result.resultList)).then(log.ContentList.setTagList());
   };
 
 
   // 카테고리 관리
   handleCategories = () => {
-    let path = Common.getPath(), sec_path = Common.getTag();
+    let path = common_view.getPath(), sec_path = common_view.getTag();
     this.props.history.push("/" + path + "/" + sec_path);
   };
 
 
-  // 업로드 버튼 관리
-  handleUploadBtn = () => document.getElementById("uploadBtn").click();
-
-
   componentDidUpdate = () => {
     let pathArr = window.location.pathname.split("/");
-    if (pathArr.length > 2 && decodeURI(pathArr[2]) !== this.state.tag) this.setFetch();
+    if (pathArr.length > 2 && pathArr[2] !== "" && decodeURI(pathArr[2]) !== this.state.tag) this.setFetch();
   };
 
 
@@ -142,20 +139,20 @@ class ContentList extends Component {
 
   render() {
     const { match, isEndPage, getIsMobile } = this.props;
-    const { resultList, totalViewCountInfo } = this.state;
+    const { resultList, totalViewCountInfo, path } = this.state;
 
     return (
       <div className="row container">
         <Helmet>
-          <title>{psString("helmet-title-" + Common.getPath()) + " | Polaris Share"}</title>
+          <title>{psString("helmet-title-" + path) + " | Polaris Share"}</title>
         </Helmet>
 
 
-        <ContentTagsContainer path={match.path} url={match.url} {...this.props}/>
+        <ContentTagsContainer path={path} url={match.url} {...this.props}/>
 
 
         <section className="col-sm-12 col-lg-9 u__center-container">
-          <div className="d-block d-sm-none content-list-path">{Common.getPath()}</div>
+          <div className="d-block d-sm-none content-list-path">{path}</div>
 
           <InfiniteScroll
             className={(getIsMobile ? "overflow-initial " : "") + "mt-0 mt-sm-4 pt-0 pt-sm-2 u__center content-list-wrapper"}

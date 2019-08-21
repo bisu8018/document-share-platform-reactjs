@@ -528,7 +528,7 @@ module.exports = function(webpackEnv) {
         publicPath: publicPath,
         generate: (seed, files) => {
           const manifestFiles = files.reduce(function(manifest, file) {
-            manifest[file.name] = file.path;
+            manifest[file.name] = file.path.substr(1);
             return manifest;
           }, seed);
 

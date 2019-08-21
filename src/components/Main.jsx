@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Router, Switch } from "react-router-dom";
-import history from "apis/history/history";
+import history from "../apis/history/history";
 
 import RouterList from "../config/routerList";
 import MainRepository from "../redux/MainRepository";
@@ -14,35 +14,44 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import AlertListContainer from "../container/common/alert/AlertListContainer";
 import DollarPolicyModal from "./common/modal/DollarPolicyModal";
 import LoadingModal from "./common/modal/LoadingModal";
-import common from "../config/common";
 import log from "../config/log";
+import { APP_PROPERTIES } from "../properties/app.properties";
+import common_view from "../common/common_view";
 
 class Main extends Component {
   state = {
-    initData: false,
-    initDom: false
+    initData: false
   };
 
 
   //초기화
   init = () => {
+    if (APP_PROPERTIES.ssr) return Promise.resolve().then(() => this.setInitData());
+
     log.Main.init();
+    history.listen(MainRepository.Analytics.sendPageView);
 
     MainRepository.init(() => {
+
+      Promise.resolve()
       //태그 리스트 GET
-      this.setTagList()
-      // 업로드 태그 리스트 GET
-        .then(this.setUploadTagList())
+        .then(() => this.setTagList())
+        // 업로드 태그 리스트 GET
+        .then(() => this.setUploadTagList())
         // 내 정보 GET
-        .then(this.setMyInfo())
+        .then(() => this.setMyInfo())
         // 모바일 유무 GET
-        .then(this.setIsMobile())
+        .then(() => this.setIsMobile())
+        // Web3 GET
+        .then(() => this.setWeb3Apis())
+        // Drizzle GET
+        .then(() => this.setDrizzleApis())
         // 크리에이터 리워드풀 GET
-        .then(this.setAuthorDailyRewardPool())
+        .then(() => this.setAuthorDailyRewardPool())
         // 큐레이터 리워드풀 GET
-        .then(this.setCuratorDailyRewardPool())
+        .then(() => this.setCuratorDailyRewardPool())
         // 초기화 완료
-        .then(this.setInitData());
+        .then(() => this.setInitData());
     });
   };
 
@@ -89,16 +98,36 @@ class Main extends Component {
   // 모바일 유무 GET
   setIsMobile = () => {
     const { setIsMobile } = this.props;
+
     if (document.documentElement.clientWidth < 576) setIsMobile(true);
     else setIsMobile(false);
 
-    return log.Main.setIsMobile();
+    log.Main.setIsMobile();
+
+    return Promise.resolve();
+  };
+
+
+  // Web3 GET
+  setWeb3Apis = () => {
+    this.props.setWeb3Apis();
+    log.Main.setWeb3Apis();
+    return Promise.resolve();
+  };
+
+
+  // Web3 GET
+  setDrizzleApis = () => {
+    this.props.setDrizzleApis();
+    log.Main.setDrizzleApis();
+    return Promise.resolve();
   };
 
 
   // 크리에이터 리워드풀 GET
   setAuthorDailyRewardPool = () => {
     const { setAuthorDailyRewardPool } = this.props;
+
     let pool = 115068493148000000000000;
     setAuthorDailyRewardPool(pool);    // web3 speed issue, 리워드풀 하드코딩
     return log.Main.setAuthorDailyRewardPool(null, pool);
@@ -108,6 +137,7 @@ class Main extends Component {
   // 큐레이터 리워드풀 GET
   setCuratorDailyRewardPool = () => {
     const { setCuratorDailyRewardPool } = this.props;
+
     let pool = 49315068492000000000000;
     setCuratorDailyRewardPool(pool);   // web3 speed issue, 리워드풀 하드코딩
     return log.Main.setCuratorDailyRewardPool(null, pool);
@@ -120,35 +150,12 @@ class Main extends Component {
   };
 
 
-  componentWillMount() {
-    this.init();
-    history.listen(MainRepository.Analytics.sendPageView);
-  }
-
-
-  componentDidMount() {
-    this.setState({ initDom: true });
-  }
-
-
-  render() {
-    const { getMyInfo } = this.props;
-    const { initData, initDom } = this.state;
-
-    let flag = !initData || !initDom || (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0);
-
-    if (!flag) common.setBodyStyleUnlock();
-    else {
-      common.setBodyStyleLock();
-      return (<LoadingModal/>);
-    }
-
+  // get Main component
+  getMainComponent = () => {
     return (
-      <Router history={history}>
+      <div>
         <HeaderContainer/>
-
-
-        <div id="container" data-parallax="true">
+        <div id='container' data-parallax='true'>
           <CookiePolicyModal/>
           <DollarPolicyModal/>
           <Switch>
@@ -164,16 +171,35 @@ class Main extends Component {
             )}
           </Switch>
         </div>
-
-
         <Footer/>
-
-
         <AlertListContainer/>
-      </Router>
-
+      </div>
     );
+  };
+
+
+  componentWillMount() {
+    this.init();
   }
+
+
+  render() {
+    const { getMyInfo } = this.props;
+    const { initData } = this.state;
+
+    if (APP_PROPERTIES.ssr) return this.getMainComponent();
+
+    let flag = !initData || (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0);
+
+    if (!flag) common_view.setBodyStyleUnlock();
+    else {
+      common_view.setBodyStyleLock();
+      return (<LoadingModal/>);
+    }
+    return <Router history={history}>{this.getMainComponent()}</Router>;
+
+  }
+
 }
 
 export default Main;

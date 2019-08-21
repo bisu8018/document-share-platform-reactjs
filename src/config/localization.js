@@ -10,8 +10,8 @@ const strings = new Map([
     ENG: "To download documents for free,"
   }],
   ["main-banner-subj-3", {
-    KOR: "당신의 잠재 고객을 성장시키세요",
-    ENG: "grow your audience"
+    KOR: "당신의 잠재 고객을 성장시키세요!",
+    ENG: "Grow your audience!"
   }],
   ["main-banner-btn-1", {
     KOR: "지금 검색해보세요",
@@ -470,6 +470,14 @@ const strings = new Map([
   ["alert-2035", {
     KOR: "인출 요청 실패",
     ENG: "Failed to claim."
+  }],
+  ["alert-2036", {
+    KOR: "메타마스크 로그인 부탁드립니다.",
+    ENG: "Please log in to the MetaMask."
+  }],
+  ["alert-2037", {
+    KOR: "메타마스크가 필요한 서비스입니다.",
+    ENG: "This service requires a metamask."
   }],
   ["alert-2051", {
     KOR: "올바른 계정으로 로그인해주세요",
@@ -1170,27 +1178,27 @@ const strings = new Map([
   }],
   ["guide-subj-1", {
     KOR: "문서업로드 하기",
-    ENG: "Upload document"
+    ENG: "Upload documents"
   }],
   ["guide-content-1", {
     KOR: "문서의 제목, 설명, 태그 등의 정보를 입력하고 업로드하면 문서가 공유됩니다.",
-    ENG: "Documents are shared when you enter and upload information such as the title, description, and tags of the documents."
+    ENG: "Add a title, description and tag, and upload a document to share."
   }],
   ["guide-subj-2", {
     KOR: "문서 등록",
-    ENG: "Register document"
+    ENG: "Register documents"
   }],
   ["guide-content-2", {
     KOR: "소셜 + 지갑 로그인 후 문서를 업로드하면 자동으로 문서 등록 절차를 진행하며, 문서가 등록되면 저자보상과 투표를 받을 수 있음 (7일간 투표량에 따라서 featured 탭 순위가 결정됨)",
-    ENG: "If you upload documents after signing in to your social + wallet, you will be automatically enrolled in the documents. Once the documents is registered, it will be entitled to creator rewards and votes (featured tab rankings are determined by your 7-day vote)"
+    ENG: "Log into your social and wallet account, and upload a document. It will be registered automatically and you will receive creator rewards and votes. (The ranking in the Featured tap is determined based on the votes received for the last 7 days.)"
   }],
   ["guide-subj-3", {
     KOR: "크리에이터 보상금 산정하기",
-    ENG: "Estimate rewards of creator"
+    ENG: "Calculate creator rewards"
   }],
   ["guide-content-3", {
     KOR: "등록된 문서들에 대해서 매일 0시(GMT+0) 당일 전체 보상금의 70%를 문서 별 이전 하루 동안의 페이지뷰에 비례해서 배분 됩니다.",
-    ENG: "For registered documents, 70% of the total rewards will be distributed on a daily basis at 0 o'clock (GMT + 0) in proportion to the pageviews during the previous day."
+    ENG: "70% of the total rewards is distributed per document based on its page views at 00:00 (GMT+0) on a daily basis."
   }],
   ["guide-subj-4", {
     KOR: "크리에이터 보상금 청구하기",
@@ -1198,39 +1206,39 @@ const strings = new Map([
   }],
   ["guide-content-4", {
     KOR: "마이 페이지의 uploaded 탭에서 문서 별로 Claim 버튼을 클릭하면 지금까지 일별로 산정된 누적 보상금을 수령할 수 있습니다.",
-    ENG: "On the uploaded tab of \"My page\", click the Claim button for each document, and you'll be able to receive daily cumulative rewards."
+    ENG: "Click on the Claim button for each document in the Uploaded tab of the My Profile page to receive your rewards settled on a daily basis."
   }],
   ["guide-subj-5", {
     KOR: "토큰 보유량 확인 하기",
-    ENG: "Check your token balance"
+    ENG: "Check token balance"
   }],
   ["guide-content-5", {
     KOR: "마이 페이지 또는 메타마스크 등의 지갑에서 토큰 보유량을 확인할 수 있습니다.",
-    ENG: "You can check the amount of your tokens in your wallet, such as \"My page\" or \"Meta Mask\"."
+    ENG: "Check your token balance on My Profile page or MetaMask wallet."
   }],
   ["guide-subj-6", {
     KOR: "투표하기",
-    ENG: "Voting documents"
+    ENG: "Vote"
   }],
   ["guide-content-6", {
     KOR: "문서 뷰어 페이지에서 투표하기 버튼을 클릭하고 해당 문서에 투표할 토큰수를 입력하여 투표하면 됩니다.",
-    ENG: "You can vote by clicking the vote button on the documents viewer page and entering the number of tokens to vote on the documents."
+    ENG: "Click on the Vote button on the document viewer page and enter the amount of tokens to vote."
   }],
   ["guide-subj-7", {
     KOR: "투표금 예치 기간",
-    ENG: "Vote Deposit Period"
+    ENG: "Token deposit period "
   }],
   ["guide-content-7", {
     KOR: "투표에 사용한 토큰은 투표한 날짜부터 1주+1일간 해당 문서에 귀속됩니다.",
-    ENG: "The token used for voting will be attributed to the documents for 1 week + 1 day from the date of voting."
+    ENG: "The tokens you used for voting will be deposited to the document for one week and one day from the date of voting."
   }],
   ["guide-subj-8", {
     KOR: "큐레이터 보상금 산정하기",
-    ENG: "Estimate rewards of curator"
+    ENG: "Calculate curator rewards"
   }],
   ["guide-content-8", {
     KOR: "당일 페이지 뷰가 발생한 문서들에 대해서 매일 0시(GMT+0) 당일 전체 보상금의 30%를 문서 별 이전 하루 동안의 페이지뷰의 제곱에 비례해서 배분하고, 이를 다시 투표한 토큰수에 비례하여 배분됩니다.",
-    ENG: "For documents that generated pageviews on the same day, 30% of the total compensation on the same day at 0:00 (GMT + 0) is distributed proportionally to the square of the pageview for the previous day, and distributed proportionally to the number of tokens It's possible."
+    ENG: "30% of the total rewards is distributed per document based on the square of its page views a day before, and is also distributed based on the tokens voted. "
   }],
   ["guide-subj-9", {
     KOR: "큐레이터 보상금 청구하기",
@@ -1238,15 +1246,15 @@ const strings = new Map([
   }],
   ["guide-content-9", {
     KOR: "내 프로필 페이지의 voted 탭에서 문서 별로 Claim 버튼을 클릭하면, 예치기간이 만료된 투표에 대해서 지금까지 정산 완료된 누적 보상금과 예치금을 수령할 수 있습니다.",
-    ENG: "If you click the Claim button for each documents in the Voting tab of \"My page\", you will receive a cumulative payment and deposit that has been settled so far for voting that has expired."
+    ENG: "Click on the Claim button in the Voted tab of the My Profile page to receive the total rewards you have earned through voting of which deposit period has expired."
   }],
   ["guide-subj-10", {
     KOR: "같은 저자의 문서",
-    ENG: "Documents of the same author"
+    ENG: "Documents uploaded by the same creator"
   }],
   ["guide-content-10", {
     KOR: "문서 뷰어 페이지 내의 저자 이름을 클릭하여 저자 프로필 페이지로 이동한 후 uploaded 또는 voted 탭에서 열람할 문서를 클릭하시면 됩니다.",
-    ENG: "Click on the author's name in the documents viewer page to go to the author's profile page, click the documents you want to view in the uploaded or voted tab."
+    ENG: "Click on the name of creator on the document viewer page to go to their profile page where you can view documents in the uploaded or voted tab."
   }],
   ["guide-subj-11", {
     KOR: "유사한 주제의 문서",
@@ -1254,7 +1262,7 @@ const strings = new Map([
   }],
   ["guide-content-11", {
     KOR: "문서 뷰어 페이지 내의 태그를 클릭하여 해당 태그의 문서 목록으로 이동한 후, 열람할 문서를 선택하시면 됩니다.",
-    ENG: "Click the tag in the documents viewer page, move to the documents list of that tag, and select the documents to view."
+    ENG: "Click on the tag on the document viewer page to access a list of documents with the same tag and select a document to view."
   }],
   ["guide-subj-12", {
     KOR: "다른 문서 탐색하기",
@@ -1262,31 +1270,31 @@ const strings = new Map([
   }],
   ["guide-content-12", {
     KOR: "사이트 로고를 클릭하여 메인 페이지로 이동한 후 최신, 추천, 인기 문서 목록 열람 또는 태그 검색하시면 됩니다.",
-    ENG: "Click on the site logo to go to the main page and browse the latest, featured, popular documents list or tag."
+    ENG: "Click on the site logo to go to the main page and check the list titled Latest, Recommended and Popular. You can also search documents using tags."
   }],
   ["guide-subj-13", {
     KOR: "SNS 공유하기",
-    ENG: "Share SNS"
+    ENG: "Share on social media"
   }],
   ["guide-content-13", {
     KOR: "문서 뷰어 페이지에서 공유하려는 소셜 매체의 아이콘을 클릭하여 내 소셜 매체에 문서를 포스팅하시면 됩니다.",
-    ENG: "Just click the icon of the SNS you want to share on \"Document Viewer page\" and post the documents to my SNS."
+    ENG: "Click on the social media icon on the document viewer page and post a document on the social media website."
   }],
   ["guide-subj-14", {
     KOR: "문서 링크 공유하기",
-    ENG: "Share documents link"
+    ENG: "Share document link"
   }],
   ["guide-content-14", {
     KOR: "문서 뷰어 페이지에서 공유 버튼을 클릭하면 문서 공유창이 표시되며, 여기서 문서의 공유 링크를 복사한 후, 이메일 또는 메신저 등에 공유하시면 됩니다.",
-    ENG: "When you click \"Share button\" on \"Document Viewer page\", \"Share Documents modal\" is displayed, where you can copy the share link of the documents and share it with email or IM."
+    ENG: "Click on the Share button on the document viewer page to open the window where you can copy the link to share it via email or messenger."
   }],
   ["guide-subj-15", {
     KOR: "외부 사이트에 문서 첨부",
-    ENG: "Attach documents to external sites"
+    ENG: "Attach documents to external site"
   }],
   ["guide-content-15", {
     KOR: "문서 뷰어 페이지에서 공유 버튼을 클릭하면 문서 공유창이 표시되며, 여기서 Embed Code를 복사한 후, 공유할 사이트에 붙여넣기를 하시면 됩니다.",
-    ENG: "When you click \"Share button\" on \"Document Viewer page\", \"Share Documents modal\" will be displayed. Copy the Embed Code and paste it to the site you want to share."
+    ENG: "Click on the Share button on the document viewer page to open the window where you can copy the embedded code and paste it on the website to share it."
   }],
 
   // Publish Modal
@@ -1431,6 +1439,7 @@ export let Lang = {
 
 function getCookie(cname) {
   let name = cname + "=";
+  if (typeof document !== "undefined"){
   let decodedCookie = decodeURIComponent(document.cookie);
   let ca = decodedCookie.split(";");
   for (let i = 0; i < ca.length; i++) {
@@ -1441,7 +1450,7 @@ function getCookie(cname) {
     if (c.indexOf(name) === 0) {
       return c.substring(name.length, c.length);
     }
-  }
+  }}
   return "";
 }
 
@@ -1450,12 +1459,12 @@ function setCookie(cname, cvalue, exdays) {
   let d = new Date();
   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
   let expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + "; " + expires + "; path=/;";
+  if (typeof document !== "undefined") document.cookie = cname + "=" + cvalue + "; " + expires + "; path=/;";
 }
 
 
 function deleteCookie(name) {
-  if (getCookie(name)) document.cookie = name + "=;expires=Thu, 01-Jan-70 00:00:01 GMT";
+  if (typeof document !== "undefined") if (getCookie(name)) document.cookie = name + "=;expires=Thu, 01-Jan-70 00:00:01 GMT";
 }
 
 

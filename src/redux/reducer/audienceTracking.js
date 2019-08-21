@@ -6,23 +6,15 @@ const delay = (ms) => new Promise(resolve =>
 );
 
 // 액션 생성자
-export function setShowAnonymous(showAnonymous: boolean, callback) {
-  return (dispatch) => {
-    dispatch({ type: ReduxTypes.SET_SHOW_ANONYMOUS, showAnonymous });
-    return delay(100).then(() => {
-      callback();
-    })
-  };
-}
+export const setShowAnonymous = (showAnonymous: boolean, dispatch, callback) => {
+  dispatch({ type: ReduxTypes.SET_SHOW_ANONYMOUS, showAnonymous });
+  return delay(100).then(() => callback());
+};
 
-export function setIncludeOnlyOnePage(includeOnlyOnePage: boolean, callback) {
-  return (dispatch) => {
-    dispatch({type: ReduxTypes.SET_INCLUDE_PAGE_ONLY_ONE, includeOnlyOnePage});
-    return delay(100).then(() => {
-      callback();
-    })
-  };
-}
+export const setIncludeOnlyOnePage = (includeOnlyOnePage: boolean, dispatch, callback) => {
+  dispatch({ type: ReduxTypes.SET_INCLUDE_PAGE_ONLY_ONE, includeOnlyOnePage });
+  return delay(100).then(() => callback());
+};
 
 
 // 초기 상태

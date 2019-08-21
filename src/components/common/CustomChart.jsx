@@ -1,7 +1,7 @@
 import React from "react";
 import { ThreeBounce } from "better-react-spinkit";
 import Chart from "react-google-charts";
-import Common from "../../config/common";
+import Common from "../../common/common";
 import { psString } from "../../config/localization";
 
 //https://www.npmjs.com/package/react-google-charts#quick-start

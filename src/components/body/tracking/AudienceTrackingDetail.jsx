@@ -3,10 +3,11 @@ import { Link, withRouter } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 
 import MainRepository from "../../../redux/MainRepository";
-import Common from "../../../config/common";
+import Common from "../../../common/common";
 import Tooltip from "@material-ui/core/Tooltip";
 import { ThreeBounce } from "better-react-spinkit";
 import { psString } from "../../../config/localization";
+import common_view from "../../../common/common_view";
 
 class AudienceTrackingDetail extends React.Component {
   state = {
@@ -66,8 +67,9 @@ class AudienceTrackingDetail extends React.Component {
         this.setState({ resultList: resData.resultList ? resData.resultList : [] });
       }, err => {
         console.error(err);
-        setTimeout(() => {
+        this.setTimeout = setTimeout(() => {
           this.getTrackingInfo();
+          clearTimeout(this.setTimeout);
         }, 8000);
       });
     }
@@ -173,7 +175,7 @@ class AudienceTrackingDetail extends React.Component {
                               <div className="d-flex w-100">
                                 {documentText &&
                                 <Link
-                                  onClick={() => Common.scrollTop()}
+                                  onClick={() => common_view.scrollTop()}
                                   to={"/" + match.params.identification + "/" + match.params.seoTitle + "/" + _result.n}
                                   title={"Link to " + _result.n + " page"}>
                                   <LinesEllipsis

@@ -19,7 +19,6 @@ class PublishModal extends React.Component {
 
     this.state = {
       classicModal: false,
-      publishLoading: false,
       registerLoading: false
     };
   }
@@ -43,22 +42,19 @@ class PublishModal extends React.Component {
 
   //블록체인 등록
   registerOnChain = () => {
-    const { documentData, getDrizzle, setAlertCode } = this.props;
+    const { afterPublish, setAlertCode } = this.props;
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.getBalance().then(res => {
-        if (res && res > 0) getDrizzle.registerDocumentToSmartContract(documentData.documentId).then(resolve());
-        else {
-          setAlertCode(2053);
-          setTimeout(() => resolve(), 3000);
-        }
+        if (res && res > 0) resolve(afterPublish());
+        else reject(setAlertCode(2053));
       });
     });
   };
 
 
   // 모달 open 관리
-  handleClickOpen = (modal) => {
+  handleOpen = modal => {
     const x = [];
     x[modal] = true;
     this.setState(x);
@@ -66,7 +62,7 @@ class PublishModal extends React.Component {
 
 
   // 모달 close 관리
-  handleClose = (modal) => {
+  handleClose = modal => {
     const x = [];
     x[modal] = false;
     this.setState(x);
@@ -74,26 +70,24 @@ class PublishModal extends React.Component {
   };
 
 
-  // 출판 버튼 클릭 관리
-  handleClickPublish = () => {
-    this.setState({ publishLoading: true }, () => {
-      this.handlePublish().then(() => {
-        this.handleClose("classicModal");
-        document.location.reload();
-      });
-    });
-  };
-
-
   // 출판/등록 버튼 클릭 관리
   handleClickRegister = () => {
     this.setState({ registerLoading: true }, () => {
-      this.handlePublish().then(this.registerOnChain()).then(() => {
-        this.handleClose("classicModal");
-        document.location.reload();
-      });
+
+      // 문서 출판
+      this.handlePublish()
+      // 체인 등록 후처리
+        .then(() => this.handleClose("classicModal"))
+        // 체인 등록
+        .then(() => this.registerOnChain());
     });
   };
+
+
+  // 출판 버튼 클릭 관리
+  handleClickPublish = () =>
+    this.setState({ registerLoading: true },
+      () => this.handlePublish().then(() => document.location.reload()));
 
 
   // publish 관리
@@ -104,7 +98,7 @@ class PublishModal extends React.Component {
 
 
   render() {
-    const { classicModal, publishLoading, registerLoading } = this.state;
+    const { classicModal, registerLoading } = this.state;
     const { getDrizzle, getMyInfo, type, getIsMobile } = this.props;
 
     let drizzleFlag = getDrizzle && getDrizzle.getReaderAccount() === getMyInfo.ethAccount;
@@ -114,11 +108,11 @@ class PublishModal extends React.Component {
          <Tooltip title={psString("tooltip-publish")} placement="bottom">
            {type === "tabItem" ?
              <div className={"claim-btn " + (getIsMobile ? " w-100" : "")}
-                  onClick={() => this.handleClickOpen("classicModal")}>
+                  onClick={() => this.handleOpen("classicModal")}>
                {psString("common-modal-publish")}
              </div>
              :
-             <div className="viewer-btn mb-1" onClick={() => this.handleClickOpen("classicModal")}>
+             <div className="viewer-btn mb-1" onClick={() => this.handleOpen("classicModal")}>
                <i className="material-icons mr-3">publish</i>
                {psString("common-modal-publish")}
              </div>
@@ -152,12 +146,21 @@ class PublishModal extends React.Component {
           <DialogActions className="modal-footer">
             <div onClick={() => this.handleClose("classicModal")} className="cancel-btn">
                 {psString("common-modal-cancel")}</div>
-            <div onClick={() => this.handleClickRegister()}
-                 className={"ok-btn " + (registerLoading ? "btn-disabled" : "")}>
+            {drizzleFlag ?
+              <div onClick={() => this.handleClickRegister()}
+                   className={"ok-btn " + (registerLoading ? "btn-disabled" : "")}>
                 {registerLoading &&
                 <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
-              {psString(!drizzleFlag ? "publish-modal-publish-btn" : "publish-modal-confirm-btn")}
-            </div>
+                {psString("publish-modal-confirm-btn")}
+              </div>
+              :
+              <div onClick={() => this.handleClickPublish()}
+                   className={"ok-btn " + (registerLoading ? "btn-disabled" : "")}>
+                {registerLoading &&
+                <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
+                {psString("publish-modal-publish-btn")}
+              </div>
+            }
           </DialogActions>
         </Dialog>
       </span>

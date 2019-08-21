@@ -1,6 +1,6 @@
 import * as React from "react";
 import Autosuggest from "react-autosuggest";
-import Common from "../../config/common";
+import Common from "../../common/common";
 import { psString } from "../../config/localization";
 
 class AutoSuggestInput extends React.Component {

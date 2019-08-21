@@ -6,7 +6,8 @@ let robotsTxt;
 
 if (process.env.NODE_ENV_SUB === "production") {
   robotsTxt = "User-agent: *\n" +
-    "Disallow: /\n" +   // 크롤러 임시 접근 X
+    // 크롤러 임시 접근 X
+    "Disallow: /\n" +
   /*  "Disallow: /about/\n" +
     "Disallow: /aboutus/\n" +
     "Disallow: /legal/\n" +

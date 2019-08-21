@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { APP_PROPERTIES } from "properties/app.properties";
-import Fullscreen from "react-full-screen";
 import { Link } from "react-router-dom";
 import {
   FacebookShareButton,
   LinkedinShareButton,
   TwitterShareButton
 } from "react-share";
-import Common from "../../../../config/common";
+import Common from "../../../../common/common";
 import log from "../../../../config/log";
 import Tooltip from "@material-ui/core/Tooltip";
 import MainRepository from "../../../../redux/MainRepository";
@@ -24,12 +23,13 @@ import DeleteDocumentModalContainer from "../../../../container/common/modal/Del
 import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
 import ContentViewComment from "./ContentViewComment";
 import { FadingCircle } from "better-react-spinkit";
+import DocumentInfo from "../../../../redux/model/DocumentInfo";
+import common_view from "../../../../common/common_view";
 
 
 class ContentViewFullScreen extends Component {
 
   state = {
-    isFull: false,
     carouselClass: null,
     text: "",
     error: null,
@@ -38,14 +38,18 @@ class ContentViewFullScreen extends Component {
     reward: 0,
     isDocumentExist: null,
     downloadLoading: false,
+    documentData: new DocumentInfo()
   };
 
 
   // 초기화
   init = () => {
+    if(APP_PROPERTIES.ssr) return;
+
     log.ContentViewFullscreen.init();
     this.getReward();
   };
+
 
   // 리워드 정보 표시
   showRewardInfo = id => {
@@ -59,26 +63,8 @@ class ContentViewFullScreen extends Component {
   };
 
 
-  //전체화면 전환
-  goFull = () => {
-    let element = document.getElementsByClassName("selected")[0].firstChild,
-      imgWidth = element.clientWidth,
-      imgHeight = element.clientHeight,
-      deviceRatio = window.innerWidth / window.innerHeight,
-      imgRatio = imgWidth / imgHeight;
-
-    if (this.state.isFull) {
-      this.setState({ isFull: false });
-    } else {
-      this.setState({ isFull: true }, () => {
-        if (deviceRatio > imgRatio) {
-          this.setState({ carouselClass: "deviceRatio" });
-        } else {
-          this.setState({ carouselClass: "imgRatio" });
-        }
-      });
-    }
-  };
+  // 등록 버튼 트리거
+  triggerRegisterBtn = () => document.getElementById("RegBlockchainBtn").click();
 
 
   //현재 page GET
@@ -110,12 +96,49 @@ class ContentViewFullScreen extends Component {
 
   //Web3에서 보상액 GET
   getReward = () => {
-    const { documentData, getWeb3Apis } = this.props;
-    getWeb3Apis.getNDaysRewards(documentData.documentId, 7).then(res => {
+    const { getWeb3Apis } = this.props;
+    getWeb3Apis.getNDaysRewards(this.state.documentData.documentId, 7).then(res => {
       log.ContentViewFullscreen.getReward();
       let reward = Common.toEther(res);
       this.setState({ reward: reward });
-    }).catch( err => log.ContentViewFullscreen.getReward(err));
+    }).catch(err => log.ContentViewFullscreen.getReward(err));
+  };
+
+
+  // 문서 정보 state 저장
+  setDocumentData = () => {
+    const { documentData } = this.props;
+    if (!this.state.documentData.seoTitle || this.state.documentData.seoTitle !== documentData.seoTitle) this.setState({ documentData: documentData });
+  };
+
+
+  //  문서 정보 state의 isPublish 업데이트
+  setIsPublish = () => {
+    return new Promise((resolve, reject) => {
+      let _documentData = this.state.documentData;
+      _documentData.isPublic = true;
+      this.setState({ _documentData: _documentData }, () => {
+        resolve();
+      });
+    });
+  };
+
+
+  //  문서 정보 state의 isRegistry 업데이트
+  setIsRegistry = () => {
+    return new Promise((resolve, reject) => {
+      let _documentData = this.state.documentData;
+      _documentData.isRegistry = true;
+      this.setState({ _documentData: _documentData }, () => {
+        resolve();
+      });
+    });
+  };
+
+
+  // 뷰어 이동 버튼
+  handleLinkToViewer = () => {
+
   };
 
 
@@ -123,10 +146,12 @@ class ContentViewFullScreen extends Component {
   handleSetting = () => document.getElementById("viewer-option-table").classList.remove("d-none");
 
 
-  //전체화면 전환 컨트롤
-  handleFullChange = _isFull => {
-    if (this.state.isFull !== _isFull) this.goFull();
-  };
+  // 퍼블리시 완료 후 관리
+  handleAfterPublish = () => this.setIsPublish().then(() => this.triggerRegisterBtn());
+
+
+  // 체인 등록 완료 후 관리
+  handleAfterRegistered = () => this.setIsRegistry();
 
 
   //이메일 입력 여부 Flag
@@ -135,7 +160,8 @@ class ContentViewFullScreen extends Component {
 
   //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
-    const { getMyInfo, documentData, setAlertCode } = this.props;
+    const { getMyInfo, setAlertCode } = this.props;
+    const { documentData } = this.state;
 
     if (!documentData) return setAlertCode(2091);
     if (!MainRepository.Account.isAuthenticated() && !getMyInfo.email) return setAlertCode(2003);
@@ -153,12 +179,17 @@ class ContentViewFullScreen extends Component {
   }
 
 
+  componentDidUpdate = () => {
+    this.setDocumentData();
+  };
+
+
   render() {
-    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
-    const { page, isFull, carouselClass, emailFlag, downloadLoading } = this.state;
+    const { documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
+    const { documentData, page, emailFlag, downloadLoading } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0,
-      reward = Common.toEther(Common.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
+      reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
       view = documentData.latestPageview || 0,
       accountId = documentData.accountId || "",
       profileUrl = author ? author.picture : null,
@@ -168,31 +199,29 @@ class ContentViewFullScreen extends Component {
     return (
 
       <article
-        className={"col-md-12 col-lg-8 view_left u__view " + (isFull && (carouselClass === "deviceRatio" ? "device-ratio" : "img-ratio"))}>
+        className="col-md-12 col-lg-8 view_left u__view ">
         <div className="view_top">
-          <Fullscreen enabled={isFull} onChange={isFull => this.handleFullChange(isFull)}>
-
-            <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
-                                          tracking={true} handleEmailFlag={this.handleEmailFlag}
-                                          getPageNum={(page) => {
-                                            this.getPageNum(page);
-                                          }}/>
-            <div className="view_screen">
-              <i title="Fullscreen button" className="material-icons" onClick={this.goFull}>fullscreen</i>
-            </div>
-          </Fullscreen>
+          <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
+                                        tracking={true} handleEmailFlag={this.handleEmailFlag}
+                                        getPageNum={(page) => {
+                                          this.getPageNum(page);
+                                        }}/>
+          <a className="view_screen" href={APP_PROPERTIES.domain().viewer + documentData.seoTitle} target="_blank"
+             rel="noopener noreferrer">
+            <i title="viewer button" className="material-icons" onClick={this.handleLinkToViewer()}>fullscreen</i>
+          </a>
         </div>
 
 
         <div className="view_content">
-          {accountId === Common.getMySub() &&
+          {accountId === common_view.getMySub() &&
           <div className="view-option-btn" id="viewer-option-btn">
             <i className="material-icons" onClick={() => this.handleSetting()}>more_vert</i>
             <div className="option-table d-none" id="viewer-option-table">
               <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>Download</div>
               {documentData &&
               <EditDocumentModalContainer documentData={documentData}/>}
-              {documentData.isRegistry === false && (accountId === Common.getMySub() && documentData) &&
+              {documentData.isRegistry === false && (accountId === common_view.getMySub() && documentData) &&
               <DeleteDocumentModalContainer documentData={documentData}/>}
             </div>
           </div>
@@ -206,8 +235,8 @@ class ContentViewFullScreen extends Component {
             <Link to={"/" + identification} className="info_name"
                   title={"Go to profile page of " + identification}>
               {profileUrl ?
-                <img src={profileUrl} alt="profile" onClick={() => Common.scrollTop()}/> :
-                <i className="material-icons img-thumbnail" onClick={() => Common.scrollTop()}>face</i>
+                <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
+                <i className="material-icons img-thumbnail" onClick={() => common_view.scrollTop()}>face</i>
               }
               {identification}
             </Link>
@@ -238,19 +267,18 @@ class ContentViewFullScreen extends Component {
 
           <div className="d-inline-block mb-3">
             {!documentData.isPublic &&
-            <PublishModalContainer documentData={documentData}/>}
+            <PublishModalContainer documentData={documentData} afterPublish={() => this.handleAfterPublish()}/>}
 
             {documentData.isPublic &&
-            <VoteDocumentModalContainer documentData={documentData}/>
-            }
+            <VoteDocumentModalContainer documentData={documentData}/>}
 
-            {documentData.isPublic && (accountId === Common.getMySub() && documentData) &&
-            <RegBlockchainBtnContainer documentData={documentData}/>
-            }
+            {documentData.isPublic && (accountId === common_view.getMySub() && documentData) &&
+            <RegBlockchainBtnContainer documentData={documentData}
+                                       afterRegistered={() => this.handleAfterRegistered()}/>}
 
             <CopyModalContainer documentData={documentData}/>
 
-            {documentData.isDownload && accountId !== Common.getMySub() &&
+            {documentData.isDownload && accountId !== common_view.getMySub() &&
             <Tooltip title={psString("tooltip-download")} placement="bottom">
               <div className={"viewer-btn mb-1 " + (downloadLoading ? "btn-disabled" : "")}
                    onClick={() => this.handleDownloadContent()}>
@@ -261,7 +289,7 @@ class ContentViewFullScreen extends Component {
             </Tooltip>
             }
 
-            {accountId === Common.getMySub() &&
+            {accountId === common_view.getMySub() &&
             <Tooltip title={psString("tooltip-tracking")} placement="bottom">
               <Link to={{
                 pathname: "/tracking/" + identification + "/" + documentData.seoTitle,
@@ -271,7 +299,7 @@ class ContentViewFullScreen extends Component {
                   totalViewCountInfo: totalViewCountInfo
                 }
               }}>
-                <div className="viewer-btn" onClick={() => Common.scrollTop()}>
+                <div className="viewer-btn" onClick={() => common_view.scrollTop()}>
                   <i className="material-icons">bar_chart</i> {psString("tracking-btn")}
                 </div>
               </Link>
@@ -294,7 +322,7 @@ class ContentViewFullScreen extends Component {
             <div className="view_tag mb-3">
               {documentData.tags ? documentData.tags.map((tag, index) => (
                 <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
-                      onClick={() => Common.scrollTop()}
+                      onClick={() => common_view.scrollTop()}
                       className="tag"> {tag} </Link>
               )) : ""}
             </div>
@@ -326,7 +354,7 @@ class ContentViewFullScreen extends Component {
               </Tooltip>
 
 
-              {documentData.cc &&
+              {documentData.cc && documentData.cc.length > 0 &&
               <Tooltip title={psString("viewer-page-cc-title")}
                        placement="bottom">
                 <a className="float-right" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/"
@@ -354,7 +382,7 @@ class ContentViewFullScreen extends Component {
             </div>
           </div>
 
-          {update === false && <ContentViewComment/>}
+          {update === false && <ContentViewComment documentData={documentData}/>}
 
         </div>
 
