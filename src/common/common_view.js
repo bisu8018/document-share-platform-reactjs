@@ -6,7 +6,7 @@ import common from "./common";
 const env = APP_PROPERTIES.env;
 
 const init = function() {
-  if(APP_PROPERTIES.ssr) return false;
+  if (APP_PROPERTIES.ssr) return false;
   return common_view;
 };
 
@@ -36,12 +36,14 @@ const common_view = ({
       }
     }
   },
+
   setCookie(cname, cvalue, exdays) {
     let d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + "; " + expires + "; path=/;";
   },
+
   getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -57,17 +59,21 @@ const common_view = ({
     }
     return "";
   },
+
   deleteCookie(name) {
     if (this.getCookie(name)) document.cookie = name + "=;expires=Thu, 01-Jan-70 00:00:01 GMT";
   },
+
   getPath: () => {
     const pathArr = window.location.pathname.split("/");
     return pathArr[1];
 
   },
+
   getPaths: () => {
     return window.location.pathname.split("/");
   },
+
   getTag: () => {
     const pathArr = window.location.pathname.split("/");
     let tag = "";
@@ -76,22 +82,33 @@ const common_view = ({
     }
     return tag;
   },
-  // Scroll to top
-  scrollTop: () => {
-    window.scrollTo(0, 0);
+
+  // Clip board copy
+  clipboardCopy: id => {
+    return new Promise((resolve, reject) => {
+      document.getElementById(id).select();
+      document.execCommand("copy");
+      resolve();
+    })
   },
+
+  // Scroll to top
+  scrollTop: () => window.scrollTo(0, 0),
+
   // Set BODY TAG Style
   setBodyStyleLock: () => {
     document.body.style.overflow = "hidden";
     document.body.style.paddingRight = "5px";
-    return true;
+    return Promise.resolve(true);
   },
+
   // Set BODY TAG Style
   setBodyStyleUnlock: () => {
     document.body.style.overflow = "";
     document.body.style.paddingRight = "";
-    return true;
+    return Promise.resolve(true);
   },
+
   getMySub: () => {
     let authSub = "";
     let isAuthenticated = MainRepository.Account.isAuthenticated();
@@ -102,14 +119,17 @@ const common_view = ({
 
     return authSub;
   },
+
   authorCalculateReward: (pv: number, tpv: number, pool: number) => {
     if (tpv === 0 || pv === 0 || pool === 0 || !tpv || !pv || !pool) return 0;
     return (pv * (pool / tpv));
   },
+
   curatorCalculateReward: (pool: number, v: number, tv: number, pv: number, tpvs: number) => {
     if (pool === 0 || v === 0 || tv === 0 || pv === 0 || tpvs === 0 || !pool || !v || !tv || !pv || !tpvs) return 0;
     return (pool * (Math.pow(pv, 2) / tpvs)) * (v / tv);
   },
+
   getAuthorNDaysReward(result: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
     if (!totalViewCountInfo || !result.latestPageviewList || getCreatorDailyRewardPool === 0) return;
     let y, m, d, pv, tpv, timestamp;
@@ -133,6 +153,7 @@ const common_view = ({
       if (i === result.latestPageviewList.length - 1) return totalReward;
     }
   },
+
   // Creator N Days Total Reward
   getAuthorNDaysTotalReward(documentList: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
     if (!documentList || getCreatorDailyRewardPool <= 0 || !totalViewCountInfo) return;
@@ -169,6 +190,7 @@ const common_view = ({
       }
     }
   },
+
   getAuthor7DaysTotalReward(documentList: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any) {
     if (!documentList || getCreatorDailyRewardPool <= 0 || !totalViewCountInfo) return;
 
@@ -205,7 +227,6 @@ const common_view = ({
     }
     return totalReward;
   },
-
 
   // Curator N Days Total Reward
   getCuratorNDaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, day: number, latestRewardVoteList: any, test) {
@@ -289,7 +310,6 @@ const common_view = ({
 
     return totalReward;
   },
-
 
   // Curator 7 Days Total Reward
   getCurator7DaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, latestRewardVoteList: any) {

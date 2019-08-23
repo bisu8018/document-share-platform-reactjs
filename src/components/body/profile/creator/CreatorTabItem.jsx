@@ -13,6 +13,7 @@ import MainRepository from "../../../../redux/MainRepository";
 import RegBlockchainBtnContainer from "../../../../container/body/contents/contentsView/RegBlockchainBtnContainer";
 import DocumentInfo from "../../../../redux/model/DocumentInfo";
 import common_view from "../../../../common/common_view";
+import PublishCompleteModalContainer from "../../../../container/common/modal/PublishCompleteModalContainer";
 
 
 class CreatorTabItem extends React.Component {
@@ -21,7 +22,8 @@ class CreatorTabItem extends React.Component {
 
     this.state = {
       ratio: null,
-      documentData: new DocumentInfo()
+      documentData: new DocumentInfo(),
+      completeModalOpen: false
     };
   }
 
@@ -55,8 +57,8 @@ class CreatorTabItem extends React.Component {
         let targetElement = e.target;
 
         // 뷰어페이지 옵션창
-        const viewerOptionBtn = document.getElementById("viewer-option-btn-" + idx);
-        const viewerOptionTable = document.getElementById("viewer-option-table-" + idx);
+        const viewerOptionBtn = document.getElementById("viewer-option-btn-" + idx),
+          viewerOptionTable = document.getElementById("viewer-option-table-" + idx);
         if (viewerOptionBtn && !viewerOptionBtn.contains(targetElement)) viewerOptionTable.classList.add("d-none");
       }
     );
@@ -64,7 +66,11 @@ class CreatorTabItem extends React.Component {
 
 
   // 등록 버튼 트리거
-  triggerRegisterBtn = () => document.getElementById("RegBlockchainBtnTab").click();
+  triggerRegisterBtn = () => {
+    let ele = document.getElementById("RegBlockchainBtnTab");
+    if (!ele) return false;
+    else ele.click();
+  };
 
 
   // 이미지 정보 GET
@@ -139,8 +145,18 @@ class CreatorTabItem extends React.Component {
   };
 
 
+  // publish completed modal 종료 관리
+  handleCompleteModalOpen = () => this.setState({ completeModalOpen: true });
+
+
+  // publish completed modal 종료 관리
+  handleCompleteModalClose = () => this.setState({ completeModalOpen: false });
+
+
   // 퍼블리시 완료 후 관리
-  handleAfterPublish = () => this.setIsPublish().then(() => this.triggerRegisterBtn());
+  handleAfterPublish = () => this.setIsPublish()
+    .then(() => this.handleCompleteModalOpen())
+    .then(() => this.triggerRegisterBtn());
 
 
   // 체인 등록 완료 후 관리
@@ -184,7 +200,7 @@ class CreatorTabItem extends React.Component {
         if (res && res.document.state === "CONVERT_COMPLETE") {
           clearInterval(this.setInterval);
           this.setDocumentState(res.document.state);
-          setAlertCode(2075, { title: documentData.title })
+          setAlertCode(2075, { title: documentData.title });
         }
       });
     }, 5000);
@@ -203,7 +219,7 @@ class CreatorTabItem extends React.Component {
 
   render() {
     const { getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, idx } = this.props;
-    const { ratio, documentData } = this.state;
+    const { ratio, documentData, completeModalOpen } = this.state;
 
     if (!documentData.seoTitle) return false;
 
@@ -295,9 +311,13 @@ class CreatorTabItem extends React.Component {
 
             {documentData.isPublic === false && documentData.state === "CONVERT_COMPLETE" &&
             <div className={(getIsMobile ? "mt-2" : "float-right")}>
-              <PublishModalContainer documentData={documentData} type={"tabItem"} afterPublish={() => this.handleAfterPublish()}/>
+              <PublishModalContainer documentData={documentData} type={"tabItem"}
+                                     afterPublish={() => this.handleAfterPublish()}/>
             </div>
             }
+
+            {completeModalOpen && <PublishCompleteModalContainer documentData={documentData}
+                                                                 completeModalClose={() => this.handleCompleteModalClose()}/>}
 
             {documentData.isPublic && (documentData.accountId === common_view.getMySub() && documentData) &&
             <div className={(getIsMobile ? "mt-2" : "float-right")}>

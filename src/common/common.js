@@ -224,5 +224,8 @@ export default ({
   },
   getVersion: () => {
     return "v " + process.env.PROJECT_VERSION;
-  }
+  },
+  delay : ms => new Promise(resolve =>
+    setTimeout(resolve, ms)
+  )
 });

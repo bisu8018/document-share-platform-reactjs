@@ -1,27 +1,12 @@
 import React from "react";
-
-import withStyles from "@material-ui/core/styles/withStyles";
-import Dialog from "@material-ui/core/Dialog/index";
-import DialogTitle from "@material-ui/core/DialogTitle/index";
-import DialogContent from "@material-ui/core/DialogContent/index";
-import DialogActions from "@material-ui/core/DialogActions/index";
 import Tooltip from "@material-ui/core/Tooltip/index";
-import Slide from "@material-ui/core/Slide/index";
-
 import MainRepository from "../../../redux/MainRepository";
 import Common from "../../../common/common";
 import CuratorUserActiveVoteContainer from "../../../container/common/UserActiveVoteContainer";
 import CuratorActiveVoteContainer from "../../../container/common/ActiveVoteContainer";
 import ApproveModal from "./ApproveModal";
 import { psString } from "../../../config/localization";
-
-const style = {
-  modalCloseButton: {
-    float: "right"
-  }
-};
-
-const Transition = props => <Slide direction="down" {...props} />;
+import common_view from "../../../common/common_view";
 
 
 class VoteDocumentModal extends React.Component {
@@ -30,6 +15,7 @@ class VoteDocumentModal extends React.Component {
     super(props);
 
     this.state = {
+      closeFlag: false,
       voteStatus: "INIT",   //  INIT(initialize) -> ALLOWANCE -> APPROVE -> VOTE -> COMPLETE
       approve: null,    // 승인 모달 출력 유무
       deposit: 0,
@@ -48,11 +34,10 @@ class VoteDocumentModal extends React.Component {
 
 
   // Deck 예금 값 입력 캐치
-  onChangeDeposit = e => {
+  onChangeDeposit = e =>
     this.setState({ deposit: e.target.value }, () => {
       this.validateDeposit();
     });
-  };
 
 
   //예금 값 유효성 체크
@@ -75,16 +60,18 @@ class VoteDocumentModal extends React.Component {
     const { voteStatus } = this.state;
     if (voteStatus !== "INIT" && voteStatus !== "COMPLETE") return;
 
+    document.getElementById("deposit").value = null;
+
     this.setState({
       voteStatus: "INIT",
       approve: null,
       vote: { stackId: -1, done: false, complete: false, receipt: null },
       deposit: 0,
       balance: -1,
-      classicModal: false,
       deckError: ""
     });
-    document.getElementById("deposit").value = null;
+
+    return Promise.resolve();
   };
 
 
@@ -98,6 +85,12 @@ class VoteDocumentModal extends React.Component {
   };
 
 
+  // 모달 숨기기 클래스 추가
+  setCloseFlag = () =>
+    new Promise(resolve =>
+      this.setState({ closeFlag: true }, () => resolve()));
+
+
   // [Step 1] : Allowance GET
   handleAllowance = async () => {
     const { getWeb3Apis, getMyInfo } = this.props;
@@ -106,7 +99,7 @@ class VoteDocumentModal extends React.Component {
     let ethAccount = getMyInfo.ethAccount;
     let allowance = await getWeb3Apis.getAllowance(ethAccount).then((res) => {
       this.setState({ voteStatus: "ALLOWANCE" }, () => {
-        this.handleClose("classicModal");
+        this.handleClickClose("classicModal");
       });
       return res;
     });
@@ -139,8 +132,10 @@ class VoteDocumentModal extends React.Component {
     return new Promise((resolve, reject) => {
       getDrizzle.approve(String(deposit)).then((res) => {
         this.setState({ voteStatus: "APPROVE" });
-        if (res === "success") resolve(res);
-        else this.handleFailed();
+        if (res === "success")
+          resolve(res);
+        else
+          this.handleFailed();
       });
     });
   };
@@ -153,8 +148,10 @@ class VoteDocumentModal extends React.Component {
 
     await getDrizzle.voteOnDocument(documentData.documentId, (String(deposit))).then((res) => {
       this.setState({ voteStatus: "VOTE" });
-      if (res === "success") document.location.reload();//this.setState({ voteStatus: "COMPLETE" });
-      else this.handleFailed();
+      if (res === "success")
+        document.location.reload(); //this.setState({ voteStatus: "COMPLETE" });
+      else
+        this.handleFailed();
     });
   };
 
@@ -170,9 +167,11 @@ class VoteDocumentModal extends React.Component {
 
     if (allowance === false) {
       approve = await this.handleApprove();    // 2단계 : Approve 진행
-      if (approve === "success") this.handleVote();
+      if (approve === "success")
+        this.handleVote();
 
-    } else if (allowance === true) this.handleVote();   // 3단계 : Vote 진행
+    } else if (allowance === true)
+      this.handleVote();   // 3단계 : Vote 진행
   };
 
 
@@ -186,7 +185,7 @@ class VoteDocumentModal extends React.Component {
   };
 
   //모달 오픈
-  handleClickOpen = (modal) => {
+  handleClickOpen = modal => {
     const { getDrizzle, getMyInfo } = this.props;
     if (getDrizzle && !getDrizzle.isAuthenticated()) return null;
     if (!getMyInfo.ethAccount) {
@@ -202,16 +201,27 @@ class VoteDocumentModal extends React.Component {
       const x = [];
       x[modal] = true;
       this.setState(x);
+      common_view.setBodyStyleLock();
     });
-
   };
 
+
+  // 모달 취소버튼 클릭 관리
+  handleClickClose = modal =>
+    this.setCloseFlag()
+      .then(() => Common.delay(200))
+      .then(() => common_view.setBodyStyleUnlock())
+      .then(() => this.clearVoteInfo())
+      .then(() => this.handleClose(modal));
+
+
+
   // 모달 종료
-  handleClose = (modal) => {
+  handleClose = modal => {
     const x = [];
     x[modal] = false;
-    this.clearVoteInfo();
     this.setState(x);
+    return Promise.resolve();
   };
 
 
@@ -259,7 +269,7 @@ class VoteDocumentModal extends React.Component {
 
   render() {
     const { documentData, getDrizzle, getMyInfo } = this.props;
-    const { deckError, balance, voteStatus, approve } = this.state;
+    const { deckError, balance, voteStatus, approve, closeFlag, classicModal } = this.state;
 
     this.handleBalance();
     if (getDrizzle && (!getDrizzle.isInitialized() || !documentData.isRegistry)) return <div/>;
@@ -284,80 +294,77 @@ class VoteDocumentModal extends React.Component {
           </div>
         </Tooltip>
 
-        <Dialog
-          className="modal-width"
-          fullWidth={this.state.fullWidth}
-          open={this.state.classicModal}
-          TransitionComponent={Transition}
-          keepMounted
-          aria-labelledby="classic-modal-slide-title"
-          aria-describedby="classic-modal-slide-description">
+        {classicModal &&
+        <div className="custom-modal-container">
+          <div className="custom-modal-wrapper"/>
+          <div className={"custom-modal " + (closeFlag ? "custom-hide" : "")}>
 
 
-          <DialogTitle
-            id="classic-modal-slide-title"
-            disableTypography>
-            <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-            <h3 className="vote-modal-title">{psString("vote-modal-title")}</h3>
-          </DialogTitle>
-
-
-          <DialogContent id="classic-modal-slide-description">
-            <div className="vote-modal-subject">{psString("vote-modal-subj-1")}</div>
-            <ul className="voteList">
-              <li>
-                <strong>{psString("vote-modal-you")} : </strong>
-                <CuratorUserActiveVoteContainer documentData={documentData}
-                                                deposit={this.state.deposit}
-                                                loggedInAccount={getMyInfo.ethAccount}/>
-              </li>
-              <li>
-                <strong>{psString("vote-modal-total")} : </strong>
-                <CuratorActiveVoteContainer documentData={documentData}
-                                            deposit={this.state.deposit}
-                                            loggedInAccount={getMyInfo.ethAccount}/>
-              </li>
-            </ul>
-
-
-            <div className="vote-modal-subject">{psString("vote-modal-subj-2")}</div>
-            <ul className="voteList">
-              <li>
-                <span className="color-main-color font-weight-bold">{Common.toDeck(balance).toFixed(2)}</span> DECK
-                ($ <span
-                className="color-main-color"> {Common.toDollar(balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} </span>)
-              </li>
-            </ul>
-
-
-            <div className="vote-modal-subject">{psString("vote-modal-subj-3")}</div>
-            <div className="deckInput">
-              <input type="number" placeholder="DECK" autoComplete="off" id="deposit"
-                     className={"custom-input " + (deckError.length > 0 ? "custom-input-warning" : "")}
-                     onChange={(e) => this.onChangeDeposit(e)}
-                     onKeyDown={(e) => this.handleKeyDown(e)}/>
-              <span>{deckError}</span>
+            <div className="custom-modal-title">
+              <i className="material-icons modal-close-btn"
+                 onClick={() => this.handleClickClose("classicModal")}>close</i>
+              <h3 className="vote-modal-title">{psString("vote-modal-title")}</h3>
             </div>
 
-            <p className="noteTxt mt-2">{psString("vote-modal-note")}</p>
-          </DialogContent>
+
+            <div className="custom-modal-content">
+              <div className="vote-modal-subject">{psString("vote-modal-subj-1")}</div>
+              <ul className="voteList">
+                <li>
+                  <strong>{psString("vote-modal-you")} : </strong>
+                  <CuratorUserActiveVoteContainer documentData={documentData}
+                                                  deposit={this.state.deposit}
+                                                  loggedInAccount={getMyInfo.ethAccount}/>
+                </li>
+                <li>
+                  <strong>{psString("vote-modal-total")} : </strong>
+                  <CuratorActiveVoteContainer documentData={documentData}
+                                              deposit={this.state.deposit}
+                                              loggedInAccount={getMyInfo.ethAccount}/>
+                </li>
+              </ul>
 
 
-          <DialogActions className="modal-footer">
-            <div onClick={() => this.handleClose("classicModal")}
-                 className="cancel-btn">{psString("common-modal-cancel")}</div>
-            <div onClick={() => this.onClickVote()}
-                 className={"ok-btn " + (statusFlag || balance <= 0 ? "btn-disabled" : "")}>{btnText}</div>
-            <div className="d-none">{voteStatus}</div>
-          </DialogActions>
-        </Dialog>
+              <div className="vote-modal-subject">{psString("vote-modal-subj-2")}</div>
+              <ul className="voteList">
+                <li>
+                  <span className="color-main-color font-weight-bold">{Common.toDeck(balance).toFixed(2)}</span> DECK
+                  ($ <span
+                  className="color-main-color"> {Common.toDollar(balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} </span>)
+                </li>
+              </ul>
+
+
+              <div className="vote-modal-subject">{psString("vote-modal-subj-3")}</div>
+              <div className="deckInput">
+                <input type="number" placeholder="DECK" autoComplete="off" id="deposit"
+                       className={"custom-input " + (deckError.length > 0 ? "custom-input-warning" : "")}
+                       onChange={(e) => this.onChangeDeposit(e)}
+                       onKeyDown={(e) => this.handleKeyDown(e)}/>
+                <span>{deckError}</span>
+              </div>
+
+              <p className="noteTxt mt-2">{psString("vote-modal-note")}</p>
+            </div>
+
+
+            <div className="custom-modal-footer">
+              <div onClick={() => this.handleClickClose("classicModal")}
+                   className="cancel-btn">{psString("common-modal-cancel")}</div>
+              <div onClick={() => this.onClickVote()}
+                   className={"ok-btn " + (statusFlag || balance <= 0 ? "btn-disabled" : "")}>{btnText}</div>
+              <div className="d-none">{voteStatus}</div>
+            </div>
+          </div>
+        </div>
+        }
 
         {approve === false &&
-        <ApproveModal ok={() => this.okApprove()} cancel={() => this.handleClose()}/>
+        <ApproveModal ok={() => this.okApprove()} cancel={() => this.handleClickClose()}/>
         }
       </span>
     );
   }
 }
 
-export default withStyles(style)(VoteDocumentModal);
+export default VoteDocumentModal;

@@ -1,16 +1,9 @@
 import React from "react";
-import Slide from "@material-ui/core/Slide";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
 import history from "apis/history/history";
 import { psString } from "../../../config/localization";
-import DialogActions from "@material-ui/core/DialogActions";
 import MainRepository from "../../../redux/MainRepository";
 import common_view from "../../../common/common_view";
-
-
-const Transition = props => <Slide direction="down" {...props} />;
+import common from "../../../common/common";
 
 
 class PrivateDocumentCountModal extends React.Component {
@@ -20,13 +13,24 @@ class PrivateDocumentCountModal extends React.Component {
 
     this.state = {
       classicModal: false,
+      closeFlag: false,
       username: null
     };
   }
 
 
   // state 제거
-  clearState = () => this.setState({ classicModal: false });
+  clearState = () =>
+    this.setState({
+      classicModal: false,
+      closeFlag: false
+    });
+
+
+  // 모달 숨기기 클래스 추가
+  setCloseFlag = () =>
+    new Promise(resolve =>
+      this.setState({ closeFlag: true }, () => resolve()));
 
 
   // 모달 open 버튼 클릭 관리
@@ -36,40 +40,48 @@ class PrivateDocumentCountModal extends React.Component {
     let username = getMyInfo.username;
     let _username = username ? username : getMyInfo.ethAccount;
     this.setState({ username: _username }, () => {
-      this.handleOpen(modal);
+      this.handleOpen(modal).then(() => common_view.setBodyStyleLock());
     });
   };
 
 
   // 모달 open 관리
-  handleOpen = (modal) => {
-    if (!MainRepository.Account.isAuthenticated()) return MainRepository.Account.login();
-    else {
-      const x = [];
-      x[modal] = true;
-      this.setState(x);
-    }
+  handleOpen = modal => {
+    if (!MainRepository.Account.isAuthenticated()) return Promise.reject(MainRepository.Account.login());
+
+    const x = [];
+    x[modal] = true;
+    this.setState(x);
+    return Promise.resolve(true);
   };
 
 
+  // 모달 취소버튼 클릭 관리
+  handleClickClose = modal =>
+    this.setCloseFlag()
+      .then(() => common.delay(200))
+      .then(() => common_view.setBodyStyleUnlock())
+      .then(() => this.handleClose(modal))
+      .then(() => this.clearState());
+
+
   // 모달 close 관리
-  handleClose = (modal) => {
+  handleClose = modal => {
     const x = [];
     x[modal] = false;
     this.setState(x);
-    this.clearState();
   };
 
 
   // 링크 이동 관리
-  handleLinkBtn = (modal) => {
-    this.handleClose(modal);
+  handleLinkBtn = modal => {
+    this.handleClickClose(modal);
     history.push("/" + this.props.getMyInfo.username);
   };
 
 
   render() {
-    const { classicModal, username } = this.state;
+    const { classicModal, username, closeFlag } = this.state;
     const { type } = this.props;
 
     return (
@@ -88,35 +100,32 @@ class PrivateDocumentCountModal extends React.Component {
         }
 
 
-        <Dialog
-          className="modal-width"
-          fullWidth={true}
-          open={classicModal}
-          TransitionComponent={Transition}
-          keepMounted
-          aria-labelledby="classic-modal-slide-title"
-          aria-describedby="classic-modal-slide-description">
+        {classicModal &&
+        <div className="custom-modal-container">
+          <div className="custom-modal-wrapper"/>
+          <div className={"custom-modal " + (closeFlag ? "custom-hide" : "")}>
 
-        <DialogTitle
-          id="classic-modal-slide-title"
-          disableTypography>
-          <i className="material-icons modal-close-btn"
-             onClick={() => this.handleClose("classicModalSub")}>close</i>
-          <h3>{psString("private-doc-modal-subj")}</h3>
-        </DialogTitle>
 
-        <DialogContent id="classic-modal-slide-description ">
-          <div className="">{psString("private-doc-modal-desc")}</div>
-        </DialogContent>
+            <div className="custom-modal-title">
+              <i className="material-icons modal-close-btn"
+                 onClick={() => this.handleClickClose("classicModalSub")}>close</i>
+              <h3>{psString("private-doc-modal-subj")}</h3>
+            </div>
 
-        <DialogActions className="modal-footer">
-          <div onClick={() => this.handleClose()} className="ok-btn">{psString("common-modal-confirm")}</div>
-          {username !== common_view.getPath() &&
-          <div onClick={() => this.handleLinkBtn()} className="ok-btn">{psString("private-doc-modal-btn")}</div>
-          }
-        </DialogActions>
-      </Dialog>
-     </span>
+            <div className="custom-modal-content">
+              <div className="">{psString("private-doc-modal-desc")}</div>
+            </div>
+
+            <div className="custom-modal-footer">
+              <div onClick={() => this.handleClickClose()} className="ok-btn">{psString("common-modal-confirm")}</div>
+              {username !== common_view.getPath() &&
+              <div onClick={() => this.handleLinkBtn()} className="ok-btn">{psString("private-doc-modal-btn")}</div>
+              }
+            </div>
+          </div>
+        </div>
+        }
+        </span>
     );
   }
 }

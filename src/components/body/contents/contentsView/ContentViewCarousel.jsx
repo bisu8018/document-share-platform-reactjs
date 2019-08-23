@@ -186,12 +186,11 @@ class ContentViewCarousel extends React.Component {
 
 
   // 이메일 강제 입력 모달 종료 시 플래그 조정
-  handleForceTrackingFlag = () => {
+  handleForceTrackingFlag = () =>
     this.setState({ readPage: 0, emailFlag: false }, () => {
       this.props.handleEmailFlag(false);
       this.handleUrl();
     });
-  };
 
 
   // 슬라이드 옵션 창 on/off

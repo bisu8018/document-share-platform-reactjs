@@ -25,6 +25,7 @@ import ContentViewComment from "./ContentViewComment";
 import { FadingCircle } from "better-react-spinkit";
 import DocumentInfo from "../../../../redux/model/DocumentInfo";
 import common_view from "../../../../common/common_view";
+import PublishCompleteModalContainer from "../../../../container/common/modal/PublishCompleteModalContainer";
 
 
 class ContentViewFullScreen extends Component {
@@ -38,7 +39,8 @@ class ContentViewFullScreen extends Component {
     reward: 0,
     isDocumentExist: null,
     downloadLoading: false,
-    documentData: new DocumentInfo()
+    documentData: new DocumentInfo(),
+    completeModalOpen: false
   };
 
 
@@ -136,10 +138,12 @@ class ContentViewFullScreen extends Component {
   };
 
 
-  // 뷰어 이동 버튼
-  handleLinkToViewer = () => {
+  // publish completed modal 종료 관리
+  handleCompleteModalOpen = () => this.setState({ completeModalOpen: true });
 
-  };
+
+  // publish completed modal 종료 관리
+  handleCompleteModalClose = () => this.setState({ completeModalOpen: false });
 
 
   // 설정창 관리
@@ -147,7 +151,9 @@ class ContentViewFullScreen extends Component {
 
 
   // 퍼블리시 완료 후 관리
-  handleAfterPublish = () => this.setIsPublish().then(() => this.triggerRegisterBtn());
+  handleAfterPublish = () => this.setIsPublish()
+    .then(() => this.handleCompleteModalOpen())
+    .then(() => this.triggerRegisterBtn());
 
 
   // 체인 등록 완료 후 관리
@@ -186,7 +192,7 @@ class ContentViewFullScreen extends Component {
 
   render() {
     const { documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
-    const { documentData, page, emailFlag, downloadLoading } = this.state;
+    const { documentData, page, emailFlag, downloadLoading, completeModalOpen } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
@@ -208,12 +214,16 @@ class ContentViewFullScreen extends Component {
                                         }}/>
           <a className="view_screen" href={APP_PROPERTIES.domain().viewer + documentData.seoTitle} target="_blank"
              rel="noopener noreferrer">
-            <i title="viewer button" className="material-icons" onClick={this.handleLinkToViewer()}>fullscreen</i>
+            <i title="viewer button" className="material-icons">fullscreen</i>
           </a>
         </div>
 
 
         <div className="view_content">
+          <div className="u_title pt-2 pb-2 mt-2 mb-2">
+            {documentData.title ? documentData.title : ""}
+          </div>
+
           {accountId === common_view.getMySub() &&
           <div className="view-option-btn" id="viewer-option-btn">
             <i className="material-icons" onClick={() => this.handleSetting()}>more_vert</i>
@@ -226,10 +236,6 @@ class ContentViewFullScreen extends Component {
             </div>
           </div>
           }
-
-          <div className="u_title pt-2 pb-2 mt-2 mb-2">
-            {documentData.title ? documentData.title : ""}
-          </div>
 
           <div>
             <Link to={"/" + identification} className="info_name"
@@ -268,6 +274,9 @@ class ContentViewFullScreen extends Component {
           <div className="d-inline-block mb-3">
             {!documentData.isPublic &&
             <PublishModalContainer documentData={documentData} afterPublish={() => this.handleAfterPublish()}/>}
+
+            {completeModalOpen && <PublishCompleteModalContainer documentData={documentData}
+                                                                 completeModalClose={() => this.handleCompleteModalClose()}/>}
 
             {documentData.isPublic &&
             <VoteDocumentModalContainer documentData={documentData}/>}

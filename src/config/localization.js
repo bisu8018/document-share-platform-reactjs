@@ -1323,6 +1323,24 @@ const strings = new Map([
     ENG: "Publish"
   }],
 
+  // Publish Modal Complete
+  ["publish-modal-complete-title", {
+    KOR: "귀하의 문서가 공개되었습니다!",
+    ENG: "Your document is published!"
+  }],
+  ["publish-modal-complete-subject", {
+    KOR: "당신의 문서를 세상에 공유해보세요.",
+    ENG: "Share your document with the world."
+  }],
+  ["publish-modal-complete-copy-url", {
+    KOR: "문서 링크 복사하기",
+    ENG: "Copy document link"
+  }],
+  ["publish-modal-complete-copied", {
+    KOR: "복사완료!",
+    ENG: "Copied!"
+  }],
+
   // Delete Document Modal
   ["delete-modal-title", {
     KOR: "문서 삭제하기",

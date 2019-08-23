@@ -1,29 +1,26 @@
 import React from "react";
-
-import Slide from "@material-ui/core/Slide";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
 import { psString } from "../../../config/localization";
+import common_view from "../../../common/common_view";
+import common from "../../../common/common";
 
-const Transition = props => <Slide direction="down" {...props} />;
-
-class DollarLearnMoreModal extends React.PureComponent {
+class DollarLearnMoreModal extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      classicModal: false
+      classicModal: false,
+      closeFlag: false
     };
   }
 
-  clearState = () => {
+
+  // state 제거
+  clearState = () =>
     this.setState({
-      classicModal: false
+      classicModal: false,
+      closeFlag: false
     });
-  };
 
 
   getStarted = () => {
@@ -32,58 +29,74 @@ class DollarLearnMoreModal extends React.PureComponent {
   };
 
 
-  handleClickOpen = (modal) => {
+  // 모달 숨기기 클래스 추가
+  setCloseFlag = () =>
+    new Promise(resolve =>
+      this.setState({ closeFlag: true }, () => resolve()));
+
+
+  // 모달 open 관리
+  handleClickOpen = modal => {
     const x = [];
     x[modal] = true;
     this.setState(x);
+    common_view.setBodyStyleLock();
+    return Promise.resolve(true);
   };
 
+
+  // 모달 취소버튼 클릭 관리
+  handleClickClose = modal =>
+    this.setCloseFlag()
+      .then(() => common.delay(200))
+      .then(() => common_view.setBodyStyleUnlock())
+      .then(() => this.handleClose(modal))
+      .then(() => this.clearState());
+
+
+  // 모달 close 관리
   handleClose = (modal) => {
     const x = [];
     x[modal] = false;
     this.setState(x);
-    this.clearState();
+    return true;
   };
 
+
   render() {
-    const { classicModal } = this.state;
+    const { classicModal, closeFlag } = this.state;
 
     return (
       <span>
-             <span className="alert-banner-learn-more" onClick={() => this.handleClickOpen("classicModal")}>{psString("dollar-policy-learn-more")}</span>
+        <span className="alert-banner-learn-more"
+              onClick={() => this.handleClickOpen("classicModal")}>{psString("dollar-policy-learn-more")}</span>
 
-        <Dialog
-          className="modal-width"
-          fullWidth={true}
-          open={classicModal}
-          TransitionComponent={Transition}
-          keepMounted
-          aria-labelledby="classic-modal-slide-title"
-          aria-describedby="classic-modal-slide-description">
+        {classicModal &&
+        <div className="custom-modal-container">
+          <div className="custom-modal-wrapper"/>
+          <div className={"custom-modal " + (closeFlag ? "custom-hide" : "")}>
 
 
-              <DialogTitle
-                id="classic-modal-slide-title"
-                disableTypography>
-                <i className="material-icons modal-close-btn" onClick={() => this.handleClose("classicModal")}>close</i>
-                    <div className="dialog-title">{psString('dollar-learn-more-subj')}</div>
-              </DialogTitle>
+            <div className="custom-modal-title">
+              <i className="material-icons modal-close-btn"
+                 onClick={() => this.handleClickClose("classicModal")}>close</i>
+              <h3>{psString("dollar-learn-more-subj")}</h3>
+            </div>
 
 
-              <DialogContent id="classic-modal-slide-description" className="overflow-hidden">
-                 <div className="dialog-desc">
-                   {psString('dollar-learn-more-explain-1')}
-                   <br/><br/>
-                   {psString('dollar-learn-more-explain-2')}
-                   <br/><br/>
-                   {psString('dollar-learn-more-explain-3')}
-                 </div>
-              </DialogContent>
+            <div className="custom-modal-content tal">
+                {psString("dollar-learn-more-explain-1")}
+                <br/><br/>
+                {psString("dollar-learn-more-explain-2")}
+                <br/><br/>
+                {psString("dollar-learn-more-explain-3")}
+            </div>
 
-              <DialogActions className="modal-footer">
-                <div onClick={() => this.getStarted()} className="ok-btn">{psString('dollar-learn-more-btn')}</div>
-              </DialogActions>
-            </Dialog>
+            <div className="custom-modal-footer">
+              <div onClick={() => this.getStarted()} className="ok-btn">{psString("dollar-learn-more-btn")}</div>
+            </div>
+          </div>
+        </div>}
       </span>
     );
   }

@@ -9,7 +9,6 @@ class ContentViewComment extends React.Component {
 
    // 디스커스 셋팅
   disqus_config  = () => {
-    console.log(123);
     //this.page.url = "https://share.decompany.io";  // Replace PAGE_URL with your page's canonical URL variable
     this.page.identifier = this.props.documentData.documentId; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
   };
