@@ -118,6 +118,7 @@ export default {
     login(isSilentAuthentication) {
       if (isSilentAuthentication) instance.InitData.authData.authorize({ prompt: "none" });
       else instance.InitData.authData.authorize();
+
     },
     logout(callback) {
       this.clearSession();

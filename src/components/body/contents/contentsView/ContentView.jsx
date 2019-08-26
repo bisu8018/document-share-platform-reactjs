@@ -114,7 +114,7 @@ class ContentView extends React.Component {
     if (!documentData && !errMessage)
       return (<div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>);
 
-    if (!documentData && errMessage)
+    if ((!documentData && errMessage) || (documentData && documentData.state !== "CONVERT_COMPLETE"))
       return (errMessage && <NotFoundPage errMessage={errMessage}/>);
 
 

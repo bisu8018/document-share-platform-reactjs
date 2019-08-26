@@ -1,19 +1,12 @@
 import React from "react";
 import Common from "../../../../common/common";
 import { APP_PROPERTIES } from "../../../../properties/app.properties";
+import { psString } from "../../../../config/localization";
 
 class CuratorClaim extends React.Component {
   state = {
     determineReward: null,
-    btnText: "Claim $ "
-  };
-
-
-  // 초기화
-  init = () => {
-    if(APP_PROPERTIES.ssr) return;
-
-    this.getDetermineCuratorReward();
+    btnText: psString("claim-text") + " $ "
   };
 
 
@@ -33,25 +26,32 @@ class CuratorClaim extends React.Component {
   // 클레임 버튼 클릭 관리
   handelClickClaim = () => {
     const { document, getDrizzle, getMyInfo, setAlertCode } = this.props;
-    const { btnText } = this.state;
+    if (!getMyInfo.ethAccount) {
+      this.setState({ msg: psString("claim-msg-1") });
+      return;
+    }
+    if (getMyInfo.ethAccount !== getDrizzle.getLoggedInAccount()) {
+      this.setState({ msg: psString("claim-msg-2") });
+      return;
+    }
 
     if (document && getDrizzle.isAuthenticated()) {
-      this.setState({ btnText: "Pending" }, () => {
+      this.setState({ btnText: psString("claim-btn-text-2") }, () => {
         getDrizzle.curatorClaimReward(document.documentId, getMyInfo.ethAccount).then((res) => {
-          this.setState({ btnText: "Complete" });
+          if (res === "success") this.setState({ btnText: psString("claim-btn-text-1") }, () => {
+            window.location.reload();
+          });
+          else this.setState({ btnText: psString("claim-text") + " $ " }, () => {
+            setAlertCode(2035);
+          });
         });
-        if (btnText === "Complete") window.location.reload();//this.setState({ voteStatus: "COMPLETE" });
-        else {
-          this.setState({ voteStatus: "Claim $ " });
-          setAlertCode(2035);
-        }
       });
     }
   };
 
 
-  componentWillMount(): void {
-    this.init();
+  componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
+    this.getDetermineCuratorReward();
   }
 
 
@@ -66,9 +66,9 @@ class CuratorClaim extends React.Component {
     if (myEthAccount !== ethAccount || ethAccount !== drizzleAccount || !getDrizzle.isAuthenticated() || claimReward <= 0 || btnText === "Complete") return <div/>;
 
     return (
-      <div className={"claim-btn " + (btnText === "Pending" ? "btn-disabled" : "") + (getIsMobile ? " w-100" : "")}
-           onClick={() => this.handelClickClaim()} title={"Claim $ " + claimReward}>
-        {btnText} {(btnText === "Pending" ? "" : claimReward)}
+      <div className={"claim-btn " + (btnText === psString("claim-btn-text-2") ? "btn-disabled" : "") + (getIsMobile ? " w-100" : "")}
+           onClick={() => this.handelClickClaim()}>
+        {btnText} {(btnText === psString("claim-btn-text-2") ? "" : claimReward)}
       </div>
     );
   }

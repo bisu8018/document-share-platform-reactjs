@@ -68,7 +68,8 @@ class VoteDocumentModal extends React.Component {
       vote: { stackId: -1, done: false, complete: false, receipt: null },
       deposit: 0,
       balance: -1,
-      deckError: ""
+      deckError: "",
+      closeFlag: false,
     });
 
     return Promise.resolve();

@@ -35,7 +35,6 @@ class CreatorClaim extends React.Component {
     }
 
     if (document && getDrizzle.isAuthenticated()) {
-
       this.setState({ btnText: psString("claim-btn-text-2") }, () => {
         getDrizzle.creatorClaimReward(document.documentId, getMyInfo.ethAccount).then((res) => {
           if (res === "success") this.setState({ btnText: psString("claim-btn-text-1") }, () => {

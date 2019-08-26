@@ -393,7 +393,7 @@ class EditDocumentModal extends React.Component {
               <div>
                 <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
                 <div className="row">
-                  <div className="col-12 col-sm-6">
+                  <div className="col-12">
                     <input type="checkbox" id="useTrackingCheckboxEdit"
                            onChange={(e) => this.handleTrackingCheckbox(e)}
                            checked={useTracking}/>

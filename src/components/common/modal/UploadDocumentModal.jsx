@@ -140,8 +140,10 @@ class UploadDocumentModal extends React.Component {
 
   // input form 초기화
   clearForm = () => {
+    if (!document.getElementById("docTitle")) return true;
+
     document.getElementById("docTitle").value = null;
-    document.getElementById("docDesc").value = "";
+    document.getElementById("docDesc").value = null;
     document.getElementById("docFileInput").value = null;
     document.getElementById("docFile").value = null;
     return Promise.resolve();
@@ -449,7 +451,7 @@ class UploadDocumentModal extends React.Component {
 
   render() {
     const { privateDocCount, classicModal, classicModalSub, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload, username, closeFlag } = this.state;
-    const { type, path } = this.props;
+    const { type } = this.props;
 
     return (
       <span>
@@ -606,6 +608,7 @@ class UploadDocumentModal extends React.Component {
         </div>
         }
 
+
         {classicModalSub &&
         <div className="custom-modal-container">
           <div className="custom-modal-wrapper"/>
@@ -624,14 +627,15 @@ class UploadDocumentModal extends React.Component {
                 <div>{psString("upload-doc-desc-2") + psString("upload-doc-desc-4-a") + privateDocCount + psString("upload-doc-desc-4-b")}</div>
               }
             </div>
-            {username === path ?
+            {username === common_view.getPath() ?
               <div className="custom-modal-footer">
                 <div onClick={() => this.handleCloseOnMyPage()}
                      className="ok-btn">{psString("common-modal-confirm")}</div>
               </div> :
               <div className="custom-modal-footer">
                 <div onClick={() => this.handleClickClose()} className="ok-btn">{psString("common-modal-confirm")}</div>
-                <div onClick={() => this.handleLinkBtn()} className="ok-btn">{psString("private-doc-modal-btn")}</div>
+                <div onClick={() => this.handleLinkBtn()}
+                     className="ok-btn ml-2">{psString("private-doc-modal-btn")}</div>
               </div>
             }
           </div>

@@ -188,10 +188,8 @@ class Main extends Component {
     const { initData } = this.state;
 
     if (APP_PROPERTIES.ssr) return this.getMainComponent();
-
-    let flag = !initData || (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0);
-
-    if (!flag) common_view.setBodyStyleUnlock();
+    if (initData && (MainRepository.Account.isAuthenticated() ? getMyInfo.email.length !== 0 : true))
+      common_view.setBodyStyleUnlock();
     else {
       common_view.setBodyStyleLock();
       return (<LoadingModal/>);
