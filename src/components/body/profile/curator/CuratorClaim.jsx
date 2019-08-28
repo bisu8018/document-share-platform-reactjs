@@ -1,6 +1,5 @@
 import React from "react";
 import Common from "../../../../common/common";
-import { APP_PROPERTIES } from "../../../../properties/app.properties";
 import { psString } from "../../../../config/localization";
 
 class CuratorClaim extends React.Component {

@@ -135,6 +135,21 @@ class Alert extends React.PureComponent {
         sub = psString("alert-" + code + "-sub");
         break;
 
+      case 2054 :
+        status = "warning";
+        msg = this.getMsg(code);    // 메타마스크 로그인 필요
+        break;
+
+      case 2055 :
+        status = "warning";
+        msg = this.getMsg(code);    // 이더리움 계정 연동 필요
+        break;
+
+      case 2056 :
+        status = "warning";
+        msg = this.getMsg(code);    // 올바른 이더리움 계정 연동 필요
+        break;
+
 
       //업로드 메세지 2071~
       case 2071 :

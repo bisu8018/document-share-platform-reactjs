@@ -19,7 +19,25 @@ class ContentViewCarousel extends React.Component {
     emailFlag: false,   // true : 메일 수집 모달 표시
     emailFlagTemp: false,   // true : 메일 수집 모달 표시
     loginTrackingFlag: false,
-    pageChangedFlag: null
+    pageChangedFlag: null,
+    stayTime: null
+  };
+
+
+  // 특정 시간 동안 머문 후 트랙킹 시작
+  checkStayTime = page => {
+    const { stayTime, readPage } = this.state;
+
+    if (readPage === null) return false;
+
+    let st = 3000;
+    let tmpTime = Date.now();
+
+    if (!stayTime || (stayTime && tmpTime >= stayTime + st))
+      return this.handleTracking(page);
+
+    else if (stayTime && tmpTime < stayTime + st)
+      return false;
   };
 
 
@@ -42,13 +60,12 @@ class ContentViewCarousel extends React.Component {
 
 
   // Tracking API POST
-  postTracking = (page, type) => {
-    return TrackingApis.tracking({
+  postTracking = (page, type) =>
+    TrackingApis.tracking({
       id: this.props.target.documentId,
       n: page + 1,
       ev: type
     }, true).then(res => res);
-  };
 
 
   // 페이지 GET
@@ -89,7 +106,6 @@ class ContentViewCarousel extends React.Component {
 
       this.setState({ emailFlag: false }, () => {
         handleEmailFlag(false);
-
         // email 입력 모달 on/off 함수
         if (page > 0 && !getMyInfo.email && !emailFlagTemp && !ss) {
           this.setState({ emailFlag: true }, () => {
@@ -105,7 +121,7 @@ class ContentViewCarousel extends React.Component {
 
 
   // 문서 옵션 useTracking true 일때만
-  handleTracking = async (page) => {
+  handleTracking = async page => {
     const { target, handleEmailFlag, getMyInfo, setMyInfo, getTempEmail } = this.props;
     const { emailFlagTemp, readPage, emailFlag } = this.state;
 
@@ -113,11 +129,12 @@ class ContentViewCarousel extends React.Component {
       this.setState({ emailFlag: false }, () => handleEmailFlag(false));
     }
 
-    // 같은 페이지 일 경우
     if (page === readPage) return;
+    // 같은 페이지 일 경우
 
     // url 페이지 파라미터 값 변경
-    this.setState({ readPage: page }, () => this.handleUrl());
+    this.setState({ readPage: page, stayTime: Date.now() }, () => this.handleUrl());
+
 
     // 트래킹 / 강제 트래킹 분기처리
     if (target.useTracking) {
@@ -150,11 +167,10 @@ class ContentViewCarousel extends React.Component {
     const { readPage } = this.state;
 
     if (!readPage) return false;
-    let _documentId = documentId || target.documentId;
 
     try {
       TrackingApis.tracking({
-        id: _documentId,
+        id: documentId || target.documentId,
         n: -1,
         ev: "leave"
       }, false, true);
@@ -171,13 +187,13 @@ class ContentViewCarousel extends React.Component {
 
     let documentId = target.documentId;
 
-    if (pageChangedFlag !== documentId) {
-      if (pageChangedFlag !== null) {
-        this.handleTrackingLeave(pageChangedFlag);
-        this.setState({ readPage: null });
-      }
-      this.setState({ pageChangedFlag: documentId });
+    if (!documentId || documentId.length === 0 || pageChangedFlag === documentId) return;
+    if (pageChangedFlag !== null) {
+      this.handleTrackingLeave(pageChangedFlag);
+      this.setState({ readPage: null });
     }
+    this.setState({ pageChangedFlag: documentId });
+
   };
 
 
@@ -254,7 +270,7 @@ class ContentViewCarousel extends React.Component {
             swipeable
             selectedItem={this.state.readPage || 0}
             useKeyboardArrows={true}
-            onChange={index => this.handleTracking(index)}
+            onChange={index => this.checkStayTime(index)}
           >
             {arr.length > 0 ? arr.map((addr, idx) => (
               <img key={idx} title={target.title} src={addr} alt={documentText[idx]} data-small="" data-normal=""

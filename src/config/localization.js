@@ -503,6 +503,18 @@ const strings = new Map([
     KOR: "3초 후 새로고침 됩니다.",
     ENG: "Refresh after 3 seconds."
   }],
+  ["alert-2054", {
+    KOR: "메타마스크 로그인 필요",
+    ENG: "Please log in to the Meta Mask."
+  }],
+  ["alert-2055", {
+    KOR: "이더리움 계정 연동 필요",
+    ENG: "Please link to Ethereum account"
+  }],
+  ["alert-2056", {
+    KOR: "올바른 이더리움 계정 연동 필요",
+    ENG: "Please link to right Ethereum account"
+  }],
   ["alert-2071", {
     KOR: "업로드 실패",
     ENG: "Upload failed"
@@ -1355,10 +1367,6 @@ const strings = new Map([
   ["claim-text", {
     KOR: "클레임",
     ENG: "Claim"
-  }],
-  ["claim-msg-1", {
-    KOR: "메타마스크 로그인 필요",
-    ENG: "Please log in to the Meta Mask."
   }],
   ["claim-msg-2", {
     KOR: "올바른 계정 로그인 필요",

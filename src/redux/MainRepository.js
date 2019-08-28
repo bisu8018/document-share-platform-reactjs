@@ -62,6 +62,23 @@ export default {
       scope: "openid profile email"
     });
 
+    // 메타마스크 관련 체크
+    if (!ssr && (typeof window.ethereum !== "undefined" || (typeof window.web3 !== "undefined"))) {
+      const ethereum = window["ethereum"] || window.web3.currentProvider;
+
+      ethereum.autoRefreshOnNetworkChange = false;
+
+      // 메타마스크 계정 변경 시, 리로드
+      ethereum.on("accountsChanged", accounts => {
+        document.location.reload();
+      });
+
+      // 메타마스크 네트워크 변경 시, 리로드
+      ethereum.on("networkChanged", accounts => {
+        document.location.reload();
+      });
+    }
+
     callback(true);
   },
   InitData: {
@@ -158,10 +175,6 @@ export default {
       const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
       const isUnExpired = new Date().getTime() < expiresAt;
 
-      if (!isUnExpired) {
-        //console.error('Session Expired', expiresAt, sessionStorage);
-        this.clearSession();
-      }
       return isUnExpired;
     },
     scheduleRenewal() {

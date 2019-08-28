@@ -6,6 +6,7 @@ import MainRepository from "../../../redux/MainRepository";
 import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
 import common from "../../../common/common";
+import { FadingCircle } from "better-react-spinkit";
 
 class EditDocumentModal extends React.Component {
 
@@ -28,7 +29,8 @@ class EditDocumentModal extends React.Component {
       sa: false,   //CC License sa 사용유무
       moreOptions: true,    // more options show / hide
       username: null,
-      desc: ""
+      desc: "",
+      loading: false
     };
   }
 
@@ -51,7 +53,8 @@ class EditDocumentModal extends React.Component {
       sa: false,   //CC License sa 사용유무
       moreOptions: true,    // more options show / hide
       username: null,
-      desc: ""
+      desc: "",
+      loading: false
     }));
 
 
@@ -124,6 +127,7 @@ class EditDocumentModal extends React.Component {
   // 확인 버튼 관리
   handleConfirmBtn = () => {
     if (!this.validateTitle() || !this.validateTag()) return false;   // input 값 유효성 검사
+    this.setState({ loading: true });
     this.handleConfirm();
   };
 
@@ -144,9 +148,11 @@ class EditDocumentModal extends React.Component {
     };
 
     MainRepository.Document.updateDocument(data).then(result => {
-      history.push("/" + common_view.getPath() + "/" + result.seoTitle);
-      this.handleClickClose();
-      document.location.reload();   // redux 로 교체 검토 필요
+      this.setState({ loading: false }, () =>{
+        history.push("/" + common_view.getPath() + "/" + result.seoTitle);
+        this.handleClickClose();
+        document.location.reload();   // redux 로 교체 검토 필요
+      })
     });
   };
 
@@ -338,7 +344,7 @@ class EditDocumentModal extends React.Component {
 
 
   render() {
-    const { classicModal, moreOptions, title, allowDownload, desc, tags, useTracking, forceTracking, titleError, tagError, by, nc, nd, sa, closeFlag } = this.state;
+    const { classicModal, loading, moreOptions, title, allowDownload, desc, tags, useTracking, forceTracking, titleError, tagError, by, nc, nd, sa, closeFlag } = this.state;
 
     return (
       <span>
@@ -353,7 +359,8 @@ class EditDocumentModal extends React.Component {
 
 
             <div className="custom-modal-title">
-              <i className="material-icons modal-close-btn" onClick={() => this.handleClickClose("classicModal")}>close</i>
+              <i className="material-icons modal-close-btn"
+                 onClick={() => this.handleClickClose("classicModal")}>close</i>
               <h3>{psString("edit-doc-subj")}</h3>
             </div>
 
@@ -468,8 +475,11 @@ class EditDocumentModal extends React.Component {
             <div className="custom-modal-footer">
               <div onClick={() => this.handleClickClose("classicModal")}
                    className="cancel-btn">{psString("common-modal-cancel")}</div>
-              <div onClick={() => this.handleConfirmBtn()}
-                   className="ok-btn">{psString("common-modal-confirm")}</div>
+              <div onClick={() => this.handleConfirmBtn()} className="ok-btn">
+                {loading &&
+                <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
+                {psString("common-modal-confirm")}
+              </div>
             </div>
           </div>
         </div>

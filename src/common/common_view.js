@@ -3,12 +3,11 @@ import MainRepository from "../redux/MainRepository";
 import { psString } from "../config/localization";
 import common from "./common";
 
-const env = APP_PROPERTIES.env;
-
 const init = function() {
   if (APP_PROPERTIES.ssr) return false;
   return common_view;
 };
+
 
 const common_view = ({
 
@@ -89,7 +88,7 @@ const common_view = ({
       document.getElementById(id).select();
       document.execCommand("copy");
       resolve();
-    })
+    });
   },
 
   // Scroll to top
@@ -234,7 +233,7 @@ const common_view = ({
     let totalReward = 0;
 
 
-    if (env === "local") {
+    if (APP_PROPERTIES.debug) {
       console.log("%cEstimated earnings for today", "color:blue;font-weight:bold;font-size:22px");
       console.log("Document List", documentList);
       console.log("Total View Count Info", totalViewCountInfo);
@@ -257,7 +256,7 @@ const common_view = ({
           }
         }
 
-        if (env === "local") {
+        if (APP_PROPERTIES.debug) {
           console.log("\n\n");
           console.log("%c[" + dk.title + "]", "font-weight:bold;font-size:16px");
           console.log("Vote counts : " + dk.depositList.length);
@@ -289,7 +288,7 @@ const common_view = ({
 
           if (common.dateAgo(timestamp) <= day) reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
 
-          if (env === "local") {
+          if (APP_PROPERTIES.debug) {
             console.log("%cNo." + Number(i + 1), "font-weight:bold");
             console.log("PV : " + pv);
             console.log("TPVS : " + tpvs);
@@ -302,7 +301,7 @@ const common_view = ({
       }
     }
 
-    if (env === "local") {
+    if (APP_PROPERTIES.debug) {
       console.log("\n\n");
       console.log("%cTOTAL REWARD : $" + common.deckToDollar(common.toDeck(totalReward)), "font-weight:bold;font-size:17px;color:purple");
       console.log("\n\n\n\n\n\n\n\n");
@@ -316,7 +315,7 @@ const common_view = ({
     if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
     let totalReward = 0;
 
-    if (env === "local") {
+    if (APP_PROPERTIES.debug) {
       console.log("%cRevenue for the last 7 days", "color:blue;font-weight:bold;font-size:22px");
       console.log("Document List", documentList);
       console.log("Total View Count Info", totalViewCountInfo);
@@ -339,7 +338,7 @@ const common_view = ({
           }
         }
 
-        if (env === "local") {
+        if (APP_PROPERTIES.debug) {
           console.log("\n\n");
           console.log("%c[" + dk.title + "]", "font-weight:bold;font-size:16px");
           console.log("Vote counts : " + dk.depositList.length);
@@ -367,7 +366,7 @@ const common_view = ({
 
           if (common.dateAgo(timestamp) <= 7 && common.dateAgo(timestamp) > 0) reward += this.curatorCalculateReward(getCuratorDailyRewardPool, v, tv, pv, tpvs);
 
-          if (env === "local") {
+          if (APP_PROPERTIES.debug) {
             console.log("%cNo." + Number(i + 1), "font-weight:bold");
             console.log("PV : " + pv);
             console.log("TPVS : " + tpvs);
@@ -380,7 +379,7 @@ const common_view = ({
       }
     }
 
-    if (env === "local") {
+    if (APP_PROPERTIES.debug) {
       console.log("\n\n");
       console.log("%cTOTAL REWARD : $" + common.deckToDollar(common.toDeck(totalReward)), "font-weight:bold;font-size:17px;color:purple");
       console.log("\n\n\n\n\n\n\n\n");

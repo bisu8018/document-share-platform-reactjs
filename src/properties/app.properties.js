@@ -1,6 +1,7 @@
 export const APP_PROPERTIES = {
   ssr: process.env.APP_ENV === 'server',
   env: (!process.env.NODE_ENV_SUB) ? 'local':process.env.NODE_ENV_SUB,
+  debug: (!process.env.NODE_ENV_SUB && false),
   domain:function(){
     if(this.env === 'production')
       return APP_PROPERTIES.production.domain;

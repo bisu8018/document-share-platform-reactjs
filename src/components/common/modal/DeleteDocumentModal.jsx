@@ -58,6 +58,7 @@ class DeleteDocumentModal extends React.Component {
     const x = [];
     x[modal] = false;
     this.setState(x);
+    return Promise.resolve();
   };
 
 
@@ -66,10 +67,10 @@ class DeleteDocumentModal extends React.Component {
     const { setAlertCode, documentData } = this.props;
 
     this.setState({ loading: true });
-    MainRepository.Document.deleteDocument({ isDeleted: true, documentId: documentData.documentId }).then(() => {
-      this.handleClose("classicModal");
-      this.handleDeleteAfter();
-    }).catch(() => this.setState({ loading: false }, () => setAlertCode(2073)));
+    MainRepository.Document.deleteDocument({ isDeleted: true, documentId: documentData.documentId })
+      .then(() => this.handleClose("classicModal"))
+      .then(() => this.handleDeleteAfter())
+      .catch(() => this.setState({ loading: false }, () => setAlertCode(2073)));
   };
 
 
@@ -80,7 +81,8 @@ class DeleteDocumentModal extends React.Component {
     if (common_view.getPaths().length > 2 && common_view.getPaths()[2] === documentData.seoTitle) {
       history.push("/");
       setAlertCode(2076);
-    } else document.location.reload();
+    } else
+      document.location.reload();
   };
 
 

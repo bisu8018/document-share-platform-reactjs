@@ -5945,6 +5945,10 @@ b {
     font-weight: 500;
 }
 
+.details_info .option-menu-btn {
+    z-index: 1;
+}
+
 .option-menu-btn {
     cursor: pointer;
     position: absolute;
@@ -6475,6 +6479,10 @@ dean
     font-weight: 400;
     color: #4d4d4d;
     font-size: 14px;
+}
+
+.back-btn-wrapper:hover {
+    color: #3681fe;
 }
 
 .back-btn-wrapper > img {
@@ -7883,9 +7891,9 @@ Dean*/
     }
 }
 
-
 .profile_container {
     margin-bottom: 50px;
+    position: relative;
 }
 
 .tracking-list-wrapper {
@@ -7909,7 +7917,6 @@ Dean*/
     width: 3000%;
     height: 160px;
     left: -1000px;
-    margin-top: 60px;
     top: -15px;
     background: #f5f5f5;
 }

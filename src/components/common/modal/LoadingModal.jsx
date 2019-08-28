@@ -13,7 +13,7 @@ class LoadingModal extends React.PureComponent{
     return (
       <div className="loading-wrapper">
         <img src={require("assets/image/logo-cut.png")} alt="POLARIS SHARE"/>
-        <DoubleBounce name="ball-pulse-sync" color="#ddeaff" size={90}/>
+        <DoubleBounce name="ball-pulse-sync" color="#ddeaff" size={110}/>
       </div>
     );
   }

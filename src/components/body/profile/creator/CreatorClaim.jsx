@@ -9,15 +9,37 @@ class CreatorClaim extends React.Component {
   };
 
 
+  // 클레임
+  claimCreatorReward = () => {
+    const { document, getDrizzle, getMyInfo, setAlertCode } = this.props;
+
+    getDrizzle.creatorClaimReward(document.documentId, getMyInfo.ethAccount).then((res) => {
+      if (res === "success") {
+        this.setState({ btnText: psString("claim-btn-text-1") }, () => {
+          window.location.reload();
+        });
+      } else {
+        this.setState({ btnText: psString("claim-text") + " $ " }, () => {
+          setAlertCode(2035);
+        });
+      }
+    });
+  };
+
+
   // 크리에이터 확정 보상 GET
   getDetermineCreatorReward = () => {
     const { document, getWeb3Apis, getMyInfo } = this.props;
     const { determineReward } = this.state;
 
     if (document && getMyInfo.ethAccount && determineReward === null) {
-      getWeb3Apis.getDetermineCreatorReward(document.documentId, getMyInfo.ethAccount).then((data) => {
-        this.setState({ determineReward: (data && Common.toDeck(data[0]) > 0 ? Common.toDeck(data[0]) : 0) });
-      }).catch(err => console.error(err));
+      getWeb3Apis.getDetermineCreatorReward(document.documentId, getMyInfo.ethAccount)
+        .then(data => {
+          this.setState({
+            determineReward: data && Common.toDeck(data[0]) > 0 ?
+              Common.toDeck(data[0]) : 0
+          });
+        }).catch(err => console.error(err));
     }
   };
 
@@ -25,45 +47,36 @@ class CreatorClaim extends React.Component {
   // 클레임 버튼 클릭 관리
   handelClickClaim = () => {
     const { document, getDrizzle, getMyInfo, setAlertCode } = this.props;
-    if (!getMyInfo.ethAccount) {
-      this.setState({ msg: psString("claim-msg-1") });
-      return;
-    }
-    if (getMyInfo.ethAccount !== getDrizzle.getLoggedInAccount()) {
-      this.setState({ msg: psString("claim-msg-2") });
-      return;
-    }
+
+    if (!getDrizzle.isInitialized() || !getDrizzle.isAuthenticated())
+      return setAlertCode(2054);
+
+    if (!getMyInfo.ethAccount)
+      return setAlertCode(2055);
+
+    if (getMyInfo.ethAccount !== getDrizzle.getLoggedInAccount())
+      return setAlertCode(2056);
 
     if (document && getDrizzle.isAuthenticated()) {
       this.setState({ btnText: psString("claim-btn-text-2") }, () => {
-        getDrizzle.creatorClaimReward(document.documentId, getMyInfo.ethAccount).then((res) => {
-          if (res === "success") this.setState({ btnText: psString("claim-btn-text-1") }, () => {
-            window.location.reload();
-          });
-          else this.setState({ btnText: psString("claim-text") + " $ " }, () => {
-            setAlertCode(2035);
-          });
-        });
+        this.claimCreatorReward();
       });
     }
   };
 
 
-  componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
+  componentDidMount(): void {
     this.getDetermineCreatorReward();
   }
 
 
   render() {
-    const { getDrizzle, userInfo, getMyInfo, getIsMobile } = this.props;
+    const { getIsMobile } = this.props;
     const { determineReward, btnText } = this.state;
 
-    let myEthAccount = getMyInfo.ethAccount,
-      ethAccount = userInfo ? userInfo.ethAccount : "",
-      claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
+    let claimReward = Common.deckToDollar(determineReward > 0 ? determineReward.toString() : 0);
 
-    let drizzleAccount = getDrizzle ? getDrizzle.getLoggedInAccount() : "";
-    if (myEthAccount !== ethAccount || ethAccount !== drizzleAccount || !getDrizzle.isAuthenticated() || claimReward <= 0 || btnText === psString("claim-btn-text-1")) return <div/>;
+    if (claimReward <= 0 || btnText === psString("claim-btn-text-1")) return <div/>;
 
     return (
       <div

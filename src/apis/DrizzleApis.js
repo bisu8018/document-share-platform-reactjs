@@ -49,9 +49,10 @@ export default class DrizzleApis {
         console.log("store",store);
         console.log("myInfo", myInfo);*/
 
-        if (this.drizzleState.web3.networkId && this.drizzleState.web3.networkId !== 4) {
+        if (this.drizzleState.web3.networkId && this.drizzleState.web3.networkId !== 4)
           store.dispatch(setAlertCode(2052));
-        }  // Alert Show
+
+        // Alert Show
         if (this.drizzleState.drizzleStatus.initialized && MainRepository.Account.isAuthenticated() && myInfo.email.length > 0) {    //myInfo - drizzle 이더리움 계정 비교
 
           if (!myInfo.ethAccount) {   // myInfo에 이더리움 계정 없을때

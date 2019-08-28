@@ -34,81 +34,65 @@ class CreatorUploadTab extends React.Component {
   };
 
 
-  // 무한 스크롤 데이터 추가 GET
+  // 타임아웃 설정
+  setTimeOut = params => {
+    this.setTimeout = setTimeout(() => {
+      this.fetchDocuments(params);
+      clearTimeout(this.setTimeout);
+    }, 8000);
+  };
+
+
+  // 무한 스크롤 데이터 추가 GET (임시 주석처리)
   fetchMoreData = () => {
-    const { pageNo, moreDataFlag } = this.state;
-    if (moreDataFlag) this.fetchDocuments({ pageNo: pageNo + 1 });
+    /*const { pageNo, moreDataFlag } = this.state;
+    if (moreDataFlag) this.fetchDocuments({ pageNo: pageNo + 1 });*/
   };
 
 
   // 데이터 GET
-  fetchDocuments = (params) => {
+  fetchDocuments = params => {
     const { userInfo, getMyInfo } = this.props;
-    let pageNo = (!params || isNaN(params.pageNo)) ? 1 : Number(params.pageNo);
-    let _params = {};
 
-    if (userInfo.username && userInfo.username.length > 0) _params = {
-      pageNo: pageNo,
-      username: userInfo.username,
-      pageSize: 10000
-    };
-    else _params = { pageNo: pageNo, email: userInfo.email, pageSize: 10000 };
+    let param = this.getParam(),
+      _params = {
+        pageNo: (!params || isNaN(params.pageNo)) ? 1 : Number(params.pageNo),
+        username: userInfo.username || "",
+        email: userInfo.email,
+        pageSize: 10000   // 임시 사용
+      };
 
-    this.setState({ loading: true });   // 로딩 on
-    let param = this.getParam();
-
-    if (param === getMyInfo.username || param === getMyInfo.email || param === common_view.getMySub()) {
-      MainRepository.Account.getDocuments(_params).then(res => {
-        this.handleData(res);
-        this.setState({ loading: false });    // 로딩 off
-      }, err => {
+    return Promise.resolve()
+      .then(() => this.setState({ loading: true }))
+      .then(() => (param === getMyInfo.username || param === getMyInfo.email || param === common_view.getMySub()) ?
+        MainRepository.Account.getDocuments(_params) :
+        MainRepository.Document.getDocumentList(_params))
+      .then(res => this.handleData(res))
+      .catch(err => {
         console.error(err);
-        this.setTimeout = setTimeout(() => {
-          this.fetchDocuments(params);
-          clearTimeout(this.setTimeout);
-        }, 8000);
+        this.setTimeOut(params);
       });
-    } else {
-      MainRepository.Document.getDocumentList(_params).then(res => {
-        this.handleData(res);
-        this.setState({ loading: false });    // 로딩 off
-      }).catch(err => {
-        console.error("Curator upload document GET ERROR", err);
-        this.setTimeout = setTimeout(() => {
-          this.fetchDocuments(params);
-          clearTimeout(this.setTimeout);
-        }, 8000);
-      });
-    }
   };
 
 
   // GET 데이터 관리
-  handleData = (res) => {
+  handleData = res => {
     const { getDocumentList } = this.props;
     const { resultList } = this.state;
 
-    if (res && res.resultList) {
-      if (resultList.length > 0) {
-        this.setState({
-          resultList: resultList.concat(res.resultList),
-          pageNo: res.pageNo
-        });
-      } else {
-        this.setState({
-          resultList: res.resultList,
-          pageNo: res.pageNo
-        }, () => {
-          // 2019-04-16, 임시 사용, AuthorSummary 데이터 전달 위한 Event
-          getDocumentList(res);
-        });
-      }
+    if (!res || !res.resultList) return Promise.reject();
 
-      this.setState({ moreDataFlag: true });
-
-      if (res.count === 0 || res.resultList.length < 10) this.setState({ isEndPage: true });
-      if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) this.setState({ totalViewCountInfo: res.totalViewCountInfo });
-    }
+    this.setState({
+      loading: false,
+      resultList: (resultList.length > 0) ? resultList.concat(res.resultList) : res.resultList,
+      pageNo: res.pageNo,
+      moreDataFlag: true,
+      isEndPage: (res.count === 0 || res.resultList.length < 10),
+      totalViewCountInfo: (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) ? res.totalViewCountInfo : null
+    }, () => {
+      if (resultList.length <= 0) getDocumentList(res);
+      return Promise.resolve();
+    });
   };
 
 
@@ -151,7 +135,7 @@ class CreatorUploadTab extends React.Component {
           :
           loading ?
             <div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>
-            :<NoDataIcon className="no-data">No data</NoDataIcon>
+            : <NoDataIcon className="no-data">No data</NoDataIcon>
         }
       </div>
 

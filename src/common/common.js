@@ -5,8 +5,9 @@ const imgDomain = APP_PROPERTIES.domain().image;
 
 export default ({
   // Timestamp GET
-  getTimestamp: (date) => {
+  getTimestamp: () => {
     // daily YYYY-MM-DD 00:00:00(실행기준에서 전날 일자)
+    let date = new Date();
     return Math.floor(date / (60 * 60 * 24 * 1000)) * (60 * 60 * 24 * 1000);
   },
   // change timestamp to duration
