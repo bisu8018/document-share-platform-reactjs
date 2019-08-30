@@ -6607,11 +6607,14 @@ dean
 }
 
 .view-option-btn {
-    display: none;
     cursor: pointer;
     position: absolute;
     right: 0;
     top: 7px;
+}
+
+.u_center_inner .view-option-btn {
+    display: none;
 }
 
 .view-option-btn > i {
@@ -7560,6 +7563,11 @@ Dean*/
 
 
 @media (max-width: 575px) {
+
+    .u__view .view_top {
+        min-height: 179px !important;
+    }
+
     #classic-modal-slide-title,
     .custom-modal-title {
         padding: 0 24px !important;
@@ -8382,7 +8390,7 @@ Duration CSS*/
 }
 
 .u__view .view_top {
-    min-height: 179px;
+    min-height: 350px;
     position: relative;
     background: #f1f1f1;
     border: 1px solid #b3b3b3;

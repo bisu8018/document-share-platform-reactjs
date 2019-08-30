@@ -206,16 +206,19 @@ class ContentViewFullScreen extends Component {
 
       <article
         className="col-md-12 col-lg-8 view_left u__view ">
-        <div className="view_top">
-          <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
-                                        tracking={true} handleEmailFlag={this.handleEmailFlag}
-                                        getPageNum={page => this.getPageNum(page)}/>
-          <a className="view_screen" href={APP_PROPERTIES.domain().viewer + documentData.seoTitle} target="_blank"
-             rel="noopener noreferrer">
-            <i title="viewer button" className="material-icons">fullscreen</i>
-          </a>
-        </div>
-
+        {documentData && documentData.documentId ?
+          <div className="view_top">
+            <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
+                                          tracking={true} handleEmailFlag={this.handleEmailFlag}
+                                          getPageNum={page => this.getPageNum(page)}/>
+            <a className="view_screen" href={APP_PROPERTIES.domain().viewer + documentData.seoTitle} target="_blank"
+               rel="noopener noreferrer">
+              <i title="viewer button" className="material-icons">fullscreen</i>
+            </a>
+          </div>
+          :
+          <div className="view_top"/>
+        }
 
         <div className="view_content">
           <div className="u_title pt-2 pb-2 mt-2 mb-2">

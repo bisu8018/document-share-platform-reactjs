@@ -24,10 +24,12 @@ export default {
     }
   },
   POST: {
-    trackingConfirm: (data, callback) => {
-      AxiosService._requestWithBody(trackingConfirmUrl, "POST", data,
-        data => callback(data)
-        , err => err);
+    trackingConfirm: (data) => {
+      return new Promise((resolve, reject) =>
+        AxiosService._requestWithBody(trackingConfirmUrl, "POST", data,
+          data => resolve(data)
+          , err => reject(err))
+      );
     }
   }
 };

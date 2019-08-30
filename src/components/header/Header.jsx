@@ -129,6 +129,7 @@ class Header extends React.Component {
         // 프로필 카드 프로필 버튼
         const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
         if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) {
+          console.log(123)
           history.push("/" + getMyInfo.username);
           this.setState({ adShow: false });
           this.profileCardHide();
@@ -262,11 +263,11 @@ class Header extends React.Component {
             }
             <div className='col-4 col-md-3 mt-1'>
               {getIsMobile ?
-                <Link to="/" className='navbar-brand-mobile'>
+                <Link to="/" className='navbar-brand-mobile' onClick={() => common_view.scrollTop()}>
                   <img src={require("assets/image/logo-cut.png")} alt='POLARIS SHARE'/>
                 </Link>
                 :
-                <Link to="/" className='navbar-brand'>
+                <Link to="/" className='navbar-brand' onClick={() => common_view.scrollTop()}>
                   <img src={require("assets/image/logo.svg")} alt='POLARIS SHARE'/>
                 </Link>
               }

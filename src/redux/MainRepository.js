@@ -553,9 +553,7 @@ export default {
   },
   Tracking: {
     postTrackingConfirm(data) {
-      return new Promise((resolve) => {
-        TrackingService.POST.trackingConfirm(data, result => resolve(result));
-      });
+      return TrackingService.POST.trackingConfirm(data);
     },
     async getTrackingInfo(data: any, callback: any, error: any) {
       const authResult = await instance.Account.renewSessionPromise();

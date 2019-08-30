@@ -121,8 +121,9 @@ const common_view = ({
 
   // 페이지 GET
   getPageNum: () => {
-    let pageNum = Number(window.location.pathname.split("/")[3]);
-    return pageNum && pageNum > 0 ? Number(pageNum.split("-")[0]) - 1 : 0;
+    let pathName = window.location.pathname.split("/")[3],
+    pageNum = pathName ? Number(pathName.split("-")[0]) : 0;
+    return pageNum > 0 ? pageNum - 1 : 0;
   },
 
   authorCalculateReward: (pv: number, tpv: number, pool: number) => {

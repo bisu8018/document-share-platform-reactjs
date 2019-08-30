@@ -32,6 +32,7 @@ class AwayModal extends React.Component {
         if (this.state.time <= 0) {
           this.postTracking();
           this.setState({ mode: true });
+          clearInterval(this.setInterval);
         }
       });
     }, 1000);

@@ -4,6 +4,7 @@ import MainRepository from "../../../redux/MainRepository";
 import TrackingApis from "../../../apis/TrackingApis";
 import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
+import { FadingCircle } from "better-react-spinkit";
 
 class EmailModal extends React.Component {
 
@@ -15,7 +16,8 @@ class EmailModal extends React.Component {
       closeFlag: false,
       email: "",
       emailError: "",
-      policyChecked: false
+      policyChecked: false,
+      loading: false
     };
   }
 
@@ -25,7 +27,8 @@ class EmailModal extends React.Component {
     this.setState({
       classicModal: false,
       closeFlag: false,
-      email: ""
+      email: "",
+      loading: false
     });
   };
 
@@ -112,7 +115,7 @@ class EmailModal extends React.Component {
     const { handleTracking, documentId } = this.props;
 
     if (this.validateEmail() && this.validateCheckBox()) {
-      const trackingInfo = TrackingApis.setTrackingInfo();
+      const trackingInfo = TrackingApis.setTrackingInfo().then(res => res);
 
       let data = {
         "cid": trackingInfo.cid,
@@ -144,7 +147,7 @@ class EmailModal extends React.Component {
 
 
   render() {
-    const { classicModal, emailError, closeFlag } = this.state;
+    const { classicModal, emailError, closeFlag, loading } = this.state;
     const { documentData } = this.props;
 
     return (
@@ -185,7 +188,11 @@ class EmailModal extends React.Component {
                   <div onClick={() => this.handleClickClose("classicModal")}
                        className="cancel-btn">{psString("email-modal-btn-cancel-1")}</div>
                 }
-                <div onClick={() => this.handleSendBtn()} className="ok-btn">{psString("email-modal-btn-ok")}</div>
+                <div onClick={() => this.handleSendBtn()} className="ok-btn">
+                  {loading &&
+                  <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
+                  {psString("email-modal-btn-ok")}
+                </div>
               </div>
             </div>
           </div>
