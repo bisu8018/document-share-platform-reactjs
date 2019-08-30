@@ -114,7 +114,7 @@ class EmailModal extends React.Component {
     const { email } = this.state;
     const { handleTracking, documentId } = this.props;
 
-    this.setState({loading: true});
+    this.setState({ loading: true });
 
     if (this.validateEmail() && this.validateCheckBox()) {
       const trackingInfo = await TrackingApis.setTrackingInfo().then(res => res);
@@ -128,8 +128,8 @@ class EmailModal extends React.Component {
 
       await MainRepository.Tracking.postTrackingConfirm(data).then(() => {
         this.setSessionInfo(data);
-        handleTracking();
-        this.setState({loading: false});
+        handleTracking(common_view.getPageNum() > this.props.target.totalPages ? 0 : common_view.getPageNum());
+        this.setState({ loading: false });
         this.handleClickClose();
       });
     }

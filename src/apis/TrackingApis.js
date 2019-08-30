@@ -42,7 +42,7 @@ const setTrackingInfo = () => {
 };
 
 const tracking = async (params, async, sidClear) => {
-  //if (process.env.NODE_ENV_SUB !== "production" && process.env.NODE_ENV_SUB !== "development") return false;
+  if (process.env.NODE_ENV_SUB !== "production" && process.env.NODE_ENV_SUB !== "development") return false;
 
   let timestamp = Date.now();
   let trackingInfo = await setTrackingInfo();
