@@ -18,7 +18,7 @@ let  ReduxTypes ={
   //======================================
   //            Header
   // =====================================
-  SET_DROPDOWN_SHOW : "header/SET_DROPDOWN_SHOW",
+  SET_AWAY : "header/SET_AWAY",
 
 
   //======================================

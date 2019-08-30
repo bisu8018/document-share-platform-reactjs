@@ -119,6 +119,12 @@ const common_view = ({
     return authSub;
   },
 
+  // 페이지 GET
+  getPageNum: () => {
+    let pageNum = Number(window.location.pathname.split("/")[3]);
+    return pageNum && pageNum > 0 ? Number(pageNum.split("-")[0]) - 1 : 0;
+  },
+
   authorCalculateReward: (pv: number, tpv: number, pool: number) => {
     if (tpv === 0 || pv === 0 || pool === 0 || !tpv || !pv || !pool) return 0;
     return (pv * (pool / tpv));

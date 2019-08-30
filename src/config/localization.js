@@ -413,6 +413,10 @@ const strings = new Map([
     KOR: "7일간 큐레이터 지급액",
     ENG: "Curator payout"
   }],
+  ["profile-err-1", {
+    KOR: "존재하지 않는 계정입니다.",
+    ENG: "This account does not exist."
+  }],
 
   // Alert
   ["alert-2001", {
@@ -1410,13 +1414,23 @@ const strings = new Map([
     KOR: "인기문서",
     ENG: "Popular"
   }],
-  ["", {
-    KOR: "",
-    ENG: ""
+
+  // away modal
+  ["away-modal-title", {
+    KOR: "사용자의 움직임이 감지되지 않습니다.",
+    ENG: "User movement is not detected."
   }],
-  ["", {
+  ["away-modal-desc-1", {
     KOR: "",
-    ENG: ""
+    ENG: "You will change to Away mode after"
+  }],
+  ["away-modal-desc-2", {
+    KOR: " 초 뒤 자리비움 모드로 변경됩니다.",
+    ENG: "seconds."
+  }],
+  ["away-modal-away-mode", {
+    KOR: "자리비움 모드",
+    ENG: "AWAY mode"
   }],
   ["", {
     KOR: "",

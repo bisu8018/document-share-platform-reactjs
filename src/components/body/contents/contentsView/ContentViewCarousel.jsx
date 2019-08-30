@@ -6,6 +6,7 @@ import MainRepository from "../../../../redux/MainRepository";
 import EmailModalContainer from "../../../../container/common/modal/EmailModalContainer";
 import UserInfo from "../../../../redux/model/UserInfo";
 import { psString } from "../../../../config/localization";
+import common_view from "../../../../common/common_view";
 
 class ContentViewCarousel extends React.Component {
 
@@ -35,9 +36,29 @@ class ContentViewCarousel extends React.Component {
 
     if (!stayTime || (stayTime && tmpTime >= stayTime + st))
       return this.handleTracking(page);
-
     else if (stayTime && tmpTime < stayTime + st)
-      return false;
+      return this.checkTrackingQualified(page);
+
+  };
+
+
+  // 트랙킹 자격 체크
+  checkTrackingQualified = page => {
+    const { target, handleEmailFlag } = this.props;
+    const { readPage } = this.state;
+
+    if ((page === null || page === undefined) && target.forceTracking) {
+      this.setState({ emailFlag: false }, () => handleEmailFlag(false));
+    }
+
+    // 같은 페이지 일 경우
+    if (page === readPage) return false;
+
+    // url 페이지 파라미터 값 변경
+    this.setState({ readPage: page, stayTime: Date.now() }, () => {
+      this.handleUrl();
+      return true;
+    });
   };
 
 
@@ -53,9 +74,7 @@ class ContentViewCarousel extends React.Component {
       "documentId": target.documentId
     };
 
-    MainRepository.Tracking.postTrackingConfirm(data).then(() => {
-      this.handleTracking(pageNum);
-    });
+    MainRepository.Tracking.postTrackingConfirm(data).then(() => this.handleTracking(pageNum));
   };
 
 
@@ -68,30 +87,24 @@ class ContentViewCarousel extends React.Component {
     }, true).then(res => res);
 
 
-  // 페이지 GET
-  getPageNum = () => {
-    let pageNum = window.location.pathname.split("/")[3];
-    pageNum = pageNum && pageNum > "1" ? Number(pageNum.split("-")[0]) - 1 : 0;
-    return pageNum;
-  };
-
-
   // URL 관리
   handleUrl = () => {
     const { readPage } = this.state;
     const { documentText, getPageNum } = this.props;
 
-    let pageNum = window.location.pathname.split("/"),
-      url = window.location.origin + "/" + pageNum[1] + "/" + pageNum[2] + "/",
+    let pathName = window.location.pathname.split("/"),
+      url = window.location.origin + "/" + pathName[1] + "/" + pathName[2] + "/",
       _readPage = readPage + 1,
       _documentText = "";
 
-    if (documentText && documentText.length > 0 && documentText[readPage]) _documentText = documentText[readPage].substr(0, 10).trim().replace(/([^A-Za-z0-9 ])+/g, "").replace(/([ ])+/g, "-");
-    if (_documentText.length > 0) _documentText = "-" + _documentText;
+    if (documentText && documentText.length > 0 && documentText[readPage])
+      _documentText = documentText[readPage].substr(0, 10).trim().replace(/([^A-Za-z0-9 ])+/g, "").replace(/([ ])+/g, "-");
+    if (_documentText.length > 0)
+      _documentText = "-" + _documentText;
 
-    if (pageNum !== _readPage) {
+    if (pathName !== _readPage) {
       window.history.replaceState({}, _readPage + _documentText, url + (_readPage === 1 ? "" : _readPage + _documentText));
-      getPageNum(_readPage);  //Parent 인 ContentView 로 pageNum 전달, page 에 따른 문서 설명 전환 용. redux 로 대체 가능
+      getPageNum(_readPage);  //Parent 인 ContentView 로 pathName 전달, page 에 따른 문서 설명 전환 용. redux 로 대체 가능
     }
   };
 
@@ -106,6 +119,7 @@ class ContentViewCarousel extends React.Component {
 
       this.setState({ emailFlag: false }, () => {
         handleEmailFlag(false);
+
         // email 입력 모달 on/off 함수
         if (page > 0 && !getMyInfo.email && !emailFlagTemp && !ss) {
           this.setState({ emailFlag: true }, () => {
@@ -123,18 +137,9 @@ class ContentViewCarousel extends React.Component {
   // 문서 옵션 useTracking true 일때만
   handleTracking = async page => {
     const { target, handleEmailFlag, getMyInfo, setMyInfo, getTempEmail } = this.props;
-    const { emailFlagTemp, readPage, emailFlag } = this.state;
+    const { emailFlagTemp, emailFlag } = this.state;
 
-    if ((page === null || page === undefined) && target.forceTracking) {
-      this.setState({ emailFlag: false }, () => handleEmailFlag(false));
-    }
-
-    if (page === readPage) return;
-    // 같은 페이지 일 경우
-
-    // url 페이지 파라미터 값 변경
-    this.setState({ readPage: page, stayTime: Date.now() }, () => this.handleUrl());
-
+    if (!this.checkTrackingQualified(page)) return false;
 
     // 트래킹 / 강제 트래킹 분기처리
     if (target.useTracking) {
@@ -222,8 +227,7 @@ class ContentViewCarousel extends React.Component {
 
 
   componentWillMount() {
-    let pageNum = this.getPageNum();
-
+    let pageNum = common_view.getPageNum();
     if (MainRepository.Account.isAuthenticated()) this.postTrackingConfirm(pageNum);
     else this.handleTracking(pageNum);
   }

@@ -1,33 +1,21 @@
 import ReduxTypes from "../config/ReduxTypes";
 
-
-const delay = (ms) => new Promise(resolve =>
-  setTimeout(resolve, ms)
-);
-
 // 액션 생성자
-export function setDropdownShow(dropdownShow: boolean, callback) {
-  return (dispatch) => {
-    dispatch({ type: ReduxTypes.SET_DROPDOWN_SHOW, dropdownShow });
-    return delay(100).then(() => {
-      //callback();
-    })
-  };
-}
-
+export const setAway = (away: boolean) => ({ type: ReduxTypes.SET_AWAY, away });
 
 // 초기 상태
 const initState = {
-  dropdownShow: false,
+  away: false,
 };
+
 
 // 리듀서
 export default (state = initState, action: any) => {
   switch (action.type) {
-    case ReduxTypes.SET_DROPDOWN_SHOW:
+    case ReduxTypes.SET_AWAY:
       return {
         ...state,
-        dropdownShow: action.dropdownShow
+        away: action.away
       };
     default:
       return state;

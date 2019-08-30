@@ -46,7 +46,7 @@ class ContentViewFullScreen extends Component {
 
   // 초기화
   init = () => {
-    if(APP_PROPERTIES.ssr) return;
+    if (APP_PROPERTIES.ssr) return;
 
     log.ContentViewFullscreen.init();
     this.getReward();
@@ -209,9 +209,7 @@ class ContentViewFullScreen extends Component {
         <div className="view_top">
           <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
                                         tracking={true} handleEmailFlag={this.handleEmailFlag}
-                                        getPageNum={(page) => {
-                                          this.getPageNum(page);
-                                        }}/>
+                                        getPageNum={page => this.getPageNum(page)}/>
           <a className="view_screen" href={APP_PROPERTIES.domain().viewer + documentData.seoTitle} target="_blank"
              rel="noopener noreferrer">
             <i title="viewer button" className="material-icons">fullscreen</i>

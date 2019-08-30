@@ -123,15 +123,14 @@
     "start": "set PORT=8000 && node scripts/start.js",
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
-    "build": "set NODE_ENV_SUB=development&& node scripts/create.robots.js && npm run build-css && node scripts/build.js",
-    "build:production": "set NODE_ENV_SUB=production&& node scripts/create.robots.js && npm run build-css && node scripts/build.js",
-    "build:ssr": "npm run build:development && npm run build && npm run build-css && node scripts/build.js && node scripts/build.server.js",
-    "build:ssr:local": "set NODE_ENV_SUB=ssr_local&& node scripts/create.robots.js && npm run build-css && node scripts/build.js && node scripts/build.server.js",
-    "build:ssr:production": "npm run build:production && npm run build-css && node scripts/build.js && node scripts/build.server.js",
+    "build": "node scripts/create.robots.js && npm run build-css && node scripts/build.js",
+    "build:ssr": "set NODE_ENV_SUB=development&& npm run build && node scripts/build.server.js",
     "invaildate": "aws cloudfront create-invalidation --distribution-id EDFUPNJU9XKGX --paths /*",
     "invaildate:production": "aws cloudfront create-invalidation --distribution-id E1UYELY2K59G6Q --paths /*",
-    "deploy": "npm run build && aws s3 sync build/ s3://share.decompany.io --cache-control max-age=60 --acl public-read && npm run invaildate",
-    "deploy:production": "npm run build:production && aws s3 sync build/ s3://www.polarishare.com --cache-control max-age=60 && npm run invaildate:production"
+    "deploy": "set NODE_ENV_SUB=development&&npm run build && aws s3 sync build/ s3://share.decompany.io --cache-control max-age=60 --acl public-read && npm run invaildate",
+    "deploy:production": "set NODE_ENV_SUB=production&&npm run build:production && aws s3 sync build/ s3://www.polarishare.com --cache-control max-age=60 && npm run invaildate:production",
+    "deploy:ssr_local": "set NODE_ENV_SUB=ssr_local&& npm run build && npm run build:ssr",
+    "deploy:ssr": "npm run build:ssr && scp -i ../../my-key-pair/dev-decompany.pem -r build/ ec2-user@ec2-13-57-41-84.us-west-1.compute.amazonaws.com:~/decompanyio-web-server"
   },
   "browserslist": [
     ">0.2%",

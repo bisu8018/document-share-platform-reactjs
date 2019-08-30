@@ -274,7 +274,7 @@ export default {
       return AuthService.GET.profileGet(params)
         .then(result => {
           if (result.user) return new UserInfo(result.user);
-          else return result.message;
+          else return result;
         })
         .catch(err => err);
     },

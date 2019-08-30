@@ -30,7 +30,7 @@ class Creator extends React.Component {
   init = () => {
     const { getMyInfo } = this.props;
 
-    if(APP_PROPERTIES.ssr) return;
+    if (APP_PROPERTIES.ssr) return;
 
     log.Creator.init();
     let presentValue = this.getParam(), params = {};
@@ -43,13 +43,30 @@ class Creator extends React.Component {
   };
 
 
+  // 잘못된 접근, 404 페이지 이동
+  wrongAccess = () => {
+    const { setAlertCode } = this.props;
+    this.props.history.push({
+      pathname: "/404",
+      state: { errMessage: psString("profile-err-1") }
+    });
+    setAlertCode(2002);
+  };
+
+
   // 프로필 정보 GET
   getProfileInfo = (params: any) => {
     MainRepository.Account.getProfileInfo(params)
-      .then(result => this.setState({
-        userInfo: result,
-        errMessage: null
-      }, () => log.Creator.getProfileInfo(null, result)))
+      .then(result => {
+          if (result.message) this.wrongAccess();
+          else {
+            this.setState({
+              userInfo: result,
+              errMessage: null
+            }, () => log.Creator.getProfileInfo(null, result));
+          }
+        }
+      )
       .catch(err => this.setState({ userInfo: null, errMessage: err }, () => log.Creator.getProfileInfo(err)));
   };
 
@@ -74,7 +91,7 @@ class Creator extends React.Component {
     const { getMyInfo } = this.props;
     const { userInfo, errMessage, uploadDocumentList, voteDocumentList } = this.state;
 
-    if(APP_PROPERTIES.ssr)  return (<LoadingModal/>);
+    if (APP_PROPERTIES.ssr) return (<LoadingModal/>);
 
     let param = this.getParam();
 

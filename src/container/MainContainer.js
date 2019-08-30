@@ -21,7 +21,8 @@ export default connect(
     getWeb3Apis: state.main.web3Apis,
     getDrizzle: state.main.drizzleApis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
-    getAlertCode: state.main.alertCode
+    getAlertCode: state.main.alertCode,
+    getAway: state.header.away,
   }),
   dispatch => ({
     setInitComplete: (initComplete: boolean) => dispatch(setInitComplete(initComplete)),

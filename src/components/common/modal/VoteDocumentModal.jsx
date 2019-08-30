@@ -34,10 +34,7 @@ class VoteDocumentModal extends React.Component {
 
 
   // Deck 예금 값 입력 캐치
-  onChangeDeposit = e =>
-    this.setState({ deposit: e.target.value }, () => {
-      this.validateDeposit();
-    });
+  onChangeDeposit = e => this.setState({ deposit: e.target.value }, () => this.validateDeposit());
 
 
   //예금 값 유효성 체크
@@ -48,9 +45,8 @@ class VoteDocumentModal extends React.Component {
       if (deposit <= 0) errMsg = psString("vote-modal-err-1");
       else if (deposit > Number(Common.toDeck(balance).toFixed(2))) errMsg = psString("vote-modal-err-2");
 
-      this.setState({ deckError: errMsg }, () => {
-        resolve(errMsg);
-      });
+      this.setState({ deckError: errMsg },
+        () => resolve(errMsg));
     });
   };
 
@@ -58,7 +54,7 @@ class VoteDocumentModal extends React.Component {
   //모달 종료시, 값 clear
   clearVoteInfo = () => {
     const { voteStatus } = this.state;
-    if (voteStatus !== "INIT" && voteStatus !== "COMPLETE") return;
+    if (voteStatus !== "INIT" && voteStatus !== "ALLOWANCE" && voteStatus !== "COMPLETE") return;
 
     document.getElementById("deposit").value = null;
 
@@ -69,7 +65,7 @@ class VoteDocumentModal extends React.Component {
       deposit: 0,
       balance: -1,
       deckError: "",
-      closeFlag: false,
+      closeFlag: false
     });
 
     return Promise.resolve();
@@ -82,14 +78,14 @@ class VoteDocumentModal extends React.Component {
     if (voteStatus !== "INIT" || balance <= 0) return;
     let v = await this.validateDeposit();
 
-    if (v === "") this.handleProcess();
+    if (v === "") return this.handleProcess();
   };
 
 
   // 모달 숨기기 클래스 추가
-  setCloseFlag = () =>
-    new Promise(resolve =>
-      this.setState({ closeFlag: true }, () => resolve()));
+  setCloseFlag = () => new Promise(resolve =>
+    this.setState({ closeFlag: true }, () => resolve())
+  );
 
 
   // [Step 1] : Allowance GET
@@ -98,10 +94,10 @@ class VoteDocumentModal extends React.Component {
     const { deposit, approve } = this.state;
 
     let ethAccount = getMyInfo.ethAccount;
-    let allowance = await getWeb3Apis.getAllowance(ethAccount).then((res) => {
-      this.setState({ voteStatus: "ALLOWANCE" }, () => {
-        this.handleClickClose("classicModal");
-      });
+    let allowance = await getWeb3Apis.getAllowance(ethAccount).then(res => {
+      this.setState({ voteStatus: "ALLOWANCE"}, () =>
+        this.handleClickClose("classicModal")
+      );
       return res;
     });
 
@@ -133,6 +129,7 @@ class VoteDocumentModal extends React.Component {
     return new Promise((resolve, reject) => {
       getDrizzle.approve(String(deposit)).then((res) => {
         this.setState({ voteStatus: "APPROVE" });
+
         if (res === "success")
           resolve(res);
         else
@@ -162,41 +159,30 @@ class VoteDocumentModal extends React.Component {
     const { documentData, getDrizzle } = this.props;
 
     if (!documentData || !getDrizzle.isAuthenticated()) return;
-    let allowance, approve;
+    let allowance = await this.handleAllowance();    // 1단계 : Allowance GET 및 검증 (투표액 > 허용액 : 2단계로, 투표액 <= 허용액 : 3단계로)
 
-    allowance = await this.handleAllowance();    // 1단계 : Allowance GET 및 검증 (투표액 > 허용액 : 2단계로, 투표액 <= 허용액 : 3단계로)
-
-    if (allowance === false) {
-      approve = await this.handleApprove();    // 2단계 : Approve 진행
-      if (approve === "success")
-        this.handleVote();
-
-    } else if (allowance === true)
-      this.handleVote();   // 3단계 : Vote 진행
+    if (allowance === false && await this.handleApprove() === "success") this.handleVote();     // 2단계 : Approve 진행
+    else if (allowance === true) this.handleVote();    // 3단계 : Vote 진행
   };
 
 
+  // 투표 실패
   handleFailed = () => {
     const { setAlertCode } = this.props;
 
-    this.setState({ voteStatus: "INIT", deposit: 0 }, () => {
-      document.getElementById("deposit").value = null;
-    });
+    this.setState({ voteStatus: "INIT", deposit: 0 }
+      //document.getElementById("deposit").value = null
+    );
     setAlertCode(2034);
   };
 
   //모달 오픈
   handleClickOpen = modal => {
     const { getDrizzle, getMyInfo } = this.props;
+
     if (getDrizzle && !getDrizzle.isAuthenticated()) return null;
-    if (!getMyInfo.ethAccount) {
-      this.setState({ msg: "Please log in to the Meta Mask." });
-      return;
-    }
-    if (getMyInfo.ethAccount !== getDrizzle.getLoggedInAccount()) {
-      this.setState({ msg: psString("b-error-1") });
-      return;
-    }
+    if (!getMyInfo.ethAccount) return this.setState({ msg: "Please log in to the Meta Mask." });
+    if (getMyInfo.ethAccount !== getDrizzle.getLoggedInAccount()) return this.setState({ msg: psString("b-error-1") });
 
     this.setState({ msg: psString("vote-modal-tooltip-1") }, () => {
       const x = [];
@@ -216,7 +202,6 @@ class VoteDocumentModal extends React.Component {
       .then(() => this.handleClose(modal));
 
 
-
   // 모달 종료
   handleClose = modal => {
     const x = [];
@@ -227,15 +212,13 @@ class VoteDocumentModal extends React.Component {
 
 
   // 키 다운 관리
-  handleKeyDown = (e) => {
-    if (e.keyCode === 13) this.onClickVote();
+  handleKeyDown = e => {
+    if (e.keyCode === 13) return this.onClickVote();
   };
 
 
   // 로그인
-  handleLogin = () => {
-    MainRepository.Account.login();
-  };
+  handleLogin = () => MainRepository.Account.login();
 
 
   // 밸런스 정보 GET
@@ -250,23 +233,19 @@ class VoteDocumentModal extends React.Component {
 
     let ethAccount = getMyInfo.ethAccount;
 
-    if (ethAccount) {
-      getWeb3Apis.getBalance(ethAccount, res => {
-        return res;
-      });
-    }
+    if (ethAccount) return getWeb3Apis.getBalance(ethAccount, res => res);
   };
 
 
   componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
     const { getWeb3Apis, getMyInfo } = this.props;
     const { balance } = this.state;
-    let address = getMyInfo.ethAccount;
-    if (!address || balance >= 0) return false;
-    getWeb3Apis.getBalance(getMyInfo.ethAccount, res => {
-      this.setState({ balance: res });
-    });
+
+    if (!getMyInfo.ethAccount || balance >= 0) return false;
+
+    getWeb3Apis.getBalance(getMyInfo.ethAccount, res => this.setState({ balance: res }));
   }
+
 
   render() {
     const { documentData, getDrizzle, getMyInfo } = this.props;

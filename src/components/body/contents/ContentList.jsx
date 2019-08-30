@@ -160,7 +160,7 @@ class ContentList extends Component {
             next={this.fetchMoreData}
             hasMore={!isEndPage}
           >
-            {resultList.length > 0 && resultList.map((result) => (
+            {resultList.length > 0 && resultList.map(result => (
               <ContentListItemContainer key={result.documentId + result.accountId} result={result}
                                         totalViewCountInfo={totalViewCountInfo}/>
             ))}

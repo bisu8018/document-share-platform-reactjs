@@ -20,7 +20,7 @@ class ContentMain extends Component {
 
   // 초기화
   init = () => {
-    if(APP_PROPERTIES.ssr) return;
+    if (APP_PROPERTIES.ssr) return;
 
     log.ContentMain.init();
     // 추천문서 목록 GET
@@ -63,7 +63,7 @@ class ContentMain extends Component {
 
 
   // 사이트 path 체크
-  getList = (path) => {
+  getList = path => {
     const { latestDocuments, featuredDocuments, popularDocuments } = this.state;
     let _path = this.getEngPath(path);
     return _path === "latest" ? latestDocuments : _path === "featured" ? featuredDocuments : popularDocuments;
@@ -77,7 +77,10 @@ class ContentMain extends Component {
 
 
   // 검색 버튼 트리거
-  handleTagClick = () => document.getElementById("headerSearchBtnWrapper").click();
+  handleTagClick = () => {
+    const ele = document.getElementById("headerSearchBtnWrapper");
+    return ele ? ele.click() : false;
+  };
 
 
   // 업로드 버튼
@@ -98,7 +101,8 @@ class ContentMain extends Component {
   // 스크롤 이벤트 리스너 종료
   handleResizeEnd = (e) => {
     log.ContentMain.handleResizeEnd();
-    window.removeEventListener("resize", () => {});
+    window.removeEventListener("resize", () => {
+    });
   };
 
 
@@ -178,7 +182,7 @@ class ContentMain extends Component {
                           <div className="main-upload-btn mr-2 ml-2 mb-3"
                                onClick={() => this.handleLogin()}>{buttonText[idx]}</div>
                           :
-                          <div className="main-upload-btn mr-2 ml-2 mb-3"
+                          <div className="main-upload-btn mr-2 ml-2 mb-3" id="mainUploadBtnSearch"
                                onClick={() => this.handleTagClick()}>{buttonText[idx]}</div>
                       )
                       :
@@ -205,28 +209,31 @@ class ContentMain extends Component {
 
         <div className="col-12 content-main-container">
           <div className="u__center">
-            {category.map((arr, idx) => (
-              <div className="main-category" key={idx}>
+            {category.map((arr, idx) =>
+              this.getList(arr) && this.getList(arr).resultList.length > 0 &&
+               (
+                <div className="main-category" key={idx}>
 
-                <div className="mb-3">
-                  <span className="main-category-name">{arr}</span>
-                  <span className="main-category-see-all"
-                        onClick={() => this.handelTrigger(arr)}>{psString("main-see-all")}
-                    <i className="material-icons">keyboard_arrow_right</i></span>
+                  <div className="mb-3">
+                    <span className="main-category-name">{arr}</span>
+                    <span className="main-category-see-all"
+                          onClick={() => this.handelTrigger(arr)}>{psString("main-see-all")}
+                      <i className="material-icons">keyboard_arrow_right</i></span>
 
+                  </div>
+
+                  <div className="row main-category-card-wrapper">
+                    {this.getList(arr).resultList.map((res, idx) => {
+                      return (idx < latestListMany &&
+                        <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res}
+                                               countCards={latestListMany}
+                                               totalViewCountInfo={this.getList(arr).totalViewCountInfo}/>
+                      );
+                    })}
+                  </div>
                 </div>
-
-                <div className="row main-category-card-wrapper">
-                  {this.getList(arr) && this.getList(arr).resultList.map((res, idx) => {
-                    return (idx < latestListMany &&
-                      <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res}
-                                             countCards={latestListMany}
-                                             totalViewCountInfo={this.getList(arr).totalViewCountInfo}/>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+              )
+            )}
 
           </div>
         </div>

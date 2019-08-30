@@ -10,6 +10,7 @@ import NotFoundPage from "../../../common/NotFoundPage";
 import ContentViewFullScreenContainer
   from "../../../../container/body/contents/contentsView/ContentViewFullScreenContainer";
 import log from "../../../../config/log";
+import AwayModal from "../../../common/modal/AwayModal";
 
 
 class ContentView extends React.Component {
@@ -108,7 +109,7 @@ class ContentView extends React.Component {
 
 
   render() {
-    const { auth, match, ...rest } = this.props;
+    const { auth, match, getAway, ...rest } = this.props;
     const { documentData, documentText, totalViewCountInfo, featuredList, author, errMessage, update } = this.state;
 
     if (!documentData && !errMessage)
@@ -123,6 +124,8 @@ class ContentView extends React.Component {
         <Helmet>
           <title>{documentData.title}</title>
         </Helmet>
+
+        {getAway && <AwayModal documentData={documentData}/>}
 
         <ContentViewFullScreenContainer documentData={documentData} documentText={documentText}
                                         totalViewCountInfo={totalViewCountInfo} update={update}

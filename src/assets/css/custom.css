@@ -6423,7 +6423,7 @@ dean
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60px;
+    width: 55px;
     font-weight: bold;
     top: 0;
     border: 0;
@@ -6607,6 +6607,7 @@ dean
 }
 
 .view-option-btn {
+    display: none;
     cursor: pointer;
     position: absolute;
     right: 0;
@@ -7116,6 +7117,10 @@ Dean*/
     position: relative;
 }
 
+.u_center_inner:hover .view-option-btn {
+    display: inline-block !important;
+}
+
 .thumb_image {
     display: flex;
     align-items: center;
@@ -7186,8 +7191,10 @@ Dean*/
     border: 1px solid #CCCCCC;
 }
 
-.info_name > img:hover {
+.info_name:hover > img,
+.info_name:hover {
     border-color: #3d5afe;
+    color: #3681fe;
 }
 
 .info_name i {
@@ -7197,10 +7204,6 @@ Dean*/
     font-size: 24px;
     text-transform: none;
     color: #666666 !important;
-}
-
-.info_name:hover {
-    color: #3681fe;
 }
 
 .info_name > span {
@@ -7558,12 +7561,12 @@ Dean*/
 
 @media (max-width: 575px) {
     #classic-modal-slide-title,
-    .custom-modal-title{
+    .custom-modal-title {
         padding: 0 24px !important;
     }
 
     #classic-modal-slide-title > h3,
-    .custom-modal-title > h3{
+    .custom-modal-title > h3 {
         font-size: 20px !important;
     }
 
@@ -7613,7 +7616,7 @@ Dean*/
         max-width: 100%;
     }
 
-    .custom-modal{
+    .custom-modal {
         margin: 0 !important;
         max-height: 100% !important;
         height: 100% !important;
@@ -7621,7 +7624,7 @@ Dean*/
     }
 
     .dialog-title,
-    .custom-modal-title{
+    .custom-modal-title {
         font-size: 20px !important;
     }
 
@@ -8937,7 +8940,7 @@ Dean*/
     background-image: linear-gradient(to right, #5494ff, #307eff);
 }
 
-#classic-modal-slide-title > h3{
+#classic-modal-slide-title > h3 {
     padding-right: 60px;
     font-size: 25px;
     font-family: 'Poppins', 'Noto Sans KR', sans-serif !important;
@@ -9580,7 +9583,7 @@ contentMain 배너 카로셀*/
 /*2019-04-10
 dean
 자동 완성 라이브러리 CSS*/
-.react-tagsinput-tag{
+.react-tagsinput-tag {
     background-color: #56a9ef !important;
     border-radius: 2px;
     border: none !important;
@@ -10107,8 +10110,10 @@ Main Category CSS
     border: 1px solid #CCCCCC;
 }
 
-.main-category-card-profile > img:hover {
+.main-category-card-profile:hover  > img,
+.main-category-card-profile:hover .main-category-card-name {
     border-color: #3d5afe;
+    color: #0d73f8;
 }
 
 .main-category-card-profile i {
@@ -10130,10 +10135,6 @@ Main Category CSS
     top: 2px;
     color: #4d4d4d;
     position: relative;
-}
-
-.main-category-card-name:hover {
-    color: #0d73f8;
 }
 
 .main-category-card-date {
@@ -10979,9 +10980,9 @@ custom modal modal css*/
     position: relative;
     margin-bottom: 25px;
     padding: 0 24px;
-    background-image: -webkit-gradient(linear,left top,right top,from(#5494ff),to(#307eff));
-    background-image: -webkit-linear-gradient(left,#5494ff,#307eff);
-    background-image: linear-gradient(90deg,#5494ff,#307eff);
+    background-image: -webkit-gradient(linear, left top, right top, from(#5494ff), to(#307eff));
+    background-image: -webkit-linear-gradient(left, #5494ff, #307eff);
+    background-image: linear-gradient(90deg, #5494ff, #307eff);
     flex: 0 0 auto;
 }
 
@@ -10990,7 +10991,7 @@ custom modal modal css*/
     font-size: 25px;
     font-family: 'Poppins', 'Noto Sans KR', sans-serif !important;
     font-weight: 400;
-    margin: 15px 0 !important;
+    margin: 10px 0 !important;
     text-align: left;
 }
 
@@ -11018,7 +11019,7 @@ custom modal modal css*/
     flex: 0 1 auto;
     width: 100%;
     max-height: calc(100% - 96px);
-    box-shadow: 0 11px 15px -7px rgba(0,0,0,0.2), 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12);
+    box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
     border-radius: 4px;
     background-color: #fff;
     animation: kf-custom-modal ease-in-out 0.3s;
@@ -11026,29 +11027,29 @@ custom modal modal css*/
 
 .custom-hide {
     animation: kf-custom-hide ease-in-out 0.2s;
-    animation-fill-mode:forwards;
+    animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
 @keyframes kf-custom-modal {
-    0%{
+    0% {
         transform: scale(0);
     }
-    100%{
+    100% {
         transform: scale(1);
     }
 }
 
 @keyframes kf-custom-hide {
-    0%{
+    0% {
         transform: scale(1);
     }
-    100%{
+    100% {
         transform: scale(0);
     }
 }
 
-.custom-modal-wrapper{
+.custom-modal-wrapper {
     top: 0;
     left: 0;
     right: 0;
@@ -11062,7 +11063,7 @@ custom modal modal css*/
     transition: transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
 }
 
-.custom-modal-content  {
+.custom-modal-content {
     flex: 1 1 auto;
     padding: 0 24px 24px;
     overflow-y: auto;
@@ -11078,7 +11079,73 @@ custom modal modal css*/
     text-align: center;
     display: flex;
     flex: 0 0 auto;
-    margin-top: 1rem!important;
-    margin-bottom: .5rem!important;
+    margin-top: 1rem !important;
+    margin-bottom: .5rem !important;
 }
 
+
+/*2019-08-29
+dean
+away modal modal css*/
+
+.away-modal-desc {
+    text-align: center;
+    font-size: 18px;
+}
+
+.away-modal-desc > span{
+    margin: 0 10px;
+    color: #3681fe;
+    font-weight: bold;
+}
+
+.away-modal-on {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    top: 0;
+    left: 0;
+}
+
+.away-modal-on-wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0.8;
+    -webkit-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}
+
+.away-modal-on-container {
+    z-index: 1;
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+.away-modal-on-container > p:first-child {
+    font-size: 25px;
+    font-family: poppins, 'source-han-sans-korean', sans-serif;
+    margin-right: 20px;
+    margin-top: 5px;
+    font-weight: 400;
+}
+
+.away-modal-on-container > p:last-child {
+    font-size: 38px;
+    font-family: poppins, 'source-han-sans-korean', sans-serif;
+    font-weight: bold;
+    margin-top: 3px;
+    color: #3681fe;
+}
+
+
+.away-modal-on > span{
+    display: flex;
+    align-items: center;
+}

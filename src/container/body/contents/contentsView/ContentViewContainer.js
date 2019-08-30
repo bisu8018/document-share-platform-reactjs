@@ -4,7 +4,8 @@ import ContentView from "../../../../components/body/contents/contentsView/Conte
 export default connect(
   state => ({
     getWeb3Apis: state.main.web3Apis,
-    getDrizzle: state.main.drizzleApis
+    getDrizzle: state.main.drizzleApis,
+    getAway: state.header.away
   }),
   dispatch => ({
   })

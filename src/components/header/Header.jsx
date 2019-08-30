@@ -11,6 +11,7 @@ import { APP_PROPERTIES } from "properties/app.properties";
 import log from "../../config/log";
 import PrivateDocumentCountModal from "../common/modal/PrivateDocumentCountModal";
 import common_view from "../../common/common_view";
+import { Link } from "react-router-dom";
 
 //import Bounty from './Bounty';
 
@@ -27,7 +28,8 @@ class Header extends React.Component {
       selectedCategory: "/latest",
       adShow: true,
       mobileOpen: false,
-      path: null
+      path: null,
+      awayTime: 0
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
   }
@@ -38,8 +40,11 @@ class Header extends React.Component {
     if (APP_PROPERTIES.ssr) return;
 
     log.Header.init();
-    this.setState({ prevScrollPos: window.pageYOffset,path: common_view.getPath() }, () => {
+    this.setState({ prevScrollPos: window.pageYOffset, path: common_view.getPath() }, () => {
       this.clickEventListener();
+      this.mouseMoveEventListener();
+      this.keyDownEventListener();
+      this.checkAwayTime();
     });
   };
 
@@ -50,6 +55,20 @@ class Header extends React.Component {
     for (let i = 0; i < navElByClass.length; ++i) {
       navElByClass[i].classList.remove("on");
     }
+  };
+
+
+  // 자리비움 시간 체크 (10 분 지날 시 자리비움)
+  checkAwayTime = () => {
+    const { setAway } = this.props;
+
+    let t = 60000;  // 1 min
+
+    this.setInterval = setInterval(() => {
+      this.setState({ awayTime: Number(this.state.awayTime + t) }, () => {
+        if (this.state.awayTime >= t * 10) setAway(true);
+      });
+    }, t);
   };
 
 
@@ -68,26 +87,29 @@ class Header extends React.Component {
 
 
   // 검색바 보임
-  showSearchBar = () => {
-    this.setState({ searchBar: true }, () => {
-      /* const autoSuggestEle = document.getElementById('headerAutoSuggest').firstChild.firstChild;
-       autoSuggestEle.onMouseOut = function() {
-         alert('Clicked');
-       };
-       autoSuggestEle.focus();*/
-    });
-  };
+  showSearchBar = () => this.setState({ searchBar: true });
 
 
   // 검색 바 종료
   closeSearchBar = () => this.setState({ searchBar: false });
 
 
+  // 키다운 이벤트 리스너
+  keyDownEventListener = () => document.addEventListener("keydown", e => this.setAwayTime());
+
+
+  // 마우스 무브 이벤트 리스너
+  mouseMoveEventListener = () => document.addEventListener("mousemove", e => this.setAwayTime());
+
+
   // 클릭 이벤트 리스너
   clickEventListener = () => {
-    const { setDropdownShow, getMyInfo } = this.props;
+    const { getMyInfo } = this.props;
 
     document.addEventListener("click", e => {
+        // 자리비움 체크
+        this.setAwayTime();
+
         // clicked element
         let targetElement = e.target;
 
@@ -99,10 +121,6 @@ class Header extends React.Component {
         const headerAvatar = document.getElementById("header-avatar");
         if (profileCard && !profileCard.contains(targetElement) && !headerAvatar.contains(targetElement)) this.profileCardHide();
 
-        // 헤더 검색 카테고리 드롭다운
-        const dropdownList = document.getElementById("dropdownList");
-        if (dropdownList && !dropdownList.contains(targetElement)) setDropdownShow(false);
-
         // 뷰어페이지 옵션창
         const viewerOptionBtn = document.getElementById("viewer-option-btn");
         const viewerOptionTable = document.getElementById("viewer-option-table");
@@ -112,18 +130,20 @@ class Header extends React.Component {
         const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
         if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) {
           history.push("/" + getMyInfo.username);
+          this.setState({ adShow: false });
           this.profileCardHide();
         }
 
         // 검색 input
         const headerAutoSuggest = document.getElementById("headerAutoSuggest");
-
         if (headerAutoSuggest &&
           !headerAutoSuggest.contains(targetElement) &&
           "headerAutoSuggest" !== targetElement.id &&
           "headerSearchIcon" !== targetElement.id &&
           "headerSearchSelectBar" !== targetElement.id &&
           "headerSearchBtnWrapper" !== targetElement.id &&
+          "mobileHeaderSearchBtn" !== targetElement.id &&
+          "mainUploadBtnSearch" !== targetElement.id &&
           targetElement.classList[0] !== "react-autosuggest__input" &&
           targetElement.classList[0] !== "react-autosuggest__suggestion"
         ) this.closeSearchBar();
@@ -138,6 +158,14 @@ class Header extends React.Component {
 
   // 프로필 카드 숨김
   profileCardHide = () => this.setState({ profileCardShow: false });
+
+
+  // 자리비움 시간 SET
+  setAwayTime = () => {
+    const { getAway, setAway } = this.props;
+    if (this.state.awayTime > 0) this.setState({ awayTime: 0 });
+    if (getAway) setAway(false);
+  };
 
 
   // 화면 크기 이벤트 리스너
@@ -234,13 +262,13 @@ class Header extends React.Component {
             }
             <div className='col-4 col-md-3 mt-1'>
               {getIsMobile ?
-                <a className='navbar-brand-mobile' href={"/"}>
+                <Link to="/" className='navbar-brand-mobile'>
                   <img src={require("assets/image/logo-cut.png")} alt='POLARIS SHARE'/>
-                </a>
+                </Link>
                 :
-                <a className='navbar-brand' href={"/"}>
+                <Link to="/" className='navbar-brand'>
                   <img src={require("assets/image/logo.svg")} alt='POLARIS SHARE'/>
-                </a>
+                </Link>
               }
             </div>
 
@@ -276,7 +304,8 @@ class Header extends React.Component {
                 <i className='material-icons'>language</i>
                 {psGetLang() === "EN" ? "KR" : "EN"}
               </div>
-              <div className='mobile-header-search-btn d-inline-block d-sm-none' onClick={() => this.showSearchBar()}/>
+              <div className='mobile-header-search-btn d-inline-block d-sm-none' id="mobileHeaderSearchBtn"
+                   onClick={() => this.showSearchBar()}/>
               {/*<Bounty/>*/}
               {getMyInfo.privateDocumentCount >= 5 ?
                 <PrivateDocumentCountModal {...this.props} />
