@@ -114,8 +114,10 @@ class EmailModal extends React.Component {
     const { email } = this.state;
     const { handleTracking, documentId } = this.props;
 
+    this.setState({loading: true});
+
     if (this.validateEmail() && this.validateCheckBox()) {
-      const trackingInfo = TrackingApis.setTrackingInfo().then(res => res);
+      const trackingInfo = await TrackingApis.setTrackingInfo().then(res => res);
 
       let data = {
         "cid": trackingInfo.cid,
@@ -127,6 +129,7 @@ class EmailModal extends React.Component {
       await MainRepository.Tracking.postTrackingConfirm(data).then(() => {
         this.setSessionInfo(data);
         handleTracking();
+        this.setState({loading: false});
         this.handleClickClose();
       });
     }
