@@ -239,10 +239,9 @@ class CreatorTabItem extends React.Component {
 
     return (
 
-      <div className="row u_center_inner">
+      <div className={"row u_center_inner " + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? "not-convert-wrapper" : "")}>
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
-          <Link to={"/" + identification + "/" + documentData.seoTitle}
-                className={(documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
+          <Link to={"/" + identification + "/" + documentData.seoTitle}>
             <div className="tab-thumbnail" onClick={() => common_view.scrollTop()}>
               {documentData.state && documentData.state !== "CONVERT_COMPLETE" ?
                 <Tooltip title="Converting document..." placement="bottom">
@@ -275,8 +274,7 @@ class CreatorTabItem extends React.Component {
           </div>
           }
 
-          <Link to={"/" + identification + "/" + documentData.seoTitle}
-                className={(documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
+          <Link to={"/" + identification + "/" + documentData.seoTitle}>
             <div className="info_title mb-1"
                  onClick={() => common_view.scrollTop()}>
               {documentData.title ? documentData.title : documentData.documentName}

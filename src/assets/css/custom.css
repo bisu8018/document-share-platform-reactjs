@@ -537,7 +537,7 @@ mark,
 }
 
 .not-convert-wrapper {
-    pointer-events: none;
+    pointer-events: none !important;
 }
 
 .img-thumbnail {
@@ -6620,7 +6620,7 @@ dean
 }
 
 .view-option-btn > i {
-    color: darkgrey;
+    color: #828282;
 }
 
 .view-option-btn > i:hover {
@@ -9019,7 +9019,6 @@ Dean*/
 }
 
 .progress-modal-second {
-    background: white;
     border-radius: 100px;
     display: block;
     position: relative;
@@ -9046,7 +9045,7 @@ Dean*/
 }
 
 .progress-percent {
-    color: #656565;
+    color: black;
     font-size: 20px;
     position: absolute;
     z-index: 4;

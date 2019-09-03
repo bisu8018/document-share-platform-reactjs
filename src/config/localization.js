@@ -1344,6 +1344,10 @@ const strings = new Map([
     KOR: "귀하의 문서가 공개되었습니다!",
     ENG: "Your document is published!"
   }],
+  ["publish-modal-complete-explain", {
+    KOR: "이제 몇 시간 후부터는 검색엔진에서 당신의 문서가 검색될 것입니다. 외부에서 당신의 문서를 참조하는 링크가 많아지면 검색 결과의 상단에 노출되는데 도움이 됩니다.",
+    ENG: "After a few hours, your document will be retrieved from the search engine. More links to your documents from outside can help you reach the top of your search results."
+  }],
   ["publish-modal-complete-subject", {
     KOR: "당신의 문서를 세상에 공유해보세요.",
     ENG: "Share your document with the world."

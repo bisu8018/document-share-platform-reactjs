@@ -70,6 +70,7 @@ class PublishCompleteModal extends React.Component {
 
 
           <div className="custom-modal-content">
+            <div className="publish-modal-complete-subject mb-3">{psString("publish-modal-complete-explain")}</div>
             <div className="publish-modal-complete-subject mb-3">{psString("publish-modal-complete-subject")}</div>
 
             <div className="publish-modal-complete-sns mb-2">
@@ -102,7 +103,7 @@ class PublishCompleteModal extends React.Component {
               </TwitterShareButton>
             </div>
 
-            <div className="publish-modal-complete-sns"
+            <div className="publish-modal-complete-sns mb-4"
                  onClick={() => this.handleCopyBtnClick("publishModalCompleteCopyDummy")}>
               {copyBtnText}
               <input type="text" className="publish-modal-complete-copy-dummy" readOnly

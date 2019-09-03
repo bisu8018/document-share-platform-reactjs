@@ -78,7 +78,7 @@ class DeleteDocumentModal extends React.Component {
   handleDeleteAfter = () => {
     const { setAlertCode, documentData } = this.props;
 
-    if (common_view.getPaths().length > 2 && common_view.getPaths()[2] === documentData.seoTitle) {
+    if (common_view.getPaths().length > 2 && decodeURI(common_view.getPaths()[2]) === documentData.seoTitle) {
       history.push("/");
       setAlertCode(2076);
     } else

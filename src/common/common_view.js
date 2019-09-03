@@ -65,7 +65,7 @@ const common_view = ({
 
   getPath: () => {
     const pathArr = window.location.pathname.split("/");
-    return pathArr[1];
+    return decodeURI(pathArr[1]);
 
   },
 

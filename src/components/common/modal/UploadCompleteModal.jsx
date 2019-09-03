@@ -49,16 +49,16 @@ class UploadCompleteModal extends React.Component {
 
 
   // 링크 이동 관리
-  handleLinkBtn = (modal) => {
+  handleLinkBtn = modal => {
     this.handleClickClose(modal);
-    let username = this.props.username;
-    history.push("/" + username);
+    let identifier = this.props.identifier;
+    history.push("/" + identifier);
   };
 
 
   render() {
     const { closeFlag } = this.state;
-    const { privateDocCount, username } = this.props;
+    const { privateDocCount, identifier } = this.props;
 
     return (
       <div className="custom-modal-container">
@@ -78,7 +78,7 @@ class UploadCompleteModal extends React.Component {
               <div>{psString("upload-doc-desc-2") + psString("upload-doc-desc-4-a") + privateDocCount + psString("upload-doc-desc-4-b")}</div>
             }
           </div>
-          {username === common_view.getPath() ?
+          {identifier === common_view.getPath() ?
             <div className="custom-modal-footer">
               <div onClick={() => this.handleCloseOnMyPage()}
                    className="ok-btn">{psString("common-modal-confirm")}</div>

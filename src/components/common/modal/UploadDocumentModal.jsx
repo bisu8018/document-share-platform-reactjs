@@ -40,7 +40,7 @@ class UploadDocumentModal extends React.Component {
       nd: false,   //CC License nd 사용유무
       sa: false,   //CC License sa 사용유무
       moreOptions: false,    // more options show / hide
-      username: null,
+      identifier: null,
       desc: "",
       privateDocCount: false    // 프라이빗 문서 5개 체크
     };
@@ -75,7 +75,7 @@ class UploadDocumentModal extends React.Component {
       nd: false,   //CC License nd 사용유무
       sa: false,   //CC License sa 사용유무
       moreOptions: false,    // more options show / hide
-      username: null,
+      identifier: null,
       desc: ""
     });
   };
@@ -230,7 +230,7 @@ class UploadDocumentModal extends React.Component {
   handleClickOpen = modal => {
     const { getMyInfo } = this.props;
 
-    this.setState({ username: getMyInfo.username || getMyInfo.email }, () => {
+    this.setState({ identifier: getMyInfo.username || getMyInfo.email }, () => {
       if (modal === "classicModal" && getMyInfo.privateDocumentCount > 0) this.props.setAlertCode(2074);
       this.handleOpen(modal).then(() => common_view.setBodyStyleLock());
     });
@@ -397,7 +397,7 @@ class UploadDocumentModal extends React.Component {
 
 
   render() {
-    const { privateDocCount, classicModal, classicModalSub, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload, username, closeFlag } = this.state;
+    const { privateDocCount, classicModal, classicModalSub, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload, identifier, closeFlag } = this.state;
     const { type } = this.props;
 
     return (
@@ -548,7 +548,7 @@ class UploadDocumentModal extends React.Component {
             <div className="progress-modal" id="progressModal">
               <div className="progress-modal-second">
                 <div className="progress-percent">{percentage}%</div>
-                <Circle size={100} color={"#3681fe"}/>
+                <Circle size={100} color={"#0089ff"}/>
               </div>
             </div>
           </div>
@@ -556,7 +556,7 @@ class UploadDocumentModal extends React.Component {
         }
 
 
-        {classicModalSub && <UploadCompleteModal privateDocCount={privateDocCount} username={username} closeSubModal={()=>this.handleClickClose()}/>}
+        {classicModalSub && <UploadCompleteModal privateDocCount={privateDocCount} identifier={identifier} closeSubModal={()=>this.handleClickClose()}/>}
 
         </span>
     );

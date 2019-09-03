@@ -129,7 +129,6 @@ class Header extends React.Component {
         // 프로필 카드 프로필 버튼
         const profileCardMyAccountBtn = document.getElementById("profileCardMyAccountBtn");
         if (profileCardMyAccountBtn && profileCardMyAccountBtn.contains(targetElement)) {
-          console.log(123)
           history.push("/" + getMyInfo.username);
           this.setState({ adShow: false });
           this.profileCardHide();
