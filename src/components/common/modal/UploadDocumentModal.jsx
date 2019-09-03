@@ -1,12 +1,12 @@
 import React from "react";
 import AutoSuggest from "react-autosuggest";
 import TagsInput from "react-tagsinput";
-import history from "apis/history/history";
 import MainRepository from "../../../redux/MainRepository";
 import { Circle } from "better-react-spinkit";
 import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
 import common from "../../../common/common";
+import UploadCompleteModal from "./UploadCompleteModal";
 
 
 class UploadDocumentModal extends React.Component {
@@ -82,11 +82,10 @@ class UploadDocumentModal extends React.Component {
 
 
   // 프라이빗 문서 보유수 체크
-  checkPrivateDoc = (res) => {
+  checkPrivateDoc = res =>
     this.setState({ privateDocCount: res.privateDocumentCount }, () => {
-      this.handleClickOpen("classicModalSub"); //두번째 모달 열기
+      this.setState({ classicModalSub: true });  //두번째 모달 열기
     });
-  };
 
 
   // 문서 등록 API
@@ -151,9 +150,8 @@ class UploadDocumentModal extends React.Component {
 
 
   // 모달 숨기기 클래스 추가
-  setCloseFlag = () =>
-    new Promise(resolve =>
-      this.setState({ closeFlag: true }, () => resolve()));
+  setCloseFlag = () => new Promise(resolve =>
+    this.setState({ closeFlag: true }, () => resolve()));
 
 
   // 진행도 모달 닫기
@@ -189,30 +187,27 @@ class UploadDocumentModal extends React.Component {
       console.error(err);
       setAlertCode(2071);
       this.handleClose("classicModal"); //모달 닫기
-      this.handleClose("classicModalSub"); //모달2 닫기
+      this.setState({ classicModalSub: false }); //모달2 닫기
     });
   };
 
 
-  // 업로드 버튼 관리
+  // 업로드 버튼 관리, input 값 유효성 검사
   handleUploadBtn = () => {
-    // input 값 유효성 검사
     if (!this.validateTitle() || !this.validateFile() || !this.validateTag()) return false;
     this.handleUpload();
   };
 
 
   // 파일 업로드 로딩 바 핸들 함수
-  handleProgress = (e) => {
+  handleProgress = e => {
     let percent = Math.round((e.loaded / e.total) * 100);
-    if (percent !== null) {
-      this.setState({ percentage: percent });
-    }
+    if (percent !== null) this.setState({ percentage: percent });
   };
 
 
   //file input 등록/변경 시
-  handleFileChange = (e) => {
+  handleFileChange = e => {
     const file = e[0];
     if (!file) return false;
     let filename = file.name,
@@ -235,9 +230,7 @@ class UploadDocumentModal extends React.Component {
   handleClickOpen = modal => {
     const { getMyInfo } = this.props;
 
-    let username = getMyInfo.username;
-    let _username = username ? username : getMyInfo.ethAccount;
-    this.setState({ username: _username }, () => {
+    this.setState({ username: getMyInfo.username || getMyInfo.email }, () => {
       if (modal === "classicModal" && getMyInfo.privateDocumentCount > 0) this.props.setAlertCode(2074);
       this.handleOpen(modal).then(() => common_view.setBodyStyleLock());
     });
@@ -271,13 +264,6 @@ class UploadDocumentModal extends React.Component {
   };
 
 
-  // 마이페이지에서 모달 종료 관리
-  handleCloseOnMyPage = () => {
-    this.handleClickClose();
-    document.location.reload();
-  };
-
-
   // 제목 변경 관리
   handleTitleChange = e => this.setState({ title: e.target.value }, () => this.validateTitle());
 
@@ -293,59 +279,34 @@ class UploadDocumentModal extends React.Component {
   // 유저 트래킹 체크박스
   handleTrackingCheckbox = () => {
     const { useTracking } = this.state;
-    let newValue = !useTracking;
-    this.setState({ useTracking: newValue }, () => {
+    this.setState({ useTracking: !useTracking }, () => {
       if (!useTracking) this.setState({ forceTracking: false });
     });
   };
 
 
   // 강제 트래킹 체크박스
-  handleForceTrackingCheckbox = () => {
-    const { forceTracking } = this.state;
-    let newValue = !forceTracking;
-    this.setState({ forceTracking: newValue });
-  };
+  handleForceTrackingCheckbox = () => this.setState({ forceTracking: !this.state.forceTracking });
 
 
   // 강제 트래킹 체크박스
-  handleAllowDownloadCheckbox = () => {
-    const { allowDownload } = this.state;
-    let newValue = !allowDownload;
-    this.setState({ allowDownload: newValue });
-  };
+  handleAllowDownloadCheckbox = () => this.setState({ allowDownload: !this.state.allowDownload });
 
 
   // CC License by 체크박스
-  handleCcByCheckbox = () => {
-    const { by } = this.state;
-    let newValue = !by;
-    this.setState({ by: newValue });
-  };
+  handleCcByCheckbox = () => this.setState({ by: !this.state.by });
 
 
   // CC License nc 체크박스
-  handleCcNcCheckbox = () => {
-    const { nc } = this.state;
-    let newValue = !nc;
-    this.setState({ nc: newValue });
-  };
+  handleCcNcCheckbox = () => this.setState({ nc: !this.state.nc });
 
 
   // CC License nd 체크박스
-  handleCcNdCheckbox = () => {
-    const { nd } = this.state;
-    let newValue = !nd;
-    this.setState({ nd: newValue });
-  };
+  handleCcNdCheckbox = () => this.setState({ nd: !this.state.nd });
 
 
   // CC License nc 체크박스
-  handleCcSaCheckbox = () => {
-    const { sa } = this.state;
-    let newValue = !sa;
-    this.setState({ sa: newValue });
-  };
+  handleCcSaCheckbox = () => this.setState({ sa: !this.state.sa });
 
 
   // more 옵션 관리
@@ -368,21 +329,10 @@ class UploadDocumentModal extends React.Component {
   };
 
 
-  // 링크 이동 관리
-  handleLinkBtn = (modal) => {
-    this.handleClickClose(modal);
-    let username = this.props.getMyInfo.username;
-    history.push("/" + username);
-  };
-
-
   //제목 유효성 체크
   validateTitle = () => {
     const { title } = this.state;
-    this.setState({
-      titleError:
-        title.length > 0 ? "" : psString("edit-doc-error-1")
-    });
+    this.setState({ titleError: title.length > 0 ? "" : psString("edit-doc-error-1") });
     return title.length > 0;
   };
 
@@ -390,10 +340,7 @@ class UploadDocumentModal extends React.Component {
   //태그 유효성 체크
   validateTag = () => {
     const { tags } = this.state;
-    this.setState({
-      tagError:
-        tags.length > 0 ? "" : psString("edit-doc-error-2")
-    });
+    this.setState({ tagError: tags.length > 0 ? "" : psString("edit-doc-error-2") });
     return tags.length > 0;
   };
 
@@ -609,38 +556,7 @@ class UploadDocumentModal extends React.Component {
         }
 
 
-        {classicModalSub &&
-        <div className="custom-modal-container">
-          <div className="custom-modal-wrapper"/>
-          <div className={"custom-modal " + (closeFlag ? "custom-hide" : "")}>
-
-
-            <div className="custom-modal-title">
-              <i className="material-icons modal-close-btn"
-                 onClick={() => this.handleClickClose("classicModalSub")}>close</i>
-              <h3>{psString("upload-doc-subj-2")}</h3>
-            </div>
-
-            <div className="custom-modal-content tal">
-              {privateDocCount >= 5 ?
-                <div>{psString("upload-doc-desc-3")}</div> :
-                <div>{psString("upload-doc-desc-2") + psString("upload-doc-desc-4-a") + privateDocCount + psString("upload-doc-desc-4-b")}</div>
-              }
-            </div>
-            {username === common_view.getPath() ?
-              <div className="custom-modal-footer">
-                <div onClick={() => this.handleCloseOnMyPage()}
-                     className="ok-btn">{psString("common-modal-confirm")}</div>
-              </div> :
-              <div className="custom-modal-footer">
-                <div onClick={() => this.handleClickClose()} className="ok-btn">{psString("common-modal-confirm")}</div>
-                <div onClick={() => this.handleLinkBtn()}
-                     className="ok-btn ml-2">{psString("private-doc-modal-btn")}</div>
-              </div>
-            }
-          </div>
-        </div>
-        }
+        {classicModalSub && <UploadCompleteModal privateDocCount={privateDocCount} username={username} closeSubModal={()=>this.handleClickClose()}/>}
 
         </span>
     );

@@ -58,8 +58,13 @@ class CreatorTabItem extends React.Component {
 
         // 뷰어페이지 옵션창
         const viewerOptionBtn = document.getElementById("viewer-option-btn-" + idx),
-          viewerOptionTable = document.getElementById("viewer-option-table-" + idx);
-        if (viewerOptionBtn && !viewerOptionBtn.contains(targetElement)) viewerOptionTable.classList.add("d-none");
+          viewerOptionTable = document.getElementById("viewer-option-table-" + idx),
+          viewerOptionIcon = document.getElementById("view-option-icon-" + idx);
+
+        if (viewerOptionBtn && !viewerOptionBtn.contains(targetElement)) {
+          viewerOptionTable.classList.add("d-none");
+          viewerOptionIcon.classList.remove("d-inline-block");
+        }
       }
     );
   };
@@ -179,8 +184,12 @@ class CreatorTabItem extends React.Component {
   };
 
 
-  // 설정창 관리
-  handleSetting = () => document.getElementById("viewer-option-table-" + this.props.idx).classList.remove("d-none");
+  // display: inline-block 추가
+  addInlineBlock = e => Promise.resolve(e.target.classList.add("d-inline-block"));
+
+
+  // 설정창 표시
+  showSetting = () => document.getElementById("viewer-option-table-" + this.props.idx).classList.remove("d-none");
 
 
   // 클릭 이벤트 리스너 종료
@@ -254,7 +263,7 @@ class CreatorTabItem extends React.Component {
         <div className="col-12 col-sm-9 col-lg-10 p-0">
           {documentData.accountId === common_view.getMySub() &&
           <div className="view-option-btn top-0 right-0" id={"viewer-option-btn-" + idx}>
-            <i className="material-icons" onClick={() => this.handleSetting()}>more_vert</i>
+            <i className="material-icons" id={"view-option-icon-" + idx} onClick={e => this.addInlineBlock(e).then(this.showSetting())}>more_vert</i>
             <div className="option-table d-none" id={"viewer-option-table-" + idx}>
               {documentData.state === "CONVERT_COMPLETE" &&
               <CopyModalContainer documentData={documentData} type="onlyIcon"/>}

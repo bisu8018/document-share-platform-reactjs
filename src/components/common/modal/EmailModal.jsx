@@ -112,7 +112,7 @@ class EmailModal extends React.Component {
   // 보내기 버튼 클릭 시
   handleSendBtn = async () => {
     const { email } = this.state;
-    const { handleTracking, documentId } = this.props;
+    const { handleTracking, documentId, documentData } = this.props;
 
     this.setState({ loading: true });
 
@@ -128,7 +128,7 @@ class EmailModal extends React.Component {
 
       await MainRepository.Tracking.postTrackingConfirm(data).then(() => {
         this.setSessionInfo(data);
-        handleTracking(common_view.getPageNum() > this.props.target.totalPages ? 0 : common_view.getPageNum());
+        handleTracking(common_view.getPageNum() > documentData.totalPages ? 0 : common_view.getPageNum());
         this.setState({ loading: false });
         this.handleClickClose();
       });

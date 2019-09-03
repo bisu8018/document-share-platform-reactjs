@@ -1,5 +1,4 @@
 import React from "react";
-import { ThreeBounce } from "better-react-spinkit";
 import { Helmet } from "react-helmet";
 import { APP_PROPERTIES } from "properties/app.properties";
 
@@ -11,6 +10,8 @@ import ContentViewFullScreenContainer
   from "../../../../container/body/contents/contentsView/ContentViewFullScreenContainer";
 import log from "../../../../config/log";
 import AwayModal from "../../../common/modal/AwayModal";
+import ContentViewFullScreenMock from "../../../common/mock/ContentViewFullScreenMock";
+import ContentViewRightMock from "../../../common/mock/ContentViewRightMock";
 
 
 class ContentView extends React.Component {
@@ -112,32 +113,37 @@ class ContentView extends React.Component {
     const { auth, match, getAway, ...rest } = this.props;
     const { documentData, documentText, totalViewCountInfo, featuredList, author, errMessage, update } = this.state;
 
-    if (!documentData && !errMessage)
-      return (<div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>);
-
-    if ((!documentData && errMessage) || (documentData && documentData.state !== "CONVERT_COMPLETE"))
+    if (errMessage || (documentData && documentData.state !== "CONVERT_COMPLETE"))
       return (errMessage && <NotFoundPage errMessage={errMessage}/>);
 
+    if (documentData) {
+      return (
+        <section data-parallax="true" className="container_view row col-re container">
+          <Helmet>
+            <title>{documentData.title}</title>
+          </Helmet>
 
-    return (
-      <section data-parallax="true" className="container_view row col-re container">
-        <Helmet>
-          <title>{documentData.title}</title>
-        </Helmet>
+          {getAway && <AwayModal documentData={documentData}/>}
 
-        {getAway && <AwayModal documentData={documentData}/>}
+          <ContentViewFullScreenContainer documentData={documentData} documentText={documentText}
+                                          totalViewCountInfo={totalViewCountInfo} update={update}
+                                          auth={auth} author={author}/>
 
-        <ContentViewFullScreenContainer documentData={documentData} documentText={documentText}
-                                        totalViewCountInfo={totalViewCountInfo} update={update}
-                                        auth={auth} author={author}/>
+          <ContentViewRight documentData={documentData} author={author}
+                            featuredList={featuredList} {...rest}/>
+        </section>
+
+      );
+    } else {
+      return (
+        <section data-parallax="true" className="container_view row col-re container">
+          <ContentViewFullScreenMock/>
+          <ContentViewRightMock/>
+        </section>
+      );
+    }
 
 
-        <ContentViewRight documentData={documentData} author={author}
-                          featuredList={featuredList} {...rest}/>
-
-      </section>
-
-    );
   }
 }
 

@@ -23,7 +23,6 @@ import DeleteDocumentModalContainer from "../../../../container/common/modal/Del
 import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
 import ContentViewComment from "./ContentViewComment";
 import { FadingCircle } from "better-react-spinkit";
-import DocumentInfo from "../../../../redux/model/DocumentInfo";
 import common_view from "../../../../common/common_view";
 import PublishCompleteModalContainer from "../../../../container/common/modal/PublishCompleteModalContainer";
 
@@ -39,8 +38,9 @@ class ContentViewFullScreen extends Component {
     reward: 0,
     isDocumentExist: null,
     downloadLoading: false,
-    documentData: new DocumentInfo(),
-    completeModalOpen: false
+    completeModalOpen: false,
+    isPublic: false,
+    isRegistry: false
   };
 
 
@@ -98,8 +98,8 @@ class ContentViewFullScreen extends Component {
 
   //Web3에서 보상액 GET
   getReward = () => {
-    const { getWeb3Apis } = this.props;
-    getWeb3Apis.getNDaysRewards(this.state.documentData.documentId, 7).then(res => {
+    const { getWeb3Apis,documentData } = this.props;
+    getWeb3Apis.getNDaysRewards(documentData.documentId, 7).then(res => {
       log.ContentViewFullscreen.getReward();
       let reward = Common.toEther(res);
       this.setState({ reward: reward });
@@ -107,19 +107,10 @@ class ContentViewFullScreen extends Component {
   };
 
 
-  // 문서 정보 state 저장
-  setDocumentData = () => {
-    const { documentData } = this.props;
-    if (!this.state.documentData.seoTitle || this.state.documentData.seoTitle !== documentData.seoTitle) this.setState({ documentData: documentData });
-  };
-
-
   //  문서 정보 state의 isPublish 업데이트
   setIsPublish = () => {
-    return new Promise((resolve, reject) => {
-      let _documentData = this.state.documentData;
-      _documentData.isPublic = true;
-      this.setState({ _documentData: _documentData }, () => {
+    return new Promise((resolve) => {
+    this.setState({ isPublic: true }, () => {
         resolve();
       });
     });
@@ -128,10 +119,8 @@ class ContentViewFullScreen extends Component {
 
   //  문서 정보 state의 isRegistry 업데이트
   setIsRegistry = () => {
-    return new Promise((resolve, reject) => {
-      let _documentData = this.state.documentData;
-      _documentData.isRegistry = true;
-      this.setState({ _documentData: _documentData }, () => {
+    return new Promise((resolve) => {
+      this.setState({ isRegistry: true }, () => {
         resolve();
       });
     });
@@ -166,8 +155,7 @@ class ContentViewFullScreen extends Component {
 
   //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
-    const { getMyInfo, setAlertCode } = this.props;
-    const { documentData } = this.state;
+    const { documentData, getMyInfo, setAlertCode } = this.props;
 
     if (!documentData) return setAlertCode(2091);
     if (!MainRepository.Account.isAuthenticated() && !getMyInfo.email) return setAlertCode(2003);
@@ -185,14 +173,9 @@ class ContentViewFullScreen extends Component {
   }
 
 
-  componentDidUpdate = () => {
-    this.setDocumentData();
-  };
-
-
   render() {
-    const { documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
-    const { documentData, page, emailFlag, downloadLoading, completeModalOpen } = this.state;
+    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
+    const { page, emailFlag,isPublic, isRegistry, downloadLoading, completeModalOpen } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
@@ -206,7 +189,6 @@ class ContentViewFullScreen extends Component {
 
       <article
         className="col-md-12 col-lg-8 view_left u__view ">
-        {documentData && documentData.documentId ?
           <div className="view_top">
             <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
                                           tracking={true} handleEmailFlag={this.handleEmailFlag}
@@ -216,13 +198,10 @@ class ContentViewFullScreen extends Component {
               <i title="viewer button" className="material-icons">fullscreen</i>
             </a>
           </div>
-          :
-          <div className="view_top"/>
-        }
 
         <div className="view_content">
           <div className="u_title pt-2 pb-2 mt-2 mb-2">
-            {documentData.title ? documentData.title : ""}
+            {documentData.title}
           </div>
 
           {accountId === common_view.getMySub() &&
@@ -230,9 +209,9 @@ class ContentViewFullScreen extends Component {
             <i className="material-icons" onClick={() => this.handleSetting()}>more_vert</i>
             <div className="option-table d-none" id="viewer-option-table">
               <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>Download</div>
-              {documentData &&
-              <EditDocumentModalContainer documentData={documentData}/>}
-              {documentData.isRegistry === false && (accountId === common_view.getMySub() && documentData) &&
+
+              <EditDocumentModalContainer documentData={documentData}/>
+              {isRegistry === false && (accountId === common_view.getMySub()) &&
               <DeleteDocumentModalContainer documentData={documentData}/>}
             </div>
           </div>
@@ -256,12 +235,12 @@ class ContentViewFullScreen extends Component {
 
           <div className="mb-3 d-inline-block position-relative">
 
-            <span className={"info-detail-reward mr-3 " + (documentData.isRegistry ? "" : "color-not-registered")}
+            <span className={"info-detail-reward mr-3 " + (isRegistry ? "" : "color-not-registered")}
                   onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
                   onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
               $ {Common.deckToDollar(reward)}
               <img className="reward-arrow"
-                   src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
+                   src={require("assets/image/icon/i_arrow_down_" + (isRegistry ? "blue" : "grey") + ".svg")}
                    alt="arrow button"/>
             </span>
 
@@ -273,16 +252,16 @@ class ContentViewFullScreen extends Component {
 
 
           <div className="d-inline-block mb-3">
-            {!documentData.isPublic &&
+            {!isPublic &&
             <PublishModalContainer documentData={documentData} afterPublish={() => this.handleAfterPublish()}/>}
 
             {completeModalOpen && <PublishCompleteModalContainer documentData={documentData}
                                                                  completeModalClose={() => this.handleCompleteModalClose()}/>}
 
-            {documentData.isPublic &&
+            {isPublic &&
             <VoteDocumentModalContainer documentData={documentData}/>}
 
-            {documentData.isPublic && (accountId === common_view.getMySub() && documentData) &&
+            {isPublic && (accountId === common_view.getMySub() && documentData) &&
             <RegBlockchainBtnContainer documentData={documentData}
                                        afterRegistered={() => this.handleAfterRegistered()}/>}
 

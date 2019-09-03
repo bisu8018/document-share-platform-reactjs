@@ -10,6 +10,7 @@ import ContentListItemContainer from "../../../container/body/contents/ContentLi
 import NoDataIcon from "../../common/NoDataIcon";
 import common_view from "../../../common/common_view";
 import { APP_PROPERTIES } from "../../../properties/app.properties";
+import ContentListItemMock from "../../common/mock/ContentListItemMock";
 
 
 class ContentList extends Component {
@@ -33,7 +34,7 @@ class ContentList extends Component {
 
   // 초기화
   init = () => {
-    if(APP_PROPERTIES.ssr) return;
+    if (APP_PROPERTIES.ssr) return;
 
     log.ContentList.init();
     this.setFetch();
@@ -160,10 +161,16 @@ class ContentList extends Component {
             next={this.fetchMoreData}
             hasMore={!isEndPage}
           >
-            {resultList.length > 0 && resultList.map(result => (
-              <ContentListItemContainer key={result.documentId + result.accountId} result={result}
-                                        totalViewCountInfo={totalViewCountInfo}/>
-            ))}
+            {resultList.length > 0 ? resultList.map(result => (
+                <ContentListItemContainer key={result.documentId + result.accountId} result={result}
+                                          totalViewCountInfo={totalViewCountInfo}/>
+              )) :
+              <div>
+                <ContentListItemMock/>
+                <ContentListItemMock order={2}/>
+                <ContentListItemMock order={3}/>
+              </div>
+            }
           </InfiniteScroll>
           {this.state.loading &&
           <div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>

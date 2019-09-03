@@ -8,6 +8,7 @@ import { psString } from "../../../config/localization";
 import log from "../../../config/log";
 import { APP_PROPERTIES } from "../../../properties/app.properties";
 import common_view from "../../../common/common_view";
+import ContentMainListMock from "../../common/mock/ContentMainListMock";
 
 class ContentMain extends Component {
   state = {
@@ -210,10 +211,9 @@ class ContentMain extends Component {
         <div className="col-12 content-main-container">
           <div className="u__center">
             {category.map((arr, idx) =>
-              this.getList(arr) && this.getList(arr).resultList.length > 0 &&
-               (
-                <div className="main-category" key={idx}>
+              this.getList(arr) && this.getList(arr).resultList.length > 0 ?
 
+                <div className="main-category" key={idx}>
                   <div className="mb-3">
                     <span className="main-category-name">{arr}</span>
                     <span className="main-category-see-all"
@@ -231,8 +231,8 @@ class ContentMain extends Component {
                       );
                     })}
                   </div>
-                </div>
-              )
+                </div>:
+                <ContentMainListMock key={idx}/>
             )}
 
           </div>

@@ -288,7 +288,7 @@ class ContentViewCarousel extends React.Component {
 
 
         {!MainRepository.Account.isAuthenticated() && emailFlag && target.useTracking &&
-        <EmailModalContainer handleTracking={() => this.handleTracking()} documentData={target}
+        <EmailModalContainer handleTracking={page => this.handleTracking(page)} documentData={target}
                              useTracking={() => this.handleUseTrackingFlag()}
                              forceTracking={() => this.handleForceTrackingFlag()}
                              documentId={target.documentId}/>
