@@ -5,11 +5,9 @@ import { setAlertCode } from "../../../redux/reducer/main";
 export default connect(
   state => ({
     getShowAnonymous: state.audienceTracking.showAnonymous,
-    getIncludeOnlyOnePage: state.audienceTracking.includeOnlyOnePage,
+    getIncludeOnlyOnePage: state.audienceTracking.includeOnlyOnePage
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any) => {
-      dispatch(setAlertCode(alertCode));
-    },
-  }),
+    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
+  })
 )(AudienceTrackingDetail);

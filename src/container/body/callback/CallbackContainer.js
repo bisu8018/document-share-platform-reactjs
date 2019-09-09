@@ -5,17 +5,11 @@ import { setTempEmail } from "../../../redux/reducer/emailModal";
 
 export default connect(
   state => ({
-    getMyInfo: state.main.myInfo,
+    getMyInfo: state.main.myInfo
   }),
   dispatch => ({
-    setMyInfo: (myInfo: any) => {
-      dispatch(setMyInfo(myInfo));
-    },
-    setTempEmail: (tempEmail: any) => {
-      dispatch(setTempEmail(tempEmail));
-    },
-    setAlertCode: (alertCode: any) => {
-      dispatch(setAlertCode(alertCode));
-    }
+    setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo)),
+    setTempEmail: (tempEmail: any) => dispatch(setTempEmail(tempEmail)),
+    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
   })
 )(Callback);

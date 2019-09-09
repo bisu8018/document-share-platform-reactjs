@@ -1,7 +1,7 @@
 {
   "name": "polarishare_front_end",
   "description": "www.polarishare.com",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "ISC",
   "private": true,
   "proxy": "http://localhost:3000/",
@@ -129,7 +129,7 @@
     "invaildate:production": "aws cloudfront create-invalidation --distribution-id E1UYELY2K59G6Q --paths /*",
     "deploy": "set NODE_ENV_SUB=development&&npm run build && aws s3 sync build/ s3://share.decompany.io --cache-control max-age=60 --acl public-read && npm run invaildate",
     "deploy:production": "set NODE_ENV_SUB=production&&npm run build && aws s3 sync build/ s3://www.polarishare.com --cache-control max-age=60 && npm run invaildate:production",
-    "deploy:ssr_local": "set NODE_ENV_SUB=ssr_local&& npm run build && npm run build:ssr",
+    "deploy:ssr_local": "set NODE_ENV_SUB=ssr_local&& npm run build && node scripts/build.server.js",
     "deploy:ssr": "npm run build:ssr && scp -i ../../my-key-pair/dev-decompany.pem -r build/ ec2-user@ec2-13-57-41-84.us-west-1.compute.amazonaws.com:~/decompanyio-web-server"
   },
   "browserslist": [

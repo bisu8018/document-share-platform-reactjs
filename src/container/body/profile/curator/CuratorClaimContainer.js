@@ -10,8 +10,6 @@ export default connect(
     getIsMobile: state.main.isMobile
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any) => {
-      dispatch(setAlertCode(alertCode));
-    },
+    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
   })
 )(CuratorClaim);

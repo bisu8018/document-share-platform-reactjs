@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { ThreeBounce } from "better-react-spinkit";
 import { Helmet } from "react-helmet";
 import { psString } from "../../../config/localization";
 import log from "../../../config/log";
@@ -34,10 +33,11 @@ class ContentList extends Component {
 
   // 초기화
   init = () => {
-    if (APP_PROPERTIES.ssr) return;
+    if (APP_PROPERTIES.ssr) return this.fetchSsrDocuments();
+
 
     log.ContentList.init();
-    this.setFetch();
+    this.setFetch().then(res => this.fetchDocuments(res));
     this.setTagList();
   };
 
@@ -56,8 +56,23 @@ class ContentList extends Component {
   };
 
 
+  // document 데이터 in SSR fetch
+  fetchSsrDocuments = () => {
+    if(typeof window !== 'undefined') console.log(window.__PRELOADED_STATE__);
+
+   /* if (!getSsrData.documentList || getSsrData.documentList.resultList.length === 0) return false;
+
+    const documentList = getSsrData.documentList;
+    this.setState({
+      resultList: documentList.resultList,
+      pageNo: documentList.pageNo,
+      totalViewCountInfo: documentList.totalViewCountInfo && !this.state.totalViewCountInfo ? documentList.totalViewCountInfo : null
+    });*/
+  };
+
+
   // document 데이터 fetch
-  fetchDocuments = (args) => {
+  fetchDocuments = args => {
     const { path, resultList, tagSearchFlag } = this.state;
     const params = {
       pageNo: args.pageNo,
@@ -96,27 +111,35 @@ class ContentList extends Component {
   setFetch = () => {
     let path = common_view.getPath(), tag = common_view.getTag();
 
-    return this.setState({
-      resultList: [],
-      pageNo: 1,
-      isEndPage: false,
-      tag: tag,
-      path: path,
-      tagSearchFlag: true
-    }, () => {
-      this.fetchDocuments({
+    return new Promise(resolve => this.setState({
+        resultList: [],
+        pageNo: 1,
+        isEndPage: false,
         tag: tag,
-        path: path
-      });
-    });
+        path: path,
+        tagSearchFlag: true
+      }, () => resolve({ tag: tag, path: path })
+    ));
   };
 
 
   //태그 리스트 GET
   setTagList = () => {
     const { setTagList, getTagList } = this.props;
+
     let path = common_view.getPath();
-    if (getTagList.path !== path) MainRepository.Document.getTagList(path).then(result => setTagList(result.resultList)).then(log.ContentList.setTagList());
+
+    if (getTagList.path !== path)
+      MainRepository.Document.getTagList(path)
+        .then(result => setTagList(result.resultList))
+        .then(log.ContentList.setTagList())
+        .catch(err => {
+          log.ContentList.setTagList(err);
+          this.setTimeout = setTimeout(() => {
+            this.setTagList();
+            clearTimeout(this.setTimeout);
+          }, 8000);
+        });
   };
 
 
@@ -129,7 +152,8 @@ class ContentList extends Component {
 
   componentDidUpdate = () => {
     let pathArr = window.location.pathname.split("/");
-    if (pathArr.length > 2 && pathArr[2] !== "" && decodeURI(pathArr[2]) !== this.state.tag) this.setFetch();
+    if (pathArr.length > 2 && pathArr[2] !== "" && decodeURI(pathArr[2]) !== this.state.tag)
+      this.setFetch().then(res => this.fetchDocuments(res));
   };
 
 
@@ -155,25 +179,25 @@ class ContentList extends Component {
         <section className="col-sm-12 col-lg-9 u__center-container">
           <div className="d-block d-sm-none content-list-path">{path}</div>
 
+          {resultList.length > 0 &&
           <InfiniteScroll
             className={(getIsMobile ? "overflow-initial " : "") + "mt-0 mt-sm-4 pt-0 pt-sm-2 u__center content-list-wrapper"}
             dataLength={resultList.length}
             next={this.fetchMoreData}
-            hasMore={!isEndPage}
-          >
-            {resultList.length > 0 ? resultList.map(result => (
-                <ContentListItemContainer key={result.documentId + result.accountId} result={result}
-                                          totalViewCountInfo={totalViewCountInfo}/>
-              )) :
-              <div>
-                <ContentListItemMock/>
-                <ContentListItemMock order={2}/>
-                <ContentListItemMock order={3}/>
-              </div>
-            }
+            hasMore={!isEndPage}>
+            {resultList.map(result => (
+              <ContentListItemContainer key={result.documentId + result.accountId} result={result}
+                                        totalViewCountInfo={totalViewCountInfo}/>
+            ))}
           </InfiniteScroll>
+          }
+
           {this.state.loading &&
-          <div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>
+          <div className="mt-3">
+            <ContentListItemMock/>
+            <ContentListItemMock order={2}/>
+            <ContentListItemMock order={3}/>
+          </div>
           }
           {!this.state.loading && ((resultList && resultList.length === 0) || !resultList) &&
           <NoDataIcon className="no-data">No data</NoDataIcon>

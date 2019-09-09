@@ -8,11 +8,7 @@ export default connect(
     getMyInfo: state.main.myInfo
   }),
   dispatch => ({
-    setMyInfo: (myInfo:any) => {
-      dispatch(setMyInfo(myInfo));
-    },
-    setTempEmail: (tempEmail:any) => {
-      dispatch(setTempEmail(tempEmail));
-    },
+    setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo)),
+    setTempEmail: (tempEmail: any) => dispatch(setTempEmail(tempEmail))
   })
 )(EmailModal);

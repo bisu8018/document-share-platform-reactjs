@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import ContentMain from "../../../components/body/contents/ContentMain";
+import { setAlertCode } from "../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -9,5 +10,7 @@ export default connect(
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
     getIsMobile: state.main.isMobile
   }),
-  dispatch => ({})
+  dispatch => ({
+    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode)),
+  })
 )(ContentMain);

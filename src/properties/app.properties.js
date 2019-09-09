@@ -26,7 +26,7 @@ export const APP_PROPERTIES = {
   },
   ssr_local:{
     domain:{
-      mainHost: 'http://localhost:3000',
+      mainHost: 'http://localhost:80',
       image: 'https://thumb.share.decompany.io',
       api: "https://api.share.decompany.io/rest",
       email: "https://api.share.decompany.io/ve",

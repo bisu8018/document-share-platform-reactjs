@@ -114,7 +114,7 @@ class Header extends React.Component {
         let targetElement = e.target;
 
         // 광고 표시 관리
-        if (common_view.getPath() !== "") this.setState({ adShow: false });
+        if(this.state.adShow !== null) this.setState({ adShow: common_view.getPath() === "" });
 
         // 프로필 카드
         const profileCard = document.getElementById("profileCard");

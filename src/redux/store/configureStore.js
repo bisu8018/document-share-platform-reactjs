@@ -2,7 +2,7 @@ import rootReducer from "../reducer";
 import thunk from "redux-thunk";
 import { createStore, applyMiddleware, compose } from "redux";
 
-export default (preloadedState) => {
+export default preloadedState => {
   let store: *;
   const isDev = process.env.NODE_ENV === "development";
   const devTools = isDev && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;

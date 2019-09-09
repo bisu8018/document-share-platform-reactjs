@@ -7,12 +7,10 @@ export default connect(
   state => ({
     getMyInfo: state.main.myInfo,
     getWeb3Apis: state.main.web3Apis,
-    getTempEmail: state.emailModal.tempEmail,
+    getTempEmail: state.emailModal.tempEmail
   }),
   dispatch => ({
     setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo)),
-    setTempEmail: (tempEmail:any) => {
-      dispatch(setTempEmail(tempEmail));
-    },
+    setTempEmail: (tempEmail: any) => dispatch(setTempEmail(tempEmail))
   })
 )(ProfileCard);

@@ -59,7 +59,7 @@ const initState = {
   authorDailyRewardPool: 0,
   curatorDailyRewardPool: 0,
   alertCode: null,
-  alertData: {}
+  alertData: {},
 };
 
 

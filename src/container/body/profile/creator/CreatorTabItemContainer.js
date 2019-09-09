@@ -7,11 +7,9 @@ export default connect(
     getWeb3Apis: state.main.web3Apis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
     getIsMobile: state.main.isMobile,
-    getMyInfo: state.main.myInfo,
+    getMyInfo: state.main.myInfo
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any, alertData: any) => {
-      dispatch(setAlertCode(alertCode, alertData));
-    },
+    setAlertCode: (alertCode: any, alertData: any) => dispatch(setAlertCode(alertCode, alertData))
   })
 )(CreatorTabItem);

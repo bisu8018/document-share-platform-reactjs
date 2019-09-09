@@ -11,7 +11,7 @@ export default ({
     return Math.floor(date / (60 * 60 * 24 * 1000)) * (60 * 60 * 24 * 1000);
   },
   // change timestamp to duration
-  timestampToDuration: (timestamp) => {
+  timestampToDuration: timestamp => {
     let date = new Date(timestamp);
 
     let h = date.getHours() - 9;
@@ -27,7 +27,7 @@ export default ({
     else return "Duration: " + h + m + s;
   },
   // change timestamp to duration
-  timestampToDurationJustTime: (timestamp) => {
+  timestampToDurationJustTime: timestamp => {
     let date = new Date(timestamp);
 
     let h = date.getHours() - 9;
@@ -43,7 +43,7 @@ export default ({
     else return h + m + s;
   },
   // change Timestamp to Datetime
-  timestampToDateTime: (timestamp) => {
+  timestampToDateTime: timestamp => {
     let date = new Date(timestamp);
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let year = date.getFullYear();
@@ -55,7 +55,7 @@ export default ({
     return day + " " + month + " " + year + " " + (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
   },
   // change Timestamp to Date
-  timestampToDate: (timestamp) => {
+  timestampToDate: timestamp => {
     let date = new Date(timestamp);
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let year = date.getFullYear();
@@ -64,7 +64,7 @@ export default ({
     return month + " " + day + ", " + year;
   },
   // change Timestamp to Time
-  timestampToTime: (timestamp) => {
+  timestampToTime: timestamp => {
     let date = new Date(timestamp);
     let hour = date.getHours();
     let min = date.getMinutes();
@@ -72,7 +72,7 @@ export default ({
     return (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
   },
   // change Timestamp to Time
-  timestampToTimeNotGmt: (timestamp) => {
+  timestampToTimeNotGmt: timestamp => {
     let date = new Date(timestamp);
     let hour = date.getHours() - 9;
     let min = date.getMinutes();
@@ -110,12 +110,12 @@ export default ({
     return year + "-" + (month < 10 ? "0" : "") + month + "-" + (date < 10 ? "0" : "") + date;
   },
   // Get Date Ago on Number
-  dateAgo: (timestamp) => {
+  dateAgo: timestamp => {
     let currentDate = new Date();
     let lastDate = new Date(timestamp);
     return Math.floor((currentDate - lastDate) / (60 * 60 * 24 * 1000));
   },
-  convertTimestampToString: (timestamp) => {
+  convertTimestampToString: timestamp => {
     const options = {
       weekday: "long",
       year: "numeric",
@@ -179,14 +179,14 @@ export default ({
 
     return deckStr;
   },
-  jsonToQueryString: (json) => {
+  jsonToQueryString: json => {
     return "?" +
       Object.keys(json).map(function(key) {
         return encodeURIComponent(key) + "=" +
           encodeURIComponent(json[key]);
       }).join("&");
   },
-  shuffleArray: (array) => {
+  shuffleArray: array => {
     let currentIndex = array.length, temporaryValue, randomIndex;
 
     // While there remain elements to shuffle...

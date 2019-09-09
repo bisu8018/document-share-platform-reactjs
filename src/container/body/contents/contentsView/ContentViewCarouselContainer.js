@@ -5,11 +5,9 @@ import { setMyInfo } from "../../../../redux/reducer/main";
 export default connect(
   state => ({
     getMyInfo: state.main.myInfo,
-    getTempEmail: state.emailModal.tempEmail,
+    getTempEmail: state.emailModal.tempEmail
   }),
   dispatch => ({
-    setMyInfo: (myInfo: any) => {
-      dispatch(setMyInfo(myInfo));
-    }
+    setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo))
   })
 )(ContentViewCarousel);

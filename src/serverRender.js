@@ -5,11 +5,8 @@ import { Provider } from 'react-redux';
 import MainContainer from "./container/MainContainer";
 import configureStore from './redux/store/configureStore';
 import routeConfig from './config/routerList';
-import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:4000'; // override baseURL
-
-async function serverRender(req) {
+async function serverRender(req, res) {
   const store = configureStore(); // create store for every request
 
   // TODO: handle requests

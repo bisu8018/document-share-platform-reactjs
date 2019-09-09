@@ -43,6 +43,7 @@ class ContentMain extends Component {
       else if (path === "featured") this.setState({ featuredDocuments: res });
       else if (path === "popular") this.setState({ popularDocuments: res });
     }).catch(err => {
+      this.props.setAlertCode(2001);
       log.ContentMain.getDocuments(err, path);
       this.setTimeout = setTimeout(() => {
         this.getDocuments(path);
@@ -211,15 +212,13 @@ class ContentMain extends Component {
         <div className="col-12 content-main-container">
           <div className="u__center">
             {category.map((arr, idx) =>
-              this.getList(arr) && this.getList(arr).resultList.length > 0 ?
-
+              this.getList(arr) ? this.getList(arr).resultList.length > 0 &&
                 <div className="main-category" key={idx}>
                   <div className="mb-3">
                     <span className="main-category-name">{arr}</span>
                     <span className="main-category-see-all"
                           onClick={() => this.handelTrigger(arr)}>{psString("main-see-all")}
                       <i className="material-icons">keyboard_arrow_right</i></span>
-
                   </div>
 
                   <div className="row main-category-card-wrapper">
@@ -231,7 +230,7 @@ class ContentMain extends Component {
                       );
                     })}
                   </div>
-                </div>:
+                </div> :
                 <ContentMainListMock key={idx}/>
             )}
 

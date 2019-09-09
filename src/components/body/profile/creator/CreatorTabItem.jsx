@@ -239,7 +239,8 @@ class CreatorTabItem extends React.Component {
 
     return (
 
-      <div className={"row u_center_inner " + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? "not-convert-wrapper" : "")}>
+      <div
+        className={"row u_center_inner " + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? "not-convert-wrapper" : "")}>
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
           <Link to={"/" + identification + "/" + documentData.seoTitle}>
             <div className="tab-thumbnail" onClick={() => common_view.scrollTop()}>
@@ -262,7 +263,8 @@ class CreatorTabItem extends React.Component {
         <div className="col-12 col-sm-9 col-lg-10 p-0">
           {documentData.accountId === common_view.getMySub() &&
           <div className="view-option-btn top-0 right-0" id={"viewer-option-btn-" + idx}>
-            <i className="material-icons" id={"view-option-icon-" + idx} onClick={e => this.addInlineBlock(e).then(this.showSetting())}>more_vert</i>
+            <i className="material-icons" id={"view-option-icon-" + idx}
+               onClick={e => this.addInlineBlock(e).then(this.showSetting())}>more_vert</i>
             <div className="option-table d-none" id={"viewer-option-table-" + idx}>
               {documentData.state === "CONVERT_COMPLETE" &&
               <CopyModalContainer documentData={documentData} type="onlyIcon"/>}

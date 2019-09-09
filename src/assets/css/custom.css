@@ -5210,10 +5210,10 @@ form {
 }
 
 .navbar .navbar-brand-mobile > img {
-    height: 45px;
+    height: 35px;
     width: auto;
-    margin-left: -10px;
-    margin-top: -5px;
+    margin-left: -5px;
+    margin-top: -3px;
 }
 
 .navbar.navbar-transparent {
@@ -7027,13 +7027,13 @@ Dean*/
 
 .u__center {
     max-width: 1300px;
-    min-height: 100vh;
 }
 
 .u__center-container {
     border-left: 1px solid #b3b3b3;
     padding-left: 25px;
     padding-bottom: 140px;
+    min-height: calc(100vh - 166px - 1.5rem);
 }
 
 .content-list-path {
@@ -7565,6 +7565,17 @@ Dean*/
 
 
 @media (max-width: 575px) {
+    .u_center_inner-mock .col-thumb-list {
+        width: 100%;
+    }
+
+    .thumb-image-mock {
+        height: auto;
+        width: 100% !important;
+        max-width: none;
+        max-height: none;
+        min-height: 160px;
+    }
 
     .u__view .view_top {
         min-height: 179px !important;
@@ -8400,6 +8411,7 @@ Duration CSS*/
     position: relative;
     background: #e8e8e8;
     border-radius: 3px;
+    border: 1px solid #e8e8e8;
 }
 
 /*2018-03-19
@@ -11169,12 +11181,12 @@ away modal modal css*/
 Mock Component
 dean*/
 .main-category-mock-2,
-.see-also-wrapper-mock-2{
+.see-also-wrapper-mock-2 {
     opacity: 0.6;
 }
 
 .main-category-mock-3,
-.see-also-wrapper-mock-3{
+.see-also-wrapper-mock-3 {
     opacity: 0.3;
 }
 
@@ -11192,6 +11204,7 @@ dean*/
     height: 30px;
     margin-top: -30px;
     background: #e8e8e8;
+    opacity: 0.2;
 }
 
 .main-category-card-mock {

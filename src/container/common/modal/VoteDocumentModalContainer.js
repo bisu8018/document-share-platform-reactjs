@@ -9,8 +9,6 @@ export default connect(
     getMyInfo: state.main.myInfo
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any) => {
-      dispatch(setAlertCode(alertCode));
-    },
+    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
   })
 )(VoteDocument);

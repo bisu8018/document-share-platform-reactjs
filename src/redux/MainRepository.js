@@ -476,7 +476,7 @@ export default {
     },
     getTagList(path: String) {
       return TagService.GET.tagList({ t: path })
-        .then(result => new TagList((result)))
+        .then(result => new TagList(result))
         .catch(err => err);
     },
     getDocumentList(params: any) {

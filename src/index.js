@@ -13,7 +13,6 @@ import "assets/css/ssr/react-tabs.scss"; // 탭 css
 import "assets/css/ssr/react-tagsinput.css"; // 탭 css
 
 export let store = configureStore(window.__PRELOADED_STATE__); // 스토어 생성
-document.getElementById("root").style.opacity = "1";
 
 ReactDOM.render(
   <Provider store={store}>

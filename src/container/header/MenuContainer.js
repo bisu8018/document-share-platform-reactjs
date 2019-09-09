@@ -9,8 +9,6 @@ export default connect(
     getIsMobile: state.main.isMobile
   }),
   dispatch => ({
-    setMyInfo: (myInfo:any) => {
-      dispatch(setMyInfo(myInfo));
-    },
+    setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo))
   })
 )(Menu);

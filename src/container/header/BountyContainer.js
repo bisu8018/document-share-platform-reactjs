@@ -6,10 +6,6 @@ const mapStateToProps = state => ({
   getMyInfo: state.main.myInfo,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
-
-});
-
 export default connect(
   state => ({
     getWeb3Apis: state.main.web3Apis,
