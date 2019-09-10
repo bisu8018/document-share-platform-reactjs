@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import Menu from "../../components/header/Menu";
-import { setMyInfo } from "../../redux/reducer/main";
+import { setAction } from "../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -9,6 +9,6 @@ export default connect(
     getIsMobile: state.main.isMobile
   }),
   dispatch => ({
-    setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo))
+    setMyInfo: (myInfo: any) => dispatch(setAction.myInfo(myInfo))
   })
 )(Menu);

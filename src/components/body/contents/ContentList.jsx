@@ -8,8 +8,8 @@ import ContentTagsContainer from "../../../container/body/contents/ContentTagsCo
 import ContentListItemContainer from "../../../container/body/contents/ContentListItemContainer";
 import NoDataIcon from "../../common/NoDataIcon";
 import common_view from "../../../common/common_view";
-import { APP_PROPERTIES } from "../../../properties/app.properties";
 import ContentListItemMock from "../../common/mock/ContentListItemMock";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 
 class ContentList extends Component {
@@ -33,8 +33,7 @@ class ContentList extends Component {
 
   // 초기화
   init = () => {
-    if (APP_PROPERTIES.ssr) return this.fetchSsrDocuments();
-
+    if(APP_PROPERTIES.ssr) return this.fetchSsrDocuments();
 
     log.ContentList.init();
     this.setFetch().then(res => this.fetchDocuments(res));
@@ -58,16 +57,18 @@ class ContentList extends Component {
 
   // document 데이터 in SSR fetch
   fetchSsrDocuments = () => {
-    if(typeof window !== 'undefined') console.log(window.__PRELOADED_STATE__);
+    const { getDocumentList } = this.props;
+    return new Promise((resolve, reject) => {
+      if (!getDocumentList || !getDocumentList.resultList || this.state.path !== "latest") resolve(false);
 
-   /* if (!getSsrData.documentList || getSsrData.documentList.resultList.length === 0) return false;
-
-    const documentList = getSsrData.documentList;
-    this.setState({
-      resultList: documentList.resultList,
-      pageNo: documentList.pageNo,
-      totalViewCountInfo: documentList.totalViewCountInfo && !this.state.totalViewCountInfo ? documentList.totalViewCountInfo : null
-    });*/
+      this.setState({
+        resultList: getDocumentList.resultList,
+        pageNo: getDocumentList.pageNo,
+        totalViewCountInfo: getDocumentList.totalViewCountInfo && !this.state.totalViewCountInfo ? getDocumentList.totalViewCountInfo : null
+      }, () => {
+        resolve();
+      });
+    });
   };
 
 

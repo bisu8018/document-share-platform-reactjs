@@ -1,7 +1,9 @@
 import ReduxTypes from "../config/ReduxTypes";
 
 // 액션 생성자
-export const setAway = (away: boolean) => ({ type: ReduxTypes.SET_AWAY, away });
+export const setAction = {
+  away : (away: boolean) => ({ type: ReduxTypes.SET_AWAY, away })
+};
 
 // 초기 상태
 const initState = {

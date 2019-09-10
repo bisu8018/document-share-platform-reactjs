@@ -13,6 +13,7 @@ let  ReduxTypes ={
   SET_AUTHOR_DAILY_REWARD_POOL : "main/SET_AUTHOR_DAILY_REWARD_POOL",
   SET_CURATOR_DAILY_REWARD_POOL : "main/SET_CURATOR_DAILY_REWARD_POOL",
   SET_ALERT_CODE : "main/SET_ALERT_CODE",
+  SET_DOCUMENT_LIST : "main/SET_DOCUMENT_LIST",
 
 
   //======================================

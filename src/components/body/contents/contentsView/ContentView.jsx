@@ -5,7 +5,7 @@ import { APP_PROPERTIES } from "properties/app.properties";
 import ContentViewRight from "./ContentViewRight";
 import MainRepository from "../../../../redux/MainRepository";
 import common from "../../../../common/common";
-import NotFoundPage from "../../../common/NotFoundPage";
+import history from "apis/history/history";
 import ContentViewFullScreenContainer
   from "../../../../container/body/contents/contentsView/ContentViewFullScreenContainer";
 import log from "../../../../config/log";
@@ -22,7 +22,6 @@ class ContentView extends React.Component {
       documentTitle: null,
       documentData: null,
       totalViewCountInfo: null,
-      errMessage: null,
       documentText: null,
       author: null,
       featuredList: null,
@@ -39,11 +38,17 @@ class ContentView extends React.Component {
 
 
   // 문서 정보 GET
-  getContentInfo = (seoTitle) => {
+  getContentInfo = seoTitle => {
     this.setState({ documentTitle: seoTitle, update: true });
     return MainRepository.Document.getDocument(seoTitle)
       .then(res => {
         log.ContentView.getContentInfo(null, res);
+
+        if (res.document.state !== "CONVERT_COMPLETE") {
+          this.setStateClear();
+          this.pushNotFoundPage();
+        }
+
         this.setState({
           documentTitle: res.document.seoTitle,
           documentData: res.document,
@@ -51,7 +56,6 @@ class ContentView extends React.Component {
           featuredList: common.shuffleArray(res.featuredList),
           documentText: res.text,
           author: res.document.author,
-          errMessage: null,
           update: false
         }, () => {
           if (this.getSeoTitle() !== res.document.seoTitle) this.checkUrl(res);
@@ -59,10 +63,7 @@ class ContentView extends React.Component {
       }).catch(err => {
         log.ContentView.getContentInfo(err);
         this.setStateClear(err);
-        this.setTimeout = setTimeout(() => {
-          this.getContentInfo(seoTitle);
-          clearTimeout(this.setTimeout);
-        }, 8000);
+        this.pushNotFoundPage();
       });
   };
 
@@ -79,15 +80,20 @@ class ContentView extends React.Component {
 
 
   //state clear
-  setStateClear = err => this.setState({
+  setStateClear = () => this.setState({
     documentTitle: null,
     documentData: null,
     totalViewCountInfo: null,
-    errMessage: err,
     documentText: null,
     author: null,
     featuredList: null
   });
+
+
+  // push 404
+  pushNotFoundPage = () => {
+    if (!APP_PROPERTIES.ssr) history.push("/404");
+  };
 
 
   // URL 검사
@@ -100,21 +106,18 @@ class ContentView extends React.Component {
 
 
   componentDidUpdate = () => {
-    const { documentTitle, errMessage } = this.state;
+    const { documentTitle } = this.state;
     let titleFromUrl = window.location.pathname.split("/")[2];
 
     // See Also 이동 시에만 발생
-    if (decodeURI(titleFromUrl) !== documentTitle && !errMessage)
+    if (decodeURI(titleFromUrl) !== documentTitle)
       this.getContentInfo(decodeURI(titleFromUrl));
   };
 
 
   render() {
     const { auth, match, getAway, ...rest } = this.props;
-    const { documentData, documentText, totalViewCountInfo, featuredList, author, errMessage, update } = this.state;
-
-    if (errMessage || (documentData && documentData.state !== "CONVERT_COMPLETE"))
-      return (errMessage && <NotFoundPage errMessage={errMessage}/>);
+    const { documentData, documentText, totalViewCountInfo, featuredList, author, update } = this.state;
 
     if (documentData) {
       return (

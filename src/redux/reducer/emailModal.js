@@ -6,14 +6,15 @@ const delay = (ms) => new Promise(resolve =>
 );
 
 // 액션 생성자
-export function setTempEmail(tempEmail: boolean, callback) {
+export const setAction = {
+  tempEmail : (tempEmail: boolean, callback) => {
   return (dispatch) => {
     dispatch({ type: ReduxTypes.SET_TEMP_EMAIL, tempEmail });
     return delay(100).then(() => {
       //callback();
     })
-  };
-}
+  }},
+};
 
 
 // 초기 상태

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import AudienceTrackingDetail from "../../../components/body/tracking/AudienceTrackingDetail";
-import { setAlertCode } from "../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -8,6 +8,6 @@ export default connect(
     getIncludeOnlyOnePage: state.audienceTracking.includeOnlyOnePage
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
   })
 )(AudienceTrackingDetail);

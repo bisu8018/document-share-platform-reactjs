@@ -1,11 +1,10 @@
 import { connect } from "react-redux";
-import { setAlertCode } from "../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/main";
 import PublishCompleteModal from "../../../components/common/modal/PublishCompleteModal";
 
 export default connect(
-  state => ({
-  }),
+  state => ({}),
   dispatch => ({
-    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
   })
 )(PublishCompleteModal);

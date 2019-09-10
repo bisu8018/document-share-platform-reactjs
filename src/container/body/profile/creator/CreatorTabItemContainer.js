@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import CreatorTabItem from "../../../../components/body/profile/creator/CreatorTabItem";
-import { setAlertCode } from "../../../../redux/reducer/main";
+import { setAction } from "../../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -10,6 +10,6 @@ export default connect(
     getMyInfo: state.main.myInfo
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any, alertData: any) => dispatch(setAlertCode(alertCode, alertData))
+    setAlertCode: (alertCode: any, alertData: any) => dispatch(setAction.alertCode(alertCode, alertData))
   })
 )(CreatorTabItem);

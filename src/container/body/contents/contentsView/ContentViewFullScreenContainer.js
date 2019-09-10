@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import ContentViewFullScreen from "../../../../components/body/contents/contentsView/ContentViewFullScreen";
-import { setAlertCode } from "../../../../redux/reducer/main";
+import { setAction } from "../../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -11,6 +11,6 @@ export default connect(
     getIsMobile: state.main.isMobile
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
   })
 )(ContentViewFullScreen);

@@ -1,7 +1,7 @@
 import { Drizzle, generateStore } from "drizzle";
 import { store } from "../index";
 import MainRepository from "../redux/MainRepository";
-import { setAlertCode, setMyInfo } from "../redux/reducer/main";
+import { setAction } from "../redux/reducer/main";
 
 let DocumentRegistry, Deck, BountyOne, Curator, Creator, RewardPool;
 
@@ -50,7 +50,7 @@ export default class DrizzleApis {
         console.log("myInfo", myInfo);*/
 
         if (this.drizzleState.web3.networkId && this.drizzleState.web3.networkId !== 4)
-          store.dispatch(setAlertCode(2052));
+          store.dispatch(setAction.alertCode(2052));
 
         // Alert Show
         if (this.drizzleState.drizzleStatus.initialized && MainRepository.Account.isAuthenticated() && myInfo.email.length > 0) {    //myInfo - drizzle 이더리움 계정 비교
@@ -58,12 +58,12 @@ export default class DrizzleApis {
           if (!myInfo.ethAccount) {   // myInfo에 이더리움 계정 없을때
             MainRepository.Account.syncEthereum(ethAccount, () => {
               myInfo.ethAccount = ethAccount;   // ethAccont 업데이트
-              store.dispatch(setMyInfo(myInfo));  // redux data SET
+              store.dispatch(setAction.myInfo(myInfo));  // redux data SET
             });
           } else if (myInfo.ethAccount && myInfo.ethAccount !== ethAccount) {   // myInfo - drizzle 이더리움 계정 다를때
             /*console.log("1",myInfo.ethAccount);
             console.log("2",ethAccount);*/
-            store.dispatch(setAlertCode(2051));  // Alert Show
+            store.dispatch(setAction.alertCode(2051));  // Alert Show
           }
         }
       });

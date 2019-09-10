@@ -4,8 +4,7 @@ import SearchBar from "../../components/header/SearchBar";
 export default connect(
   state => ({
     getMyInfo: state.main.myInfo,
-    getIsMobile: state.main.isMobile,
+    getIsMobile: state.main.isMobile
   }),
-  dispatch => ({
-  })
+  dispatch => ({})
 )(SearchBar);

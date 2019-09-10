@@ -1,10 +1,10 @@
 import { connect } from "react-redux";
-import { setAlertCode } from "../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/main";
 import CopyModal from "../../../components/common/modal/CopyModal";
 
 export default connect(
   state => ({}),
   dispatch => ({
-    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode)),
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode)),
   })
 )(CopyModal);

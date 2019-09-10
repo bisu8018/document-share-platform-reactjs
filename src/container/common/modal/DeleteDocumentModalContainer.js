@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { setAlertCode } from "../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/main";
 import DeleteDocumentModal from "../../../components/common/modal/DeleteDocumentModal";
 
 export default connect(
@@ -9,6 +9,6 @@ export default connect(
     getWeb3Apis: state.main.web3Apis
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
   })
 )(DeleteDocumentModal);

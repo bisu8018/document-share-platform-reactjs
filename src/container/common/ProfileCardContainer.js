@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import ProfileCard from "../../components/common/card/ProfileCard";
-import { setMyInfo } from "../../redux/reducer/main";
-import { setTempEmail } from "../../redux/reducer/emailModal";
+import { setAction } from "../../redux/reducer/main";
+import emailModal from "../../redux/reducer/emailModal";
 
 export default connect(
   state => ({
@@ -10,7 +10,7 @@ export default connect(
     getTempEmail: state.emailModal.tempEmail
   }),
   dispatch => ({
-    setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo)),
-    setTempEmail: (tempEmail: any) => dispatch(setTempEmail(tempEmail))
+    setMyInfo: (myInfo: any) => dispatch(setAction.myInfo(myInfo)),
+    setTempEmail: (tempEmail: any) => dispatch(emailModal.setAction.tempEmail(tempEmail))
   })
 )(ProfileCard);

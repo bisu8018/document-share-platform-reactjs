@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { setAlertCode } from "../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/main";
 import PublishModal from "../../../components/common/modal/PublishModal";
 
 export default connect(
@@ -11,6 +11,6 @@ export default connect(
     getIsMobile: state.main.isMobile
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
   })
 )(PublishModal);

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import ContentListItem from "../../../components/body/contents/ContentListItem";
-import { setAuthorDailyRewardPool } from "../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -10,6 +10,6 @@ export default connect(
     getIsMobile: state.main.isMobile,
   }),
   dispatch => ({
-    setAuthorDailyRewardPool: (authorRewardPool: any) => dispatch(setAuthorDailyRewardPool(authorRewardPool))
+    setAuthorDailyRewardPool: (authorRewardPool: any) => dispatch(setAction.authorDailyRewardPool(authorRewardPool))
   })
 )(ContentListItem);

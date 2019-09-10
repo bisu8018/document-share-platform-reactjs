@@ -205,13 +205,18 @@ class CreatorTabItem extends React.Component {
     if (documentData.accountId !== common_view.getMySub() || !documentData.state || documentData.state === "CONVERT_COMPLETE") return false;
 
     this.setInterval = setInterval(() => {
-      MainRepository.Document.getDocument(documentData.seoTitle).then(res => {
-        if (res && res.document.state === "CONVERT_COMPLETE") {
+      MainRepository.Document.getDocument(documentData.seoTitle)
+        .then(res => {
+          if (res && res.document.state === "CONVERT_COMPLETE") {
+            clearInterval(this.setInterval);
+            this.setDocumentState(res.document.state);
+            setAlertCode(2075, { title: documentData.title });
+          }
+        })
+        .catch(err => {
           clearInterval(this.setInterval);
-          this.setDocumentState(res.document.state);
-          setAlertCode(2075, { title: documentData.title });
-        }
-      });
+          setAlertCode(2001);
+        });
     }, 5000);
   };
 

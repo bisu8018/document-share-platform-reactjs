@@ -4,6 +4,7 @@ import LinesEllipsis from "react-lines-ellipsis";
 import Common from "../../../common/common";
 import PayoutCard from "../../common/card/PayoutCard";
 import common_view from "../../../common/common_view";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 class ContentListItem extends React.Component {
   constructor(props) {
@@ -13,6 +14,14 @@ class ContentListItem extends React.Component {
       ratio: null
     };
   }
+
+
+  //초기화
+  init = () => {
+    if (APP_PROPERTIES.ssr) return false;
+
+    this.getImgInfo();
+  };
 
 
   // 리워드 정보 표시
@@ -40,7 +49,7 @@ class ContentListItem extends React.Component {
 
 
   componentWillMount(): void {
-    this.getImgInfo();
+    this.init();
   }
 
 

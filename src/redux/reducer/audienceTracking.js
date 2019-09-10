@@ -5,15 +5,17 @@ const delay = (ms) => new Promise(resolve =>
   setTimeout(resolve, ms)
 );
 
-// 액션 생성자
-export const setShowAnonymous = (showAnonymous: boolean, dispatch, callback) => {
-  dispatch({ type: ReduxTypes.SET_SHOW_ANONYMOUS, showAnonymous });
-  return delay(100).then(() => callback());
-};
 
-export const setIncludeOnlyOnePage = (includeOnlyOnePage: boolean, dispatch, callback) => {
-  dispatch({ type: ReduxTypes.SET_INCLUDE_PAGE_ONLY_ONE, includeOnlyOnePage });
-  return delay(100).then(() => callback());
+// 액션 생성자
+export const setAction = {
+  showAnonymous : (showAnonymous: boolean, dispatch, callback) => {
+    dispatch({ type: ReduxTypes.SET_SHOW_ANONYMOUS, showAnonymous });
+    return delay(100).then(() => callback());
+  },
+  includeOnlyOnePage : (includeOnlyOnePage: boolean, dispatch, callback) => {
+    dispatch({ type: ReduxTypes.SET_INCLUDE_PAGE_ONLY_ONE, includeOnlyOnePage });
+    return delay(100).then(() => callback());
+  },
 };
 
 

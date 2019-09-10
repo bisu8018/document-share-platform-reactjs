@@ -1,13 +1,5 @@
 import { connect } from "react-redux";
-import {
-  setAuthorDailyRewardPool,
-  setCuratorDailyRewardPool,
-  setInitComplete,
-  setIsMobile,
-  setMyInfo,
-  setTagList,
-  setUploadTagList, setWeb3Apis, setDrizzleApis
-} from "../redux/reducer/main";
+import { setAction } from "../redux/reducer/main";
 import Main from "../components/Main";
 
 
@@ -22,17 +14,17 @@ export default connect(
     getDrizzle: state.main.drizzleApis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
     getAlertCode: state.main.alertCode,
-    getAway: state.header.away,
+    getAway: state.header.away
   }),
   dispatch => ({
-    setInitComplete: (initComplete: boolean) => dispatch(setInitComplete(initComplete)),
-    setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo)),
-    setTagList: (tagList: []) => dispatch(setTagList(tagList)),
-    setUploadTagList: (uploadTagList: []) => dispatch(setUploadTagList(uploadTagList)),
-    setIsMobile: (isMobile: boolean) => dispatch(setIsMobile(isMobile)),
-    setAuthorDailyRewardPool: (authorRewardPool: any) => dispatch(setAuthorDailyRewardPool(authorRewardPool)),
-    setCuratorDailyRewardPool: (curatorRewardPool: any) => dispatch(setCuratorDailyRewardPool(curatorRewardPool)),
-    setWeb3Apis: () => dispatch(setWeb3Apis()),
-    setDrizzleApis: () => dispatch(setDrizzleApis())
+    setInitComplete: (initComplete: boolean) => dispatch(setAction.initComplete(initComplete)),
+    setMyInfo: (myInfo: any) => dispatch(setAction.myInfo(myInfo)),
+    setTagList: (tagList: []) => dispatch(setAction.tagList(tagList)),
+    setUploadTagList: (uploadTagList: []) => dispatch(setAction.uploadTagList(uploadTagList)),
+    setIsMobile: (isMobile: boolean) => dispatch(setAction.isMobile(isMobile)),
+    setAuthorDailyRewardPool: (authorRewardPool: any) => dispatch(setAction.authorDailyRewardPool(authorRewardPool)),
+    setCuratorDailyRewardPool: (curatorRewardPool: any) => dispatch(setAction.curatorDailyRewardPool(curatorRewardPool)),
+    setWeb3Apis: () => dispatch(setAction.web3Apis()),
+    setDrizzleApis: () => dispatch(setAction.drizzleApis())
   })
 )(Main);

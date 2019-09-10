@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import AudienceTrackingList from "../../../components/body/tracking/AudienceTrackingList";
-import { setShowAnonymous, setIncludeOnlyOnePage } from "../../../redux/reducer/audienceTracking";
-import { setAlertCode } from "../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/audienceTracking";
+import main from "../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -14,9 +14,9 @@ export default connect(
   }),
   dispatch => ({
     setShowAnonymous: (showAnonymous: boolean, callback) =>
-      setShowAnonymous(showAnonymous, dispatch, () => callback()),
+      setAction.showAnonymous(showAnonymous, dispatch, () => callback()),
     setIncludeOnlyOnePage: (includeOnlyOnePage: boolean, callback) =>
-      setIncludeOnlyOnePage(includeOnlyOnePage, dispatch, () => callback()),
-    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
+      setAction.includeOnlyOnePage(includeOnlyOnePage, dispatch, () => callback()),
+    setAlertCode: (alertCode: any) => dispatch(main.setAction.alertCode(alertCode))
   })
 )(AudienceTrackingList);

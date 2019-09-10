@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import UploadDocumentModal from "../../../components/common/modal/UploadDocumentModal";
-import { setAlertCode, setMyInfo } from "../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -10,8 +10,7 @@ export default connect(
     getWeb3Apis: state.main.web3Apis
   }),
   dispatch => ({
-    setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo)),
-    setAlertCode: (alertCode: any) => dispatch(setAlertCode(alertCode))
-
+    setMyInfo: (myInfo: any) => dispatch(setAction.myInfo(myInfo)),
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
   })
 )(UploadDocumentModal);

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import ContentList from "../../../components/body/contents/ContentList";
-import { setTagList } from "../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/main";
 
 
 export default connect(
@@ -10,8 +10,9 @@ export default connect(
     getDrizzle: state.main.drizzleApis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
     getIsMobile: state.main.isMobile,
+    getDocumentList: state.main.documentList,
   }),
   dispatch => ({
-    setTagList: (tagList: []) => dispatch(setTagList(tagList))
+    setTagList: (tagList: []) => dispatch(setAction.tagList(tagList))
   })
 )(ContentList);

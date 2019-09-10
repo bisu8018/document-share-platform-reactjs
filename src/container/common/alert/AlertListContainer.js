@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { setAlertCode } from "../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/main";
 import AlertList from "../../../components/common/alert/AlertList";
 
 export default connect(
@@ -8,6 +8,6 @@ export default connect(
     getAlertData: state.main.alertData
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any, alertData: any) => dispatch(setAlertCode(alertCode, alertData))
+    setAlertCode: (alertCode: any, alertData: any) => dispatch(setAction.alertCode(alertCode, alertData))
   })
 )(AlertList);

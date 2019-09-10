@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import ContentViewCarousel from "../../../../components/body/contents/contentsView/ContentViewCarousel";
-import { setMyInfo } from "../../../../redux/reducer/main";
+import { setAction } from "../../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -8,6 +8,6 @@ export default connect(
     getTempEmail: state.emailModal.tempEmail
   }),
   dispatch => ({
-    setMyInfo: (myInfo: any) => dispatch(setMyInfo(myInfo))
+    setMyInfo: (myInfo: any) => dispatch(setAction.myInfo(myInfo))
   })
 )(ContentViewCarousel);

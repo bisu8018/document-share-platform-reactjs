@@ -4,26 +4,29 @@ import { APP_PROPERTIES } from "properties/app.properties";
 
 
 // 액션 생성자
-export const setInitComplete = (initComplete: boolean) => ({ type: ReduxTypes.SET_INIT_COMPLETE, initComplete });
-export const setMyInfo = (myInfo: any) => ({ type: ReduxTypes.SET_MY_INFO, myInfo });
-export const setTagList = (tagList: []) => ({ type: ReduxTypes.SET_TAG_LIST, tagList });
-export const setUploadTagList = (uploadTagList: []) => ({ type: ReduxTypes.SET_UPLOAD_TAG_LIST, uploadTagList });
-export const setIsMobile = (isMobile: boolean) => ({ type: ReduxTypes.SET_IS_MOBILE, isMobile });
-export const setWeb3Apis = () => ({ type: ReduxTypes.SET_WEB3_APIS, web3Apis: getWeb3Apis() });
-export const setDrizzleApis = () => ({ type: ReduxTypes.SET_DRIZZLE_APIS, drizzleApis: getDrizzleApis() });
-export const setAuthorDailyRewardPool = (authorDailyRewardPool: number) => ({
-  type: ReduxTypes.SET_AUTHOR_DAILY_REWARD_POOL,
-  authorDailyRewardPool
-});
-export const setCuratorDailyRewardPool = (curatorDailyRewardPool: number) => ({
-  type: ReduxTypes.SET_CURATOR_DAILY_REWARD_POOL,
-  curatorDailyRewardPool
-});
-export const setAlertCode = (alertCode: any, alertData: any) => ({
-  type: ReduxTypes.SET_ALERT_CODE,
-  alertCode,
-  alertData
-});
+export const setAction = {
+  initComplete: (initComplete: boolean) => ({ type: ReduxTypes.SET_INIT_COMPLETE, initComplete }),
+  myInfo: (myInfo: any) => ({ type: ReduxTypes.SET_MY_INFO, myInfo }),
+  tagList: (tagList: []) => ({ type: ReduxTypes.SET_TAG_LIST, tagList }),
+  uploadTagList: (uploadTagList: []) => ({ type: ReduxTypes.SET_UPLOAD_TAG_LIST, uploadTagList }),
+  isMobile: (isMobile: boolean) => ({ type: ReduxTypes.SET_IS_MOBILE, isMobile }),
+  documentList: (documentList: {}) => ({ type: ReduxTypes.SET_DOCUMENT_LIST, documentList }),
+  web3Apis: () => ({ type: ReduxTypes.SET_WEB3_APIS, web3Apis: getWeb3Apis() }),
+  drizzleApis: () => ({ type: ReduxTypes.SET_DRIZZLE_APIS, drizzleApis: getDrizzleApis() }),
+  authorDailyRewardPool: (authorDailyRewardPool: number) => ({
+    type: ReduxTypes.SET_AUTHOR_DAILY_REWARD_POOL,
+    authorDailyRewardPool
+  }),
+  curatorDailyRewardPool: (curatorDailyRewardPool: number) => ({
+    type: ReduxTypes.SET_CURATOR_DAILY_REWARD_POOL,
+    curatorDailyRewardPool
+  }),
+  alertCode: (alertCode: any, alertData: any) => ({
+    type: ReduxTypes.SET_ALERT_CODE,
+    alertCode,
+    alertData
+  })
+};
 
 
 // web3 초기화
@@ -60,6 +63,7 @@ const initState = {
   curatorDailyRewardPool: 0,
   alertCode: null,
   alertData: {},
+  documentList: {}
 };
 
 
@@ -116,6 +120,11 @@ export default (state = initState, action: any) => {
         ...state,
         alertCode: action.alertCode,
         alertData: action.alertData
+      };
+    case ReduxTypes.SET_DOCUMENT_LIST:
+      return {
+        ...state,
+        documentList: action.documentList,
       };
     default:
       return state;

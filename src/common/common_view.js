@@ -3,16 +3,12 @@ import MainRepository from "../redux/MainRepository";
 import { psString } from "../config/localization";
 import common from "./common";
 
-const init = function() {
-  if (APP_PROPERTIES.ssr) return false;
-  return common_view;
-};
-
-
-const common_view = ({
+export default ({
 
   // Get Date Time Ago on Number
   dateTimeAgo: (timestamp, isMobile) => {
+    if(APP_PROPERTIES.ssr) return 0;
+
     let currentDate = new Date();
     let lastDate = new Date(timestamp);
     let y = Math.floor((currentDate - lastDate) / (60 * 60 * 24 * 365 * 1000));
@@ -37,6 +33,8 @@ const common_view = ({
   },
 
   setCookie(cname, cvalue, exdays) {
+    if(APP_PROPERTIES.ssr) return false;
+
     let d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toUTCString();
@@ -44,6 +42,8 @@ const common_view = ({
   },
 
   getCookie(cname) {
+    if(APP_PROPERTIES.ssr) return false;
+
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(";");
@@ -60,20 +60,27 @@ const common_view = ({
   },
 
   deleteCookie(name) {
+    if(APP_PROPERTIES.ssr) return false;
+
     if (this.getCookie(name)) document.cookie = name + "=;expires=Thu, 01-Jan-70 00:00:01 GMT";
   },
 
   getPath: () => {
+    if(APP_PROPERTIES.ssr) return "";
+
     const pathArr = window.location.pathname.split("/");
     return decodeURI(pathArr[1]);
-
   },
 
   getPaths: () => {
+    if(APP_PROPERTIES.ssr) return false;
+
     return window.location.pathname.split("/");
   },
 
   getTag: () => {
+    if(APP_PROPERTIES.ssr) return "";
+
     const pathArr = window.location.pathname.split("/");
     let tag = "";
     if (pathArr.length > 2 && (pathArr[1] === "latest" || pathArr[1] === "featured" || pathArr[1] === "popular")) {
@@ -84,6 +91,8 @@ const common_view = ({
 
   // Clip board copy
   clipboardCopy: id => {
+    if(APP_PROPERTIES.ssr) return false;
+
     return new Promise((resolve, reject) => {
       document.getElementById(id).select();
       document.execCommand("copy");
@@ -92,10 +101,16 @@ const common_view = ({
   },
 
   // Scroll to top
-  scrollTop: () => window.scrollTo(0, 0),
+  scrollTop: () => {
+    if(APP_PROPERTIES.ssr) return false;
+
+    return window.scrollTo(0, 0)
+  },
 
   // Set BODY TAG Style
   setBodyStyleLock: () => {
+    if(APP_PROPERTIES.ssr) return false;
+
     document.body.style.overflow = "hidden";
     document.body.style.paddingRight = "5px";
     return Promise.resolve(true);
@@ -103,12 +118,16 @@ const common_view = ({
 
   // Set BODY TAG Style
   setBodyStyleUnlock: () => {
+    if(APP_PROPERTIES.ssr) return false;
+
     document.body.style.overflow = "";
     document.body.style.paddingRight = "";
     return Promise.resolve(true);
   },
 
   getMySub: () => {
+    if(APP_PROPERTIES.ssr) return "";
+
     let authSub = "";
     let isAuthenticated = MainRepository.Account.isAuthenticated();
 
@@ -121,23 +140,29 @@ const common_view = ({
 
   // 페이지 GET
   getPageNum: () => {
+    if(APP_PROPERTIES.ssr) return 1;
+
     let pathName = window.location.pathname.split("/")[3],
     pageNum = pathName ? Number(pathName.split("-")[0]) : 0;
     return pageNum > 0 ? pageNum - 1 : 0;
   },
 
   authorCalculateReward: (pv: number, tpv: number, pool: number) => {
+    if(APP_PROPERTIES.ssr) return 0;
+
     if (tpv === 0 || pv === 0 || pool === 0 || !tpv || !pv || !pool) return 0;
     return (pv * (pool / tpv));
   },
 
   curatorCalculateReward: (pool: number, v: number, tv: number, pv: number, tpvs: number) => {
+    if(APP_PROPERTIES.ssr) return 0;
+
     if (pool === 0 || v === 0 || tv === 0 || pv === 0 || tpvs === 0 || !pool || !v || !tv || !pv || !tpvs) return 0;
     return (pool * (Math.pow(pv, 2) / tpvs)) * (v / tv);
   },
 
   getAuthorNDaysReward(result: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
-    if (!totalViewCountInfo || !result.latestPageviewList || getCreatorDailyRewardPool === 0) return;
+    if (APP_PROPERTIES.ssr || !totalViewCountInfo || !result.latestPageviewList || getCreatorDailyRewardPool === 0) return;
     let y, m, d, pv, tpv, timestamp;
     let totalReward = 0;
 
@@ -162,7 +187,7 @@ const common_view = ({
 
   // Creator N Days Total Reward
   getAuthorNDaysTotalReward(documentList: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any, day: number) {
-    if (!documentList || getCreatorDailyRewardPool <= 0 || !totalViewCountInfo) return;
+    if (APP_PROPERTIES.ssr || !documentList || getCreatorDailyRewardPool <= 0 || !totalViewCountInfo) return;
     let totalReward = 0;
 
     for (let k = 0; k < documentList.length; ++k) {
@@ -198,7 +223,7 @@ const common_view = ({
   },
 
   getAuthor7DaysTotalReward(documentList: any, getCreatorDailyRewardPool: number, totalViewCountInfo: any) {
-    if (!documentList || getCreatorDailyRewardPool <= 0 || !totalViewCountInfo) return;
+    if (APP_PROPERTIES.ssr || !documentList || getCreatorDailyRewardPool <= 0 || !totalViewCountInfo) return;
 
     let totalReward = 0;
 
@@ -236,7 +261,7 @@ const common_view = ({
 
   // Curator N Days Total Reward
   getCuratorNDaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, day: number, latestRewardVoteList: any, test) {
-    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
+    if (APP_PROPERTIES.ssr || !documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
     let totalReward = 0;
 
 
@@ -319,7 +344,7 @@ const common_view = ({
 
   // Curator 7 Days Total Reward
   getCurator7DaysTotalReward(documentList: any, getCuratorDailyRewardPool: number, totalViewCountInfo: any, latestRewardVoteList: any) {
-    if (!documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
+    if (APP_PROPERTIES.ssr || !documentList || getCuratorDailyRewardPool <= 0 || !totalViewCountInfo || !latestRewardVoteList) return;
     let totalReward = 0;
 
     if (APP_PROPERTIES.debug) {
@@ -395,6 +420,3 @@ const common_view = ({
     return totalReward;
   }
 });
-
-
-export default init();
