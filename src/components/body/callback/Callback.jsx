@@ -22,7 +22,7 @@ class Callback extends Component {
 
           // 로그인 성공시, 유사 로그인 정보 삭제
           setMyInfo(res);
-          history.push("/" + res.username);
+          history.push("/@" + res.username);
         });
       }).catch( err => {
         console.error(err);

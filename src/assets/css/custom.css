@@ -9510,8 +9510,6 @@ dean
 404 화면 CSS*/
 
 .no-data-icon {
-    margin-top: 20%;
-    margin-bottom: 15%;
     color: #a2a2a2;
     font-size: 16px;
     text-align: center;
@@ -9530,6 +9528,13 @@ dean
 
 .content-list-wrapper .no-data-icon {
     margin-top: 0;
+}
+
+.not-found-page-wrapper {
+    height: calc(100vh - 190px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 

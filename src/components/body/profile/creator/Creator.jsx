@@ -35,6 +35,14 @@ class Creator extends React.Component {
     log.Creator.init();
     let presentValue = this.getParam(), params = {};
 
+    // @ 통해서 프로필 접근 허용
+    if(presentValue[0] !== '@'){
+      this.wrongAccess();
+    } else {
+      presentValue = presentValue.substring(1);
+    }
+
+
     if (getMyInfo.username !== presentValue && getMyInfo.email !== presentValue && getMyInfo.sub !== presentValue) {
       if (Common.checkEmailForm(presentValue)) params = { email: presentValue };
       else params = { username: presentValue };
@@ -45,17 +53,16 @@ class Creator extends React.Component {
 
   // 잘못된 접근, 404 페이지 이동
   wrongAccess = () => {
-    const { setAlertCode } = this.props;
+    this.props.setAlertCode(2002);
     this.props.history.push({
       pathname: "/404",
       state: { errMessage: psString("profile-err-1") }
     });
-    setAlertCode(2002);
   };
 
 
   // 프로필 정보 GET
-  getProfileInfo = (params: any) => {
+  getProfileInfo = params => {
     MainRepository.Account.getProfileInfo(params)
       .then(result => {
           if (result.message) this.wrongAccess();
@@ -75,12 +82,12 @@ class Creator extends React.Component {
   getParam = () => decodeURI(window.location.pathname.split("/")[1]);
 
 
-  //업로드 탭에서 문서 목록 GET, AuthorSummary에서 계산 위해 사용
-  getUploadDocumentList = (result: any) => this.setState({ uploadDocumentList: result });
+  //업로드 탭에서 문서 목록 GET, AuthorSummary 에서 계산 위해 사용
+  getUploadDocumentList = result => this.setState({ uploadDocumentList: result });
 
 
-  //투표 탭에서 문서 목록 GET, AuthorSummary에서 계산 위해 사용
-  getVoteDocumentList = (result: any) => this.setState({ voteDocumentList: result });
+  //투표 탭에서 문서 목록 GET, AuthorSummary 에서 계산 위해 사용
+  getVoteDocumentList = result => this.setState({ voteDocumentList: result });
 
 
   componentWillMount(): void {

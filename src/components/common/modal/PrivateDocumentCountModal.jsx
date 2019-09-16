@@ -76,7 +76,7 @@ class PrivateDocumentCountModal extends React.Component {
   // 링크 이동 관리
   handleLinkBtn = modal => {
     this.handleClickClose(modal);
-    history.push("/" + this.props.getMyInfo.username);
+    history.push("/@" + this.props.getMyInfo.username);
   };
 
 

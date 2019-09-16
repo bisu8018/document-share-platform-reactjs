@@ -218,7 +218,7 @@ class ContentViewFullScreen extends Component {
           }
 
           <div>
-            <Link to={"/" + identification} className="info_name"
+            <Link to={"/@" + identification} className="info_name"
                   title={"Go to profile page of " + identification}>
               {profileUrl ?
                 <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :

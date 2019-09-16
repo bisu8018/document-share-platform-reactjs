@@ -59,7 +59,7 @@ class DocumentCard extends React.Component {
       <div>
         <div
           className={"main-category-card mb-3 " + (idx < (countCards - 1) && " mr-0 mr-sm-3 ") + (idx === (countCards - 1) && " mr-0 mr-sm-3 mr-lg-0")}>
-          <Link to={"/" + identification + "/" + documentData.seoTitle}>
+          <Link to={"/@" + identification + "/" + documentData.seoTitle}>
             <div className="main-category-card-img-wrapper" onClick={() => common_view.scrollTop()}>
               <img src={imgUrl} alt={documentData.title}
                    className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
@@ -67,7 +67,7 @@ class DocumentCard extends React.Component {
           </Link>
           <div className="main-category-card-content">
             <div className="main-category-card-title">
-              <Link to={"/" + identification + "/" + documentData.seoTitle} onClick={() => common_view.scrollTop()}
+              <Link to={"/@" + identification + "/" + documentData.seoTitle} onClick={() => common_view.scrollTop()}
                     title={documentData.title}>
                 <LinesEllipsis
                   text={documentData.title ? documentData.title : documentData.documentName}
@@ -78,7 +78,7 @@ class DocumentCard extends React.Component {
                 />
               </Link>
             </div>
-            <Link to={"/" + identification} className="main-category-card-profile mt-1 mb-1 pt-1 pb-2 w-full">
+            <Link to={"/@" + identification} className="main-category-card-profile mt-1 mb-1 pt-1 pb-2 w-full">
               {profileUrl ?
                 <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
                 <i className="material-icons img-thumbnail" onClick={() => common_view.scrollTop()}>face</i>

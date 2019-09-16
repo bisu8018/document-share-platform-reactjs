@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import ContentView from "../../../../components/body/contents/contentsView/ContentView";
+import { setAction } from "../../../../redux/reducer/main";
 
 export default connect(
   state => ({
@@ -8,5 +9,6 @@ export default connect(
     getAway: state.header.away
   }),
   dispatch => ({
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
   })
 )(ContentView);

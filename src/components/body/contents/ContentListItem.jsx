@@ -67,7 +67,7 @@ class ContentListItem extends React.Component {
     return (
       <div className="row u_center_inner" key={result.seoTitle}>
         <div className="col-thumb-list">
-          <Link to={"/" + identification + "/" + result.seoTitle}>
+          <Link to={"/@" + identification + "/" + result.seoTitle}>
             <div className="thumb_image" onClick={() => common_view.scrollTop()}>
               <img src={imageUrl} alt={result.title}
                    className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
@@ -77,11 +77,11 @@ class ContentListItem extends React.Component {
 
         <div className="col-details_info details_info">
           <div className="mb-3 mb-sm-2 detail-title">
-            <Link to={"/" + identification + "/" + result.seoTitle} onClick={() => common_view.scrollTop()}
+            <Link to={"/@" + identification + "/" + result.seoTitle} onClick={() => common_view.scrollTop()}
                   title={result.title}> {result.title ? result.title : result.documentName}</Link>
           </div>
           <div className="mb-2">
-            <Link to={"/" + identification} className="info_name"
+            <Link to={"/@" + identification} className="info_name"
                   title={identification}>
               {profileUrl ?
                 <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
@@ -95,7 +95,7 @@ class ContentListItem extends React.Component {
           </div>
 
           <div className="details-info-desc-wrapper">
-            <Link to={"/" + identification + "/" + result.seoTitle} className="info_desc" title={result.desc}
+            <Link to={"/@" + identification + "/" + result.seoTitle} className="info_desc" title={result.desc}
                   onClick={() => common_view.scrollTop()}>
               {result.desc &&
               <LinesEllipsis

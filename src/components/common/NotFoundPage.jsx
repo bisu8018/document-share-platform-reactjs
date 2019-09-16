@@ -1,12 +1,12 @@
 import React from "react";
 import history from "apis/history/history";
 
-class NotFoundPage extends React.Component{
+class NotFoundPage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      time: 5,
+      time: 5
     };
   }
 
@@ -15,7 +15,7 @@ class NotFoundPage extends React.Component{
   setTime = () => {
     this.setInterval = setInterval(() => {
       let t = this.state.time;
-      this.setState({time: t - 1}, () => {
+      this.setState({ time: t - 1 }, () => {
         if (this.state.time <= 0) {
           clearInterval(this.setInterval);
           history.push("/");
@@ -30,22 +30,24 @@ class NotFoundPage extends React.Component{
   }
 
 
-  render(){
+  render() {
     const { errMessage, location } = this.props;
 
     return (
-      <div className="no-data-icon container">
-        <i className="material-icons">report</i>
+      <div className="not-found-page-wrapper">
+        <div className="no-data-icon container">
+          <i className="material-icons">report</i>
 
-        <br/>
+          <br/>
 
-        { errMessage || (location.state && location.state.errMessage) || "Not Found Page."}
+          {errMessage || (location.state && location.state.errMessage) || "Not Found Page."}
 
-        <br/>
+          <br/>
 
-        Go to main page after
-        <span>{this.state.time}</span>
-        seconds.
+          Go to main page after
+          <span>{this.state.time}</span>
+          seconds.
+        </div>
       </div>
     );
   }

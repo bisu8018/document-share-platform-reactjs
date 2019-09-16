@@ -68,7 +68,7 @@ class Menu extends React.Component {
 
 
             {MainRepository.Account.isAuthenticated() ?
-              <Link to={"/" + identification}
+              <Link to={"/@" + identification}
                     onClick={() => this.menuClick()}>
                 {getMyInfo.picture.length > 0 ?
                   <img src={getMyInfo.picture} className="avatar-menu" alt="Link to my profile"/> :

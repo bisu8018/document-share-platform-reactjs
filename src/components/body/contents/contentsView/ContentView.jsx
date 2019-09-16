@@ -12,6 +12,7 @@ import log from "../../../../config/log";
 import AwayModal from "../../../common/modal/AwayModal";
 import ContentViewFullScreenMock from "../../../common/mock/ContentViewFullScreenMock";
 import ContentViewRightMock from "../../../common/mock/ContentViewRightMock";
+import { psString } from "../../../../config/localization";
 
 
 class ContentView extends React.Component {
@@ -33,8 +34,33 @@ class ContentView extends React.Component {
   // 초기화
   init = () => {
     log.ContentView.init();
+
+    if (APP_PROPERTIES.ssr) return;
+
+    let presentValue = this.getParam();
+
+    // @ 통해서 프로필 접근 허용
+    if(presentValue[0] !== '@'){
+      this.wrongAccess();
+    }
+
+
     if (!this.state.documentData) this.getContentInfo(this.getSeoTitle());
   };
+
+
+  // 잘못된 접근, 404 페이지 이동
+  wrongAccess = () => {
+    this.props.setAlertCode(2002);
+    this.props.history.push({
+      pathname: "/404",
+      state: { errMessage: psString("profile-err-1") }
+    });
+  };
+
+
+  // URL 파라미터 유저 identification GET
+  getParam = () => decodeURI(window.location.pathname.split("/")[1]);
 
 
   // 문서 정보 GET

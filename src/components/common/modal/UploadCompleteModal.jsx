@@ -52,7 +52,7 @@ class UploadCompleteModal extends React.Component {
   handleLinkBtn = modal => {
     this.handleClickClose(modal);
     let identifier = this.props.identifier;
-    history.push("/" + identifier);
+    history.push("/@" + identifier);
   };
 
 
