@@ -78,7 +78,7 @@ class UploadCompleteModal extends React.Component {
               <div>{psString("upload-doc-desc-2") + psString("upload-doc-desc-4-a") + privateDocCount + psString("upload-doc-desc-4-b")}</div>
             }
           </div>
-          {identifier === common_view.getPath() ?
+          {identifier === common_view.getPath().substring(1) ?
             <div className="custom-modal-footer">
               <div onClick={() => this.handleCloseOnMyPage()}
                    className="ok-btn">{psString("common-modal-confirm")}</div>

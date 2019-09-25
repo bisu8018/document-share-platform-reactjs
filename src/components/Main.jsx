@@ -17,6 +17,8 @@ import LoadingModal from "./common/modal/LoadingModal";
 import log from "../config/log";
 import { APP_PROPERTIES } from "../properties/app.properties";
 import common_view from "../common/common_view";
+import { Helmet } from "react-helmet";
+
 
 class Main extends Component {
   state = {
@@ -28,40 +30,38 @@ class Main extends Component {
   init = () => {
     if (APP_PROPERTIES.ssr) return Promise.resolve().then(() => this.setInitData());
 
-    log.Main.init();
     history.listen(MainRepository.Analytics.sendPageView);
 
-    MainRepository.init(() => {
-
+    MainRepository.init(() =>
       Promise.resolve()
-      //태그 리스트 GET
-        .then(() => this.setTagList())
-        // 업로드 태그 리스트 GET
-        .then(() => this.setUploadTagList())
-        // 내 정보 GET
-        .then(() => this.setMyInfo())
-        // 모바일 유무 GET
-        .then(() => this.setIsMobile())
-        // Web3 GET
-        .then(() => this.setWeb3Apis())
-        // Drizzle GET
-        .then(() => this.setDrizzleApis())
-        // 크리에이터 리워드풀 GET
-        .then(() => this.setAuthorDailyRewardPool())
-        // 큐레이터 리워드풀 GET
-        .then(() => this.setCuratorDailyRewardPool())
+        .then(() => {
+          this.setTagList();    //태그 리스트 GET
+          this.setUploadTagList();   // 업로드 태그 리스트 GET
+          this.setIsMobile();     // 모바일 유무 GET
+          this.setWeb3Apis();   // Web3 GET
+          this.setDrizzleApis();   // Drizzle GET
+          this.setAuthorDailyRewardPool();     // 크리에이터 리워드풀 GET
+          this.setCuratorDailyRewardPool();    // 큐레이터 리워드풀 GET
+          return this.setMyInfo();    // 내 정보 GET
+        })
+        // 찜 리스트 GET
+        .then(() => this.setMyList())
+        // 히스토리 리스트 GET
+        .then(() => this.setHistory())
         // 초기화 완료
-        .then(() => this.setInitData());
-    });
+        .then(() => this.setInitData())
+        // 초기화 완료 LOG
+        .then(() => log.Main.init())
+        // 에러 발생 체크
+        .catch(() => this.setInitData())
+    );
   };
 
 
   //태그 리스트 GET
   setTagList = () => {
-    const { setTagList } = this.props;
-
-    return MainRepository.Document.getTagList("latest")
-      .then(result => setTagList(result.resultList))
+    MainRepository.Document.getTagList("latest")
+      .then(result => this.props.setTagList(result.resultList))
       .catch(err => log.Main.setTagList(err))
       .then(log.Main.setTagList());
   };
@@ -69,10 +69,8 @@ class Main extends Component {
 
   //업로드 태그 리스트 GET
   setUploadTagList = () => {
-    const { setUploadTagList } = this.props;
-
-    return MainRepository.Document.getTagList("latest")
-      .then(result => setUploadTagList(result.resultList))
+    MainRepository.Document.getTagList("latest")
+      .then(result => this.props.setUploadTagList(result.resultList))
       .catch(err => log.Main.setUploadTagList(err))
       .then(log.Main.setUploadTagList());
   };
@@ -83,14 +81,35 @@ class Main extends Component {
     const { getMyInfo, setMyInfo } = this.props;
     if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
       let myInfo = MainRepository.Account.getMyInfo();
-      MainRepository.Account.getAccountInfo(myInfo.sub).then(result => {
+      return MainRepository.Account.getAccountInfo(myInfo.sub).then(result => {
         let res = result.user;
+
         if (!res.username || !res.username === "") res.username = res.email;
-        res.privateDocumentCount = result.privateDocumentCount;
         if (!res.picture) res.picture = localStorage.getItem("user_info").picture;
+
+        res.privateDocumentCount = result.privateDocumentCount;
         log.Main.setMyInfo();
+
         return setMyInfo(res);
       }).catch(err => log.Main.setMyInfo(err));
+    }
+  };
+
+
+  // 나의 찜 목록 GET
+  setMyList = () => {
+    const { getMyInfo, setMyList } = this.props;
+    if (MainRepository.Account.isAuthenticated() && getMyInfo.sub.length !== 0) {
+      return MainRepository.Document.getMyList(getMyInfo.sub).then(res => setMyList({ resultList: res }));
+    }
+  };
+
+
+  // 히스토리 목록 GET
+  setHistory = () => {
+    const { getMyInfo, setHistory } = this.props;
+    if (MainRepository.Account.isAuthenticated() && getMyInfo.sub.length !== 0) {
+      return MainRepository.Document.getHistory(getMyInfo.sub).then(res => setHistory({ resultList: res }));
     }
   };
 
@@ -103,8 +122,6 @@ class Main extends Component {
     else setIsMobile(false);
 
     log.Main.setIsMobile();
-
-    return Promise.resolve();
   };
 
 
@@ -112,7 +129,6 @@ class Main extends Component {
   setWeb3Apis = () => {
     this.props.setWeb3Apis();
     log.Main.setWeb3Apis();
-    return Promise.resolve();
   };
 
 
@@ -120,7 +136,6 @@ class Main extends Component {
   setDrizzleApis = () => {
     this.props.setDrizzleApis();
     log.Main.setDrizzleApis();
-    return Promise.resolve();
   };
 
 
@@ -145,15 +160,17 @@ class Main extends Component {
 
 
   //init 데이터 SET
-  setInitData = () => {
-    return this.setState({ initData: true });
-  };
+  setInitData = () => this.setState({ initData: true });
 
 
   // get Main component
   getMainComponent = () => {
     return (
       <div>
+        <Helmet>
+          <title>Polaris Share</title>
+        </Helmet>
+
         <HeaderContainer/>
         <div id='container' data-parallax='true'>
           <CookiePolicyModal/>

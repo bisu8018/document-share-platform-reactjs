@@ -5,13 +5,20 @@ import Common from "../../../common/common";
 import PayoutCard from "../../common/card/PayoutCard";
 import common_view from "../../../common/common_view";
 import { APP_PROPERTIES } from "../../../properties/app.properties";
+import Tooltip from "@material-ui/core/Tooltip";
+import { psString } from "../../../config/localization";
+import MainRepository from "../../../redux/MainRepository";
+import DocumentInfo from "../../../redux/model/DocumentInfo";
+
 
 class ContentListItem extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      ratio: null
+      ratio: null,
+      documentData: new DocumentInfo(),
+      bookmarkFlag: false
     };
   }
 
@@ -21,18 +28,65 @@ class ContentListItem extends React.Component {
     if (APP_PROPERTIES.ssr) return false;
 
     this.getImgInfo();
+    this.checkBookmark();
   };
 
 
   // 리워드 정보 표시
-  showRewardInfo = (id) => {
+  showRewardInfo = id => {
     if (document.getElementById(id)) document.getElementById(id).style.display = "block";
   };
 
 
   // 리워드 정보 숨김
-  hideRewardInfo = (id) => {
+  hideRewardInfo = id => {
     if (document.getElementById(id)) document.getElementById(id).style.display = "none";
+  };
+
+
+  // 찜하기
+  checkBookmark = () => {
+    const { getMyList } = this.props;
+    let flag;
+
+    if (getMyList.resultList) {
+      flag = getMyList.resultList.filter(v => v._id === this.props.result._id).length > 0;
+    } else {
+      flag = false;
+    }
+
+    this.setState({ bookmarkFlag: flag });
+  };
+
+
+  // 북마크 버튼 클릭 관리
+  handleBookmark = () => {
+    const { result, setAlertCode, getMyList, setMyList } = this.props;
+
+    this.setState({ bookmarkFlag: true });
+    let myList = getMyList;
+    myList.resultList.push(result);
+    setMyList(myList);
+
+    return MainRepository.Mutation.addMyList(result.documentId)
+      .then(() => setAlertCode(2121))
+      .catch(err => setAlertCode(2122));
+  };
+
+
+  // 북마크 삭제 버튼 클릭 관리
+  handleBookmarkRemove = () => {
+    const { result, setAlertCode, getMyList, setMyList } = this.props;
+
+    this.setState({ bookmarkFlag: false });
+    let myList = getMyList;
+    let idx = getMyList.resultList.findIndex(x => x._id === result.documentId);
+    myList.resultList.slice(idx, 1);
+    setMyList(myList);
+
+    return MainRepository.Mutation.removeMyList(result.documentId)
+      .then(() => setAlertCode(2123))
+      .catch(err => setAlertCode(2124));
   };
 
 
@@ -41,10 +95,7 @@ class ContentListItem extends React.Component {
     const { result } = this.props;
     let img = new Image();
     img.src = Common.getThumbnail(result.documentId, 320, 1, result.documentName);
-    img.onload = () => {
-      let height = img.height, width = img.width;
-      this.setState({ ratio: (width / height) });
-    };
+    img.onload = () => this.setState({ ratio: (img.width / img.height) });
   };
 
 
@@ -55,7 +106,7 @@ class ContentListItem extends React.Component {
 
   render() {
     const { result, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
-    const { ratio } = this.state;
+    const { ratio, bookmarkFlag } = this.state;
 
     let vote = Common.toEther(result.latestVoteAmount) || 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(result, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
@@ -120,11 +171,22 @@ class ContentListItem extends React.Component {
             </span>
             <span className="info-detail-view mr-3">{view}</span>
             <span className="info-detail-vote mr-3">{Common.deckStr(vote)}</span>
+            {MainRepository.Account.isAuthenticated() && bookmarkFlag &&
+            <Tooltip title={psString("bookmark-remove")} placement="bottom">
+              <span className="info-detail-bookmark-checked" onClick={() => this.handleBookmarkRemove()}>
+                   <i className="material-icons">bookmark</i>
+              </span>
+            </Tooltip>}
+            {MainRepository.Account.isAuthenticated() && !bookmarkFlag &&
+            <Tooltip title={psString("bookmark-add")} placement="bottom">
+              <span className="info-detail-bookmark" onClick={() => this.handleBookmark()}>
+                   <i className="material-icons">bookmark_border</i>
+              </span>
+            </Tooltip>
+            }
           </div>
 
-          {reward > 0 &&
-          <PayoutCard reward={reward} data={result}/>
-          }
+          {reward > 0 && <PayoutCard reward={reward} data={result}/>}
 
         </div>
         <div className="hr-content-list-item d-block d-sm-none"/>

@@ -401,7 +401,7 @@ class UploadDocumentModal extends React.Component {
     const { type } = this.props;
 
     return (
-      <span>
+      <span className="ml-3">
         <div className="upload-btn d-none d-sm-flex" id="uploadBtn"
              onClick={() => this.handleClickOpen("classicModal")}>
           {psString("common-modal-upload")}

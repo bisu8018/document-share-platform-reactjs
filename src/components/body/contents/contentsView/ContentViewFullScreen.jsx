@@ -36,11 +36,11 @@ class ContentViewFullScreen extends Component {
     eventId: null,
     emailFlag: false,
     reward: 0,
-    isDocumentExist: null,
     downloadLoading: false,
     completeModalOpen: false,
-    isPublic: false,
-    isRegistry: false
+    isPublic: this.props.documentData.isPublic || false,
+    isRegistry: this.props.documentData.isRegistry || false,
+    bookmarkFlag: false
   };
 
 
@@ -50,6 +50,7 @@ class ContentViewFullScreen extends Component {
 
     log.ContentViewFullscreen.init();
     this.getReward();
+    this.checkBookmark();
   };
 
 
@@ -67,6 +68,22 @@ class ContentViewFullScreen extends Component {
 
   // 등록 버튼 트리거
   triggerRegisterBtn = () => document.getElementById("RegBlockchainBtn").click();
+
+
+  // 찜하기
+  checkBookmark = () => {
+    const { getMyList, documentData } = this.props;
+
+    let flag;
+
+    if (getMyList.resultList) {
+      flag = getMyList.resultList.filter(v => v._id === documentData._id).length > 0;
+    } else {
+      flag = false;
+    }
+
+    this.setState({ bookmarkFlag: flag });
+  };
 
 
   //현재 page GET
@@ -98,7 +115,7 @@ class ContentViewFullScreen extends Component {
 
   //Web3에서 보상액 GET
   getReward = () => {
-    const { getWeb3Apis,documentData } = this.props;
+    const { getWeb3Apis, documentData } = this.props;
     getWeb3Apis.getNDaysRewards(documentData.documentId, 7).then(res => {
       log.ContentViewFullscreen.getReward();
       let reward = Common.toEther(res);
@@ -110,7 +127,7 @@ class ContentViewFullScreen extends Component {
   //  문서 정보 state의 isPublish 업데이트
   setIsPublish = () => {
     return new Promise((resolve) => {
-    this.setState({ isPublic: true }, () => {
+      this.setState({ isPublic: true }, () => {
         resolve();
       });
     });
@@ -168,6 +185,37 @@ class ContentViewFullScreen extends Component {
   };
 
 
+  // 북마크 버튼 클릭 관리
+  handleBookmark = () => {
+    const { documentData, setAlertCode, getMyList, setMyList } = this.props;
+
+    this.setState({ bookmarkFlag: true });
+    let myList = getMyList;
+    myList.resultList.push(documentData);
+    setMyList(myList);
+
+    return MainRepository.Mutation.addMyList(documentData.documentId)
+      .then(() => setAlertCode(2121))
+      .catch(err => setAlertCode(2122));
+  };
+
+
+  // 북마크 삭제 버튼 클릭 관리
+  handleBookmarkRemove = () => {
+    const { documentData, setAlertCode, getMyList, setMyList } = this.props;
+
+    this.setState({ bookmarkFlag: false });
+    let myList = getMyList;
+    let idx = getMyList.resultList.findIndex(x => x._id === documentData.documentId);
+    myList.resultList.slice(idx, 1);
+    setMyList(myList);
+
+    return MainRepository.Mutation.removeMyList(documentData.documentId)
+      .then(() => setAlertCode(2123))
+      .catch(err => setAlertCode(2124));
+  };
+
+
   componentWillMount(): void {
     this.init();
   }
@@ -175,7 +223,7 @@ class ContentViewFullScreen extends Component {
 
   render() {
     const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
-    const { page, emailFlag,isPublic, isRegistry, downloadLoading, completeModalOpen } = this.state;
+    const { page, emailFlag, isPublic, isRegistry, downloadLoading, completeModalOpen, bookmarkFlag } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
@@ -189,18 +237,18 @@ class ContentViewFullScreen extends Component {
 
       <article
         className="col-md-12 col-lg-8 view_left u__view ">
-          <div className="view_top">
-            <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
-                                          tracking={true} handleEmailFlag={this.handleEmailFlag}
-                                          getPageNum={page => this.getPageNum(page)}/>
-            <a className="view_screen" href={APP_PROPERTIES.domain().viewer + documentData.seoTitle} target="_blank"
-               rel="noopener noreferrer">
-              <i title="viewer button" className="material-icons">fullscreen</i>
-            </a>
-          </div>
+        <div className="view_top">
+          <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
+                                        tracking={true} handleEmailFlag={this.handleEmailFlag}
+                                        getPageNum={page => this.getPageNum(page)}/>
+          <a className="view_screen" href={APP_PROPERTIES.domain().viewer + documentData.seoTitle} target="_blank"
+             rel="noopener noreferrer">
+            <i title="viewer button" className="material-icons">fullscreen</i>
+          </a>
+        </div>
 
         <div className="view_content">
-          <div className="u_title pt-2 pb-2 mt-2 mb-2">
+          <div className="u_title mt-0 mt-sm-2 mb-2">
             {documentData.title}
           </div>
 
@@ -208,32 +256,27 @@ class ContentViewFullScreen extends Component {
           <div className="view-option-btn" id="viewer-option-btn">
             <i className="material-icons" onClick={() => this.handleSetting()}>more_vert</i>
             <div className="option-table d-none" id="viewer-option-table">
-              <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>Download</div>
-
+              <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>
+                <i className="material-icons">save_alt</i>
+                {psString("download-btn")}
+              </div>
+              {MainRepository.Account.isAuthenticated() && bookmarkFlag ?
+                <div className="option-table-btn" onClick={() => this.handleBookmarkRemove()}>
+                  <i className="material-icons">bookmark_border</i>
+                  {psString("bookmark-remove")}
+                </div> :
+                <div className="option-table-btn" onClick={() => this.handleBookmark()}>
+                  <i className="material-icons">bookmark</i>
+                  {psString("bookmark-add")}
+                </div>
+              }
               <EditDocumentModalContainer documentData={documentData}/>
               {isRegistry === false && (accountId === common_view.getMySub()) &&
               <DeleteDocumentModalContainer documentData={documentData}/>}
             </div>
           </div>
           }
-
-          <div>
-            <Link to={"/@" + identification} className="info_name"
-                  title={"Go to profile page of " + identification}>
-              {profileUrl ?
-                <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
-                <i className="material-icons img-thumbnail" onClick={() => common_view.scrollTop()}>face</i>
-              }
-              {identification}
-            </Link>
-
-            <div className="info-date-view">
-              {Common.timestampToDateTime(documentData.created)}
-            </div>
-          </div>
-
-
-          <div className="mb-3 d-inline-block position-relative">
+          <div className="mb-2 mb-sm-3 d-block position-relative">
 
             <span className={"info-detail-reward mr-3 " + (isRegistry ? "" : "color-not-registered")}
                   onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
@@ -251,7 +294,7 @@ class ContentViewFullScreen extends Component {
           </div>
 
 
-          <div className="d-inline-block mb-3">
+          <div className="mb-3">
             {!isPublic &&
             <PublishModalContainer documentData={documentData} afterPublish={() => this.handleAfterPublish()}/>}
 
@@ -297,10 +340,25 @@ class ContentViewFullScreen extends Component {
           </div>
 
 
-          <div className="hr mb-2"/>
+          <div className="hr"/>
 
 
           <div className="view_desc">
+            <Link to={"/@" + identification} className="info_name mb-2 mb-sm-3"
+                  title={"Go to profile page of " + identification}>
+              {profileUrl ?
+                <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
+                <i className="material-icons img-thumbnail" onClick={() => common_view.scrollTop()}>face</i>
+              }
+              {identification}
+            </Link>
+
+            <div className="info-date-view d-none d-sm-inline-block">
+              {Common.timestampToDate(documentData.created)}
+            </div>
+
+            <br/>
+
             <Linkify properties={{
               title: psString("viewer-page-title-1"),
               rel: "nofollow",
@@ -316,7 +374,7 @@ class ContentViewFullScreen extends Component {
               )) : ""}
             </div>
 
-            <div className="sns-share-icon-wrapper mb-3">
+            <div className="sns-share-icon-wrapper mb-2">
               <Tooltip title={psString("viewer-page-sns-linkedin")} placement="bottom">
                 <div className="d-inline-block mr-3">
                   <LinkedinShareButton url={ogUrl} className="sns-share-icon " title={documentData.title}>

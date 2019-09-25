@@ -40,12 +40,11 @@ class ContentView extends React.Component {
     let presentValue = this.getParam();
 
     // @ 통해서 프로필 접근 허용
-    if(presentValue[0] !== '@'){
+    if (presentValue[0] !== "@")
       this.wrongAccess();
-    }
-
-
-    if (!this.state.documentData) this.getContentInfo(this.getSeoTitle());
+    if (!this.state.documentData)
+      this.getContentInfo(this.getSeoTitle())
+        .then(res => this.setHistory(res));
   };
 
 
@@ -63,35 +62,43 @@ class ContentView extends React.Component {
   getParam = () => decodeURI(window.location.pathname.split("/")[1]);
 
 
+  // 문서 우져 히스토리 SET
+  setHistory = res => {
+    if (MainRepository.Account.isAuthenticated()) MainRepository.Mutation.addHistory(res.documentId);
+  };
+
+
   // 문서 정보 GET
-  getContentInfo = seoTitle => {
-    this.setState({ documentTitle: seoTitle, update: true });
-    return MainRepository.Document.getDocument(seoTitle)
-      .then(res => {
-        log.ContentView.getContentInfo(null, res);
+  getContentInfo = seoTitle =>
+    new Promise(resolve => {
+      this.setState({ documentTitle: seoTitle, update: true });
+      MainRepository.Document.getDocument(seoTitle)
+        .then(res => {
+          log.ContentView.getContentInfo(null, res);
 
-        if (res.document.state !== "CONVERT_COMPLETE") {
-          this.setStateClear();
-          this.pushNotFoundPage();
-        }
+          if (res.document.state !== "CONVERT_COMPLETE") {
+            this.setStateClear();
+            this.pushNotFoundPage();
+          }
 
-        this.setState({
-          documentTitle: res.document.seoTitle,
-          documentData: res.document,
-          totalViewCountInfo: res.totalViewCountInfo,
-          featuredList: common.shuffleArray(res.featuredList),
-          documentText: res.text,
-          author: res.document.author,
-          update: false
-        }, () => {
-          if (this.getSeoTitle() !== res.document.seoTitle) this.checkUrl(res);
-        });
-      }).catch(err => {
+          this.setState({
+            documentTitle: res.document.seoTitle,
+            documentData: res.document,
+            totalViewCountInfo: res.totalViewCountInfo,
+            featuredList: common.shuffleArray(res.featuredList),
+            documentText: res.text,
+            author: res.document.author,
+            update: false
+          }, () => {
+            if (this.getSeoTitle() !== res.document.seoTitle) this.checkUrl(res);
+            resolve(res.document);
+          });
+        }).catch(err => {
         log.ContentView.getContentInfo(err);
         this.setStateClear(err);
         this.pushNotFoundPage();
       });
-  };
+    });
 
 
   // SEO TITLE GET

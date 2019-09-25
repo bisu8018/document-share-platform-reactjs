@@ -118,7 +118,7 @@ class PrivateDocumentCountModal extends React.Component {
 
             <div className="custom-modal-footer">
               <div onClick={() => this.handleClickClose()} className="ok-btn">{psString("common-modal-confirm")}</div>
-              {username !== common_view.getPath() &&
+              {username !== common_view.getPath().substring(1) &&
               <div onClick={() => this.handleLinkBtn()} className="ok-btn">{psString("private-doc-modal-btn")}</div>
               }
             </div>

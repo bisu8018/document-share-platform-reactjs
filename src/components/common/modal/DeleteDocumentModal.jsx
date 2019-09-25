@@ -92,6 +92,7 @@ class DeleteDocumentModal extends React.Component {
     return (
       <div>
         <div className="option-table-btn " onClick={() => this.handleClickOpen("classicModal")}>
+          <i className="material-icons">delete</i>
           {psString("common-modal-delete")}
         </div>
 

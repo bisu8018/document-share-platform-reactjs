@@ -48,6 +48,6 @@ export default {
         data => resolve(data)
         , err => reject(err));
       });
-    }
+    },
   }
 };

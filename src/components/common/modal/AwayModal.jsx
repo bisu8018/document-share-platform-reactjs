@@ -63,7 +63,7 @@ class AwayModal extends React.Component {
               </div>
 
 
-              <div className="custom-modal-content away-modal-desc">
+              <div className="custom-modal-content away-modal-desc pb-4">
                 {psString("away-modal-desc-1")}
                 <span>{this.state.time}</span>
                 {psString("away-modal-desc-2")}

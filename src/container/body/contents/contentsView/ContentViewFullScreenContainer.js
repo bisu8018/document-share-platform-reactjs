@@ -8,9 +8,11 @@ export default connect(
     getDrizzle: state.main.drizzleApis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
     getMyInfo: state.main.myInfo,
+    getMyList: state.main.myList,
     getIsMobile: state.main.isMobile
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode)),
+    setMyList: (myList: []) => dispatch(setAction.myList(myList)),
   })
 )(ContentViewFullScreen);

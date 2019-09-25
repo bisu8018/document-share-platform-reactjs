@@ -14,6 +14,8 @@ import RegBlockchainBtnContainer from "../../../../container/body/contents/conte
 import DocumentInfo from "../../../../redux/model/DocumentInfo";
 import common_view from "../../../../common/common_view";
 import PublishCompleteModalContainer from "../../../../container/common/modal/PublishCompleteModalContainer";
+import { psString } from "../../../../config/localization";
+import AnalyticsModalContainer from "../../../../container/common/modal/AnalyticsModalContainer";
 
 
 class CreatorTabItem extends React.Component {
@@ -30,7 +32,6 @@ class CreatorTabItem extends React.Component {
 
   // 초기화
   init = () => {
-    this.clickEventListener();
     this.setDocumentData()
       .then(() => this.handleState())
       .then(() => this.getImgInfo());
@@ -110,7 +111,7 @@ class CreatorTabItem extends React.Component {
   // 문서 정보 state 저장
   setDocumentData = () => {
     if (!this.state.documentData.seoTitle)
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         this.setState({ documentData: this.props.document }, () => {
           resolve();
         });
@@ -126,9 +127,9 @@ class CreatorTabItem extends React.Component {
   };
 
 
-  //  문서 정보 state의 isPublish 업데이트
+  //  문서 정보 state 의 isPublish 업데이트
   setIsPublish = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       let _documentData = this.state.documentData;
       _documentData.isPublic = true;
       this.setState({ _documentData: _documentData }, () => {
@@ -138,9 +139,9 @@ class CreatorTabItem extends React.Component {
   };
 
 
-  //  문서 정보 state의 isRegistry 업데이트
+  //  문서 정보 state 의 isRegistry 업데이트
   setIsRegistry = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       let _documentData = this.state.documentData;
       _documentData.isRegistry = true;
       this.setState({ _documentData: _documentData }, () => {
@@ -188,15 +189,6 @@ class CreatorTabItem extends React.Component {
   addInlineBlock = e => Promise.resolve(e.target.classList.add("d-inline-block"));
 
 
-  // 설정창 표시
-  showSetting = () => document.getElementById("viewer-option-table-" + this.props.idx).classList.remove("d-none");
-
-
-  // 클릭 이벤트 리스너 종료
-  handleResizeEnd = (e) => window.removeEventListener("click", () => {
-  });
-
-
   // 문서 상태관리
   handleState = () => {
     const { setAlertCode } = this.props;
@@ -213,7 +205,7 @@ class CreatorTabItem extends React.Component {
             setAlertCode(2075, { title: documentData.title });
           }
         })
-        .catch(err => {
+        .catch(() => {
           clearInterval(this.setInterval);
           setAlertCode(2001);
         });
@@ -226,13 +218,8 @@ class CreatorTabItem extends React.Component {
   }
 
 
-  componentWillUnmount() {
-    this.handleResizeEnd();
-  }
-
-
   render() {
-    const { getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, idx } = this.props;
+    const { getCreatorDailyRewardPool, handleUploadSettings, totalViewCountInfo, getIsMobile, viewerOptionOpenedIdx, idx } = this.props;
     const { ratio, documentData, completeModalOpen } = this.state;
 
     if (!documentData.seoTitle) return false;
@@ -254,12 +241,10 @@ class CreatorTabItem extends React.Component {
                   <div className="not-convert-container">
                     <div className="not-convert"><FadingCircle size={40} color={"#3d5afe"}/></div>
                   </div>
-                </Tooltip>
-                :
+                </Tooltip> :
                 <img src={Common.getThumbnail(documentData.documentId, "thumb", 1, documentData.documentName)}
                      alt={documentData.title ? documentData.title : documentData.documentName}
-                     className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>
-              }
+                     className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>}
             </div>
           </Link>
         </div>
@@ -267,23 +252,30 @@ class CreatorTabItem extends React.Component {
 
         <div className="col-12 col-sm-9 col-lg-10 p-0">
           {documentData.accountId === common_view.getMySub() &&
-          <div className="view-option-btn top-0 right-0" id={"viewer-option-btn-" + idx}>
-            <i className="material-icons" id={"view-option-icon-" + idx}
-               onClick={e => this.addInlineBlock(e).then(this.showSetting())}>more_vert</i>
-            <div className="option-table d-none" id={"viewer-option-table-" + idx}>
+          <div className="view-option-btn">
+            <i className="material-icons"
+               onClick={e => this.addInlineBlock(e).then(handleUploadSettings())}>more_vert</i>
+
+            <div className={"option-table " + (viewerOptionOpenedIdx === idx ? "" : "d-none")} id={"optionTable" + idx }>
               {documentData.state === "CONVERT_COMPLETE" &&
               <CopyModalContainer documentData={documentData} type="onlyIcon"/>}
-              {documentData.state === "CONVERT_COMPLETE" && documentData.isDownload &&
-              <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>Download</div>}
+
+              {documentData.state === "CONVERT_COMPLETE" &&
+              <AnalyticsModalContainer documentData={documentData} type="onlyIcon"/>}
+
+              {documentData.state === "CONVERT_COMPLETE" &&
+              <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>
+                <i className="material-icons">save_alt</i>
+                {psString("download-btn")}
+              </div>}
+
               {((Common.dateAgo(documentData.created) > 0 && documentData.state && documentData.state !== "CONVERT_COMPLETE") || documentData.isRegistry === false) &&
               <DeleteDocumentModalContainer documentData={documentData} type="onlyIcon"/>}
             </div>
-          </div>
-          }
+          </div>}
 
           <Link to={"/@" + identification + "/" + documentData.seoTitle}>
-            <div className="info_title mb-1"
-                 onClick={() => common_view.scrollTop()}>
+            <div className="info_title mb-1" onClick={() => common_view.scrollTop()}>
               {documentData.title ? documentData.title : documentData.documentName}
             </div>
           </Link>
@@ -291,19 +283,16 @@ class CreatorTabItem extends React.Component {
           <div className="details-info-desc-wrapper">
             <Link to={"/@" + identification + "/" + documentData.seoTitle}
                   className={"info_desc " + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}
-                  title="description"
-                  onClick={() => common_view.scrollTop()}>
+                  title="description" onClick={() => common_view.scrollTop()}>
               {documentData.desc &&
-              <LinesEllipsis
-                text={documentData.desc}
-                maxLine={2}
-                ellipsis='...'
-                trimRight
-                basedOn='words'
-              />
-              }
+              <LinesEllipsis text={documentData.desc}
+                             maxLine={2}
+                             ellipsis='...'
+                             trimRight
+                             basedOn='words'/>}
             </Link>
           </div>
+
 
           <div className="tab-item-info-wrapper ">
               <span className={"info-detail-reward mr-3 " + (documentData.isRegistry ? "" : "color-not-registered")}
@@ -314,40 +303,38 @@ class CreatorTabItem extends React.Component {
                      src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
                      alt="arrow button"/>
               </span>
+
             {reward > 0 && <PayoutCard reward={reward} data={documentData}/>}
             <span className="info-detail-view mr-3">{view}</span>
             <span className="info-detail-vote mr-3">{Common.deckStr(vote)}</span>
-            <div className="info-date info-date-profile">{common_view.dateTimeAgo(documentData.created)}</div>
+            <div className="info-date ml-0 ml-sm-3">{common_view.dateTimeAgo(documentData.created)}</div>
 
-            <div className={(getIsMobile ? "mt-2" : "float-right")}>
+            <div className={"claim-btn-wrapper " + (getIsMobile ? "mt-2" : "float-right")}>
               <CreatorClaimContainer {...this.props} document={documentData}/>
             </div>
 
             {documentData.isPublic === false && documentData.state === "CONVERT_COMPLETE" &&
             <div className={(getIsMobile ? "mt-2" : "float-right")}>
-              <PublishModalContainer documentData={documentData} type={"tabItem"}
+              <PublishModalContainer documentData={documentData}
+                                     type={"tabItem"}
                                      afterPublish={() => this.handleAfterPublish()}/>
-            </div>
-            }
+            </div>}
 
-            {completeModalOpen && <PublishCompleteModalContainer documentData={documentData}
-                                                                 completeModalClose={() => this.handleCompleteModalClose()}/>}
+            {completeModalOpen &&
+            <PublishCompleteModalContainer documentData={documentData}
+                                           completeModalClose={() => this.handleCompleteModalClose()}/>}
 
             {documentData.isPublic && (documentData.accountId === common_view.getMySub() && documentData) &&
             <div className={(getIsMobile ? "mt-2" : "float-right")}>
               <RegBlockchainBtnContainer documentData={documentData} type={"tabItem"}
                                          afterRegistered={() => this.handleAfterRegistered()}/>
-            </div>
-            }
+            </div>}
           </div>
         </div>
 
 
         <div className="hr-content-list-item d-block d-sm-none"/>
-
-
       </div>
-
     );
   }
 

@@ -8,6 +8,7 @@ import CreatorTabItemContainer from "../../../../container/body/profile/creator/
 import { psString } from "../../../../config/localization";
 import log from "../../../../config/log";
 import common_view from "../../../../common/common_view";
+import { APP_PROPERTIES } from "../../../../properties/app.properties";
 
 class CreatorUploadTab extends React.Component {
   state = {
@@ -16,21 +17,27 @@ class CreatorUploadTab extends React.Component {
     isEndPage: false,
     moreDataFlag: false,
     totalViewCountInfo: null,
-    loading: false
+    loading: false,
+    param: null,
+    viewerOptionOpenedIdx: null
   };
 
 
   // 초기화
   init = () => {
     log.CreatorUploadTab.init();
-    this.fetchDocuments();
+
+    this.setState({ param: this.getParam() }, () => {
+      this.handleClickEventListener();
+      this.fetchDocuments();    // url 위변조 방지 위하여, 첫 로드시 set state 진행
+    });
   };
 
 
   //URL 파라미터 유저 identification GET
   getParam = () => {
     let pathArr = window.location.pathname.split("/");
-    return decodeURI(pathArr[1]);
+    return decodeURI(pathArr[1]).substring(1);
   };
 
 
@@ -53,20 +60,19 @@ class CreatorUploadTab extends React.Component {
   // 데이터 GET
   fetchDocuments = params => {
     const { userInfo, getMyInfo } = this.props;
+    const { param } = this.state;
 
-    let param = this.getParam(),
-      _params = {
-        pageNo: (!params || isNaN(params.pageNo)) ? 1 : Number(params.pageNo),
-        username: userInfo.username || "",
-        email: userInfo.email,
-        pageSize: 10000   // 임시 사용
-      };
+    let _params = {
+      pageNo: (!params || isNaN(params.pageNo)) ? 1 : Number(params.pageNo),
+      username: userInfo.username || "",
+      email: userInfo.email,
+      pageSize: 10000   // 임시 사용
+    };
 
     return Promise.resolve()
       .then(() => this.setState({ loading: true }))
       .then(() => (param === getMyInfo.username || param === getMyInfo.email || param === common_view.getMySub()) ?
-        MainRepository.Account.getDocuments(_params) :
-        MainRepository.Document.getDocumentList(_params))
+        MainRepository.Account.getDocuments(_params) : MainRepository.Document.getDocumentList(_params))
       .then(res => this.handleData(res))
       .catch(err => {
         console.error(err);
@@ -96,12 +102,35 @@ class CreatorUploadTab extends React.Component {
   };
 
 
-  // 클릭 이벤트 리스너 종료
-  handleResizeEnd = (e) => {
-    log.ContentMain.handleResizeEnd();
-    window.removeEventListener("click", () => {
-    });
+  // 업로드 탭, 설정창 on/off 관리
+  handleUploadSettings = idx => {
+    const { viewerOptionOpenedIdx } = this.state;
+    this.setState({ viewerOptionOpenedIdx: viewerOptionOpenedIdx !== idx ? idx : null });
   };
+
+
+  // 클릭 이벤트 리스너
+  handleClickEventListener = () => {
+    if (APP_PROPERTIES.ssr) return false;
+
+    document.addEventListener("click", e => {
+      const { viewerOptionOpenedIdx } = this.state;
+        if (viewerOptionOpenedIdx !== null) {
+          // clicked element
+          let targetElement = e.target;
+          const profileCard = document.getElementById("optionTable" + viewerOptionOpenedIdx);
+          if (targetElement.contains(profileCard)) {
+            this.setState({ viewerOptionOpenedIdx: null });
+          }
+        }
+      }
+    );
+  };
+
+
+  // 클릭 이벤트 리스너 종료
+  handleResizeEnd = (e) => window.removeEventListener("click", () => {
+  });
 
 
   componentWillMount() {
@@ -109,8 +138,13 @@ class CreatorUploadTab extends React.Component {
   }
 
 
+  componentWillUnmount() {
+    this.handleResizeEnd();
+  }
+
+
   render() {
-    const { resultList, isEndPage, totalViewCountInfo, loading } = this.state;
+    const { resultList, isEndPage, totalViewCountInfo, loading, viewerOptionOpenedIdx } = this.state;
     const { userInfo } = this.props;
 
     return (
@@ -130,9 +164,10 @@ class CreatorUploadTab extends React.Component {
             loader={<div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>}>
             {resultList.length > 0 && resultList.map((result, idx) => (
               <CreatorTabItemContainer document={result} userInfo={userInfo} idx={idx} key={idx}
+                                       handleUploadSettings={() => this.handleUploadSettings(idx)}
+                                       viewerOptionOpenedIdx={viewerOptionOpenedIdx}
                                        totalViewCountInfo={totalViewCountInfo}/>
-            ))}</InfiniteScroll>
-          :
+            ))}</InfiniteScroll> :
           loading ?
             <div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>
             : <NoDataIcon className="no-data">No data</NoDataIcon>

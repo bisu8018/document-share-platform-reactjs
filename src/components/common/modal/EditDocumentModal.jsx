@@ -349,6 +349,7 @@ class EditDocumentModal extends React.Component {
     return (
       <span>
         <div className="option-table-btn " onClick={() => this.handleClickOpen("classicModal")}>
+          <i className="material-icons">settings_applications</i>
           {psString("common-modal-settings")}
         </div>
 

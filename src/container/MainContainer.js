@@ -14,13 +14,15 @@ export default connect(
     getDrizzle: state.main.drizzleApis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
     getAlertCode: state.main.alertCode,
-    getAway: state.header.away
+    getAway: state.header.away,
   }),
   dispatch => ({
     setInitComplete: (initComplete: boolean) => dispatch(setAction.initComplete(initComplete)),
     setMyInfo: (myInfo: any) => dispatch(setAction.myInfo(myInfo)),
     setTagList: (tagList: []) => dispatch(setAction.tagList(tagList)),
     setUploadTagList: (uploadTagList: []) => dispatch(setAction.uploadTagList(uploadTagList)),
+    setMyList: (myList: []) => dispatch(setAction.myList(myList)),
+    setHistory: (history: []) => dispatch(setAction.history(history)),
     setIsMobile: (isMobile: boolean) => dispatch(setAction.isMobile(isMobile)),
     setAuthorDailyRewardPool: (authorRewardPool: any) => dispatch(setAction.authorDailyRewardPool(authorRewardPool)),
     setCuratorDailyRewardPool: (curatorRewardPool: any) => dispatch(setAction.curatorDailyRewardPool(curatorRewardPool)),

@@ -33,7 +33,7 @@ class ContentList extends Component {
 
   // 초기화
   init = () => {
-    if(APP_PROPERTIES.ssr) return this.fetchSsrDocuments();
+    if (APP_PROPERTIES.ssr) return this.fetchSsrDocuments();
 
     log.ContentList.init();
     this.setFetch().then(res => this.fetchDocuments(res));
@@ -177,35 +177,32 @@ class ContentList extends Component {
         <ContentTagsContainer path={path} url={match.url} {...this.props}/>
 
 
-        <section className="col-sm-12 col-lg-9 u__center-container">
+        <section
+          className={"col-sm-12 col-lg-9 u__center-container mt-0 pt-0 pt-sm-4 " + (this.state.loading ? "u__center-container-mock" : "")}>
           <div className="d-block d-sm-none content-list-path">{path}</div>
 
           {resultList.length > 0 &&
           <InfiniteScroll
-            className={(getIsMobile ? "overflow-initial " : "") + "mt-0 mt-sm-4 pt-0 pt-sm-2 u__center content-list-wrapper"}
+            className={(getIsMobile ? "overflow-initial " : "") + "u__center content-list-wrapper"}
             dataLength={resultList.length}
             next={this.fetchMoreData}
             hasMore={!isEndPage}>
             {resultList.map(result => (
               <ContentListItemContainer key={result.documentId + result.accountId} result={result}
-                                        totalViewCountInfo={totalViewCountInfo}/>
-            ))}
+                                        totalViewCountInfo={totalViewCountInfo}/>))}
           </InfiniteScroll>
           }
 
           {this.state.loading &&
-          <div className="mt-3">
+          <div>
             <ContentListItemMock/>
             <ContentListItemMock order={2}/>
             <ContentListItemMock order={3}/>
-          </div>
-          }
+          </div>}
           {!this.state.loading && ((resultList && resultList.length === 0) || !resultList) &&
-          <NoDataIcon className="no-data">No data</NoDataIcon>
-          }
+          <NoDataIcon className="no-data">No data</NoDataIcon>}
 
         </section>
-
 
       </div>
     );

@@ -1,11 +1,16 @@
 import ReactGA from "react-ga";
 import auth0 from "auth0-js";
 import axios from "axios";
-import { AUTH_CONFIG } from "properties/auth.properties";
-import { APP_PROPERTIES } from "properties/app.properties";
+import { AUTH_CONFIG } from "../properties/auth.properties";
+import { APP_PROPERTIES } from "../properties/app.properties";
 
 import DocService from "../service/DocService";
 import AuthService from "../service/AuthService";
+import CuratorService from "../service/CuratorService";
+import TrackingService from "../service/TrackingService";
+import AnalyticsService from "../service/AnalyticsService";
+import TagService from "../service/TagService";
+import Graphql from "../service/Graphql";
 
 import DocumentList from "./model/DocumentList";
 import Document from "./model/Document";
@@ -18,13 +23,11 @@ import TrackingExport from "./model/TrackingExport";
 import AnalysticsExport from "./model/AnalysticsExport";
 import UserProfile from "./model/UserProfile";
 import DocumentDownload from "./model/DocumentDownload";
-import CuratorService from "../service/CuratorService";
-import TrackingService from "../service/TrackingService";
 import CuratorSummary from "./model/CuratorSummary";
-import AnalyticsService from "../service/AnalyticsService";
-import TagService from "../service/TagService";
 import AccountInfo from "./model/AccountInfo";
 import common_view from "../common/common_view";
+import mutations from "../service/mutations";
+import queries from "../service/queries";
 //import * as Sentry from '@sentry/browser';
 
 let instance: any;
@@ -85,14 +88,16 @@ export default {
     authData: {},
     hsq: []
   },
+  Common: {
+    async getToken() {
+      const authResult = await instance.Account.renewSessionPromise();
+      return authResult.idToken;
+    }
+  },
   Analytics: {
     async getAnalyticsExport(data: any, callback: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      const token = authResult.idToken;
       const params = {
-        header: {
-          "Authorization": `Bearer ${token}`
-        },
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         params: {
           "documentId": data.documentId,
           "year": data.year,
@@ -106,17 +111,15 @@ export default {
       });
     },
     async getAnalyticsList(params: any, callback: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
       const _params = {
+        header: {
+          "Authorization": `Bearer ${await instance.Common.getToken()}`
+        },
         params: {
           userid: null,
           week: params.week,
           year: params.year,
           documentId: params.documentId
-        },
-        header: {
-          "Authorization": `Bearer ${token}`
         }
       };
       AnalyticsService.GET.analyticsList(_params, (result) => {
@@ -252,10 +255,8 @@ export default {
       if (userInfo) localStorage.setItem("user_info", JSON.stringify(userInfo));
     },
     async getAccountInfo(id) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
       const data = {
-        header: { "Authorization": `Bearer ${token}` },
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         params: { "id": id }
       };
 
@@ -315,19 +316,17 @@ export default {
         });
     },
     async getProfileImageUploadUrl() {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
-      const _data = { header: { "Authorization": `Bearer ${token}` } };
+      const _data = {
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` }
+      };
 
       return AuthService.POST.profileImageUpdate(_data)
         .then(result => new UserProfile(result))
         .catch(err => err);
     },
     async syncEthereum(ethAccount: string, callback) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
       const _data = {
-        header: { "Authorization": `Bearer ${token}` },
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         data: { "ethAccount": ethAccount }
       };
       AuthService.POST.ethereumSync(_data, (res, error) => {
@@ -336,10 +335,8 @@ export default {
       });
     },
     async updateUsername(username: string, callback) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
       const _data = {
-        header: { "Authorization": `Bearer ${token}` },
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         data: { "username": username }
       };
       AuthService.POST.accountUpdate(_data, () => {
@@ -348,10 +345,8 @@ export default {
       });
     },
     async updateProfileImage(url: string, callback) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
       const _data = {
-        header: { "Authorization": `Bearer ${token}` },
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         data: { "picture": url }
       };
       AuthService.POST.accountUpdate(_data, () => {
@@ -382,10 +377,8 @@ export default {
       common_view.deleteCookie("_gid");
     },
     async getDocuments(data: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      const token = authResult.idToken;
       const params = {
-        header: { "Authorization": `Bearer ${token}` },
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         params: {
           "pageSize": data.pageSize,
           "pageNo": data.pageNo
@@ -399,7 +392,6 @@ export default {
   },
   Document: {
     async registerDocument(args: any, progress: any, callback: any, error: any) {
-      const authResult = await instance.Account.renewSessionPromise();
       let fileInfo = args.fileInfo,
         user = args.userInfo,
         ethAccount = args.ethAccount,
@@ -409,10 +401,10 @@ export default {
         useTracking = args.useTracking,
         forceTracking = args.forceTracking,
         isDownload = args.isDownload,
-        cc = args.cc,
-        token = authResult.idToken;
+        cc = args.cc;
 
       const data = {
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         data: {
           filename: fileInfo.file.name,
           size: fileInfo.file.size,
@@ -427,8 +419,7 @@ export default {
           isDownload: isDownload,
           isPublic: false,
           cc: cc
-        },
-        header: { "Authorization": `Bearer ${token}` }
+        }
       };
 
       if (!fileInfo.file) return console.error("The registration value(file or metadata) is invalid.", fileInfo);
@@ -493,9 +484,8 @@ export default {
       DocService.POST.todayVotedDocumentsByCurator({ accountId: params.accountId }, (result) => callback(result));
     },
     async updateDocument(data: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
       const _data = {
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         data: {
           documentId: data.documentId,
           desc: data.desc,
@@ -505,35 +495,86 @@ export default {
           forceTracking: data.forceTracking,
           isDownload: data.isDownload,
           cc: data.cc
-        },
-        header: { "Authorization": `Bearer ${token}` }
+        }
       };
       return DocService.POST.updateDocument(_data)
         .then(rst => new DocumentInfo(rst.result))
         .catch(error => console.error(error));
     },
     async publishDocument(data: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
       const _data = {
-        data: data,
-        header: { "Authorization": `Bearer ${token}` }
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
+        data: data
       };
       return DocService.POST.updateDocument(_data)
         .then(rst => new DocumentInfo(rst.result))
         .catch(error => console.error(error));
     },
     async deleteDocument(data: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      let token = authResult.idToken;
       const _data = {
-        data: data,
-        header: { "Authorization": `Bearer ${token}` }
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
+        data: data
       };
       return DocService.POST.updateDocument(_data)
         .then(rst => new DocumentInfo(rst.result))
         .catch(error => console.error(error));
-    }
+    },
+    getMyList: async data => instance.Query.getMyListFindMany(data)
+      .then(res => res.map(v => "\"" + v.documentId + "\""))
+      .then(res => instance.Query.getDocumentListByIds(res))
+      .then(res => {
+        let resultData = res;
+        resultData.Document.findByIds = res.Document.findByIds.filter(l => {
+          let latestArr = res.DocumentFeatured.findByIds.filter(f => f._id === l._id)[0];
+          return latestArr ? l.latestVoteAmount = latestArr.latestVoteAmount : true;
+        });
+        return resultData;
+      })
+      .then(res => {
+        let resultData = res;
+        resultData.Document.findByIds = res.Document.findByIds.filter(l => {
+          let latestArr = res.DocumentPopular.findByIds.filter(p => p._id === l._id)[0];
+          return latestArr ? l.latestPageview = latestArr.latestPageview : true;
+        });
+        return resultData.Document.findByIds;
+      })
+      .then(async res => {
+        let ids = res.map(v => "\"" + v.accountId + "\"");
+        let userData = await instance.Query.getUserByIds(ids);
+        return res.filter(v => {
+          let idx = -1;
+          userData.map((u, i) => (idx === -1 && u._id === v.accountId) ? idx = i : -1);
+          return idx !== -1 ? v.author = userData[idx] : v;
+        });
+      }),
+    getHistory: async data => instance.Query.getHistoryFindById(data)
+      .then(res => res.map(v => "\"" + v.documentId + "\""))
+      .then(res => instance.Query.getDocumentListByIds(res))
+      .then(res => {
+        let resultData = res;
+        resultData.Document.findByIds = res.Document.findByIds.filter(l => {
+          let latestArr = res.DocumentFeatured.findByIds.filter(f => f._id === l._id)[0];
+          return latestArr ? l.latestVoteAmount = latestArr.latestVoteAmount : true;
+        });
+        return resultData;
+      })
+      .then(res => {
+        let resultData = res;
+        resultData.Document.findByIds = res.Document.findByIds.filter(l => {
+          let latestArr = res.DocumentPopular.findByIds.filter(p => p._id === l._id)[0];
+          return latestArr ? l.latestPageview = latestArr.latestPageview : true;
+        });
+        return resultData.Document.findByIds;
+      })
+      .then(async res => {
+        let ids = res.map(v => "\"" + v.accountId + "\"");
+        let userData = await instance.Query.getUserByIds(ids);
+        return res.filter(v => {
+          let idx = -1;
+          userData.map((u, i) => (idx === -1 && u._id === v.accountId) ? idx = i : -1);
+          return idx !== -1 ? v.author = userData[idx] : v;
+        });
+      })
   },
   Curator: {
     async getCuratorDocuments(params: any, callback: any, error: any) {
@@ -556,10 +597,8 @@ export default {
       return TrackingService.POST.trackingConfirm(data);
     },
     async getTrackingInfo(data: any, callback: any, error: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      const token = authResult.idToken;
       const params = {
-        header: { "Authorization": `Bearer ${token}` },
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         params: {
           "cid": data.cid,
           "documentId": data.documentId,
@@ -572,10 +611,8 @@ export default {
         , err => error(err));
     },
     async getTrackingList(data: any, callback: any, error: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      const token = authResult.idToken;
       const params = {
-        header: { "Authorization": `Bearer ${token}` },
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         params: data
       };
 
@@ -584,19 +621,40 @@ export default {
         , err => error(err));
     },
     async getTrackingExport(documentId: string, callback: any) {
-      const authResult = await instance.Account.renewSessionPromise();
-      const token = authResult.idToken;
       const params = {
-        header: { "Authorization": `Bearer ${token}` },
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         params: { "documentId": documentId }
       };
 
       TrackingService.GET.trackingExport(params, result => callback(new TrackingExport(result)));
     }
   },
-  Bounty: {
-    getBounty(data) {
-
-    }
+  Mutation: {
+    addMyList: async data => Graphql({
+      header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
+      mutation: mutations.addMyList(data)
+    }).then(res => res),
+    removeMyList: async data => Graphql({
+      header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
+      mutation: mutations.removeMyList(data)
+    }).then(res => res),
+    addHistory: async data => Graphql({
+      header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
+      mutation: mutations.addHistory(data)
+    }).then(res => res),
+  },
+  Query: {
+    getMyListFindMany: async data => Graphql({
+      query: queries.getMyListFindMany(data)
+    }).then(res => res.UserDocumentFavorite.findMany),
+    getHistoryFindById: async data => Graphql({
+      query: queries.getHistoryFindById(data)
+    }).then(res => res.UserDocumentHistory.findMany),
+    getDocumentListByIds: async data => Graphql({
+      query: queries.getDocumentListByIds(data)
+    }).then(res => res),
+    getUserByIds: async data => Graphql({
+      query: queries.getUserByIds(data)
+    }).then(res => res.User.findByIds)
   }
 };

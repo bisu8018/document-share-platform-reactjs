@@ -9,7 +9,7 @@ class Footer extends React.Component {
     return (
 
       <footer id="footer">
-        <div className="container p-4 row">
+        <div className="container row">
           <div className="footer-logo col-sm-3">
             <a href={"/"} title="Link to main page">
               <img className="footer-logo-img" src={require("assets/image/logo-mono.png")} alt="POLARIS SHARE"/>
@@ -39,7 +39,7 @@ class Footer extends React.Component {
               <div className="footer-nav" onClick={() => common_view.scrollTop()}>{psString("footer-4")}</div>
             </Link>
           </div>
-          <div className="footer-sns col-sm-3 row">
+          <div className="footer-sns col-sm-3 row pr-0">
             <div className="footer-sns-wrapper">
               <a target="_blank" href={"https://www.facebook.com/polarishare/"} rel="noopener noreferrer">
                 <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-facebook.svg")} alt="Facebook Page"/>

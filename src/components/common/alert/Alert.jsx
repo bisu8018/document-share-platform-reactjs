@@ -187,6 +187,25 @@ class Alert extends React.PureComponent {
         break;
 
 
+      //북마크 관련 메세지 2121~
+      case 2121 :
+        status = "success";
+        msg = this.getMsg(code);   // 찜 등록 성공
+        break;
+      case 2122 :
+        status = "error";
+        msg = this.getMsg(code);   // 북마크 에러
+        break;
+      case 2123 :
+        status = "success";
+        msg = this.getMsg(code);   // 찜 목록 삭제
+        break;
+      case 2124 :
+        status = "error";
+        msg = this.getMsg(code);   // 찜 목록 삭제
+        break;
+
+
 
       //=============================================
       //서버 단 상태코드

@@ -290,7 +290,7 @@ class AudienceTrackingList extends React.Component {
       <section className="u__center w-100 container">
         <div className="row tracking-list-wrapper">
           <div className="col-12 col-sm-3 col-lg-2 col-thumb mt-2">
-            <Link to={"/" + match.params.identification + "/" + documentData.seoTitle}>
+            <Link to={"/@" + match.params.identification + "/" + documentData.seoTitle}>
               <div className="tab-thumbnail" onClick={() => common_view.scrollTop()}>
                 <img src={addr}
                      alt={documentData.title ? documentData.title : documentData.documentName}
@@ -302,7 +302,7 @@ class AudienceTrackingList extends React.Component {
 
           <div className="col-12 col-sm-9 col-lg-10 col-details_info p-sm-2 ">
             <dl className="details_info">
-              <Link to={"/" + match.params.identification + "/" + documentData.seoTitle} className="info_title mb-2"
+              <Link to={"/@" + match.params.identification + "/" + documentData.seoTitle} className="info_title mb-2"
                     onClick={() => common_view.scrollTop()}>
                 {documentData.title}
               </Link>

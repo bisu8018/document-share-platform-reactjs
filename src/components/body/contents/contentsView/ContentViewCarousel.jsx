@@ -26,6 +26,18 @@ class ContentViewCarousel extends React.Component {
   };
 
 
+  // init
+  init = () => {
+    let pageNum = common_view.getPageNum() > this.props.target.totalPages ? 0 : common_view.getPageNum();
+    if (MainRepository.Account.isAuthenticated()) {
+      this.postTrackingConfirm(pageNum)
+        .then(() => this.handleTracking(pageNum))
+        .catch(() => APP_PROPERTIES.env === "local" ? this.handleTracking(pageNum) : false);
+    } else {
+      this.handleTracking(pageNum);
+    }
+  };
+
   // 특정 시간 동안 머문 후 트랙킹 시작
   checkStayTime = page => {
     const { stayTime, readPage } = this.state;
@@ -157,7 +169,7 @@ class ContentViewCarousel extends React.Component {
           }
 
           if (emailFlag) this.setState({ emailFlag: false });
-        }else if((!res.user || (res.user && !res.use.e)) && page > 0 && emailFlagTemp){
+        } else if ((!res.user || (res.user && !res.use.e)) && page > 0 && emailFlagTemp) {
           this.setState({ emailFlag: true });
         }
       });
@@ -219,19 +231,12 @@ class ContentViewCarousel extends React.Component {
   handleOptionBarClickEvent = () => this.setState({ slideOptionFlag: !this.state.slideOptionFlag });
 
 
-  // 자동 슬라이드 설정 on/off
+  // 자동 슬라이드 설정 on/offsns-share-icon-wrapper mb-3
   handleOptionBtnClickEvent = () => this.setState({ autoSlideFlag: !this.state.autoSlideFlag });
 
 
   componentWillMount() {
-    let pageNum = common_view.getPageNum() > this.props.target.totalPages ? 0 : common_view.getPageNum();
-    if (MainRepository.Account.isAuthenticated()) {
-      this.postTrackingConfirm(pageNum)
-        .then(() => this.handleTracking(pageNum))
-        .catch(() => APP_PROPERTIES.env === "local" ? this.handleTracking(pageNum) : false);
-    } else {
-      this.handleTracking(pageNum);
-    }
+    this.init();
   }
 
 
@@ -251,6 +256,8 @@ class ContentViewCarousel extends React.Component {
     const arr = [target.totalPages];
 
     for (let i = 0; i < target.totalPages; i++) arr[i] = Common.getThumbnail(target.documentId, 2048, i + 1);
+
+    //console.log(1);
 
     return (
       <div className="card card-raised">

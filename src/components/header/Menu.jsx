@@ -3,7 +3,7 @@ import MainRepository from "../../redux/MainRepository";
 import UserInfo from "../../redux/model/UserInfo";
 import { Link } from "react-router-dom";
 import Common from "../../common/common";
-import { psString } from "../../config/localization";
+import { psGetLang, psSetLang, psString } from "../../config/localization";
 import common_view from "../../common/common_view";
 
 class Menu extends React.Component {
@@ -11,27 +11,41 @@ class Menu extends React.Component {
     menuShow: false
   };
 
+
+  // 메뉴 표시
   menuShow = () => {
     this.setState({ menuShow: true }, () => {
       common_view.setBodyStyleLock();
     });
   };
 
+
+  // 메뉴 숨김
   menuHide = () => {
     this.setState({ menuShow: false }, () => {
       common_view.setBodyStyleUnlock();
     });
   };
 
+
+  // 메뉴 클릭
   menuClick = () => {
     this.menuHide();
     common_view.scrollTop();
   };
 
+
+  // 언어 설정 관리
+  handleLang = () => psGetLang() === "EN" ? psSetLang("KO") : psSetLang("EN");
+
+
+  // 로그인 관리
   handleLogin = () => {
     MainRepository.Account.login();
   };
 
+
+  // 로그아웃 관리
   handleLogout = () => {
     const { setMyInfo } = this.props;
 
@@ -54,7 +68,6 @@ class Menu extends React.Component {
       <div className="d-inline-block ">
         <div className="menu-btn d-inline-block " onClick={() => this.menuShow()}/>
 
-
         {menuShow &&
         <div className="menu-wrapper">
           <div className="container">
@@ -65,44 +78,43 @@ class Menu extends React.Component {
 
           {(MainRepository.Account.isAuthenticated() || getTempEmail) &&
           <div className="d-black d-sm-none">
-
-
             {MainRepository.Account.isAuthenticated() ?
-              <Link to={"/@" + identification}
-                    onClick={() => this.menuClick()}>
+              <Link to={"/@" + identification} onClick={() => this.menuClick()}>
                 {getMyInfo.picture.length > 0 ?
                   <img src={getMyInfo.picture} className="avatar-menu" alt="Link to my profile"/> :
                   <img src={require("assets/image/icon/i_anonymous.png")} className="avatar"
                        alt="Link to my profile"/>}
                 <span className="avatar-name-menu">{identification}</span>
-              </Link>
-              :
-
+              </Link> :
               <div className="avatar-init-menu">
                 <div className="avatar-name-init-menu">{getTempEmail[0]}</div>
+              </div>}
+          </div>}
+
+
+          <div className="d-flex menu-content-list">
+            <div>
+              <Link to="/about">
+                <div className="menu-content-item" onClick={() => this.menuClick()}>{psString("menu-1")}</div>
+              </Link>
+              <Link to="/guide">
+                <div className="menu-content-item" onClick={() => this.menuClick()}>{psString("menu-2")}</div>
+              </Link>
+              <Link to="/faq">
+                <div className="menu-content-item" onClick={() => this.menuClick()}>FAQ</div>
+              </Link>
+              <a href="http://www.decompany.io/" target="_blank" rel="noopener noreferrer">
+                <div className="menu-content-item">{psString("menu-5")}</div>
+              </a>
+              <a href="https://www.linkedin.com/in/decompany-io-720812178/" target="_blank" rel="noopener noreferrer">
+                <div className="menu-content-item-sub">{psString("menu-3")}</div>
+              </a>
+              <div className="menu-content-item-sub">{psString("menu-4")}</div>
+              <div className='menu-content-item-sub' onClick={() => this.handleLang()}>
+
+                {psGetLang() === "EN" ? "Global" : "Korea"}
               </div>
-            }
-          </div>
-          }
-
-
-          <div className="menu-content-list">
-            <Link to="/about">
-              <div className="menu-content-item" onClick={() => this.menuClick()}>{psString("menu-1")}</div>
-            </Link>
-            <Link to="/guide">
-              <div className="menu-content-item" onClick={() => this.menuClick()}>{psString("menu-2")}</div>
-            </Link>
-            <Link to="/faq">
-              <div className="menu-content-item" onClick={() => this.menuClick()}>FAQ</div>
-            </Link>
-            <a href="http://www.decompany.io/" target="_blank" rel="noopener noreferrer">
-              <div className="menu-content-item">{psString("menu-5")}</div>
-            </a>
-            <a href="https://www.linkedin.com/in/decompany-io-720812178/" target="_blank" rel="noopener noreferrer">
-              <div className="menu-content-item-sub">{psString("menu-3")}</div>
-            </a>
-            <div className="menu-content-item-sub">{psString("menu-4")}</div>
+            </div>
           </div>
 
 
@@ -110,15 +122,13 @@ class Menu extends React.Component {
             <div className="menu-login-btn d-flex d-sm-none"
                  onClick={() => this.handleLogin()}>{psString("menu-login")}</div> :
             <div className="menu-logout-btn d-flex d-sm-none"
-                 onClick={() => this.handleLogout()}>{psString("menu-sign-out")}</div>
-          }
+                 onClick={() => this.handleLogout()}>{psString("menu-sign-out")}</div>}
           {getTempEmail &&
           <div className="menu-logout-btn d-flex d-sm-none"
                onClick={() => this.handleLogout()}>{psString("menu-sign-out")}</div>}
 
           <div className="header-version">{Common.getVersion()}</div>
-        </div>
-        }
+        </div>}
 
       </div>
     );

@@ -11,6 +11,8 @@ export const setAction = {
   uploadTagList: (uploadTagList: []) => ({ type: ReduxTypes.SET_UPLOAD_TAG_LIST, uploadTagList }),
   isMobile: (isMobile: boolean) => ({ type: ReduxTypes.SET_IS_MOBILE, isMobile }),
   documentList: (documentList: {}) => ({ type: ReduxTypes.SET_DOCUMENT_LIST, documentList }),
+  myList: (myList: {}) => ({ type: ReduxTypes.SET_MY_LIST, myList }),
+  history: (history: {}) => ({ type: ReduxTypes.SET_HISTORY, history }),
   web3Apis: () => ({ type: ReduxTypes.SET_WEB3_APIS, web3Apis: getWeb3Apis() }),
   drizzleApis: () => ({ type: ReduxTypes.SET_DRIZZLE_APIS, drizzleApis: getDrizzleApis() }),
   authorDailyRewardPool: (authorDailyRewardPool: number) => ({
@@ -56,6 +58,8 @@ const initState = {
   myInfo: new UserInfo(),
   tagList: [],
   uploadTagList: [],
+  myList: [],
+  history: [],
   isMobile: null,
   web3Apis: null,
   drizzleApis: getDrizzleApis(),
@@ -125,6 +129,16 @@ export default (state = initState, action: any) => {
       return {
         ...state,
         documentList: action.documentList,
+      };
+    case ReduxTypes.SET_MY_LIST:
+      return {
+        ...state,
+        myList: action.myList,
+      };
+    case ReduxTypes.SET_HISTORY:
+      return {
+        ...state,
+        history: action.history,
       };
     default:
       return state;

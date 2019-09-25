@@ -7,7 +7,7 @@ class Callback extends Component {
 
   // 초기화
   init = () => {
-    const { setAlertCode, setMyInfo } = this.props;
+    const { setAlertCode, setMyInfo, setMyList } = this.props;
     // 최초 로그인 시 redux 에 myInfo 저장 필요. callback.jsx 는 Main.jsx 에 route 되기 때문에,  Main.jsx 의 init 함수가 끝난 뒤에 호출됨.
 
     if (MainRepository.Account.isAuthenticated()) return false;
@@ -21,14 +21,16 @@ class Callback extends Component {
           if (!res.picture) res.picture = localStorage.getItem("user_info").picture;
 
           // 로그인 성공시, 유사 로그인 정보 삭제
-          setMyInfo(res);
+
+          setMyInfo(res);   // 나의 정보 SET
+          MainRepository.Document.getMyList(res.sub).then(res => setMyList({ resultList: res }));   // 나의 찜한 목록 SET
           history.push("/@" + res.username);
         });
-      }).catch( err => {
-        console.error(err);
-        setAlertCode(2004);
-        history.push("/");
-      });
+      }).catch(err => {
+      console.error(err);
+      setAlertCode(2004);
+      history.push("/");
+    });
   };
 
 

@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import Header from "../../components/header/Header";
 import { setAction } from "../../redux/reducer/main";
-import header from "../../redux/reducer/header";
+import { setAction as headerAction } from "../../redux/reducer/header";
 
 export default connect(
   state => ({
@@ -12,6 +12,6 @@ export default connect(
   }),
   dispatch => ({
     setIsMobile: (isMobile: boolean) => dispatch(setAction.isMobile(isMobile)),
-    setAway: (away: boolean) => dispatch(header.setAction.away(away))
+    setAway: (away: boolean) => dispatch(headerAction.away(away))
   })
 )(Header);

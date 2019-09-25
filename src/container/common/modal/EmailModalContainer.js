@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import EmailModal from "../../../components/common/modal/EmailModal";
 import { setAction } from "../../../redux/reducer/main";
-import emailModal from "../../../redux/reducer/emailModal";
+import { setAction as emailModalAction} from "../../../redux/reducer/emailModal";
 
 export default connect(
   state => ({
@@ -9,6 +9,6 @@ export default connect(
   }),
   dispatch => ({
     setMyInfo: (myInfo: any) => dispatch(setAction.myInfo(myInfo)),
-    setTempEmail: (tempEmail: any) => dispatch(emailModal.setAction.tempEmail(tempEmail))
+    setTempEmail: (tempEmail: any) => dispatch(emailModalAction.tempEmail(tempEmail))
   })
 )(EmailModal);
