@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet";
 import { psString } from "../../../config/localization";
 import log from "../../../config/log";
 import MainRepository from "../../../redux/MainRepository";
-import ContentTagsContainer from "../../../container/body/contents/ContentTagsContainer";
 import ContentListItemContainer from "../../../container/body/contents/ContentListItemContainer";
 import NoDataIcon from "../../common/NoDataIcon";
 import common_view from "../../../common/common_view";
@@ -164,7 +163,7 @@ class ContentList extends Component {
 
 
   render() {
-    const { match, isEndPage, getIsMobile } = this.props;
+    const { isEndPage, getIsMobile } = this.props;
     const { resultList, totalViewCountInfo, path } = this.state;
 
     return (
@@ -174,11 +173,8 @@ class ContentList extends Component {
         </Helmet>
 
 
-        <ContentTagsContainer path={path} url={match.url} {...this.props}/>
-
-
         <section
-          className={"col-sm-12 col-lg-9 u__center-container mt-0 pt-0 pt-sm-4 " + (this.state.loading ? "u__center-container-mock" : "")}>
+          className={"col-12 u__center-container mt-0 pt-0 pt-sm-4 " + (this.state.loading ? "u__center-container-mock" : "")}>
           <div className="d-block d-sm-none content-list-path">{path}</div>
 
           {resultList.length > 0 &&

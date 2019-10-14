@@ -17,34 +17,18 @@ import { psString } from "../../../../config/localization";
 
 class ContentView extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      documentTitle: null,
-      documentData: null,
-      totalViewCountInfo: null,
-      documentText: null,
-      author: null,
-      featuredList: null,
-      update: null
-    };
-  }
-
-
   // 초기화
   init = () => {
     log.ContentView.init();
 
-    if (APP_PROPERTIES.ssr) return;
-
-    let presentValue = this.getParam();
+    if (APP_PROPERTIES.ssr) return false;
 
     // @ 통해서 프로필 접근 허용
-    if (presentValue[0] !== "@")
+    if (this.getParam()[0] !== "@")
       this.wrongAccess();
-    if (!this.state.documentData)
-      this.getContentInfo(this.getSeoTitle())
-        .then(res => this.setHistory(res));
+
+    if (!this.props.getDocument.document.documentTitle)
+      this.getContentInfo(this.props.match.params.documentId).then(res => this.setHistory(res));
   };
 
 
@@ -71,31 +55,18 @@ class ContentView extends React.Component {
   // 문서 정보 GET
   getContentInfo = seoTitle =>
     new Promise(resolve => {
-      this.setState({ documentTitle: seoTitle, update: true });
       MainRepository.Document.getDocument(seoTitle)
         .then(res => {
           log.ContentView.getContentInfo(null, res);
 
-          if (res.document.state !== "CONVERT_COMPLETE") {
-            this.setStateClear();
+          if (res.document.state !== "CONVERT_COMPLETE")
             this.pushNotFoundPage();
-          }
 
-          this.setState({
-            documentTitle: res.document.seoTitle,
-            documentData: res.document,
-            totalViewCountInfo: res.totalViewCountInfo,
-            featuredList: common.shuffleArray(res.featuredList),
-            documentText: res.text,
-            author: res.document.author,
-            update: false
-          }, () => {
-            if (this.getSeoTitle() !== res.document.seoTitle) this.checkUrl(res);
-            resolve(res.document);
-          });
+          this.props.setDocument(res);
+          if (!APP_PROPERTIES.ssr && this.getSeoTitle() !== res.document.seoTitle) this.checkUrl(res);
+          resolve(res.document);
         }).catch(err => {
         log.ContentView.getContentInfo(err);
-        this.setStateClear(err);
         this.pushNotFoundPage();
       });
     });
@@ -107,20 +78,9 @@ class ContentView extends React.Component {
 
   // 이미지 URL GET
   getImgUrl = () => {
-    const { documentData } = this.state;
-    return common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName);
+    const { getDocument } = this.props;
+    return common.getThumbnail(getDocument.document.documentId, 640, 1, getDocument.document.documentName);
   };
-
-
-  //state clear
-  setStateClear = () => this.setState({
-    documentTitle: null,
-    documentData: null,
-    totalViewCountInfo: null,
-    documentText: null,
-    author: null,
-    featuredList: null
-  });
 
 
   // push 404
@@ -138,35 +98,31 @@ class ContentView extends React.Component {
   }
 
 
-  componentDidUpdate = () => {
-    const { documentTitle } = this.state;
-    let titleFromUrl = window.location.pathname.split("/")[2];
+  componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+    const { getDocument, match} = this.props;
 
-    // See Also 이동 시에만 발생
-    if (decodeURI(titleFromUrl) !== documentTitle)
-      this.getContentInfo(decodeURI(titleFromUrl));
-  };
+    if(getDocument.document.seoTitle !== this.getSeoTitle()) {
+      this.getContentInfo(match.params.documentId)
+    }
+  }
 
 
   render() {
-    const { auth, match, getAway, ...rest } = this.props;
-    const { documentData, documentText, totalViewCountInfo, featuredList, author, update } = this.state;
+    const { getDocument, auth, match, getAway, ...rest } = this.props;
 
-    if (documentData) {
+    if (APP_PROPERTIES.ssr || getDocument.document.seoTitle === this.getSeoTitle()) {
       return (
         <section data-parallax="true" className="container_view row col-re container">
           <Helmet>
-            <title>{documentData.title}</title>
+            <title>{getDocument.document.title}</title>
           </Helmet>
 
-          {getAway && <AwayModal documentData={documentData}/>}
+          {getAway && <AwayModal documentData={getDocument.document}/>}
 
-          <ContentViewFullScreenContainer documentData={documentData} documentText={documentText}
-                                          totalViewCountInfo={totalViewCountInfo} update={update}
-                                          auth={auth} author={author}/>
+          <ContentViewFullScreenContainer auth={auth}/>
 
-          <ContentViewSeeAlso documentData={documentData} author={author}
-                              featuredList={featuredList} {...rest}/>
+          <ContentViewSeeAlso documentData={getDocument.document} author={getDocument.document.author}
+                              featuredList={getDocument.featuredList} {...rest}/>
         </section>
 
       );
@@ -178,8 +134,6 @@ class ContentView extends React.Component {
         </section>
       );
     }
-
-
   }
 }
 

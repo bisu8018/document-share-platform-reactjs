@@ -116,7 +116,7 @@ class ContentListItem extends React.Component {
       identification = result.author ? (result.author.username && result.author.username.length > 0 ? result.author.username : result.author.email) : result.accountId;
 
     return (
-      <div className="row u_center_inner" key={result.seoTitle}>
+      <div className="row col-12 u_center_inner" key={result.seoTitle}>
         <div className="col-thumb-list">
           <Link to={"/@" + identification + "/" + result.seoTitle}>
             <div className="thumb_image" onClick={() => common_view.scrollTop()}>

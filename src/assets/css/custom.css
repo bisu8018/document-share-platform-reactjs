@@ -6957,12 +6957,6 @@ Dean*/
     background-color: #fff;
 }
 
-.u__left .tags_menu {
-    padding: 0 !important;
-    height: auto;
-    margin: 15px 0;
-}
-
 .tags_menu {
     padding: 0 15px;
     margin: 5px 0;
@@ -6990,15 +6984,6 @@ Dean*/
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
     text-transform: uppercase;
-}
-
-.tags_menu_all_tags {
-    margin-bottom: 10px;
-}
-
-.tags_menu_all_tags a {
-    font-size: 16px !important;
-    font-weight: bold !important;
 }
 
 .tags_menu_search_container {
@@ -7042,8 +7027,6 @@ Dean*/
 }
 
 .u__center-container {
-    border-left: 1px solid #b3b3b3;
-    padding-left: 25px;
     padding-bottom: 140px;
     min-height: calc(100vh - 166px - 1.5rem);
 }
@@ -7634,10 +7617,6 @@ Dean*/
     .menu-content-list {
         margin-top: 40px;
         display: inline-block !important;
-    }
-
-    .tags_menu li a {
-        margin: 0 18px 0 0 !important;
     }
 
     .view_content .hr {
@@ -8822,6 +8801,7 @@ Dean
 
 
 .see-also-content {
+    cursor: pointer;
     position: absolute;
     bottom: 10px;
     left: 121px;

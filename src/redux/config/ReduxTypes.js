@@ -36,6 +36,12 @@ let  ReduxTypes ={
   // =====================================
   SET_TEMP_EMAIL : "emailModal/SET_TEMP_EMAIL",
 
+
+  //======================================
+  //            Content View
+  // =====================================
+  SET_DOCUMENT : "contentView/SET_DOCUMENT",
+
 };
 
 export default ReduxTypes

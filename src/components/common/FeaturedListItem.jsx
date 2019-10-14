@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Common from "../../common/common";
 import common_view from "../../common/common_view";
+import { APP_PROPERTIES } from "../../properties/app.properties";
 
 class FeaturedList extends React.Component {
 
@@ -16,6 +17,8 @@ class FeaturedList extends React.Component {
   // 이미지 정보 GET
   getImgInfo = () => {
     const { resultItem } = this.props;
+    if (APP_PROPERTIES.ssr) return false;
+
     let img = new Image();
 
     img.src = Common.getThumbnail(resultItem.documentId, 320, 1, resultItem.documentName);
@@ -50,7 +53,7 @@ class FeaturedList extends React.Component {
         </Link>
 
         <div className="see-also-content">
-          <Link to={"/@" + identification} className="info_name see-also-author" onClick={common_view.scrollTop()} rel="nofollow">
+          <Link to={"/@" + identification} rel="nofollow" className="info_name see-also-author" onClick={common_view.scrollTop()}>
             {identification}
           </Link>
         </div>

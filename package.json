@@ -1,7 +1,7 @@
 {
   "name": "polarishare_front_end",
   "description": "www.polarishare.com",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "license": "ISC",
   "private": true,
   "dependencies": {
@@ -135,9 +135,9 @@
     "build:ssr_production": "set NODE_ENV_SUB=production&& npm run build && node scripts/build.server.js",
     "invaildate:production": "aws cloudfront create-invalidation --distribution-id E1UYELY2K59G6Q --paths /*",
     "deploy:production": "set NODE_ENV_SUB=production&&npm run build && aws s3 sync build/ s3://www.polarishare.com --cache-control max-age=60 && npm run invaildate:production",
-    "deploy:ssr_local": "set NODE_ENV_SUB=local&& npm run build && node scripts/build.server.js",
+    "deploy:ssr_local": "set NODE_ENV_SUB=development&& npm run build && node scripts/build.server.js",
     "deploy:ssr": "npm run build:ssr && scp -i ../../my-key-pair/dev-decompany.pem -r build/ ec2-user@ec2-13-57-41-84.us-west-1.compute.amazonaws.com:~/decompanyio-web-server",
-    "deploy:ssr_production": "npm run build:ssr_production && scp -i ../../my-key-pair/ko-decompany.pem -r build/ ec2-user@ec2-13-209-20-206.ap-northeast-2.compute.amazonaws.com:~/decompanyio-web-server"
+    "deploy:ssr_production": "npm run build:ssr_production && scp -i ../../my-key-pair/ko-decompany.pem -r build/ ec2-user@ec2-15-165-15-50.ap-northeast-2.compute.amazonaws.com:~/decompanyio-web-server"
   },
   "browserslist": [
     ">0.2%",

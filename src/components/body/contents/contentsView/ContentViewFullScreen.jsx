@@ -37,8 +37,8 @@ class ContentViewFullScreen extends Component {
     reward: 0,
     downloadLoading: false,
     completeModalOpen: false,
-    isPublic: this.props.documentData.isPublic || false,
-    isRegistry: this.props.documentData.isRegistry || false,
+    isPublic: this.props.getDocument.document.isPublic || false,
+    isRegistry: this.props.getDocument.document.isRegistry || false,
     bookmarkFlag: false
   };
 
@@ -71,12 +71,12 @@ class ContentViewFullScreen extends Component {
 
   // 찜하기
   checkBookmark = () => {
-    const { getMyList, documentData } = this.props;
+    const { getMyList, getDocument } = this.props;
 
     let flag;
 
     if (getMyList.resultList) {
-      flag = getMyList.resultList.filter(v => v._id === documentData._id).length > 0;
+      flag = getMyList.resultList.filter(v => v._id === getDocument.document._id).length > 0;
     } else {
       flag = false;
     }
@@ -114,8 +114,8 @@ class ContentViewFullScreen extends Component {
 
   //Web3에서 보상액 GET
   getReward = () => {
-    const { getWeb3Apis, documentData } = this.props;
-    getWeb3Apis.getNDaysRewards(documentData.documentId, 7).then(res => {
+    const { getWeb3Apis, getDocument } = this.props;
+    getWeb3Apis.getNDaysRewards(getDocument.document.documentId, 7).then(res => {
       log.ContentViewFullscreen.getReward();
       let reward = Common.toEther(res);
       this.setState({ reward: reward });
@@ -171,14 +171,14 @@ class ContentViewFullScreen extends Component {
 
   //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
-    const { documentData, getMyInfo, setAlertCode } = this.props;
+    const { getDocument, getMyInfo, setAlertCode } = this.props;
 
-    if (!documentData) return setAlertCode(2091);
+    if (!getDocument.document) return setAlertCode(2091);
     if (!MainRepository.Account.isAuthenticated() && !getMyInfo.email) return setAlertCode(2003);
 
-    const accountId = documentData.accountId,
-      documentId = documentData.documentId,
-      documentName = documentData.documentName;
+    const accountId = getDocument.document.accountId,
+      documentId = getDocument.document.documentId,
+      documentName = getDocument.document.documentName;
 
     this.getContentDownload(accountId, documentId, documentName);
   };
@@ -186,14 +186,14 @@ class ContentViewFullScreen extends Component {
 
   // 북마크 버튼 클릭 관리
   handleBookmark = () => {
-    const { documentData, setAlertCode, getMyList, setMyList } = this.props;
+    const { getDocument, setAlertCode, getMyList, setMyList } = this.props;
 
     this.setState({ bookmarkFlag: true });
     let myList = getMyList;
-    myList.resultList.push(documentData);
+    myList.resultList.push(getDocument.document);
     setMyList(myList);
 
-    return MainRepository.Mutation.addMyList(documentData.documentId)
+    return MainRepository.Mutation.addMyList(getDocument.document.documentId)
       .then(() => setAlertCode(2121))
       .catch(err => setAlertCode(2122));
   };
@@ -201,15 +201,15 @@ class ContentViewFullScreen extends Component {
 
   // 북마크 삭제 버튼 클릭 관리
   handleBookmarkRemove = () => {
-    const { documentData, setAlertCode, getMyList, setMyList } = this.props;
+    const { getDocument, setAlertCode, getMyList, setMyList } = this.props;
 
     this.setState({ bookmarkFlag: false });
     let myList = getMyList;
-    let idx = getMyList.resultList.findIndex(x => x._id === documentData.documentId);
+    let idx = getMyList.resultList.findIndex(x => x._id === getDocument.document.documentId);
     myList.resultList.slice(idx, 1);
     setMyList(myList);
 
-    return MainRepository.Mutation.removeMyList(documentData.documentId)
+    return MainRepository.Mutation.removeMyList(getDocument.document.documentId)
       .then(() => setAlertCode(2123))
       .catch(err => setAlertCode(2124));
   };
@@ -221,25 +221,25 @@ class ContentViewFullScreen extends Component {
 
 
   render() {
-    const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
+    const { getDocument, getCreatorDailyRewardPool, getIsMobile, update } = this.props;
     const { isPublic, isRegistry, downloadLoading, completeModalOpen, bookmarkFlag } = this.state;
 
-    let vote = Common.toEther(documentData.latestVoteAmount) || 0,
-      reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
-      view = documentData.latestPageview || 0,
-      accountId = documentData.accountId || "",
-      profileUrl = author ? author.picture : null,
-      identification = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId,
-      ogUrl = APP_PROPERTIES.domain().embed + documentData.seoTitle;
+    let vote = Common.toEther(getDocument.document.latestVoteAmount) || 0,
+      reward = Common.toEther(common_view.getAuthorNDaysReward(getDocument.document, getCreatorDailyRewardPool, getDocument.totalViewCountInfo, 7)),
+      view = getDocument.document.latestPageview || 0,
+      accountId = getDocument.document.accountId || "",
+      profileUrl = getDocument.document.author ? getDocument.document.author.picture : null,
+      identification = getDocument.document.author ? (getDocument.document.author.username && getDocument.document.author.username.length > 0 ? getDocument.document.author.username : getDocument.document.author.email) : getDocument.document.accountId,
+      ogUrl = APP_PROPERTIES.domain().embed + getDocument.document.seoTitle;
 
     return (
 
       <article className="col-12 view_left u__view p-3">
         <div className="view_top mb-4">
-          <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
-                                        tracking={true} handleEmailFlag={this.handleEmailFlag}
+          <ContentViewCarouselContainer id="pageCarousel" tracking={true} handleEmailFlag={this.handleEmailFlag}
                                         getPageNum={page => this.getPageNum(page)}/>
-          <a className="view_screen" href={APP_PROPERTIES.domain().viewer + documentData.seoTitle} target="_blank"
+          <a className="view_screen" href={APP_PROPERTIES.domain().viewer + getDocument.document.seoTitle}
+             target="_blank"
              rel="noopener noreferrer nofollow">
             <i title="viewer button" className="material-icons">fullscreen</i>
           </a>
@@ -247,7 +247,7 @@ class ContentViewFullScreen extends Component {
 
 
         <div className="view_content">
-          <div className="u_title mb-3">{documentData.title}</div>
+          <div className="u_title mb-3">{getDocument.document.title}</div>
 
           <div className="mb-3 position-relative">
             <div className="row">
@@ -262,22 +262,24 @@ class ContentViewFullScreen extends Component {
                 <Link to={"/@" + identification} title={"Go to profile page of " + identification} rel="nofollow">
                   <div className="info-name">{identification}</div>
                 </Link>
-                <div className="info-date-view d-inline-block">{Common.timestampToDate(documentData.created)}</div>
+                <div
+                  className="info-date-view d-inline-block">{Common.timestampToDate(getDocument.document.created)}</div>
               </div>
             </div>
 
             <div className="content-view-fullscreen-info-detail">
               <span className={"info-detail-reward mr-3 " + (isRegistry ? "" : "color-not-registered")}
-                    onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
-                    onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
+                    onMouseOver={() => this.showRewardInfo(getDocument.document.seoTitle + "reward")}
+                    onMouseOut={() => this.hideRewardInfo(getDocument.document.seoTitle + "reward")}>
                 $ {Common.deckToDollar(reward)}
                 <img className="reward-arrow"
                      src={require("assets/image/icon/i_arrow_down_" + (isRegistry ? "blue" : "grey") + ".svg")}
                      alt="arrow button"/>
               </span>
-              {reward > 0 && <PayoutCard reward={reward} data={documentData}/>}
+              {reward > 0 && <PayoutCard reward={reward} data={getDocument.document}/>}
               <span className="info-detail-view mr-3">{view}</span>
-              <span className={"info-detail-vote " + (accountId === common_view.getMySub() ? "mr-5" : "mr-4")}>{Common.deckStr(vote)}</span>
+              <span
+                className={"info-detail-vote " + (accountId === common_view.getMySub() ? "mr-5" : "mr-4")}>{Common.deckStr(vote)}</span>
 
               {accountId === common_view.getMySub() &&
               <div className="view-option-btn" id="viewer-option-btn">
@@ -297,9 +299,9 @@ class ContentViewFullScreen extends Component {
                       {psString("bookmark-add")}
                     </div>
                   }
-                  <EditDocumentModalContainer documentData={documentData}/>
+                  <EditDocumentModalContainer documentData={getDocument.document}/>
                   {isRegistry === false && (accountId === common_view.getMySub()) &&
-                  <DeleteDocumentModalContainer documentData={documentData}/>}
+                  <DeleteDocumentModalContainer documentData={getDocument.document}/>}
                 </div>
               </div>
               }
@@ -308,16 +310,16 @@ class ContentViewFullScreen extends Component {
 
           <div className="mb-3">
             {!isPublic &&
-            <PublishModalContainer documentData={documentData} afterPublish={() => this.handleAfterPublish()}/>}
-            {completeModalOpen && <PublishCompleteModalContainer documentData={documentData}
+            <PublishModalContainer documentData={getDocument.document} afterPublish={() => this.handleAfterPublish()}/>}
+            {completeModalOpen && <PublishCompleteModalContainer documentData={getDocument.document}
                                                                  completeModalClose={() => this.handleCompleteModalClose()}/>}
             {isPublic &&
-            <VoteDocumentModalContainer documentData={documentData}/>}
-            {isPublic && (accountId === common_view.getMySub() && documentData) &&
-            <RegBlockchainBtnContainer documentData={documentData}
+            <VoteDocumentModalContainer documentData={getDocument.document}/>}
+            {isPublic && (accountId === common_view.getMySub() && getDocument.document) &&
+            <RegBlockchainBtnContainer documentData={getDocument.document}
                                        afterRegistered={() => this.handleAfterRegistered()}/>}
-            <CopyModalContainer documentData={documentData}/>
-            {documentData.isDownload && accountId !== common_view.getMySub() &&
+            <CopyModalContainer documentData={getDocument.document}/>
+            {getDocument.document.isDownload && accountId !== common_view.getMySub() &&
             <Tooltip title={psString("tooltip-download")} placement="bottom">
               <div className={"viewer-btn mb-1 " + (downloadLoading ? "btn-disabled" : "")}
                    onClick={() => this.handleDownloadContent()}>
@@ -330,11 +332,11 @@ class ContentViewFullScreen extends Component {
             {accountId === common_view.getMySub() &&
             <Tooltip title={psString("tooltip-tracking")} placement="bottom">
               <Link to={{
-                pathname: "/tr/" + identification + "/" + documentData.seoTitle,
+                pathname: "/tr/" + identification + "/" + getDocument.document.seoTitle,
                 state: {
-                  documentData: documentData,
-                  documentText: documentText,
-                  totalViewCountInfo: totalViewCountInfo
+                  documentData: getDocument.document,
+                  documentText: getDocument.text,
+                  totalViewCountInfo: getDocument.totalViewCountInfo
                 }
               }} rel="nofollow">
                 <div className="viewer-btn" onClick={() => common_view.scrollTop()}>
@@ -348,9 +350,9 @@ class ContentViewFullScreen extends Component {
           <div className="hr mb-3"/>
 
           <div className="view_desc">
-            <div dangerouslySetInnerHTML={{ __html: documentData.desc }}/>
+            <div dangerouslySetInnerHTML={{ __html: getDocument.document.desc }}/>
             <div className="view_tag mt-5 mb-3">
-              {documentData.tags ? documentData.tags.map((tag, index) => (
+              {getDocument.document.tags ? getDocument.document.tags.map((tag, index) => (
                 <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
                       onClick={() => common_view.scrollTop()}
                       className="tag" rel="nofollow"> {tag} </Link>
@@ -360,7 +362,7 @@ class ContentViewFullScreen extends Component {
             <div>
               <Tooltip title={psString("viewer-page-sns-linkedin")} placement="bottom">
                 <div className="d-inline-block mr-3">
-                  <LinkedinShareButton url={ogUrl} className="sns-share-icon " title={documentData.title}>
+                  <LinkedinShareButton url={ogUrl} className="sns-share-icon " title={getDocument.document.title}>
                     <img src={require("assets/image/sns/ic-sns-linkedin-color.png")} alt="linkedin sns icon"/>
                   </LinkedinShareButton>
                 </div>
@@ -376,21 +378,21 @@ class ContentViewFullScreen extends Component {
 
               <Tooltip title={psString("viewer-page-sns-twitter")} placement="bottom">
                 <div className="d-inline-block">
-                  <TwitterShareButton url={ogUrl} className="sns-share-icon" hashtags={documentData.tags}
-                                      title={documentData.title}>
+                  <TwitterShareButton url={ogUrl} className="sns-share-icon" hashtags={getDocument.document.tags}
+                                      title={getDocument.document.title}>
                     <img src={require("assets/image/sns/ic-sns-twitter-color.png")} alt="twitter sns icon"/>
                   </TwitterShareButton>
                 </div>
               </Tooltip>
 
 
-              {documentData.cc && documentData.cc.length > 0 &&
+              {getDocument.document.cc && getDocument.document.cc.length > 0 &&
               <Tooltip title={psString("viewer-page-cc-title")}
                        placement="bottom">
                 <a className="float-right" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/"
                    target="_blank" rel="license noopener noreferrer">
                   <img alt="Creative Commons License" className="cc-img"
-                       src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + documentData.cc + ".svg")}/>
+                       src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + getDocument.document.cc + ".svg")}/>
                 </a>
               </Tooltip>
               }
@@ -400,7 +402,7 @@ class ContentViewFullScreen extends Component {
             <div className="hr mb-3 mt-3"/>
           </div>
 
-          {update === false && <ContentViewComment documentData={documentData}/>}
+          {update === false && <ContentViewComment documentData={getDocument.document}/>}
 
         </div>
 

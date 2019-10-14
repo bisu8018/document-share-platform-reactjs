@@ -151,7 +151,7 @@ class EditDocumentModal extends React.Component {
       this.setState({ loading: false }, () =>{
         history.push("/" + common_view.getPath() + "/" + result.seoTitle);
         this.handleClickClose();
-        document.location.reload();   // redux 로 교체 검토 필요
+        document.location.reload();   // redux 사용 가능, 현재는 새로고침이 더욱 에러확률 낮다고 판단.
       })
     });
   };

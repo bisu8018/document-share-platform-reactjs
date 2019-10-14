@@ -28,7 +28,7 @@ class ContentViewCarousel extends React.Component {
 
   // init
   init = () => {
-    let pageNum = common_view.getPageNum() > this.props.target.totalPages ? 0 : common_view.getPageNum();
+    let pageNum = common_view.getPageNum() > this.props.getDocument.document.totalPages ? 0 : common_view.getPageNum();
     if (MainRepository.Account.isAuthenticated()) {
       this.postTrackingConfirm(pageNum)
         .then(() => this.handleTracking(pageNum))
@@ -56,11 +56,11 @@ class ContentViewCarousel extends React.Component {
 
   // 트랙킹 자격 체크
   checkTrackingQualified = page => {
-    const { target, handleEmailFlag } = this.props;
+    const { getDocument, handleEmailFlag } = this.props;
     const { readPage } = this.state;
 
     return new Promise((resolve, reject) => {
-      if ((page === null || page === undefined) && target.forceTracking)
+      if ((page === null || page === undefined) && getDocument.document.forceTracking)
         this.setState({ emailFlag: false }, () => handleEmailFlag(false));
 
       // 같은 페이지 일 경우
@@ -77,14 +77,14 @@ class ContentViewCarousel extends React.Component {
 
   // 로그인 시, cid ~ email 싱크 작업
   postTrackingConfirm = async () => {
-    const { target, getMyInfo } = this.props;
+    const { getDocument, getMyInfo } = this.props;
     let trackingInfo = await TrackingApis.setTrackingInfo().then(res => res);
 
     let data = {
       "cid": trackingInfo.cid,
       "sid": trackingInfo.sid,
       "email": getMyInfo.email,
-      "documentId": target.documentId
+      "documentId": getDocument.document.documentId
     };
 
     return MainRepository.Tracking.postTrackingConfirm(data);
@@ -94,7 +94,7 @@ class ContentViewCarousel extends React.Component {
   // Tracking API POST
   postTracking = (page, type) =>
     TrackingApis.tracking({
-      id: this.props.target.documentId,
+      id: this.props.getDocument.document.documentId,
       n: page + 1,
       ev: type
     }, true).then(res => res);
@@ -103,15 +103,15 @@ class ContentViewCarousel extends React.Component {
   // URL 관리
   handleUrl = () => {
     const { readPage } = this.state;
-    const { documentText, getPageNum } = this.props;
+    const { getDocument, getPageNum } = this.props;
 
     let pathName = window.location.pathname.split("/"),
       url = window.location.origin + "/" + pathName[1] + "/" + pathName[2] + "/",
       _readPage = readPage + 1,
       _documentText = "";
 
-    if (documentText && documentText.length > 0 && documentText[readPage])
-      _documentText = documentText[readPage].substr(0, 10).trim().replace(/([^A-Za-z0-9 ])+/g, "").replace(/([ ])+/g, "-");
+    if (getDocument.text && getDocument.text.length > 0 && getDocument.text[readPage])
+      _documentText = getDocument.text[readPage].substr(0, 10).trim().replace(/([^A-Za-z0-9 ])+/g, "").replace(/([ ])+/g, "-");
     if (_documentText.length > 0)
       _documentText = "-" + _documentText;
 
@@ -148,15 +148,15 @@ class ContentViewCarousel extends React.Component {
 
   // 문서 옵션 useTracking true 일때만
   handleTracking = async page => {
-    const { target, getMyInfo, setMyInfo } = this.props;
+    const { getDocument, getMyInfo, setMyInfo } = this.props;
     const { emailFlagTemp, emailFlag } = this.state;
 
     let checkTracking = await this.checkTrackingQualified(page).then(() => true).catch(() => false);
     if (!checkTracking) return false;
 
     // 트래킹 / 강제 트래킹 분기처리
-    if (target.useTracking) {
-      if (target.forceTracking && !await this.handleFlag(page))
+    if (getDocument.document.useTracking) {
+      if (getDocument.document.forceTracking && !await this.handleFlag(page))
         return false;
 
       return this.postTracking(page, "view").then(res => {
@@ -181,14 +181,14 @@ class ContentViewCarousel extends React.Component {
 
   // 떠남 상태 관리
   handleTrackingLeave = documentId => {
-    const { target } = this.props;
+    const { getDocument } = this.props;
     const { readPage } = this.state;
 
     if (!readPage) return false;
 
     try {
       TrackingApis.tracking({
-        id: documentId || target.documentId,
+        id: documentId || getDocument.document.documentId,
         n: -1,
         ev: "leave"
       }, false, true);
@@ -201,9 +201,9 @@ class ContentViewCarousel extends React.Component {
   // see also 통한 페이지 전환 시, readPage 값 0으로 초기화
   handlePageChanged = () => {
     const { pageChangedFlag } = this.state;
-    const { target } = this.props;
+    const { getDocument } = this.props;
 
-    let documentId = target.documentId;
+    let documentId = getDocument.document.documentId;
 
     if (!documentId || documentId.length === 0 || pageChangedFlag === documentId) return;
     if (pageChangedFlag !== null) {
@@ -251,13 +251,11 @@ class ContentViewCarousel extends React.Component {
 
 
   render() {
-    const { target, documentText } = this.props;
+    const { getDocument } = this.props;
     const { emailFlag } = this.state;
-    const arr = [target.totalPages];
+    const arr = [getDocument.document.totalPages];
 
-    for (let i = 0; i < target.totalPages; i++) arr[i] = Common.getThumbnail(target.documentId, 2048, i + 1);
-
-    //console.log(1);
+    for (let i = 0; i < getDocument.document.totalPages; i++) arr[i] = Common.getThumbnail(getDocument.document.documentId, 2048, i + 1);
 
     return (
       <div className="card card-raised">
@@ -286,19 +284,19 @@ class ContentViewCarousel extends React.Component {
             onChange={index => this.checkStayTime(index)}
           >
             {arr.length > 0 ? arr.map((addr, idx) => (
-              <img key={idx} title={target.title} src={addr} alt={documentText[idx]} data-small="" data-normal=""
+              <img key={idx} title={getDocument.document.title} src={addr} alt={getDocument.text[idx]} data-small="" data-normal=""
                    data-full=""
-                   className={(target.forceTracking && emailFlag && !MainRepository.Account.isAuthenticated() ? "img-cloudy" : "")}/>
+                   className={(getDocument.document.forceTracking && emailFlag && !MainRepository.Account.isAuthenticated() ? "img-cloudy" : "")}/>
             )) : "no data"}
           </Carousel>
         </div>
 
 
-        {!MainRepository.Account.isAuthenticated() && emailFlag && target.useTracking &&
-        <EmailModalContainer handleTracking={page => this.handleTracking(page)} documentData={target}
+        {!MainRepository.Account.isAuthenticated() && emailFlag && getDocument.document.useTracking &&
+        <EmailModalContainer handleTracking={page => this.handleTracking(page)} documentData={getDocument.document}
                              useTracking={() => this.handleUseTrackingFlag()}
                              forceTracking={() => this.handleForceTrackingFlag()}
-                             documentId={target.documentId}/>
+                             documentId={getDocument.document.documentId}/>
         }
       </div>
     );
