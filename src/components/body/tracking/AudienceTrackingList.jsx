@@ -43,7 +43,7 @@ class AudienceTrackingList extends React.Component {
   wrongAccess = () => {
     const { setAlertCode } = this.props;
     this.props.history.push({
-      pathname: "/404",
+      pathname: "/n",
       state: { errMessage: psString("tracking-list-err-1") }
     });
     setAlertCode(2002);
@@ -251,7 +251,7 @@ class AudienceTrackingList extends React.Component {
       _time = e.target.parentElement.dataset.time;
 
     this.props.history.push({
-      pathname: "/trackingDetail/" + match.params.identification + "/" + match.params.seoTitle,
+      pathname: "/td/" + match.params.identification + "/" + match.params.seoTitle,
       state: {
         document: documentData,
         documentText: documentText,

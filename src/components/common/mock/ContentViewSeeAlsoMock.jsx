@@ -1,11 +1,11 @@
 import React from "react";
 import FeaturedListItemMock from "./FeaturedListItemMock";
 
-class ContentViewRightMock extends React.PureComponent {
+class ContentViewSeeAlsoMock extends React.PureComponent {
 
   render() {
       return (
-        <aside className="u__right col-md-12 col-lg-4 ">
+        <aside className="u__right col-12 mb-5">
           <div className="see-also-main-title-mock"/>
           <div className="hr mt-2"/>
             <FeaturedListItemMock/>
@@ -16,4 +16,4 @@ class ContentViewRightMock extends React.PureComponent {
   }
 }
 
-export default ContentViewRightMock;
+export default ContentViewSeeAlsoMock;

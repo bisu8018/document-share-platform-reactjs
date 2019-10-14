@@ -63,7 +63,7 @@ class AnalyticsModal extends React.Component {
       year: week,
       week: year
     };
-    this.setState({loading : true});
+    this.setState({ loading: true });
 
     MainRepository.Analytics.getAnalyticsExport(data, rst => {
       const a = document.createElement("a");
@@ -78,7 +78,7 @@ class AnalyticsModal extends React.Component {
 
       window.URL.revokeObjectURL(a.href);
       document.body.removeChild(a);
-      this.setState({loading : false});
+      this.setState({ loading: false });
     });
   };
 
@@ -147,7 +147,7 @@ class AnalyticsModal extends React.Component {
 
 
   render() {
-    const { classicModal, closeFlag,  year, week, analyticsList, loading} = this.state;
+    const { classicModal, closeFlag, year, week, analyticsList, loading } = this.state;
     const { type } = this.props;
 
     return (
@@ -184,19 +184,15 @@ class AnalyticsModal extends React.Component {
                 <div data-value="1y" className={year === 1 ? "clicked" : ""}>1y</div>
               </div>
               {analyticsList && analyticsList.resultList.length > 0 &&
-              <span>
-                <CustomChart chartData={analyticsList} week={week} year={year} subject="analytics"/>
-                </span>
-              }
-              {analyticsList && analyticsList.resultList.length === 0 &&
-              <NoDataIcon/>
-              }
+              <CustomChart chartData={analyticsList} week={week} year={year} subject="analytics"/>}
+              {analyticsList && analyticsList.resultList.length === 0 && <NoDataIcon/>}
             </div>
 
             <div className="custom-modal-footer">
               <div onClick={() => this.handleClickClose("classicModal")}
                    className="cancel-btn">{psString("common-modal-cancel")}</div>
-              <div onClick={() => this.handleExport()} className={"ok-btn " +   (analyticsList && analyticsList.resultList.length > 0 ? "" : "btn-disabled")}>
+              <div onClick={() => this.handleExport()}
+                   className={"ok-btn " + (analyticsList && analyticsList.resultList.length > 0 ? "" : "btn-disabled")}>
                 {loading &&
                 <div className="loading-btn-wrapper"><FadingCircle color="#3681fe" size={17}/></div>}
                 Export

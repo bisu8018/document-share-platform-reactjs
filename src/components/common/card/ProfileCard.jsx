@@ -1,7 +1,6 @@
 import React from 'react';
 import BalanceOfContainer from '../../../container/common/BalanceOfContainer';
 import MainRepository from '../../../redux/MainRepository';
-import UserInfo from '../../../redux/model/UserInfo';
 import { psString } from '../../../config/localization';
 import { FadingCircle } from 'better-react-spinkit';
 
@@ -24,13 +23,6 @@ class ProfileCard extends React.Component {
     getWeb3Apis.getBalance(getMyInfo.ethAccount, res => {
       this.setState({ balance: res, loading: false });
     });
-  };
-
-
-  // 로그아웃 관리
-  handleLogout = () => {
-    if (MainRepository.Account.isAuthenticated()) MainRepository.Account.logout(() => this.props.setMyInfo(new UserInfo()));
-    else window.location.reload();
   };
 
 
@@ -80,7 +72,7 @@ class ProfileCard extends React.Component {
                  onClick={() => MainRepository.Account.login()}> {psString('profile-card-login')} </div>
           }
           <div className='profile-card-logout-btn'
-               onClick={() => this.handleLogout()}>{psString('profile-card-logout')}</div>
+               onClick={() => MainRepository.Account.logout()}>{psString('profile-card-logout')}</div>
         </div>
 
       </div>

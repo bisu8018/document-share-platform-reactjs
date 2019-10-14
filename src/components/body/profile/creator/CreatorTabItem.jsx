@@ -231,36 +231,36 @@ class CreatorTabItem extends React.Component {
 
     return (
 
-      <div
-        className={"row u_center_inner " + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? "not-convert-wrapper" : "")}>
+      <div className="row u_center_inner">
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
-          <Link to={"/@" + identification + "/" + documentData.seoTitle}>
-            <div className="tab-thumbnail" onClick={() => common_view.scrollTop()}>
-              {documentData.state && documentData.state !== "CONVERT_COMPLETE" ?
-                <Tooltip title="Converting document..." placement="bottom">
-                  <div className="not-convert-container">
-                    <div className="not-convert"><FadingCircle size={40} color={"#3d5afe"}/></div>
-                  </div>
-                </Tooltip> :
+          <div className="tab-thumbnail" onClick={() => common_view.scrollTop()}>
+            {documentData.state && documentData.state !== "CONVERT_COMPLETE" ?
+              <Tooltip title="Converting document..." placement="bottom">
+                <div className="not-convert-container">
+                  <div className="not-convert"><FadingCircle size={40} color={"#3d5afe"}/></div>
+                </div>
+              </Tooltip> :
+              <Link to={"/@" + identification + "/" + documentData.seoTitle}>
                 <img src={Common.getThumbnail(documentData.documentId, "thumb", 1, documentData.documentName)}
                      alt={documentData.title ? documentData.title : documentData.documentName}
-                     className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>}
-            </div>
-          </Link>
+                     className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>
+              </Link>
+            }
+          </div>
         </div>
 
 
         <div className="col-12 col-sm-9 col-lg-10 p-0">
           {documentData.accountId === common_view.getMySub() &&
           <div className="view-option-btn">
-            <i className="material-icons"
-               onClick={e => this.addInlineBlock(e).then(handleUploadSettings())}>more_vert</i>
+            <i className={"material-icons " + (viewerOptionOpenedIdx === idx ? "d-inline-block" : "")}
+               onClick={e => handleUploadSettings()}>more_vert</i>
 
-            <div className={"option-table " + (viewerOptionOpenedIdx === idx ? "" : "d-none")} id={"optionTable" + idx }>
-              {documentData.state === "CONVERT_COMPLETE" &&
+            <div className={"option-table " + (viewerOptionOpenedIdx === idx ? "" : "d-none")} id={"optionTable" + idx}>
+              {documentData.state === "CONVERT_COMPLETE" && documentData.isPublic === true &&
               <CopyModalContainer documentData={documentData} type="onlyIcon"/>}
 
-              {documentData.state === "CONVERT_COMPLETE" &&
+              {documentData.state === "CONVERT_COMPLETE" && documentData.isPublic === true &&
               <AnalyticsModalContainer documentData={documentData} type="onlyIcon"/>}
 
               {documentData.state === "CONVERT_COMPLETE" &&
@@ -274,23 +274,24 @@ class CreatorTabItem extends React.Component {
             </div>
           </div>}
 
-          <Link to={"/@" + identification + "/" + documentData.seoTitle}>
+          <Link to={"/@" + identification + "/" + documentData.seoTitle}
+                className={(documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
             <div className="info_title mb-1" onClick={() => common_view.scrollTop()}>
               {documentData.title ? documentData.title : documentData.documentName}
             </div>
           </Link>
 
           <div className="details-info-desc-wrapper">
+            {documentData.desc && documentData.state === "CONVERT_COMPLETE" &&
             <Link to={"/@" + identification + "/" + documentData.seoTitle}
-                  className={"info_desc " + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}
+                  className="info_desc "
                   title="description" onClick={() => common_view.scrollTop()}>
-              {documentData.desc &&
               <LinesEllipsis text={documentData.desc}
                              maxLine={2}
                              ellipsis='...'
                              trimRight
-                             basedOn='words'/>}
-            </Link>
+                             basedOn='words'/>
+            </Link>}
           </div>
 
 

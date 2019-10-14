@@ -7,6 +7,7 @@ import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
 import common from "../../../common/common";
 import UploadCompleteModal from "./UploadCompleteModal";
+import Tooltip from "@material-ui/core/Tooltip";
 
 
 class UploadDocumentModal extends React.Component {
@@ -230,6 +231,8 @@ class UploadDocumentModal extends React.Component {
   handleClickOpen = modal => {
     const { getMyInfo } = this.props;
 
+    if (!MainRepository.Account.isAuthenticated()) return MainRepository.Account.login();
+
     this.setState({ identifier: getMyInfo.username || getMyInfo.email }, () => {
       if (modal === "classicModal" && getMyInfo.privateDocumentCount > 0) this.props.setAlertCode(2074);
       this.handleOpen(modal).then(() => common_view.setBodyStyleLock());
@@ -401,13 +404,12 @@ class UploadDocumentModal extends React.Component {
     const { type } = this.props;
 
     return (
-      <span className="ml-3">
-        <div className="upload-btn d-none d-sm-flex" id="uploadBtn"
-             onClick={() => this.handleClickOpen("classicModal")}>
-          {psString("common-modal-upload")}
-        </div>
-        <div className="mobile-upload-btn d-sm-none d-inline-block"
-             onClick={() => this.handleClickOpen("classicModal")}/>
+      <span>
+        <Tooltip title="Share your content" placement="bottom">
+          <div className="add-btn ml-3" onClick={() => this.handleClickOpen("classicModal")}>
+            <i className="material-icons">add</i>
+          </div>
+        </Tooltip>
 
 
         {type && type === "menu" &&
@@ -556,7 +558,8 @@ class UploadDocumentModal extends React.Component {
         }
 
 
-        {classicModalSub && <UploadCompleteModal privateDocCount={privateDocCount} identifier={identifier} closeSubModal={()=>this.handleClickClose()}/>}
+        {classicModalSub && <UploadCompleteModal privateDocCount={privateDocCount} identifier={identifier}
+                                                 closeSubModal={() => this.handleClickClose()}/>}
 
         </span>
     );

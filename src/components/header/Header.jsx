@@ -1,7 +1,6 @@
 import React from "react";
 import history from "apis/history/history";
 import MainRepository from "../../redux/MainRepository";
-import UploadDocumentModalContainer from "../../container/common/modal/UploadDocumentModalContainer";
 import MenuContainer from "../../container/header/MenuContainer";
 import ProfileCardContainer from "../../container/common/ProfileCardContainer";
 import AdsContainer from "../../container/ads/AdsContainer";
@@ -13,6 +12,7 @@ import common_view from "../../common/common_view";
 import { Link } from "react-router-dom";
 import CategoryContainer from "../../container/header/CategoryContainer";
 import AutoSuggestInputContainer from "../../container/common/AutoSuggestInputContainer";
+import UploadDocumentModalContainer from "../../container/common/modal/UploadDocumentModalContainer";
 
 
 class Header extends React.Component {
@@ -98,9 +98,9 @@ class Header extends React.Component {
 
   // 클릭 이벤트 리스너
   clickEventListener = () => {
-    const { getMyInfo } = this.props;
-
     document.addEventListener("click", e => {
+        const { getMyInfo } = this.props;
+
         // 자리비움 체크
         this.setAwayTime();
 
@@ -188,6 +188,10 @@ class Header extends React.Component {
   handleAdClose = () => this.setState({ adShow: null });
 
 
+  // Content Add 페이지, 퍼블리시 버튼 트리거
+  handleUploadBtn = () => document.getElementById("contentAddPublish").click();
+
+
   // 스크롤 관리
   handleScroll = () => {
     const { path, prevScrollPos } = this.state;
@@ -231,13 +235,12 @@ class Header extends React.Component {
   };
 
 
-  // pop state 관리
+  // 뒤로가기 버튼 관리
   handlePopstate = e => {
     let path = common_view.getPath();
-
     // 광고 및 카테고리 element 표시
-    if (e.state && e.state.key && !path) {
-      if (this.state.adShow !== null) this.setState({ adShow: path === "" });
+    if (e.state && e.state.key) {
+      if (this.state.adShow !== null) this.setState({ adShow: !path });
       this.setState({ path: path });
     }
   };
@@ -280,38 +283,58 @@ class Header extends React.Component {
           id='header__main-nav'>
 
           <div className='container-fluid container'>
-            <div className='col-4 mt-1 align-items-center d-flex'>
+            <div className='col-3 mt-1 align-items-center d-flex'>
               {getIsMobile ?
-                <Link to="/" className='navbar-brand-mobile' onClick={() => common_view.scrollTop()}>
+                <Link to="/" className='navbar-brand-mobile' onClick={() => common_view.scrollTop()} rel="nofollow">
                   <img src={require("assets/image/logo-cut.png")} alt='POLARIS SHARE'/>
                 </Link> :
-                <Link to="/" className='navbar-brand' onClick={() => common_view.scrollTop()}>
+                <Link to="/" className='navbar-brand' onClick={() => common_view.scrollTop()} rel="nofollow">
                   <img src={require("assets/image/logo.svg")} alt='POLARIS SHARE'/>
                 </Link>}
             </div>
 
 
-            <div className='header-bar col-8'>
+            <div className='header-bar col-9'>
 
+              {path !== "ca" &&
               <div className="d-flex">
                 <div
                   className={"header-search-input " + (searchBar ? "header-search-input-on" : "header-search-input-off")}
                   id="headerSearchBar">
                   <AutoSuggestInputContainer search={this.onSuggestionSelected} type={"tag"}/>
                 </div>
-                <div className='web-header-search-btn' id='headerSearchBtnWrapper'
-                     onClick={() => this.showSearchBar()}/>
-              </div>
+                <div className='web-header-search-btn-wrapper ml-1'>
+                  <div className='web-header-search-btn' id='headerSearchBtnWrapper'
+                       onClick={() => this.showSearchBar()}/>
+                </div>
+              </div>}
 
+             {/* {getMyInfo.privateDocumentCount >= 5 ?
+                <PrivateDocumentCountModal {...this.props} /> :
+                (!getIsMobile || (!searchBar && getIsMobile)) && path !== "ca" &&
+                <Tooltip title="Share your content" placement="bottom">
+                  {MainRepository.Account.isAuthenticated() ?
+                    <Link to="/ca">
+                      <div className="add-btn ml-3">
+                        <i className="material-icons">add</i>
+                      </div>
+                    </Link> :
+                    <div className="add-btn ml-3" onClick={() => MainRepository.Account.login()}>
+                      <i className="material-icons">add</i>
+                    </div>}
+                </Tooltip>}*/}
 
               {getMyInfo.privateDocumentCount >= 5 ?
                 <PrivateDocumentCountModal {...this.props} /> :
                 (!getIsMobile || (!searchBar && getIsMobile)) &&
                 <UploadDocumentModalContainer {...this.props} path={path}/>}
 
+              {MainRepository.Account.isAuthenticated() && path === "ca" &&
+              <div onClick={() => this.handleUploadBtn()}
+                   className="publish-ready-btn">{psString("common-modal-done")}</div>}
 
               {(MainRepository.Account.isAuthenticated() || getTempEmail) && !getIsMobile &&
-              <span className='d-inline-block ml-4' onClick={() => this.profileCardShow()}>
+              <div className='header-avatar-wrapper ml-3' onClick={() => this.profileCardShow()}>
                 {MainRepository.Account.isAuthenticated() ?
                   getMyInfo.picture.length > 0 ?
                     <img src={getMyInfo.picture} id='header-avatar' className='avatar' alt='Link to my profile'/> :
@@ -321,10 +344,10 @@ class Header extends React.Component {
                     <div className='avatar-name-init-menu'>{getTempEmail[0]}</div>
                   </div>}
                 {profileCardShow && <ProfileCardContainer/>}
-                </span>}
+              </div>}
 
               {!MainRepository.Account.isAuthenticated() && !getTempEmail && !getIsMobile &&
-              <div className='d-flex login-btn ml-2' onClick={() => this.handleLogin()}>
+              <div className='d-flex login-btn ml-3' onClick={() => this.handleLogin()}>
                 {psString("header-login")}
               </div>}
               {(!getIsMobile || (!searchBar && getIsMobile)) && <MenuContainer {...this.props} />}
@@ -334,6 +357,7 @@ class Header extends React.Component {
 
 
         <CategoryContainer path={path}/>
+
 
         {prevScrollPos > 100 &&
         <div className='scroll-top-btn' onClick={() => common_view.scrollTop()}>

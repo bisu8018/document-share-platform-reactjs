@@ -48,12 +48,17 @@ class Alert extends React.PureComponent {
 
       case 2004 :
         status = "error";
-        msg = this.getMsg(code);   // 로그인 필요
+        msg = this.getMsg(code);   // 로그인 실패
         break;
 
       case 2005 :
         status = "success";
         msg = this.getMsg(code);   // 복사 성공
+        break;
+
+      case 2006 :
+        status = "warning";
+        msg = this.getMsg(code);   // 서비스 워커 재시작
         break;
 
 
@@ -177,6 +182,11 @@ class Alert extends React.PureComponent {
       case 2076 :
         status = "success";
         msg = this.getMsg(code);   // 문서 삭제 성공
+        break;
+      case 2077 :
+        status = "success";
+        msg = this.getMsg(code);   // 문서 업로드 성공
+        sub = psString("alert-2074-sub-a") + getMyInfo.privateDocumentCount + psString("alert-2074-sub-b");
         break;
 
 

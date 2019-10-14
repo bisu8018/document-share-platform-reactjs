@@ -1,6 +1,5 @@
 import React from "react";
 import MainRepository from "../../redux/MainRepository";
-import UserInfo from "../../redux/model/UserInfo";
 import { Link } from "react-router-dom";
 import Common from "../../common/common";
 import { psGetLang, psSetLang, psString } from "../../config/localization";
@@ -39,25 +38,6 @@ class Menu extends React.Component {
   handleLang = () => psGetLang() === "EN" ? psSetLang("KO") : psSetLang("EN");
 
 
-  // 로그인 관리
-  handleLogin = () => {
-    MainRepository.Account.login();
-  };
-
-
-  // 로그아웃 관리
-  handleLogout = () => {
-    const { setMyInfo } = this.props;
-
-    if (MainRepository.Account.isAuthenticated()) {
-      MainRepository.Account.logout(() => {
-        setMyInfo(new UserInfo());
-      });
-    } else {
-      window.location.reload();
-    }
-  };
-
   render() {
     const { menuShow } = this.state;
     const { getMyInfo, getTempEmail, getIsMobile } = this.props;
@@ -65,9 +45,10 @@ class Menu extends React.Component {
     let identification = getMyInfo.username.length && getMyInfo.username.length > 0 ? getMyInfo.username : getMyInfo.email;
 
     return (
-      <div className="d-inline-block ">
-        <div className="menu-btn d-inline-block " onClick={() => this.menuShow()}/>
-
+      <div className="ml-3">
+        <div className="menu-btn-wrapper">
+          <div className="menu-btn d-inline-block " onClick={() => this.menuShow()}/>
+        </div>
         {menuShow &&
         <div className="menu-wrapper">
           <div className="container">
@@ -94,19 +75,20 @@ class Menu extends React.Component {
 
           <div className="d-flex menu-content-list">
             <div>
-              <Link to="/about">
+              <Link to="/a">
                 <div className="menu-content-item" onClick={() => this.menuClick()}>{psString("menu-1")}</div>
               </Link>
-              <Link to="/guide">
+              <Link to="/g">
                 <div className="menu-content-item" onClick={() => this.menuClick()}>{psString("menu-2")}</div>
               </Link>
-              <Link to="/faq">
+              <Link to="/f">
                 <div className="menu-content-item" onClick={() => this.menuClick()}>FAQ</div>
               </Link>
-              <a href="http://www.decompany.io/" target="_blank" rel="noopener noreferrer">
+              <a href="http://www.decompany.io/" target="_blank" rel="noopener noreferrer nofollow">
                 <div className="menu-content-item">{psString("menu-5")}</div>
               </a>
-              <a href="https://www.linkedin.com/in/decompany-io-720812178/" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.linkedin.com/in/decompany-io-720812178/" target="_blank"
+                 rel="noopener noreferrer nofollow">
                 <div className="menu-content-item-sub">{psString("menu-3")}</div>
               </a>
               <div className="menu-content-item-sub">{psString("menu-4")}</div>
@@ -120,12 +102,12 @@ class Menu extends React.Component {
 
           {!MainRepository.Account.isAuthenticated() ?
             <div className="menu-login-btn d-flex d-sm-none"
-                 onClick={() => this.handleLogin()}>{psString("menu-login")}</div> :
+                 onClick={() => MainRepository.Account.login()}>{psString("menu-login")}</div> :
             <div className="menu-logout-btn d-flex d-sm-none"
-                 onClick={() => this.handleLogout()}>{psString("menu-sign-out")}</div>}
+                 onClick={() => MainRepository.Account.logout()}>{psString("menu-sign-out")}</div>}
           {getTempEmail &&
           <div className="menu-logout-btn d-flex d-sm-none"
-               onClick={() => this.handleLogout()}>{psString("menu-sign-out")}</div>}
+               onClick={() => MainRepository.Account.logout()}>{psString("menu-sign-out")}</div>}
 
           <div className="header-version">{Common.getVersion()}</div>
         </div>}

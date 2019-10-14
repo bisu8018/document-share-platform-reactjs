@@ -36,7 +36,7 @@ class AudienceTrackingDetail extends React.Component {
   wrongAccess = () => {
     const { setAlertCode } = this.props;
     this.props.history.push({
-      pathname: "/404",
+      pathname: "/n",
       state: { errMessage: psString("tracking-list-err-1") }
     });
     setAlertCode(2002);

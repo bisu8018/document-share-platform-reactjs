@@ -3,7 +3,7 @@ import { ThreeBounce } from 'better-react-spinkit'
 import FeaturedList from "../../../common/FeaturedListItem";
 import { psString } from "../../../../config/localization";
 
-class ContentViewRight extends React.Component {
+class ContentViewSeeAlso extends React.Component {
 
   render() {
     const { documentData, featuredList } = this.props;
@@ -11,7 +11,7 @@ class ContentViewRight extends React.Component {
       return (<div className="spinner"><ThreeBounce color="#3681fe" name="ball-pulse-sync"/></div>);
     } else {
       return (
-        <aside className="u__right col-md-12 col-lg-4 ">
+        <aside className="u__right col-12 ">
           <div className="see-also-main-title">{psString("see-also-text")}</div>
           <div className="hr mt-2"/>
           {featuredList.length > 0 && featuredList.map((result, idx) => (
@@ -25,4 +25,4 @@ class ContentViewRight extends React.Component {
   }
 }
 
-export default ContentViewRight;
+export default ContentViewSeeAlso;

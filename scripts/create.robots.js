@@ -7,31 +7,18 @@ let robotsTxt;
 if (process.env.NODE_ENV_SUB === "production") {
   robotsTxt = "User-agent: *\n" +
     // 크롤러 임시 접근 X
-    "Disallow: /\n" +
-  /*  "Disallow: /about/\n" +
-    "Disallow: /aboutus/\n" +
-    "Disallow: /legal/\n" +
-    "Disallow: /static/\n" +
-    "Disallow: /faq/\n" +
-    "Disallow: /guide/\n" +
-    "Disallow: /terms/\n" +
-    "Disallow: /main\n" +
-    "Disallow: /latest\n" +
-    "Disallow: /latest/\n" +
-    "Disallow: /popular\n" +
-    "Disallow: /featured\n" +
-    "Disallow: /callback\n" +
-    "Disallow: /tracking/\n" +
-    "Disallow: /trackingDetail/\n" +
-    "Disallow: /faq\n" +
-    "Disallow: /policies\n" +
-    "Disallow: /privacy\n" +
-    "Disallow: /about\n" +
-    "Disallow: /guide\n" +
-    "Disallow: /terms\n" +
-    "Disallow: /emailverify\n" +
-    "Disallow: /signup\n" +
-    "Disallow: /404\n" +*/
+   /* "Disallow: /popular/\n" +
+    "Disallow: /featured/\n" +
+    "Disallow: /callback/\n" +
+    "Disallow: /ca/\n" +  // content add
+    "Disallow: /tr/\n" +  // tracking
+    "Disallow: /td/\n" +  // tracking detail
+    "Disallow: /f/\n" +   // faq
+    "Disallow: /p/\n" +   // privacy
+    "Disallow: /a/\n" +   // about
+    "Disallow: /g/\n" +   // user guide
+    "Disallow: /t/\n" +   // terms of service
+    "Disallow: /n/\n" +   // not found page*/
     "Sitemap: https://www.polarishare.com/sitemap.xml\n";
 } else {
   robotsTxt = "User-agent: *\n" +

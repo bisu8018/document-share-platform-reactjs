@@ -16,7 +16,7 @@ class Terms extends React.PureComponent {
         </Helmet>
 
         <div className="col-12 mt-3 mb-5 u__center-faq">
-          <div className="legal-subject mt-3 mt-sm-5 text-center">Terms of Service</div>
+          <div className="legal-subject mt-3 mb-5">Terms of Service</div>
 
 
           <div className="legal-content mt-4">

@@ -1,7 +1,10 @@
 export const APP_PROPERTIES = {
   ssr: process.env.APP_ENV === 'server',
   env: (!process.env.NODE_ENV_SUB) ? 'local':process.env.NODE_ENV_SUB,
-  debug: (!process.env.NODE_ENV_SUB && false),
+
+  // debug 모드 이용시, true 로 변경
+  debug: (process.env.NODE_ENV_SUB === 'local' && false),
+
   domain:function(){
     if(this.env === 'production')
       return APP_PROPERTIES.production.domain;

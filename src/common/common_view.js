@@ -17,15 +17,16 @@ export default ({
     let m = Math.floor((currentDate - lastDate) / (60 * 1000));
     let s = Math.floor((currentDate - lastDate) / (1000));
 
-    if (y !== 0) return y + (isMobile ? "y" : psString("common-year")) + (y > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
+    if (y > 0) return y + (isMobile ? "y" : psString("common-year")) + (y > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
     else {
-      if (d !== 0) return d + (isMobile ? "d" : psString("common-day")) + (d > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
+      if (d > 0) return d + (isMobile ? "d" : psString("common-day")) + (d > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
       else {
-        if (h !== 0) return h + (isMobile ? "h" : psString("common-hour")) + (h > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
+        if (h > 0) return h + (isMobile ? "h" : psString("common-hour")) + (h > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
         else {
-          if (m !== 0) return m + (isMobile ? "m" : psString("common-minute")) + (m > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
+          if (m > 0) return m + (isMobile ? "m" : psString("common-minute")) + (m > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
           else {
-            return s + (isMobile ? "s" : psString("common-second")) + (s > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
+            if (s > 0) return s + (isMobile ? "s" : psString("common-second")) + (s > 1 && !isMobile ? psString("common-times") : "") + psString("common-ago");
+            else return "now";
           }
         }
       }

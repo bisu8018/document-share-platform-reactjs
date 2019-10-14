@@ -37,6 +37,7 @@ export default {
   init(callback: () => any) {
     // 자기 참조
     instance = this;
+
     //Google Analytics 초기화
     let gaId = process.env.NODE_ENV_SUB === "production" ? "UA-140503497-1" : "UA-129300994-1";
     if (process.env.NODE_ENV_SUB === "production" || process.env.NODE_ENV_SUB === "development") {
@@ -140,7 +141,9 @@ export default {
       else instance.InitData.authData.authorize();
 
     },
-    logout(callback) {
+    logout() {
+      if (ssr) return false;
+
       this.clearSession();
       this.clearTrackingCookie();
 
@@ -148,7 +151,7 @@ export default {
         returnTo: APP_PROPERTIES.domain().mainHost,
         clientID: AUTH_CONFIG.clientId
       });
-      callback();
+      window.location.href = "/";
     },
     sync(callback, error) {
       const token = localStorage.getItem("id_token");
@@ -176,9 +179,7 @@ export default {
       if (ssr) return false;
 
       const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
-      const isUnExpired = new Date().getTime() < expiresAt;
-
-      return isUnExpired;
+      return new Date().getTime() < expiresAt;
     },
     scheduleRenewal() {
       let expiresAt = JSON.parse(localStorage.getItem("expires_at"));
@@ -194,7 +195,9 @@ export default {
     renewSession() {
       instance.InitData.authData.checkSession({}, (err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
-          this.setMyInfo(authResult).then(user => this.setSession(authResult, user));
+          this.setMyInfo(authResult)
+            .then(user => this.setSession(authResult, user))
+            .catch(err => this.logout());
         } else if (err) {
           this.logout();
           console.error(err);
@@ -210,7 +213,6 @@ export default {
           } else if (err) {
             console.log(err);
             this.clearSession();
-            window.location.reload();
           }
         });
       });
@@ -225,7 +227,7 @@ export default {
               this.scheduleRenewal();
               this.syncUser();
               resolve(user.sub);
-            });
+            }).catch(err => reject(err));
           } else if (err) {
             this.clearSession();
             reject(err);
@@ -265,8 +267,7 @@ export default {
           let accountInfo = new AccountInfo(result);
           accountInfo.user = new UserInfo(result.user);
           return accountInfo;
-        })
-        .catch(err => {
+        }).catch(err => {
           this.logout();
           return err;
         });
@@ -362,14 +363,17 @@ export default {
         .catch(err => error(err));
     },
     clearSession() {
-      //Auth0 API
+      // Auth0 API
       localStorage.removeItem("access_token");
       localStorage.removeItem("id_token");
       localStorage.removeItem("expires_at");
       localStorage.removeItem("user_info");
 
-      //Tracking API
+      // Tracking API
       localStorage.removeItem("tracking_info");
+
+      // Content Editor
+      localStorage.removeItem("content");
     },
     clearTrackingCookie() {
       //Google Analystics,
@@ -548,23 +552,37 @@ export default {
         });
       }),
     getHistory: async data => instance.Query.getHistoryFindById(data)
-      .then(res => res.map(v => "\"" + v.documentId + "\""))
-      .then(res => instance.Query.getDocumentListByIds(res))
+      .then(res => res.map(v => v.documentId))
+      .then(res => instance.Query.getDocumentListByIdsMultiple(res))
+      .then(res => {
+        const resultData = Object({
+          Document : [],
+          DocumentFeatured : [],
+          DocumentPopular : []
+        });
+        let arrLength = Object.keys(res).length/3;
+        for(let i = 0; i < arrLength ; ++i) {
+          if(res['latest_' + i].findOne) resultData.Document.push(res['latest_' + i].findOne);
+          if(res['featured_' + i].findOne) resultData.DocumentFeatured.push(res['featured_' + i].findOne);
+          if(res['popular_' + i].findOne) resultData.DocumentPopular.push(res['popular_' + i].findOne);
+        }
+        return resultData;
+      })
       .then(res => {
         let resultData = res;
-        resultData.Document.findByIds = res.Document.findByIds.filter(l => {
-          let latestArr = res.DocumentFeatured.findByIds.filter(f => f._id === l._id)[0];
+        resultData.Document = res.Document.filter(l => {
+          let latestArr = res.DocumentFeatured.filter(f => f._id === l._id)[0];
           return latestArr ? l.latestVoteAmount = latestArr.latestVoteAmount : true;
         });
         return resultData;
       })
       .then(res => {
         let resultData = res;
-        resultData.Document.findByIds = res.Document.findByIds.filter(l => {
-          let latestArr = res.DocumentPopular.findByIds.filter(p => p._id === l._id)[0];
+        resultData.Document = res.Document.filter(l => {
+          let latestArr = res.DocumentPopular.filter(p => p._id === l._id)[0];
           return latestArr ? l.latestPageview = latestArr.latestPageview : true;
         });
-        return resultData.Document.findByIds;
+        return resultData.Document;
       })
       .then(async res => {
         let ids = res.map(v => "\"" + v.accountId + "\"");
@@ -641,7 +659,7 @@ export default {
     addHistory: async data => Graphql({
       header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
       mutation: mutations.addHistory(data)
-    }).then(res => res),
+    }).then(res => res)
   },
   Query: {
     getMyListFindMany: async data => Graphql({
@@ -652,6 +670,13 @@ export default {
     }).then(res => res.UserDocumentHistory.findMany),
     getDocumentListByIds: async data => Graphql({
       query: queries.getDocumentListByIds(data)
+    }).then(res => res),
+    getDocumentListByIdsMultiple: async data => Graphql({
+      query: data.map((v, i) =>
+        `\nlatest_` + i + `: ` + queries.getDocumentByFindOne(v) +
+        `\nfeatured_` + i + `: ` + queries.getDocumentFeaturedByFindOne(v) +
+        `\npopular_` + i + `: ` + queries.getDocumentPopularByFindOne(v)
+      )
     }).then(res => res),
     getUserByIds: async data => Graphql({
       query: queries.getUserByIds(data)

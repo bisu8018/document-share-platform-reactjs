@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import configureStore from "./redux/store/configureStore";
 import MainContainer from "./container/MainContainer";
 import { BrowserRouter } from "react-router-dom";
-//import registerServiceWorker from 'apis/registerServiceWorker';
+import registerServiceWorker from "apis/registerServiceWorker";
 import "assets/css/custom.css";
 import "assets/css/ssr/carousel.css"; // 카로쉘 css
 import "assets/css/ssr/main.css"; // 카로쉘 css
@@ -21,4 +21,7 @@ ReactDOM.render(
     </BrowserRouter>
   </Provider>,
   document.getElementById("root"));
-//registerServiceWorker();
+
+
+// 서비스 워커 등록 및 구동
+registerServiceWorker();

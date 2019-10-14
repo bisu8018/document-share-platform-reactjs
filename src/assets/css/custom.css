@@ -57,7 +57,7 @@ hr {
 .hr {
     width: 100%;
     height: 1px;
-    background: #b3b3b3;
+    background: #e8e8e8;
 }
 
 .hr-content-list-item {
@@ -284,7 +284,7 @@ input[type="month"] {
 }
 
 textarea {
-    overflow: auto;
+    overflow: hidden;
     resize: none;
     line-height: 1.4 !important;
     min-height: 80px;
@@ -557,6 +557,10 @@ mark,
 @media (min-width: 1140px) {
     .container {
         max-width: 1280px;
+    }
+
+    .container-add {
+        max-width: 1024px !important;
     }
 }
 
@@ -845,7 +849,7 @@ mark,
 }
 
 @media (min-width: 576px) {
-    .tab-item-info-wrapper .claim-btn-wrapper  {
+    .tab-item-info-wrapper .claim-btn-wrapper {
         position: absolute;
         right: 0;
         bottom: 0;
@@ -5926,11 +5930,13 @@ b {
     align-items: center;
     justify-content: center;
     width: 70px;
-    height: 33px;
+    font-family: poppins, 'source-han-sans-korean', sans-serif;
+    height: 34px;
     font-size: 14px;
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
     color: #666666;
+    font-weight: 100;
 }
 
 .login-btn:hover {
@@ -6079,6 +6085,42 @@ dean
     color: white;
 }
 
+.mobile-upload-btn {
+    background-image: url(../image/icon/i_upload.svg);
+    width: 28px;
+    height: 28px;
+    margin: 0 4px;
+    background-size: cover;
+    background-position-y: 2px;
+    cursor: pointer;
+}
+
+.add-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    transition: 0.5s all ease-in-out;
+    color: #0d73f8;
+    width: 34px;
+    height: 34px;
+    margin-left: 5px;
+    background: white;
+    border-radius: 50%;
+}
+
+.add-btn:hover {
+    background: #d6e6ff;
+}
+
+.add-btn > i {
+    font-size: 28px;
+}
+
 .main-upload-btn {
     cursor: pointer;
     border-radius: 4px;
@@ -6207,11 +6249,27 @@ dean
 }
 
 .menu-btn {
-    width: 27px;
-    height: 27px;
-    margin: 0 0 0 6px;
+    width: 100%;
+    height: 100%;
     background-image: url(../image/icon/i_hamberger.svg);
     cursor: pointer;
+}
+
+.menu-btn:hover {
+    background-image: url(../image/icon/i_hamberger_blue.png);
+}
+
+.menu-btn-wrapper {
+    width: 34px;
+    height: 34px;
+    transition: 0.5s all ease-in-out;
+    border-radius: 50%;
+    padding-left: 1px;
+    padding-top: 2px;
+}
+
+.menu-btn-wrapper:hover {
+    background: #d6e6ff;
 }
 
 .mobile-upload-btn {
@@ -6301,6 +6359,29 @@ dean
 }
 
 .ok-btn:hover {
+    background: #3681fe;
+    color: white;
+}
+
+.publish-ready-btn {
+    margin-right: 10px;
+    position: relative;
+    background: white;
+    color: #3681fe;
+    cursor: pointer;
+    border-radius: 45px;
+    border: 1px solid #3681fe;
+    padding: 6px 20px;
+    transition: 0.2s all ease-in-out;;
+    font-size: 14px;
+    font-weight: 400;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.publish-ready-btn:hover {
     background: #3681fe;
     color: white;
 }
@@ -6657,7 +6738,6 @@ Dean*/
     border-radius: 19px;
     cursor: pointer;
     position: relative !important;
-    margin-right: 20px;
     width: 33px;
     height: 33px;
     border: 1px solid #989898;
@@ -6850,7 +6930,7 @@ Dean*/
 
 
 #container {
-   /* margin-top: 60px;*/
+    /* margin-top: 60px;*/
     overflow-x: hidden;
     min-height: calc(80vh + 4px);
 }
@@ -6969,7 +7049,7 @@ Dean*/
 }
 
 .u__center-container-mock {
-    margin-top:  -15px !important;
+    margin-top: -15px !important;
 }
 
 .content-list-path {
@@ -6992,8 +7072,7 @@ Dean*/
 
 .u_title {
     width: 100%;
-    margin: 0;
-    font-size: 16px;
+    font-size: 30px;
     font-weight: bold;
     font-style: normal;
     font-stretch: normal;
@@ -7074,7 +7153,6 @@ Dean*/
     text-align: center;
     background: #f1f1f1;
     border: 1px solid #d0d0d0;
-    border-radius: 2px 2px 0 0;
     position: relative;
 }
 
@@ -7202,7 +7280,10 @@ Dean*/
     top: 0;
     height: 25px;
     display: inline-block;
-    margin-left: 8px;
+}
+
+.info-date-name {
+    font-size: 14px;
 }
 
 .info-date {
@@ -7260,13 +7341,13 @@ Dean*/
     color: #3681fe !important;
 }
 
-.info-detail-bookmark > i{
+.info-detail-bookmark > i {
     display: none;
     color: #8c8c8c;
     font-size: 24px;
 }
 
-.info-detail-bookmark-checked > i{
+.info-detail-bookmark-checked > i {
     color: #3681fe;
     font-size: 24px;
 }
@@ -7516,6 +7597,36 @@ Dean*/
 
 
 @media (max-width: 575px) {
+    .view_content .content-view-fullscreen-info-detail {
+        position: relative !important;
+        display: block !important;
+        margin-top: 10px;
+    }
+
+    .u_title {
+        font-size: 25px;
+    }
+
+    .content-add-dropzone-wrapper {
+        height: 100px !important;
+    }
+
+    .custom-dropzone > div > div > i {
+        font-size: 50px !important;
+    }
+
+    .custom-dropzone > div > div {
+        font-size: 15px !important;
+    }
+
+    .legal-subject {
+        font-size: 30px !important;
+    }
+
+    .ad-dummy {
+        height: 50px !important;
+    }
+
     .container-fluid {
         min-height: 50px;
     }
@@ -7710,10 +7821,6 @@ Dean*/
 
     .cc-container {
         margin-bottom: 25px !important;
-    }
-
-    .menu-btn {
-        top: 3px !important;
     }
 
     .tracking_fulldown_list .tfl_desc {
@@ -8076,6 +8183,7 @@ author tap list analytics*/
     padding: 0 0 10px 0;
     border-bottom: 1px solid #cecece;
 }
+
 .analytics-inner .no-data-icon {
 }
 
@@ -8293,7 +8401,7 @@ Duration CSS*/
 .option-table {
     position: absolute;
     top: 30px;
-    right: 5px;
+    right: 20px;
     float: right;
     -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.21), 0 0 1px rgba(0, 0, 0, 0.18);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.21), 0 0 1px rgba(0, 0, 0, 0.18);
@@ -8326,7 +8434,7 @@ Duration CSS*/
 
 
 .option-table .option-table-btn:hover,
-.option-table .option-table-btn:hover > i{
+.option-table .option-table-btn:hover > i {
     background: #3681fe;
     color: white !important;
 }
@@ -8392,15 +8500,14 @@ Duration CSS*/
     max-width: 1280px;
     padding: 20px;
     background-color: #fff;
-    border-right: 1px solid #b3b3b3;
 }
 
 .u__view .view_top {
     min-height: 300px;
     position: relative;
     background: #e8e8e8;
-    border-radius: 3px;
     border: 1px solid #e8e8e8;
+    z-index: 0;
 }
 
 /*2018-03-19
@@ -8473,14 +8580,39 @@ Dean
     right: 0;
 }
 
-
 .view_content {
-    margin-top: 15px;
     position: relative;
+}
+
+.view_content .info-date-view {
+    height: 0;
+}
+
+.view_content .info-name {
+    font-size: 14px;
+}
+
+.view_content .info-name:hover {
+    color: #3681fe;
+}
+
+.view_content .content-view-img {
+    width: 43px;
+    height: 43px;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: .4rem;
+    border: 1px solid #CCCCCC;
 }
 
 .view_content .view_content-desc {
     min-height: 20px;
+}
+
+.view_content .content-view-fullscreen-info-detail {
+    position: absolute;
+    right: 0;
+    top: 8px;
 }
 
 .view-content-desc-warning {
@@ -8570,10 +8702,6 @@ Dean
     opacity: 0.4
 }
 
-.u__view .info_name {
-    margin-bottom: 15px;
-}
-
 .u__view .view_tag {
     display: block;
     margin-top: 12px;
@@ -8612,7 +8740,6 @@ Dean
 
 .view_desc {
     margin-top: 20px;
-    margin-bottom: 20px;
     font-size: 14px;
     line-height: 1.5;
     min-height: 70px;
@@ -9062,7 +9189,7 @@ Dean*/
     margin-left: 5px;
 }
 
-.custom-textarea {
+.custom-modal-content .custom-textarea {
     background: white;
     border: 1px solid #d2d2d2;
     width: 100%;
@@ -9071,12 +9198,118 @@ Dean*/
     padding: 10px;
     -webkit-transition-duration: 0.3s;
     transition-duration: 0.3s;
+    min-height: 120px !important;
 }
 
-.custom-textarea:not(#copyEmbedInput):hover,
-.custom-textarea:focus {
+.custom-modal-content .custom-textarea:not(#copyEmbedInput):hover,
+.custom-modal-content .custom-textarea:focus {
     border-color: #3681fe;
     box-shadow: 0 0 0 1px #3681fe;
+}
+
+.custom-modal-content .custom-textarea::placeholder {
+    font-size: 14px;
+    color: #a5a5a5 !important;
+    font-weight: 100;
+}
+
+.custom-textarea {
+    background: white;
+    border: none;
+    width: 100%;
+    min-height: calc(100vh - 680px);
+    font-size: 18px;
+    font-weight: 400;
+    padding: 10px;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    color: #4d4d4d;
+}
+
+.custom-textarea::placeholder {
+    font-size: 18px;
+    color: #a5a5a5 !important;
+    font-weight: 100;
+}
+
+.custom-dropzone {
+    border-radius: 15px;
+    background: white;
+    width: 100%;
+    height: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.custom-dropzone:hover > div > div > i,
+.custom-dropzone:hover > div > div,
+.custom-dropzone-over > div > div,
+.custom-dropzone-over > div > div > i {
+    color: #3681fe !important;
+}
+
+.custom-dropzone > div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-dropzone > div > div {
+    text-align: center;
+}
+
+.custom-dropzone > div > div > i {
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    color: #bbbbbb;
+    font-size: 70px;
+}
+
+.custom-dropzone > div > div {
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    color: #bbbbbb;
+    font-size: 18px;
+    font-weight: 100;
+}
+
+.custom-dropzone-over {
+    background: linear-gradient(224deg, #ffffff, #ffffff, #ffffff, #eaf2ff, #eef9ff, #ffffff, #bddfff, #ffffff, #ffffff);
+    background-size: 1800% 1800%;
+    transition: all 0.3s ease-in-out;
+    -webkit-animation: drop-zone 11s ease infinite;
+    -moz-animation: drop-zone 11s ease infinite;
+    -o-animation: drop-zone 11s ease infinite;
+    animation: drop-zone 11s ease infinite;
+}
+
+@-webkit-keyframes drop-zone {
+    0%{background-position:0% 51%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 51%}
+}
+
+@-moz-keyframes drop-zone {
+    0%{background-position:0% 51%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 51%}
+}
+
+@-o-keyframes drop-zone {
+    0%{background-position:0% 51%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 51%}
+}
+
+@keyframes drop-zone {
+    0%{background-position:0% 51%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 51%}
 }
 
 .custom-input-copy-text {
@@ -9108,6 +9341,7 @@ Dean*/
     padding-right: 10px;
     border-radius: 0;
     font-size: 14px;
+    color: #4d4d4d;
     width: 100%;
 }
 
@@ -9127,6 +9361,22 @@ Dean*/
 .custom-input::placeholder {
     font-size: 14px;
     color: #a5a5a5;
+}
+
+.custom-input-content-add-title {
+    font-size: 30px !important;
+    font-weight: bold;
+    color: #4d4d4d !important;
+    border: 0;
+    height: 36px;
+    -webkit-transition: background 0s ease-out;
+    transition: background 0s ease-out;
+    width: 100%;
+}
+
+.custom-input-content-add-title::placeholder {
+    color: #a5a5a5 !important;
+    font-weight: 100;
 }
 
 .custom-input-file {
@@ -9176,7 +9426,8 @@ Dean*/
 .tag-input-warning,
 .tag-input-warning:hover,
 .tag-input-warning:focus-within {
-    border: 1px solid red;
+    border: 1px solid red !important;
+    box-shadow: 0 0 0 1px red;
 }
 
 .custom-input-warning + span,
@@ -9384,6 +9635,7 @@ Dean
     min-height: 44px;
     padding: 10px 0;
     border-bottom: 1px solid #a3d2f9;
+    border-top: 1px solid #a3d2f9;
 }
 
 .alert-banner {
@@ -9392,6 +9644,7 @@ Dean
     min-height: 44px;
     padding: 10px 0;
     border-bottom: 1px solid #f2dc9d;
+    border-top: 1px solid #f2dc9d;
 }
 
 .alert-info-img-wrapper {
@@ -9478,11 +9731,6 @@ Dean
     -ms-user-select: none;
     -webkit-user-select: none;
     user-select: none;
-}
-
-.sns-share-icon-wrapper {
-    height: 30px;
-    margin-top: 5px;
 }
 
 .thumb-up-icon {
@@ -9636,6 +9884,7 @@ dean
 
 .react-autosuggest__container {
     position: relative;
+    display: inline-block;
 }
 
 .tags_menu_search_container .react-autosuggest__container {
@@ -10031,7 +10280,7 @@ Main Category CSS
     color: #3681fe;
 }
 
-.main-category-name:hover + .main-category-see-all{
+.main-category-name:hover + .main-category-see-all {
     max-height: 33px;
     opacity: 1;
 }
@@ -10485,6 +10734,11 @@ Ads CSS
     margin-left: -35px;
 }
 
+.header-avatar-wrapper {
+    display: inline-block;
+    z-index: 1;
+}
+
 .header-version {
     color: #505050;
     font-size: 12px;
@@ -10540,7 +10794,7 @@ Ads CSS
     border-color: #3681fe;
 }
 
-.header-search-input .react-autosuggest__input{
+.header-search-input .react-autosuggest__input {
     font-size: 13px;
     outline: none;
     background: none;
@@ -10551,7 +10805,11 @@ Ads CSS
     margin: 0;
 }
 
-.header-search-input .react-autosuggest__container{
+.header-search-input-off .react-autosuggest__input {
+    cursor: default;
+}
+
+.header-search-input .react-autosuggest__container {
     height: 100%;
     width: 100%;
 }
@@ -10563,16 +10821,29 @@ Ads CSS
 .web-header-search-btn {
     background-image: url(../image/icon/i_search.svg);
     cursor: pointer;
-    width: 28px;
-    height: 27px;
-    margin: 0 0 0 6px;
+    width: 25px;
+    height: 26px;
     background-size: cover;
-    background-position-y: 3px;
+    background-position-y: 4px;
+    background-position-x: -1px;
     z-index: 1;
 }
 
 .web-header-search-btn:hover {
     background-image: url(../image/icon/i_search_blue.png);
+}
+
+.web-header-search-btn-wrapper {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    border-radius: 50%;
+    transition: 0.5s all ease-in-out;
+}
+
+.web-header-search-btn-wrapper:hover {
+    background-color: #d6e6ff;
 }
 
 
@@ -10595,19 +10866,30 @@ Ads CSS
 }
 
 
-
 /*
 legal CSS
 2019-05-24 Dean
 */
 .legal-subject {
-    font-size: 24px;
-    font-weight: 500;
+    font-size: 45px;
+    text-align: left;
+    font-family: poppins, 'source-han-sans-korean', sans-serif;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
-    text-align: center;
+    text-transform: lowercase;
+}
+
+.legal-subject:after {
+    content: '.';
+    margin-left: 5px;
+}
+
+.legal-subject:first-letter {
+    font-weight: bold;
+    color: #3681fe;
+    text-transform: uppercase;
 }
 
 .legal-subject-sub {
@@ -10954,7 +11236,7 @@ dean
 
 
 .modal-more-btn-wrapper {
-    margin: 40px 0 0 0;
+    margin: 30px 0 0 0;
     position: relative;
     height: 20px;
 }
@@ -11209,7 +11491,11 @@ dean*/
     width: 100px;
     border-radius: 30px;
     height: 30px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
 }
 
 .main-category-see-all-mock {
@@ -11218,7 +11504,11 @@ dean*/
     border-radius: 30px;
     height: 30px;
     margin-top: -30px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     opacity: 0.2;
 }
 
@@ -11237,11 +11527,55 @@ dean*/
     height: 168px;
     border-radius: 3px;
     overflow: hidden;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
+}
+
+@-webkit-keyframes mock-gradient-animation {
+    0% {
+        background-position: 0% 52%
+    }
+    50% {
+        background-position: 100% 49%
+    }
+    100% {
+        background-position: 0% 52%
+    }
+}
+
+@-moz-keyframes mock-gradient-animation {
+    0% {
+        background-position: 0% 52%
+    }
+    50% {
+        background-position: 100% 49%
+    }
+    100% {
+        background-position: 0% 52%
+    }
+}
+
+@keyframes mock-gradient-animation {
+    0% {
+        background-position: 0% 52%
+    }
+    50% {
+        background-position: 100% 49%
+    }
+    100% {
+        background-position: 0% 52%
+    }
 }
 
 .main-category-card-title-mock {
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     border-radius: 3px;
     width: 100%;
     height: 20px;
@@ -11257,14 +11591,22 @@ dean*/
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
 }
 
 .main-category-card-name-mock {
     display: inline-block;
     margin-left: 6px;
     top: 5px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     border-radius: 3px;
     position: relative;
     width: 80px;
@@ -11280,7 +11622,11 @@ dean*/
     display: inline-block;
     right: 0;
     top: 5px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     border-radius: 3px;
     position: absolute;
     width: 100px;
@@ -11293,7 +11639,11 @@ dean*/
     width: 80px;
     position: relative;
     height: 19px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     border-radius: 3px;
     vertical-align: middle;
 }
@@ -11304,7 +11654,11 @@ dean*/
     width: 40px;
     position: relative;
     height: 19px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     border-radius: 3px;
     vertical-align: middle;
 }
@@ -11316,7 +11670,11 @@ dean*/
     position: relative;
     height: 19px;
     margin-right: 20px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     border-radius: 3px;
     vertical-align: middle;
 }
@@ -11326,13 +11684,21 @@ dean*/
     align-items: center;
     width: 235px;
     height: 133px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     border-radius: 3px;
 }
 
 .detail-title-mock {
     border-radius: 3px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     width: 100%;
     height: 22px;
     min-width: 200px;
@@ -11342,7 +11708,11 @@ dean*/
 .details-info-desc-wrapper-mock {
     height: 34px;
     border-radius: 3px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     width: 100%;
     min-width: 200px;
     max-width: 500px;
@@ -11359,42 +11729,38 @@ dean*/
 }
 
 .view-top-mock {
-    min-height: 350px;
+    min-height: 400px;
     position: relative;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     border-radius: 3px;
 }
 
 .u-title-mock {
     height: 22px;
     border-radius: 3px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     width: 100%;
     min-width: 200px;
     max-width: 500px;
-}
-
-.view_desc .view_desc-mock {
-    height: 22px;
-    border-radius: 3px;
-    background: #e8e8e8;
-    width: 80%;
-    margin-bottom: 12px;
-}
-
-.view_desc .view_desc-mock-2 {
-    width: 60% !important;
-}
-
-.view_desc .view_desc-mock-3 {
-    width: 40% !important;
 }
 
 .view-tag-mock {
     display: inline-block;
     height: 22px;
     border-radius: 3px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     width: 50px;
     margin-top: 15px;
     margin-right: 15px;
@@ -11403,7 +11769,11 @@ dean*/
 .sns-share-icon-wrapper-mock {
     height: 20px;
     border-radius: 3px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     width: 21px;
     margin-top: 10px;
     margin-right: 10px;
@@ -11413,7 +11783,11 @@ dean*/
     width: 100px;
     height: 30px;
     border-radius: 3px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
 }
 
 .see-also-thumbnail-mock {
@@ -11422,7 +11796,11 @@ dean*/
     width: 110px;
     height: 63px;
     border-radius: 3px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
     display: inline-block;
 }
 
@@ -11431,7 +11809,11 @@ dean*/
     max-width: 300px;
     height: 20px;
     border-radius: 3px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
 }
 
 .see-also-content-mock {
@@ -11439,9 +11821,142 @@ dean*/
     height: 20px;
     border-radius: 3px;
     margin-top: 23px;
-    background: #e8e8e8;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
 }
 
 .see-also-container-mock {
     width: calc(100% - 120px);
+}
+
+
+/*2019-09-26
+dean
+More*/
+.more-tag-item {
+    margin: 20px 20px;
+    width: 168px;
+    height: 168px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #b3b3b3;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: poppins, 'source-han-sans-korean', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: #666666;
+}
+
+.more-tag-item:hover {
+    background: linear-gradient(238deg, #813dd0, #2373f9, #2a4e8a);
+    background-size: 600% 600%;
+    color: white;
+    -webkit-animation: mock-gradient-animation 5s ease infinite;
+    -moz-animation: mock-gradient-animation 5s ease infinite;
+    -o-animation: mock-gradient-animation 5s ease infinite;
+    animation: mock-gradient-animation 5s ease infinite;
+}
+
+@-webkit-keyframes mock-gradient-animation {
+    0% {
+        background-position: 0 11%
+    }
+    50% {
+        background-position: 100% 90%
+    }
+    100% {
+        background-position: 0 11%
+    }
+}
+
+@-moz-keyframes mock-gradient-animation {
+    0% {
+        background-position: 0 11%
+    }
+    50% {
+        background-position: 100% 90%
+    }
+    100% {
+        background-position: 0 11%
+    }
+}
+
+@-o-keyframes mock-gradient-animation {
+    0% {
+        background-position: 0 11%
+    }
+    50% {
+        background-position: 100% 90%
+    }
+    100% {
+        background-position: 0 11%
+    }
+}
+
+@keyframes mock-gradient-animation {
+    0% {
+        background-position: 0 11%
+    }
+    50% {
+        background-position: 100% 90%
+    }
+    100% {
+        background-position: 0 11%
+    }
+}
+
+
+/*
+Content Add Css
+2019-09-30 Dean
+*/
+.content-add-dropzone-wrapper {
+    height: 220px;
+}
+
+.custom-dropzone-document-img {
+    background-image: url(../image/icon/i_document.png);
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: #3681fe;
+    font-family: poppins, 'source-han-sans-korean', sans-serif;
+}
+
+.custom-dropzone-document-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #3681fe !important;
+}
+
+
+/*
+Content Editor Css
+2019-10-01 Dean
+*/
+.content-editor-el-p:first-child {
+    margin-top: 15px;
+    color: #4d4d4d;
+}
+
+.content-editor-el-p {
+    font-weight: 100;
+    margin-top: 25px;
+    margin-bottom: 0;
+    color: #4d4d4d;
 }

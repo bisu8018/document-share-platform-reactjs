@@ -36,16 +36,8 @@ class Category extends React.Component {
             <NavLink to="/popular" activeClassName="on"
                      onClick={common_view.scrollTop}>popular</NavLink>
           </li>
-        {/*  {getTagList.length > 0 && getTagList.sort((a, b) => b.value - a.value).map((rst, idx) => {
-            return (idx < 6 &&
-              <li key={idx}>
-                <NavLink to={"/category/" + rst._id} activeClassName="on"
-                         onClick={common_view.scrollTop}>{rst._id}</NavLink>
-              </li>
-            );
-          })}*/}
           <li>
-            <NavLink to="/category" activeClassName="on"
+            <NavLink to="/more" activeClassName="on"
                      onClick={common_view.scrollTop}>more</NavLink>
           </li>
         </ul>

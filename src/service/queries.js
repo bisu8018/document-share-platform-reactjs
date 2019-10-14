@@ -2,7 +2,10 @@ export default ({
   getMyListFindMany: data =>
     `
     UserDocumentFavorite {
-    findMany(filter: { userId: "${data}" }) {
+    findMany(
+    filter: { userId: "${data}" },
+    sort: USERID__CREATED_ASC
+    ) {
       documentId
     }
   }`,
@@ -11,7 +14,8 @@ export default ({
     UserDocumentHistory {
     findMany(
     filter: { userId: "${data}" },
-    limit: 10
+    limit: 6,
+    sort: USERID__UPDATED_ASC
     ) {
       documentId
     }
@@ -52,6 +56,48 @@ export default ({
   }
   DocumentPopular {
     findByIds(_ids: [${data}]) {
+      _id
+      latestPageview
+    }
+  }`,
+  getDocumentByFindOne: data =>
+    `Document {    
+    findOne(filter: { _id: "${data}" }) {
+      _id
+      created
+      state
+      accountId
+      documentId
+      documentName
+      documentSize
+      ethAccount
+      title
+      desc
+      seoTitle
+      useTracking
+      forceTracking
+      isDownload
+      cc
+      isPublic
+      isBlocked
+      isDeleted
+      dimensions {
+        width
+        height
+        type
+      }
+    }
+  }`,
+  getDocumentFeaturedByFindOne: data =>
+    `DocumentFeatured {
+    findOne(filter: { _id: "${data}" }) {
+      _id
+      latestVoteAmount
+    }
+  }`,
+  getDocumentPopularByFindOne: data =>
+    `DocumentPopular {
+    findOne(filter: { _id: "${data}" }) {
       _id
       latestPageview
     }

@@ -2,7 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { APP_PROPERTIES } from "properties/app.properties";
 
-import ContentViewRight from "./ContentViewRight";
+import ContentViewSeeAlso from "./ContentViewSeeAlso";
 import MainRepository from "../../../../redux/MainRepository";
 import common from "../../../../common/common";
 import history from "apis/history/history";
@@ -11,7 +11,7 @@ import ContentViewFullScreenContainer
 import log from "../../../../config/log";
 import AwayModal from "../../../common/modal/AwayModal";
 import ContentViewFullScreenMock from "../../../common/mock/ContentViewFullScreenMock";
-import ContentViewRightMock from "../../../common/mock/ContentViewRightMock";
+import ContentViewSeeAlsoMock from "../../../common/mock/ContentViewSeeAlsoMock";
 import { psString } from "../../../../config/localization";
 
 
@@ -52,7 +52,7 @@ class ContentView extends React.Component {
   wrongAccess = () => {
     this.props.setAlertCode(2002);
     this.props.history.push({
-      pathname: "/404",
+      pathname: "/n",
       state: { errMessage: psString("profile-err-1") }
     });
   };
@@ -125,7 +125,7 @@ class ContentView extends React.Component {
 
   // push 404
   pushNotFoundPage = () => {
-    if (!APP_PROPERTIES.ssr) history.push("/404");
+    if (!APP_PROPERTIES.ssr) history.push("/n");
   };
 
 
@@ -165,8 +165,8 @@ class ContentView extends React.Component {
                                           totalViewCountInfo={totalViewCountInfo} update={update}
                                           auth={auth} author={author}/>
 
-          <ContentViewRight documentData={documentData} author={author}
-                            featuredList={featuredList} {...rest}/>
+          <ContentViewSeeAlso documentData={documentData} author={author}
+                              featuredList={featuredList} {...rest}/>
         </section>
 
       );
@@ -174,7 +174,7 @@ class ContentView extends React.Component {
       return (
         <section data-parallax="true" className="container_view row col-re container">
           <ContentViewFullScreenMock/>
-          <ContentViewRightMock/>
+          <ContentViewSeeAlsoMock/>
         </section>
       );
     }

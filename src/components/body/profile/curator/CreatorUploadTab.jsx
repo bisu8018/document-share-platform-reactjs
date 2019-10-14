@@ -114,12 +114,11 @@ class CreatorUploadTab extends React.Component {
     if (APP_PROPERTIES.ssr) return false;
 
     document.addEventListener("click", e => {
-      const { viewerOptionOpenedIdx } = this.state;
+        const { viewerOptionOpenedIdx } = this.state;
         if (viewerOptionOpenedIdx !== null) {
-          // clicked element
-          let targetElement = e.target;
-          const profileCard = document.getElementById("optionTable" + viewerOptionOpenedIdx);
-          if (targetElement.contains(profileCard)) {
+          const targetElement = e.target;
+          const profileCard = document.getElementById("optionTable" + viewerOptionOpenedIdx).parentNode;
+          if (!profileCard.contains(targetElement)) {
             this.setState({ viewerOptionOpenedIdx: null });
           }
         }

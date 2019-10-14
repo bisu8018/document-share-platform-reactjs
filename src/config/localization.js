@@ -68,10 +68,6 @@ const strings = new Map([
 
 
   // viewer page
-  ['vp-email-warning', {
-    KOR: '이 문서의 모든 내용을 보시려면, 이메일을 제출하고 가입하시기 바랍니다. ',
-    ENG: 'To view the entire documents, enter your email to sign up.'
-  }],
   ['viewer-page-title-1', {
     KOR: '해당 링크로 이동',
     ENG: 'Link to this URL'
@@ -401,6 +397,10 @@ const strings = new Map([
     KOR: '투표',
     ENG: 'Voted'
   }],
+  ["profile-analytics", {
+    KOR: "통계분석",
+    ENG: "Analytics"
+  }],
   ['profile-total-documents', {
     KOR: '총 문서량 :',
     ENG: 'Total documents :'
@@ -442,6 +442,10 @@ const strings = new Map([
   ['alert-2005', {
     KOR: '복사 성공',
     ENG: 'Copy Success'
+  }],
+  ['alert-2005', {
+    KOR: '새로운 콘텐트가 있습니다. 새로고침 해주세요.',
+    ENG: 'New content is available, please refresh.'
   }],
   ['alert-2021', {
     KOR: '이메일 검증 성공',
@@ -554,6 +558,10 @@ const strings = new Map([
   ['alert-2076', {
     KOR: '문서 삭제 성공',
     ENG: 'Successfully deleted documents'
+  }],
+  ['alert-2077', {
+    KOR: '문서 업로드 성공',
+    ENG: 'Successfully uploaded documents'
   }],
   ['alert-2091', {
     KOR: '다운로드 실패',
@@ -1022,7 +1030,7 @@ const strings = new Map([
   }],
   ['header-login', {
     KOR: '로그인',
-    ENG: 'Login'
+    ENG: 'Sign in'
   }],
 
   // Content View Right
@@ -1370,7 +1378,7 @@ const strings = new Map([
     ENG: 'Publish and Register'
   }],
   ['publish-modal-publish-btn', {
-    KOR: '공개하기',
+    KOR: '출판하기',
     ENG: 'Publish'
   }],
 
@@ -1482,21 +1490,22 @@ const strings = new Map([
     ENG: 'Remove from My List'
   }],
 
-  ['', {
-    KOR: '',
-    ENG: ''
+  // Content Add
+  ['content-add-publish-btn', {
+    KOR: '출판 시작하기',
+    ENG: 'Start to publish'
   }],
-  ['', {
-    KOR: '',
-    ENG: ''
+  ['content-add-drag-drop', {
+    KOR: '드래그 앤 드롭 또는 클릭하여 파일 선택',
+    ENG: 'Drag & Drop or Click to upload document'
   }],
-  ['', {
-    KOR: '',
-    ENG: ''
+  ['content-add-click', {
+    KOR: '클릭하여 파일 선택',
+    ENG: 'Click to upload document'
   }],
-  ['', {
-    KOR: '',
-    ENG: ''
+  ['content-add-write-contents', {
+    KOR: '당신의 컨텐츠를 작성해보세요 . . .',
+    ENG: 'Write your contents . . .'
   }],
   ['', {
     KOR: '',

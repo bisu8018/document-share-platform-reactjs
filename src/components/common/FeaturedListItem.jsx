@@ -40,7 +40,7 @@ class FeaturedList extends React.Component {
     return (
       <div className="see-also-container">
 
-        <Link to={"/@" + identification + "/" + resultItem.seoTitle}>
+        <Link to={"/@" + identification + "/" + resultItem.seoTitle} rel="nofollow">
           <div className="see-also-thumbnail" onClick={common_view.scrollTop()}>
             <img src={Common.getThumbnail(resultItem.documentId, 320, 1, resultItem.documentName)}
                  className={ratio >= 1.8 ? "see-also-card-img-landscape" : "main-category-card-img"}
@@ -50,7 +50,7 @@ class FeaturedList extends React.Component {
         </Link>
 
         <div className="see-also-content">
-          <Link to={"/@" + identification} className="info_name see-also-author" onClick={common_view.scrollTop()}>
+          <Link to={"/@" + identification} className="info_name see-also-author" onClick={common_view.scrollTop()} rel="nofollow">
             {identification}
           </Link>
         </div>

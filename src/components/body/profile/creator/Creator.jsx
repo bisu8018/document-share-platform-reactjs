@@ -5,12 +5,14 @@ import MainRepository from "../../../../redux/MainRepository";
 import Common from "../../../../common/common";
 import { ThreeBounce } from "better-react-spinkit";
 import NotFoundPage from "../../../common/NotFoundPage";
+import CuratorAnalyticsTabContainer from "../../../../container/body/profile/curator/CuratorAnalyticsTabContainer";
 import CreatorSummaryContainer from "../../../../container/body/profile/creator/CreatorSummaryContainer";
 import CuratorVoteTabContainer from "../../../../container/body/profile/curator/CuratorVoteTabContainer";
 import CreatorUploadTabContainer from "../../../../container/body/profile/creator/CreatorUploadTabContainer";
 import { psString } from "../../../../config/localization";
 import { Helmet } from "react-helmet";
 import log from "../../../../config/log";
+import common_view from "../../../../common/common_view";
 import { APP_PROPERTIES } from "../../../../properties/app.properties";
 import LoadingModal from "../../../common/modal/LoadingModal";
 
@@ -36,9 +38,10 @@ class Creator extends React.Component {
 
     // @ 통해서 프로필 접근 허용
     if(presentValue[0] !== '@'){
-      this.wrongAccess();
+      return this.wrongAccess();
     } else {
       presentValue = presentValue.substring(1);
+      if(!presentValue) return this.wrongAccess();
     }
 
 
@@ -54,7 +57,7 @@ class Creator extends React.Component {
   wrongAccess = () => {
     this.props.setAlertCode(2002);
     this.props.history.push({
-      pathname: "/404",
+      pathname: "/n",
       state: { errMessage: psString("profile-err-1") }
     });
   };
@@ -94,6 +97,7 @@ class Creator extends React.Component {
   }
 
   render() {
+    const { getMyInfo } = this.props;
     const { userInfo, errMessage, uploadDocumentList, voteDocumentList } = this.state;
 
     if (APP_PROPERTIES.ssr) return (<LoadingModal/>);
@@ -126,6 +130,8 @@ class Creator extends React.Component {
           <TabList>
             <Tab>{psString("profile-uploaded")}</Tab>
             <Tab>{psString("profile-voted")}</Tab>
+            {(param === getMyInfo.username || param === getMyInfo.email || param === common_view.getMySub()) &&
+            <Tab>{psString("profile-analytics")}</Tab>}
           </TabList>
 
           <TabPanel>
@@ -141,6 +147,12 @@ class Creator extends React.Component {
               getDocumentList={this.getVoteDocumentList.bind(this)}
             />
           </TabPanel>
+
+          {(param === getMyInfo.username || param === getMyInfo.email || param === common_view.getMySub()) &&
+          <TabPanel>
+            <CuratorAnalyticsTabContainer userInfo={userInfo}/>
+          </TabPanel>
+          }
 
         </Tabs>
         }

@@ -13,7 +13,6 @@ import MainRepository from "../../../../redux/MainRepository";
 import EditDocumentModalContainer from "../../../../container/common/modal/EditDocumentModalContainer";
 import ContentViewCarouselContainer
   from "../../../../container/body/contents/contentsView/ContentViewCarouselContainer";
-import Linkify from "react-linkify";
 import RegBlockchainBtnContainer from "../../../../container/body/contents/contentsView/RegBlockchainBtnContainer";
 import VoteDocumentModalContainer from "../../../../container/common/modal/VoteDocumentModalContainer";
 import PayoutCard from "../../../common/card/PayoutCard";
@@ -223,7 +222,7 @@ class ContentViewFullScreen extends Component {
 
   render() {
     const { documentData, documentText, author, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile, update } = this.props;
-    const { page, emailFlag, isPublic, isRegistry, downloadLoading, completeModalOpen, bookmarkFlag } = this.state;
+    const { isPublic, isRegistry, downloadLoading, completeModalOpen, bookmarkFlag } = this.state;
 
     let vote = Common.toEther(documentData.latestVoteAmount) || 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
@@ -235,81 +234,89 @@ class ContentViewFullScreen extends Component {
 
     return (
 
-      <article
-        className="col-md-12 col-lg-8 view_left u__view ">
-        <div className="view_top">
+      <article className="col-12 view_left u__view p-3">
+        <div className="view_top mb-4">
           <ContentViewCarouselContainer id="pageCarousel" target={documentData} documentText={documentText}
                                         tracking={true} handleEmailFlag={this.handleEmailFlag}
                                         getPageNum={page => this.getPageNum(page)}/>
           <a className="view_screen" href={APP_PROPERTIES.domain().viewer + documentData.seoTitle} target="_blank"
-             rel="noopener noreferrer">
+             rel="noopener noreferrer nofollow">
             <i title="viewer button" className="material-icons">fullscreen</i>
           </a>
         </div>
 
-        <div className="view_content">
-          <div className="u_title mt-0 mt-sm-2 mb-2">
-            {documentData.title}
-          </div>
 
-          {accountId === common_view.getMySub() &&
-          <div className="view-option-btn" id="viewer-option-btn">
-            <i className="material-icons" onClick={() => this.handleSetting()}>more_vert</i>
-            <div className="option-table d-none" id="viewer-option-table">
-              <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>
-                <i className="material-icons">save_alt</i>
-                {psString("download-btn")}
+        <div className="view_content">
+          <div className="u_title mb-3">{documentData.title}</div>
+
+          <div className="mb-3 position-relative">
+            <div className="row">
+              <Link to={"/@" + identification} title={"Go to profile page of " + identification}
+                    rel="nofollow">
+                {profileUrl ? <img src={profileUrl} alt="profile" className="content-view-img"
+                                   onClick={() => common_view.scrollTop()}/> :
+                  <i className="material-icons img-thumbnail" onClick={() => common_view.scrollTop()}>face</i>}
+              </Link>
+
+              <div className="d-inline-block ml-1">
+                <Link to={"/@" + identification} title={"Go to profile page of " + identification} rel="nofollow">
+                  <div className="info-name">{identification}</div>
+                </Link>
+                <div className="info-date-view d-inline-block">{Common.timestampToDate(documentData.created)}</div>
               </div>
-              {MainRepository.Account.isAuthenticated() && bookmarkFlag ?
-                <div className="option-table-btn" onClick={() => this.handleBookmarkRemove()}>
-                  <i className="material-icons">bookmark_border</i>
-                  {psString("bookmark-remove")}
-                </div> :
-                <div className="option-table-btn" onClick={() => this.handleBookmark()}>
-                  <i className="material-icons">bookmark</i>
-                  {psString("bookmark-add")}
+            </div>
+
+            <div className="content-view-fullscreen-info-detail">
+              <span className={"info-detail-reward mr-3 " + (isRegistry ? "" : "color-not-registered")}
+                    onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
+                    onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
+                $ {Common.deckToDollar(reward)}
+                <img className="reward-arrow"
+                     src={require("assets/image/icon/i_arrow_down_" + (isRegistry ? "blue" : "grey") + ".svg")}
+                     alt="arrow button"/>
+              </span>
+              {reward > 0 && <PayoutCard reward={reward} data={documentData}/>}
+              <span className="info-detail-view mr-3">{view}</span>
+              <span className={"info-detail-vote " + (accountId === common_view.getMySub() ? "mr-5" : "mr-4")}>{Common.deckStr(vote)}</span>
+
+              {accountId === common_view.getMySub() &&
+              <div className="view-option-btn" id="viewer-option-btn">
+                <i className="material-icons" onClick={() => this.handleSetting()}>more_horiz</i>
+                <div className="option-table d-none" id="viewer-option-table">
+                  <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>
+                    <i className="material-icons">save_alt</i>
+                    {psString("download-btn")}
+                  </div>
+                  {MainRepository.Account.isAuthenticated() && bookmarkFlag ?
+                    <div className="option-table-btn" onClick={() => this.handleBookmarkRemove()}>
+                      <i className="material-icons">bookmark_border</i>
+                      {psString("bookmark-remove")}
+                    </div> :
+                    <div className="option-table-btn" onClick={() => this.handleBookmark()}>
+                      <i className="material-icons">bookmark</i>
+                      {psString("bookmark-add")}
+                    </div>
+                  }
+                  <EditDocumentModalContainer documentData={documentData}/>
+                  {isRegistry === false && (accountId === common_view.getMySub()) &&
+                  <DeleteDocumentModalContainer documentData={documentData}/>}
                 </div>
+              </div>
               }
-              <EditDocumentModalContainer documentData={documentData}/>
-              {isRegistry === false && (accountId === common_view.getMySub()) &&
-              <DeleteDocumentModalContainer documentData={documentData}/>}
             </div>
           </div>
-          }
-          <div className="mb-2 mb-sm-3 d-block position-relative">
-
-            <span className={"info-detail-reward mr-3 " + (isRegistry ? "" : "color-not-registered")}
-                  onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
-                  onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
-              $ {Common.deckToDollar(reward)}
-              <img className="reward-arrow"
-                   src={require("assets/image/icon/i_arrow_down_" + (isRegistry ? "blue" : "grey") + ".svg")}
-                   alt="arrow button"/>
-            </span>
-
-            {reward > 0 && <PayoutCard reward={reward} data={documentData}/>}
-
-            <span className="info-detail-view mr-3">{view}</span>
-            <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
-          </div>
-
 
           <div className="mb-3">
             {!isPublic &&
             <PublishModalContainer documentData={documentData} afterPublish={() => this.handleAfterPublish()}/>}
-
             {completeModalOpen && <PublishCompleteModalContainer documentData={documentData}
                                                                  completeModalClose={() => this.handleCompleteModalClose()}/>}
-
             {isPublic &&
             <VoteDocumentModalContainer documentData={documentData}/>}
-
             {isPublic && (accountId === common_view.getMySub() && documentData) &&
             <RegBlockchainBtnContainer documentData={documentData}
                                        afterRegistered={() => this.handleAfterRegistered()}/>}
-
             <CopyModalContainer documentData={documentData}/>
-
             {documentData.isDownload && accountId !== common_view.getMySub() &&
             <Tooltip title={psString("tooltip-download")} placement="bottom">
               <div className={"viewer-btn mb-1 " + (downloadLoading ? "btn-disabled" : "")}
@@ -320,17 +327,16 @@ class ContentViewFullScreen extends Component {
               </div>
             </Tooltip>
             }
-
             {accountId === common_view.getMySub() &&
             <Tooltip title={psString("tooltip-tracking")} placement="bottom">
               <Link to={{
-                pathname: "/tracking/" + identification + "/" + documentData.seoTitle,
+                pathname: "/tr/" + identification + "/" + documentData.seoTitle,
                 state: {
                   documentData: documentData,
                   documentText: documentText,
                   totalViewCountInfo: totalViewCountInfo
                 }
-              }}>
+              }} rel="nofollow">
                 <div className="viewer-btn" onClick={() => common_view.scrollTop()}>
                   <i className="material-icons">bar_chart</i> {psString("tracking-btn")}
                 </div>
@@ -339,42 +345,19 @@ class ContentViewFullScreen extends Component {
             }
           </div>
 
-
-          <div className="hr"/>
-
+          <div className="hr mb-3"/>
 
           <div className="view_desc">
-            <Link to={"/@" + identification} className="info_name mb-2 mb-sm-3"
-                  title={"Go to profile page of " + identification}>
-              {profileUrl ?
-                <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
-                <i className="material-icons img-thumbnail" onClick={() => common_view.scrollTop()}>face</i>
-              }
-              {identification}
-            </Link>
-
-            <div className="info-date-view d-none d-sm-inline-block">
-              {Common.timestampToDate(documentData.created)}
-            </div>
-
-            <br/>
-
-            <Linkify properties={{
-              title: psString("viewer-page-title-1"),
-              rel: "nofollow",
-              target: "_blank",
-              style: { color: "#3681fe", fontWeight: "400" }
-            }}>{documentData.desc}</Linkify>
-
-            <div className="view_tag mb-3">
+            <div dangerouslySetInnerHTML={{ __html: documentData.desc }}/>
+            <div className="view_tag mt-5 mb-3">
               {documentData.tags ? documentData.tags.map((tag, index) => (
                 <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
                       onClick={() => common_view.scrollTop()}
-                      className="tag"> {tag} </Link>
+                      className="tag" rel="nofollow"> {tag} </Link>
               )) : ""}
             </div>
 
-            <div className="sns-share-icon-wrapper mb-2">
+            <div>
               <Tooltip title={psString("viewer-page-sns-linkedin")} placement="bottom">
                 <div className="d-inline-block mr-3">
                   <LinkedinShareButton url={ogUrl} className="sns-share-icon " title={documentData.title}>
@@ -414,19 +397,7 @@ class ContentViewFullScreen extends Component {
             </div>
 
 
-            <div className="hr mb-3"/>
-
-            <div className="view_content-desc mb-5">
-              {documentData.forceTracking && emailFlag ?
-                <div className="view-content-desc-warning">{psString("vp-email-warning")}</div> :
-                <Linkify properties={{
-                  title: psString("Link to this URL"),
-                  rel: "nofollow",
-                  target: "_blank",
-                  style: { color: "#0d73f8", fontWeight: "400" }
-                }}>{documentText[page - 1]}</Linkify>
-              }
-            </div>
+            <div className="hr mb-3 mt-3"/>
           </div>
 
           {update === false && <ContentViewComment documentData={documentData}/>}

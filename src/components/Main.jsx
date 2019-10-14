@@ -28,9 +28,13 @@ class Main extends Component {
 
   //초기화
   init = () => {
-    if (APP_PROPERTIES.ssr) return Promise.resolve().then(() => this.setInitData());
+    if (APP_PROPERTIES.ssr)
+      return Promise.resolve().then(() => this.setInitData());
 
     history.listen(MainRepository.Analytics.sendPageView);
+
+    // 초기화 시작 LOG
+    log.Main.init();
 
     MainRepository.init(() =>
       Promise.resolve()
@@ -50,8 +54,6 @@ class Main extends Component {
         .then(() => this.setHistory())
         // 초기화 완료
         .then(() => this.setInitData())
-        // 초기화 완료 LOG
-        .then(() => log.Main.init())
         // 에러 발생 체크
         .catch(() => this.setInitData())
     );
@@ -81,17 +83,19 @@ class Main extends Component {
     const { getMyInfo, setMyInfo } = this.props;
     if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
       let myInfo = MainRepository.Account.getMyInfo();
-      return MainRepository.Account.getAccountInfo(myInfo.sub).then(result => {
-        let res = result.user;
+      return MainRepository.Account.getAccountInfo(myInfo.sub)
+        .then(result => {
+          let res = result.user;
 
-        if (!res.username || !res.username === "") res.username = res.email;
-        if (!res.picture) res.picture = localStorage.getItem("user_info").picture;
+          if (!res.username || !res.username === "") res.username = res.email;
+          if (!res.picture) res.picture = localStorage.getItem("user_info").picture;
 
-        res.privateDocumentCount = result.privateDocumentCount;
-        log.Main.setMyInfo();
+          res.privateDocumentCount = result.privateDocumentCount;
+          log.Main.setMyInfo();
 
-        return setMyInfo(res);
-      }).catch(err => log.Main.setMyInfo(err));
+          return setMyInfo(res);
+        })
+        .catch(err => log.Main.setMyInfo(err));
     }
   };
 
@@ -100,7 +104,8 @@ class Main extends Component {
   setMyList = () => {
     const { getMyInfo, setMyList } = this.props;
     if (MainRepository.Account.isAuthenticated() && getMyInfo.sub.length !== 0) {
-      return MainRepository.Document.getMyList(getMyInfo.sub).then(res => setMyList({ resultList: res }));
+      return MainRepository.Document.getMyList(getMyInfo.sub)
+        .then(res => setMyList({ resultList: res }));
     }
   };
 
@@ -109,7 +114,8 @@ class Main extends Component {
   setHistory = () => {
     const { getMyInfo, setHistory } = this.props;
     if (MainRepository.Account.isAuthenticated() && getMyInfo.sub.length !== 0) {
-      return MainRepository.Document.getHistory(getMyInfo.sub).then(res => setHistory({ resultList: res }));
+      return MainRepository.Document.getHistory(getMyInfo.sub)
+        .then(res => setHistory({ resultList: res }));
     }
   };
 
@@ -204,7 +210,8 @@ class Main extends Component {
     const { getMyInfo } = this.props;
     const { initData } = this.state;
 
-    if (APP_PROPERTIES.ssr) return this.getMainComponent();
+    if (APP_PROPERTIES.ssr)
+      return this.getMainComponent();
     if (initData && (MainRepository.Account.isAuthenticated() ? getMyInfo.email.length !== 0 : true))
       common_view.setBodyStyleUnlock();
     else {

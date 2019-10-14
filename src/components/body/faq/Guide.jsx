@@ -16,7 +16,7 @@ class Guide extends React.PureComponent {
         </Helmet>
 
         <div className="col-12 mt-3 mb-5">
-          <div className="legal-subject mt-3 mt-sm-5 text-center">{psString("guide-subj-main")}</div>
+          <div className="legal-subject mt-3 mb-5">{psString("guide-subj-main")}</div>
 
           <div className="legal-content mt-4">
 

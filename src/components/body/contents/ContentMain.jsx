@@ -135,10 +135,6 @@ class ContentMain extends Component {
   };
 
 
-  // 업로드 버튼
-  handleUploadBtn = () => document.getElementById("uploadBtn").click();
-
-
   // see more 트리거 버튼
   handelTrigger = arr => {
     common_view.scrollTop();
@@ -183,6 +179,7 @@ class ContentMain extends Component {
     return (
       <section className="row container">
         <div className="main-banner" id="mainBanner">
+          <div/>
           <Carousel
             useKeyboardArrows={false}
             autoPlay={false}
@@ -194,7 +191,6 @@ class ContentMain extends Component {
           >
             {subject.map((arr, idx) => (
               <div className="main-banner-text" key={idx}>
-
                 <div className="main-banner-wrapper">
                   <div>
                     <div className="main-banner-subject d-inline-block">{arr}</div>
@@ -212,10 +208,11 @@ class ContentMain extends Component {
                                onClick={() => this.handleTagClick()}>{buttonText[idx]}</div>
                       )
                       :
-                      <div className="main-upload-btn mr-2 ml-2 mb-3"
-                           onClick={() => this.handleUploadBtn()}>{buttonText[idx]}</div>
+                      <Link to='/ca'>
+                        <div className="main-upload-btn mr-2 ml-2 mb-3">{buttonText[idx]}</div>
+                      </Link>
                     }
-                    <Link to="/faq">
+                    <Link to="/f" rel="nofollow">
                       <div className="main-learn-more-btn ml-2 mr-2"
                            onClick={() => common_view.scrollTop()}>{psString("main-banner-btn-4")}</div>
                     </Link>
@@ -223,8 +220,6 @@ class ContentMain extends Component {
                 </div>
 
                 <div className={"main-banner-img-wrapper main-banner-img" + (idx + 1)}/>
-
-                <img src="" data-src={require("assets/image/banner/img-banner-0" + (idx + 1) + ".png")} alt=""/>
               </div>
             ))}
           </Carousel>
@@ -239,7 +234,8 @@ class ContentMain extends Component {
               this.getList(arr) ? ((this.getList(arr).resultList && this.getList(arr).resultList.length > 0) || (!this.getList(arr).resultList && this.getList(arr).length > 0)) &&
                 <div className="main-category" key={idx}>
                   <div className="mb-3 d-flex">
-                    <div className="main-category-name" onClick={() => arr !== "myList" && arr !== "history" ? this.handelTrigger(arr) : false}>
+                    <div className="main-category-name"
+                         onClick={() => arr !== "myList" && arr !== "history" ? this.handelTrigger(arr) : false}>
                       {psString("main-category-" + arr)}
                     </div>
                     {arr !== "myList" && arr !== "history" &&

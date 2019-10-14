@@ -16,7 +16,7 @@ class Faq extends React.PureComponent {
         </Helmet>
 
         <div className="col-12 mb-5 mt-3">
-          <div className="legal-subject mt-3 mt-sm-5 text-center">FAQ</div>
+          <div className="legal-subject mt-3 mb-5">FAQ</div>
 
           <div className="legal-content mt-4">
 

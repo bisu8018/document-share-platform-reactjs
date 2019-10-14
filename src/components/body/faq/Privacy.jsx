@@ -20,7 +20,7 @@ class Privacy extends React.PureComponent {
 
         <div className="col-12 mt-3 mb-5 pb-5">
 
-          <div className="legal-subject mt-3 mt-sm-5 text-center">PRIVACY</div>
+          <div className="legal-subject mt-3 mb-5">PRIVACY</div>
 
           <div className="legal-content mt-4">
             DECOMPANY Inc. (hereinafter “Company”) always makes its best efforts to protect the personal information of its
@@ -418,7 +418,7 @@ class Privacy extends React.PureComponent {
 
 
         <div className="mt-5">
-          <div className="legal-subject mt-3 mt-sm-5 text-center">PRIVACY POLICY</div>
+          <div className="legal-subject mt-3 mb-5">PRIVACY POLICY</div>
 
           <div className="legal-content mt-4">
             At DECOMPANY Corporation, doing business as Polaris Share ("Polaris Share"), we strive to protect the

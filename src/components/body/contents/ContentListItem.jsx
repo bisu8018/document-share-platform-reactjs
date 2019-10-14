@@ -132,8 +132,7 @@ class ContentListItem extends React.Component {
                   title={result.title}> {result.title ? result.title : result.documentName}</Link>
           </div>
           <div className="mb-2">
-            <Link to={"/@" + identification} className="info_name"
-                  title={identification}>
+            <Link to={"/@" + identification} className="info_name" title={identification} rel="nofollow">
               {profileUrl ?
                 <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
                 <i className="material-icons img-thumbnail" onClick={() => this.menuClick()}>face</i>
@@ -147,7 +146,7 @@ class ContentListItem extends React.Component {
 
           <div className="details-info-desc-wrapper">
             <Link to={"/@" + identification + "/" + result.seoTitle} className="info_desc" title={result.desc}
-                  onClick={() => common_view.scrollTop()}>
+                  onClick={() => common_view.scrollTop()} rel="nofollow">
               {result.desc &&
               <LinesEllipsis
                 text={result.desc}
