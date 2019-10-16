@@ -12,12 +12,13 @@ import "react-tabs/style/react-tabs.css";
 import "react-tagsinput/react-tagsinput.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import AlertListContainer from "../container/common/alert/AlertListContainer";
-import DollarPolicyModal from "./common/modal/DollarPolicyModal";
 import LoadingModal from "./common/modal/LoadingModal";
 import log from "../config/log";
 import { APP_PROPERTIES } from "../properties/app.properties";
 import common_view from "../common/common_view";
 import { Helmet } from "react-helmet";
+import ModalListContainer from "../container/common/modal/ModalListContainer";
+import DollarPolicyModalContainer from "../container/common/modal/DollarPolicyModalContainer";
 
 
 class Main extends Component {
@@ -180,7 +181,7 @@ class Main extends Component {
         <HeaderContainer/>
         <div id='container' data-parallax='true'>
           <CookiePolicyModal/>
-          <DollarPolicyModal/>
+          <DollarPolicyModalContainer/>
           <Switch>
             {RouterList.map((result, idx) => {
                 let flag = false;
@@ -196,6 +197,7 @@ class Main extends Component {
         </div>
         <Footer/>
         <AlertListContainer/>
+        <ModalListContainer/>
       </div>
     );
   };

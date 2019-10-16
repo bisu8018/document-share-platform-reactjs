@@ -519,6 +519,7 @@ mark,
 .not-convert {
     height: 100%;
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
     justify-content: center;
 }
@@ -573,6 +574,7 @@ mark,
 
 .row {
     display: flex;
+    display: -webkit-flexbox;
     flex-wrap: wrap;
 }
 
@@ -1584,6 +1586,7 @@ mark,
 
 .nav {
     display: flex;
+    display: -webkit-flexbox;
     flex-wrap: wrap;
     padding-left: 0;
     margin-bottom: 0;
@@ -1641,6 +1644,7 @@ mark,
 .navbar {
     position: relative;
     display: flex;
+    display: -webkit-flexbox;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
@@ -1649,6 +1653,7 @@ mark,
 .navbar > .container,
 .navbar > .container-fluid {
     display: flex;
+    display: -webkit-flexbox;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
@@ -1656,6 +1661,7 @@ mark,
 
 .navbar-nav {
     display: flex;
+    display: -webkit-flexbox;
     flex-direction: column;
     padding-left: 0;
     margin-bottom: 0;
@@ -1883,6 +1889,7 @@ mark,
 
 .breadcrumb {
     display: flex;
+    display: -webkit-flexbox;
     flex-wrap: wrap;
     padding: 0.75rem 1rem;
     margin-bottom: 1rem;
@@ -1913,6 +1920,7 @@ mark,
 
 .pagination {
     display: flex;
+    display: -webkit-flexbox;
     padding-left: 0;
     list-style: none;
     border-radius: 0.25rem;
@@ -2006,6 +2014,7 @@ mark,
 
 .progress {
     display: flex;
+    display: -webkit-flexbox;
     height: 1rem;
     overflow: hidden;
     font-size: 0.75rem;
@@ -2016,6 +2025,7 @@ mark,
 
 .progress-bar {
     display: flex;
+    display: -webkit-flexbox;
     flex-direction: column;
     justify-content: center;
     color: #ffffff;
@@ -2035,6 +2045,7 @@ mark,
 
 .media {
     display: flex;
+    display: -webkit-flexbox;
     align-items: flex-start;
 }
 
@@ -5988,6 +5999,7 @@ dean
 .chart-date-btn {
     height: 25px;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
 }
 
@@ -6031,6 +6043,7 @@ dean
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
 }
 
@@ -6054,6 +6067,7 @@ dean
     -webkit-transition: 0.2s all ease-in-out;
     transition: 0.2s all ease-in-out;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center
 }
 
@@ -6098,6 +6112,7 @@ dean
 .add-btn {
     cursor: pointer;
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
     justify-content: center;
     -ms-user-select: none;
@@ -6108,7 +6123,6 @@ dean
     color: #0d73f8;
     width: 34px;
     height: 34px;
-    margin-left: 5px;
     background: white;
     border-radius: 50%;
 }
@@ -6176,6 +6190,7 @@ dean
     color: #666666;
     margin-left: -1px;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -6318,6 +6333,7 @@ dean
     cursor: pointer;
     background: white;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
     position: relative;
@@ -6396,6 +6412,7 @@ dean
     font-weight: 300;
     color: #4d4d4d;
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
     justify-content: center;
 }
@@ -6413,6 +6430,7 @@ dean
     font-weight: 300;
     color: #4d4d4d;
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
     justify-content: center;
 }
@@ -6475,6 +6493,7 @@ dean
     height: 100%;
     color: white;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
     width: 55px;
@@ -6603,6 +6622,7 @@ dean
 .chart-btn {
     cursor: pointer;
     display: flex;;
+    display: -webkit-flexbox;
     background: white;
     color: #4d4d4d;
     border: 1px solid #b3b3b3;
@@ -6686,6 +6706,7 @@ dean
 
 .share-btn {
     display: flex;
+    display: -webkit-flexbox;
     font-size: 10px;
     justify-content: center;
     align-items: center;
@@ -6778,6 +6799,7 @@ Dean*/
     width: 33px;
     height: 33px;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
     background: #3681fe;
@@ -6798,6 +6820,7 @@ Dean*/
     width: 90px;
     height: 90px;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
     text-transform: uppercase;
@@ -6810,6 +6833,7 @@ Dean*/
 
 .profile-card-loading-wrapper {
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     padding-top: 2px;
 }
@@ -6840,6 +6864,7 @@ Dean*/
     align-items: center;
     transition: all .3s ease;
     display: flex;
+    display: -webkit-flexbox;
 }
 
 .alert-success {
@@ -6884,7 +6909,10 @@ Dean*/
 
 .header-bar {
     display: flex;
+    display: -webkit-flexbox;
     justify-content: flex-end;
+    -webkit-box-pack: end; /* justify-content */
+    -webkit-box-align: end; /* align-items */
 }
 
 
@@ -7051,6 +7079,7 @@ Dean*/
 
 .u__center .u__center_mobile {
     display: flex;
+    display: -webkit-flexbox;
 }
 
 .u_title {
@@ -7064,6 +7093,8 @@ Dean*/
     color: #4d4d4d;
     vertical-align: middle;
     position: relative;
+    word-break: break-all;
+    word-wrap: break-word;
 }
 
 .tracking-detail-title {
@@ -7129,13 +7160,14 @@ Dean*/
 
 .thumb_image {
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
     width: 235px;
     height: 133px;
     overflow: hidden;
     text-align: center;
     background: #f1f1f1;
-    border: 1px solid #d0d0d0;
+    border: 1px solid #dcdcdc;
     position: relative;
 }
 
@@ -7157,10 +7189,9 @@ Dean*/
 }
 
 .details-info-desc-wrapper {
-    height: 40px;
+    height: 44px;
     overflow: hidden;
 }
-
 
 .detail-title {
     font-size: 16px;
@@ -7240,10 +7271,6 @@ Dean*/
     line-height: normal;
     letter-spacing: -0.2px;
     color: #4d4d4d;
-}
-
-.info_desc > div {
-    padding-right: 20px;
 }
 
 .info_date {
@@ -7381,6 +7408,7 @@ Dean*/
     background: white;
     left: 0;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
 }
@@ -7521,13 +7549,6 @@ Dean*/
         border-top: none;
     }
 
-    .u__right {
-        margin-right: -15px;
-        padding: 20px 15px !important;
-        min-height: 300px !important;
-        box-shadow: none;
-    }
-
     .view_left {
         padding: 0 !important;
     }
@@ -7580,6 +7601,10 @@ Dean*/
 
 
 @media (max-width: 575px) {
+    .info-detail-bookmark, .info-detail-bookmark-checked {
+        right: 15px !important;
+    }
+
     .view_content .content-view-fullscreen-info-detail {
         position: relative !important;
         display: block !important;
@@ -7763,13 +7788,13 @@ Dean*/
     }
 
     .main-category-card-img-landscape {
-        width: 100%;
-        height: auto !important;
         left: 0 !important;
+        position: relative !important;
     }
 
     .u__center-container {
         border: none;
+        padding: 0;
     }
 
     .navbar-expand-sm > .container,
@@ -7784,9 +7809,9 @@ Dean*/
     }
 
     .info_date {
-        right: 18px;
+        right: 0;
         float: inherit;
-        top: 0 !important;
+        top: 5 !important;
     }
 
     .info-date-view {
@@ -7877,9 +7902,8 @@ Dean*/
     }
 
     .u_center_inner {
-        border: none;
-        padding: 0 0 16px 0;
-        margin: 20px 0;
+        border: none !important;
+        padding: 0 0 30px 0;
     }
 
     .u_center_inner .col-thumb {
@@ -7914,6 +7938,7 @@ Dean*/
 
     .col-details_info {
         max-width: 100%;
+        padding: 0 15px;
     }
 
     .tracking_fulldown_list {
@@ -7932,10 +7957,14 @@ Dean*/
     .thumb_image,
     .tab-thumbnail {
         height: auto;
-        width: 100%;
+        width: 100% !important;
         max-width: none;
         max-height: none;
         min-height: 160px;
+        border-right: none;
+        border-left: none;
+        display: flex;
+        justify-content: center;
     }
 
     .profile_info_name {
@@ -8402,6 +8431,7 @@ Duration CSS*/
     white-space: nowrap;
     color: #4d4d4d;
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
 }
 
@@ -8486,7 +8516,6 @@ Duration CSS*/
     position: relative;
     background: #e8e8e8;
     border: 1px solid #e8e8e8;
-    z-index: 0;
 }
 
 /*2018-03-19
@@ -8761,8 +8790,8 @@ Dean
 }
 
 .u__right {
-    min-height: 200px;
-    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 50px;
     background-color: #fff;
     font-size: 18px;
     font-weight: bold;
@@ -8771,13 +8800,12 @@ Dean
     line-height: 1.22;
     letter-spacing: -0.2px;
     color: #4d4d4d;
-    margin-bottom: 0;
 }
 
 .see-also-container {
     max-height: 120px;
     min-height: 75px;
-    border-bottom: 1px solid #cecece;
+    border-bottom: 1px solid #e8e8e8;
     padding: 10px 0;
     display: inline-table;
     width: 100%;
@@ -9110,6 +9138,7 @@ Dean*/
     padding: 0 15px 15px 15px;
     text-align: center;
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
     flex: 0 0 auto;
     margin-top: 1rem !important;
@@ -9235,6 +9264,7 @@ Dean*/
     width: 100%;
     height: 100%;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
 }
@@ -9269,31 +9299,56 @@ Dean*/
 }
 
 @-webkit-keyframes drop-zone {
-    0%{background-position:0% 51%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 51%}
+    0% {
+        background-position: 0% 51%
+    }
+    50% {
+        background-position: 100% 50%
+    }
+    100% {
+        background-position: 0% 51%
+    }
 }
 
 @-moz-keyframes drop-zone {
-    0%{background-position:0% 51%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 51%}
+    0% {
+        background-position: 0% 51%
+    }
+    50% {
+        background-position: 100% 50%
+    }
+    100% {
+        background-position: 0% 51%
+    }
 }
 
 @-o-keyframes drop-zone {
-    0%{background-position:0% 51%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 51%}
+    0% {
+        background-position: 0% 51%
+    }
+    50% {
+        background-position: 100% 50%
+    }
+    100% {
+        background-position: 0% 51%
+    }
 }
 
 @keyframes drop-zone {
-    0%{background-position:0% 51%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 51%}
+    0% {
+        background-position: 0% 51%
+    }
+    50% {
+        background-position: 100% 50%
+    }
+    100% {
+        background-position: 0% 51%
+    }
 }
 
 .custom-input-copy-text {
     display: flex;
+    display: -webkit-flexbox;
     font-weight: 400;
     color: #666666;
     cursor: pointer;
@@ -9425,6 +9480,7 @@ dialog {
     z-index: 1;
     margin-top: 25px;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
 }
@@ -9490,6 +9546,7 @@ contentContainer 배너 CSS*/
 
 .main-banner-wrapper {
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -9651,6 +9708,7 @@ Dean
 
 .alert-banner-wrapper {
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
 }
@@ -9751,6 +9809,7 @@ dean
 .not-found-page-wrapper {
     height: calc(100vh - 190px);
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
 }
@@ -9970,6 +10029,7 @@ dean
 .callback-wrapper {
     position: fixed;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     height: 100%;
     width: 100%;
@@ -9995,6 +10055,7 @@ dean
 .loading-wrapper {
     position: fixed;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     height: 100%;
     width: 100%;
@@ -10028,6 +10089,7 @@ input[type="checkbox"] + label {
     font-size: 13px;
     align-items: center;
     display: flex;
+    display: -webkit-flexbox;
 }
 
 input[type="checkbox"]:disabled + label {
@@ -10035,6 +10097,7 @@ input[type="checkbox"]:disabled + label {
     font-size: 13px;
     align-items: center;
     display: flex;
+    display: -webkit-flexbox;
 }
 
 input[type="checkbox"] + label span {
@@ -10102,6 +10165,7 @@ input[type="radio"] + label {
     font-size: 13px;
     align-items: center;
     display: flex;
+    display: -webkit-flexbox;
 }
 
 input[type="radio"]:disabled + label {
@@ -10109,6 +10173,7 @@ input[type="radio"]:disabled + label {
     font-size: 13px;
     align-items: center;
     display: flex;
+    display: -webkit-flexbox;
 }
 
 input[type="radio"] + label span {
@@ -10148,6 +10213,7 @@ input[type="radio"] + label span i {
 
 input[type="radio"]:checked + label span i {
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
     font-size: 16px;
@@ -10328,6 +10394,7 @@ Main Category CSS
 
 .main-category-card-title {
     display: flex;
+    display: -webkit-flexbox;
     font-size: 16px;
     min-height: 45px;
     align-items: center;
@@ -10481,10 +10548,6 @@ Main Category CSS
 
 .content-list-wrapper .reward-info-not-registered {
     bottom: -50px !important;
-}
-
-.content-list-wrapper .u_center_inner:first-child {
-    padding-top: 0;
 }
 
 .reward-info-not-registered-syntax {
@@ -10732,6 +10795,7 @@ Ads CSS
     height: 34px;
     border-radius: 31px;
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
 }
 
@@ -10813,10 +10877,19 @@ Ads CSS
     background-image: url(../image/icon/i_search_blue.png);
 }
 
+.header-search-wrapper {
+    display: flex;
+    display: -webkit-flexbox;
+    justify-content: flex-end;
+    -webkit-box-pack: end; /* justify-content */
+    -webkit-box-align: end; /* align-items */
+}
+
 .web-header-search-btn-wrapper {
     width: 34px;
     height: 34px;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     border-radius: 50%;
     transition: 0.5s all ease-in-out;
@@ -10835,6 +10908,7 @@ Ads CSS
     background: white;
     height: 45px;
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
     justify-content: center;
     z-index: 1;
@@ -11162,6 +11236,7 @@ Dropdown CSS
     padding: 0 12px;
     color: #4d4d4d;
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
 }
 
@@ -11179,6 +11254,7 @@ Dropdown CSS
     font-weight: 500;
     cursor: pointer;
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
 }
 
@@ -11238,6 +11314,7 @@ publish complete modal css*/
     cursor: pointer;
     background: #fff;
     display: flex;
+    display: -webkit-flexbox;
     font-family: poppins, 'source-han-sans-korean', sans-serif;
     justify-content: center;
     align-items: center;
@@ -11305,6 +11382,7 @@ custom modal modal css*/
     position: fixed;
     z-index: 5;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
 }
@@ -11314,6 +11392,7 @@ custom modal modal css*/
     transition: transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
     margin: 48px;
     display: flex;
+    display: -webkit-flexbox;
     position: relative;
     overflow-y: auto;
     flex-direction: column;
@@ -11380,6 +11459,7 @@ custom modal modal css*/
     padding: 0 15px 15px;
     text-align: center;
     display: flex;
+    display: -webkit-flexbox;
     flex: 0 0 auto;
     margin-top: 1rem !important;
     margin-bottom: .5rem !important;
@@ -11404,6 +11484,7 @@ away modal modal css*/
 .away-modal-on {
     position: fixed;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-content: center;
     width: 100%;
@@ -11426,6 +11507,7 @@ away modal modal css*/
 .away-modal-on-container {
     z-index: 1;
     display: flex;
+    display: -webkit-flexbox;
     align-content: center;
     align-items: center;
 }
@@ -11449,6 +11531,7 @@ away modal modal css*/
 
 .away-modal-on > span {
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
 }
 
@@ -11661,6 +11744,7 @@ dean*/
 
 .thumb-image-mock {
     display: flex;
+    display: -webkit-flexbox;
     align-items: center;
     width: 235px;
     height: 133px;
@@ -11686,7 +11770,7 @@ dean*/
 }
 
 .details-info-desc-wrapper-mock {
-    height: 34px;
+    height: 44px;
     border-radius: 3px;
     background: linear-gradient(310deg, #ffffff, #d5d5d5);
     background-size: 800% 800%;
@@ -11821,6 +11905,7 @@ More*/
     width: 168px;
     height: 168px;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
     border: 1px solid #b3b3b3;
@@ -11906,6 +11991,7 @@ Content Add Css
     background-size: cover;
     margin: auto;
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
     font-weight: bold;
@@ -11916,6 +12002,7 @@ Content Add Css
 
 .custom-dropzone-document-info {
     display: flex;
+    display: -webkit-flexbox;
     justify-content: center;
     align-items: center;
     font-size: 15px;

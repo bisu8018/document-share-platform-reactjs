@@ -12,6 +12,7 @@ export default connect(
   }),
   dispatch => ({
     setIsMobile: (isMobile: boolean) => dispatch(setAction.isMobile(isMobile)),
-    setAway: (away: boolean) => dispatch(headerAction.away(away))
+    setAway: (away: boolean) => dispatch(headerAction.away(away)),
+    setModal: (modalCode: any) => dispatch(setAction.modal(modalCode))
   })
 )(Header);

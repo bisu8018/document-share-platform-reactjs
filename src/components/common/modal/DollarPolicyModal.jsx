@@ -3,6 +3,7 @@ import DollarLearnMoreModal from "./DollarLearnMoreModal";
 import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
 import { APP_PROPERTIES } from "../../../properties/app.properties";
+import DollarLearnMoreModalContainer from "../../../container/common/modal/DollarLearnMoreModalContainer";
 
 class DollarPolicyModal extends React.PureComponent {
   state = {
@@ -12,7 +13,7 @@ class DollarPolicyModal extends React.PureComponent {
 
   // 초기화
   init = () => {
-    if(APP_PROPERTIES.ssr) return;
+    if (APP_PROPERTIES.ssr) return;
 
     let _dollarPolicyValue = common_view.getCookie("dpv");
     if (!_dollarPolicyValue) {
@@ -38,6 +39,8 @@ class DollarPolicyModal extends React.PureComponent {
 
   render() {
     const { dollarPolicyValue } = this.state;
+    const { setModal } = this.props;
+
     if (dollarPolicyValue === true) return (<div/>);
     else return (
 
@@ -50,9 +53,11 @@ class DollarPolicyModal extends React.PureComponent {
           <div className="alert-banner-text">
             {psString("dollar-policy-content")}
             <span className="mr-3"/>
-            <DollarLearnMoreModal close={() => {
-              this.getStarted();
-            }}/>
+            <span className="alert-banner-learn-more"
+                  onClick={() => {
+                    this.getStarted();
+                    setModal("dollarLearnMore");
+                  }}>{psString("dollar-policy-learn-more")}</span>
           </div>
 
 

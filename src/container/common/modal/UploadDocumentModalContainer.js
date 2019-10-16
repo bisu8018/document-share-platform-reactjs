@@ -11,6 +11,7 @@ export default connect(
   }),
   dispatch => ({
     setMyInfo: (myInfo: any) => dispatch(setAction.myInfo(myInfo)),
-    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode)),
+    setModal: (modalCode: any, modalData: any) => dispatch(setAction.modal(modalCode, modalData)),
   })
 )(UploadDocumentModal);

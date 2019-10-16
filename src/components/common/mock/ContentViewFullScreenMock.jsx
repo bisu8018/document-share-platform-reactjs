@@ -1,4 +1,5 @@
 import React from "react";
+import ContentViewSeeAlsoMock from "./ContentViewSeeAlsoMock";
 
 
 class ContentViewFullScreenMock extends React.PureComponent {
@@ -39,6 +40,8 @@ class ContentViewFullScreenMock extends React.PureComponent {
             </div>
             <div className="hr mb-3"/>
           </div>
+
+          <ContentViewSeeAlsoMock/>
         </div>
       </article>
 

@@ -6,8 +6,6 @@ import { Circle } from "better-react-spinkit";
 import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
 import common from "../../../common/common";
-import UploadCompleteModal from "./UploadCompleteModal";
-import Tooltip from "@material-ui/core/Tooltip";
 
 
 class UploadDocumentModal extends React.Component {
@@ -43,50 +41,19 @@ class UploadDocumentModal extends React.Component {
       moreOptions: false,    // more options show / hide
       identifier: null,
       desc: "",
-      privateDocCount: false    // 프라이빗 문서 5개 체크
     };
   }
 
 
-  // 모달 state 값 초기화
-  clearState = () => {
-    this.setState({
-      closeFlag: false,
-      percentage: 0,
-      title: "",
-      titleError: "",
-      tags: [],
-      tagError: "",
-      fileInfo: {
-        file: null,
-        size: -1,
-        ext: null,
-        owner: null,
-        title: null,
-        filename: null
-      },
-      fileInfoError: "",  // 파일 에러 정보
-      useTracking: false,   // 트래킹 사용 유무
-      forceTracking: false,   // 트래킹 강제 사용 유무
-      allowDownload: false,   // 다운로드 허용
-      classicModal: false,    // 모달 종료
-      classicModalSub: false,    // 모달2
-      by: false,   //CC License by 사용유무
-      nc: false,   //CC License nc 사용유무
-      nd: false,   //CC License nd 사용유무
-      sa: false,   //CC License sa 사용유무
-      moreOptions: false,    // more options show / hide
-      identifier: null,
-      desc: ""
+  // 초기화
+  init = () => {
+    const { getMyInfo } = this.props;
+
+    this.setState({ identifier: getMyInfo.username || getMyInfo.email }, () => {
+      if (getMyInfo.privateDocumentCount > 0) this.props.setAlertCode(2074);
+      common_view.setBodyStyleLock();
     });
   };
-
-
-  // 프라이빗 문서 보유수 체크
-  checkPrivateDoc = res =>
-    this.setState({ privateDocCount: res.privateDocumentCount }, () => {
-      this.setState({ classicModalSub: true });  //두번째 모달 열기
-    });
 
 
   // 문서 등록 API
@@ -94,14 +61,11 @@ class UploadDocumentModal extends React.Component {
     const { getMyInfo, setAlertCode, setMyInfo } = this.props;
     const { title, fileInfo, tags, desc, useTracking, forceTracking, allowDownload } = this.state;
 
-    let ethAccount = getMyInfo.ethAccount,
-      userInfo = MainRepository.Account.getMyInfo();
-
     return new Promise((resolve, reject) => {
       MainRepository.Document.registerDocument({
         fileInfo: fileInfo,
-        userInfo: userInfo,
-        ethAccount: ethAccount,
+        userInfo: MainRepository.Account.getMyInfo(),
+        ethAccount: getMyInfo.ethAccount,
         title: title,
         desc: desc,
         tags: tags,
@@ -175,20 +139,23 @@ class UploadDocumentModal extends React.Component {
 
   //업로드 함수
   handleUpload = () => {
-    const { setAlertCode } = this.props;
+    const { setAlertCode, setModal } = this.props;
+    const { identifier } = this.state;
 
     this.handleProcessModalOpen();
 
     // 문서 등록 API
     this.registerDocument().then(res => {
-      this.handleProcessModalClose();
-      this.handleClose("classicModal"); //모달 닫기
-      this.checkPrivateDoc(res);
+      // 업로드 성공 모달 전환
+      setModal('uploadComplete', {
+        privateDocumentCount : res.privateDocumentCount || 0,
+        identifier : identifier
+      })
     }).catch(err => {
+      this.handleProcessModalClose();
       console.error(err);
       setAlertCode(2071);
-      this.handleClose("classicModal"); //모달 닫기
-      this.setState({ classicModalSub: false }); //모달2 닫기
+      setModal(null);
     });
   };
 
@@ -227,44 +194,13 @@ class UploadDocumentModal extends React.Component {
   };
 
 
-  // 모달 open 상태 관리
-  handleClickOpen = modal => {
-    const { getMyInfo } = this.props;
-
-    if (!MainRepository.Account.isAuthenticated()) return MainRepository.Account.login();
-
-    this.setState({ identifier: getMyInfo.username || getMyInfo.email }, () => {
-      if (modal === "classicModal" && getMyInfo.privateDocumentCount > 0) this.props.setAlertCode(2074);
-      this.handleOpen(modal).then(() => common_view.setBodyStyleLock());
-    });
-  };
-
-
-  // 오픈 관리
-  handleOpen = modal => {
-    const x = [];
-    x[modal] = true;
-    this.setState(x);
-    return Promise.resolve(true);
-  };
-
-
   // 모달 취소버튼 클릭 관리
-  handleClickClose = modal =>
+  handleClickClose = () =>
     this.setCloseFlag()
       .then(() => common.delay(200))
       .then(() => common_view.setBodyStyleUnlock())
       .then(() => this.clearForm())
-      .then(() => this.handleClose(modal))
-      .then(() => this.clearState());
-
-
-  // 모달 종료 관리
-  handleClose = modal => {
-    const x = [];
-    x[modal] = false;
-    this.setState(x);
-  };
+      .then(() => this.props.setModal(null));
 
 
   // 제목 변경 관리
@@ -399,171 +335,156 @@ class UploadDocumentModal extends React.Component {
   };
 
 
+  componentWillMount(): void {
+    this.init();
+  }
+
+
   render() {
-    const { privateDocCount, classicModal, classicModalSub, fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload, identifier, closeFlag } = this.state;
-    const { type } = this.props;
+    const { fileInfo, tags, percentage, moreOptions, titleError, fileInfoError, tagError, useTracking, forceTracking, by, nc, nd, sa, allowDownload, closeFlag } = this.state;
+
+    if (!MainRepository.Account.isAuthenticated()) return MainRepository.Account.login();
 
     return (
-      <span>
-        <Tooltip title="Share your content" placement="bottom">
-          <div className="add-btn ml-3" onClick={() => this.handleClickOpen("classicModal")}>
-            <i className="material-icons">add</i>
+      <div className="custom-modal-container">
+        <div className="custom-modal-wrapper"/>
+        <div className={"custom-modal " + (closeFlag ? "custom-hide" : "")}>
+
+
+          <div className="custom-modal-title">
+            <i className="material-icons modal-close-btn"
+               onClick={() => this.handleClickClose("classicModal")}>close</i>
+            <h3>{psString("upload-doc-subj")}</h3>
           </div>
-        </Tooltip>
 
 
-        {type && type === "menu" &&
-        <span className="d-inline-block d-sm-none"
-              onClick={() => this.handleClickOpen("classicModal")}>{psString("common-modal-upload")}</span>
-        }
+          <div className="custom-modal-content tal">
+            <div className="dialog-subject">{psString("common-modal-title")}</div>
+            <input type="text" placeholder={psString("title-placeholder")} id="docTitle"
+                   className={"custom-input " + (titleError.length > 0 ? "custom-input-warning" : "")}
+                   onChange={(e) => this.handleTitleChange(e)}/>
+            <span>{titleError}</span>
+
+            <div className="dialog-subject mt-3 mb-2">{psString("common-modal-description")}</div>
+            <textarea id="docDesc"
+                      placeholder={psString("description-placeholder")}
+                      className="custom-textarea"
+                      onChange={(e) => this.handleDescChange(e)}/>
+
+            <div className="dialog-subject mt-3">{psString("common-modal-file")}</div>
+            <input type="text" value={fileInfo.filename || ""} readOnly
+                   placeholder={psString("file-placeholder")} id="docFileInput"
+                   className={"custom-input-file " + (fileInfoError.length > 0 ? "custom-input-warning" : "")}
+                   onClick={this.handleFileUpload}/>
+            <span>{fileInfoError}</span>
+            <input type="file" id="docFile" onChange={(e) => this.handleFileChange(e.target.files)}/>
+
+            <div className="dialog-subject mt-3 mb-1">{psString("common-modal-tag")}</div>
+            <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
+                       className={"react-tagsinput " + (tagError.length > 0 ? "tag-input-warning" : "")}
+                       value={tags} onChange={this.handleTagChange} validate={false} onlyUnique/>
+            <span>{tagError}</span>
 
 
-        {classicModal &&
-        <div className="custom-modal-container">
-          <div className="custom-modal-wrapper"/>
-          <div className={"custom-modal " + (closeFlag ? "custom-hide" : "")}>
-
-
-            <div className="custom-modal-title">
-              <i className="material-icons modal-close-btn"
-                 onClick={() => this.handleClickClose("classicModal")}>close</i>
-              <h3>{psString("upload-doc-subj")}</h3>
+            <div className="modal-more-btn-wrapper">
+              <div className="modal-more-btn-line"/>
+              <div className="modal-more-btn" onClick={() => this.handleMoreOptions()}>
+                {psString("common-modal-more-option")}
+                <img className="reward-arrow"
+                     src={require("assets/image/icon/i_arrow_" + (moreOptions ? "down_grey.svg" : "up_grey.png"))}
+                     alt="arrow button"/>
+              </div>
             </div>
 
+            {moreOptions &&
+            <div>
+              <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
+              <div className="row">
+                <div className="col-12">
+                  <input type="checkbox" id="useTrackingCheckbox" onChange={(e) => this.handleTrackingCheckbox(e)}
+                         checked={useTracking}/>
 
-            <div className="custom-modal-content tal">
-              <div className="dialog-subject">{psString("common-modal-title")}</div>
-              <input type="text" placeholder={psString("title-placeholder")} id="docTitle"
-                     className={"custom-input " + (titleError.length > 0 ? "custom-input-warning" : "")}
-                     onChange={(e) => this.handleTitleChange(e)}/>
-              <span>{titleError}</span>
-
-              <div className="dialog-subject mt-3 mb-2">{psString("common-modal-description")}</div>
-              <textarea id="docDesc"
-                        placeholder={psString("description-placeholder")}
-                        className="custom-textarea"
-                        onChange={(e) => this.handleDescChange(e)}/>
-
-              <div className="dialog-subject mt-3">{psString("common-modal-file")}</div>
-              <input type="text" value={fileInfo.filename || ""} readOnly
-                     placeholder={psString("file-placeholder")} id="docFileInput"
-                     className={"custom-input-file " + (fileInfoError.length > 0 ? "custom-input-warning" : "")}
-                     onClick={this.handleFileUpload}/>
-              <span>{fileInfoError}</span>
-              <input type="file" id="docFile" onChange={(e) => this.handleFileChange(e.target.files)}/>
-
-              <div className="dialog-subject mt-3 mb-1">{psString("common-modal-tag")}</div>
-              <TagsInput id="tags" renderInput={this.autocompleteRenderInput}
-                         className={"react-tagsinput " + (tagError.length > 0 ? "tag-input-warning" : "")}
-                         value={tags} onChange={this.handleTagChange} validate={false} onlyUnique/>
-              <span>{tagError}</span>
-
-
-              <div className="modal-more-btn-wrapper">
-                <div className="modal-more-btn-line"/>
-                <div className="modal-more-btn" onClick={() => this.handleMoreOptions()}>
-                  {psString("common-modal-more-option")}
-                  <img className="reward-arrow"
-                       src={require("assets/image/icon/i_arrow_" + (moreOptions ? "down_grey.svg" : "up_grey.png"))}
-                       alt="arrow button"/>
+                  <label htmlFor="useTrackingCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    {psString("doc-option-1")}
+                  </label>
+                </div>
+                <div className="col-12">
+                  <input type="checkbox" id="forceTrackingCheckbox"
+                         onChange={(e) => this.handleForceTrackingCheckbox(e)}
+                         checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
+                  <label htmlFor="forceTrackingCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    {psString("doc-option-2")}
+                  </label>
+                </div>
+                <div className="col-12">
+                  <input type="checkbox" id="allowDownload" checked={allowDownload}
+                         onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
+                  <label htmlFor="allowDownload">
+                    <span><i className="material-icons">done</i></span>
+                    {psString("doc-option-3")}
+                  </label>
                 </div>
               </div>
 
-              {moreOptions &&
-              <div>
-                <div className="dialog-subject mb-2 mt-3">{psString("common-modal-option")}</div>
-                <div className="row">
-                  <div className="col-12">
-                    <input type="checkbox" id="useTrackingCheckbox" onChange={(e) => this.handleTrackingCheckbox(e)}
-                           checked={useTracking}/>
-
-                    <label htmlFor="useTrackingCheckbox">
-                      <span><i className="material-icons">done</i></span>
-                      {psString("doc-option-1")}
-                    </label>
-                  </div>
-                  <div className="col-12">
-                    <input type="checkbox" id="forceTrackingCheckbox"
-                           onChange={(e) => this.handleForceTrackingCheckbox(e)}
-                           checked={useTracking ? forceTracking : false} disabled={!useTracking}/>
-                    <label htmlFor="forceTrackingCheckbox">
-                      <span><i className="material-icons">done</i></span>
-                      {psString("doc-option-2")}
-                    </label>
-                  </div>
-                  <div className="col-12">
-                    <input type="checkbox" id="allowDownload" checked={allowDownload}
-                           onChange={(e) => this.handleAllowDownloadCheckbox(e)}/>
-                    <label htmlFor="allowDownload">
-                      <span><i className="material-icons">done</i></span>
-                      {psString("doc-option-3")}
-                    </label>
-                  </div>
+              <div className="dialog-subject mb-2 mt-3">{psString("edit-cc-license")}</div>
+              <div className="row">
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccByCheckbox" onChange={(e) => this.handleCcByCheckbox(e)}
+                         checked={by}/>
+                  <label htmlFor="ccByCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    Attribution
+                  </label>
                 </div>
-
-                <div className="dialog-subject mb-2 mt-3">{psString("edit-cc-license")}</div>
-                <div className="row">
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="ccByCheckbox" onChange={(e) => this.handleCcByCheckbox(e)}
-                           checked={by}/>
-                    <label htmlFor="ccByCheckbox">
-                      <span><i className="material-icons">done</i></span>
-                      Attribution
-                    </label>
-                  </div>
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="ccNcCheckbox" onChange={(e) => this.handleCcNcCheckbox(e)}
-                           checked={!by ? false : nc} disabled={!by}/>
-                    <label htmlFor="ccNcCheckbox">
-                      <span><i className="material-icons">done</i></span>
-                      Noncommercial
-                    </label>
-                  </div>
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="ccNdCheckbox" onChange={(e) => this.handleCcNdCheckbox(e)}
-                           checked={!by || sa ? false : nd} disabled={!by || sa}/>
-                    <label htmlFor="ccNdCheckbox">
-                      <span><i className="material-icons">done</i></span>
-                      No Derivative Works
-                    </label>
-                  </div>
-                  <div className="col-12 col-sm-6">
-                    <input type="checkbox" id="ccSaCheckbox" onChange={(e) => this.handleCcSaCheckbox(e)}
-                           checked={!by || nd ? false : sa} disabled={!by || nd}/>
-                    <label htmlFor="ccSaCheckbox">
-                      <span><i className="material-icons">done</i></span>
-                      Share Alike
-                    </label>
-                  </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccNcCheckbox" onChange={(e) => this.handleCcNcCheckbox(e)}
+                         checked={!by ? false : nc} disabled={!by}/>
+                  <label htmlFor="ccNcCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    Noncommercial
+                  </label>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccNdCheckbox" onChange={(e) => this.handleCcNdCheckbox(e)}
+                         checked={!by || sa ? false : nd} disabled={!by || sa}/>
+                  <label htmlFor="ccNdCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    No Derivative Works
+                  </label>
+                </div>
+                <div className="col-12 col-sm-6">
+                  <input type="checkbox" id="ccSaCheckbox" onChange={(e) => this.handleCcSaCheckbox(e)}
+                         checked={!by || nd ? false : sa} disabled={!by || nd}/>
+                  <label htmlFor="ccSaCheckbox">
+                    <span><i className="material-icons">done</i></span>
+                    Share Alike
+                  </label>
                 </div>
               </div>
-              }
             </div>
+            }
+          </div>
 
-            <div className="custom-modal-footer">
-              <div onClick={() => this.handleClickClose("classicModal")}
-                   className="cancel-btn ">{psString("common-modal-cancel")}</div>
-              <div onClick={() => this.handleUploadBtn()} className="ok-btn">{psString("common-modal-upload")}</div>
-            </div>
+          <div className="custom-modal-footer">
+            <div onClick={() => this.handleClickClose("classicModal")}
+                 className="cancel-btn ">{psString("common-modal-cancel")}</div>
+            <div onClick={() => this.handleUploadBtn()} className="ok-btn">{psString("common-modal-upload")}</div>
+          </div>
 
-            <div className="progress-wrapper" id="progressWrapper"/>
-            <div className="progress-modal" id="progressModal">
-              <div className="progress-modal-second">
-                <div className="progress-percent">{percentage}%</div>
-                <Circle size={100} color={"#0089ff"}/>
-              </div>
+          <div className="progress-wrapper" id="progressWrapper"/>
+          <div className="progress-modal" id="progressModal">
+            <div className="progress-modal-second">
+              <div className="progress-percent">{percentage}%</div>
+              <Circle size={100} color={"#0089ff"}/>
             </div>
           </div>
         </div>
-        }
-
-
-        {classicModalSub && <UploadCompleteModal privateDocCount={privateDocCount} identifier={identifier}
-                                                 closeSubModal={() => this.handleClickClose()}/>}
-
-        </span>
+      </div>
     );
-  }
+  };
 }
+
 
 export default UploadDocumentModal;

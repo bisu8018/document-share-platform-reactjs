@@ -60,7 +60,7 @@ class Menu extends React.Component {
           {(MainRepository.Account.isAuthenticated() || getTempEmail) &&
           <div className="d-black d-sm-none">
             {MainRepository.Account.isAuthenticated() ?
-              <Link to={"/@" + identification} onClick={() => this.menuClick()}>
+              <Link to={"/@" + identification} onClick={() => this.menuClick()} rel="nofollow">
                 {getMyInfo.picture.length > 0 ?
                   <img src={getMyInfo.picture} className="avatar-menu" alt="Link to my profile"/> :
                   <img src={require("assets/image/icon/i_anonymous.png")} className="avatar"
@@ -75,13 +75,13 @@ class Menu extends React.Component {
 
           <div className="d-flex menu-content-list">
             <div>
-              <Link to="/a">
+              <Link to="/a" rel="nofollow">
                 <div className="menu-content-item" onClick={() => this.menuClick()}>{psString("menu-1")}</div>
               </Link>
-              <Link to="/g">
+              <Link to="/g" rel="nofollow">
                 <div className="menu-content-item" onClick={() => this.menuClick()}>{psString("menu-2")}</div>
               </Link>
-              <Link to="/f">
+              <Link to="/f" rel="nofollow">
                 <div className="menu-content-item" onClick={() => this.menuClick()}>FAQ</div>
               </Link>
               <a href="http://www.decompany.io/" target="_blank" rel="noopener noreferrer nofollow">

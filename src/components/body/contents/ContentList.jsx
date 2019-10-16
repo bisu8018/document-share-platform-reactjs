@@ -174,9 +174,7 @@ class ContentList extends Component {
 
 
         <section
-          className={"col-12 u__center-container mt-0 pt-0 pt-sm-4 " + (this.state.loading ? "u__center-container-mock" : "")}>
-          <div className="d-block d-sm-none content-list-path">{path}</div>
-
+          className={"col-12 u__center-container " + (this.state.loading ? "u__center-container-mock" : "")}>
           {resultList.length > 0 &&
           <InfiniteScroll
             className={(getIsMobile ? "overflow-initial " : "") + "u__center content-list-wrapper"}

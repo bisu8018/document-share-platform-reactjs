@@ -290,7 +290,7 @@ class AudienceTrackingList extends React.Component {
       <section className="u__center w-100 container">
         <div className="row tracking-list-wrapper">
           <div className="col-12 col-sm-3 col-lg-2 col-thumb mt-2">
-            <Link to={"/@" + match.params.identification + "/" + documentData.seoTitle}>
+            <Link to={"/@" + match.params.identification + "/" + documentData.seoTitle} rel="nofollow">
               <div className="tab-thumbnail" onClick={() => common_view.scrollTop()}>
                 <img src={addr}
                      alt={documentData.title ? documentData.title : documentData.documentName}
@@ -303,7 +303,7 @@ class AudienceTrackingList extends React.Component {
           <div className="col-12 col-sm-9 col-lg-10 col-details_info p-sm-2 ">
             <dl className="details_info">
               <Link to={"/@" + match.params.identification + "/" + documentData.seoTitle} className="info_title mb-2"
-                    onClick={() => common_view.scrollTop()}>
+                    onClick={() => common_view.scrollTop()} rel="nofollow">
                 {documentData.title}
               </Link>
 
@@ -342,7 +342,7 @@ class AudienceTrackingList extends React.Component {
 
                 <span className="info-detail-view mr-3">{view}</span>
                 <span className="info-detail-vote mr-4">{Common.deckStr(vote)}</span>
-                <span className="ml-4 info_date"> {Common.timestampToDate(documentData.created)}</span>
+                <div className="ml-4 info_date"> {Common.timestampToDate(documentData.created)}</div>
               </div>
               {location &&
               <Tooltip title="Export tracking data as Excel file." placement="bottom">

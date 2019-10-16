@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import CategoryContainer from "../../container/header/CategoryContainer";
 import AutoSuggestInputContainer from "../../container/common/AutoSuggestInputContainer";
 import UploadDocumentModalContainer from "../../container/common/modal/UploadDocumentModalContainer";
+import Tooltip from "@material-ui/core/Tooltip";
+import UploadCompleteModal from "../common/modal/UploadCompleteModal";
 
 
 class Header extends React.Component {
@@ -270,7 +272,7 @@ class Header extends React.Component {
 
   render() {
     const { prevScrollPos, searchBar, profileCardShow, adShow, path } = this.state;
-    const { getMyInfo, getTempEmail, getIsMobile } = this.props;
+    const { getMyInfo, getTempEmail, getIsMobile, setModal } = this.props;
 
     return (
 
@@ -297,7 +299,7 @@ class Header extends React.Component {
             <div className='header-bar col-9'>
 
               {path !== "ca" &&
-              <div className="d-flex">
+              <div className="header-search-wrapper">
                 <div
                   className={"header-search-input " + (searchBar ? "header-search-input-on" : "header-search-input-off")}
                   id="headerSearchBar">
@@ -309,7 +311,7 @@ class Header extends React.Component {
                 </div>
               </div>}
 
-             {/* {getMyInfo.privateDocumentCount >= 5 ?
+              {/* {getMyInfo.privateDocumentCount >= 5 ?
                 <PrivateDocumentCountModal {...this.props} /> :
                 (!getIsMobile || (!searchBar && getIsMobile)) && path !== "ca" &&
                 <Tooltip title="Share your content" placement="bottom">
@@ -327,7 +329,14 @@ class Header extends React.Component {
               {getMyInfo.privateDocumentCount >= 5 ?
                 <PrivateDocumentCountModal {...this.props} /> :
                 (!getIsMobile || (!searchBar && getIsMobile)) &&
-                <UploadDocumentModalContainer {...this.props} path={path}/>}
+                <div className="ml-3">
+                  <Tooltip title="Share your content" placement="bottom">
+                    <div className="add-btn" onClick={() => setModal("upload",{})}>
+                      <i className="material-icons">add</i>
+                    </div>
+                  </Tooltip>
+                </div>
+              }
 
               {MainRepository.Account.isAuthenticated() && path === "ca" &&
               <div onClick={() => this.handleUploadBtn()}

@@ -1,8 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { APP_PROPERTIES } from "properties/app.properties";
-
-import ContentViewSeeAlso from "./ContentViewSeeAlso";
 import MainRepository from "../../../../redux/MainRepository";
 import common from "../../../../common/common";
 import history from "apis/history/history";
@@ -11,7 +9,6 @@ import ContentViewFullScreenContainer
 import log from "../../../../config/log";
 import AwayModal from "../../../common/modal/AwayModal";
 import ContentViewFullScreenMock from "../../../common/mock/ContentViewFullScreenMock";
-import ContentViewSeeAlsoMock from "../../../common/mock/ContentViewSeeAlsoMock";
 import { psString } from "../../../../config/localization";
 
 
@@ -99,16 +96,16 @@ class ContentView extends React.Component {
 
 
   componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
-    const { getDocument, match} = this.props;
+    const { getDocument, match } = this.props;
 
-    if(getDocument.document.seoTitle !== this.getSeoTitle()) {
-      this.getContentInfo(match.params.documentId)
+    if (getDocument.document.seoTitle !== this.getSeoTitle()) {
+      this.getContentInfo(match.params.documentId);
     }
   }
 
 
   render() {
-    const { getDocument, auth, match, getAway, ...rest } = this.props;
+    const { getDocument, auth, getAway } = this.props;
 
     if (APP_PROPERTIES.ssr || getDocument.document.seoTitle === this.getSeoTitle()) {
       return (
@@ -120,17 +117,12 @@ class ContentView extends React.Component {
           {getAway && <AwayModal documentData={getDocument.document}/>}
 
           <ContentViewFullScreenContainer auth={auth}/>
-
-          <ContentViewSeeAlso documentData={getDocument.document} author={getDocument.document.author}
-                              featuredList={getDocument.featuredList} {...rest}/>
         </section>
-
       );
     } else {
       return (
         <section data-parallax="true" className="container_view row col-re container">
           <ContentViewFullScreenMock/>
-          <ContentViewSeeAlsoMock/>
         </section>
       );
     }

@@ -26,7 +26,7 @@ class About extends React.Component {
               {psString("about-main-explain")}
             </div>
             <div className="about-text-align">
-              <Link to="/f">
+              <Link to="/f" rel="nofollow">
                 <div className="main-learn-more-btn tac" onClick={() => common_view.scrollTop()}
                      title="Link to FAQ">{psString("main-banner-btn-4")}</div>
               </Link>

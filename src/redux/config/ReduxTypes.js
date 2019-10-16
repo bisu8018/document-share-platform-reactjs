@@ -16,6 +16,7 @@ let  ReduxTypes ={
   SET_DOCUMENT_LIST : "main/SET_DOCUMENT_LIST",
   SET_MY_LIST : "main/SET_MY_LIST",
   SET_HISTORY : "main/SET_HISTORY",
+  SET_MODAL : "main/SET_MODAL",
 
 
   //======================================

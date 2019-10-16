@@ -208,7 +208,7 @@ class ContentMain extends Component {
                                onClick={() => this.handleTagClick()}>{buttonText[idx]}</div>
                       )
                       :
-                      <Link to='/ca'>
+                      <Link to='/ca' rel="nofollow">
                         <div className="main-upload-btn mr-2 ml-2 mb-3">{buttonText[idx]}</div>
                       </Link>
                     }

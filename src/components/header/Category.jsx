@@ -21,19 +21,19 @@ class Category extends React.Component {
       <nav className="header-category-wrapper " id="headerCategoryWrapper">
         <ul className="tags_menu d-flex container">
           <li>
-            <NavLink to="/" activeClassName="on"
+            <NavLink to="/" activeClassName="on" rel="nofollow"
                      onClick={common_view.scrollTop}>home</NavLink>
           </li>
           <li>
-            <NavLink to="/latest" activeClassName="on"
+            <NavLink to="/latest" activeClassName="on" rel="nofollow"
                      onClick={common_view.scrollTop}>latest</NavLink>
           </li>
           <li>
-            <NavLink to="/featured" activeClassName="on"
+            <NavLink to="/featured" activeClassName="on" rel="nofollow"
                      onClick={common_view.scrollTop}>featured</NavLink>
           </li>
           <li>
-            <NavLink to="/popular" activeClassName="on"
+            <NavLink to="/popular" activeClassName="on" rel="nofollow"
                      onClick={common_view.scrollTop}>popular</NavLink>
           </li>
           <li>

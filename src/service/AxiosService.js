@@ -26,7 +26,7 @@ export default {
       .then(response => {
           if (this.DEBUG()) console.log("성공\nurl: " + url + "\nres:\n" + JSON.stringify(response.data));
           if (response.data.success && response.data.success === true) success(response.data);  //성공 alert
-          else failure(response.data.message);
+          else failure(response.data.message || response.data);
         }
       )
       .catch(error => {

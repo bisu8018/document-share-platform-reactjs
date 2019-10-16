@@ -16,29 +16,17 @@ class UploadCompleteModal extends React.Component {
   }
 
 
-  // 모달 state 값 초기화
-  clearState = () => {
-    this.setState({
-      closeFlag: false
-    });
-  };
-
-
   // 모달 숨기기 클래스 추가
   setCloseFlag = () => new Promise(resolve =>
     this.setState({ closeFlag: true }, () => resolve()));
 
 
   // 모달 취소버튼 클릭 관리
-  handleClickClose = modal =>
+  handleClickClose = () =>
     this.setCloseFlag()
       .then(() => common.delay(200))
       .then(() => common_view.setBodyStyleUnlock())
-      .then(() => this.handleClose(modal));
-
-
-  // 모달 종료 관리
-  handleClose = () => this.props.closeSubModal();
+      .then(() => this.props.setModal(null));
 
 
   // 마이페이지에서 모달 종료 관리
@@ -49,16 +37,16 @@ class UploadCompleteModal extends React.Component {
 
 
   // 링크 이동 관리
-  handleLinkBtn = modal => {
-    this.handleClickClose(modal);
-    let identifier = this.props.identifier;
+  handleLinkBtn = () => {
+    this.handleClickClose();
+    let identifier = this.props.getModalData.identifier;
     history.push("/@" + identifier);
   };
 
 
   render() {
     const { closeFlag } = this.state;
-    const { privateDocCount, identifier } = this.props;
+    const { getModalData } = this.props;
 
     return (
       <div className="custom-modal-container">
@@ -73,12 +61,12 @@ class UploadCompleteModal extends React.Component {
           </div>
 
           <div className="custom-modal-content tal">
-            {privateDocCount >= 5 ?
+            {getModalData.privateDocumentCount >= 5 ?
               <div>{psString("upload-doc-desc-3")}</div> :
-              <div>{psString("upload-doc-desc-2") + psString("upload-doc-desc-4-a") + privateDocCount + psString("upload-doc-desc-4-b")}</div>
+              <div>{psString("upload-doc-desc-2") + psString("upload-doc-desc-4-a") + getModalData.privateDocumentCount + psString("upload-doc-desc-4-b")}</div>
             }
           </div>
-          {identifier === common_view.getPath().substring(1) ?
+          {getModalData.identifier === common_view.getPath().substring(1) ?
             <div className="custom-modal-footer">
               <div onClick={() => this.handleCloseOnMyPage()}
                    className="ok-btn">{psString("common-modal-confirm")}</div>

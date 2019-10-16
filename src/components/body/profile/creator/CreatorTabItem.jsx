@@ -5,6 +5,7 @@ import CreatorClaimContainer from "../../../../container/body/profile/creator/Cr
 import { FadingCircle } from "better-react-spinkit";
 import Tooltip from "@material-ui/core/Tooltip";
 import LinesEllipsis from "react-lines-ellipsis";
+import responsiveHOC from "react-lines-ellipsis/lib/responsiveHOC";
 import PayoutCard from "../../../common/card/PayoutCard";
 import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
 import DeleteDocumentModalContainer from "../../../../container/common/modal/DeleteDocumentModalContainer";
@@ -15,8 +16,9 @@ import DocumentInfo from "../../../../redux/model/DocumentInfo";
 import common_view from "../../../../common/common_view";
 import PublishCompleteModalContainer from "../../../../container/common/modal/PublishCompleteModalContainer";
 import { psString } from "../../../../config/localization";
-import AnalyticsModalContainer from "../../../../container/common/modal/AnalyticsModalContainer";
 
+
+const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
 
 class CreatorTabItem extends React.Component {
   constructor(props) {
@@ -240,7 +242,7 @@ class CreatorTabItem extends React.Component {
                   <div className="not-convert"><FadingCircle size={40} color={"#3d5afe"}/></div>
                 </div>
               </Tooltip> :
-              <Link to={"/@" + identification + "/" + documentData.seoTitle}>
+              <Link to={"/@" + identification + "/" + documentData.seoTitle} rel="nofollow">
                 <img src={Common.getThumbnail(documentData.documentId, "thumb", 1, documentData.documentName)}
                      alt={documentData.title ? documentData.title : documentData.documentName}
                      className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>
@@ -260,9 +262,6 @@ class CreatorTabItem extends React.Component {
               {documentData.state === "CONVERT_COMPLETE" && documentData.isPublic === true &&
               <CopyModalContainer documentData={documentData} type="onlyIcon"/>}
 
-              {documentData.state === "CONVERT_COMPLETE" && documentData.isPublic === true &&
-              <AnalyticsModalContainer documentData={documentData} type="onlyIcon"/>}
-
               {documentData.state === "CONVERT_COMPLETE" &&
               <div className="option-table-btn" onClick={() => this.handleDownloadContent()}>
                 <i className="material-icons">save_alt</i>
@@ -274,7 +273,7 @@ class CreatorTabItem extends React.Component {
             </div>
           </div>}
 
-          <Link to={"/@" + identification + "/" + documentData.seoTitle}
+          <Link to={"/@" + identification + "/" + documentData.seoTitle} rel="nofollow"
                 className={(documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-wrapper" : "")}>
             <div className="info_title mb-1" onClick={() => common_view.scrollTop()}>
               {documentData.title ? documentData.title : documentData.documentName}
@@ -284,13 +283,14 @@ class CreatorTabItem extends React.Component {
           <div className="details-info-desc-wrapper">
             {documentData.desc && documentData.state === "CONVERT_COMPLETE" &&
             <Link to={"/@" + identification + "/" + documentData.seoTitle}
-                  className="info_desc "
+                  className="info_desc " rel="nofollow"
                   title="description" onClick={() => common_view.scrollTop()}>
-              <LinesEllipsis text={documentData.desc}
-                             maxLine={2}
-                             ellipsis='...'
-                             trimRight
-                             basedOn='words'/>
+              <ResponsiveEllipsis
+                text={documentData.desc}
+                maxLine={2}
+                ellipsis='...'
+                trimRight
+                basedOn='words'/>
             </Link>}
           </div>
 
@@ -332,9 +332,6 @@ class CreatorTabItem extends React.Component {
             </div>}
           </div>
         </div>
-
-
-        <div className="hr-content-list-item d-block d-sm-none"/>
       </div>
     );
   }

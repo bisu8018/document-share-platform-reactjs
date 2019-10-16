@@ -216,7 +216,7 @@ class CuratorAnalyticsTab extends React.Component {
               <div className="row analytics-inner" key={idx}>
 
                 <div className="d-none pl-0 d-sm-inline-block col-sm-2">
-                  <Link to={"/@" + identification + "/" + result.seoTitle}>
+                  <Link to={"/@" + identification + "/" + result.seoTitle} rel="nofollow">
                     <div className="analytics-thumb-image" onClick={() => common_view.scrollTop()}>
                       <img src={Common.getThumbnail(result.documentId, 320, 1, result.documentName)}
                            alt={result.title ? result.title : result.documentName} className="img-fluid"/>
@@ -225,7 +225,7 @@ class CuratorAnalyticsTab extends React.Component {
                 </div>
 
                 <div className="col-10 col-sm-7 mb-4">
-                  <Link to={"/@" + identification + "/" + result.seoTitle}>
+                  <Link to={"/@" + identification + "/" + result.seoTitle} rel="nofollow">
                     <div className="analytics-info-title"
                          onClick={() => common_view.scrollTop()}>  {result.title ? result.title : result.documentName} </div>
                   </Link>

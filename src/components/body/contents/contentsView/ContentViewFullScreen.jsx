@@ -24,6 +24,7 @@ import ContentViewComment from "./ContentViewComment";
 import { FadingCircle } from "better-react-spinkit";
 import common_view from "../../../../common/common_view";
 import PublishCompleteModalContainer from "../../../../container/common/modal/PublishCompleteModalContainer";
+import ContentViewSeeAlso from "./ContentViewSeeAlso";
 
 
 class ContentViewFullScreen extends Component {
@@ -221,7 +222,7 @@ class ContentViewFullScreen extends Component {
 
 
   render() {
-    const { getDocument, getCreatorDailyRewardPool, getIsMobile, update } = this.props;
+    const { getDocument, getCreatorDailyRewardPool, getIsMobile } = this.props;
     const { isPublic, isRegistry, downloadLoading, completeModalOpen, bookmarkFlag } = this.state;
 
     let vote = Common.toEther(getDocument.document.latestVoteAmount) || 0,
@@ -398,18 +399,20 @@ class ContentViewFullScreen extends Component {
               }
             </div>
 
-
             <div className="hr mb-3 mt-3"/>
           </div>
 
-          {update === false && <ContentViewComment documentData={getDocument.document}/>}
+
+          <ContentViewSeeAlso documentData={getDocument.document} author={getDocument.document.author}
+                              featuredList={getDocument.featuredList}/>
+
+
+          <ContentViewComment documentData={getDocument.document}/>
+
 
         </div>
-
-
       </article>
-    )
-      ;
+    );
   }
 }
 

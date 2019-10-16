@@ -59,7 +59,7 @@ class CuratorTabItem extends React.Component {
       <div className="row u_center_inner">
 
         <div className="pl-0 col-12 col-sm-3 col-lg-2 col-thumb">
-          <Link to={"/@" + identification + "/" + document.seoTitle}>
+          <Link to={"/@" + identification + "/" + document.seoTitle} rel="nofollow">
             <div className="tab-thumbnail" onClick={common_view.scrollTop()}>
               <img src={Common.getThumbnail(document.documentId, (getIsMobile ? 640 : 320), 1, document.documentName)}
                    alt={document.title ? document.title : document.documentName}
@@ -71,14 +71,14 @@ class CuratorTabItem extends React.Component {
 
         <div className="col-12 col-sm-9 col-lg-10 p-0">
           <div className="details_info-padding">
-            <Link to={"/@" + identification + "/" + document.seoTitle}>
+            <Link to={"/@" + identification + "/" + document.seoTitle} rel="nofollow">
               <div className="info_title mb-1"
                    onClick={() => common_view.scrollTop()}>  {document.title ? document.title : document.documentName} </div>
             </Link>
 
 
             <div className="details-info-desc-wrapper">
-              <Link to={"/@" + identification + "/" + document.seoTitle} className="info_desc"
+              <Link to={"/@" + identification + "/" + document.seoTitle} className="info_desc" rel="nofollow"
                     onClick={() => common_view.scrollTop()}>
                 {document.desc &&
                 <LinesEllipsis
@@ -127,10 +127,6 @@ class CuratorTabItem extends React.Component {
 
 
         </div>
-
-        <div className="hr-content-list-item d-block d-sm-none"/>
-
-
       </div>
 
     );

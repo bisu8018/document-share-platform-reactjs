@@ -27,7 +27,12 @@ export const setAction = {
     type: ReduxTypes.SET_ALERT_CODE,
     alertCode,
     alertData
-  })
+  }),
+  modal: (modalCode: any, modalData: any) => ({
+    type: ReduxTypes.SET_MODAL,
+    modalCode,
+    modalData
+  }),
 };
 
 
@@ -67,7 +72,9 @@ const initState = {
   curatorDailyRewardPool: 0,
   alertCode: null,
   alertData: {},
-  documentList: {}
+  modalCode: null,
+  modalData: {},
+  documentList: {},
 };
 
 
@@ -124,6 +131,12 @@ export default (state = initState, action: any) => {
         ...state,
         alertCode: action.alertCode,
         alertData: action.alertData
+      };
+    case ReduxTypes.SET_MODAL:
+      return {
+        ...state,
+        modalCode: action.modalCode,
+        modalData: action.modalData,
       };
     case ReduxTypes.SET_DOCUMENT_LIST:
       return {

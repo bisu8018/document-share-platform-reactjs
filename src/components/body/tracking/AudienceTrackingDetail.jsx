@@ -175,6 +175,7 @@ class AudienceTrackingDetail extends React.Component {
                               <div className="d-flex w-100">
                                 {documentText &&
                                 <Link
+                                  rel="nofollow"
                                   onClick={() => common_view.scrollTop()}
                                   to={"/" + match.params.identification + "/" + match.params.seoTitle + "/" + _result.n}
                                   title={"Link to " + _result.n + " page"}>

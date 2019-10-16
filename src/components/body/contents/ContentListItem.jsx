@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
+import responsiveHOC from "react-lines-ellipsis/lib/responsiveHOC";
 import Common from "../../../common/common";
 import PayoutCard from "../../common/card/PayoutCard";
 import common_view from "../../../common/common_view";
@@ -10,6 +11,8 @@ import { psString } from "../../../config/localization";
 import MainRepository from "../../../redux/MainRepository";
 import DocumentInfo from "../../../redux/model/DocumentInfo";
 
+
+const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
 
 class ContentListItem extends React.Component {
   constructor(props) {
@@ -80,8 +83,8 @@ class ContentListItem extends React.Component {
 
     this.setState({ bookmarkFlag: false });
     let myList = getMyList;
-    let idx = getMyList.resultList.findIndex(x => x._id === result.documentId);
-    myList.resultList.slice(idx, 1);
+    let idx = myList.resultList.findIndex(x => x._id === result.documentId);
+    myList.resultList.splice(idx, 1);
     setMyList(myList);
 
     return MainRepository.Mutation.removeMyList(result.documentId)
@@ -118,7 +121,7 @@ class ContentListItem extends React.Component {
     return (
       <div className="row col-12 u_center_inner" key={result.seoTitle}>
         <div className="col-thumb-list">
-          <Link to={"/@" + identification + "/" + result.seoTitle}>
+          <Link to={"/@" + identification + "/" + result.seoTitle} rel="nofollow">
             <div className="thumb_image" onClick={() => common_view.scrollTop()}>
               <img src={imageUrl} alt={result.title}
                    className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
@@ -127,7 +130,7 @@ class ContentListItem extends React.Component {
         </div>
 
         <div className="col-details_info details_info">
-          <div className="mb-3 mb-sm-2 detail-title">
+          <div className="mb-2 detail-title">
             <Link to={"/@" + identification + "/" + result.seoTitle} onClick={() => common_view.scrollTop()}
                   title={result.title}> {result.title ? result.title : result.documentName}</Link>
           </div>
@@ -148,7 +151,7 @@ class ContentListItem extends React.Component {
             <Link to={"/@" + identification + "/" + result.seoTitle} className="info_desc" title={result.desc}
                   onClick={() => common_view.scrollTop()} rel="nofollow">
               {result.desc &&
-              <LinesEllipsis
+              <ResponsiveEllipsis
                 text={result.desc}
                 maxLine={2}
                 ellipsis='...'
@@ -159,7 +162,7 @@ class ContentListItem extends React.Component {
             </Link>
           </div>
 
-          <div className="mt-2">
+          <div>
             <span className={"info-detail-reward mr-3 " + (result.isRegistry ? "" : "color-not-registered")}
                   onMouseOver={() => this.showRewardInfo(result.seoTitle + "reward")}
                   onMouseOut={() => this.hideRewardInfo(result.seoTitle + "reward")}>
@@ -188,7 +191,6 @@ class ContentListItem extends React.Component {
           {reward > 0 && <PayoutCard reward={reward} data={result}/>}
 
         </div>
-        <div className="hr-content-list-item d-block d-sm-none"/>
       </div>
     );
   }
