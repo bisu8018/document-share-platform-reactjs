@@ -130,7 +130,7 @@ class ContentListItem extends React.Component {
         </div>
 
         <div className="col-details_info details_info">
-          <div className="mb-2 detail-title">
+          <div className="mb-1 detail-title">
             <Link to={"/@" + identification + "/" + result.seoTitle} onClick={() => common_view.scrollTop()}
                   title={result.title}> {result.title ? result.title : result.documentName}</Link>
           </div>
@@ -162,7 +162,7 @@ class ContentListItem extends React.Component {
             </Link>
           </div>
 
-          <div>
+          <div className="info-detail-wrapper">
             <span className={"info-detail-reward mr-3 " + (result.isRegistry ? "" : "color-not-registered")}
                   onMouseOver={() => this.showRewardInfo(result.seoTitle + "reward")}
                   onMouseOut={() => this.hideRewardInfo(result.seoTitle + "reward")}>

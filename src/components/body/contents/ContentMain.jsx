@@ -36,7 +36,7 @@ const content = [
 
 // path 카테고리
 const category = [
-  "myList",
+  "mylist",
   "featured",
   "latest",
   "popular",
@@ -112,7 +112,7 @@ class ContentMain extends Component {
         return featuredDocuments;
       case "popular" :
         return popularDocuments;
-      case "myList" :
+      case "mylist" :
         return myListDocuments;
       case "history" :
         return myHistoryDocuments;
@@ -233,15 +233,12 @@ class ContentMain extends Component {
             {category.map((arr, idx) =>
               this.getList(arr) ? ((this.getList(arr).resultList && this.getList(arr).resultList.length > 0) || (!this.getList(arr).resultList && this.getList(arr).length > 0)) &&
                 <div className="main-category" key={idx}>
-                  <div className="mb-3 d-flex">
-                    <div className="main-category-name"
-                         onClick={() => arr !== "myList" && arr !== "history" ? this.handelTrigger(arr) : false}>
+                  <div className="p-3 pl-sm-0 pb-sm-3 d-flex">
+                    <div className="main-category-name" onClick={() => this.handelTrigger(arr)}>
                       {psString("main-category-" + arr)}
                     </div>
-                    {arr !== "myList" && arr !== "history" &&
                     <div className="main-category-see-all">{psString("main-see-all")}
                       <i className="material-icons">keyboard_arrow_right</i></div>
-                    }
                   </div>
 
                   <div className="row main-category-card-wrapper">

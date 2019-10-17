@@ -3,7 +3,9 @@ export default ({
     `
     UserDocumentFavorite {
     findMany(
-    filter: { userId: "${data}" },
+    filter: { userId: "${data.userId}" },
+    skip: ${data.skip || 0},
+    limit: 10,
     sort: USERID__CREATED_ASC
     ) {
       documentId
@@ -13,8 +15,9 @@ export default ({
     `
     UserDocumentHistory {
     findMany(
-    filter: { userId: "${data}" },
-    limit: 6,
+    filter: { userId: "${data.userId}" },
+    skip: ${data.skip || 0},
+    limit: 10,
     sort: USERID__UPDATED_ASC
     ) {
       documentId

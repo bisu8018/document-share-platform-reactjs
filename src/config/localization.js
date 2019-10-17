@@ -57,7 +57,7 @@ const strings = new Map([
     KOR: '인기문서',
     ENG: 'popular'
   }],
-  ['main-category-myList', {
+  ['main-category-mylist', {
     KOR: '내가 찜한 문서',
     ENG: 'my list'
   }],
@@ -1440,6 +1440,14 @@ const strings = new Map([
   ['helmet-title-guide', {
     KOR: '유저 가이드',
     ENG: 'User Guide'
+  }],
+  ['helmet-title-mylist', {
+    KOR: '내가 찜한 문서',
+    ENG: 'My List'
+  }],
+  ['helmet-title-history', {
+    KOR: '내가 본 문서',
+    ENG: 'History'
   }],
   ['helmet-title-terms', {
     KOR: '이용약관',

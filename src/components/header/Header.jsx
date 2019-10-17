@@ -12,9 +12,7 @@ import common_view from "../../common/common_view";
 import { Link } from "react-router-dom";
 import CategoryContainer from "../../container/header/CategoryContainer";
 import AutoSuggestInputContainer from "../../container/common/AutoSuggestInputContainer";
-import UploadDocumentModalContainer from "../../container/common/modal/UploadDocumentModalContainer";
 import Tooltip from "@material-ui/core/Tooltip";
-import UploadCompleteModal from "../common/modal/UploadCompleteModal";
 
 
 class Header extends React.Component {
@@ -162,6 +160,20 @@ class Header extends React.Component {
   profileCardHide = () => this.setState({ profileCardShow: false });
 
 
+  // GET subtitle
+  getSubTitle = () => {
+    const paths = common_view.getPaths();
+    if (paths.length === 2 && (paths[1] === "latest" || paths[1] === "featured" || paths[1] === "popular" || paths[1] === "mylist" || paths[1] === "history")) {
+      return psString("main-category-" + paths[1]);
+    } else if (paths.length > 2 && paths[1] === "latest") {
+      if (!paths[2]) return psString("main-category-" + paths[1]);
+      return paths[2];
+    } else {
+      return null;
+    }
+  };
+
+
   // 자리비움 시간 SET
   setAwayTime = () => {
     const { getAway, setAway } = this.props;
@@ -285,19 +297,20 @@ class Header extends React.Component {
           id='header__main-nav'>
 
           <div className='container-fluid container'>
-            <div className='col-3 mt-1 align-items-center d-flex'>
-              {getIsMobile ?
+            <div className='col-4 col-sm-3 mt-1 align-items-center d-flex'>
+              {getIsMobile || this.getSubTitle() ?
                 <Link to="/" className='navbar-brand-mobile' onClick={() => common_view.scrollTop()} rel="nofollow">
                   <img src={require("assets/image/logo-cut.png")} alt='POLARIS SHARE'/>
                 </Link> :
                 <Link to="/" className='navbar-brand' onClick={() => common_view.scrollTop()} rel="nofollow">
                   <img src={require("assets/image/logo.svg")} alt='POLARIS SHARE'/>
                 </Link>}
+              {(!getIsMobile || (!searchBar && getIsMobile)) &&
+              <div className='main-category-sub-title'>{this.getSubTitle()}</div>}
             </div>
 
 
-            <div className='header-bar col-9'>
-
+            <div className='header-bar col-sm-9 col-8'>
               {path !== "ca" &&
               <div className="header-search-wrapper">
                 <div
@@ -331,7 +344,7 @@ class Header extends React.Component {
                 (!getIsMobile || (!searchBar && getIsMobile)) &&
                 <div className="ml-3">
                   <Tooltip title="Share your content" placement="bottom">
-                    <div className="add-btn" onClick={() => setModal("upload",{})}>
+                    <div className="add-btn" onClick={() => setModal("upload", {})}>
                       <i className="material-icons">add</i>
                     </div>
                   </Tooltip>

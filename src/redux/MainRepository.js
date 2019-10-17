@@ -93,6 +93,11 @@ export default {
     async getToken() {
       const authResult = await instance.Account.renewSessionPromise();
       return authResult.idToken;
+    },
+    checkNone(res) {
+      if(res.length === 0)
+        throw new Error('handled');
+      else return res;
     }
   },
   Analytics: {
@@ -524,6 +529,7 @@ export default {
         .catch(error => console.error(error));
     },
     getMyList: async data => instance.Query.getMyListFindMany(data)
+      .then(res => instance.Common.checkNone(res))
       .then(res => res.map(v => "\"" + v.documentId + "\""))
       .then(res => instance.Query.getDocumentListByIds(res))
       .then(res => {
@@ -552,19 +558,20 @@ export default {
         });
       }),
     getHistory: async data => instance.Query.getHistoryFindById(data)
+      .then(res => instance.Common.checkNone(res))
       .then(res => res.map(v => v.documentId))
       .then(res => instance.Query.getDocumentListByIdsMultiple(res))
       .then(res => {
         const resultData = Object({
-          Document : [],
-          DocumentFeatured : [],
-          DocumentPopular : []
+          Document: [],
+          DocumentFeatured: [],
+          DocumentPopular: []
         });
-        let arrLength = Object.keys(res).length/3;
-        for(let i = 0; i < arrLength ; ++i) {
-          if(res['latest_' + i].findOne) resultData.Document.push(res['latest_' + i].findOne);
-          if(res['featured_' + i].findOne) resultData.DocumentFeatured.push(res['featured_' + i].findOne);
-          if(res['popular_' + i].findOne) resultData.DocumentPopular.push(res['popular_' + i].findOne);
+        let arrLength = Object.keys(res).length / 3;
+        for (let i = 0; i < arrLength; ++i) {
+          if (res["latest_" + i].findOne) resultData.Document.push(res["latest_" + i].findOne);
+          if (res["featured_" + i].findOne) resultData.DocumentFeatured.push(res["featured_" + i].findOne);
+          if (res["popular_" + i].findOne) resultData.DocumentPopular.push(res["popular_" + i].findOne);
         }
         return resultData;
       })

@@ -36,6 +36,16 @@ export default ([
       component: ContentListContainer
     },
     {
+      path: "/mylist",
+      name: "MyList",
+      component: ContentListContainer
+    },
+    {
+      path: "/history",
+      name: "History",
+      component: ContentListContainer
+    },
+    {
       path: "/featured",
       name: "Featured",
       component: ContentListContainer

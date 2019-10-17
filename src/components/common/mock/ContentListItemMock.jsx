@@ -11,7 +11,7 @@ class ContentListItemMock extends React.PureComponent {
         </div>
 
         <div className="col-details_info details_info">
-          <div className="mb-2 detail-title-mock"/>
+          <div className="mb-sm-2 mb-1  detail-title-mock"/>
           <div>
             <div className="img-thumbnail-mock"/>
             <div className="main-category-card-name-mock"/>

@@ -105,7 +105,7 @@ class Main extends Component {
   setMyList = () => {
     const { getMyInfo, setMyList } = this.props;
     if (MainRepository.Account.isAuthenticated() && getMyInfo.sub.length !== 0) {
-      return MainRepository.Document.getMyList(getMyInfo.sub)
+      return MainRepository.Document.getMyList({userId : getMyInfo.sub})
         .then(res => setMyList({ resultList: res }));
     }
   };
@@ -115,7 +115,7 @@ class Main extends Component {
   setHistory = () => {
     const { getMyInfo, setHistory } = this.props;
     if (MainRepository.Account.isAuthenticated() && getMyInfo.sub.length !== 0) {
-      return MainRepository.Document.getHistory(getMyInfo.sub)
+      return MainRepository.Document.getHistory({userId : getMyInfo.sub})
         .then(res => setHistory({ resultList: res }));
     }
   };

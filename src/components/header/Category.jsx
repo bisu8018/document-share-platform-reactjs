@@ -25,16 +25,32 @@ class Category extends React.Component {
                      onClick={common_view.scrollTop}>home</NavLink>
           </li>
           <li>
-            <NavLink to="/latest" activeClassName="on" rel="nofollow"
-                     onClick={common_view.scrollTop}>latest</NavLink>
+            <NavLink to="/latest/marketing" activeClassName="on" rel="nofollow"
+                     onClick={common_view.scrollTop}>marketing</NavLink>
           </li>
           <li>
-            <NavLink to="/featured" activeClassName="on" rel="nofollow"
-                     onClick={common_view.scrollTop}>featured</NavLink>
+            <NavLink to="/latest/business" activeClassName="on" rel="nofollow"
+                     onClick={common_view.scrollTop}>business</NavLink>
           </li>
           <li>
-            <NavLink to="/popular" activeClassName="on" rel="nofollow"
-                     onClick={common_view.scrollTop}>popular</NavLink>
+            <NavLink to="/latest/technology" activeClassName="on" rel="nofollow"
+                     onClick={common_view.scrollTop}>technology</NavLink>
+          </li>
+          <li>
+            <NavLink to="/latest/health" activeClassName="on" rel="nofollow"
+                     onClick={common_view.scrollTop}>health</NavLink>
+          </li>
+          <li>
+            <NavLink to="/latest/food" activeClassName="on" rel="nofollow"
+                     onClick={common_view.scrollTop}>food</NavLink>
+          </li>
+          <li>
+            <NavLink to="/latest/education" activeClassName="on" rel="nofollow"
+                     onClick={common_view.scrollTop}>education</NavLink>
+          </li>
+          <li>
+            <NavLink to="/latest/design" activeClassName="on" rel="nofollow"
+                     onClick={common_view.scrollTop}>design</NavLink>
           </li>
           <li>
             <NavLink to="/more" activeClassName="on"

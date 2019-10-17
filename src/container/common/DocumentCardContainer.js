@@ -3,7 +3,8 @@ import DocumentCard from "../../components/common/card/DocumentCard";
 
 export default connect(
   state => ({
-    getCreatorDailyRewardPool: state.main.authorDailyRewardPool
+    getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
+    getIsMobile: state.main.isMobile,
   }),
   dispatch => ({})
 )(DocumentCard);

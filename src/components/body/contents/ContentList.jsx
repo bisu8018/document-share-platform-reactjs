@@ -9,6 +9,7 @@ import NoDataIcon from "../../common/NoDataIcon";
 import common_view from "../../../common/common_view";
 import ContentListItemMock from "../../common/mock/ContentListItemMock";
 import { APP_PROPERTIES } from "../../../properties/app.properties";
+import history from "apis/history/history";
 
 
 class ContentList extends Component {
@@ -39,6 +40,17 @@ class ContentList extends Component {
     this.setTagList();
   };
 
+
+  // 로그인 체크
+  checkLogin = () => {
+    const { setAlertCode } = this.props;
+
+    if (!MainRepository.Account.isAuthenticated()) {
+      setAlertCode(2002);
+      return history.push("/");
+    }
+    return true;
+  };
 
   // 무한 스크롤 두번째 데이터 GET
   fetchMoreData = () => {
@@ -73,38 +85,51 @@ class ContentList extends Component {
 
   // document 데이터 fetch
   fetchDocuments = args => {
-    const { path, resultList, tagSearchFlag } = this.state;
+    const { path, pageNo } = this.state;
     const params = {
-      pageNo: args.pageNo,
+      pageNo: pageNo,
       tag: args.tag,
       path: args.path ? args.path : path
     };
+
     this.setState({ loading: true });
 
-    MainRepository.Document.getDocumentList(params).then(res => {
-      this.setState({ loading: false });
-      log.ContentList.fetchDocuments();
-      const _resultList = res.resultList ? res.resultList : [];
-      const pageNo = res.pageNo;
+    // 경로별 문서 GET API 분기 처리
+    switch (path) {
+      case "mylist" :
+        this.checkLogin();
+        return this.getMyList(params);
 
-      if (_resultList.length > 0) {
-        if (resultList.length > 0 && !tagSearchFlag) this.setState({
-          resultList: resultList.concat(_resultList),
-          pageNo: pageNo
-        });
-        else this.setState({ resultList: _resultList, pageNo: pageNo, tagSearchFlag: false });
-      } else this.setState({ isEndPage: true });
+      case "history" :
+        this.checkLogin();
+        return this.getHistory(params);
 
-      if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) this.setState({ totalViewCountInfo: res.totalViewCountInfo });
-    }).catch(err => {
-      this.setState({ loading: false });
-      log.ContentList.fetchDocuments(err);
-      this.setTimeout = setTimeout(() => {
-        this.fetchDocuments(args);
-        clearTimeout(this.setTimeout);
-      }, 8000);
-    });
+      default :
+        return this.getDocumentList(params);
+    }
   };
+
+
+  // GET my list
+  getMyList = params => MainRepository.Document.getMyList({
+    userId: MainRepository.Account.getMyInfo().sub,
+    skip: (params.pageNo - 1) * 10
+  }).then(res => this.handleGetDocumentData({ resultList: res, pageNo: params.pageNo + 1 }))
+    .catch(err => this.handleError(err, params));
+
+
+  // GET history
+  getHistory = params => MainRepository.Document.getHistory({
+    userId: MainRepository.Account.getMyInfo().sub,
+    skip: (params.pageNo - 1) * 10
+  }).then(res => this.handleGetDocumentData({ resultList: res, pageNo: params.pageNo + 1 }))
+    .catch(err => this.handleError(err, params));
+
+
+  // GET document list
+  getDocumentList = params => MainRepository.Document.getDocumentList(params)
+    .then(res => this.handleGetDocumentData(res))
+    .catch(err => this.handleError(err, params));
 
 
   // fetch 진행
@@ -140,6 +165,45 @@ class ContentList extends Component {
             clearTimeout(this.setTimeout);
           }, 8000);
         });
+  };
+
+
+  // GET 한 문서 데이터 관리
+  handleGetDocumentData = res => {
+    const { resultList, tagSearchFlag } = this.state;
+
+    this.setState({ loading: false });
+    log.ContentList.fetchDocuments();
+
+    const _resultList = res.resultList ? res.resultList : [];
+    const pageNo = res.pageNo;
+
+    if (_resultList.length > 0) {
+      if (resultList.length > 0 && !tagSearchFlag) {
+        this.setState({
+          resultList: resultList.concat(_resultList),
+          pageNo: pageNo
+        });
+      } else {
+        this.setState({
+          resultList: _resultList,
+          pageNo: pageNo,
+          tagSearchFlag: false
+        });
+      }
+    } else this.setState({ isEndPage: true });
+
+    if (res && res.totalViewCountInfo && !this.state.totalViewCountInfo) this.setState({ totalViewCountInfo: res.totalViewCountInfo });
+  };
+
+
+  // 문서 GET 에러 관리
+  handleError = (err, params) => {
+    this.setState({ loading: false });
+
+    log.ContentList.fetchDocuments(err);
+
+    this.setTimeout = setTimeout(() => clearTimeout(this.setTimeout), 8000);
   };
 
 

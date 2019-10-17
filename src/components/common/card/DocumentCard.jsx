@@ -44,7 +44,7 @@ class DocumentCard extends React.Component {
   }
 
   render() {
-    const { idx, path, documentData, getCreatorDailyRewardPool, totalViewCountInfo, countCards } = this.props;
+    const { idx, path, getIsMobile, documentData, getCreatorDailyRewardPool, totalViewCountInfo, countCards } = this.props;
     const { ratio } = this.state;
 
     let author = documentData.author,
@@ -78,27 +78,33 @@ class DocumentCard extends React.Component {
                 />
               </Link>
             </div>
-            <Link to={"/@" + identification} className="main-category-card-profile mt-1 mb-1 pt-1 pb-2 w-full" rel="nofollow">
+            <Link to={"/@" + identification} className="main-category-card-profile mt-1 mb-1 pt-1 pb-2 w-full"
+                  rel="nofollow">
               {profileUrl ?
                 <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
                 <i className="material-icons img-thumbnail" onClick={() => common_view.scrollTop()}>face</i>
               }
               <span className="main-category-card-name">{identification}</span>
+              {!getIsMobile &&
               <span className="main-category-card-date">
                 {common_view.dateTimeAgo(documentData.created)}
-              </span>
+              </span>}
             </Link>
-            <div className="main-category-card-count">
-              <span className={"main-category-card-reward " + (documentData.isRegistry ? "" : "color-not-registered")}
-                    onMouseOver={() => this.showRewardInfo(path + idx)}
-                    onMouseOut={() => this.hideRewardInfo(path + idx)}>
+            <div className="main-category-card-count ">
+              <div
+                className={"main-category-card-reward mr-3 " + (documentData.isRegistry ? "" : "color-not-registered")}
+                onMouseOver={() => this.showRewardInfo(path + idx)}
+                onMouseOut={() => this.hideRewardInfo(path + idx)}>
                 $ {Common.deckToDollar(reward)}
                 <img className="reward-arrow"
                      src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
                      alt="arrow button"/>
-              </span>
-              <span className="main-category-card-vote float-right">{Common.deckStr(vote)}</span>
-              <span className="main-category-card-view float-right">{view}</span>
+              </div>
+              <div className="main-category-card-view ">{view}</div>
+              <div className="main-category-card-vote ">{Common.deckStr(vote)}</div>
+              {getIsMobile && <div className="main-category-card-date">
+                {common_view.dateTimeAgo(documentData.created)}
+              </div>}
             </div>
           </div>
 

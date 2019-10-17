@@ -21,8 +21,8 @@ class Callback extends Component {
 
           // 로그인 성공시, 유사 로그인 정보 삭제
           setMyInfo(res);   // 나의 정보 SET
-          MainRepository.Document.getMyList(res.sub).then(res => setMyList({ resultList: res }));   // 나의 찜한 목록 SET
-          MainRepository.Document.getHistory(res.sub).then(res => setHistory({ resultList: res }));   // 나의 히스토리 목록 SET
+          MainRepository.Document.getMyList({userId : res.sub}).then(res => setMyList({ resultList: res }));   // 나의 찜한 목록 SET
+          MainRepository.Document.getHistory({userId: res.sub}).then(res => setHistory({ resultList: res }));   // 나의 히스토리 목록 SET
           history.push("/@" + res.username);
         });
       }).catch(err => {

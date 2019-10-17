@@ -1715,7 +1715,7 @@ mark,
 
 @media (min-width: 576px) {
     .details_info {
-        padding-left: 35px;
+        padding-left: 15px;
     }
 
     .navbar-expand-sm {
@@ -5940,7 +5940,6 @@ b {
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    width: 70px;
     font-family: poppins, 'source-han-sans-korean', sans-serif;
     height: 34px;
     font-size: 14px;
@@ -6964,13 +6963,13 @@ Dean*/
 }
 
 .col-thumb-list {
-    max-width: 235px;
-    flex: auto;
+    max-width: 100px;
 }
 
 .col-details_info {
-    flex: auto;
-    max-width: calc(100% - 235px);
+    position: relative;
+    width: 100%;
+    max-width: calc(100% - 115px);
 }
 
 .tracking-item .info_date {
@@ -7059,10 +7058,6 @@ Dean*/
     min-height: calc(100vh - 166px - 1.5rem);
 }
 
-.u__center-container-mock {
-    margin-top: -15px !important;
-}
-
 .content-list-path {
     text-transform: uppercase;
     font-family: poppins, 'source-han-sans-korean', sans-serif;
@@ -7145,7 +7140,7 @@ Dean*/
 }
 
 .u_center_inner {
-    padding: 15px 0;
+    padding: 15px 0 15px 0;
     border-bottom: 1px solid #cecece;
     position: relative;
 }
@@ -7162,12 +7157,12 @@ Dean*/
     display: flex;
     display: -webkit-flexbox;
     align-items: center;
-    width: 235px;
-    height: 133px;
+    width: 100px;
+    height: 131px;
     overflow: hidden;
     text-align: center;
-    background: #f1f1f1;
-    border: 1px solid #dcdcdc;
+    background: #ffffff;
+    border: 1px solid #f5f5f5;
     position: relative;
 }
 
@@ -7194,7 +7189,7 @@ Dean*/
 }
 
 .detail-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     font-style: normal;
     font-stretch: normal;
@@ -7274,13 +7269,11 @@ Dean*/
 }
 
 .info_date {
-    font-size: 14px;
+    font-size: 13px;
     color: #b3b3b3;
     position: relative;
-    top: 0;
+    top: 5px;
     height: 25px;
-    display: inline-block;
-    float: right;
 }
 
 .info-date-view {
@@ -7308,6 +7301,15 @@ Dean*/
     display: inline-block;
     font-size: 14px;
     color: #666666;
+}
+
+.info-detail-wrapper {
+    position: absolute;
+}
+
+.content-list-wrapper .info-detail-wrapper {
+    width: 100%;
+    bottom: 0;
 }
 
 .info-detail-view:before {
@@ -7391,6 +7393,10 @@ Dean*/
     padding: 10px 15px;
 }
 
+.u_center_inner .info-detail-reward-info {
+    bottom: -30px;
+}
+
 .info-detail-reward-info.info-fullscreen,
 .tracking-item .info-detail-reward-info {
     top: 30px !important;
@@ -7472,6 +7478,7 @@ Dean*/
 
     .main-category-card-wrapper {
         justify-content: center;
+        border-bottom: 1px solid #e8e8e8;
     }
 }
 
@@ -7483,9 +7490,7 @@ Dean*/
     }
 
     .content-main-container {
-        padding-left: 12px;
-        padding-right: 12px;
-        padding-bottom: 0;
+        padding: 0;
     }
 
     footer .footer-nav-divider.footer-nav-divider-ug:after {
@@ -7529,11 +7534,6 @@ Dean*/
 }
 
 @media (max-width: 767px) {
-
-    .thumb_image,
-    .tab-thumbnail {
-        padding-top: 0;
-    }
 
     .tracking_detail_title {
         font-size: 18px;
@@ -7601,8 +7601,82 @@ Dean*/
 
 
 @media (max-width: 575px) {
-    .info-detail-bookmark, .info-detail-bookmark-checked {
-        right: 15px !important;
+    .main-category-card-content-mock {
+        padding: 15px 15px 25px 15px !important;
+    }
+
+    .main-category-card-img-wrapper-mock {
+        border-radius: 0 !important;
+    }
+
+    .main-category-card-mock {
+        width: 100% !important;
+    }
+
+    .main-category-card-name {
+        margin-left: 3px !important;
+    }
+    .main-category-card-content {
+        padding: 15px 15px 25px 15px !important;
+    }
+
+    .main-category-sub-title {
+        font-size: 15px !important;
+        font-weight: 400 !important;
+        margin-left: 7px !important;
+    }
+
+    .main-category-card-wrapper .main-category-card-reward-info {
+        bottom: -40px;
+    }
+
+    .u_center_inner .info-detail-reward-info {
+        width: 270px;
+        font-size: 12px;
+        min-height: 35px;
+        padding: 10px;
+    }
+
+    .main-category-card-count {
+        margin-top: 18px !important;
+    }
+
+    .u_center_inner-mock {
+        padding: 15px !important;
+    }
+    .details-info-desc-wrapper {
+        max-height: 58px;
+    }
+
+    .info_name {
+        font-size: 12px;
+    }
+
+    .info_name > img {
+        width: 23px;
+        height: 23px;
+    }
+
+    .col-details_info {
+        margin: 0 0 0 15px;
+    }
+
+    .u_center_inner {
+        padding: 15px;
+    }
+
+    .info-detail-reward {
+        font-size: 14px;
+    }
+
+    .info_desc,
+    .info-detail-view,
+    .info-detail-vote{
+        font-size: 13px;
+    }
+
+    .detail-title {
+        font-size: 14px !important;
     }
 
     .view_content .content-view-fullscreen-info-detail {
@@ -7667,14 +7741,6 @@ Dean*/
         width: 100%;
     }
 
-    .thumb-image-mock {
-        height: auto;
-        width: 100% !important;
-        max-width: none;
-        max-height: none;
-        min-height: 160px;
-    }
-
     .u__view .view_top {
         min-height: 179px !important;
     }
@@ -7717,10 +7783,37 @@ Dean*/
         width: 100% !important;
     }
 
-    .main-category-card,
+    .main-category-card-profile {
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .main-category-card {
+        width: 100% !important;
+        height: auto !important;
+        outline: none;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        border: none !important;
+        margin-bottom: 0 !important;
+    }
+
     .main-category-card-img-wrapper {
         width: 100% !important;
         height: auto !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-top: 1px solid #e8e8e8;
+        outline: none;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        border-color: #e8e8e8 !important;
+    }
+
+    .main-category-card-title {
+        min-height: auto !important;
+        margin-bottom: 10px;
     }
 
     .main-banner-content {
@@ -7811,7 +7904,8 @@ Dean*/
     .info_date {
         right: 0;
         float: inherit;
-        top: 5 !important;
+        top: 5px !important;
+        font-size: 12px;
     }
 
     .info-date-view {
@@ -7901,11 +7995,6 @@ Dean*/
         color: #666666 !important;
     }
 
-    .u_center_inner {
-        border: none !important;
-        padding: 0 0 30px 0;
-    }
-
     .u_center_inner .col-thumb {
         padding: 0;
     }
@@ -7927,18 +8016,8 @@ Dean*/
         font-size: 35px;
     }
 
-    .col-thumb-list {
-        max-width: 100% !important;
-        margin-bottom: 20px;
-    }
-
     .document-total-num {
         margin-bottom: 0 !important;
-    }
-
-    .col-details_info {
-        max-width: 100%;
-        padding: 0 15px;
     }
 
     .tracking_fulldown_list {
@@ -7952,19 +8031,6 @@ Dean*/
     .col-thumb > div {
         width: 180px;
         margin: 0 auto;
-    }
-
-    .thumb_image,
-    .tab-thumbnail {
-        height: auto;
-        width: 100% !important;
-        max-width: none;
-        max-height: none;
-        min-height: 160px;
-        border-right: none;
-        border-left: none;
-        display: flex;
-        justify-content: center;
     }
 
     .profile_info_name {
@@ -9636,10 +9702,6 @@ contentContainer 배너 CSS*/
 
 @media (max-width: 480px) {
 
-    .content-main-container {
-        margin-top: 25px;
-    }
-
     .main-banner-subject {
         font-size: 30px !important;
     }
@@ -10311,6 +10373,17 @@ Main Category CSS
 2019-05-22 Dean
 */
 
+.main-category-sub-title {
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif !important;
+    font-size: 17px;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-left: 20px;
+    color: #585858;
+    letter-spacing: -1px;
+    transition: 0.5s all ease-in-out;
+}
+
 .main-category-name {
     font-size: 22px;
     display: inline-block;
@@ -10462,11 +10535,22 @@ Main Category CSS
     top: 6px;
 }
 
+.main-category-card-count .main-category-card-date {
+    font-size: 12px;
+    color: #b3b3b3;
+    position: absolute;
+    top: 4px;
+    right: 15px;
+}
+
+.main-category-card-info-wrapper {
+    position: absolute;
+    right: 10px;
+}
 
 .main-category-card-view {
     cursor: pointer;
     display: inline-block;
-    margin-bottom: 10px;
     font-size: 14px;
     color: #666666;
     margin-right: 25px;
@@ -10487,7 +10571,6 @@ Main Category CSS
 .main-category-card-vote {
     display: inline-block;
     cursor: pointer;
-    margin-bottom: 10px;
     font-size: 14px;
     color: #666666;
     margin-right: 5px;
@@ -10517,6 +10600,9 @@ Main Category CSS
 
 .main-category-card-count {
     margin-top: 5px;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
 .main-category-card-reward-info {
@@ -10933,11 +11019,6 @@ legal CSS
     line-height: normal;
     letter-spacing: normal;
     text-transform: lowercase;
-}
-
-.legal-subject:after {
-    content: '.';
-    margin-left: 5px;
 }
 
 .legal-subject:first-letter {
@@ -11550,33 +11631,24 @@ dean*/
     opacity: 0.3;
 }
 
-.main-category-name-mock {
-    width: 100px;
-    border-radius: 30px;
-    height: 30px;
-    background: linear-gradient(310deg, #ffffff, #d5d5d5);
-    background-size: 800% 800%;
-    -webkit-animation: mock-gradient-animation 4s ease infinite;
-    -moz-animation: mock-gradient-animation 4s ease infinite;
-    animation: mock-gradient-animation 4s ease infinite;
-}
-
-.main-category-see-all-mock {
-    float: right;
-    width: 70px;
-    border-radius: 30px;
-    height: 30px;
-    margin-top: -30px;
-    background: linear-gradient(310deg, #ffffff, #d5d5d5);
-    background-size: 800% 800%;
-    -webkit-animation: mock-gradient-animation 4s ease infinite;
-    -moz-animation: mock-gradient-animation 4s ease infinite;
-    animation: mock-gradient-animation 4s ease infinite;
+.main-category-mock-4,
+.see-also-wrapper-mock-4 {
     opacity: 0.2;
 }
 
+.main-category-name-mock {
+    width: 100px;
+    border-radius: 33px;
+    height: 30px;
+    background: linear-gradient(310deg, #ffffff, #d5d5d5);
+    background-size: 800% 800%;
+    -webkit-animation: mock-gradient-animation 4s ease infinite;
+    -moz-animation: mock-gradient-animation 4s ease infinite;
+    animation: mock-gradient-animation 4s ease infinite;
+}
+
 .main-category-card-mock {
-    width: 300px;
+    width: 295px;
     height: 315px;
     border-radius: 4px;
     position: relative;
@@ -11647,12 +11719,13 @@ dean*/
 
 .main-category-card-content-mock {
     padding: 12px 0 8px 0;
+    border-radius: 0 0 4px 4px;
 }
 
 .img-thumbnail-mock {
     display: inline-block;
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: linear-gradient(310deg, #ffffff, #d5d5d5);
     background-size: 800% 800%;
@@ -11678,7 +11751,7 @@ dean*/
 
 .col-details_info .main-category-card-name-mock,
 .view_content .main-category-card-name-mock {
-    top: -4px;
+    top: -3px;
 }
 
 .main-category-card-date-mock {
@@ -11746,8 +11819,8 @@ dean*/
     display: flex;
     display: -webkit-flexbox;
     align-items: center;
-    width: 235px;
-    height: 133px;
+    width: 100px;
+    height: 131px;
     background: linear-gradient(310deg, #ffffff, #d5d5d5);
     background-size: 800% 800%;
     -webkit-animation: mock-gradient-animation 4s ease infinite;
@@ -11770,7 +11843,7 @@ dean*/
 }
 
 .details-info-desc-wrapper-mock {
-    height: 44px;
+    height: 36px;
     border-radius: 3px;
     background: linear-gradient(310deg, #ffffff, #d5d5d5);
     background-size: 800% 800%;
@@ -11783,7 +11856,7 @@ dean*/
 }
 
 .u_center_inner-mock {
-    padding: 15px 0;
+    padding: 15px 15px 15px 0;
     border-bottom: 1px solid #e8e8e8;
     position: relative;
 }

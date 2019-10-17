@@ -13,6 +13,7 @@ export default connect(
     getDocumentList: state.main.documentList,
   }),
   dispatch => ({
-    setTagList: (tagList: []) => dispatch(setAction.tagList(tagList))
+    setTagList: (tagList: []) => dispatch(setAction.tagList(tagList)),
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
   })
 )(ContentList);
