@@ -1366,8 +1366,8 @@ const strings = new Map([
     ENG: 'Publish documents'
   }],
   ['publish-modal-desc-1', {
-    KOR: '현재 문서는 Public(공개) 상태로 전환 될것입니다. 메타마스크에 로그인하여 문서를 블록체인에 등록해보세요. 전문가들이 당신의 문서를 투표하고, 조회수에 따라 크리에이터 보상도 받을 수 있습니다.',
-    ENG: 'This documents will be transitioned to the Public state. Sign in to the Meta Mask and register the documents in the block chain. Experts can vote on your documents and receive creator rewards based on views.'
+    KOR: '현재 문서는 Public(공개) 상태로 전환 될것입니다. 문서를 블록체인에 등록해보세요. 전문가들이 당신의 문서를 투표하고, 조회수에 따라 크리에이터 보상도 받을 수 있습니다.',
+    ENG: 'This documents will be transitioned to the Public state. Register the documents in the block chain. Experts can vote on your documents and receive creator rewards based on views.'
   }],
   ['publish-modal-desc-2', {
     KOR: '현재 문서는 Public(공개) 상태로 전환 될것입니다. 계속해서 문서를 블록체인에 등록하시려면 약간의 가스비가 필요합니다. 메타마스크 팝업에서 \'승인\' 버튼을 클릭하면 등록됩니다. 문서가 체인에 등록되면 이후로는 수정할 수 없지만 크리에이터 보상과 추천을 받을 수 있습니다.',
@@ -1515,9 +1515,9 @@ const strings = new Map([
     KOR: '당신의 컨텐츠를 작성해보세요 . . .',
     ENG: 'Write your contents . . .'
   }],
-  ['', {
-    KOR: '',
-    ENG: ''
+  ['content-add-post-add', {
+    KOR: '새 글 작성',
+    ENG: 'Add Post'
   }],
   ['', {
     KOR: '',

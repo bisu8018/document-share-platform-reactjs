@@ -1,8 +1,6 @@
 import React from "react";
 import { psString } from "../../../../config/localization";
 import MainRepository from "../../../../redux/MainRepository";
-import ContentAddModalContainer from "../../../../container/common/modal/ContentAddModalContainer";
-import DropZoneContainer from "../../../../container/common/DropZoneContainer";
 import ContentEditorContainer from "../../../../container/body/contents/contentsAdd/ContentEditorContainer";
 
 
@@ -13,18 +11,8 @@ class ContentAdd extends React.Component {
     this.state = {
       title: "",
       titleError: "",
-      fileInfo: {
-        file: null,
-        size: -1,
-        ext: null,
-        owner: null,
-        title: null,
-        filename: null
-      },
       identifier: null,
-      fileInfoError: "",  // 파일 에러 정보
       desc: "",
-      firstModalOpen: false,
       init: false
     };
   }
@@ -45,42 +33,13 @@ class ContentAdd extends React.Component {
   };
 
 
-  // 모달 종료
-  closeModal = () => this.setState({ firstModalOpen: false });
-
-
   // GET 포스팅 내용
   getDesc = content => this.setState({ desc: content });
-
-
-  // 파일 업로드 관리
-  handleFileUpload = () => document.getElementById("docFile").click();
 
 
   // 업로드 버튼 관리, input 값 유효성 검사
   handlePublishBtn = () => {
     if (!this.validateFile() || !this.validateTitle()) return false;
-    this.setState({ firstModalOpen: true });
-  };
-
-
-  //file input 등록/변경 시
-  handleFileChange = e => {
-    const file = e[0];
-    if (!file) return false;
-    let filename = file.name,
-      fileSize = file.size,
-      ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length).toLowerCase();
-    this.setState({
-      fileInfo: {
-        file: file,
-        size: fileSize,
-        ext: ext,
-        filename: filename
-      }
-    }, () => {
-      this.validateFile();
-    });
   };
 
 
@@ -100,17 +59,6 @@ class ContentAdd extends React.Component {
   };
 
 
-  //파일 유효성 체크
-  validateFile = () => {
-    const { fileInfo } = this.state;
-    this.setState({
-      fileInfoError:
-        fileInfo.title === null || fileInfo.filename === null ? psString("upload-doc-check") : ""
-    });
-    return !(fileInfo.title === null || fileInfo.filename === null);
-  };
-
-
   // 프라이빗 문서 보유수 체크
   checkPrivateDoc = res =>
     this.setState({ privateDocCount: res.privateDocumentCount }, () => {
@@ -124,17 +72,12 @@ class ContentAdd extends React.Component {
 
 
   render() {
-    const { titleError, fileInfoError, identifier, fileInfo, title, desc, firstModalOpen, init } = this.state;
+    const { titleError,  title, desc, init } = this.state;
 
     if (!init) return <div/>;
 
     return (
       <div className="row container container-add pt-4 mb-5">
-
-        <div className="col-12 content-add-dropzone-wrapper">
-          <DropZoneContainer handleFileChange={file => this.handleFileChange(file)} fileInfoError={fileInfoError}/>
-          <span>{fileInfoError}</span>
-        </div>
 
 
         <div className="col-12 mt-4">
@@ -151,12 +94,7 @@ class ContentAdd extends React.Component {
         </div>}
 
 
-        <div onClick={() => this.handlePublishBtn()} id="contentAddPublish" className="d-none"/>
-
-
-        {firstModalOpen &&
-        <ContentAddModalContainer closeModal={() => this.closeModal()} identifier={identifier} fileInfo={fileInfo}
-                                  title={title} desc={desc}/>}
+        <div onClick={() => this.handlePublishBtn()} id="contentAddPublish"/>
       </div>
     );
   }

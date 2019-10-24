@@ -17,5 +17,6 @@ export default connect(
     setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode)),
     setMyList: (myList: []) => dispatch(setAction.myList(myList)),
     setDocument: (document: any) => dispatch(contentView.document(document)),
+    setModal: (modalCode: any, modalData: any) => dispatch(setAction.modal(modalCode, modalData)),
   })
 )(ContentViewFullScreen);

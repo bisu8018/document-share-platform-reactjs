@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { psString } from "../../../config/localization";
 import { Helmet } from "react-helmet";
 import common_view from "../../../common/common_view";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 
 class About extends React.Component {
@@ -33,7 +34,7 @@ class About extends React.Component {
             </div>
           </div>
           <div className="col-12 col-md-6 about-main-img order-first order-md-last">
-            <img src={require("assets/image/common/about-main.png")} alt="about us main"/>
+            <img src={APP_PROPERTIES.domain().static + "/image/common/about-main.png"} alt="about us main"/>
           </div>
         </section>
 
@@ -74,7 +75,7 @@ class About extends React.Component {
                 <div className="main-category-card d-inline-block m-auto">
 
                   <div className="main-category-card-img-wrapper">
-                    <img className="main-category-card-img" src={require("assets/image/common/about-sample-1.png")}
+                    <img className="main-category-card-img" src={APP_PROPERTIES.domain().static + "/image/common/about-sample-1.png"}
                          alt="sample 1"/>
                   </div>
 
@@ -82,7 +83,7 @@ class About extends React.Component {
                     <div className="main-category-card-title c-pointer">Sample PPT 1</div>
 
                     <div className="main-category-card-profile pb-2">
-                      <img src={require("assets/image/common/about-sample-person-1.png")} alt="sample person 1"/>
+                      <img src={APP_PROPERTIES.domain().static + "/image/common/about-sample-person-1.png"} alt="sample person 1"/>
                       <span className="main-category-card-name c-pointer">Anderson</span>
                       <span className="main-category-card-date">1 days ago</span>
                     </div>
@@ -90,7 +91,7 @@ class About extends React.Component {
                     <div className="main-category-card-count">
                       <span className="main-category-card-reward mt-2">
                         $32
-                        <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")}
+                        <img className="reward-arrow" src={APP_PROPERTIES.domain().static + "/image/icon/i_arrow_down_blue.svg"}
                              alt="arrow button"/>
                       </span>
                       <span className="main-category-card-vote float-right mt-2">150</span>
@@ -110,7 +111,7 @@ class About extends React.Component {
                 <div className="main-category-card d-inline-block m-auto">
 
                   <div className="main-category-card-img-wrapper">
-                    <img className="main-category-card-img" src={require("assets/image/common/about-sample-2.png")}
+                    <img className="main-category-card-img" src={APP_PROPERTIES.domain().static + "/image/common/about-sample-2.png"}
                          alt="sample 1"/>
                   </div>
 
@@ -118,7 +119,7 @@ class About extends React.Component {
                     <div className="main-category-card-title c-pointer">Sample PPT 2</div>
 
                     <div className="main-category-card-profile pb-2">
-                      <img src={require("assets/image/common/about-sample-person-2.png")} alt="sample person 1"/>
+                      <img src={APP_PROPERTIES.domain().static + "/image/common/about-sample-person-2.png"} alt="sample person 1"/>
                       <span className="main-category-card-name c-pointer">Anya</span>
                       <span className="main-category-card-date">5 days ago</span>
                     </div>
@@ -126,8 +127,7 @@ class About extends React.Component {
                     <div className="main-category-card-count">
                       <span className="main-category-card-reward mt-2">
                         $201
-                        <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")}
-                             alt="arrow button"/>
+                        <img className="reward-arrow" src={APP_PROPERTIES.domain().static + "/image/icon/i_arrow_down_blue.svg"} alt="arrow button"/>
                       </span>
                       <span className="main-category-card-vote float-right mt-2">7650</span>
                       <span className="main-category-card-view float-right mt-2">11801</span>
@@ -152,7 +152,7 @@ class About extends React.Component {
 
           <div className="col-12 row">
             <div className="col-12 col-md-4 tac">
-              <img src={require("assets/image/common/about-vision-img-01.svg")}
+              <img src={APP_PROPERTIES.domain().static + "/image/common/about-vision-img-1.svg"}
                    alt="Value of knowledge"/>
               <div className="about-vision-title">
                 {psString("about-third-section-chap-subj-1")}
@@ -162,7 +162,7 @@ class About extends React.Component {
               </div>
             </div>
             <div className="col-12 col-md-4 tac">
-              <img src={require("assets/image/common/about-vision-img-02.svg")}
+              <img src={APP_PROPERTIES.domain().static + "/image/common/about-vision-img-2.svg"}
                    alt="No transaction fees"/>
               <div className="about-vision-title">
                 {psString("about-third-section-chap-subj-2")}
@@ -172,7 +172,7 @@ class About extends React.Component {
               </div>
             </div>
             <div className="col-12 col-md-4 tac">
-              <img src={require("assets/image/common/about-vision-img-03.svg")}
+              <img src={APP_PROPERTIES.domain().static + "/image/common/about-vision-img-3.svg"}
                    alt="Content shared"/>
               <div className="about-vision-title">
                 {psString("about-third-section-chap-subj-3")}
@@ -198,7 +198,7 @@ class About extends React.Component {
                 <div className="about-team-linkedin">
                   <a className="team-icon" href="https://www.linkedin.com/in/dalsam/" target="_blank"
                      rel="noopener noreferrer">
-                    <img src={require("assets/image/common/about-linkedin.svg")} alt="Linkedin icon"/>
+                    <img src={APP_PROPERTIES.domain().static + "/image/common/about-linkedin.svg"} alt="Linkedin icon"/>
                   </a>
                 </div>
 
@@ -226,7 +226,7 @@ class About extends React.Component {
                 <div className="about-team-linkedin">
                   <a className="team-icon" href="https://www.linkedin.com/in/eddie-kwak/" target="_blank"
                      rel="noopener noreferrer">
-                    <img src={require("assets/image/common/about-linkedin.svg")} alt="Linkedin icon"/>
+                    <img src={APP_PROPERTIES.domain().static + "/image/common/about-linkedin.svg"} alt="Linkedin icon"/>
                   </a>
                 </div>
 
@@ -255,7 +255,7 @@ class About extends React.Component {
                 <div className="about-team-linkedin">
                   <a className="team-icon" href="https://www.linkedin.com/in/chris-lee-sw/" target="_blank"
                      rel="noopener noreferrer">
-                    <img src={require("assets/image/common/about-linkedin.svg")} alt="Linkedin icon"/>
+                    <img src={APP_PROPERTIES.domain().static + "/image/common/about-linkedin.svg"} alt="Linkedin icon"/>
                   </a>
                 </div>
 
@@ -279,7 +279,7 @@ class About extends React.Component {
                 <div className="about-team-linkedin">
                   <a className="team-icon" href="https://www.linkedin.com/in/richard-yoon" target="_blank"
                      rel="noopener noreferrer">
-                    <img src={require("assets/image/common/about-linkedin.svg")} alt="Linkedin icon"/>
+                    <img src={APP_PROPERTIES.domain().static + "/image/common/about-linkedin.svg"} alt="Linkedin icon"/>
                   </a>
                 </div>
 

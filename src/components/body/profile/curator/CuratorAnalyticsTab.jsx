@@ -10,6 +10,7 @@ import CustomChart from "../../../common/CustomChart";
 import NoDataIcon from "../../../common/NoDataIcon";
 import { psString } from "../../../../config/localization";
 import common_view from "../../../../common/common_view";
+import { APP_PROPERTIES } from "../../../../properties/app.properties";
 
 class CuratorAnalyticsTab extends React.Component {
   state = {
@@ -240,7 +241,7 @@ class CuratorAnalyticsTab extends React.Component {
                      title="See analytics of this document"
                      data-key={idx}
                      data-id={result.documentId}>
-                  <i><img src={require("assets/image/icon/i_faq_reverse.png")} alt="dropdown icon"/></i>
+                  <i><img src={APP_PROPERTIES.domain().static + "/image/icon/i_faq_reverse.png"} alt="dropdown icon"/></i>
                 </div>
 
                 <div className="col-12 ">

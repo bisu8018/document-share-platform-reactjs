@@ -10,6 +10,7 @@ import AutoSuggestInputContainer from "../../../container/common/AutoSuggestInpu
 import PayoutCard from "../../common/card/PayoutCard";
 import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 class AudienceTrackingList extends React.Component {
   state = {
@@ -332,7 +333,7 @@ class AudienceTrackingList extends React.Component {
                        onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
                     $ {Common.deckToDollar(reward)}
                    <img className="reward-arrow"
-                        src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
+                        src={APP_PROPERTIES.domain().static + "/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg"}
                         alt="arrow button"/>
                   </span>
 

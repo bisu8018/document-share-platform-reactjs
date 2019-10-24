@@ -17,13 +17,11 @@ import RegBlockchainBtnContainer from "../../../../container/body/contents/conte
 import VoteDocumentModalContainer from "../../../../container/common/modal/VoteDocumentModalContainer";
 import PayoutCard from "../../../common/card/PayoutCard";
 import { psString } from "../../../../config/localization";
-import PublishModalContainer from "../../../../container/common/modal/PublishModalContainer";
 import DeleteDocumentModalContainer from "../../../../container/common/modal/DeleteDocumentModalContainer";
 import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
 import ContentViewComment from "./ContentViewComment";
 import { FadingCircle } from "better-react-spinkit";
 import common_view from "../../../../common/common_view";
-import PublishCompleteModalContainer from "../../../../container/common/modal/PublishCompleteModalContainer";
 import ContentViewSeeAlso from "./ContentViewSeeAlso";
 
 
@@ -40,7 +38,7 @@ class ContentViewFullScreen extends Component {
     completeModalOpen: false,
     isPublic: this.props.getDocument.document.isPublic || false,
     isRegistry: this.props.getDocument.document.isRegistry || false,
-    bookmarkFlag: false
+    bookmarkFlag: false,
   };
 
 
@@ -222,8 +220,8 @@ class ContentViewFullScreen extends Component {
 
 
   render() {
-    const { getDocument, getCreatorDailyRewardPool, getIsMobile } = this.props;
-    const { isPublic, isRegistry, downloadLoading, completeModalOpen, bookmarkFlag } = this.state;
+    const { getDocument, getCreatorDailyRewardPool, getIsMobile, setModal } = this.props;
+    const { isPublic, isRegistry, downloadLoading, bookmarkFlag } = this.state;
 
     let vote = Common.toEther(getDocument.document.latestVoteAmount) || 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(getDocument.document, getCreatorDailyRewardPool, getDocument.totalViewCountInfo, 7)),
@@ -237,7 +235,7 @@ class ContentViewFullScreen extends Component {
 
       <article className="col-12 view_left u__view p-3">
         <div className="view_top mb-4">
-          <ContentViewCarouselContainer id="pageCarousel" tracking={true} handleEmailFlag={this.handleEmailFlag}
+          <ContentViewCarouselContainer tracking={true} handleEmailFlag={this.handleEmailFlag}
                                         getPageNum={page => this.getPageNum(page)}/>
           <a className="view_screen" href={APP_PROPERTIES.domain().viewer + getDocument.document.seoTitle}
              target="_blank"
@@ -250,7 +248,7 @@ class ContentViewFullScreen extends Component {
         <div className="view_content">
           <div className="u_title mb-3">{getDocument.document.title}</div>
 
-          <div className="mb-3 position-relative">
+          <div className="mb-4 mb-sm-3 position-relative">
             <div className="row">
               <Link to={"/@" + identification} title={"Go to profile page of " + identification}
                     rel="nofollow">
@@ -274,7 +272,7 @@ class ContentViewFullScreen extends Component {
                     onMouseOut={() => this.hideRewardInfo(getDocument.document.seoTitle + "reward")}>
                 $ {Common.deckToDollar(reward)}
                 <img className="reward-arrow"
-                     src={require("assets/image/icon/i_arrow_down_" + (isRegistry ? "blue" : "grey") + ".svg")}
+                     src={APP_PROPERTIES.domain().static + "/image/icon/i_arrow_down_" + (isRegistry ? "blue" : "grey") + ".svg"}
                      alt="arrow button"/>
               </span>
               {reward > 0 && <PayoutCard reward={reward} data={getDocument.document}/>}
@@ -311,9 +309,12 @@ class ContentViewFullScreen extends Component {
 
           <div className="mb-3">
             {!isPublic &&
-            <PublishModalContainer documentData={getDocument.document} afterPublish={() => this.handleAfterPublish()}/>}
-            {completeModalOpen && <PublishCompleteModalContainer documentData={getDocument.document}
-                                                                 completeModalClose={() => this.handleCompleteModalClose()}/>}
+            <Tooltip title={psString("tooltip-publish")} placement="bottom">
+              <div className="viewer-btn" onClick={() => setModal("publish", { documentData: getDocument.document })}>
+                <i className="material-icons mr-3">publish</i>
+                {psString("common-modal-publish")}
+              </div>
+            </Tooltip>}
             {isPublic &&
             <VoteDocumentModalContainer documentData={getDocument.document}/>}
             {isPublic && (accountId === common_view.getMySub() && getDocument.document) &&
@@ -364,7 +365,7 @@ class ContentViewFullScreen extends Component {
               <Tooltip title={psString("viewer-page-sns-linkedin")} placement="bottom">
                 <div className="d-inline-block mr-3">
                   <LinkedinShareButton url={ogUrl} className="sns-share-icon " title={getDocument.document.title}>
-                    <img src={require("assets/image/sns/ic-sns-linkedin-color.png")} alt="linkedin sns icon"/>
+                    <img src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-linkedin-color.png"} alt="linkedin sns icon"/>
                   </LinkedinShareButton>
                 </div>
               </Tooltip>
@@ -372,7 +373,7 @@ class ContentViewFullScreen extends Component {
               <Tooltip title={psString("viewer-page-sns-fb")} placement="bottom">
                 <div className="d-inline-block mr-3">
                   <FacebookShareButton url={ogUrl} className="sns-share-icon">
-                    <img src={require("assets/image/sns/ic-sns-facebook-color.png")} alt="facebook sns icon"/>
+                    <img src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-facebook-color.png"} alt="facebook sns icon"/>
                   </FacebookShareButton>
                 </div>
               </Tooltip>
@@ -381,7 +382,7 @@ class ContentViewFullScreen extends Component {
                 <div className="d-inline-block">
                   <TwitterShareButton url={ogUrl} className="sns-share-icon" hashtags={getDocument.document.tags}
                                       title={getDocument.document.title}>
-                    <img src={require("assets/image/sns/ic-sns-twitter-color.png")} alt="twitter sns icon"/>
+                    <img src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-twitter-color.png"} alt="twitter sns icon"/>
                   </TwitterShareButton>
                 </div>
               </Tooltip>
@@ -393,7 +394,7 @@ class ContentViewFullScreen extends Component {
                 <a className="float-right" href="http://creativecommons.org/licenses/by-nc-nd/2.0/kr/"
                    target="_blank" rel="license noopener noreferrer">
                   <img alt="Creative Commons License" className="cc-img"
-                       src={require("assets/image/cc/" + (getIsMobile ? "m-" : "") + getDocument.document.cc + ".svg")}/>
+                       src={APP_PROPERTIES.domain().static + "/image/cc/" + (getIsMobile ? "m-" : "") + getDocument.document.cc + ".svg"}/>
                 </a>
               </Tooltip>
               }

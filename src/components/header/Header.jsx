@@ -55,15 +55,18 @@ class Header extends React.Component {
   };
 
 
-  // 자리비움 시간 체크 (10 분 지날 시 자리비움)
+  // 자리비움 시간 체크 (15 분 지날 시 자리비움)
   checkAwayTime = () => {
-    const { setAway } = this.props;
+    //const { setAway } = this.props;
 
     let t = 60000;  // 1 min
 
     this.setInterval = setInterval(() =>
       this.setState({ awayTime: Number(this.state.awayTime + t) }, () => {
-        if (this.state.awayTime >= t * 10) setAway(true);
+        if (this.state.awayTime >= t * 15) {
+          history.push('/');
+          // setAway(true);   // 백엔드 작업 전까지 보류
+        }
       }), t);
   };
 
@@ -202,10 +205,6 @@ class Header extends React.Component {
   handleAdClose = () => this.setState({ adShow: null });
 
 
-  // Content Add 페이지, 퍼블리시 버튼 트리거
-  handleUploadBtn = () => document.getElementById("contentAddPublish").click();
-
-
   // 스크롤 관리
   handleScroll = () => {
     const { path, prevScrollPos } = this.state;
@@ -300,13 +299,13 @@ class Header extends React.Component {
             <div className='col-4 col-sm-3 mt-1 align-items-center d-flex'>
               {getIsMobile || this.getSubTitle() ?
                 <Link to="/" className='navbar-brand-mobile' onClick={() => common_view.scrollTop()} rel="nofollow">
-                  <img src={require("assets/image/logo-cut.png")} alt='POLARIS SHARE'/>
+                  <img src={APP_PROPERTIES.domain().static + "/image/logo-cut.png"} alt='POLARIS SHARE'/>
                 </Link> :
                 <Link to="/" className='navbar-brand' onClick={() => common_view.scrollTop()} rel="nofollow">
-                  <img src={require("assets/image/logo.svg")} alt='POLARIS SHARE'/>
+                  <img src={APP_PROPERTIES.domain().static + "/image/logo.svg"} alt='POLARIS SHARE'/>
                 </Link>}
               {(!getIsMobile || (!searchBar && getIsMobile)) &&
-              <div className='main-category-sub-title'>{this.getSubTitle()}</div>}
+              <div className='main-category-sub-title ml-2'>{this.getSubTitle()}</div>}
             </div>
 
 
@@ -324,26 +323,11 @@ class Header extends React.Component {
                 </div>
               </div>}
 
-              {/* {getMyInfo.privateDocumentCount >= 5 ?
-                <PrivateDocumentCountModal {...this.props} /> :
-                (!getIsMobile || (!searchBar && getIsMobile)) && path !== "ca" &&
-                <Tooltip title="Share your content" placement="bottom">
-                  {MainRepository.Account.isAuthenticated() ?
-                    <Link to="/ca">
-                      <div className="add-btn ml-3">
-                        <i className="material-icons">add</i>
-                      </div>
-                    </Link> :
-                    <div className="add-btn ml-3" onClick={() => MainRepository.Account.login()}>
-                      <i className="material-icons">add</i>
-                    </div>}
-                </Tooltip>}*/}
-
               {getMyInfo.privateDocumentCount >= 5 ?
                 <PrivateDocumentCountModal {...this.props} /> :
-                (!getIsMobile || (!searchBar && getIsMobile)) &&
-                <div className="ml-3">
-                  <Tooltip title="Share your content" placement="bottom">
+                (path !== "ca" && (!getIsMobile || (!searchBar && getIsMobile))) &&
+                <div className="ml-2">
+                  <Tooltip title="Share your contents" placement="bottom">
                     <div className="add-btn" onClick={() => setModal("upload", {})}>
                       <i className="material-icons">add</i>
                     </div>
@@ -351,16 +335,12 @@ class Header extends React.Component {
                 </div>
               }
 
-              {MainRepository.Account.isAuthenticated() && path === "ca" &&
-              <div onClick={() => this.handleUploadBtn()}
-                   className="publish-ready-btn">{psString("common-modal-done")}</div>}
-
               {(MainRepository.Account.isAuthenticated() || getTempEmail) && !getIsMobile &&
               <div className='header-avatar-wrapper ml-3' onClick={() => this.profileCardShow()}>
                 {MainRepository.Account.isAuthenticated() ?
                   getMyInfo.picture.length > 0 ?
                     <img src={getMyInfo.picture} id='header-avatar' className='avatar' alt='Link to my profile'/> :
-                    <img src={require("assets/image/icon/i_anonymous.png")} className='avatar'
+                    <img src={APP_PROPERTIES.domain().static + "/image/icon/i_anonymous.png"} className='avatar'
                          alt='Link to my profile'/> :
                   <div className='avatar-init-menu'>
                     <div className='avatar-name-init-menu'>{getTempEmail[0]}</div>
@@ -369,7 +349,7 @@ class Header extends React.Component {
               </div>}
 
               {!MainRepository.Account.isAuthenticated() && !getTempEmail && !getIsMobile &&
-              <div className='d-flex login-btn ml-3' onClick={() => this.handleLogin()}>
+              <div className='d-flex login-btn ml-2 ml-sm-3' onClick={() => this.handleLogin()}>
                 {psString("header-login")}
               </div>}
               {(!getIsMobile || (!searchBar && getIsMobile)) && <MenuContainer {...this.props} />}
@@ -383,7 +363,7 @@ class Header extends React.Component {
 
         {prevScrollPos > 100 &&
         <div className='scroll-top-btn' onClick={() => common_view.scrollTop()}>
-          <img src={require("assets/image/icon/i_backtotop.svg")} alt='back to top'/>
+          <img src={APP_PROPERTIES.domain().static + "/image/icon/i_backtotop.svg"} alt='back to top'/>
         </div>}
       </header>
     );

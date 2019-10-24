@@ -74,8 +74,19 @@ module.exports = {
           },
           /* css-loader/locals does not create the output */
           {
-            test: /\.css$/,
+            test: /\.(css)$/,
             loader: require.resolve("css-loader/locals")
+          },
+          {
+            test: /\.s[ac]ss$/i,
+            use: [
+              // Creates `style` nodes from JS strings
+              'style-loader',
+              // Translates CSS into CommonJS
+              'css-loader',
+              // Compiles Sass to CSS
+              'sass-loader',
+            ],
           },
           /* emitFile: false will not create new files */
           {

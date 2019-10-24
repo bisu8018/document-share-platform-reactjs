@@ -1,7 +1,7 @@
 {
   "name": "polarishare_front_end",
   "description": "www.polarishare.com",
-  "version": "1.5.7",
+  "version": "1.6.1",
   "license": "ISC",
   "private": true,
   "dependencies": {
@@ -86,7 +86,7 @@
     "react-lines-ellipsis": "^0.14.1",
     "react-linkify": "^0.2.2",
     "react-redux": "^7.1.0",
-    "react-responsive-carousel": "^3.1.49",
+    "react-responsive-carousel": "^3.1.50",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-share": "^2.4.0",
@@ -96,7 +96,7 @@
     "redux-actions": "^2.6.5",
     "redux-thunk": "^2.3.0",
     "resolve": "1.10.0",
-    "sass-loader": "7.1.0",
+    "sass-loader": "^7.1.0",
     "semver": "6.0.0",
     "shortid": "^2.2.14",
     "slate": "^0.47.8",
@@ -127,16 +127,15 @@
   "scripts": {
     "test": "node scripts/test.js",
     "start": "set PORT=8000 && node scripts/start.js",
+    "invaildate": "aws cloudfront create-invalidation --distribution-id E31ZKBIJTZLU --paths /* /*",
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
-    "build-dummy": "node scripts/create.robots.js && npm run build-css && node scripts/build.js",
     "build": "node scripts/create.robots.js && npm run build-css && node scripts/build.js",
     "build:ssr": "set NODE_ENV_SUB=development&& npm run build && node scripts/build.server.js",
     "build:ssr_production": "set NODE_ENV_SUB=production&& npm run build && node scripts/build.server.js",
-    "invaildate:production": "aws cloudfront create-invalidation --distribution-id E1UYELY2K59G6Q --paths /*",
-    "deploy:production": "set NODE_ENV_SUB=production&&npm run build && aws s3 sync build/ s3://www.polarishare.com --cache-control max-age=60 && npm run invaildate:production",
-    "deploy:ssr_local": "set NODE_ENV_SUB=development&& npm run build && node scripts/build.server.js",
-    "deploy:ssr": "npm run build:ssr && scp -i ../../my-key-pair/dev-decompany.pem -r build/ ec2-user@ec2-13-57-41-84.us-west-1.compute.amazonaws.com:~/decompanyio-web-server",
+    "deploy:static": "aws s3 sync static/ s3://dev-ca-web-static/static --cache-control max-age=60 --acl public-read && npm run invaildate",
+
+    "deploy:ssr_local": "npm run deploy:static && set NODE_ENV_SUB=development&& npm run build && node scripts/build.server.js",
+    "deploy:ssr": "npm run deploy:static && npm run build:ssr && scp -i ../../my-key-pair/dev-decompany.pem -r build/ ec2-user@ec2-13-57-41-84.us-west-1.compute.amazonaws.com:~/decompanyio-web-server",
     "deploy:ssr_production": "npm run build:ssr_production && scp -i ../../my-key-pair/ko-decompany.pem -r build/ ec2-user@ec2-15-165-15-50.ap-northeast-2.compute.amazonaws.com:~/decompanyio-web-server"
   },
   "browserslist": [

@@ -3,6 +3,7 @@ import BalanceOfContainer from '../../../container/common/BalanceOfContainer';
 import MainRepository from '../../../redux/MainRepository';
 import { psString } from '../../../config/localization';
 import { FadingCircle } from 'better-react-spinkit';
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 class ProfileCard extends React.Component {
   state = {
@@ -44,7 +45,7 @@ class ProfileCard extends React.Component {
           {MainRepository.Account.isAuthenticated() ?
             getMyInfo.picture.length > 0 ?
               <img src={getMyInfo.picture} className='profile-card-avatar' alt='profile'/> :
-              <img src={require('assets/image/icon/i_anonymous.png')} className='profile-card-avatar' alt='profile'/>
+              <img src={APP_PROPERTIES.domain().static + '/image/icon/i_anonymous.png'} className='profile-card-avatar' alt='profile'/>
             :
             <div className='profile-card-avatar-init'>{getTempEmail[0]}</div>
           }

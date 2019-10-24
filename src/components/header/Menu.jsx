@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Common from "../../common/common";
 import { psGetLang, psSetLang, psString } from "../../config/localization";
 import common_view from "../../common/common_view";
+import { APP_PROPERTIES } from "../../properties/app.properties";
 
 class Menu extends React.Component {
   state = {
@@ -45,7 +46,7 @@ class Menu extends React.Component {
     let identification = getMyInfo.username.length && getMyInfo.username.length > 0 ? getMyInfo.username : getMyInfo.email;
 
     return (
-      <div className="ml-3">
+      <div className="ml-2 ml-sm-3">
         <div className="menu-btn-wrapper">
           <div className="menu-btn d-inline-block " onClick={() => this.menuShow()}/>
         </div>
@@ -53,7 +54,7 @@ class Menu extends React.Component {
         <div className="menu-wrapper">
           <div className="container">
             <img className="menu-close-btn" onClick={() => this.menuHide()}
-                 src={require("assets/image/icon/i_close_menu" + (getIsMobile ? "_mobile" : "") + ".svg")}
+                 src={APP_PROPERTIES.domain().static + "/image/icon/i_close_menu" + (getIsMobile ? "_mobile" : "") + ".svg"}
                  alt="menu close button"/>
           </div>
 
@@ -63,7 +64,7 @@ class Menu extends React.Component {
               <Link to={"/@" + identification} onClick={() => this.menuClick()} rel="nofollow">
                 {getMyInfo.picture.length > 0 ?
                   <img src={getMyInfo.picture} className="avatar-menu" alt="Link to my profile"/> :
-                  <img src={require("assets/image/icon/i_anonymous.png")} className="avatar"
+                  <img src={APP_PROPERTIES.domain().static + "/image/icon/i_anonymous.png"} className="avatar"
                        alt="Link to my profile"/>}
                 <span className="avatar-name-menu">{identification}</span>
               </Link> :

@@ -7,6 +7,7 @@ import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
 import common from "../../../common/common";
 import { FadingCircle } from "better-react-spinkit";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 class EditDocumentModal extends React.Component {
 
@@ -392,7 +393,7 @@ class EditDocumentModal extends React.Component {
                 <div className="modal-more-btn" onClick={() => this.handleMoreOptions()}>
                   {psString("common-modal-more-option")}
                   <img className="reward-arrow"
-                       src={require("assets/image/icon/i_arrow_" + (moreOptions ? "down_grey.svg" : "up_grey.png"))}
+                       src={APP_PROPERTIES.domain().static + "/image/icon/i_arrow_" + (moreOptions ? "down_grey.svg" : "up_grey.png")}
                        alt="arrow button"/>
                 </div>
               </div>

@@ -21,7 +21,7 @@ class PublishCompleteModal extends React.Component {
   handleClose = () =>
     this.setCloseFlag()
       .then(() => common.delay(200))
-      .then(() => this.props.completeModalClose());
+      .then(() => this.props.setModal(null));
 
 
   // 복사 버튼 관리
@@ -48,14 +48,15 @@ class PublishCompleteModal extends React.Component {
 
   componentWillUnmount(): void {
     common_view.setBodyStyleUnlock();
+    document.location.reload();
   }
 
 
   render() {
     const { copyBtnText, closeFlag } = this.state;
-    const { documentData } = this.props;
+    const { getModalData } = this.props;
 
-    let ogUrl = APP_PROPERTIES.domain().embed + documentData.seoTitle;
+    let ogUrl = APP_PROPERTIES.domain().embed + getModalData.documentData.seoTitle;
 
     return (
       <div className="custom-modal-container">
@@ -76,7 +77,7 @@ class PublishCompleteModal extends React.Component {
             <div className="publish-modal-complete-sns mb-2">
               <LinkedinShareButton url={ogUrl} className="sns-share-icon">
                 <div className="d-inline-block">
-                  <img className="mr-2" src={require("assets/image/sns/ic-sns-linkedin-color.png")}
+                  <img className="mr-2" src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-linkedin-color.png"}
                        alt="facebook sns icon"/>
                   {psString("viewer-page-sns-linkedin")}
                 </div>
@@ -86,7 +87,7 @@ class PublishCompleteModal extends React.Component {
             <div className="publish-modal-complete-sns mb-2">
               <FacebookShareButton url={ogUrl} className="sns-share-icon">
                 <div className="d-inline-block">
-                  <img className="mr-2" src={require("assets/image/sns/ic-sns-facebook-color.png")}
+                  <img className="mr-2" src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-facebook-color.png"}
                        alt="facebook sns icon"/>
                   {psString("viewer-page-sns-fb")}
                 </div>
@@ -96,7 +97,7 @@ class PublishCompleteModal extends React.Component {
             <div className="publish-modal-complete-sns mb-2">
               <TwitterShareButton url={ogUrl} className="sns-share-icon">
                 <div className="d-inline-block">
-                  <img className="mr-2" src={require("assets/image/sns/ic-sns-twitter-color.png")}
+                  <img className="mr-2" src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-twitter-color.png"}
                        alt="facebook sns icon"/>
                   {psString("viewer-page-sns-twitter")}
                 </div>
@@ -107,7 +108,7 @@ class PublishCompleteModal extends React.Component {
                  onClick={() => this.handleCopyBtnClick("publishModalCompleteCopyDummy")}>
               {copyBtnText}
               <input type="text" className="publish-modal-complete-copy-dummy" readOnly
-                     id="publishModalCompleteCopyDummy" value={documentData.shortUrl}/>
+                     id="publishModalCompleteCopyDummy" value={getModalData.documentData.shortUrl}/>
             </div>
 
           </div>

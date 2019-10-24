@@ -10,6 +10,7 @@ export default connect(
     getMyInfo: state.main.myInfo
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any, alertData: any) => dispatch(setAction.alertCode(alertCode, alertData))
+    setAlertCode: (alertCode: any, alertData: any) => dispatch(setAction.alertCode(alertCode, alertData)),
+    setModal: (modalCode: any, modalData: any) => dispatch(setAction.modal(modalCode, modalData)),
   })
 )(CreatorTabItem);

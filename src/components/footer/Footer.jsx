@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { psString } from "../../config/localization";
 import common_view from "../../common/common_view";
+import { APP_PROPERTIES } from "../../properties/app.properties";
 
 class Footer extends React.Component {
 
@@ -12,7 +13,7 @@ class Footer extends React.Component {
         <div className="container row">
           <div className="footer-logo col-sm-3">
             <a href={"/"} title="Link to main page" rel="nofollow">
-              <img className="footer-logo-img" src={require("assets/image/logo-mono.png")} alt="POLARIS SHARE"/>
+              <img className="footer-logo-img" src={APP_PROPERTIES.domain().static + "/image/logo-mono.png"} alt="POLARIS SHARE"/>
             </a>
             <div className="copyright">
               Copyrightⓒ 2019 POLARIS SHARE
@@ -42,16 +43,16 @@ class Footer extends React.Component {
           <div className="footer-sns col-sm-3 row pr-0">
             <div className="footer-sns-wrapper">
               <a target="_blank" href={"https://www.facebook.com/polarishare/"} rel="noopener noreferrer nofollow">
-                <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-facebook.svg")} alt="Facebook Page"/>
+                <img className="mr-3 c-pointer" src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-facebook.svg"} alt="Facebook Page"/>
               </a>
               <a target="_blank" href={"https://twitter.com/Polarishare"} rel="noopener noreferrer nofollow">
-                <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-twitter.svg")} alt="Twitter Page"/>
+                <img className="mr-3 c-pointer" src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-twitter.svg"} alt="Twitter Page"/>
               </a>
               <a target="_blank" href={"https://www.instagram.com/polarishare.io/"} rel="noopener noreferrer nofollow">
-              <img className="mr-3 c-pointer" src={require("assets/image/sns/ic-sns-insta.svg")} alt="Instagram Page"/>
+              <img className="mr-3 c-pointer" src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-insta.svg"} alt="Instagram Page"/>
               </a>
               <a target="_blank" href={"https://www.linkedin.com/in/decompany-io-720812178/"} rel="noopener noreferrer nofollow">
-                <img className="c-pointer" src={require("assets/image/sns/ic-sns-linkedin.svg")} alt="Linkedin Page"/>
+                <img className="c-pointer" src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-linkedin.svg"} alt="Linkedin Page"/>
               </a>
             </div>
           </div>

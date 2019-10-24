@@ -132,9 +132,17 @@ class ContentListItem extends React.Component {
         <div className="col-details_info details_info">
           <div className="mb-1 detail-title">
             <Link to={"/@" + identification + "/" + result.seoTitle} onClick={() => common_view.scrollTop()}
-                  title={result.title}> {result.title ? result.title : result.documentName}</Link>
+                  title={result.title}>
+              <ResponsiveEllipsis
+                text={result.title ? result.title : result.documentName}
+                maxLine={2}
+                ellipsis='...'
+                trimRight
+                basedOn='words'
+              />
+            </Link>
           </div>
-          <div className="mb-2">
+          <div className="mb-1">
             <Link to={"/@" + identification} className="info_name" title={identification} rel="nofollow">
               {profileUrl ?
                 <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
@@ -168,7 +176,7 @@ class ContentListItem extends React.Component {
                   onMouseOut={() => this.hideRewardInfo(result.seoTitle + "reward")}>
               $ {Common.deckToDollar(reward)}
               <img className="reward-arrow"
-                   src={require("assets/image/icon/i_arrow_down_" + (result.isRegistry ? "blue" : "grey") + ".svg")}
+                   src={APP_PROPERTIES.domain().static + "/image/icon/i_arrow_down_" + (result.isRegistry ? "blue" : "grey") + ".svg"}
                    alt="arrow button"/>
             </span>
             <span className="info-detail-view mr-3">{view}</span>

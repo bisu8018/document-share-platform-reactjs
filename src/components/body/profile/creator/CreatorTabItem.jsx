@@ -9,13 +9,12 @@ import responsiveHOC from "react-lines-ellipsis/lib/responsiveHOC";
 import PayoutCard from "../../../common/card/PayoutCard";
 import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
 import DeleteDocumentModalContainer from "../../../../container/common/modal/DeleteDocumentModalContainer";
-import PublishModalContainer from "../../../../container/common/modal/PublishModalContainer";
 import MainRepository from "../../../../redux/MainRepository";
 import RegBlockchainBtnContainer from "../../../../container/body/contents/contentsView/RegBlockchainBtnContainer";
 import DocumentInfo from "../../../../redux/model/DocumentInfo";
 import common_view from "../../../../common/common_view";
-import PublishCompleteModalContainer from "../../../../container/common/modal/PublishCompleteModalContainer";
 import { psString } from "../../../../config/localization";
+import { APP_PROPERTIES } from "../../../../properties/app.properties";
 
 
 const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
@@ -73,14 +72,6 @@ class CreatorTabItem extends React.Component {
   };
 
 
-  // 등록 버튼 트리거
-  triggerRegisterBtn = () => {
-    let ele = document.getElementById("RegBlockchainBtnTab");
-    if (!ele) return false;
-    else ele.click();
-  };
-
-
   // 이미지 정보 GET
   getImgInfo = () => {
     const { documentData } = this.state;
@@ -129,18 +120,6 @@ class CreatorTabItem extends React.Component {
   };
 
 
-  //  문서 정보 state 의 isPublish 업데이트
-  setIsPublish = () => {
-    return new Promise(resolve => {
-      let _documentData = this.state.documentData;
-      _documentData.isPublic = true;
-      this.setState({ _documentData: _documentData }, () => {
-        resolve();
-      });
-    });
-  };
-
-
   //  문서 정보 state 의 isRegistry 업데이트
   setIsRegistry = () => {
     return new Promise(resolve => {
@@ -151,20 +130,6 @@ class CreatorTabItem extends React.Component {
       });
     });
   };
-
-
-  // publish completed modal 종료 관리
-  handleCompleteModalOpen = () => this.setState({ completeModalOpen: true });
-
-
-  // publish completed modal 종료 관리
-  handleCompleteModalClose = () => this.setState({ completeModalOpen: false });
-
-
-  // 퍼블리시 완료 후 관리
-  handleAfterPublish = () => this.setIsPublish()
-    .then(() => this.handleCompleteModalOpen())
-    .then(() => this.triggerRegisterBtn());
 
 
   // 체인 등록 완료 후 관리
@@ -221,8 +186,8 @@ class CreatorTabItem extends React.Component {
 
 
   render() {
-    const { getCreatorDailyRewardPool, handleUploadSettings, totalViewCountInfo, getIsMobile, viewerOptionOpenedIdx, idx } = this.props;
-    const { ratio, documentData, completeModalOpen } = this.state;
+    const { getCreatorDailyRewardPool, handleUploadSettings, totalViewCountInfo, getIsMobile, viewerOptionOpenedIdx, idx, setModal } = this.props;
+    const { ratio, documentData } = this.state;
 
     if (!documentData.seoTitle) return false;
 
@@ -301,7 +266,7 @@ class CreatorTabItem extends React.Component {
                     onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
                 $ {Common.deckToDollar(reward)}
                 <img className="reward-arrow"
-                     src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
+                     src={APP_PROPERTIES.domain().static + "/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg"}
                      alt="arrow button"/>
               </span>
 
@@ -316,14 +281,13 @@ class CreatorTabItem extends React.Component {
 
             {documentData.isPublic === false && documentData.state === "CONVERT_COMPLETE" &&
             <div className={(getIsMobile ? "mt-2" : "float-right")}>
-              <PublishModalContainer documentData={documentData}
-                                     type={"tabItem"}
-                                     afterPublish={() => this.handleAfterPublish()}/>
+              <Tooltip title={psString("tooltip-publish")} placement="bottom">
+                  <div className={"claim-btn " + (getIsMobile ? " w-100" : "")}
+                       onClick={() => setModal("publish", {documentData : documentData})}>
+                    {psString("common-modal-publish")}
+                  </div>
+              </Tooltip>
             </div>}
-
-            {completeModalOpen &&
-            <PublishCompleteModalContainer documentData={documentData}
-                                           completeModalClose={() => this.handleCompleteModalClose()}/>}
 
             {documentData.isPublic && (documentData.accountId === common_view.getMySub() && documentData) &&
             <div className={(getIsMobile ? "mt-2" : "float-right")}>

@@ -6,6 +6,7 @@ import CuratorClaimContainer from "../../../../container/body/profile/curator/Cu
 import LinesEllipsis from "react-lines-ellipsis";
 import { psString } from "../../../../config/localization";
 import common_view from "../../../../common/common_view";
+import { APP_PROPERTIES } from "../../../../properties/app.properties";
 
 class CuratorTabItem extends React.Component {
   constructor(props) {
@@ -97,7 +98,7 @@ class CuratorTabItem extends React.Component {
                     onMouseOver={() => this.showRewardInfo(document.seoTitle + "rewardVote")}
                     onMouseOut={() => this.hideRewardInfo(document.seoTitle + "rewardVote")}>
                 $ {Common.deckToDollar(reward)}
-                <img className="reward-arrow" src={require("assets/image/icon/i_arrow_down_blue.svg")}
+                <img className="reward-arrow" src={APP_PROPERTIES.domain().static + "/image/icon/i_arrow_down_blue.svg"}
                      alt="arrow button"/>
               </span>
 

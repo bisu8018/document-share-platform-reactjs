@@ -8,6 +8,8 @@ import UserInfo from "../../../../redux/model/UserInfo";
 import { psString } from "../../../../config/localization";
 import common_view from "../../../../common/common_view";
 import { APP_PROPERTIES } from "../../../../properties/app.properties";
+import ContentViewPortraitContainer
+  from "../../../../container/body/contents/contentsView/ContentViewPortraitContainer";
 
 class ContentViewCarousel extends React.Component {
 
@@ -22,19 +24,23 @@ class ContentViewCarousel extends React.Component {
     emailFlagTemp: true,   // true : 메일 수집 모달 표시
     loginTrackingFlag: false,
     pageChangedFlag: null,
-    stayTime: null
+    stayTime: null,
+    ratio: null
   };
 
 
   // init
   init = () => {
     let pageNum = common_view.getPageNum() > this.props.getDocument.document.totalPages ? 0 : common_view.getPageNum();
+
+    this.getImgInfo();
+
     if (MainRepository.Account.isAuthenticated()) {
-      this.postTrackingConfirm(pageNum)
+      return this.postTrackingConfirm(pageNum)
         .then(() => this.handleTracking(pageNum))
         .catch(() => APP_PROPERTIES.env === "local" ? this.handleTracking(pageNum) : false);
     } else {
-      this.handleTracking(pageNum);
+      return this.handleTracking(pageNum);
     }
   };
 
@@ -98,6 +104,21 @@ class ContentViewCarousel extends React.Component {
       n: page + 1,
       ev: type
     }, true).then(res => res);
+
+
+  // 이미지 정보 GET
+  getImgInfo = () => {
+    const { getDocument } = this.props;
+    let imgUrl = Common.getThumbnail(getDocument.document.documentId, 320, 1, getDocument.document.documentName),
+      img = new Image();
+
+    img.src = imgUrl;
+    img.onload = () => {
+      let height = img.height;
+      let width = img.width;
+      this.setState({ ratio: (width / height) });
+    };
+  };
 
 
   // URL 관리
@@ -211,7 +232,6 @@ class ContentViewCarousel extends React.Component {
       this.setState({ readPage: 0 });
     }
     this.setState({ pageChangedFlag: documentId });
-
   };
 
 
@@ -252,7 +272,7 @@ class ContentViewCarousel extends React.Component {
 
   render() {
     const { getDocument } = this.props;
-    const { emailFlag } = this.state;
+    const { emailFlag, ratio } = this.state;
     const arr = [getDocument.document.totalPages];
 
     for (let i = 0; i < getDocument.document.totalPages; i++) arr[i] = Common.getThumbnail(getDocument.document.documentId, 2048, i + 1);
@@ -271,24 +291,37 @@ class ContentViewCarousel extends React.Component {
             </div>
           </div>
 
-
-          <Carousel
-            showThumbs={false}
-            showStatus={false}
-            showIndicators={false}
-            autoPlay={this.state.autoSlideFlag}
-            interval={5000}
-            swipeable
-            selectedItem={this.state.readPage || 0}
-            useKeyboardArrows={true}
-            onChange={index => this.checkStayTime(index)}
-          >
-            {arr.length > 0 ? arr.map((addr, idx) => (
-              <img key={idx} title={getDocument.document.title} src={addr} alt={getDocument.text[idx]} data-small="" data-normal=""
-                   data-full=""
-                   className={(getDocument.document.forceTracking && emailFlag && !MainRepository.Account.isAuthenticated() ? "img-cloudy" : "")}/>
-            )) : "no data"}
-          </Carousel>
+          {ratio >= 1 ?
+            <Carousel
+              showThumbs={false}
+              showStatus={false}
+              showIndicators={false}
+              autoPlay={this.state.autoSlideFlag}
+              interval={5000}
+              swipeable={false}
+              selectedItem={this.state.readPage || 0}
+              useKeyboardArrows={true}
+              onChange={index => this.checkStayTime(index)}>
+              {arr.length > 0 ? arr.map((addr, idx) => (
+                <img key={idx}
+                     title={getDocument.document.title}
+                     src={addr}
+                     alt={getDocument.text[idx]}
+                     data-small=""
+                     data-normal=""
+                     data-full=""
+                     className={(getDocument.document.forceTracking && emailFlag && !MainRepository.Account.isAuthenticated() ? "img-cloudy" : "")}/>
+              )) : "no data"}
+            </Carousel> :
+            (ratio && arr &&
+              <ContentViewPortraitContainer
+                onChange={index => this.checkStayTime(index)}
+                arr={arr}
+                ratio={ratio}
+                emailFlag={emailFlag}
+              />
+            )
+          }
         </div>
 
 

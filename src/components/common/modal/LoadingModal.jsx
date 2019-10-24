@@ -1,5 +1,6 @@
 import React from "react";
 import { DoubleBounce } from "better-react-spinkit";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 class LoadingModal extends React.PureComponent{
 
@@ -12,7 +13,7 @@ class LoadingModal extends React.PureComponent{
 
     return (
       <div className="loading-wrapper">
-        <img src={require("assets/image/logo-cut.png")} alt="POLARIS SHARE"/>
+        <img src={APP_PROPERTIES.domain().static + "/image/logo-cut.png"} alt="POLARIS SHARE"/>
         <DoubleBounce name="ball-pulse-sync" color="#ddeaff" size={110}/>
       </div>
     );

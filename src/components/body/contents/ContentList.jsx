@@ -128,7 +128,7 @@ class ContentList extends Component {
 
   // GET document list
   getDocumentList = params => MainRepository.Document.getDocumentList(params)
-    .then(res => this.handleGetDocumentData(res))
+    .then(res => this.handleGetDocumentData({ resultList: res.resultList, pageNo: params.pageNo + 1 }))
     .catch(err => this.handleError(err, params));
 
 

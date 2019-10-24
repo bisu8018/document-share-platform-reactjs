@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 class DocumentCard extends React.Component {
   constructor(props) {
@@ -97,7 +98,7 @@ class DocumentCard extends React.Component {
                 onMouseOut={() => this.hideRewardInfo(path + idx)}>
                 $ {Common.deckToDollar(reward)}
                 <img className="reward-arrow"
-                     src={require("assets/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg")}
+                     src={APP_PROPERTIES.domain().static + "/image/icon/i_arrow_down_" + (documentData.isRegistry ? "blue" : "grey") + ".svg"}
                      alt="arrow button"/>
               </div>
               <div className="main-category-card-view ">{view}</div>

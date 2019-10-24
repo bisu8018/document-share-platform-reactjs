@@ -8,6 +8,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { ThreeBounce } from "better-react-spinkit";
 import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
+import { APP_PROPERTIES } from "../../../properties/app.properties";
 
 class AudienceTrackingDetail extends React.Component {
   state = {
@@ -124,7 +125,7 @@ class AudienceTrackingDetail extends React.Component {
               <span className="mr-3">{email}</span>
               <span className="tracking-time d-block d-sm-inline-block">{time}</span>
               <div className="back-btn-wrapper" onClick={history.goBack}>
-                <img src={require("assets/image/icon/i_arrow_back.png")} alt="back"/>
+                <img src={APP_PROPERTIES.domain().static + "/image/icon/i_arrow_back.png"} alt="back"/>
                 {psString("tracking-detail-back")}
               </div>
             </div>
@@ -134,7 +135,7 @@ class AudienceTrackingDetail extends React.Component {
                 <ul key={idx}>
                   <li>
                     <div className="tfl_title" onClick={this.handleClick}>
-                      <i><img src={require("assets/image/icon/i_faq.png")} alt="dropdown icon"/></i>
+                      <i><img src={APP_PROPERTIES.domain().static + "/image/icon/i_faq.png"} alt="dropdown icon"/></i>
                       <div className="font-weight-bold">
                         {this.getSortedTime(result)}
                         <span className="ml-2 font-weight-normal">

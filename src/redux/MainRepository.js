@@ -95,8 +95,8 @@ export default {
       return authResult.idToken;
     },
     checkNone(res) {
-      if(res.length === 0)
-        throw new Error('handled');
+      if (res.length === 0)
+        throw new Error("handled");
       else return res;
     }
   },
@@ -515,6 +515,7 @@ export default {
         header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         data: data
       };
+
       return DocService.POST.updateDocument(_data)
         .then(rst => new DocumentInfo(rst.result))
         .catch(error => console.error(error));

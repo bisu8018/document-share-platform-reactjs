@@ -45,7 +45,7 @@ class DollarPolicyModal extends React.PureComponent {
       <div className="alert-banner">
         <div className="alert-banner-wrapper container">
           <div className="alert-info-img-wrapper">
-            <img src={require("assets/image/icon/i_info.png")} alt="info"/>
+            <img src={APP_PROPERTIES.domain().static + "/image/icon/i_info.png"} alt="info"/>
           </div>
 
           <div className="alert-banner-text">
