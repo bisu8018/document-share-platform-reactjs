@@ -25,7 +25,8 @@ class ContentViewCarousel extends React.Component {
 
     let ele = document.getElementById("contentViewPortraitWrapper");
     let height = Number(ele.offsetWidth / this.props.ratio);
-    let page = window.location.pathname.split("/")[3].split("-")[0] || 0;
+    let page = window.location.pathname.split("/")[3];
+    page = page ? page.split("-")[0] : 0;
     ele.style.maxHeight = height + "px";
     ele.scrollTop = (page > 0 ? page - 1 : 0) * height;
   };

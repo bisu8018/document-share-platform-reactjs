@@ -81,10 +81,11 @@ class DocumentCard extends React.Component {
             </div>
             <Link to={"/@" + identification} className="main-category-card-profile mt-1 mb-1 pt-1 pb-2 w-full"
                   rel="nofollow">
-              {profileUrl ?
-                <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
-                <i className="material-icons img-thumbnail" onClick={() => common_view.scrollTop()}>face</i>
-              }
+              <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}
+                   onError={(e) => {
+                     e.target.onerror = null;
+                     e.target.src = require("assets/image/icon/i_profile-default.png");
+                   }}/>
               <span className="main-category-card-name">{identification}</span>
               {!getIsMobile &&
               <span className="main-category-card-date">

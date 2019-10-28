@@ -170,7 +170,10 @@ class CreatorSummary extends React.Component {
         <div className="row  profile_top">
           <div className="col-12 col-sm-2 col-lg-1 ">
             <div className="profile-image" title="Change profile image">
-              <img src={profileImage} alt="profile" className="img-fluid"/>
+              <img src={profileImage} alt="profile" className="img-fluid" onError={(e) => {
+                e.target.onerror = null;
+                e.target.src =require("assets/image/icon/i_profile-default.png");
+              }}/>
               {this.getMyInfo().email === userInfo.email &&
               <div className="profile-image-edit" onClick={this.handleFileUpload}><i className="material-icons">edit</i>
               </div>

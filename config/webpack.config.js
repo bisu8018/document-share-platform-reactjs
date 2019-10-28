@@ -317,6 +317,7 @@ module.exports = function(webpackEnv) {
           oneOf: [
             {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+              exclude: paths.appStatic,
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,

@@ -45,9 +45,9 @@ export const APP_PROPERTIES = {
   dev:{
     domain:{
       mainHost: 'https://share.decompany.io',
-      image: 'https://res.polarishare.com/thumb',
-      profile: 'https://res.polarishare.com/profile/',
-      static: 'https://res.polarishare.com/static',
+      image: 'https://res.share.decompany.io/thumb',
+      profile: 'https://res.share.decompany.io/profile/',
+      static: 'https://res.share.decompany.io/static',
       api: 'https://api.share.decompany.io/rest',
       email: 'https://api.share.decompany.io/ve',
       embed: 'https://embed.share.decompany.io/',

@@ -33,7 +33,7 @@ class ContentViewCarousel extends React.Component {
   init = () => {
     let pageNum = common_view.getPageNum() > this.props.getDocument.document.totalPages ? 0 : common_view.getPageNum();
 
-    this.getImgInfo();
+    if (!APP_PROPERTIES.ssr) this.getImgInfo();
 
     if (MainRepository.Account.isAuthenticated()) {
       return this.postTrackingConfirm(pageNum)
@@ -291,7 +291,7 @@ class ContentViewCarousel extends React.Component {
             </div>
           </div>
 
-          {ratio >= 1 ?
+          {!ratio || (ratio && ratio >= 1) ?
             <Carousel
               showThumbs={false}
               showStatus={false}
@@ -313,7 +313,7 @@ class ContentViewCarousel extends React.Component {
                      className={(getDocument.document.forceTracking && emailFlag && !MainRepository.Account.isAuthenticated() ? "img-cloudy" : "")}/>
               )) : "no data"}
             </Carousel> :
-            (ratio && arr &&
+            (ratio && ratio <= 1 && arr &&
               <ContentViewPortraitContainer
                 onChange={index => this.checkStayTime(index)}
                 arr={arr}

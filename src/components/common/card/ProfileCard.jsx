@@ -1,9 +1,8 @@
-import React from 'react';
-import BalanceOfContainer from '../../../container/common/BalanceOfContainer';
-import MainRepository from '../../../redux/MainRepository';
-import { psString } from '../../../config/localization';
-import { FadingCircle } from 'better-react-spinkit';
-import { APP_PROPERTIES } from "../../../properties/app.properties";
+import React from "react";
+import BalanceOfContainer from "../../../container/common/BalanceOfContainer";
+import MainRepository from "../../../redux/MainRepository";
+import { psString } from "../../../config/localization";
+import { FadingCircle } from "better-react-spinkit";
 
 class ProfileCard extends React.Component {
   state = {
@@ -44,8 +43,12 @@ class ProfileCard extends React.Component {
 
           {MainRepository.Account.isAuthenticated() ?
             getMyInfo.picture.length > 0 ?
-              <img src={getMyInfo.picture} className='profile-card-avatar' alt='profile'/> :
-              <img src={APP_PROPERTIES.domain().static + '/image/icon/i_anonymous.png'} className='profile-card-avatar' alt='profile'/>
+              <img src={getMyInfo.picture} className='profile-card-avatar' alt='profile' onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = require("assets/image/icon/i_profile-default.png");
+              }}/> :
+              <img src={require("assets/image/icon/i_profile-default.png")}
+                   className='profile-card-avatar' alt='profile'/>
             :
             <div className='profile-card-avatar-init'>{getTempEmail[0]}</div>
           }
@@ -56,7 +59,7 @@ class ProfileCard extends React.Component {
         </div>
 
         <div className='mb-4'>
-          <div className='profile-card-total-balance'>{psString('profile-card-total-balance')}</div>
+          <div className='profile-card-total-balance'>{psString("profile-card-total-balance")}</div>
           {!loading ?
             <BalanceOfContainer balance={balance}/>
             :
@@ -67,13 +70,13 @@ class ProfileCard extends React.Component {
         <div>
           {MainRepository.Account.isAuthenticated() ?
             <div className='my-account-btn mb-2' id='profileCardMyAccountBtn'
-                 data-id={identification}>{psString('profile-card-my-page')}</div>
+                 data-id={identification}>{psString("profile-card-my-page")}</div>
             :
             <div className='my-account-btn mb-2'
-                 onClick={() => MainRepository.Account.login()}> {psString('profile-card-login')} </div>
+                 onClick={() => MainRepository.Account.login()}> {psString("profile-card-login")} </div>
           }
           <div className='profile-card-logout-btn'
-               onClick={() => MainRepository.Account.logout()}>{psString('profile-card-logout')}</div>
+               onClick={() => MainRepository.Account.logout()}>{psString("profile-card-logout")}</div>
         </div>
 
       </div>

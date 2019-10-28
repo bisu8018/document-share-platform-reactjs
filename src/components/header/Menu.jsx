@@ -63,8 +63,11 @@ class Menu extends React.Component {
             {MainRepository.Account.isAuthenticated() ?
               <Link to={"/@" + identification} onClick={() => this.menuClick()} rel="nofollow">
                 {getMyInfo.picture.length > 0 ?
-                  <img src={getMyInfo.picture} className="avatar-menu" alt="Link to my profile"/> :
-                  <img src={APP_PROPERTIES.domain().static + "/image/icon/i_anonymous.png"} className="avatar"
+                  <img src={getMyInfo.picture} className="avatar-menu" alt="Link to my profile" onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = require("assets/image/icon/i_profile-default.png");
+                  }}/> :
+                  <img src={require("assets/image/icon/i_profile-default.png")} className="avatar"
                        alt="Link to my profile"/>}
                 <span className="avatar-name-menu">{identification}</span>
               </Link> :

@@ -124,7 +124,11 @@ class ContentListItem extends React.Component {
           <Link to={"/@" + identification + "/" + result.seoTitle} rel="nofollow">
             <div className="thumb_image" onClick={() => common_view.scrollTop()}>
               <img src={imageUrl} alt={result.title}
-                   className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
+                   className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}
+                   onError={(e) => {
+                     e.target.onerror = null;
+                     e.target.src = APP_PROPERTIES.domain().static + "/image/logo-cut.png";
+                   }}/>
             </div>
           </Link>
         </div>
@@ -144,10 +148,10 @@ class ContentListItem extends React.Component {
           </div>
           <div className="mb-1">
             <Link to={"/@" + identification} className="info_name" title={identification} rel="nofollow">
-              {profileUrl ?
-                <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}/> :
-                <i className="material-icons img-thumbnail" onClick={() => this.menuClick()}>face</i>
-              }
+                <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()} onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src =require("assets/image/icon/i_profile-default.png");
+                }}/>
               {identification}
             </Link>
             <div className="info_date float-right d-inline-block">

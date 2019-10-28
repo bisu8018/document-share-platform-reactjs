@@ -339,9 +339,13 @@ class Header extends React.Component {
               <div className='header-avatar-wrapper ml-3' onClick={() => this.profileCardShow()}>
                 {MainRepository.Account.isAuthenticated() ?
                   getMyInfo.picture.length > 0 ?
-                    <img src={getMyInfo.picture} id='header-avatar' className='avatar' alt='Link to my profile'/> :
-                    <img src={APP_PROPERTIES.domain().static + "/image/icon/i_anonymous.png"} className='avatar'
-                         alt='Link to my profile'/> :
+                    <img src={getMyInfo.picture} id='header-avatar' className='avatar' alt='Link to my profile'
+                         onError={(e) => {
+                           e.target.onerror = null;
+                           e.target.src = require("assets/image/icon/i_profile-default.png");
+                         }}/> :
+                    <img src={require("assets/image/icon/i_profile-default.png")} className='avatar'
+                         alt='Link to my profile' /> :
                   <div className='avatar-init-menu'>
                     <div className='avatar-name-init-menu'>{getTempEmail[0]}</div>
                   </div>}

@@ -24,6 +24,7 @@ module.exports = {
         oneOf: [
           {
             test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+            exclude: paths.appStatic,
             loader: require.resolve("url-loader"),
             options: {
               limit: 10000,
@@ -85,7 +86,12 @@ module.exports = {
               // Translates CSS into CommonJS
               'css-loader',
               // Compiles Sass to CSS
-              'sass-loader',
+              {
+                loader : 'sass-loader',
+                options: {
+                  data: '$env: ' + process.env.NODE_ENV_SUB + ';',
+                },
+              },
             ],
           },
           /* emitFile: false will not create new files */

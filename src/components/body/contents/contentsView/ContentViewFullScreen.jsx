@@ -38,7 +38,7 @@ class ContentViewFullScreen extends Component {
     completeModalOpen: false,
     isPublic: this.props.getDocument.document.isPublic || false,
     isRegistry: this.props.getDocument.document.isRegistry || false,
-    bookmarkFlag: false,
+    bookmarkFlag: false
   };
 
 
@@ -252,9 +252,12 @@ class ContentViewFullScreen extends Component {
             <div className="row">
               <Link to={"/@" + identification} title={"Go to profile page of " + identification}
                     rel="nofollow">
-                {profileUrl ? <img src={profileUrl} alt="profile" className="content-view-img"
-                                   onClick={() => common_view.scrollTop()}/> :
-                  <i className="material-icons img-thumbnail" onClick={() => common_view.scrollTop()}>face</i>}
+                <img src={profileUrl} alt="profile" className="content-view-img"
+                     onClick={() => common_view.scrollTop()}
+                     onError={(e) => {
+                       e.target.onerror = null;
+                       e.target.src = require("assets/image/icon/i_profile-default.png");
+                     }}/>
               </Link>
 
               <div className="d-inline-block ml-1">
@@ -365,7 +368,8 @@ class ContentViewFullScreen extends Component {
               <Tooltip title={psString("viewer-page-sns-linkedin")} placement="bottom">
                 <div className="d-inline-block mr-3">
                   <LinkedinShareButton url={ogUrl} className="sns-share-icon " title={getDocument.document.title}>
-                    <img src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-linkedin-color.png"} alt="linkedin sns icon"/>
+                    <img src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-linkedin-color.png"}
+                         alt="linkedin sns icon"/>
                   </LinkedinShareButton>
                 </div>
               </Tooltip>
@@ -373,7 +377,8 @@ class ContentViewFullScreen extends Component {
               <Tooltip title={psString("viewer-page-sns-fb")} placement="bottom">
                 <div className="d-inline-block mr-3">
                   <FacebookShareButton url={ogUrl} className="sns-share-icon">
-                    <img src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-facebook-color.png"} alt="facebook sns icon"/>
+                    <img src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-facebook-color.png"}
+                         alt="facebook sns icon"/>
                   </FacebookShareButton>
                 </div>
               </Tooltip>
@@ -382,7 +387,8 @@ class ContentViewFullScreen extends Component {
                 <div className="d-inline-block">
                   <TwitterShareButton url={ogUrl} className="sns-share-icon" hashtags={getDocument.document.tags}
                                       title={getDocument.document.title}>
-                    <img src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-twitter-color.png"} alt="twitter sns icon"/>
+                    <img src={APP_PROPERTIES.domain().static + "/image/sns/ic-sns-twitter-color.png"}
+                         alt="twitter sns icon"/>
                   </TwitterShareButton>
                 </div>
               </Tooltip>

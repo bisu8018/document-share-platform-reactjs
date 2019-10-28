@@ -1,7 +1,7 @@
 {
   "name": "polarishare_front_end",
   "description": "www.polarishare.com",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "license": "ISC",
   "private": true,
   "dependencies": {
@@ -134,7 +134,7 @@
     "build:ssr_production": "set NODE_ENV_SUB=production&& npm run build && node scripts/build.server.js",
     "deploy:static": "aws s3 sync static/ s3://dev-ca-web-static/static --cache-control max-age=60 --acl public-read && npm run invaildate",
 
-    "deploy:ssr_local": "npm run deploy:static && set NODE_ENV_SUB=development&& npm run build && node scripts/build.server.js",
+    "deploy:ssr_local": "npm run deploy:static && set NODE_ENV_SUB=ssr_local&& npm run build && node scripts/build.server.js",
     "deploy:ssr": "npm run deploy:static && npm run build:ssr && scp -i ../../my-key-pair/dev-decompany.pem -r build/ ec2-user@ec2-13-57-41-84.us-west-1.compute.amazonaws.com:~/decompanyio-web-server",
     "deploy:ssr_production": "npm run build:ssr_production && scp -i ../../my-key-pair/ko-decompany.pem -r build/ ec2-user@ec2-15-165-15-50.ap-northeast-2.compute.amazonaws.com:~/decompanyio-web-server"
   },
