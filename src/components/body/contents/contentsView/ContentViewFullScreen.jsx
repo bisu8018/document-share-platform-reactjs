@@ -13,6 +13,7 @@ import MainRepository from "../../../../redux/MainRepository";
 import EditDocumentModalContainer from "../../../../container/common/modal/EditDocumentModalContainer";
 import ContentViewCarouselContainer
   from "../../../../container/body/contents/contentsView/ContentViewCarouselContainer";
+import Linkify from "react-linkify";
 import RegBlockchainBtnContainer from "../../../../container/body/contents/contentsView/RegBlockchainBtnContainer";
 import VoteDocumentModalContainer from "../../../../container/common/modal/VoteDocumentModalContainer";
 import PayoutCard from "../../../common/card/PayoutCard";
@@ -355,7 +356,13 @@ class ContentViewFullScreen extends Component {
           <div className="hr mb-3"/>
 
           <div className="view_desc">
-            <div dangerouslySetInnerHTML={{ __html: getDocument.document.desc }}/>
+            {/*<div dangerouslySetInnerHTML={{ __html: getDocument.document.desc }}/>*/}
+            <Linkify properties={{
+              title: psString("Link to this URL"),
+              rel: "nofollow",
+              target: "_blank",
+              style: { color: "#0d73f8", fontWeight: "400" }
+            }}>{getDocument.document.desc}</Linkify>
             <div className="view_tag mt-5 mb-3">
               {getDocument.document.tags ? getDocument.document.tags.map((tag, index) => (
                 <Link title={"Link to " + tag + " tag"} to={"/latest/" + tag} key={index}
@@ -409,10 +416,10 @@ class ContentViewFullScreen extends Component {
             <div className="hr mb-3 mt-3"/>
           </div>
 
-
+          {getDocument.featuredList.length > 0 &&
           <ContentViewSeeAlso documentData={getDocument.document} author={getDocument.document.author}
                               featuredList={getDocument.featuredList}/>
-
+          }
 
           <ContentViewComment documentData={getDocument.document}/>
 

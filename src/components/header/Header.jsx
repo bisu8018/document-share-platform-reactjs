@@ -297,13 +297,10 @@ class Header extends React.Component {
 
           <div className='container-fluid container'>
             <div className='col-4 col-sm-3 mt-1 align-items-center d-flex'>
-              {getIsMobile || this.getSubTitle() ?
-                <Link to="/" className='navbar-brand-mobile' onClick={() => common_view.scrollTop()} rel="nofollow">
-                  <img src={APP_PROPERTIES.domain().static + "/image/logo-cut.png"} alt='POLARIS SHARE'/>
-                </Link> :
-                <Link to="/" className='navbar-brand' onClick={() => common_view.scrollTop()} rel="nofollow">
-                  <img src={APP_PROPERTIES.domain().static + "/image/logo.svg"} alt='POLARIS SHARE'/>
-                </Link>}
+              <Link to="/" className='navbar-brand' onClick={() => common_view.scrollTop()} rel="nofollow">
+                <div className={'header-logo' + (getIsMobile || this.getSubTitle() ? '-cut' : '')}/>
+                {/*<img src={APP_PROPERTIES.domain().static + "/image/logo.svg"} alt='POLARIS SHARE'/>*/}
+              </Link>
               {(!getIsMobile || (!searchBar && getIsMobile)) &&
               <div className='main-category-sub-title ml-2'>{this.getSubTitle()}</div>}
             </div>

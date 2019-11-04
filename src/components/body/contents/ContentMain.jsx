@@ -102,24 +102,13 @@ class ContentMain extends Component {
 
 
   // 사이트 path 체크
-  getList = path => {
-    const { latestDocuments, featuredDocuments, popularDocuments, myListDocuments, myHistoryDocuments } = this.state;
-
-    switch (path) {
-      case "latest" :
-        return latestDocuments;
-      case "featured" :
-        return featuredDocuments;
-      case "popular" :
-        return popularDocuments;
-      case "mylist" :
-        return myListDocuments;
-      case "history" :
-        return myHistoryDocuments;
-      default :
-        return;
-    }
-  };
+  getList = path => ({
+    "latest": this.state.latestDocuments,
+    "featured": this.state.featuredDocuments,
+    "popular": this.state.popularDocuments,
+    "mylist": this.state.myListDocuments,
+    "history": this.state.myHistoryDocuments
+  }[path] || []);
 
 
   // 로그인

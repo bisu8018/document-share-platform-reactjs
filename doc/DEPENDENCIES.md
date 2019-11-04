@@ -72,7 +72,7 @@ Hubspot page view tracking을 위한 플러그인
 import ReactGA from 'react-ga';
 
 //hubspot tracking
-var _hsq = window._hsq = window._hsq || [];
+let _hsq = window._hsq = window._hsq || [];
 
 // GA
 if (process.env.NODE_ENV_SUB !== 'production') {

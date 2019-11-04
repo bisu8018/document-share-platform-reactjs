@@ -9,13 +9,6 @@ import common_view from "../../../../common/common_view";
 import { APP_PROPERTIES } from "../../../../properties/app.properties";
 
 class CuratorTabItem extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      ratio: null
-    };
-  }
 
   // 리워드 정보 표시
   showRewardInfo = (id) => {
@@ -27,28 +20,9 @@ class CuratorTabItem extends React.Component {
     if (document.getElementById(id)) document.getElementById(id).style.display = "none";
   };
 
-  // 이미지 정보 GET
-  getImgInfo = () => {
-    const { document } = this.props;
-    let imgUrl = Common.getThumbnail(document.documentId, 320, 1, document.documentName),
-      img = new Image();
-
-    img.src = imgUrl;
-    img.onload = () => {
-      let height = img.height;
-      let width = img.width;
-      this.setState({ ratio: (width / height) });
-    };
-  };
-
-  componentWillMount(): void {
-    this.getImgInfo();
-  }
-
 
   render() {
     const { document, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
-    const { ratio } = this.state;
 
     let reward = Common.toEther(common_view.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
       vote = Common.toEther(document.latestVoteAmount) || 0,
@@ -64,7 +38,7 @@ class CuratorTabItem extends React.Component {
             <div className="tab-thumbnail" onClick={common_view.scrollTop()}>
               <img src={Common.getThumbnail(document.documentId, (getIsMobile ? 640 : 320), 1, document.documentName)}
                    alt={document.title ? document.title : document.documentName}
-                   className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}/>
+                   className="main-category-card-img"/>
             </div>
           </Link>
         </div>

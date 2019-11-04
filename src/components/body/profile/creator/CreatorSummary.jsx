@@ -1,5 +1,4 @@
 import React from "react";
-import { APP_PROPERTIES } from "properties/app.properties";
 import DollarWithDeck from "../../../common/amount/DollarWithDeck";
 import MainRepository from "../../../../redux/MainRepository";
 import Common from "../../../../common/common";
@@ -8,10 +7,10 @@ import { psString } from "../../../../config/localization";
 import log from "../../../../config/log";
 import common_view from "../../../../common/common_view";
 
+
 class CreatorSummary extends React.Component {
   state = {
     balance: -1,
-    profileImage: "",
     userName: "",
     userNameEdit: false,
     errMsg: "",
@@ -25,7 +24,7 @@ class CreatorSummary extends React.Component {
   // 초기화
   init = () => {
     const { userInfo } = this.props;
-    this.setState({ userName: userInfo.username, profileImage: userInfo.picture }, () => log.CreatorSummary.init());
+    this.setState({ userName: userInfo.username }, () => log.CreatorSummary.init());
   };
 
 
@@ -100,25 +99,10 @@ class CreatorSummary extends React.Component {
 
 
   //file input 등록/변경 시, url get
-  handleFileChange = (e) => {
-    const file = e[0];
-
-    // upload url GET
-    MainRepository.Account.getProfileImageUploadUrl().then(result => {
-      let params = { file: file, signedUrl: result.signedUploadUrl };
-
-      // 이미지 서버에 업로드
-      MainRepository.Account.profileImageUpload(params, () => {
-        let url = APP_PROPERTIES.domain().profile + result.picture;
-
-        // 유저 정보 업데이트
-        MainRepository.Account.updateProfileImage(url, () => this.setState({ profileImage: url }));
-      }, () => document.getElementById("imgFile").value = null);
-
-    }).catch(err => {
-      console.error(err);
-      document.getElementById("imgFile").value = null;
-    });
+  handleFileChange = async e => {
+    if (e && e.length > 0) {
+      this.props.setModal("imageCrop", { file: e[0] });
+    }
   };
 
 
@@ -159,7 +143,7 @@ class CreatorSummary extends React.Component {
 
   render() {
     const { userInfo } = this.props;
-    const { author7DayReward, authorTodayReward, curatorEstimatedToday, curatorTotalRewards, balance, userNameEdit, userName, profileImage, errMsg } = this.state;
+    const { author7DayReward, authorTodayReward, curatorEstimatedToday, curatorTotalRewards, balance, userNameEdit, userName, errMsg } = this.state;
 
     this.getRewards();
 
@@ -170,9 +154,9 @@ class CreatorSummary extends React.Component {
         <div className="row  profile_top">
           <div className="col-12 col-sm-2 col-lg-1 ">
             <div className="profile-image" title="Change profile image">
-              <img src={profileImage} alt="profile" className="img-fluid" onError={(e) => {
+              <img src={userInfo.picture} alt="profile" className="img-fluid" onError={(e) => {
                 e.target.onerror = null;
-                e.target.src =require("assets/image/icon/i_profile-default.png");
+                e.target.src = require("assets/image/icon/i_profile-default.png");
               }}/>
               {this.getMyInfo().email === userInfo.email &&
               <div className="profile-image-edit" onClick={this.handleFileUpload}><i className="material-icons">edit</i>
@@ -180,7 +164,8 @@ class CreatorSummary extends React.Component {
               }
             </div>
             {this.getMyInfo().email === userInfo.email &&
-            <input type="file" id="imgFile" accept="image/*" onChange={(e) => this.handleFileChange(e.target.files)}/>
+            <input type="file" id="imgFile" accept="image/*" onChange={(e) => this.handleFileChange(e.target.files)}
+                   onClick={e => e.target.value = null}/>
             }
           </div>
 

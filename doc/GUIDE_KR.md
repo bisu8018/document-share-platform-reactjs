@@ -10,10 +10,17 @@
 클라이언트 아키텍쳐
 > https://www.polarisoffice.com/d/2RQQv3Kt
 
-## 빠른 시작
+## 빠른 시작 (로컬)
 1. Node.js v8.10,  npm v5 이상 버전으로 설치
 2. 터미널에 <b>"npm install"</b> 입력하여 의존 라이브러리 설치
 3. <b>"npm start"</b> 또는 <b>"npm run start"</b> 입력하여 로컬환경 앱 실행 (http://localhost:8000)
+
+## 빠른 시작 (로컬 서버)
+1. Node.js v8.10,  npm v5 이상 버전으로 설치
+2. 터미널에 <b>"npm install"</b> 입력하여 의존 라이브러리 설치
+3. <b>"npm run deploy:ssr_local" 입력하여 빌드 파일 생성 
+4. decompanyio-web-server 프로젝트 이동 후 "npm start" 입력하여 실행
+
 
 ## 주요 라이브러리
 - react (https://reactjs.org/)
@@ -23,6 +30,9 @@
 - axios (https://github.com/axios/axios)
 - eslint (https://www.npmjs.com/package/eslint) 
 - history (https://www.npmjs.com/package/history)
+- css-loader (https://www.npmjs.com/package/css-loader)
+- style-loader (https://www.npmjs.com/package/style-loader)
+- file-loader (https://www.npmjs.com/package/file-loader)
 
 ## 블록체인 라이브러리
 - web3 (https://www.npmjs.com/package/web3)
@@ -42,6 +52,8 @@
 <br>(참고 : https://github.com/decompanyio/decompanyio-front-end/blob/master/src/redux/MainRepository.js)
 
 - 모든 <b>GET response Data</b> 에 대하여 <b>model</b> 적용 
-<br>(참고 : https://github.com/decompanyio/decompanyio-front-end/tree/master/src/redux/model)  
-
+<br>(참고 : https://github.com/decompanyio/decompanyio-front-end/tree/master/src/redux/model)
+  
+- <b>SCSS</b> 전처리기 사용 
+<br>(참고 : https://github.com/decompanyio/decompanyio-front-end/blob/master/src/assets/scss/index.scss)
 

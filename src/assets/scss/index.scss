@@ -5286,16 +5286,20 @@ form {
   line-height: 30px;
 }
 
-.navbar .navbar-brand > img {
-  width: 217px;
-  margin-left: -10px;
+.header-logo {
+  background-image: url($image-url + '/logo.png');
+  height: 100%;
+  width: 200px;
+  background-repeat: no-repeat;
+  background-position-y: 9px;
 }
 
-.navbar .navbar-brand-mobile > img {
-  height: 35px;
-  width: auto;
-  margin-left: -5px;
-  margin-top: -3px;
+.header-logo-cut {
+  background-repeat: no-repeat;
+  background-image: url($image-url + '/logo.png');
+  height: 100%;
+  width: 25px;
+  background-position-y: 9px;
 }
 
 .navbar.navbar-transparent {
@@ -6850,7 +6854,7 @@ Dean*/
   position: relative !important;
   width: 33px;
   height: 33px;
-  border: 1px solid #989898;
+  border: 1px solid #b3b3b3;
 }
 
 .avatar:hover {
@@ -7682,6 +7686,11 @@ Dean*/
 
 
 @media (max-width: 575px) {
+
+  .main-category:last-child .main-category-card-wrapper {
+    margin-bottom: 0 !important;
+  }
+
   .main-category-card-content-mock {
     padding: 15px 15px 25px 15px !important;
   }
@@ -9908,7 +9917,9 @@ dean
   color: #a2a2a2;
   font-size: 16px;
   display: inline-block;
+  height: 100%;
   text-align: center;
+  width: 100%;
 }
 
 .no-data-icon > i {
@@ -10687,6 +10698,7 @@ Main Category CSS
 
 .view_content .info-detail-reward-info {
   top: 30px !important;
+  right: 0 !important;
 }
 
 .content-list-wrapper .reward-info-not-registered {
@@ -11590,10 +11602,20 @@ custom modal modal css*/
 
 .custom-modal-content {
   flex: 1 1 auto;
-  padding: 0 24px 0;
+  min-height: 100px;
+  position: relative;
+  padding: 0 24px;
   overflow-y: auto;
   color: #4d4d4d;
   -webkit-overflow-scrolling: touch;
+}
+
+.custom-modal-image-crop .custom-modal-content {
+  overflow-x: auto;
+  width: calc(100% - 48px);
+  min-height: 300px !important;
+  padding: 0;
+  margin: 0 24px;
 }
 
 .custom-modal-footer {

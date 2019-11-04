@@ -1,10 +1,8 @@
 export const APP_PROPERTIES = {
-  ssr: process.env.APP_ENV === 'server',
-  env: (!process.env.NODE_ENV_SUB) ? 'local':process.env.NODE_ENV_SUB,
-
   // debug 모드 이용시, true 로 변경
   debug: (process.env.NODE_ENV_SUB === 'local' && false),
-
+  ssr: process.env.APP_ENV === 'server',
+  env: (!process.env.NODE_ENV_SUB) ? 'local':process.env.NODE_ENV_SUB,
   domain:function(){
     if(this.env === 'production')
       return APP_PROPERTIES.production.domain;
@@ -58,10 +56,11 @@ export const APP_PROPERTIES = {
   production:{
     domain:{
       mainHost: 'https://www.polarishare.com',
-      image: 'https://res.polarishare.com',
+      image: 'https://res.polarishare.com/thumb',
+      profile: 'https://res.polarishare.com/profile/',
+      static: 'https://res.polarishare.com/static',
       api: 'https://api.polarishare.com/rest',
       email: 'https://api.polarishare.com/ve',
-      profile: 'https://res.polarishare.com/',
       viewer: 'https://viewer.polarishare.com/',
       embed: 'https://embed.polarishare.com/',
       graphql: 'https://api.polarishare.com/graphql/'

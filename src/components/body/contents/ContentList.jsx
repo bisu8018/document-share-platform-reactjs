@@ -258,7 +258,7 @@ class ContentList extends Component {
             <ContentListItemMock order={3}/>
           </div>}
           {!this.state.loading && ((resultList && resultList.length === 0) || !resultList) &&
-          <NoDataIcon className="no-data">No data</NoDataIcon>}
+          <div className='mt-5'><NoDataIcon/></div>}
 
         </section>
 

@@ -13,7 +13,7 @@ class ContentViewSeeAlso extends React.Component {
       return (
         <aside className="u__right">
           <div className="see-also-main-title">{psString("see-also-text")}</div>
-          {featuredList.length > 0 && featuredList.map((result, idx) => (
+          {featuredList.map((result, idx) => (
             <FeaturedListItemContainer resultItem={result} key={idx}/>
           ))}
         </aside>

@@ -159,20 +159,20 @@ class CuratorAnalyticsTab extends React.Component {
 
     switch (weekValue) {
       case "1w" :
-        weekValueNum = 1;
-        break;
+        return weekValueNum = 1;
+
       case "1m" :
-        weekValueNum = 4;
-        break;
+        return weekValueNum = 4;
+
       case "3m" :
-        weekValueNum = 12;
-        break;
+        return weekValueNum = 12;
+
       case "6m" :
-        weekValueNum = 24;
-        break;
+        return weekValueNum = 24;
+
       case "1y" :
-        weekValueNum = 1;
-        break;
+        return weekValueNum = 1;
+
       default:
         break;
     }

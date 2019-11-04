@@ -1,12 +1,9 @@
 import { connect } from "react-redux";
-import CreatorSummary from "../../../../components/body/profile/creator/CreatorSummary";
-import { setAction } from "../../../../redux/reducer/main";
+import { setAction } from "../../../redux/reducer/main";
+import ImageCropModal from "../../../components/common/modal/ImageCropModal";
 
 export default connect(
   state => ({
-    getWeb3Apis: state.main.web3Apis,
-    getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
-    getCuratorDailyRewardPool: state.main.curatorDailyRewardPool,
     getModalData: state.main.modalData,
     getMyInfo: state.main.myInfo
   }),
@@ -14,4 +11,4 @@ export default connect(
     setModal: (modalCode: any, modalData: any) => dispatch(setAction.modal(modalCode, modalData)),
     setMyInfo: (myInfo: any) => dispatch(setAction.myInfo(myInfo)),
   })
-)(CreatorSummary);
+)(ImageCropModal);

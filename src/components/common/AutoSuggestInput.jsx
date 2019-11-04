@@ -128,15 +128,12 @@ class AutoSuggestInput extends React.Component {
 
     switch (type) {
       case "tag":
-        _placeholder = psString("auto-placeholder-1");
-        break;
+        return _placeholder = psString("auto-placeholder-1");
 
       case "name":
-        _placeholder = psString("auto-placeholder-2");
-        break;
+        return _placeholder = psString("auto-placeholder-2");
 
       default:
-        _placeholder = "";
         break;
     }
 

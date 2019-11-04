@@ -2,34 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Common from "../../common/common";
 import common_view from "../../common/common_view";
-import { APP_PROPERTIES } from "../../properties/app.properties";
+
 
 class FeaturedList extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      ratio: null
-    };
-  }
-
-  // 이미지 정보 GET
-  getImgInfo = () => {
-    const { resultItem } = this.props;
-    if (APP_PROPERTIES.ssr) return false;
-
-    let img = new Image();
-
-    img.src = Common.getThumbnail(resultItem.documentId, 320, 1, resultItem.documentName);
-    img.onload = () => {
-      let height = img.height,
-        width = img.width;
-      this.setState({ ratio: (width / height) });
-    };
-  };
-
-
   componentWillMount(): void {
     this.getImgInfo();
   }
@@ -37,7 +12,6 @@ class FeaturedList extends React.Component {
 
   render() {
     const { resultItem } = this.props;
-    const { ratio } = this.state;
     let identification = resultItem.author ? (resultItem.author.username && resultItem.author.username.length > 0 ? resultItem.author.username : resultItem.author.email) : resultItem.accountId;
 
     return (
@@ -46,7 +20,7 @@ class FeaturedList extends React.Component {
         <Link to={"/@" + identification + "/" + resultItem.seoTitle} rel="nofollow">
           <div className="see-also-thumbnail" onClick={common_view.scrollTop()}>i
             <img src={Common.getThumbnail(resultItem.documentId, 320, 1, resultItem.documentName)}
-                 className={ratio >= 1.8 ? "see-also-card-img-landscape" : "main-category-card-img"}
+                 className="main-category-card-img"
                  alt={resultItem.documentName ? resultItem.documentName : resultItem.documentId}/>
           </div>
           <div className="see-also-title"> {resultItem.title} </div>

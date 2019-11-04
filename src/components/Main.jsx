@@ -82,6 +82,7 @@ class Main extends Component {
   // 내 정보 GET
   setMyInfo = () => {
     const { getMyInfo, setMyInfo } = this.props;
+
     if (MainRepository.Account.isAuthenticated() && getMyInfo.email.length === 0) {
       let myInfo = MainRepository.Account.getMyInfo();
       return MainRepository.Account.getAccountInfo(myInfo.sub)
@@ -105,7 +106,7 @@ class Main extends Component {
   setMyList = () => {
     const { getMyInfo, setMyList } = this.props;
     if (MainRepository.Account.isAuthenticated() && getMyInfo.sub.length !== 0) {
-      return MainRepository.Document.getMyList({userId : getMyInfo.sub})
+      return MainRepository.Document.getMyList({ userId: getMyInfo.sub })
         .then(res => setMyList({ resultList: res }));
     }
   };
@@ -115,7 +116,7 @@ class Main extends Component {
   setHistory = () => {
     const { getMyInfo, setHistory } = this.props;
     if (MainRepository.Account.isAuthenticated() && getMyInfo.sub.length !== 0) {
-      return MainRepository.Document.getHistory({userId : getMyInfo.sub})
+      return MainRepository.Document.getHistory({ userId: getMyInfo.sub })
         .then(res => setHistory({ resultList: res }));
     }
   };
@@ -141,6 +142,7 @@ class Main extends Component {
 
   // Web3 GET
   setDrizzleApis = () => {
+    if(common_view.isAndroid) return true;
     this.props.setDrizzleApis();
     log.Main.setDrizzleApis();
   };
@@ -179,6 +181,7 @@ class Main extends Component {
         </Helmet>
 
         <HeaderContainer/>
+
         <div id='container' data-parallax='true'>
           <CookiePolicyModal/>
           <DollarPolicyModalContainer/>
@@ -212,11 +215,12 @@ class Main extends Component {
     const { getMyInfo } = this.props;
     const { initData } = this.state;
 
-    if (APP_PROPERTIES.ssr)
+    if (APP_PROPERTIES.ssr) {
       return this.getMainComponent();
-    if (initData && (MainRepository.Account.isAuthenticated() ? getMyInfo.email.length !== 0 : true))
+    }
+    if (initData && (MainRepository.Account.isAuthenticated() ? getMyInfo.email.length !== 0 : true)) {
       common_view.setBodyStyleUnlock();
-    else {
+    } else {
       common_view.setBodyStyleLock();
       return (<LoadingModal/>);
     }

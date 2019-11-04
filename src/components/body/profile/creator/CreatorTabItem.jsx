@@ -24,7 +24,6 @@ class CreatorTabItem extends React.Component {
     super(props);
 
     this.state = {
-      ratio: null,
       documentData: new DocumentInfo(),
       completeModalOpen: false
     };
@@ -33,9 +32,7 @@ class CreatorTabItem extends React.Component {
 
   // 초기화
   init = () => {
-    this.setDocumentData()
-      .then(() => this.handleState())
-      .then(() => this.getImgInfo());
+    this.setDocumentData().then(() => this.handleState());
   };
 
 
@@ -69,17 +66,6 @@ class CreatorTabItem extends React.Component {
         }
       }
     );
-  };
-
-
-  // 이미지 정보 GET
-  getImgInfo = () => {
-    const { documentData } = this.state;
-    let imgUrl = Common.getThumbnail(documentData.documentId, 320, 1, documentData.documentName);
-    let img = new Image();
-
-    img.src = imgUrl;
-    img.onload = () => this.setState({ ratio: (img.width / img.height) });
   };
 
 
@@ -187,7 +173,7 @@ class CreatorTabItem extends React.Component {
 
   render() {
     const { getCreatorDailyRewardPool, handleUploadSettings, totalViewCountInfo, getIsMobile, viewerOptionOpenedIdx, idx, setModal } = this.props;
-    const { ratio, documentData } = this.state;
+    const { documentData } = this.state;
 
     if (!documentData.seoTitle) return false;
 
@@ -210,7 +196,7 @@ class CreatorTabItem extends React.Component {
               <Link to={"/@" + identification + "/" + documentData.seoTitle} rel="nofollow">
                 <img src={Common.getThumbnail(documentData.documentId, "thumb", 1, documentData.documentName)}
                      alt={documentData.title ? documentData.title : documentData.documentName}
-                     className={(ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img") + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>
+                     className={"main-category-card-img " + (documentData.state && documentData.state !== "CONVERT_COMPLETE" ? " not-convert-background" : "")}/>
               </Link>
             }
           </div>
@@ -282,10 +268,10 @@ class CreatorTabItem extends React.Component {
             {documentData.isPublic === false && documentData.state === "CONVERT_COMPLETE" &&
             <div className={(getIsMobile ? "mt-2" : "float-right")}>
               <Tooltip title={psString("tooltip-publish")} placement="bottom">
-                  <div className={"claim-btn " + (getIsMobile ? " w-100" : "")}
-                       onClick={() => setModal("publish", {documentData : documentData})}>
-                    {psString("common-modal-publish")}
-                  </div>
+                <div className={"claim-btn " + (getIsMobile ? " w-100" : "")}
+                     onClick={() => setModal("publish", { documentData: documentData })}>
+                  {psString("common-modal-publish")}
+                </div>
               </Tooltip>
             </div>}
 

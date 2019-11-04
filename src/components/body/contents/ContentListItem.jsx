@@ -19,7 +19,6 @@ class ContentListItem extends React.Component {
     super(props);
 
     this.state = {
-      ratio: null,
       documentData: new DocumentInfo(),
       bookmarkFlag: false
     };
@@ -30,7 +29,6 @@ class ContentListItem extends React.Component {
   init = () => {
     if (APP_PROPERTIES.ssr) return false;
 
-    this.getImgInfo();
     this.checkBookmark();
   };
 
@@ -93,15 +91,6 @@ class ContentListItem extends React.Component {
   };
 
 
-  // 이미지 정보 GET
-  getImgInfo = () => {
-    const { result } = this.props;
-    let img = new Image();
-    img.src = Common.getThumbnail(result.documentId, 320, 1, result.documentName);
-    img.onload = () => this.setState({ ratio: (img.width / img.height) });
-  };
-
-
   componentWillMount(): void {
     this.init();
   }
@@ -109,7 +98,7 @@ class ContentListItem extends React.Component {
 
   render() {
     const { result, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
-    const { ratio, bookmarkFlag } = this.state;
+    const { bookmarkFlag } = this.state;
 
     let vote = Common.toEther(result.latestVoteAmount) || 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(result, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
@@ -124,7 +113,7 @@ class ContentListItem extends React.Component {
           <Link to={"/@" + identification + "/" + result.seoTitle} rel="nofollow">
             <div className="thumb_image" onClick={() => common_view.scrollTop()}>
               <img src={imageUrl} alt={result.title}
-                   className={ratio >= 1.8 ? "main-category-card-img-landscape" : "main-category-card-img"}
+                   className="main-category-card-img"
                    onError={(e) => {
                      e.target.onerror = null;
                      e.target.src = APP_PROPERTIES.domain().static + "/image/logo-cut.png";

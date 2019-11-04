@@ -7,6 +7,6 @@ export default connect(
     getMyInfo: state.main.myInfo
   }),
   dispatch => ({
-    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode)),
   })
 )(Creator);

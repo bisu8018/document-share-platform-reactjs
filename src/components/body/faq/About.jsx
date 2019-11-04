@@ -152,7 +152,7 @@ class About extends React.Component {
 
           <div className="col-12 row">
             <div className="col-12 col-md-4 tac">
-              <img src={APP_PROPERTIES.domain().static + "/image/common/about-vision-img-1.svg"}
+              <img src={APP_PROPERTIES.domain().static + "/image/common/about-vision-img-01.svg"}
                    alt="Value of knowledge"/>
               <div className="about-vision-title">
                 {psString("about-third-section-chap-subj-1")}
@@ -162,7 +162,7 @@ class About extends React.Component {
               </div>
             </div>
             <div className="col-12 col-md-4 tac">
-              <img src={APP_PROPERTIES.domain().static + "/image/common/about-vision-img-2.svg"}
+              <img src={APP_PROPERTIES.domain().static + "/image/common/about-vision-img-02.svg"}
                    alt="No transaction fees"/>
               <div className="about-vision-title">
                 {psString("about-third-section-chap-subj-2")}
@@ -172,7 +172,7 @@ class About extends React.Component {
               </div>
             </div>
             <div className="col-12 col-md-4 tac">
-              <img src={APP_PROPERTIES.domain().static + "/image/common/about-vision-img-3.svg"}
+              <img src={APP_PROPERTIES.domain().static + "/image/common/about-vision-img-03.svg"}
                    alt="Content shared"/>
               <div className="about-vision-title">
                 {psString("about-third-section-chap-subj-3")}

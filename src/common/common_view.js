@@ -7,7 +7,7 @@ export default ({
 
   // Get Date Time Ago on Number
   dateTimeAgo: (timestamp, isMobile) => {
-    if(APP_PROPERTIES.ssr) return 0;
+    if (APP_PROPERTIES.ssr) return 0;
 
     let currentDate = new Date();
     let lastDate = new Date(timestamp);
@@ -34,7 +34,7 @@ export default ({
   },
 
   setCookie(cname, cvalue, exdays) {
-    if(APP_PROPERTIES.ssr) return false;
+    if (APP_PROPERTIES.ssr) return false;
 
     let d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -43,7 +43,7 @@ export default ({
   },
 
   getCookie(cname) {
-    if(APP_PROPERTIES.ssr) return false;
+    if (APP_PROPERTIES.ssr) return false;
 
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -61,26 +61,30 @@ export default ({
   },
 
   deleteCookie(name) {
-    if(APP_PROPERTIES.ssr) return false;
+    if (APP_PROPERTIES.ssr) return false;
 
     if (this.getCookie(name)) document.cookie = name + "=;expires=Thu, 01-Jan-70 00:00:01 GMT";
   },
 
+  isAndroid: () => {
+    return /Android/i.test(navigator.userAgent);
+  },
+
   getPath: () => {
-    if(APP_PROPERTIES.ssr) return "";
+    if (APP_PROPERTIES.ssr) return "";
 
     const pathArr = window.location.pathname.split("/");
     return decodeURI(pathArr[1]);
   },
 
   getPaths: () => {
-    if(APP_PROPERTIES.ssr) return false;
+    if (APP_PROPERTIES.ssr) return false;
 
     return window.location.pathname.split("/");
   },
 
   getTag: () => {
-    if(APP_PROPERTIES.ssr) return "";
+    if (APP_PROPERTIES.ssr) return "";
 
     const pathArr = window.location.pathname.split("/");
     let tag = "";
@@ -92,7 +96,7 @@ export default ({
 
   // Clip board copy
   clipboardCopy: id => {
-    if(APP_PROPERTIES.ssr) return false;
+    if (APP_PROPERTIES.ssr) return false;
 
     return new Promise((resolve, reject) => {
       document.getElementById(id).select();
@@ -103,14 +107,14 @@ export default ({
 
   // Scroll to top
   scrollTop: () => {
-    if(APP_PROPERTIES.ssr) return false;
+    if (APP_PROPERTIES.ssr) return false;
 
-    return window.scrollTo(0, 0)
+    return window.scrollTo(0, 0);
   },
 
   // Set BODY TAG Style
   setBodyStyleLock: () => {
-    if(APP_PROPERTIES.ssr) return false;
+    if (APP_PROPERTIES.ssr) return false;
 
     document.body.style.overflow = "hidden";
     document.body.style.paddingRight = "5px";
@@ -119,7 +123,7 @@ export default ({
 
   // Set BODY TAG Style
   setBodyStyleUnlock: () => {
-    if(APP_PROPERTIES.ssr) return false;
+    if (APP_PROPERTIES.ssr) return false;
 
     document.body.style.overflow = "";
     document.body.style.paddingRight = "";
@@ -127,7 +131,7 @@ export default ({
   },
 
   getMySub: () => {
-    if(APP_PROPERTIES.ssr) return "";
+    if (APP_PROPERTIES.ssr) return "";
 
     let authSub = "";
     let isAuthenticated = MainRepository.Account.isAuthenticated();
@@ -141,22 +145,22 @@ export default ({
 
   // 페이지 GET
   getPageNum: () => {
-    if(APP_PROPERTIES.ssr) return 1;
+    if (APP_PROPERTIES.ssr) return 1;
 
     let pathName = window.location.pathname.split("/")[3],
-    pageNum = pathName ? Number(pathName.split("-")[0]) : 0;
+      pageNum = pathName ? Number(pathName.split("-")[0]) : 0;
     return pageNum > 0 ? pageNum - 1 : 0;
   },
 
   authorCalculateReward: (pv: number, tpv: number, pool: number) => {
-    if(APP_PROPERTIES.ssr) return 0;
+    if (APP_PROPERTIES.ssr) return 0;
 
     if (tpv === 0 || pv === 0 || pool === 0 || !tpv || !pv || !pool) return 0;
     return (pv * (pool / tpv));
   },
 
   curatorCalculateReward: (pool: number, v: number, tv: number, pv: number, tpvs: number) => {
-    if(APP_PROPERTIES.ssr) return 0;
+    if (APP_PROPERTIES.ssr) return 0;
 
     if (pool === 0 || v === 0 || tv === 0 || pv === 0 || tpvs === 0 || !pool || !v || !tv || !pv || !tpvs) return 0;
     return (pool * (Math.pow(pv, 2) / tpvs)) * (v / tv);

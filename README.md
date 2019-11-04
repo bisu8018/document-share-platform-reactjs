@@ -8,13 +8,10 @@
 
 > Production URL : https://www.polarishare.com
 
-## Build
-- npm run build (share.decompany.io, Dev Server Build)
-- npm run build:production (www.polarishare.com Production Server Build)
-
 ## Deploy
-- npm run deploy (개발 빌드 및 배포 진행, aws s3 sync build/ s3://share.decompany.io)
-- npm run deploy:production (운영 빌드 및 배포 진행, aws s3 sync build/ s3://www.polarishare.com)
+- npm run deploy:ssr_local (Local Build/Deploy, aws s3 sync build/ s3://share.decompany.io)
+- npm run deploy:ssr (Dev Build/Deploy, aws s3 sync build/ s3://share.decompany.io)
+- npm run deploy:ssr_production (Production Build/Deploy, aws s3 sync build/ s3://www.polarishare.com)
 
 ## Local
 - npm start (port 8000)
@@ -25,6 +22,7 @@
 - public : 정적 파일 (index.html ..)
 - scripts :  node.js 스크립트 파일
 - src : 프로젝트 메인 파일
+- static : 정적 파일
 
 ## Guide
 English

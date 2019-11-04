@@ -58,13 +58,7 @@ export default {
     instance.InitData.hsq = window._hsq = window._hsq || [];
 
     //Auth0 초기화
-    instance.InitData.authData = new auth0.WebAuth({
-      domain: AUTH_CONFIG.domain,
-      clientID: AUTH_CONFIG.clientId,
-      redirectUri: AUTH_CONFIG.callbackUrl,
-      responseType: "token id_token",
-      scope: "openid profile email"
-    });
+    instance.InitData.authData = new auth0.WebAuth(AUTH_CONFIG);
 
     // 메타마스크 관련 체크
     if (!ssr && (typeof window.ethereum !== "undefined" || (typeof window.web3 !== "undefined"))) {
@@ -154,7 +148,7 @@ export default {
 
       instance.InitData.authData.logout({
         returnTo: APP_PROPERTIES.domain().mainHost,
-        clientID: AUTH_CONFIG.clientId
+        clientID: AUTH_CONFIG.clientID
       });
       window.location.href = "/";
     },
@@ -189,13 +183,9 @@ export default {
     scheduleRenewal() {
       let expiresAt = JSON.parse(localStorage.getItem("expires_at"));
       let timeout = expiresAt - Date.now(); //mms
-      if (timeout > 0) {
-        (() => {
-          setTimeout(() => {
-            this.renewSession();
-          }, timeout);
-        })();
-      } else if (timeout <= 0) this.logout();
+
+      if (timeout > 0) (() => setTimeout(() => this.renewSession(), timeout))();
+      else if (timeout <= 0) this.logout();
     },
     renewSession() {
       instance.InitData.authData.checkSession({}, (err, authResult) => {
@@ -218,11 +208,12 @@ export default {
           } else if (err) {
             console.log(err);
             this.clearSession();
+            reject(err);
           }
         });
       });
     },
-    handleAuthentication({ location }) {
+    handleAuthentication(location) {
       return new Promise((resolve, reject) => {
         if (!/access_token|id_token|error/.test(location.hash)) reject();
         instance.InitData.authData.parseHash((err, authResult) => {

@@ -128,18 +128,14 @@ class CustomChart extends React.Component {
     switch (subject) {
       // Profile - Analytics
       case "analytics" :
-        this.getAnalyticsData();
-        break;
+        return this.getAnalyticsData();
 
       // Tracking
       case "tracking" :
-        this.getTrackingData();
-        break;
-
+        return this.getTrackingData();
 
       case "etc":
         break;
-
 
       default :
         break;

@@ -1519,10 +1519,14 @@ const strings = new Map([
     KOR: '새 글 작성',
     ENG: 'Add Post'
   }],
-  ['', {
-    KOR: '',
-    ENG: ''
+
+  // Image Crop Modal
+  ['image-crop-modal-subject', {
+    KOR: '프로필 사진 자르기',
+    ENG: 'Crop profile image'
   }],
+
+
   ['', {
     KOR: '',
     ENG: ''

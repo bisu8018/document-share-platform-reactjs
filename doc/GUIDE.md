@@ -24,6 +24,13 @@ Client Architecture
 - axios (https://github.com/axios/axios)
 - eslint (https://www.npmjs.com/package/eslint) 
 - history (https://www.npmjs.com/package/history)
+- css-loader (https://www.npmjs.com/package/css-loader)
+- style-loader (https://www.npmjs.com/package/style-loader)
+- file-loader (https://www.npmjs.com/package/file-loader)
+
+## BlockChain library
+- web3 (https://www.npmjs.com/package/web3)
+- drizzle (https://www.npmjs.com/package/drizzle)
 
 ## Note
 - This project is a reactive web production using the Google material UI library.
@@ -39,3 +46,6 @@ Client Architecture
 
 - Applied to <b>model</b> for all <b>GET response data</b> 
 <br>(Ref : https://github.com/decompanyio/decompanyio-front-end/tree/master/src/redux/model)  
+
+- <b>SCSS</b> was used. 
+<br>(Ref : https://github.com/decompanyio/decompanyio-front-end/blob/master/src/assets/scss/index.scss)
