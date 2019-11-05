@@ -591,6 +591,14 @@ const strings = new Map([
     KOR: '유저네임 수정을 실패하였습니다.',
     ENG: 'Failed to edit username.'
   }],
+  ['alert-2143', {
+    KOR: '프로필 이미지 수정을 성공하였습니다.',
+    ENG: 'Successfully edited profile image.'
+  }],
+  ['alert-2144', {
+    KOR: '프로필 이미지 수정을 실패하였습니다.',
+    ENG: 'Failed to edit profile image.'
+  }],
 
   // Common
   ['common-modal-cancel', {

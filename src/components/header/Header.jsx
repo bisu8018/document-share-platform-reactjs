@@ -93,11 +93,11 @@ class Header extends React.Component {
 
 
   // 키다운 이벤트 리스너
-  keyDownEventListener = () => document.addEventListener("keydown", () => this.setAwayTime());
+  keyDownEventListener = () => document.addEventListener("keydown", this.setAwayTime);
 
 
   // 마우스 무브 이벤트 리스너
-  mouseMoveEventListener = () => document.addEventListener("mousemove", () => this.setAwayTime());
+  mouseMoveEventListener = () => document.addEventListener("mousemove", this.setAwayTime);
 
 
   // 클릭 이벤트 리스너
@@ -272,16 +272,6 @@ class Header extends React.Component {
   }
 
 
-  componentWillUnmount() {
-    window.removeEventListener("scroll", () => {
-    });
-    window.removeEventListener("click", () => {
-    });
-    window.removeEventListener("resize", () => {
-    });
-  }
-
-
   render() {
     const { prevScrollPos, searchBar, profileCardShow, adShow, path } = this.state;
     const { getMyInfo, getTempEmail, getIsMobile, setModal } = this.props;
@@ -334,7 +324,8 @@ class Header extends React.Component {
               }
 
               {(MainRepository.Account.isAuthenticated() || getTempEmail) && !getIsMobile &&
-              <MyAvatar onClicked={() => this.profileCardShow()} size={33} picture={getMyInfo.picture} croppedArea={getMyInfo.croppedArea} tempEmail={getTempEmail}/>
+              <MyAvatar onClicked={() => this.profileCardShow()} size={33} picture={getMyInfo.picture}
+                        croppedArea={getMyInfo.croppedArea} tempEmail={getTempEmail}/>
               }
 
               {profileCardShow && <ProfileCardContainer/>}

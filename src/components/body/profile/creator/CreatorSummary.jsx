@@ -163,7 +163,7 @@ class CreatorSummary extends React.Component {
       <div className="profile_container">
         <div className="profile-top-wrapper"/>
         <div className="row  profile_top pt-4">
-          <div className="col-12 col-sm-2 col-lg-1 ">
+          <div className="col-12 col-md-2 col-lg-1 ">
             <MyAvatar size={90} picture={userInfo.picture} croppedArea={userInfo.croppedArea}/>
             {this.getMyInfo().email === userInfo.email &&
             <div className="profile-image-edit" onClick={this.handleFileUpload}>
@@ -177,7 +177,7 @@ class CreatorSummary extends React.Component {
           </div>
 
 
-          <div className="col-12 col-sm-10 col-lg-11 ">
+          <div className="col-12 col-md-10 col-lg-11 ">
             <div className="profile_info_name">
               <span className={!userNameEdit ? "d-flex" : "d-none"}>
                 <strong>{userName || userInfo.email}</strong>

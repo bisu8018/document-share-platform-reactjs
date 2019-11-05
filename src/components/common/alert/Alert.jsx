@@ -225,6 +225,14 @@ class Alert extends React.PureComponent {
         status = "error";
         msg = this.getMsg(code);   // 유저네임 수정 실패
         break;
+      case 2143 :
+        status = "success";
+        msg = this.getMsg(code);   // 프로필 이미지 수정 성공
+        break;
+      case 2144 :
+        status = "error";
+        msg = this.getMsg(code);   // 프로필 이미지 수정 실패
+        break;
 
 
 

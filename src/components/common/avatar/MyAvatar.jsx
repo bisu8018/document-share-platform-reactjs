@@ -25,10 +25,12 @@ class MyAvatar extends React.Component {
 
     let xLocation = 0;
     let yLocation = 0;
+    let zoom = 1;
 
     if (croppedArea) {
       xLocation = Math.floor(croppedArea.x / ((this.getImgInfo() ? croppedArea.height : croppedArea.width) / size));
       yLocation = Math.floor(croppedArea.y / ((this.getImgInfo() ? croppedArea.height : croppedArea.width) / size));
+      zoom = croppedArea.zoom;
     }
 
 
@@ -38,8 +40,8 @@ class MyAvatar extends React.Component {
         height: (size || 30) + "px"
       },
       imgStyle: {
-        width: this.getImgInfo() ? "auto" : "inherit",
-        height: !this.getImgInfo() ? "auto" : "inherit",
+        width: this.getImgInfo() ? "auto" : (Number(zoom * 100) + "%"),
+        height: !this.getImgInfo() ? "auto" : (Number(zoom * 100) + "%"),
         left: "-" + xLocation + "px",
         top: "-" + yLocation + "px"
       },
@@ -70,10 +72,11 @@ class MyAvatar extends React.Component {
     const { wrapperStyle, imgStyle, nameStyle } = this.state;
 
     return (
-      <div className='avatar-wrapper' onClick={() => onClicked ? onClicked() : false} style={wrapperStyle}>
+      <div id='header-avatar' className='avatar-wrapper' onClick={() => onClicked ? onClicked() : false}
+           style={wrapperStyle}>
         {MainRepository.Account.isAuthenticated() ?
           picture.length > 0 ?
-            <img src={picture} id='header-avatar' alt='Link to my profile'
+            <img src={picture} alt='Link to my profile'
                  style={imgStyle}
                  onError={(e) => {
                    e.target.onerror = null;

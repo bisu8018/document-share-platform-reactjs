@@ -48,27 +48,6 @@ class CreatorTabItem extends React.Component {
   };
 
 
-  // 클릭 이벤트 리스너
-  clickEventListener = () => {
-    const { idx } = this.props;
-
-    document.addEventListener("click", e => {
-        let targetElement = e.target;
-
-        // 뷰어페이지 옵션창
-        const viewerOptionBtn = document.getElementById("viewer-option-btn-" + idx),
-          viewerOptionTable = document.getElementById("viewer-option-table-" + idx),
-          viewerOptionIcon = document.getElementById("view-option-icon-" + idx);
-
-        if (viewerOptionBtn && !viewerOptionBtn.contains(targetElement)) {
-          viewerOptionTable.classList.add("d-none");
-          viewerOptionIcon.classList.remove("d-inline-block");
-        }
-      }
-    );
-  };
-
-
   //문서 다운로드
   getContentDownload = (accountId, documentId, documentName) => {
 

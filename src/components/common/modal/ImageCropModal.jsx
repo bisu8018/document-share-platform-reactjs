@@ -36,7 +36,7 @@ class ImageCropModal extends React.Component {
           background: "none"
         },
         cropAreaStyle: {
-          color: "#ffffff5c"
+          color: "#7171715c"
         }
       }
     };
@@ -89,7 +89,7 @@ class ImageCropModal extends React.Component {
   // 자르기 확인
   handleCropConfirm = () => {
     const { getModalData, getMyInfo, setMyInfo } = this.props;
-    const { croppedArea } = this.state;
+    const { croppedArea, zoom } = this.state;
 
     if (!croppedArea) return false;
 
@@ -102,22 +102,25 @@ class ImageCropModal extends React.Component {
       // 이미지 서버에 업로드
       MainRepository.Account.profileImageUpload(params, () => {
         let url = APP_PROPERTIES.domain().profile + result.picture;
+        let _croppedArea = croppedArea;
+        _croppedArea.zoom = zoom;
         let data = {
           "picture": url,
-          "croppedArea": croppedArea
+          "croppedArea": _croppedArea
         };
 
         // 유저 정보 업데이트
         MainRepository.Account.updateProfileImage(data).then(() => {
-            const myInfo = getMyInfo;
-            myInfo.picture = url;
-            setMyInfo(myInfo);
+          this.props.setAlertCode(2143);
 
-            this.handleClickClose();
-          }
-        );
+          const myInfo = getMyInfo;
+          myInfo.picture = url;
+          myInfo.croppedArea = croppedArea;
+          setMyInfo(myInfo);
+
+          this.handleClickClose();
+        }).catch(err => this.props.setAlertCode(2144));
       });
-
     }).catch(err => {
       console.error(err);
       this.handleClickClose();

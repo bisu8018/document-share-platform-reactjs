@@ -8,7 +8,7 @@ import CreatorTabItemContainer from "../../../../container/body/profile/creator/
 import { psString } from "../../../../config/localization";
 import log from "../../../../config/log";
 import common_view from "../../../../common/common_view";
-import { APP_PROPERTIES } from "../../../../properties/app.properties";
+
 
 class CreatorUploadTab extends React.Component {
   state = {
@@ -27,10 +27,9 @@ class CreatorUploadTab extends React.Component {
   init = () => {
     log.CreatorUploadTab.init();
 
-    this.setState({ param: this.getParam() }, () => {
-      this.handleClickEventListener();
-      this.fetchDocuments();    // url 위변조 방지 위하여, 첫 로드시 set state 진행
-    });
+    this.setState({ param: this.getParam() }, () =>
+      this.fetchDocuments() // url 위변조 방지 위하여, 첫 로드시 set state 진행
+    );
   };
 
 
@@ -110,35 +109,30 @@ class CreatorUploadTab extends React.Component {
 
 
   // 클릭 이벤트 리스너
-  handleClickEventListener = () => {
-    if (APP_PROPERTIES.ssr) return false;
+  handleOption = e => {
+    const { viewerOptionOpenedIdx } = this.state;
 
-    document.addEventListener("click", e => {
-        const { viewerOptionOpenedIdx } = this.state;
-        if (viewerOptionOpenedIdx !== null) {
-          const targetElement = e.target;
-          const profileCard = document.getElementById("optionTable" + viewerOptionOpenedIdx).parentNode;
-          if (!profileCard.contains(targetElement)) {
-            this.setState({ viewerOptionOpenedIdx: null });
-          }
-        }
-      }
-    );
+    if (viewerOptionOpenedIdx !== null) {
+      const targetElement = e.target;
+      const profileCard = document.getElementById("optionTable" + viewerOptionOpenedIdx).parentNode;
+
+      if (!profileCard.contains(targetElement))
+        this.setState({ viewerOptionOpenedIdx: null });
+    }
   };
-
-
-  // 클릭 이벤트 리스너 종료
-  handleResizeEnd = (e) => window.removeEventListener("click", () => {
-  });
 
 
   componentWillMount() {
     this.init();
   }
 
+  componentDidMount(): void {
+    window.addEventListener("click", this.handleOption);
+  }
+
 
   componentWillUnmount() {
-    this.handleResizeEnd();
+    window.removeEventListener("click", this.handleOption);
   }
 
 

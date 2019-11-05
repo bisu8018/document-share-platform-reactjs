@@ -23,12 +23,14 @@ class UserAvatar extends React.Component {
 
     if (APP_PROPERTIES.ssr) return;
 
-    let xLocation = 1;
-    let yLocation = 1;
+    let xLocation = 0;
+    let yLocation = 0;
+    let zoom = 1;
 
     if (croppedArea) {
       xLocation = Math.floor(croppedArea.x / ((this.getImgInfo() ? croppedArea.height : croppedArea.width) / size));
       yLocation = Math.floor(croppedArea.y / ((this.getImgInfo() ? croppedArea.height : croppedArea.width) / size));
+      zoom = croppedArea.zoom;
     }
 
 
@@ -38,8 +40,8 @@ class UserAvatar extends React.Component {
         height: (size || 30) + "px"
       },
       imgStyle: {
-        width: this.getImgInfo() ? "auto" : "inherit",
-        height: !this.getImgInfo() ? "auto" : "inherit",
+        width: this.getImgInfo() ? "auto" : (Number(zoom * 100) + "%"),
+        height: !this.getImgInfo() ? "auto" : (Number(zoom * 100) + "%"),
         left: "-" + xLocation + "px",
         top: "-" + yLocation + "px"
       },

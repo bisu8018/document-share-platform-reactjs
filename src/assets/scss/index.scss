@@ -8119,10 +8119,6 @@ Dean*/
     padding: 15px !important;
   }
 
-  .profile-top-wrapper {
-    height: 270px !important;
-  }
-
   .main-banner-text {
     padding: 30px !important;
   }
@@ -8179,7 +8175,7 @@ Dean*/
 .profile-top-wrapper {
   position: absolute;
   width: 3000%;
-  height: 145px;
+  height: 150px;
   left: -1000px;
   top: -15px;
   background: #f5f5f5;
@@ -11213,6 +11209,11 @@ About us page CSS
 }
 
 @media all and (max-width: 767px) {
+
+  .profile-top-wrapper {
+    height: 270px !important;
+  }
+
   .about-section-3 .main-category-card {
     text-align: center;
   }

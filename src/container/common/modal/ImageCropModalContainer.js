@@ -10,5 +10,6 @@ export default connect(
   dispatch => ({
     setModal: (modalCode: any, modalData: any) => dispatch(setAction.modal(modalCode, modalData)),
     setMyInfo: (myInfo: any) => dispatch(setAction.myInfo(myInfo)),
+    setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))
   })
 )(ImageCropModal);
