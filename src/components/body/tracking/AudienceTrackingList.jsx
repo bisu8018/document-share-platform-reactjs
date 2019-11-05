@@ -327,7 +327,7 @@ class AudienceTrackingList extends React.Component {
               </div>
 
 
-              <div className="col-view tracking-item mb-1  mt-1 position-relative">
+              <div className="col-view tracking-item d-flex mb-1 mt-1 position-relative">
                  <span className={"info-detail-reward mr-3 " + (documentData.isRegistry ? "" : "color-not-registered")}
                        onMouseOver={() => this.showRewardInfo(documentData.seoTitle + "reward")}
                        onMouseOut={() => this.hideRewardInfo(documentData.seoTitle + "reward")}>
@@ -451,7 +451,8 @@ class AudienceTrackingList extends React.Component {
                           </Tooltip>
 
                           <Tooltip
-                            title={psString("tracking-list-viewed") + ": " + (Math.round((result.readPageCount / documentData.totalPages) * 100)) + "%"}
+                            title={psString("tracking-list-viewed") + ": " +
+                            ((result.readPageCount / documentData.totalPages) >= 1 ?  100 : Math.round((result.readPageCount / documentData.totalPages) * 100)) + "%"}
                             placement="top">
                             <div className="circular-chart-wrapper">
                               <svg viewBox="0 0 32 32" className="circular-chart" width="24" height="24">

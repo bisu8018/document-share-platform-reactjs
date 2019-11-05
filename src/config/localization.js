@@ -358,8 +358,8 @@ const strings = new Map([
     ENG: 'Please enter a username.'
   }],
   ['profile-error-2', {
-    KOR: '오직 영문과 숫자만 허용됩니다.',
-    ENG: 'Your username must be a combination of letters and numbers.'
+    KOR: '오직 소문자와 숫자만 허용됩니다.',
+    ENG: 'Your username must be a combination of lowercase letters and numbers.'
   }],
   ['profile-error-3', {
     KOR: '4~20자 이내의 영문과 숫자가 섞어 입력해 주십시오.',
@@ -582,6 +582,14 @@ const strings = new Map([
   ['alert-2124', {
     KOR: '내가 찜한 목록에서 삭제를 실패하였습니다.',
     ENG: 'Failed to remove from add my list.'
+  }],
+  ['alert-2141', {
+    KOR: '유저네임 수정을 성공하였습니다.',
+    ENG: 'Successfully edited username.'
+  }],
+  ['alert-2142', {
+    KOR: '유저네임 수정을 실패하였습니다.',
+    ENG: 'Failed to edit username.'
   }],
 
   // Common

@@ -15,10 +15,12 @@ export default {
         data => callback(data)
         , err => error(err));
     },
-    accountUpdate: (data, callback, error) => {
-      AxiosService._requestWithHeader(accountUpdateUrl, "POST", data,
-        data => callback(data)
-        , err => error(err));
+    accountUpdate: data => {
+      return new Promise((resolve, reject) => {
+        AxiosService._requestWithHeaderBody(accountUpdateUrl, "POST", data,
+          data => resolve(data)
+          , err => reject(err));
+      });
     },
     ethereumSync: (data, callback, error) => {
       AxiosService._requestWithHeader(ethereumSyncUrl, "POST", data,

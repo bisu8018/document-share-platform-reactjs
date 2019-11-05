@@ -25,7 +25,7 @@ class Alert extends React.PureComponent {
 
     switch (code) {
 
-      //=============================================ㅊㅐ
+      //=============================================
       //클라이언트 단 상태코드
       //=============================================
 
@@ -213,6 +213,17 @@ class Alert extends React.PureComponent {
       case 2124 :
         status = "error";
         msg = this.getMsg(code);   // 찜 목록 삭제
+        break;
+
+
+      //프로필 관련 메세지 2141~
+      case 2141 :
+        status = "success";
+        msg = this.getMsg(code);   // 유저네임 수정 성공
+        break;
+      case 2142 :
+        status = "error";
+        msg = this.getMsg(code);   // 유저네임 수정 실패
         break;
 
 

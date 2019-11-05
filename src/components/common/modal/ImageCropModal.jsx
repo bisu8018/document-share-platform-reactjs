@@ -108,7 +108,7 @@ class ImageCropModal extends React.Component {
         };
 
         // 유저 정보 업데이트
-        MainRepository.Account.updateProfileImage(data, () => {
+        MainRepository.Account.updateProfileImage(data).then(() => {
             const myInfo = getMyInfo;
             myInfo.picture = url;
             setMyInfo(myInfo);

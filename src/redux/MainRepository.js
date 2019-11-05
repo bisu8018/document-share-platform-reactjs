@@ -336,20 +336,18 @@ export default {
         header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         data: { "username": username }
       };
-      AuthService.POST.accountUpdate(_data, () => {
-        this.renewSession();
-        callback();
-      });
+      AuthService.POST.accountUpdate(_data)
+        .then(() => this.renewSession())
+        .catch(err => err);
     },
     async updateProfileImage(data: any, callback) {
       const _data = {
         header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         data: data
       };
-      AuthService.POST.accountUpdate(_data, () => {
-        this.renewSession();
-        callback();
-      });
+      AuthService.POST.accountUpdate(_data)
+        .then(() => this.renewSession())
+        .catch(err => err);
     },
     profileImageUpload(params, callback, error) {
       if (params.file == null) return console.error("file object is null", params);

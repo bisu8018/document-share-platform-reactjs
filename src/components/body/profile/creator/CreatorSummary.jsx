@@ -7,6 +7,8 @@ import { psString } from "../../../../config/localization";
 import log from "../../../../config/log";
 import common_view from "../../../../common/common_view";
 import MyAvatar from "../../../common/avatar/MyAvatar";
+import { FadingCircle } from "better-react-spinkit";
+import { APP_PROPERTIES } from "../../../../properties/app.properties";
 
 
 class CreatorSummary extends React.Component {
@@ -14,6 +16,7 @@ class CreatorSummary extends React.Component {
     balance: -1,
     userName: "",
     userNameEdit: false,
+    editLoading: false,
     errMsg: "",
     author7DayReward: null,
     authorTodayReward: null,
@@ -30,20 +33,22 @@ class CreatorSummary extends React.Component {
 
 
   //유저 네임 유효성 체크
-  userNameValidate = (name) => {
-    if (!name || name.length < 1)
-      this.setState({ errMsg: psString("profile-error-1") }, () => false);
+  userNameValidate = value => {
+    if (!value || value.length < 1)
+      return this.setState({ errMsg: psString("profile-error-1") }, () => false);
 
-    if (!Common.checkUsernameForm(name))
-      this.setState({ errMsg: psString("profile-error-2") }, () => false);
+    if (!Common.checkUsernameForm(value))
+      return this.setState({ errMsg: psString("profile-error-2") }, () => false);
 
-    if (name.length < 4 || name.length > 20)
-      this.setState({ errMsg: psString("profile-error-3") }, () => false);
+    if (value.length < 4 || value.length > 20) {
+      console.log(value);
+      return this.setState({ errMsg: psString("profile-error-3") }, () => false);
+    }
 
     if (this.state.errMsg !== "")
       this.setState({ errMsg: "" }, () => true);
 
-    return name;
+    return value;
   };
 
 
@@ -88,7 +93,8 @@ class CreatorSummary extends React.Component {
     const { getWeb3Apis, userInfo } = this.props;
     const { balance } = this.state;
 
-    if (!userInfo.ethAccount || balance >= 0) return false;
+    if (!userInfo.ethAccount || balance >= 0)
+      return false;
 
     getWeb3Apis.getBalance(userInfo.ethAccount, res => this.setState({ balance: res }, () => log.CreatorSummary.getBalance()));
     return true;
@@ -101,9 +107,8 @@ class CreatorSummary extends React.Component {
 
   //file input 등록/변경 시, url get
   handleFileChange = async e => {
-    if (e && e.length > 0) {
+    if (e && e.length > 0)
       this.props.setModal("imageCrop", { file: e[0] });
-    }
   };
 
 
@@ -117,19 +122,24 @@ class CreatorSummary extends React.Component {
 
   //수정 버튼 핸들
   handleEditBtn = () => {
+    this.setState({ editLoading: true });
+
     let name = document.getElementById("userNameEditInput").value;
     if (this.userNameValidate(name) && this.state.errMsg === "") {
       let userNameValue = document.getElementById("userNameEditInput").value;
-      MainRepository.Account.updateUsername(userNameValue, () => {
-        this.setState({ userNameEdit: false });
-        this.setState({ userName: userNameValue });
-      });
+      MainRepository.Account.updateUsername(userNameValue)
+        .then(() => {
+          this.props.setAlertCode(2141);
+          this.setState({ userNameEdit: false, editLoading: true });
+          this.setState({ userName: userNameValue });
+          window.history.replaceState({}, {}, APP_PROPERTIES.domain().mainHost + "/@" + userNameValue);
+        }).catch(err => this.props.setAlertCode());
     }
   };
 
 
   //유져네임 수정 상태 핸들
-  handleChangeUsername = (e) => this.setState({ userName: this.userNameValidate(e.target.value) });
+  handleChangeUsername = value => this.setState({ userName: this.userNameValidate(value) });
 
 
   shouldComponentUpdate = () => {
@@ -144,7 +154,7 @@ class CreatorSummary extends React.Component {
 
   render() {
     const { userInfo } = this.props;
-    const { author7DayReward, authorTodayReward, curatorEstimatedToday, curatorTotalRewards, balance, userNameEdit, userName, errMsg } = this.state;
+    const { author7DayReward, editLoading, authorTodayReward, curatorEstimatedToday, curatorTotalRewards, balance, userNameEdit, userName, errMsg } = this.state;
 
     this.getRewards();
 
@@ -179,9 +189,13 @@ class CreatorSummary extends React.Component {
               <span className={userNameEdit ? "d-flex" : "d-none"}>
                 <input type="text" id="userNameEditInput" placeholder="User Name . . ." value={this.state.userName}
                        className={"username-edit-input mr-2 " + (errMsg.length > 0 ? "username-edit-input-warning" : "")}
-                       onChange={(e) => this.handleChangeUsername(e)} spellCheck="false" maxLength="20"/>
-                <div onClick={() => this.handleEditBtn()} className="username-edit-btn mr-2">Done</div>
-                <div onClick={() => this.handleCancelEvent()} className="username-cancel-btn">Cancel</div>
+                       onChange={(e) => this.handleChangeUsername(e.target.value)} spellCheck="false" maxLength="20"/>
+                <div onClick={() => this.handleEditBtn()}
+                     className={"username-edit-btn mr-2 " + (!editLoading ? "" : "btn-disabled")}>
+                  {!editLoading ? "Done" : <FadingCircle color="#3681fe" size={17}/>}
+                </div>
+                {!editLoading &&
+                <div onClick={() => this.handleCancelEvent()} className="username-cancel-btn">Cancel</div>}
                 {errMsg.length > 0 && <div className="username-edit-input-warning-msg">{errMsg}</div>}
               </span>
             </div>
