@@ -24,6 +24,7 @@ import ContentViewComment from "./ContentViewComment";
 import { FadingCircle } from "better-react-spinkit";
 import common_view from "../../../../common/common_view";
 import ContentViewSeeAlso from "./ContentViewSeeAlso";
+import UserAvatar from "../../../common/avatar/UserAvatar";
 
 
 class ContentViewFullScreen extends Component {
@@ -229,6 +230,7 @@ class ContentViewFullScreen extends Component {
       view = getDocument.document.latestPageview || 0,
       accountId = getDocument.document.accountId || "",
       profileUrl = getDocument.document.author ? getDocument.document.author.picture : null,
+      croppedArea = getDocument.document.author ? getDocument.document.author.croppedArea : null,
       identification = getDocument.document.author ? (getDocument.document.author.username && getDocument.document.author.username.length > 0 ? getDocument.document.author.username : getDocument.document.author.email) : getDocument.document.accountId,
       ogUrl = APP_PROPERTIES.domain().embed + getDocument.document.seoTitle;
 
@@ -253,20 +255,16 @@ class ContentViewFullScreen extends Component {
             <div className="row">
               <Link to={"/@" + identification} title={"Go to profile page of " + identification}
                     rel="nofollow">
-                <img src={profileUrl} alt="profile" className="content-view-img"
-                     onClick={() => common_view.scrollTop()}
-                     onError={(e) => {
-                       e.target.onerror = null;
-                       e.target.src = require("assets/image/icon/i_profile-default.png");
-                     }}/>
+                <UserAvatar picture={profileUrl} croppedArea={croppedArea} size={43}/>
               </Link>
 
-              <div className="d-inline-block ml-1">
+              <div className="d-inline-block ml-3">
                 <Link to={"/@" + identification} title={"Go to profile page of " + identification} rel="nofollow">
                   <div className="info-name">{identification}</div>
                 </Link>
-                <div
-                  className="info-date-view d-inline-block">{Common.timestampToDate(getDocument.document.created)}</div>
+                <div className="info-date-view d-inline-block">
+                  {Common.timestampToDate(getDocument.document.created)}
+                </div>
               </div>
             </div>
 

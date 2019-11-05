@@ -30,6 +30,7 @@ class ImageCropModal extends React.Component {
       crop: { x: 0, y: 0 },
       zoom: 1,
       aspect: 1,
+      croppedArea: null,
       style: {
         containerStyle: {
           background: "none"
@@ -62,11 +63,7 @@ class ImageCropModal extends React.Component {
 
 
   // crop zoom complete check
-  onCropComplete = (croppedArea, croppedAreaPixels) => {
-    console.log("croppedArea", croppedAreaPixels);
-    console.log("croppedAreaPixels", croppedAreaPixels);
-    console.log(croppedAreaPixels.width / croppedAreaPixels.height);
-  };
+  onCropComplete = (croppedArea, croppedAreaPixels) => this.setState({ croppedArea: croppedAreaPixels });
 
 
   // crop zoom change check
@@ -92,6 +89,9 @@ class ImageCropModal extends React.Component {
   // 자르기 확인
   handleCropConfirm = () => {
     const { getModalData, getMyInfo, setMyInfo } = this.props;
+    const { croppedArea } = this.state;
+
+    if (!croppedArea) return false;
 
     this.setState({ registerLoading: true });
 
@@ -102,9 +102,13 @@ class ImageCropModal extends React.Component {
       // 이미지 서버에 업로드
       MainRepository.Account.profileImageUpload(params, () => {
         let url = APP_PROPERTIES.domain().profile + result.picture;
+        let data = {
+          "picture": url,
+          "croppedArea": croppedArea
+        };
 
         // 유저 정보 업데이트
-        MainRepository.Account.updateProfileImage(url, () => {
+        MainRepository.Account.updateProfileImage(data, () => {
             const myInfo = getMyInfo;
             myInfo.picture = url;
             setMyInfo(myInfo);

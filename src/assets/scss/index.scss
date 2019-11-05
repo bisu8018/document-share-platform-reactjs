@@ -6850,19 +6850,8 @@ Dean*/
 
 .avatar {
   border-radius: 19px;
-  cursor: pointer;
-  position: relative !important;
-  width: 33px;
-  height: 33px;
-  border: 1px solid #b3b3b3;
-}
 
-.avatar:hover {
-  border-color: $second-color;
-}
-
-.avatar:after {
-  background: none !important;
+  position: absolute !important;
 }
 
 .avatar-menu {
@@ -6879,18 +6868,14 @@ Dean*/
 .avatar-name-menu {
   font-size: 16px;
   font-weight: 300;
-  line-height: 1.38;
-  letter-spacing: -0.2px;
   color: #4d4d4d;
 }
 
 .avatar-init-menu {
-  border-radius: 25px;
   cursor: pointer;
   position: relative !important;
-  margin-right: 10px;
-  width: 33px;
-  height: 33px;
+  width: inherit;
+  height: inherit;
   display: flex;
   display: -webkit-flexbox;
   justify-content: center;
@@ -6902,26 +6887,8 @@ Dean*/
 .avatar-name-init-menu {
   font-size: 16px;
   font-weight: 500;
-  line-height: 1.38;
-  letter-spacing: -0.2px;
   text-transform: uppercase;
   color: #ffffff;
-}
-
-.profile-card-avatar-init {
-  border-radius: 60px;
-  width: 90px;
-  height: 90px;
-  display: flex;
-  display: -webkit-flexbox;
-  justify-content: center;
-  align-items: center;
-  text-transform: uppercase;
-  font-size: 40px;
-  font-weight: bold;
-  color: white;
-  background: #3d5afe;
-  margin: auto;
 }
 
 .profile-card-loading-wrapper {
@@ -6929,6 +6896,28 @@ Dean*/
   display: -webkit-flexbox;
   justify-content: center;
   padding-top: 2px;
+}
+
+.avatar-wrapper {
+  display: inline-block;
+  z-index: 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 60px;
+  cursor: pointer;
+  border: 1px solid #dadada;
+}
+
+.avatar-wrapper:hover {
+  border-color: $second-color;
+}
+
+.avatar-wrapper:after {
+  background: none !important;
+}
+
+.avatar-wrapper > img {
+  position: absolute;
 }
 
 
@@ -7295,19 +7284,14 @@ Dean*/
   line-height: normal;
   letter-spacing: normal;
   color: #4d4d4d;
-  display: inline-block;
+  display: flex;
+  width: intrinsic;           /* Safari/WebKit uses a non-standard name */
+  width: -moz-max-content;    /* Firefox/Gecko */
+  width: -webkit-max-content; /* Chrome */
+  align-items: center;
 }
 
-.info_name > img {
-  display: inline-block;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  margin-right: .4rem;
-  border: 1px solid #CCCCCC;
-}
-
-.info_name:hover > img,
+.info_name:hover > div,
 .info_name:hover {
   border-color: #3d5afe;
   color: $primary-color;
@@ -8202,7 +8186,6 @@ Dean*/
 }
 
 .profile_top {
-  margin-top: 15px;
   margin-bottom: 40px;
   position: relative;
 }
@@ -8211,28 +8194,12 @@ Dean*/
   display: inline-flex;
 }
 
-
-.profile_top .profile-image {
-  width: 90px;
-  height: 90px;
-  margin: 10px auto;
-}
-
-.profile_top .profile-image .img-fluid {
-  border-radius: 50%;
-  max-width: 100%;
-  width: inherit;
-  height: inherit;
-  border: 1px solid #CCCCCC;
-}
-
 .profile_info_name {
   text-align: left;
   display: inline-block;
   font-weight: bold;
   font-size: 16px;
   word-break: break-all;
-  padding-top: 10px;
   line-height: 1.38;
   letter-spacing: -0.2px;
   color: #4d4d4d;
@@ -8283,7 +8250,8 @@ Dean*/
 
 .profile-image-edit {
   cursor: pointer;
-  top: 10px;
+  z-index: 1;
+  top: 0;
   position: absolute;
   width: 90px;
   height: 90px;
@@ -8519,8 +8487,9 @@ Duration CSS*/
 트랙킹 리스트 페이지 CSS*/
 .tracking-list-search-selected-wrapper {
   position: relative;
-  width: fit-content;
-  width: -moz-fit-content;
+  width: intrinsic;           /* Safari/WebKit uses a non-standard name */
+  width: -moz-max-content;    /* Firefox/Gecko */
+  width: -webkit-max-content; /* Chrome */
   float: right;
   right: 27px;
 }
@@ -8684,7 +8653,9 @@ Dean
 .u__view .fullscreen-enabled .view_screen {
   position: absolute;
   display: inline-block;
-  height: fit-content;
+  height: intrinsic;           /* Safari/WebKit uses a non-standard name */
+  height: -moz-max-content;    /* Firefox/Gecko */
+  height: -webkit-max-content; /* Chrome */
   top: 10px;
 }
 
@@ -10560,18 +10531,9 @@ Main Category CSS
   position: relative;
 }
 
-.main-category-card-profile > img {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin-right: .4rem;
-  border: 1px solid #CCCCCC;
-}
-
-.main-category-card-profile:hover > img,
+.main-category-card-profile:hover > div,
 .main-category-card-profile:hover .main-category-card-name {
-  border-color: #3d5afe;
+  border-color: $second-color !important;
   color: $second-color;
 }
 
@@ -10723,18 +10685,9 @@ Main Category CSS
   background: white;
   right: 45px;
   top: 0;
+  z-index: 1;
   border-radius: 4px;
   border: solid 1px #cccccc;
-}
-
-.profile-card-avatar {
-  border-radius: 60px;
-  width: 90px;
-  height: 90px;
-  border: 1px solid #cccccc;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 .profile-card-username {
@@ -10930,11 +10883,6 @@ Ads CSS
 
 .ad-demo-img {
   margin-left: -35px;
-}
-
-.header-avatar-wrapper {
-  display: inline-block;
-  z-index: 1;
 }
 
 .header-version {

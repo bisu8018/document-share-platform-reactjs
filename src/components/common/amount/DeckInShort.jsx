@@ -6,7 +6,7 @@ class DeckInShort extends React.Component {
   render() {
     const { deck } = this.props;
 
-    let deck1m = Math.round((deck * 1) / 1000000) > 0 ? Math.floor((deck * 1) / 100000) / 10 : 0,
+    let deck1m = Math.round((deck * 1) / 1000000) > 0 ?c(deck * 1) / 100000) / 10 : 0,
       deck1k = Math.round((deck * 1) / 1000) > 0 ? Math.floor((deck * 1) / 100) / 10 : 0,
       deckStr = 0;
 

@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import CategoryContainer from "../../container/header/CategoryContainer";
 import AutoSuggestInputContainer from "../../container/common/AutoSuggestInputContainer";
 import Tooltip from "@material-ui/core/Tooltip";
+import MyAvatar from "../common/avatar/MyAvatar";
 
 
 class Header extends React.Component {
@@ -64,7 +65,7 @@ class Header extends React.Component {
     this.setInterval = setInterval(() =>
       this.setState({ awayTime: Number(this.state.awayTime + t) }, () => {
         if (this.state.awayTime >= t * 15) {
-          history.push('/');
+          history.push("/");
           // setAway(true);   // 백엔드 작업 전까지 보류
         }
       }), t);
@@ -115,7 +116,7 @@ class Header extends React.Component {
         // 프로필 카드
         const profileCard = document.getElementById("profileCard");
         const headerAvatar = document.getElementById("header-avatar");
-        if (profileCard && !profileCard.contains(targetElement) && !headerAvatar.contains(targetElement))
+        if (profileCard && !profileCard.contains(targetElement) && headerAvatar && !headerAvatar.contains(targetElement))
           this.profileCardHide();
 
         // 뷰어페이지 옵션창
@@ -298,7 +299,7 @@ class Header extends React.Component {
           <div className='container-fluid container'>
             <div className='col-4 col-sm-3 mt-1 align-items-center d-flex'>
               <Link to="/" className='navbar-brand' onClick={() => common_view.scrollTop()} rel="nofollow">
-                <div className={'header-logo' + (getIsMobile || this.getSubTitle() ? '-cut' : '')}/>
+                <div className={"header-logo" + (getIsMobile || this.getSubTitle() ? "-cut" : "")}/>
                 {/*<img src={APP_PROPERTIES.domain().static + "/image/logo.svg"} alt='POLARIS SHARE'/>*/}
               </Link>
               {(!getIsMobile || (!searchBar && getIsMobile)) &&
@@ -323,7 +324,7 @@ class Header extends React.Component {
               {getMyInfo.privateDocumentCount >= 5 ?
                 <PrivateDocumentCountModal {...this.props} /> :
                 (path !== "ca" && (!getIsMobile || (!searchBar && getIsMobile))) &&
-                <div className="ml-2">
+                <div className="ml-2 mr-3">
                   <Tooltip title="Share your contents" placement="bottom">
                     <div className="add-btn" onClick={() => setModal("upload", {})}>
                       <i className="material-icons">add</i>
@@ -333,21 +334,10 @@ class Header extends React.Component {
               }
 
               {(MainRepository.Account.isAuthenticated() || getTempEmail) && !getIsMobile &&
-              <div className='header-avatar-wrapper ml-3' onClick={() => this.profileCardShow()}>
-                {MainRepository.Account.isAuthenticated() ?
-                  getMyInfo.picture.length > 0 ?
-                    <img src={getMyInfo.picture} id='header-avatar' className='avatar' alt='Link to my profile'
-                         onError={(e) => {
-                           e.target.onerror = null;
-                           e.target.src = require("assets/image/icon/i_profile-default.png");
-                         }}/> :
-                    <img src={require("assets/image/icon/i_profile-default.png")} className='avatar'
-                         alt='Link to my profile' /> :
-                  <div className='avatar-init-menu'>
-                    <div className='avatar-name-init-menu'>{getTempEmail[0]}</div>
-                  </div>}
-                {profileCardShow && <ProfileCardContainer/>}
-              </div>}
+              <MyAvatar onClicked={() => this.profileCardShow()} size={33} picture={getMyInfo.picture} croppedArea={getMyInfo.croppedArea} tempEmail={getTempEmail}/>
+              }
+
+              {profileCardShow && <ProfileCardContainer/>}
 
               {!MainRepository.Account.isAuthenticated() && !getTempEmail && !getIsMobile &&
               <div className='d-flex login-btn ml-2 ml-sm-3' onClick={() => this.handleLogin()}>

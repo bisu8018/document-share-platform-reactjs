@@ -1,5 +1,6 @@
 export default class UserInfo {
-  connected: any;
+  connected: number;
+  croppedArea: any;
   email : string;
   family_name: string;
   locale: string;
@@ -13,6 +14,7 @@ export default class UserInfo {
 
   constructor(data) {
     this.connected = data && data.connected ? data.connected : 0;
+    this.croppedArea = data && data.croppedArea ? data.croppedArea : null;
     this.email = data && data.email ? data.email :"";
     this.family_name = data && data.family_name ? data.family_name :"";
     this.locale = data && data.locale ? data.locale :"";

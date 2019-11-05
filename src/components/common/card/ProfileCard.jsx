@@ -3,6 +3,8 @@ import BalanceOfContainer from "../../../container/common/BalanceOfContainer";
 import MainRepository from "../../../redux/MainRepository";
 import { psString } from "../../../config/localization";
 import { FadingCircle } from "better-react-spinkit";
+import MyAvatar from "../avatar/MyAvatar";
+
 
 class ProfileCard extends React.Component {
   state = {
@@ -40,45 +42,32 @@ class ProfileCard extends React.Component {
     return (
       <div className='profile-card tac' id='profileCard'>
         <div className='mt-4 mb-4'>
-
-          {MainRepository.Account.isAuthenticated() ?
-            getMyInfo.picture.length > 0 ?
-              <img src={getMyInfo.picture} className='profile-card-avatar' alt='profile' onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = require("assets/image/icon/i_profile-default.png");
-              }}/> :
-              <img src={require("assets/image/icon/i_profile-default.png")}
-                   className='profile-card-avatar' alt='profile'/>
-            :
-            <div className='profile-card-avatar-init'>{getTempEmail[0]}</div>
-          }
-
+          <MyAvatar size={90} picture={getMyInfo.picture} croppedArea={getMyInfo.croppedArea} tempEmail={getTempEmail}/>
           <div className='profile-card-username mt-2'>
             {MainRepository.Account.isAuthenticated() ? identification : getTempEmail}
           </div>
         </div>
 
+
         <div className='mb-4'>
           <div className='profile-card-total-balance'>{psString("profile-card-total-balance")}</div>
           {!loading ?
-            <BalanceOfContainer balance={balance}/>
-            :
+            <BalanceOfContainer balance={balance}/> :
             <div className='profile-card-loading-wrapper'><FadingCircle color='#3681fe'/></div>
           }
         </div>
 
+
         <div>
           {MainRepository.Account.isAuthenticated() ?
             <div className='my-account-btn mb-2' id='profileCardMyAccountBtn'
-                 data-id={identification}>{psString("profile-card-my-page")}</div>
-            :
+                 data-id={identification}>{psString("profile-card-my-page")}</div> :
             <div className='my-account-btn mb-2'
                  onClick={() => MainRepository.Account.login()}> {psString("profile-card-login")} </div>
           }
           <div className='profile-card-logout-btn'
                onClick={() => MainRepository.Account.logout()}>{psString("profile-card-logout")}</div>
         </div>
-
       </div>
 
 

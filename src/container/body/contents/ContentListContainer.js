@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import ContentList from "../../../components/body/contents/ContentList";
+import ContentList from "../../../components/body/contents/contentsList/ContentList";
 import { setAction } from "../../../redux/reducer/main";
 
 

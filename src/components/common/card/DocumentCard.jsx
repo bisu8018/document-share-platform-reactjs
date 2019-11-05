@@ -5,6 +5,7 @@ import LinesEllipsis from "react-lines-ellipsis";
 import { psString } from "../../../config/localization";
 import common_view from "../../../common/common_view";
 import { APP_PROPERTIES } from "../../../properties/app.properties";
+import UserAvatar from "../avatar/UserAvatar";
 
 class DocumentCard extends React.Component {
   constructor(props) {
@@ -15,14 +16,15 @@ class DocumentCard extends React.Component {
     };
   }
 
+
   // 리워드 정보 표시
-  showRewardInfo = (id) => {
+  showRewardInfo = id => {
     if (document.getElementById(id)) document.getElementById(id).style.display = "block";
   };
 
 
   // 리워드 정보 숨김
-  hideRewardInfo = (id) => {
+  hideRewardInfo = id => {
     if (document.getElementById(id)) document.getElementById(id).style.display = "none";
   };
 
@@ -40,9 +42,11 @@ class DocumentCard extends React.Component {
     };
   };
 
+
   componentWillMount(): void {
     this.getImgInfo();
   }
+
 
   render() {
     const { idx, path, getIsMobile, documentData, getCreatorDailyRewardPool, totalViewCountInfo, countCards } = this.props;
@@ -52,6 +56,7 @@ class DocumentCard extends React.Component {
       identification = author ? (author.username && author.username.length > 0 ? author.username : author.email) : documentData.accountId,
       imgUrl = Common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName),
       profileUrl = author ? author.picture : null,
+      croppedArea = author ? author.croppedArea : null,
       vote = Common.toEther(documentData.latestVoteAmount) || 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
       view = documentData.latestPageview || 0;
@@ -79,13 +84,8 @@ class DocumentCard extends React.Component {
                 />
               </Link>
             </div>
-            <Link to={"/@" + identification} className="main-category-card-profile mt-1 mb-1 pt-1 pb-2 w-full"
-                  rel="nofollow">
-              <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()}
-                   onError={(e) => {
-                     e.target.onerror = null;
-                     e.target.src = require("assets/image/icon/i_profile-default.png");
-                   }}/>
+            <Link to={"/@" + identification} rel="nofollow" className={"main-category-card-profile mt-1 mb-1 pt-1 pb-2 w-full"}>
+              <UserAvatar picture={profileUrl} croppedArea={croppedArea} size={30}/>
               <span className="main-category-card-name">{identification}</span>
               {!getIsMobile &&
               <span className="main-category-card-date">
@@ -116,21 +116,16 @@ class DocumentCard extends React.Component {
                 {psString("profile-payout-txt-1")}
                 <span
                   className="font-weight-bold ml-1">{(!reward ? 0 : reward)} DECK</span> {psString("profile-payout-txt-2")}
-              </div>
-              :
+              </div> :
               <div className={"main-category-card-reward-info reward-info-not-registered"} id={path + idx}>
                 <div className="reward-info-not-registered-syntax">{psString("payout-registered")}</div>
                 {psString("payout-text-2")}
                 <span className="font-weight-bold ml-1">{(!reward ? 0 : reward)} DECK</span>
-              </div>
-          )
-
+              </div>)
           }
         </div>
 
       </div>
-
-
     );
   }
 }

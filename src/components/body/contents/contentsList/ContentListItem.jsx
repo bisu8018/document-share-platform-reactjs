@@ -2,14 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import LinesEllipsis from "react-lines-ellipsis";
 import responsiveHOC from "react-lines-ellipsis/lib/responsiveHOC";
-import Common from "../../../common/common";
-import PayoutCard from "../../common/card/PayoutCard";
-import common_view from "../../../common/common_view";
-import { APP_PROPERTIES } from "../../../properties/app.properties";
+import Common from "../../../../common/common";
+import PayoutCard from "../../../common/card/PayoutCard";
+import common_view from "../../../../common/common_view";
+import { APP_PROPERTIES } from "../../../../properties/app.properties";
 import Tooltip from "@material-ui/core/Tooltip";
-import { psString } from "../../../config/localization";
-import MainRepository from "../../../redux/MainRepository";
-import DocumentInfo from "../../../redux/model/DocumentInfo";
+import { psString } from "../../../../config/localization";
+import MainRepository from "../../../../redux/MainRepository";
+import DocumentInfo from "../../../../redux/model/DocumentInfo";
+import UserAvatar from "../../../common/avatar/UserAvatar";
 
 
 const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
@@ -105,6 +106,7 @@ class ContentListItem extends React.Component {
       view = result.latestPageview || 0,
       imageUrl = Common.getThumbnail(result.documentId, (getIsMobile ? 640 : 320), 1, result.documentName),
       profileUrl = result.author ? result.author.picture : null,
+      croppedArea = result.author ? result.author.croppedArea : null,
       identification = result.author ? (result.author.username && result.author.username.length > 0 ? result.author.username : result.author.email) : result.accountId;
 
     return (
@@ -137,11 +139,8 @@ class ContentListItem extends React.Component {
           </div>
           <div className="mb-1">
             <Link to={"/@" + identification} className="info_name" title={identification} rel="nofollow">
-                <img src={profileUrl} alt="profile" onClick={() => common_view.scrollTop()} onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src =require("assets/image/icon/i_profile-default.png");
-                }}/>
-              {identification}
+              <UserAvatar picture={profileUrl} croppedArea={croppedArea} size={26}/>
+              <div className='ml-2'>{identification}</div>
             </Link>
             <div className="info_date float-right d-inline-block">
               {common_view.dateTimeAgo(result.created)}

@@ -341,10 +341,10 @@ export default {
         callback();
       });
     },
-    async updateProfileImage(url: string, callback) {
+    async updateProfileImage(data: any, callback) {
       const _data = {
         header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
-        data: { "picture": url }
+        data: data
       };
       AuthService.POST.accountUpdate(_data, () => {
         this.renewSession();

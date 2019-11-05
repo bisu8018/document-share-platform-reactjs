@@ -6,6 +6,7 @@ import BalanceOfContainer from "../../../../container/common/BalanceOfContainer"
 import { psString } from "../../../../config/localization";
 import log from "../../../../config/log";
 import common_view from "../../../../common/common_view";
+import MyAvatar from "../../../common/avatar/MyAvatar";
 
 
 class CreatorSummary extends React.Component {
@@ -151,18 +152,14 @@ class CreatorSummary extends React.Component {
 
       <div className="profile_container">
         <div className="profile-top-wrapper"/>
-        <div className="row  profile_top">
+        <div className="row  profile_top pt-4">
           <div className="col-12 col-sm-2 col-lg-1 ">
-            <div className="profile-image" title="Change profile image">
-              <img src={userInfo.picture} alt="profile" className="img-fluid" onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = require("assets/image/icon/i_profile-default.png");
-              }}/>
-              {this.getMyInfo().email === userInfo.email &&
-              <div className="profile-image-edit" onClick={this.handleFileUpload}><i className="material-icons">edit</i>
-              </div>
-              }
+            <MyAvatar size={90} picture={userInfo.picture} croppedArea={userInfo.croppedArea}/>
+            {this.getMyInfo().email === userInfo.email &&
+            <div className="profile-image-edit" onClick={this.handleFileUpload}>
+              <i className="material-icons">edit</i>
             </div>
+            }
             {this.getMyInfo().email === userInfo.email &&
             <input type="file" id="imgFile" accept="image/*" onChange={(e) => this.handleFileChange(e.target.files)}
                    onClick={e => e.target.value = null}/>
