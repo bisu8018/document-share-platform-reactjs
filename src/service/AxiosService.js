@@ -9,6 +9,7 @@ export default {
   DEBUG: () => false,
 
   getRootUrlWithApi: () => APP_PROPERTIES.domain().api + "/api/",
+  getRootUrlWithWallet: () => APP_PROPERTIES.domain().wallet + "/api/",
   _request: function(url, type, data, success, failure, header) {
     if (this.DEBUG()) console.log("[request]\nurl: " + url + "\ndata: " + data);
 
@@ -19,7 +20,7 @@ export default {
 
     axios({
       method: type,
-      url: this.getRootUrlWithApi() + url,
+      url: url,
       data: data,
       headers: _header
     })
@@ -51,7 +52,7 @@ export default {
   },
   _requestPlain: function(url, type, success, failure) {
     this._request(
-      url,
+      this.getRootUrlWithApi() + url,
       type,
       "",
       success,
@@ -63,63 +64,96 @@ export default {
     data = data || {};
     let params = data ? "?" + qs.stringify(data) : "";
     this._request(
-      url + params,
+      this.getRootUrlWithApi() + url + params,
       type,
       "",
       success,
       failure
     );
-  }
-  ,
+  },
   _requestWithBody: function(url, type, data, success, failure) {
     let _data = data || {};
 
     this._request(
-      url,
+      this.getRootUrlWithApi() + url,
       type,
       JSON.stringify(_data),
       success,
       failure
     );
-  }
-  ,
+  },
   _requestWithHeader: function(url, type, data, success, failure) {
     const _header = data.header || {};
     const _data = data.data || {};
     this._request(
-      url,
+      this.getRootUrlWithApi() + url,
       type,
       _data,
       success,
       failure,
       _header
     );
-  }
-  ,
+  },
   _requestWithHeaderBody: function(url, type, data, success, failure) {
     const _header = data.header || {};
     const _data = data.data || {};
     this._request(
-      url,
+      this.getRootUrlWithApi() + url,
       type,
       JSON.stringify(_data),
       success,
       failure,
       _header
     );
-  }
-  ,
+  },
   _requestGetWithHeader: function(url, type, data, success, failure) {
     const _header = data.header || {};
     let _params = data.params ? "?" + qs.stringify(data.params) : "";
 
     this._request(
-      url + _params,
+      this.getRootUrlWithApi() + url + _params,
       type,
       null,
       success,
       failure,
       _header
+    );
+  },
+  _requestGetWithHeaderForWallet: function(url, type, data, success, failure) {
+    const _header = data.header || {};
+    let _params = data.params ? "?" + qs.stringify(data.params) : "";
+
+    this._request(
+      this.getRootUrlWithWallet() + url + _params,
+      type,
+      null,
+      success,
+      failure,
+      _header
+    );
+  },
+  _requestWithHeaderBodyForWallet: function(url, type, data, success, failure) {
+    const _header = data.header || {};
+    const _data = data.data || {};
+
+    this._request(
+      this.getRootUrlWithWallet() + url,
+      type,
+      JSON.stringify(_data),
+      success,
+      failure,
+      _header
+    );
+  },
+  _requestWithBodyForWallet: function(url, type, data, success, failure) {
+    let _data = data || {};
+
+    this._request(
+      this.getRootUrlWithWallet() + url,
+      type,
+      JSON.stringify(_data),
+      success,
+      failure
     );
   }
 }

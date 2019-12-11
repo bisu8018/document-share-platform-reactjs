@@ -10,8 +10,6 @@ export default connect(
     getTagList: state.main.tagList,
     getUploadTagList: state.main.uploadTagList,
     getIsMobile: state.main.isMobile,
-    getWeb3Apis: state.main.web3Apis,
-    getDrizzle: state.main.drizzleApis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
     getAlertCode: state.main.alertCode,
     getAway: state.header.away,
@@ -26,7 +24,5 @@ export default connect(
     setIsMobile: (isMobile: boolean) => dispatch(setAction.isMobile(isMobile)),
     setAuthorDailyRewardPool: (authorRewardPool: any) => dispatch(setAction.authorDailyRewardPool(authorRewardPool)),
     setCuratorDailyRewardPool: (curatorRewardPool: any) => dispatch(setAction.curatorDailyRewardPool(curatorRewardPool)),
-    setWeb3Apis: () => dispatch(setAction.web3Apis()),
-    setDrizzleApis: () => dispatch(setAction.drizzleApis())
   })
 )(Main);

@@ -4,9 +4,7 @@ import DeleteDocumentModal from "../../../components/common/modal/DeleteDocument
 
 export default connect(
   state => ({
-    getDrizzle: state.main.drizzleApis,
     getMyInfo: state.main.myInfo,
-    getWeb3Apis: state.main.web3Apis
   }),
   dispatch => ({
     setAlertCode: (alertCode: any) => dispatch(setAction.alertCode(alertCode))

@@ -38,7 +38,7 @@ class PrivateDocumentCountModal extends React.Component {
     const { getMyInfo } = this.props;
 
     let username = getMyInfo.username;
-    let _username = username ? username : getMyInfo.ethAccount;
+    let _username = username ? username : getMyInfo.email;
     this.setState({ username: _username }, () => {
       this.handleOpen(modal).then(() => common_view.setBodyStyleLock());
     });

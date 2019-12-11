@@ -118,5 +118,43 @@ export default ({
       family_name
       ethAccount
     }
-  }`
+  }`,
+  getProfileRewards: data =>
+    `
+  ProfileSummary {
+    getLast7CreatorReward(userId: "${data}") {
+      documentId
+      blockchainTimestamp
+      blockchainDate
+      pageview
+      totalPageview
+      reward
+    }
+    getTodayEstimatedCreatorReward(userId: "${data}") {
+      documentId
+      blockchainTimestamp
+      blockchainDate
+      pageview
+      totalPageview
+      reward
+    }
+    getLast7CuratorReward(userId: "${data}") {
+      documentId
+      blockchainTimestamp
+      blockchainDate
+      pageview
+      totalPageview
+      reward
+    }
+    getTodayEstimatedCuratorReward(userId: "${data}") {
+      documentId
+      blockchainTimestamp
+      blockchainDate
+      pageview
+      totalPageview
+      reward
+    }
+  }
+
+`
 });

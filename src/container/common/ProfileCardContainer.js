@@ -6,7 +6,6 @@ import { setAction as emailModalAction } from "../../redux/reducer/emailModal";
 export default connect(
   state => ({
     getMyInfo: state.main.myInfo,
-    getWeb3Apis: state.main.web3Apis,
     getTempEmail: state.emailModal.tempEmail
   }),
   dispatch => ({

@@ -57,7 +57,7 @@ class DocumentCard extends React.Component {
       imgUrl = Common.getThumbnail(documentData.documentId, 640, 1, documentData.documentName),
       profileUrl = author ? author.picture : null,
       croppedArea = author ? author.croppedArea : null,
-      vote = Common.toEther(documentData.latestVoteAmount) || 0,
+      vote = documentData.latestVoteAmount ? Common.toEther(Object.values(documentData.latestVoteAmount)[0]) : 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
       view = documentData.latestPageview || 0;
 
@@ -80,7 +80,7 @@ class DocumentCard extends React.Component {
                   maxLine={2}
                   ellipsis='...'
                   trimRight
-                  basedOn='words'
+                  basedOn='letters'
                 />
               </Link>
             </div>

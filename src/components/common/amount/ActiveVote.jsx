@@ -9,10 +9,7 @@ class ActiveVote extends React.Component {
   };
 
   componentWillMount() {
-    const { documentData, getWeb3Apis } = this.props;
-    getWeb3Apis.getActiveVotes(documentData.documentId).then((data) => {
-      this.setState({ curatorRewardOnUserDocument: data });
-    });
+    this.setState({ curatorRewardOnUserDocument: 0 });
   }
 
   handleClick = event => {

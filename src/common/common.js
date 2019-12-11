@@ -129,11 +129,15 @@ export default ({
   escapeRegexCharacters: str => {
     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   },
+
+  // 이메일 양식 체크
   checkEmailForm: (email: string) => {
     let regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
     return email.match(regExp);
   },
+
+  // 유저 네임 양식 체크
   checkUsernameForm: (name: string) => {
     let regExp = /^[a-z0-9+]*$/;
 
@@ -228,5 +232,11 @@ export default ({
   },
   delay : ms => new Promise(resolve =>
     setTimeout(resolve, ms)
-  )
+  ),
+  checkWalletAccount: value => {
+    let regExp1 = value.match(/^[A-Za-z0-9+]{42}$/) !== null;
+    let regExp2 = value.match(/^0x(\w)+$/) !== null;
+
+    return regExp1 && regExp2;
+  }
 });

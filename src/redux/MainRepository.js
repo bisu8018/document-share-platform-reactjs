@@ -28,6 +28,10 @@ import AccountInfo from "./model/AccountInfo";
 import common_view from "../common/common_view";
 import mutations from "../service/mutations";
 import queries from "../service/queries";
+import WalletService from "../service/WalletService";
+import WalletCreate from "./model/WalletCreate";
+import WalletBalance from "./model/WalletBalance";
+import ProfileRewards from "./model/ProfileRewards";
 //import * as Sentry from '@sentry/browser';
 
 let instance: any;
@@ -59,23 +63,6 @@ export default {
 
     //Auth0 초기화
     instance.InitData.authData = new auth0.WebAuth(AUTH_CONFIG);
-
-    // 메타마스크 관련 체크
-    if (!ssr && (typeof window.ethereum !== "undefined" || (typeof window.web3 !== "undefined"))) {
-      const ethereum = window["ethereum"] || window.web3.currentProvider;
-
-      ethereum.autoRefreshOnNetworkChange = false;
-
-      // 메타마스크 계정 변경 시, 리로드
-      ethereum.on("accountsChanged", accounts => {
-        document.location.reload();
-      });
-
-      // 메타마스크 네트워크 변경 시, 리로드
-      ethereum.on("networkChanged", accounts => {
-        document.location.reload();
-      });
-    }
 
     callback(true);
   },
@@ -321,14 +308,14 @@ export default {
         .then(result => new UserProfile(result))
         .catch(err => err);
     },
-    async syncEthereum(ethAccount: string, callback) {
+    async syncEthereum(ethAccount: string) {
       const _data = {
         header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
         data: { "ethAccount": ethAccount }
       };
-      AuthService.POST.ethereumSync(_data, (res, error) => {
+      return AuthService.POST.ethereumSync(_data).then(res => {
         this.renewSession();
-        callback(res);
+        return res;
       });
     },
     async updateUsername(username: string, callback) {
@@ -386,7 +373,7 @@ export default {
       return AuthService.GET.documents(params)
         .then(result => new DocumentList((result)))
         .catch(err => err);
-    }
+    },
   },
   Document: {
     async registerDocument(args: any, progress: any, callback: any, error: any) {
@@ -477,9 +464,6 @@ export default {
       return DocService.GET.documentDownload(params)
         .then(result => new DocumentDownload(result))
         .catch(err => err);
-    },
-    getTodayVotedDocumentsByCurator(params: any, callback: any) {
-      DocService.POST.todayVotedDocumentsByCurator({ accountId: params.accountId }, (result) => callback(result));
     },
     async updateDocument(data: any) {
       const _data = {
@@ -644,6 +628,74 @@ export default {
       TrackingService.GET.trackingExport(params, result => callback(new TrackingExport(result)));
     }
   },
+  Wallet: {
+    async getWalletBalance(data) {
+
+      return WalletService.POST.walletBalance(data)
+        .then(result => {
+          return new WalletBalance(result);
+        })
+        .catch(err => err);
+    },
+    async createWallet() {
+      const params = {
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` }
+      };
+
+      return WalletService.POST.walletCreate(params)
+        .then(result => {
+          return new WalletCreate(result);
+        })
+        .catch(err => err);
+    },
+    async walletWithdraw(data) {
+      const params = {
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
+        data: data
+      };
+
+      return WalletService.POST.walletWithdraw(params)
+        .then(result => {
+          return new WalletCreate(result);
+        })
+        .catch(err => err);
+    },
+    async voteDocument(data) {
+      const params = {
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
+        data: data
+      };
+
+      return WalletService.POST.voteDocument(params)
+        .then(result => result)
+        .catch(err => err);
+    },
+    async claimCreator(data) {
+      const params = {
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
+        data: data
+      };
+
+      return WalletService.POST.claimCreator(params)
+        .then(result => result)
+        .catch(err => err);
+    },
+    async claimCurator(data) {
+      const params = {
+        header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
+        data: data
+      };
+
+      return WalletService.POST.claimCurator(params)
+        .then(result => result)
+        .catch(err => err);
+    },
+    async getProfileRewards(data) {
+      return instance.Query.getProfileRewards(data).then(res =>
+        new ProfileRewards(res.ProfileSummary)
+      );
+    }
+  },
   Mutation: {
     addMyList: async data => Graphql({
       header: { "Authorization": `Bearer ${await instance.Common.getToken()}` },
@@ -677,6 +729,9 @@ export default {
     }).then(res => res),
     getUserByIds: async data => Graphql({
       query: queries.getUserByIds(data)
-    }).then(res => res.User.findByIds)
+    }).then(res => res.User.findByIds),
+    getProfileRewards: async data => Graphql({
+      query: queries.getProfileRewards(data)
+    }).then(res => res)
   }
 };

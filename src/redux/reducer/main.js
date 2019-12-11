@@ -1,6 +1,6 @@
 import ReduxTypes from "../config/ReduxTypes";
 import UserInfo from "../model/UserInfo";
-import { APP_PROPERTIES } from "properties/app.properties";
+import DocumentList from "../model/DocumentList";
 
 
 // 액션 생성자
@@ -13,8 +13,6 @@ export const setAction = {
   documentList: (documentList: {}) => ({ type: ReduxTypes.SET_DOCUMENT_LIST, documentList }),
   myList: (myList: {}) => ({ type: ReduxTypes.SET_MY_LIST, myList }),
   history: (history: {}) => ({ type: ReduxTypes.SET_HISTORY, history }),
-  web3Apis: () => ({ type: ReduxTypes.SET_WEB3_APIS, web3Apis: getWeb3Apis() }),
-  drizzleApis: () => ({ type: ReduxTypes.SET_DRIZZLE_APIS, drizzleApis: getDrizzleApis() }),
   authorDailyRewardPool: (authorDailyRewardPool: number) => ({
     type: ReduxTypes.SET_AUTHOR_DAILY_REWARD_POOL,
     authorDailyRewardPool
@@ -36,38 +34,15 @@ export const setAction = {
 };
 
 
-// web3 초기화
-const getWeb3Apis = () => {
-  let web3 = null;
-  if (!APP_PROPERTIES.ssr) {
-    let _web3 = require("../../apis/Web3Apis").default;
-    web3 = new _web3();
-  }
-  return web3;
-};
-
-// drizzle 초기화
-const getDrizzleApis = () => {
-  let drizzle = null;
-  if (!APP_PROPERTIES.ssr) {
-    let _drizzle = require("../../apis/DrizzleApis").default;
-    drizzle = new _drizzle();
-  }
-  return drizzle;
-};
-
-
 // 초기 상태
 const initState = {
   initComplete: false,
   myInfo: new UserInfo(),
   tagList: [],
   uploadTagList: [],
-  myList: [],
+  myList: new DocumentList(),
   history: [],
   isMobile: null,
-  web3Apis: null,
-  drizzleApis: getDrizzleApis(),
   authorDailyRewardPool: 0,
   curatorDailyRewardPool: 0,
   alertCode: null,
@@ -105,16 +80,6 @@ export default (state = initState, action: any) => {
       return {
         ...state,
         isMobile: action.isMobile
-      };
-    case ReduxTypes.SET_WEB3_APIS:
-      return {
-        ...state,
-        web3Apis: action.web3Apis
-      };
-    case ReduxTypes.SET_DRIZZLE_APIS:
-      return {
-        ...state,
-        drizzleApis: action.drizzleApis
       };
     case ReduxTypes.SET_AUTHOR_DAILY_REWARD_POOL:
       return {

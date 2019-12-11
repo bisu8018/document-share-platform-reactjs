@@ -22,10 +22,12 @@ export default {
           , err => reject(err));
       });
     },
-    ethereumSync: (data, callback, error) => {
+    ethereumSync: (data) => {
+      return new Promise((resolve, reject) => {
       AxiosService._requestWithHeader(ethereumSyncUrl, "POST", data,
-        data => callback(data)
-        , err => error(err));
+        data => resolve(data)
+        , err => reject(err));
+      });
     },
     profileImageUpdate: (data) => {
       return new Promise((resolve, reject) => {
@@ -56,6 +58,6 @@ export default {
           data => resolve(data)
           , err => reject(err));
       });
-    }
+    },
   }
 };

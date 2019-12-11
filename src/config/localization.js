@@ -443,7 +443,7 @@ const strings = new Map([
     KOR: '복사 성공',
     ENG: 'Copy Success'
   }],
-  ['alert-2005', {
+  ['alert-2006', {
     KOR: '새로운 콘텐트가 있습니다. 새로고침 해주세요.',
     ENG: 'New content is available, please refresh.'
   }],
@@ -660,6 +660,18 @@ const strings = new Map([
   ['common-modal-publish', {
     KOR: '출판',
     ENG: 'Publish'
+  }],
+  ['common-modal-deposit', {
+    KOR: '입금',
+    ENG: 'Deposit'
+  }],
+  ['common-modal-async', {
+    KOR: '지갑 연동',
+    ENG: 'Async Wallet'
+  }],
+  ['common-modal-withdraw', {
+    KOR: '출금',
+    ENG: 'Withdraw'
   }],
   ['common-modal-delete', {
     KOR: '삭제',
@@ -1377,6 +1389,10 @@ const strings = new Map([
     KOR: '출판하기',
     ENG: 'Publish this documents'
   }],
+  ['tooltip-deposit', {
+    KOR: '입금하기',
+    ENG: 'Deposit'
+  }],
   ['publish-modal-title', {
     KOR: '문서 출판하기',
     ENG: 'Publish documents'
@@ -1418,6 +1434,62 @@ const strings = new Map([
   ['publish-modal-complete-copied', {
     KOR: '복사완료!',
     ENG: 'Copied!'
+  }],
+
+  //async Modal
+  ['async-modal-title', {
+    KOR: '지갑연동하기',
+    ENG: 'Async Wallet'
+  }],
+
+  //Deposit Modal
+  ['deposit-modal-title', {
+    KOR: '입금하기',
+    ENG: 'Deposit'
+  }],
+  ['deposit-modal-copied', {
+    KOR: '복사완료!',
+    ENG: 'Copied!'
+  }],
+
+  //Withdraw Modal
+  ['withdraw-modal-title', {
+    KOR: '출금하기',
+    ENG: 'Withdraw'
+  }],
+  ['withdraw-modal-subj-1', {
+    KOR: '총 잔액',
+    ENG: 'Total balance'
+  }],
+  ['withdraw-modal-subj-2', {
+    KOR: '출금액',
+    ENG: 'Amount'
+  }],
+  ['withdraw-modal-err-1', {
+    KOR: '출금액은 0보다 큰 값이어야 합니다.',
+    ENG: 'The amount for withdrawing must be greater than zero.'
+  }],
+  ['withdraw-modal-err-2', {
+    KOR: '출금액은 잔고보다 작은 값이어야 합니다.',
+    ENG: 'The amount for withdrawing must be less than the balance.'
+  }],
+
+  //Async Modal
+  ['async-modal-title', {
+    KOR: '지갑연동하기',
+    ENG: 'Async Wallet'
+  }],
+  ['async-modal-subj-1', {
+    KOR: '외부 지갑 주소',
+    ENG: 'EOA (External Owner Account)'
+  }],
+  ['async-modal-err-1', {
+    KOR: '계좌를 입력해 주십시오.',
+    ENG: 'Please enter your account.'
+  }],
+  ['async-modal-err-2', {
+    KOR: '계좌 양식에 맞지 않습니다.',
+    ENG: 'Your account address is invalid.'
   }],
 
   // Delete Document Modal

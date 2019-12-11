@@ -43,11 +43,9 @@ class Main extends Component {
           this.setTagList();    //태그 리스트 GET
           this.setUploadTagList();   // 업로드 태그 리스트 GET
           this.setIsMobile();     // 모바일 유무 GET
-          this.setWeb3Apis();   // Web3 GET
-          this.setDrizzleApis();   // Drizzle GET
           this.setAuthorDailyRewardPool();     // 크리에이터 리워드풀 GET
           this.setCuratorDailyRewardPool();    // 큐레이터 리워드풀 GET
-          return this.setMyInfo();    // 내 정보 GET
+          return this.setMyInfo();
         })
         // 찜 리스트 GET
         .then(() => this.setMyList())
@@ -61,7 +59,7 @@ class Main extends Component {
   };
 
 
-  //태그 리스트 GET
+//태그 리스트 GET
   setTagList = () => {
     MainRepository.Document.getTagList("latest")
       .then(result => this.props.setTagList(result.resultList))
@@ -70,7 +68,7 @@ class Main extends Component {
   };
 
 
-  //업로드 태그 리스트 GET
+//업로드 태그 리스트 GET
   setUploadTagList = () => {
     MainRepository.Document.getTagList("latest")
       .then(result => this.props.setUploadTagList(result.resultList))
@@ -79,7 +77,7 @@ class Main extends Component {
   };
 
 
-  // 내 정보 GET
+// 내 정보 GET
   setMyInfo = () => {
     const { getMyInfo, setMyInfo } = this.props;
 
@@ -94,15 +92,15 @@ class Main extends Component {
 
           res.privateDocumentCount = result.privateDocumentCount;
           log.Main.setMyInfo();
-
-          return setMyInfo(res);
+          setMyInfo(res);
+          return result;
         })
         .catch(err => log.Main.setMyInfo(err));
     }
   };
 
 
-  // 나의 찜 목록 GET
+// 나의 찜 목록 GET
   setMyList = () => {
     const { getMyInfo, setMyList } = this.props;
     if (MainRepository.Account.isAuthenticated() && getMyInfo.sub.length !== 0) {
@@ -112,7 +110,7 @@ class Main extends Component {
   };
 
 
-  // 히스토리 목록 GET
+// 히스토리 목록 GET
   setHistory = () => {
     const { getMyInfo, setHistory } = this.props;
     if (MainRepository.Account.isAuthenticated() && getMyInfo.sub.length !== 0) {
@@ -122,7 +120,7 @@ class Main extends Component {
   };
 
 
-  // 모바일 유무 GET
+// 모바일 유무 GET
   setIsMobile = () => {
     const { setIsMobile } = this.props;
 
@@ -133,22 +131,7 @@ class Main extends Component {
   };
 
 
-  // Web3 GET
-  setWeb3Apis = () => {
-    this.props.setWeb3Apis();
-    log.Main.setWeb3Apis();
-  };
-
-
-  // Web3 GET
-  setDrizzleApis = () => {
-    if(common_view.isAndroid) return true;
-    this.props.setDrizzleApis();
-    log.Main.setDrizzleApis();
-  };
-
-
-  // 크리에이터 리워드풀 GET
+// 크리에이터 리워드풀 GET
   setAuthorDailyRewardPool = () => {
     const { setAuthorDailyRewardPool } = this.props;
 
@@ -158,7 +141,7 @@ class Main extends Component {
   };
 
 
-  // 큐레이터 리워드풀 GET
+// 큐레이터 리워드풀 GET
   setCuratorDailyRewardPool = () => {
     const { setCuratorDailyRewardPool } = this.props;
 
@@ -168,11 +151,11 @@ class Main extends Component {
   };
 
 
-  //init 데이터 SET
+//init 데이터 SET
   setInitData = () => this.setState({ initData: true });
 
 
-  // get Main component
+// get Main component
   getMainComponent = () => {
     return (
       <div>

@@ -40,7 +40,6 @@ class CuratorVoteTab extends React.Component {
       _params = {
         pageNo: pageNo,
         ethAccount: userInfo.ethAccount
-
       };
     } else return false;
 

@@ -5,10 +5,10 @@ import Common from "../../../../common/common";
 import BalanceOfContainer from "../../../../container/common/BalanceOfContainer";
 import { psString } from "../../../../config/localization";
 import log from "../../../../config/log";
-import common_view from "../../../../common/common_view";
 import MyAvatar from "../../../common/avatar/MyAvatar";
 import { FadingCircle } from "better-react-spinkit";
 import { APP_PROPERTIES } from "../../../../properties/app.properties";
+import Tooltip from "@material-ui/core/Tooltip";
 
 
 class CreatorSummary extends React.Component {
@@ -18,10 +18,10 @@ class CreatorSummary extends React.Component {
     userNameEdit: false,
     editLoading: false,
     errMsg: "",
-    author7DayReward: null,
-    authorTodayReward: null,
-    curatorEstimatedToday: null,
-    curatorTotalRewards: null
+    last7CreatorReward: null,
+    todayEstimatedCreatorReward: null,
+    todayEstimatedCuratorReward: null,
+    last7CuratorReward: null
   };
 
 
@@ -29,6 +29,8 @@ class CreatorSummary extends React.Component {
   init = () => {
     const { userInfo } = this.props;
     this.setState({ userName: userInfo.username }, () => log.CreatorSummary.init());
+    this.getRewards();
+    this.getBalance();
   };
 
 
@@ -56,47 +58,43 @@ class CreatorSummary extends React.Component {
   getMyInfo = () => MainRepository.Account.getMyInfo();
 
 
-  // 크리에이터 7일간 리워드
-  setAuthor7DayReward = (docList, pool, countInfo) => this.setState({ author7DayReward: Common.toDeck(common_view.getAuthor7DaysTotalReward(docList, pool, countInfo)) });
-
-
-  // 크리에이터 하루 리워드
-  setAuthorTodayReward = (docList, pool, countInfo) => this.setState({ authorTodayReward: Common.toDeck(common_view.getAuthorNDaysTotalReward(docList, pool, countInfo, 0)) });
-
-
-  // 큐레이터 7일간 리워드
-  setCuratorEstimatedToday = (docList, pool, countInfo, voteList) => this.setState({ curatorEstimatedToday: Common.toDeck(common_view.getCuratorNDaysTotalReward(docList, pool, countInfo, 0, voteList, 1)) });
-
-
-  // 큐레이터 하루 리워드
-  setCuratorTotalRewards = (docList, pool, countInfo, voteList) => this.setState({ curatorTotalRewards: Common.toDeck(common_view.getCurator7DaysTotalReward(docList, pool, countInfo, voteList)) });
-
-
   // 리워드 조회
   getRewards = () => {
-    const { getCreatorDailyRewardPool, getCuratorDailyRewardPool, uploadTotalViewCountInfo, uploadDocumentList, voteDocumentList, voteTotalViewCountInfo, latestRewardVoteList } = this.props;
-    const { author7DayReward, authorTodayReward, curatorEstimatedToday, curatorTotalRewards } = this.state;
+    const { userInfo } = this.props;
 
-    if (uploadDocumentList && getCreatorDailyRewardPool && uploadTotalViewCountInfo) {
-      if (author7DayReward === null) this.setAuthor7DayReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo);
-      if (authorTodayReward === null) this.setAuthorTodayReward(uploadDocumentList, getCreatorDailyRewardPool, uploadTotalViewCountInfo);
-    }
-    if (voteDocumentList && getCuratorDailyRewardPool && voteTotalViewCountInfo && latestRewardVoteList) {
-      if (curatorEstimatedToday === null) this.setCuratorEstimatedToday(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, latestRewardVoteList);
-      if (curatorTotalRewards === null) this.setCuratorTotalRewards(voteDocumentList, getCuratorDailyRewardPool, voteTotalViewCountInfo, latestRewardVoteList);
+    MainRepository.Wallet.getProfileRewards(userInfo.sub).then(res => {
+      let creatorReward = this.getCalculatedReward(res.last7CreatorReward);
+      let curatorReward = this.getCalculatedReward(res.last7CuratorReward);
+
+      this.setState({
+        last7CreatorReward: creatorReward,
+        last7CuratorReward: curatorReward,
+        todayEstimatedCreatorReward: res.todayEstimatedCreatorReward.reward || 0,
+        todayEstimatedCuratorReward: res.todayEstimatedCuratorReward.reward || 0
+      });
+    });
+  };
+
+  getCalculatedReward = value => {
+    if (value && value.length > 0) {
+      let { reward } = value.reduce((prev, value) => prev.reward + value.reward);
+      return reward;
+    } else {
+      return 0;
     }
   };
 
 
   // 잔액 조회
   getBalance = () => {
-    const { getWeb3Apis, userInfo } = this.props;
+    const { userInfo } = this.props;
     const { balance } = this.state;
 
-    if (!userInfo.ethAccount || balance >= 0)
-      return false;
+    if (balance >= 0) return false;
 
-    getWeb3Apis.getBalance(userInfo.ethAccount, res => this.setState({ balance: res }, () => log.CreatorSummary.getBalance()));
+    MainRepository.Wallet.getWalletBalance({ userId: userInfo.sub })
+      .then(res =>
+        this.setState({ balance: res.wei }, () => log.CreatorSummary.getBalance()));
     return true;
   };
 
@@ -142,21 +140,14 @@ class CreatorSummary extends React.Component {
   handleChangeUsername = value => this.setState({ userName: this.userNameValidate(value) });
 
 
-  shouldComponentUpdate = () => {
-    this.getBalance(); // 잔액 조회
-    return true;
-  };
-
-
   componentWillMount(): void {
     this.init();
   }
 
-  render() {
-    const { userInfo } = this.props;
-    const { author7DayReward, editLoading, authorTodayReward, curatorEstimatedToday, curatorTotalRewards, balance, userNameEdit, userName, errMsg } = this.state;
 
-    this.getRewards();
+  render() {
+    const { userInfo, getIsMobile, setModal } = this.props;
+    const { last7CreatorReward, editLoading, todayEstimatedCreatorReward, todayEstimatedCuratorReward, last7CuratorReward, balance, userNameEdit, userName, errMsg } = this.state;
 
     return (
 
@@ -208,27 +199,54 @@ class CreatorSummary extends React.Component {
               <br/>
               {psString("profile-estimated-earnings")}
               <span className="color ml-1">
-                <DollarWithDeck deck={Number(authorTodayReward || 0) + Number(curatorEstimatedToday || 0)}/>
+                <DollarWithDeck
+                  deck={Number(todayEstimatedCreatorReward || 0) + Number(todayEstimatedCuratorReward || 0)}/>
               </span>
               <br/>
               {psString("profile-revenue-7-days")}
               <span className="color ml-1">
-                <DollarWithDeck deck={Number(author7DayReward || 0) + Number(curatorTotalRewards || 0)}/>
+                <DollarWithDeck deck={Number(last7CreatorReward || 0) + Number(last7CuratorReward || 0)}/>
               </span>
             </div>
+
+            {this.getMyInfo().email === userInfo.email && userInfo.ethAccount === "" &&
+            <div className="deposit-btn-wrapper">
+              <Tooltip title={psString("async-modal-title")} placement="bottom">
+                <div className={"claim-btn " + (getIsMobile ? " w-100" : "")}
+                     onClick={() => setModal("async")}>
+                  {psString("common-modal-async")}
+                </div>
+              </Tooltip>
+            </div>
+            }
+            {this.getMyInfo().email === userInfo.email && userInfo.ethAccount !== "" &&
+            <div className="deposit-btn-wrapper">
+              <Tooltip title={psString("deposit-modal-title")} placement="bottom">
+                <div className={"claim-btn " + (getIsMobile ? " w-100" : "")}
+                     onClick={() => setModal("deposit")}>
+                  {psString("common-modal-deposit")}
+                </div>
+              </Tooltip>
+              <Tooltip title={psString("withdraw-modal-title")} placement="bottom">
+                <div className={"claim-btn mt-2 " + (getIsMobile ? " w-100" : "")}
+                     onClick={() => setModal("withdraw")}>
+                  {psString("common-modal-withdraw")}
+                </div>
+              </Tooltip>
+            </div>
+            }
           </div>
         </div>
-
 
         <div className="row">
           <div className=" profile-creator col-sm-12 col-md-6">
             <h5>{psString("profile-author-rewards")}</h5>
             <div className="profile_info_desc">
               {psString("profile-estimated-earnings")}
-              <span className="ml-1"><DollarWithDeck deck={authorTodayReward}/></span>
+              <span className="ml-1"><DollarWithDeck deck={todayEstimatedCreatorReward}/></span>
               <br/>
               {psString("profile-revenue-7-days")}
-              <span className="ml-1"><DollarWithDeck deck={author7DayReward}/></span>
+              <span className="ml-1"><DollarWithDeck deck={last7CreatorReward}/></span>
             </div>
           </div>
 
@@ -237,10 +255,10 @@ class CreatorSummary extends React.Component {
             <h5>{psString("profile-curator-rewards")}</h5>
             <div className="profile_info_desc">
               {psString("profile-estimated-earnings")}
-              <span className="ml-1"><DollarWithDeck deck={curatorEstimatedToday}/></span>
+              <span className="ml-1"><DollarWithDeck deck={todayEstimatedCuratorReward}/></span>
               <br/>
               {psString("profile-revenue-7-days")}
-              <span className="ml-1"><DollarWithDeck deck={curatorTotalRewards}/></span>
+              <span className="ml-1"><DollarWithDeck deck={last7CuratorReward}/></span>
             </div>
           </div>
         </div>

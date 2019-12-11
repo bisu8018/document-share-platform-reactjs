@@ -1,6 +1,7 @@
 import React from "react";
 import Common from "../../../../common/common";
 import { psString } from "../../../../config/localization";
+import MainRepository from "../../../../redux/MainRepository";
 
 class CreatorClaim extends React.Component {
   state = {
@@ -11,53 +12,38 @@ class CreatorClaim extends React.Component {
 
   // 클레임
   claimCreatorReward = () => {
-    const { document, getDrizzle, getMyInfo, setAlertCode } = this.props;
+    const { document, setAlertCode } = this.props;
 
-    getDrizzle.creatorClaimReward(document.documentId, getMyInfo.ethAccount).then((res) => {
-      if (res === "success") {
-        this.setState({ btnText: psString("claim-btn-text-1") }, () => {
-          window.location.reload();
-        });
-      } else {
-        this.setState({ btnText: psString("claim-text") + " $ " }, () => {
-          setAlertCode(2035);
-        });
-      }
+    MainRepository.Wallet.claimCreator({documentId : document.documentId}).then(res => {
+      this.setState({ btnText: psString("claim-btn-text-1") }, () => {
+        //window.location.reload();
+      });
+    }).catch(err => {
+      this.setState({ btnText: psString("claim-text") + " $ " }, () => {
+        setAlertCode(2035);
+      });
     });
   };
 
 
   // 크리에이터 확정 보상 GET
   getDetermineCreatorReward = () => {
-    const { document, getWeb3Apis, getMyInfo } = this.props;
+    const { document } = this.props;
     const { determineReward } = this.state;
 
-    if (document && getMyInfo.ethAccount && determineReward === null) {
-      getWeb3Apis.getDetermineCreatorReward(document.documentId, getMyInfo.ethAccount)
-        .then(data => {
-          this.setState({
-            determineReward: data && Common.toDeck(data[0]) > 0 ?
-              Common.toDeck(data[0]) : 0
-          });
-        }).catch(err => console.error(err));
+    if (document && determineReward === null) {
+      this.setState({
+        determineReward: 100
+      });
     }
   };
 
 
   // 클레임 버튼 클릭 관리
   handelClickClaim = () => {
-    const { document, getDrizzle, getMyInfo, setAlertCode } = this.props;
+    const { document } = this.props;
 
-    if (!getDrizzle.isInitialized() || !getDrizzle.isAuthenticated())
-      return setAlertCode(2054);
-
-    if (!getMyInfo.ethAccount)
-      return setAlertCode(2055);
-
-    if (getMyInfo.ethAccount !== getDrizzle.getLoggedInAccount())
-      return setAlertCode(2056);
-
-    if (document && getDrizzle.isAuthenticated()) {
+    if (document) {
       this.setState({ btnText: psString("claim-btn-text-2") }, () => {
         this.claimCreatorReward();
       });

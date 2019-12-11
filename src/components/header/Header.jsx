@@ -311,10 +311,10 @@ class Header extends React.Component {
                 </div>
               </div>}
 
-              {getMyInfo.privateDocumentCount >= 5 ?
+              {getMyInfo && getMyInfo.privateDocumentCount >= 5 ?
                 <PrivateDocumentCountModal {...this.props} /> :
                 (path !== "ca" && (!getIsMobile || (!searchBar && getIsMobile))) &&
-                <div className="ml-2 mr-3">
+                <div className="ml-2 mr-2 mr-sm-3">
                   <Tooltip title="Share your contents" placement="bottom">
                     <div className="add-btn" onClick={() => setModal("upload", {})}>
                       <i className="material-icons">add</i>
@@ -331,7 +331,7 @@ class Header extends React.Component {
               {profileCardShow && <ProfileCardContainer/>}
 
               {!MainRepository.Account.isAuthenticated() && !getTempEmail && !getIsMobile &&
-              <div className='d-flex login-btn ml-2 ml-sm-3' onClick={() => this.handleLogin()}>
+              <div className='d-flex login-btn' onClick={() => this.handleLogin()}>
                 {psString("header-login")}
               </div>}
               {(!getIsMobile || (!searchBar && getIsMobile)) && <MenuContainer {...this.props} />}

@@ -5,6 +5,9 @@ import DollarLearnMoreModal from "../../../container/common/modal/DollarLearnMor
 import PublishModalContainer from "../../../container/common/modal/PublishModalContainer";
 import PublishCompleteModalContainer from "../../../container/common/modal/PublishCompleteModalContainer";
 import ImageCropModalContainer from "../../../container/common/modal/ImageCropModalContainer";
+import DepositModalContainer from "../../../container/common/modal/DepositModalContainer";
+import WithdrawModalContainer from "../../../container/common/modal/WithdrawModalContainer";
+import AsyncWalletModalContainer from "../../../container/common/modal/AsyncWalletModalContainer";
 
 class ModalList extends React.Component {
 
@@ -26,7 +29,16 @@ class ModalList extends React.Component {
       "publishComplete": <PublishCompleteModalContainer/>,
 
       // 이미지 자르기 모달
-      "imageCrop": <ImageCropModalContainer/>
+      "imageCrop": <ImageCropModalContainer/>,
+
+      // 입금 모달
+      "deposit": <DepositModalContainer/>,
+
+      // 입금 모달
+      "withdraw": <WithdrawModalContainer/>,
+
+      // 지갑 연동 모달
+      "async": <AsyncWalletModalContainer/>
 
     }[this.props.getModalCode] || <div/>;
   }

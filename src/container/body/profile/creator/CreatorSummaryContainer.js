@@ -4,11 +4,11 @@ import { setAction as mainAction, setAction } from "../../../../redux/reducer/ma
 
 export default connect(
   state => ({
-    getWeb3Apis: state.main.web3Apis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
     getCuratorDailyRewardPool: state.main.curatorDailyRewardPool,
     getModalData: state.main.modalData,
-    getMyInfo: state.main.myInfo
+    getMyInfo: state.main.myInfo,
+    getIsMobile: state.main.isMobile,
   }),
   dispatch => ({
     setModal: (modalCode: any, modalData: any) => dispatch(setAction.modal(modalCode, modalData)),

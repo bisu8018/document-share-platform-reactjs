@@ -15,16 +15,14 @@ class ProfileCard extends React.Component {
 
   // 잔액 조회
   getBalance = () => {
-    const { getWeb3Apis, getMyInfo } = this.props;
+    const { getMyInfo } = this.props;
     const { balance } = this.state;
 
-    let address = getMyInfo.ethAccount;
+    if ( balance > 0) return false;
 
-    if (!address || balance > 0) return false;
     this.setState({ loading: true });
-    getWeb3Apis.getBalance(getMyInfo.ethAccount, res => {
-      this.setState({ balance: res, loading: false });
-    });
+    MainRepository.Wallet.getWalletBalance({ userId: getMyInfo.sub }).then(res =>
+      this.setState({ balance: res.wei, loading: false }));
   };
 
 

@@ -159,7 +159,7 @@ class ContentMain extends Component {
                   </div>
 
                   <div className="row main-category-card-wrapper">
-                    {this.getList(arr).resultList.map((res, idx) => {
+                    {this.getList(arr).resultList && this.getList(arr).resultList.map((res, idx) => {
                       return (idx < latestListMany &&
                         <DocumentCardContainer key={idx} idx={idx} path={arr} documentData={res}
                                                countCards={latestListMany}

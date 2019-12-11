@@ -34,7 +34,7 @@ class DropZone extends Component {
     return (
       <Dropzone onDrop={this.onDrop} onDragOver={this.onDragOver} onDragLeave={this.onDragLeave}>
         {({ getRootProps, getInputProps }) => (
-          <div {...getRootProps({ className: "dropzone custom-dropzone mt-4 " + (fileInfoError.length > 0 ? "tag-input-warning " : "") + (dragOver && "custom-dropzone-over" : "") })}>
+          <div {...getRootProps({ className: "dropzone custom-dropzone mt-4 " + (fileInfoError.length > 0 ? "tag-input-warning " : "") + (dragOver && "custom-dropzone-over") })}>
             <input {...getInputProps()} />
             {file.length > 0 ?
               <div>{_files}</div> :

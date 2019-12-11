@@ -284,7 +284,7 @@ class AudienceTrackingList extends React.Component {
 
     let addr = Common.getThumbnail(documentData.documentId, 320, 1),
       reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
-      vote = Common.toEther(documentData.latestVoteAmount),
+      vote = documentData.latestVoteAmount ? Common.toEther(Object.values(documentData.latestVoteAmount)[0]) : 0,
       view = documentData.latestPageview || 0;
 
     return (

@@ -4,8 +4,6 @@ import { setAction } from "../../../redux/reducer/main";
 
 export default connect(
   state => ({
-    getWeb3Apis: state.main.web3Apis,
-    getDrizzle: state.main.drizzleApis,
     getCreatorDailyRewardPool: state.main.authorDailyRewardPool,
     getIsMobile: state.main.isMobile,
     getMyList: state.main.myList,

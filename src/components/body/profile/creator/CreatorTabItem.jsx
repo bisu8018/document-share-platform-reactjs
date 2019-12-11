@@ -10,7 +10,6 @@ import PayoutCard from "../../../common/card/PayoutCard";
 import CopyModalContainer from "../../../../container/common/modal/CopyModalContainer";
 import DeleteDocumentModalContainer from "../../../../container/common/modal/DeleteDocumentModalContainer";
 import MainRepository from "../../../../redux/MainRepository";
-import RegBlockchainBtnContainer from "../../../../container/body/contents/contentsView/RegBlockchainBtnContainer";
 import DocumentInfo from "../../../../redux/model/DocumentInfo";
 import common_view from "../../../../common/common_view";
 import { psString } from "../../../../config/localization";
@@ -85,22 +84,6 @@ class CreatorTabItem extends React.Component {
   };
 
 
-  //  문서 정보 state 의 isRegistry 업데이트
-  setIsRegistry = () => {
-    return new Promise(resolve => {
-      let _documentData = this.state.documentData;
-      _documentData.isRegistry = true;
-      this.setState({ _documentData: _documentData }, () => {
-        resolve();
-      });
-    });
-  };
-
-
-  // 체인 등록 완료 후 관리
-  handleAfterRegistered = () => this.setIsRegistry();
-
-
   //문서 다운로드 전 데이터 SET
   handleDownloadContent = () => {
     const { getMyInfo, setAlertCode } = this.props;
@@ -115,10 +98,6 @@ class CreatorTabItem extends React.Component {
 
     this.getContentDownload(accountId, documentId, documentName);
   };
-
-
-  // display: inline-block 추가
-  addInlineBlock = e => Promise.resolve(e.target.classList.add("d-inline-block"));
 
 
   // 문서 상태관리
@@ -157,7 +136,7 @@ class CreatorTabItem extends React.Component {
     if (!documentData.seoTitle) return false;
 
     let reward = Common.toEther(common_view.getAuthorNDaysReward(documentData, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
-      vote = Common.toEther(documentData.latestVoteAmount) || 0,
+      vote = documentData.latestVoteAmount ? Common.toEther(Object.values(documentData.latestVoteAmount)[0]) : 0,
       view = documentData.latestPageview || 0,
       identification = documentData.author ? (documentData.author.username && documentData.author.username.length > 0 ? documentData.author.username : documentData.author.email) : documentData.accountId;
 
@@ -198,7 +177,7 @@ class CreatorTabItem extends React.Component {
                 {psString("download-btn")}
               </div>}
 
-              {((Common.dateAgo(documentData.created) > 0 && documentData.state && documentData.state !== "CONVERT_COMPLETE") || documentData.isRegistry === false) &&
+              {((Common.dateAgo(documentData.created) > 0 && documentData.state && documentData.state !== "CONVERT_COMPLETE") || documentData.isPublic === false) &&
               <DeleteDocumentModalContainer documentData={documentData} type="onlyIcon"/>}
             </div>
           </div>}
@@ -252,12 +231,6 @@ class CreatorTabItem extends React.Component {
                   {psString("common-modal-publish")}
                 </div>
               </Tooltip>
-            </div>}
-
-            {documentData.isPublic && (documentData.accountId === common_view.getMySub() && documentData) &&
-            <div className={(getIsMobile ? "mt-2" : "float-right")}>
-              <RegBlockchainBtnContainer documentData={documentData} type={"tabItem"}
-                                         afterRegistered={() => this.handleAfterRegistered()}/>
             </div>}
           </div>
         </div>

@@ -5,10 +5,6 @@ import common_view from "../../common/common_view";
 
 
 class FeaturedList extends React.Component {
-  componentWillMount(): void {
-    this.getImgInfo();
-  }
-
 
   render() {
     const { resultItem } = this.props;
@@ -18,7 +14,7 @@ class FeaturedList extends React.Component {
       <div className="see-also-container">
 
         <Link to={"/@" + identification + "/" + resultItem.seoTitle} rel="nofollow">
-          <div className="see-also-thumbnail" onClick={common_view.scrollTop()}>i
+          <div className="see-also-thumbnail" onClick={common_view.scrollTop()}>
             <img src={Common.getThumbnail(resultItem.documentId, 320, 1, resultItem.documentName)}
                  className="main-category-card-img"
                  alt={resultItem.documentName ? resultItem.documentName : resultItem.documentId}/>

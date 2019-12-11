@@ -51,7 +51,7 @@ class ContentListItem extends React.Component {
     const { getMyList } = this.props;
     let flag;
 
-    if (getMyList.resultList) {
+    if (getMyList.resultList.length > 0) {
       flag = getMyList.resultList.filter(v => v._id === this.props.result._id).length > 0;
     } else {
       flag = false;
@@ -101,7 +101,7 @@ class ContentListItem extends React.Component {
     const { result, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
     const { bookmarkFlag } = this.state;
 
-    let vote = Common.toEther(result.latestVoteAmount) || 0,
+    let vote = result.latestVoteAmount ? Common.toEther(Object.values(result.latestVoteAmount)[0]) : 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(result, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
       view = result.latestPageview || 0,
       imageUrl = Common.getThumbnail(result.documentId, (getIsMobile ? 640 : 320), 1, result.documentName),

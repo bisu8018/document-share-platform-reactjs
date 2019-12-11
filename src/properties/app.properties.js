@@ -20,6 +20,7 @@ export const APP_PROPERTIES = {
       profile: 'https://res.share.decompany.io/profile/',
       static: 'https://res.share.decompany.io/static',
       api: 'https://api.share.decompany.io/rest',
+      wallet: 'https://api.share.decompany.io/wallet',
       email: 'https://api.share.decompany.io/ve',
       embed: 'https://embed.share.decompany.io/',
       viewer: 'https://viewer.share.decompany.io/',

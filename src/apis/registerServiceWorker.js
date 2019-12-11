@@ -16,7 +16,6 @@ const isLocalhost = Boolean(
 export default function register() {
   if (!APP_PROPERTIES.ssr && "serviceWorker" in navigator) {
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location);
-
     if (publicUrl.origin !== window.location.origin)
       return;
 

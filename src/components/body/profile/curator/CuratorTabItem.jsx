@@ -25,7 +25,7 @@ class CuratorTabItem extends React.Component {
     const { document, getCreatorDailyRewardPool, totalViewCountInfo, getIsMobile } = this.props;
 
     let reward = Common.toEther(common_view.getAuthorNDaysReward(document, getCreatorDailyRewardPool, totalViewCountInfo, 7)),
-      vote = Common.toEther(document.latestVoteAmount) || 0,
+      vote = document.latestVoteAmount ? Common.toEther(Object.values(document.latestVoteAmount)[0]) : 0,
       view = document.latestPageview || 0,
       identification = document.author ? (document.author.username && document.author.username.length > 0 ? document.author.username : document.author.email) : document.accountId;
 

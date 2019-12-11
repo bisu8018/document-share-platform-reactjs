@@ -7671,6 +7671,12 @@ Dean*/
 
 @media (max-width: 575px) {
 
+  .deposit-btn-wrapper {
+    position: relative !important;
+    right: 0 !important;
+    margin-top: 15px;
+  }
+
   .main-category:last-child .main-category-card-wrapper {
     margin-bottom: 0 !important;
   }
@@ -8105,10 +8111,7 @@ Dean*/
     margin-bottom: 15px;
   }
 
-  .col-thumb > div {
-    width: 180px;
-    margin: 0 auto;
-  }
+  .col-thumb
 
   .profile_info_name {
     text-align: center;
@@ -10478,6 +10481,7 @@ Main Category CSS
   padding: 12px 12px 8px 12px;
   border-radius: 0 0 4px 4px;
   background: white;
+  position: relative;
 }
 
 .main-category-card-img-wrapper {
@@ -10502,14 +10506,20 @@ Main Category CSS
 
 .main-category-card-title {
   display: flex;
+  align-items: center;
   display: -webkit-flexbox;
   font-size: 16px;
-  min-height: 45px;
-  align-items: center;
+  height: 45px;
   font-weight: bold;
   line-height: 1.38;
   letter-spacing: -0.2px;
   color: #4d4d4d !important;
+}
+
+.main-category-card-title > a,
+.main-category-card-title > a > div{
+  width: 100%;
+  position: relative;
 }
 
 .main-category-card-title > a:hover {
@@ -11211,7 +11221,7 @@ About us page CSS
 @media all and (max-width: 767px) {
 
   .profile-top-wrapper {
-    height: 270px !important;
+    height: 290px !important;
   }
 
   .about-section-3 .main-category-card {
@@ -12142,4 +12152,50 @@ Content View Portrait Css
 
 .content-view-portrait-wrapper {
   overflow: auto;
+}
+
+
+/*
+Deposit Modal Css
+2019-11-20 Dean
+*/
+
+.deposit-btn-wrapper {
+  position: absolute;
+  top: 0;
+  right: 15px;
+}
+
+.qr-image-wrapper {
+  width: 100%;
+  text-align: center;
+
+  img {
+    max-height: 200px;
+  }
+}
+
+.qr-code {
+  text-align: center;
+  font-weight: bold;
+}
+
+.deposit-modal-copy-dummy {
+  position: absolute;
+  left: -9999px;
+}
+
+
+/*
+Withdraw Modal Css
+2019-11-21 Dean
+*/
+.withdraw-modal-subject {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.withdraw-modal-amount {
+  display: flex;
+  margin-left: 15px;
 }

@@ -43,7 +43,7 @@ class ContentView extends React.Component {
   getParam = () => decodeURI(window.location.pathname.split("/")[1]);
 
 
-  // 문서 우져 히스토리 SET
+  // 문서 유져 히스토리 SET
   setHistory = res => {
     if (MainRepository.Account.isAuthenticated()) MainRepository.Mutation.addHistory(res.documentId);
   };

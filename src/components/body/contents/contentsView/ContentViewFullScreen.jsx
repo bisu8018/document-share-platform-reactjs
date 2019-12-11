@@ -14,7 +14,6 @@ import EditDocumentModalContainer from "../../../../container/common/modal/EditD
 import ContentViewCarouselContainer
   from "../../../../container/body/contents/contentsView/ContentViewCarouselContainer";
 import Linkify from "react-linkify";
-import RegBlockchainBtnContainer from "../../../../container/body/contents/contentsView/RegBlockchainBtnContainer";
 import VoteDocumentModalContainer from "../../../../container/common/modal/VoteDocumentModalContainer";
 import PayoutCard from "../../../common/card/PayoutCard";
 import { psString } from "../../../../config/localization";
@@ -115,12 +114,9 @@ class ContentViewFullScreen extends Component {
 
   //Web3에서 보상액 GET
   getReward = () => {
-    const { getWeb3Apis, getDocument } = this.props;
-    getWeb3Apis.getNDaysRewards(getDocument.document.documentId, 7).then(res => {
-      log.ContentViewFullscreen.getReward();
-      let reward = Common.toEther(res);
-      this.setState({ reward: reward });
-    }).catch(err => log.ContentViewFullscreen.getReward(err));
+    let reward = Common.toEther(0);
+    this.setState({ reward: reward });
+    log.ContentViewFullscreen.getReward();
   };
 
 
@@ -133,15 +129,6 @@ class ContentViewFullScreen extends Component {
     });
   };
 
-
-  //  문서 정보 state의 isRegistry 업데이트
-  setIsRegistry = () => {
-    return new Promise((resolve) => {
-      this.setState({ isRegistry: true }, () => {
-        resolve();
-      });
-    });
-  };
 
 
   // publish completed modal 종료 관리
@@ -160,10 +147,6 @@ class ContentViewFullScreen extends Component {
   handleAfterPublish = () => this.setIsPublish()
     .then(() => this.handleCompleteModalOpen())
     .then(() => this.triggerRegisterBtn());
-
-
-  // 체인 등록 완료 후 관리
-  handleAfterRegistered = () => this.setIsRegistry();
 
 
   //이메일 입력 여부 Flag
@@ -225,7 +208,7 @@ class ContentViewFullScreen extends Component {
     const { getDocument, getCreatorDailyRewardPool, getIsMobile, setModal } = this.props;
     const { isPublic, isRegistry, downloadLoading, bookmarkFlag } = this.state;
 
-    let vote = Common.toEther(getDocument.document.latestVoteAmount) || 0,
+    let vote = getDocument.document ? Common.toEther(Object.values(getDocument.document.latestVoteAmount)[0]) : 0,
       reward = Common.toEther(common_view.getAuthorNDaysReward(getDocument.document, getCreatorDailyRewardPool, getDocument.totalViewCountInfo, 7)),
       view = getDocument.document.latestPageview || 0,
       accountId = getDocument.document.accountId || "",
@@ -319,9 +302,6 @@ class ContentViewFullScreen extends Component {
             </Tooltip>}
             {isPublic &&
             <VoteDocumentModalContainer documentData={getDocument.document}/>}
-            {isPublic && (accountId === common_view.getMySub() && getDocument.document) &&
-            <RegBlockchainBtnContainer documentData={getDocument.document}
-                                       afterRegistered={() => this.handleAfterRegistered()}/>}
             <CopyModalContainer documentData={getDocument.document}/>
             {getDocument.document.isDownload && accountId !== common_view.getMySub() &&
             <Tooltip title={psString("tooltip-download")} placement="bottom">

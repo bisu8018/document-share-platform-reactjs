@@ -42,18 +42,6 @@ export default ({
         else console.log("Mobile Environment SETTING : %c FAILED", failed, err);
       } // else "Do something!"
     },
-    setWeb3Apis: err => {
-      if (APP_PROPERTIES.debug) {
-        if (!err) console.log("Web3 Environment SETTING : %c COMPLETE", success);
-        else console.log("Web3 Environment SETTING : %c FAILED", failed, err);
-      } // else "Do something!"
-    },
-    setDrizzleApis: err => {
-      if (APP_PROPERTIES.debug) {
-        if (!err) console.log("Drizzle Environment SETTING : %c COMPLETE", success);
-        else console.log("Drizzle Environment SETTING : %c FAILED", failed, err);
-      } // else "Do something!"
-    },
     setMyInfo: err => {
       if (APP_PROPERTIES.debug) {
         if (!err) console.log("User Information SETTING : %c COMPLETE", success);

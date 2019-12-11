@@ -16,6 +16,8 @@ class ContentViewComment extends React.Component {
 
   //디스커스 초기화
   init = () => {
+    if (APP_PROPERTIES.ssr) return;
+
     let d = document, s = d.createElement("script");
     s.src = "https://" + (APP_PROPERTIES.env === "production" ? "polaris-share" : "polarishare") + ".disqus.com/embed.js";
     s.setAttribute("data-timestamp", +new Date());
