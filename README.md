@@ -1,13 +1,3 @@
-<img src="https://www.polarishare.com/logo.png" alt="react boilerplate banner" align="center" />
-
-
-# Polaris Share Front-End
-> Development URL : https://share.decompany.io
-
-<br>
-
-> Production URL : https://www.polarishare.com
-
 ## Deploy
 - npm run deploy:ssr_local (Local Build/Deploy, aws s3 sync build/ s3://share.decompany.io)
 - npm run deploy:ssr (Dev Build/Deploy, aws s3 sync build/ s3://share.decompany.io)
