@@ -16,9 +16,9 @@
 
 ## Guide
 English
-> https://github.com/decompanyio/decompanyio-front-end/blob/master/doc/GUIDE.md
+> https://github.com/bisu8018/document-share-platform/blob/master/doc/GUIDE.md
 
 한국어
-> https://github.com/decompanyio/decompanyio-front-end/blob/master/doc/GUIDE_KR.md
+> https://github.com/bisu8018/document-share-platform/blob/master/doc/GUIDE_KR.md
 
 
