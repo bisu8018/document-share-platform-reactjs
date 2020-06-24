@@ -1,0 +1,31 @@
+extends layout
+
+append styles
+    link(href="css/notFoundPage.css", rel="stylesheet")
+
+block body
+    - console.log("404 body 태그 읽기 완료");
+    .no-data-icon
+        .explain Not Found Page
+        br
+        div
+            span(class='explain-sub') Link to Polaris Office after
+            #time-set 5
+            span(class='explain-sub') seconds.
+
+block scripts
+    - console.log("404 script 태그 읽기 완료");
+    script.
+
+        let time = 5;
+        let env = '#{env}' || "dev";
+
+        setInterval(function () {
+            --time
+            if (time >= 0) {
+                document.getElementById("time-set").innerText = String(time);
+                if (time === 0) location.href = "https://www.polarishare.com";
+        }
+        }, 1000);
+
+

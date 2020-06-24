@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Serverless Express Application/API powered by API Gateway and Lambda
+
+Globals:
+  Function:
+    Runtime: nodejs8.10
+    Timeout: 30
+
+Resources:
+  DocumentViewSsr:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: lambda.handler
+      Events:
+        GetDocumentViewSsr:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: GET
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - 'logs:*'
+                - 's3:*'
+              Resource: '*'
