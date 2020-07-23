@@ -8,7 +8,7 @@
 </a>
   
 ## 아키텍쳐
-<image src="./frontend-archtecture.png" style="width: 150px;">
+<image src="./backend-archtecture.png" style="width: 150px;">
 <br>
 
 ## 개요
