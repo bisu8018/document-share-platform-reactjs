@@ -19,7 +19,7 @@
 - web3 통한 가상화폐지갑 연동
 
 ### 현황
-- <a href="https://polarishare.com">Beta 오픈 (https://polarishare.com)</a>
+- Next js로 플랫폼 변경 후 <a href="https://polarishare.com">Beta 오픈 (https://polarishare.com)</a>
 
 ### 구성원 
 - PM : 1명
