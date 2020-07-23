@@ -1,5 +1,5 @@
 # 문서 공유 플랫폼
-<image src="./banner.png" style="width: 150px;">
+<image src="doc/banner.png" style="width: 150px;">
 <a href="https://github.com/bisu8018/document-share-platform-reactjs/tree/master/client">
   React js 소스코드 (https://github.com/bisu8018/document-share-platform-reactjs/tree/master/client)
 </a><br>
@@ -8,7 +8,7 @@
 </a>
   
 ## 아키텍쳐
-<image src="./backend-archtecture.png" style="width: 150px;">
+<image src="doc/backend-archtecture.png" style="width: 150px;">
 <br>
 
 ## 개요
