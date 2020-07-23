@@ -52,7 +52,7 @@
 - 멀티 브라우져 지원
 - 2개국어 지원 (한국어, 영어)
 - SEO, oEmbed, Open graph 지원
-- Functional Programing 
+- Functional Programing 지향
 <br>
 
 ## 담당 업무
@@ -109,19 +109,19 @@ document-share-platform-reactjs
     └───service   // AXIOS 관련 파일
 ```
 
-## 빠른 시작 (로컬)
+### 빠른 시작 (로컬)
 1. Node.js v8.10,  npm v5 이상 버전으로 설치
 2. 터미널에 <b>"npm install"</b> 입력하여 의존 라이브러리 설치
 3. <b>"npm start"</b> 또는 <b>"npm run start"</b> 입력하여 로컬환경 앱 실행 (http://localhost:8000)
 
-## 빠른 시작 (로컬 서버)
+### 빠른 시작 (로컬 서버)
 1. Node.js v8.10,  npm v5 이상 버전으로 설치
 2. 터미널에 <b>"npm install"</b> 입력하여 의존 라이브러리 설치
 3. <b>"npm run deploy:ssr_local" 입력하여 빌드 파일 생성 
 4. decompanyio-web-server 프로젝트 이동 후 "npm start" 입력하여 실행
 
 
-## 주요 라이브러리
+### 주요 라이브러리
 - react (https://reactjs.org/)
 - redux (https://redux.js.org/basics/usage-with-react)
 - webpack (https://www.npmjs.com/package/webpack)
@@ -133,11 +133,11 @@ document-share-platform-reactjs
 - style-loader (https://www.npmjs.com/package/style-loader)
 - file-loader (https://www.npmjs.com/package/file-loader)
 
-## 블록체인 라이브러리
+### 블록체인 라이브러리
 - web3 (https://www.npmjs.com/package/web3)
 - drizzle (https://www.npmjs.com/package/drizzle)
 
-## 참고사항
+### 참고사항
 - 구글 material UI 라이브러리 사용하여 반응형 웹 제작
 - <b>Redux</b> 사용하며, <b>Thunk</b> (https://www.npmjs.com/package/redux-thunk) 와 StoreLogger 미들웨어 사용 
 - <b>Redux</b> 사용이 필요할 때만 container 생성
