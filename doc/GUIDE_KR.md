@@ -1,14 +1,113 @@
-# 가이드
-
-
+# 문서 공유 플랫폼
+<image src="doc/banner.png" style="width: 150px;">
+<a href="https://github.com/bisu8018/document-share-platform-reactjs/tree/master/client">
+  React js 소스코드 (https://github.com/bisu8018/document-share-platform-reactjs/tree/master/client)
+</a><br>
+<a href="https://github.com/bisu8018/document-share-platform-reactjs/tree/master/server">
+  Web server(Express js) 소스코드 (https://github.com/bisu8018/document-share-platform-reactjs/tree/master/server)
+</a>
+  
 ## 아키텍쳐
-전체 아키텍쳐
-> https://drive.google.com/file/d/1Q94ubwcRWHg7zRoyrFPLPckq-Y0NzQHV/view?usp=sharing
-
+<image src="doc/frontend-archtecture.png" style="width: 150px;">
 <br>
 
-클라이언트 아키텍쳐
-> https://www.polarisoffice.com/d/2RQQv3Kt
+## 개요
+### 프로젝트
+- 문서 공유 플랫폼 + 수익 실현 가능한 DAPP
+- 초기 한국, 영어 지원
+- 반응형 웹 개발 
+- web3 통한 가상화폐지갑 연동
+
+### 현황
+- <a href="https://polarishare.com">Beta 오픈 (https://polarishare.com)</a>
+
+### 구성원 
+- PM : 1명
+- Front-End : 1명 
+- Back-End : 1명
+
+### 기간 
+- 2019.4 ~ 2018.10 (약 7개월)
+
+### 주요 기술
+- React js 
+- ES6
+- Express js
+- SCSS
+- GraphQL
+- Web3 + Drizzle js
+
+### 협업 툴
+- Github
+- Wrike
+- Teamview
+- Google docs
+- Postman
+- Zeplin 
+<br>
+
+## 특이사항
+- 반응형 SPA + SSR 개발
+- Web3, Drizzle 연동
+- 멀티 브라우져 지원
+- 2개국어 지원 (한국어, 영어)
+- SEO, oEmbed, Open graph 지원
+- Functional Programing 
+<br>
+
+## 담당 업무
+- 문서 공유 플랫폼 프론트엔드 담당
+- React js + Web server (Express) 구축
+- Client 가상화폐 지갑 연동 구축 
+- AWS EC2 빌드/배포 관리
+<br>
+
+## 기여도
+- 100%
+<br>
+
+## 상세 내용
+### 프로젝트 구조
+```
+document-share-platform-reactjs
+│
+└───config  // eject 제공 환경설정 파일 (webpack, env ...)
+│
+└───public
+│
+└───script  // Web server 빌드 설정/실행 script 파일
+│
+└───src
+    │   index.js  // CSR index 파일
+    │   serverRender.js // SSR index 파일
+    │
+    └───apis  // Smart Contract, thirdparty library 파일
+    │
+    └───assets  // scss, css, image 파일
+    │
+    └───common  // 공통 스크립트 파일
+    │
+    └───components  // 리액트 컴포넌트 파일
+    │
+    └───config
+    │
+    └───container // redux 용 컴포넌트 컨테이너 파일
+    │
+    └───properties
+    │
+    └───redux
+    │   │   MainRepository.js   // AXIOS 통신, 리덕스 get/set controller 파일
+    │   │  
+    │   └───config  // redux 설정 파일
+    │   │  
+    │   └───model   // data model 파일
+    │   │  
+    │   └───reducer   // 리듀서 파일
+    │   │  
+    │   └───store   // 스토어 파일
+    │
+    └───service   // AXIOS 관련 파일
+```
 
 ## 빠른 시작 (로컬)
 1. Node.js v8.10,  npm v5 이상 버전으로 설치
