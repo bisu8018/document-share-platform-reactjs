@@ -13,14 +13,6 @@ app.use(express.static(path.resolve('build')));
 app.use(render);
 
 app.listen(port, () => {
-  console.log('\n\n\n\n\n' +
-    '######  ####### #          #    ######  ###  #####      #####  #     #    #    ######  ####### \n'.blue +
-    '#     # #     # #         # #   #     #  #  #     #    #     # #     #   # #   #     # #       \n'.blue +
-    '#     # #     # #        #   #  #     #  #  #          #       #     #  #   #  #     # #       \n'.blue +
-    '######  #     # #       #     # ######   #   #####      #####  ####### #     # ######  #####   \n'.blue +
-    '#       #     # #       ####### #   #    #        #          # #     # ####### #   #   #       \n'.blue +
-    '#       #     # #       #     # #    #   #  #     #    #     # #     # #     # #    #  #       \n'.blue +
-    '#       ####### ####### #     # #     # ###  #####      #####  #     # #     # #     # ####### \n\n\n\n\n'.blue);
   console.log('Server Start'.bold.bgGreen);
   console.log('Date Time : '.bold + datetime);
   console.log('Listening Port : '.bold + port);
